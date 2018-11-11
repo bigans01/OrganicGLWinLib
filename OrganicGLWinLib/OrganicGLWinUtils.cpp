@@ -46,6 +46,28 @@ void OrganicGLWinUtils::createAndBindDrawIndirectBuffer(GLuint* in_bufferID)
 	glBindBuffer(GL_DRAW_INDIRECT_BUFFER, *in_bufferID);
 }
 
+GLFWwindow* OrganicGLWinUtils::createGLFWWindow(int in_width, int in_height)
+{
+	return glfwCreateWindow(in_width, in_height, "Organic Testing", NULL, NULL);
+}
+
+void OrganicGLWinUtils::setGLFWInputMode(GLFWwindow* in_window)
+{
+	glfwSetInputMode(in_window, GLFW_STICKY_KEYS, GL_TRUE);
+}
+
+void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
+{
+	if (in_mode == 0)
+	{
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode0_VertexShader.vertexshader", "graphics/shaders/Mode0_FragmentShader.fragmentshader");
+	}
+	else if (in_mode == 1)
+	{
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode1_VertexShader.vertexshader", "graphics/shaders/Mode1_FragmentShader.fragmentshader");
+	}
+}
+
 void OrganicGLWinUtils::initializeLibraryAndSetHints()
 {
 	if (!glfwInit())	// initialize GLFW library
@@ -94,6 +116,11 @@ void OrganicGLWinUtils::checkWindowValidity(GLFWwindow* in_window)
 		glfwTerminate();
 		//return -1;
 	}
+}
+
+void OrganicGLWinUtils::makeContextCurrent(GLFWwindow* in_window)
+{
+	glfwMakeContextCurrent(in_window);
 }
 
 void OrganicGLWinUtils::setBasicStates()

@@ -11,6 +11,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdio.h>
 
+#include "OrganicShaderLoader.h"
+
 class OrganicGLWinUtils
 {
 public:
@@ -19,7 +21,11 @@ public:
 	static void createAndBindVertexArray(GLuint* in_bufferID);													// creates and binds a single vertex array
 	static void createAndBindDrawIndirectBuffer(GLuint* in_bufferID);											// creates and binds a single indirect buffer
 	static void initializeLibraryAndSetHints();	// initializes the OpenGL library and the window; adds input(keypress) listening for the window
+	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
 	static void initializeGlew();
+	static void setGLFWInputMode(GLFWwindow* in_window);
+	static GLFWwindow* createGLFWWindow(int in_width, int in_height);
+	static void makeContextCurrent(GLFWwindow* in_window);
 	static void checkWindowValidity(GLFWwindow* in_window);
 	static void setBasicStates();																				// sets basic OpenGL states
 	static void setClearColor(float in_red, float in_green, float in_blue, float in_alpha);						// sets the background color
