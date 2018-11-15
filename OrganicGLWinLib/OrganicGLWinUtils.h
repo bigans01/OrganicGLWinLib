@@ -24,6 +24,9 @@ public:
 	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
 	static void initializeGlew();
 	static void setGLFWInputMode(GLFWwindow* in_window);
+	static void multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections);
+	static void multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections);
+	static void multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections);
 	static GLFWwindow* createGLFWWindow(int in_width, int in_height);
 	static void makeContextCurrent(GLFWwindow* in_window);
 	static void checkWindowValidity(GLFWwindow* in_window);

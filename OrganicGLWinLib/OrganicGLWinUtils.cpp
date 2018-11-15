@@ -9,10 +9,12 @@ void OrganicGLWinUtils::createImmutableBufferMode1(GLuint* in_bufferID, int in_b
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
 
 	// multiple attributes per vertex array means its not tightly packed, so 5th parameter represents the byte offset between consecutive attributes
+	/*
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);
+	*/
 }
 
 void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
@@ -21,6 +23,8 @@ void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_b
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
 	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+	/*
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(
 		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
@@ -28,10 +32,12 @@ void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_b
 		GL_FLOAT,           // type
 		GL_FALSE,           // normalized?
 		0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
-		(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
-							For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
-							*/
+		(void*)0            // array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
+							//For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
+							//
 	);
+
+	*/
 }
 
 void OrganicGLWinUtils::createAndBindVertexArray(GLuint* in_bufferID)
@@ -65,6 +71,10 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	else if (in_mode == 1)
 	{
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode1_VertexShader.vertexshader", "graphics/shaders/Mode1_FragmentShader.fragmentshader");
+	}
+	else if (in_mode == 2)
+	{
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode2_VertexShader.vertexshader", "graphics/shaders/Mode2_FragmentShader.fragmentshader");
 	}
 }
 
@@ -143,4 +153,47 @@ void OrganicGLWinUtils::initializeGlew()
 		glfwTerminate();
 		//return -1;
 	}
+}
+
+void OrganicGLWinUtils::multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections)
+{
+	//float testFloat = in_MVPmat4ref[0][0];
+	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
+	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);		// bind to the draw array, to setup vertex attributes
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
+		(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
+							For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
+							*/
+	);
+	//glBindBuffer(GL_DRAW_INDIRECT_BUFFER, *in_indirectBufferID);						// switch to indirect draw buffer
+	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// perform the draw
+
+	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);										// switch back to the draw array, to disable vertex attributes
+	glDisableVertexAttribArray(0);
+}
+
+void OrganicGLWinUtils::multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections)
+{
+	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
+	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);		// bind to the draw array, to setup vertex attributes
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
+	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+}
+
+void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections)
+{
+
 }
