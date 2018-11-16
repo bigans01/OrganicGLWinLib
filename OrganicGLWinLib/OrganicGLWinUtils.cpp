@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "OrganicGLWinUtils.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 void OrganicGLWinUtils::createImmutableBufferMode1(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
 {
 	glGenBuffers(1, in_bufferID);					// generate the buffer
@@ -38,6 +41,34 @@ void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_b
 	);
 
 	*/
+}
+
+void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef)
+{
+	glGenBuffers(1, in_bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
+	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+	
+	
+	// create texture buffers
+	glGenTextures(1, &*in_textureRef);
+	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
+
+	// load the texture's JPG
+	std::string imageName = "graphics/textures/container.jpg";
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load(imageName.c_str(), &width, &height, &nrChannels, 0);	// from new stb_image.h (downloaded from ... ?)
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	delete data;
+	
 }
 
 void OrganicGLWinUtils::createAndBindVertexArray(GLuint* in_bufferID)
@@ -195,5 +226,19 @@ void OrganicGLWinUtils::multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_s
 
 void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections)
 {
+	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
+	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
 
+	glActiveTexture(GL_TEXTURE0);	// send updated texture uniform to shader
+	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
+	glUniform1i(*in_textureUniformRef, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
+	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 }
