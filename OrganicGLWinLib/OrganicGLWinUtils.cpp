@@ -326,6 +326,79 @@ AtlasMetaData OrganicGLWinUtils::findAtlasMetadata(int in_atlasWidth, int in_til
 
 }
 
+void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref)
+{
+	// glfwGetTime is called only once, the first time this function is called
+	static double lastTime = glfwGetTime();
+
+	// Compute time difference between current and last frame
+	double currentTime = glfwGetTime();
+	float deltaTime = float(currentTime - lastTime);
+
+	// Get mouse position
+	double xpos, ypos;
+	glfwGetCursorPos(in_windowRef, &xpos, &ypos);
+
+	// Reset mouse position for next frame
+	glfwSetCursorPos(in_windowRef, 1024 / 2, 768 / 2);
+
+	// Compute new orientation
+	*in_horizontalAngle += in_mouseSpeed * float(1024 / 2 - xpos);
+	*in_verticalAngle += in_mouseSpeed * float(768 / 2 - ypos);
+
+	// Direction : Spherical coordinates to Cartesian coordinates conversion
+	glm::vec3 direction(
+		cos(*in_verticalAngle) * sin(*in_horizontalAngle),
+		sin(*in_verticalAngle),
+		cos(*in_verticalAngle) * cos(*in_horizontalAngle)
+	);
+
+	// Right vector
+	glm::vec3 right = glm::vec3(
+		sin(*in_horizontalAngle - 3.14f / 2.0f),
+		0,
+		cos(*in_horizontalAngle - 3.14f / 2.0f)
+	);
+
+	// Up vector
+	glm::vec3 up = glm::cross(right, direction);
+
+	// Move forward
+	if (glfwGetKey(in_windowRef, GLFW_KEY_UP) == GLFW_PRESS) {
+		*in_position += direction * deltaTime * *in_speed;
+	}
+	// Move backward
+	if (glfwGetKey(in_windowRef, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		*in_position -= direction * deltaTime * *in_speed;
+	}
+	// Strafe right
+	if (glfwGetKey(in_windowRef, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		*in_position += right * deltaTime * *in_speed;
+	}
+	// Strafe left
+	if (glfwGetKey(in_windowRef, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		*in_position -= right * deltaTime * *in_speed;
+	}
+
+	float FoV = *in_initialFoV;  // - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
+
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	*in_projectionMatrix = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 100.0f);
+	// Camera matrix
+	*in_viewMatrix = glm::lookAt(
+		*in_position,           // Camera is here
+		*in_position + direction, // and looks here : at the same position, plus "direction"
+		up                  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+
+
+	glm::mat4 Model = glm::mat4(1.0);
+	*in_MVPref = *in_projectionMatrix * *in_viewMatrix * Model;
+
+	// For the next frame, the "last time" will be "now"
+	lastTime = currentTime;
+}
+
 void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef)
 {
 

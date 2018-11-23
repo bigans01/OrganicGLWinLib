@@ -37,6 +37,7 @@ public:
 	static void initializeLibraryAndSetHints();	// initializes the OpenGL library and the window; adds input(keypress) listening for the window
 	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
 	static void initializeGlew();
+	static void computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
 	static void setGLFWInputMode(GLFWwindow* in_window);
 	static void setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef);
 	static void multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections);
