@@ -72,6 +72,348 @@ void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, int in_b
 	
 }
 
+void OrganicGLWinUtils::createImmutableBuffer(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
+{
+	glGenBuffers(1, in_bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
+	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+}
+
+void OrganicGLWinUtils::createImmutableBufferExperimental(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef, GLuint* in_textureRef2)
+{
+	glGenBuffers(1, in_bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
+	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+
+
+
+	// create texture buffers
+	glGenTextures(1, &*in_textureRef);
+	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
+
+
+
+	// load first the texture's JPG
+	std::string imageName = "graphics/textures/test3.jpg";
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load(imageName.c_str(), &width, &height, &nrChannels, 0);	// from new stb_image.h (downloaded from ... ?)
+
+	int numberOfLevels = 11;	// 10 is for 512 x 512
+	int current_width = width;
+	int current_height = height;
+	std::cout << "Current width: " << current_width << std::endl;
+	std::cout << "Current height: " << current_height << std::endl;
+	int currentLevel = 0;
+	for (int x = 0; x < numberOfLevels; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, currentLevel, GL_RGB, current_width, current_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		currentLevel++;
+		current_width /= 2;
+		current_height /= 2;
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);
+	delete data;
+
+
+
+
+
+
+
+
+
+
+
+	// create texture buffers
+	glGenTextures(1, &*in_textureRef2);
+	glBindTexture(GL_TEXTURE_2D, *in_textureRef2);
+
+
+
+	// load first the texture's JPG
+	imageName = "graphics/textures/test1.jpg";
+	//int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data2 = stbi_load(imageName.c_str(), &width, &height, &nrChannels, 0);	// from new stb_image.h (downloaded from ... ?)
+
+	
+	numberOfLevels = 11;		// 11 is for 1024 x 1024
+	current_width = width;
+	current_height = height;
+	currentLevel = 0;
+	for (int x = 0; x < numberOfLevels; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, currentLevel, GL_RGB, current_width, current_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+		currentLevel++;
+		current_width /= 2;
+		current_height /= 2;
+	}
+	
+
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data2);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);
+	delete data2;
+
+
+
+
+
+
+
+}
+
+void OrganicGLWinUtils::createImmutableBufferExperimental2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef)
+{
+	glGenBuffers(1, in_bufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
+	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+	//GLuint TextureA = loadDDS("textureA.DDS");		// load first texture
+	GLuint TextureB = loadDDS("graphics/textures/textureB.DDS");		// load second texture
+
+	/**/
+	// function variables
+	unsigned int srcX = 0;	// for reading the bottom left corner, from the source
+	unsigned int srcY = 0;	// ""
+	unsigned int srcWidth = 512;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
+	unsigned int srcHeight = 512;
+
+	unsigned int dstX = 0;
+	unsigned int dstY = 384;
+
+	
+	for (unsigned int level = 0; level < 10; level++)
+	{
+		glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_textureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+		srcWidth /= 2;
+		srcHeight /= 2;
+		dstY /= 2;
+	}
+	
+
+	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+}
+
+void OrganicGLWinUtils::createImmutableBufferExperimental3(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef)
+{
+	//glGenBuffers(1, in_bufferID);
+	//glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	//const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
+	//glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+
+	GLuint TextureB;
+	glGenTextures(1, &TextureB);
+	glBindTexture(GL_TEXTURE_2D, TextureB);
+
+	std::string imageName = "graphics/textures/test5.jpg";
+	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load(imageName.c_str(), &width, &height, &nrChannels, 0);	// from new stb_image.h (downloaded from ... ?)
+
+	int numberOfLevels = 10;
+	int current_width = 512;
+	int current_height = 512;
+	int currentLevel = 0;
+	for (int x = 0; x < numberOfLevels; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, currentLevel, GL_RGBA8, current_width, current_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		currentLevel++;
+		std::cout << "----------------" << std::endl;
+		std::cout << "(B) current width: " << current_width << std::endl;
+		std::cout << "(B) current height: " << current_height << std::endl;
+		current_width /= 2;
+		current_height /= 2;
+
+	}
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 9);			// needs to be set to 9 if doing only down to 2x2 texture size (numberOfLevels = 10)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+
+
+	// function variables
+	unsigned int srcX = 0;	// for reading the bottom left corner, from the source
+	unsigned int srcY = 0;	// ""
+	unsigned int srcWidth = 512;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
+	unsigned int srcHeight = 512;
+
+	unsigned int dstX = 0;
+	unsigned int dstY = 384;
+
+
+	for (unsigned int level = 0; level < 10; level++)
+	{
+		glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_textureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+		srcWidth /= 2;
+		srcHeight /= 2;
+		dstY /= 2;
+	}
+
+
+	//glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+}
+
+AtlasMetaData OrganicGLWinUtils::findAtlasMetadata(int in_atlasWidth, int in_tileWidth)
+{
+	// find exponent for power of 2 for atlas (this will be the currentLevel)
+	int currentAtlasLevel = 0;
+	int currentAtlasWidth = in_atlasWidth;
+	int currentAtlasResult = 0;
+	while (currentAtlasResult != 1)
+	{
+		currentAtlasResult = currentAtlasWidth / 2;
+		currentAtlasWidth = currentAtlasResult;
+		currentAtlasLevel++;
+
+	}
+	currentAtlasLevel++; // increment by one, to include the initial level 0
+	std::cout << "Atlas has this many levels: " << currentAtlasLevel << std::endl;
+
+	int currentTileLevel = 0;
+	int currentTileWidth = in_tileWidth;
+	int currentTileResult = 0;
+	while (currentTileResult != 1)
+	{
+		currentTileResult = currentTileWidth / 2;
+		currentTileWidth = currentTileResult;
+		currentTileLevel++;
+	}
+	currentTileLevel++;
+	std::cout << "Tile has this many levels: " << currentTileLevel << std::endl;
+	std::cout << "Difference in levels: " << currentAtlasLevel - currentTileLevel << std::endl;
+
+	AtlasMetaData returnData;
+	returnData.atlasMaxLevel = currentAtlasLevel;
+	returnData.atlasWidth = in_atlasWidth;
+	returnData.tileWidth = in_tileWidth;
+	returnData.tileMaxLevel = currentTileLevel;
+	returnData.mipMapLevelDiff = (currentAtlasLevel - currentTileLevel);
+	returnData.dimensionToSquare = pow(2.0f, (returnData.mipMapLevelDiff));
+
+	std::cout << "Tile width: " << returnData.tileWidth << std::endl;
+
+	return returnData;
+
+}
+
+void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef)
+{
+
+
+
+	// set flip
+	stbi_set_flip_vertically_on_load(true);
+
+	//  get data on the atlas texture
+	std::string atlasTextureName = in_atlasTextureName;
+	int atlas_width, atlas_height, atlas_nrChannels;
+	unsigned char* atlas_data = stbi_load(atlasTextureName.c_str(), &atlas_width, &atlas_height, &atlas_nrChannels, 0);
+
+	// get data on the tile texture
+	std::string tileTextureName = in_tileTextureName;
+	int tile_width, tile_height, tile_nrChannels;
+	unsigned char* tile_data = stbi_load(tileTextureName.c_str(), &tile_width, &tile_height, &tile_nrChannels, 0);
+
+	std::cout << "----> Atlas texture width: " << atlas_width << std::endl;
+	std::cout << "----> Tile texture width: " << tile_width << std::endl;
+
+	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
+
+
+
+	// Step 1: set up the initial atlas texture, and set its max level
+	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
+	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
+	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
+	//std::cout << "|||||||| mip map level diff: " << currentAtlasMeta.mipMapLevelDiff << std::endl;
+	int atlas_loopLimit = currentAtlasMeta.atlasMaxLevel - currentAtlasMeta.mipMapLevelDiff;		// the loop limit for the calls to glTexImage2D
+	int atlas_current_mipmap_dimension = currentAtlasMeta.atlasWidth;		// get the width of the atlas in pixels, as the value to start
+	for (int x = 0; x < atlas_loopLimit; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, atlas_current_mipmap_dimension, atlas_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, atlas_data);	// load atlas data for each mip map level
+		atlas_current_mipmap_dimension /= 2;
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+
+
+	// Step 2: create a temporary texture, set it up
+	GLuint TextureB;
+	glGenTextures(1, &TextureB);
+	glBindTexture(GL_TEXTURE_2D, TextureB);
+	int tile_loopLimit = currentAtlasMeta.tileMaxLevel;
+	int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;
+	for (int x = 0; x < tile_loopLimit; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, tile_data);		// load tile data for each mip map level
+		tile_current_mipmap_dimension /= 2;
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	// Step 3: load TextureB into TextureA
+	unsigned int srcX = 0;	// for reading the bottom left corner, from the source
+	unsigned int srcY = 0;	// ""
+	unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
+	unsigned int srcHeight = currentAtlasMeta.tileWidth;
+
+	unsigned int dstX = 0;
+	unsigned int dstY = 384;
+
+	std::cout << "Source height/width: " << currentAtlasMeta.tileWidth << std::endl;
+
+
+	for (unsigned int level = 0; level < tile_loopLimit; level++)
+	{
+		glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+		std::cout << "Copying sub data..." << std::endl;
+		srcWidth /= 2;
+		srcHeight /= 2;
+		dstY /= 2;
+	}
+
+	// cleanup memory
+	stbi_image_free(tile_data);
+	stbi_image_free(atlas_data);
+
+}
+
 void OrganicGLWinUtils::createAndBindVertexArray(GLuint* in_bufferID)
 {
 	glGenVertexArrays(1, in_bufferID);
@@ -124,30 +466,6 @@ void OrganicGLWinUtils::initializeLibraryAndSetHints()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	/*
-	in_windowPtr = glfwCreateWindow(in_windowWidth, in_windowHeight, "Organic", NULL, NULL);	// window dimensions
-	if (in_windowPtr == NULL)	// check if window was successfully created, and terminate otherwise
-	{
-		fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
-		getchar();
-		glfwTerminate();
-	}
-
-	glfwMakeContextCurrent(in_windowPtr);	// set the current context
-
-	// Initialize GLEW
-	glewExperimental = true; // Needed for core profile
-	if (glewInit() != GLEW_OK) {
-		fprintf(stderr, "----------------Failed to initialize GLEW\n");
-		getchar();
-		glfwTerminate();
-		//return -1;
-	}
-	*/
-	//glEnable(GL_DEPTH_TEST); // Enable depth test
-	//glDepthFunc(GL_LESS); // Accept fragment if it closer to the camera than the former one
-	//glfwSetInputMode(in_windowPtr, GLFW_STICKY_KEYS, GL_TRUE);	// Ensure we can capture the escape key being pressed
 }
 
 void OrganicGLWinUtils::checkWindowValidity(GLFWwindow* in_window)
@@ -242,4 +560,103 @@ void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_s
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+}
+
+void OrganicGLWinUtils::shutdownOpenGLBasic(GLuint* in_terrainBufferID, GLuint* in_vertexArrayID, GLuint* in_programID)
+{
+	glDeleteBuffers(1, in_terrainBufferID);
+	glDeleteVertexArrays(1, in_vertexArrayID);
+	glDeleteProgram(*in_programID);
+	glfwTerminate();
+}
+
+GLuint OrganicGLWinUtils::loadDDS(const char* imagepath)
+{
+	unsigned char header[124];
+
+	FILE *fp;
+
+	/* try to open the file */
+	fp = fopen(imagepath, "rb");
+	if (fp == NULL) {
+		printf("%s could not be opened. Are you in the right directory ? Don't forget to read the FAQ !\n", imagepath); getchar();
+		return 0;
+	}
+
+	/* verify the type of file */
+	char filecode[4];
+	fread(filecode, 1, 4, fp);
+	if (strncmp(filecode, "DDS ", 4) != 0) {
+		fclose(fp);
+		return 0;
+	}
+
+	/* get the surface desc */
+	fread(&header, 124, 1, fp);
+
+	unsigned int height = *(unsigned int*)&(header[8]);
+	unsigned int width = *(unsigned int*)&(header[12]);
+	unsigned int linearSize = *(unsigned int*)&(header[16]);
+	unsigned int mipMapCount = *(unsigned int*)&(header[24]);
+	unsigned int fourCC = *(unsigned int*)&(header[80]);
+
+
+	unsigned char * buffer;
+	unsigned int bufsize;
+	/* how big is it going to be including all mipmaps? */
+	bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
+	buffer = (unsigned char*)malloc(bufsize * sizeof(unsigned char));
+	fread(buffer, 1, bufsize, fp);
+	/* close the file pointer */
+	fclose(fp);
+
+	unsigned int components = (fourCC == FOURCC_DXT1) ? 3 : 4;
+	unsigned int format;
+	switch (fourCC)
+	{
+	case FOURCC_DXT1:
+		format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+		break;
+	case FOURCC_DXT3:
+		format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+		break;
+	case FOURCC_DXT5:
+		format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+		break;
+	default:
+		free(buffer);
+		return 0;
+	}
+
+	// Create one OpenGL texture
+	GLuint textureID;
+	glGenTextures(1, &textureID);
+
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
+	unsigned int offset = 0;
+
+	/* load the mipmaps */
+	for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
+	{
+		unsigned int size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+		glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height,
+			0, size, buffer + offset);
+
+		offset += size;
+		width /= 2;
+		height /= 2;
+
+		// Deal with Non-Power-Of-Two textures. This code is not included in the webpage to reduce clutter.
+		if (width < 1) width = 1;
+		if (height < 1) height = 1;
+
+	}
+
+	free(buffer);
+
+	return textureID;
 }
