@@ -383,7 +383,7 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	float FoV = *in_initialFoV;  // - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	*in_projectionMatrix = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 100.0f);
+	*in_projectionMatrix = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 400.0f);
 	// Camera matrix
 	*in_viewMatrix = glm::lookAt(
 		*in_position,           // Camera is here
@@ -420,11 +420,12 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	std::cout << "----> Atlas texture width: " << atlas_width << std::endl;
 	std::cout << "----> Tile texture width: " << tile_width << std::endl;
 
+	// Step 1: initialzie the atlas map
 	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
 
 
 
-	// Step 1: set up the initial atlas texture, and set its max level
+	// Step 2: set up the initial atlas texture, and set its max level
 	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
 	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
 	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
@@ -444,7 +445,9 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 
 
 
-	// Step 2: create a temporary texture, set it up
+
+
+	// Step 3: create a temporary texture, set it up
 	GLuint TextureB;
 	glGenTextures(1, &TextureB);
 	glBindTexture(GL_TEXTURE_2D, TextureB);
@@ -460,7 +463,7 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	// Step 3: load TextureB into TextureA
+	// Step 4: load TextureB into TextureA
 	unsigned int srcX = 0;	// for reading the bottom left corner, from the source
 	unsigned int srcY = 0;	// ""
 	unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
