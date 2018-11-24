@@ -45,6 +45,12 @@
     <ClInclude Include="TileLoadData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextureUV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

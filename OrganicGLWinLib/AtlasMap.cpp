@@ -50,3 +50,55 @@ TileLoadData AtlasMap::getTileLoadData(int in_tileID)
 	returnMeta.filename = tileLookup[in_tileID].file_location;
 	return returnMeta;
 }
+
+TexturePoints AtlasMap::getUVPointsForTerrainTile(int in_tileID, TexturePoints in_pointsToConvert)
+{
+	TexturePoints returnUVcoords = in_pointsToConvert;
+	//std::cout << "!!!! Before down scale: " << std::endl;
+	//std::cout << "0: " << returnUVcoords.UVpoints[0].U_coord << ", " << returnUVcoords.UVpoints[0].V_coord << std::endl;
+	//std::cout << "1: " << returnUVcoords.UVpoints[1].U_coord << ", " << returnUVcoords.UVpoints[1].V_coord << std::endl;
+	//std::cout << "2: " << returnUVcoords.UVpoints[2].U_coord << ", " << returnUVcoords.UVpoints[2].V_coord << std::endl;
+
+	returnUVcoords.UVpoints[0] = scaleDownUVcoords(returnUVcoords.UVpoints[0]);
+	returnUVcoords.UVpoints[1] = scaleDownUVcoords(returnUVcoords.UVpoints[1]);
+	returnUVcoords.UVpoints[2] = scaleDownUVcoords(returnUVcoords.UVpoints[2]);
+
+	//std::cout << "!!!! After down scale: " << std::endl;
+	//std::cout << "0: " << returnUVcoords.UVpoints[0].U_coord << ", " << returnUVcoords.UVpoints[0].V_coord << std::endl;
+	//std::cout << "1: " << returnUVcoords.UVpoints[1].U_coord << ", " << returnUVcoords.UVpoints[1].V_coord << std::endl;
+	//std::cout << "2: " << returnUVcoords.UVpoints[2].U_coord << ", " << returnUVcoords.UVpoints[2].V_coord << std::endl;
+
+	// find the index to look up, and get the offsets
+	int x_lookup = tileLookup[in_tileID].x_location;
+	int y_lookup = tileLookup[in_tileID].y_location;
+	int indexToFind = findTileIndex(x_lookup, y_lookup);
+	float U_offset = AtlasTileArray[indexToFind].x_float_offset;
+	float V_offset = AtlasTileArray[indexToFind].y_float_offset;
+	for (int x = 0; x < 3; x++)
+	{
+		returnUVcoords.UVpoints[x].U_coord += U_offset;			// add the offsets to the converted points
+		returnUVcoords.UVpoints[x].V_coord += V_offset;		
+	}
+
+	//std::cout << "!!!! After adding offsets: " << std::endl;
+	//std::cout << "0: " << returnUVcoords.UVpoints[0].U_coord << ", " << returnUVcoords.UVpoints[0].V_coord << std::endl;
+	//std::cout << "1: " << returnUVcoords.UVpoints[1].U_coord << ", " << returnUVcoords.UVpoints[1].V_coord << std::endl;
+	//std::cout << "2: " << returnUVcoords.UVpoints[2].U_coord << ", " << returnUVcoords.UVpoints[2].V_coord << std::endl;
+
+
+	return returnUVcoords;
+}
+
+TextureUV AtlasMap::scaleDownUVcoords(TextureUV in_textureUV)
+{
+	TextureUV returnUV = in_textureUV;
+	if (returnUV.U_coord != 0.0f)	// do not divide by 0
+	{
+		returnUV.U_coord /= tileDimension;	// scale down by the number of tiles in either dimension
+	}
+	if (returnUV.V_coord != 0.0f)
+	{
+		returnUV.V_coord /= tileDimension;	// 
+	}
+	return returnUV;
+}
