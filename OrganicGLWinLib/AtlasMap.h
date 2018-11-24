@@ -11,8 +11,10 @@
 #include <iostream>
 #include <string>
 
+
 class AtlasMap
 {
+	friend class OrganicGLWinUtils;
 	public:
 		std::unique_ptr<AtlasTile[]> AtlasTileArray;	// will contain all tile information (generated at run time)
 		void setupTileArray(int in_atlasPixelsLength, int in_tilePixelsLength);

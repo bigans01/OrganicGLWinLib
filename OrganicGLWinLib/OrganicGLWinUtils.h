@@ -17,6 +17,7 @@
 #include <math.h>
 
 #include <iostream>
+#include <map>
 
 #include "OrganicShaderLoader.h"
 #include "AtlasMetaData.h"

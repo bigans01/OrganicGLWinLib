@@ -420,11 +420,17 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	std::cout << "---- > Atlas texture width: " << atlas_width << std::endl;
 	std::cout << "---- > Tile texture width: " << tile_width << std::endl;
 
-	// Step 1: initialzie the atlas map
+
+
+
+
+	// Step 1: initialize the atlas map; add tiles as needed
 	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
 	in_atlasRef->setupTileArray(atlas_width, tile_width);
-	in_atlasRef->insertTileLookup(1, 0, 1, in_tileTextureName);				// insert data for tile 1, at x = 0, and y = 1
-	
+	in_atlasRef->insertTileLookup(1, 0, 0, in_tileTextureName);				// insert data for tile 1, at x = 0, and y = 1	(Green tile)
+	in_atlasRef->insertTileLookup(2, 1, 1, "graphics/textures/test5.jpg");  // " 1, 1 = Blue tile
+
+
 
 
 
@@ -450,60 +456,69 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 
 
 
-	// Step 3: create a temporary texture, set it up
-	TileLoadData dataToLoad = in_atlasRef->getTileLoadData(1);				// get the load data, to use it later for OpenGL		// fetch the load data
-	std::string loadingTileName = dataToLoad.filename;
-	int load_width, load_height, load_nrChannels;
-	unsigned char* load_data = stbi_load(loadingTileName.c_str(), &load_width, &load_height, &load_nrChannels, 0);
-	//std::cout << "!! Test: dataToLoad (x-pixel): " << dataToLoad.x_pixel_begin << std::endl;
-	//std::cout << "!! Test: dataToLoad (y-pixel): " << dataToLoad.y_pixel_begin << std::endl;
 
 
-	GLuint TextureB;
-	glGenTextures(1, &TextureB);
-	glBindTexture(GL_TEXTURE_2D, TextureB);
-	int tile_loopLimit = currentAtlasMeta.tileMaxLevel;
-	int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;
-	for (int x = 0; x < tile_loopLimit; x++)
+
+
+
+	// Step 3: cycle through all tiles in the tileLookup map, and insert them
+	std::map<int, TileMeta>::iterator currentTile = in_atlasRef->tileLookup.begin();		// get the beginning iterator for the tile lookup
+	std::map<int, TileMeta>::iterator tileMapEnd = in_atlasRef->tileLookup.end();
+	for (currentTile; currentTile != tileMapEnd; ++currentTile)
 	{
-		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
-		tile_current_mipmap_dimension /= 2;
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		int currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
+		TileLoadData dataToLoad = in_atlasRef->getTileLoadData(currentTileID);	// get the load data, to use it later for OpenGL
+		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
+		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load
+		unsigned char* load_data = stbi_load(loadingTileName.c_str(), &load_width, &load_height, &load_nrChannels, 0);
+		//std::cout << "!! Test: dataToLoad (x-pixel): " << dataToLoad.x_pixel_begin << std::endl;
+		//std::cout << "!! Test: dataToLoad (y-pixel): " << dataToLoad.y_pixel_begin << std::endl;
 
-	// Step 4: load TextureB into TextureA
-	unsigned int srcX = 0;	// for reading the bottom left corner, from the source
-	unsigned int srcY = 0;	// ""
-	unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
-	unsigned int srcHeight = currentAtlasMeta.tileWidth;
 
-	//unsigned int dstX = 0;
-	//unsigned int dstY = 384;
-	unsigned int dstX = dataToLoad.x_pixel_begin;
-	unsigned int dstY = dataToLoad.y_pixel_begin;
-
-	for (unsigned int level = 0; level < tile_loopLimit; level++)
-	{
-		glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
-		srcWidth /= 2;
-		srcHeight /= 2;
-		if (dstY != 0)
+		GLuint TextureB;														// the temporary texture to use
+		glGenTextures(1, &TextureB);
+		glBindTexture(GL_TEXTURE_2D, TextureB);
+		int tile_loopLimit = currentAtlasMeta.tileMaxLevel;						// the loop limit for the tiles
+		int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;			// set the base tile width
+		for (int x = 0; x < tile_loopLimit; x++)
 		{
-			dstY /= 2;
+			glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
+			tile_current_mipmap_dimension /= 2;									
 		}
-		if (dstX != 0)
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		unsigned int srcX = 0;	// for reading the bottom left corner, from the source
+		unsigned int srcY = 0;	// ""
+		unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
+		unsigned int srcHeight = currentAtlasMeta.tileWidth;
+
+		unsigned int dstX = dataToLoad.x_pixel_begin;
+		unsigned int dstY = dataToLoad.y_pixel_begin;
+
+		for (unsigned int level = 0; level < tile_loopLimit; level++)
 		{
-			dstX /= 2;
+			glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+			srcWidth /= 2;
+			srcHeight /= 2;
+			if (dstY != 0)		// can't divide by 0
+			{
+				dstY /= 2;
+			}
+			if (dstX != 0)		// "" ""
+			{
+				dstX /= 2;
+			}
 		}
+		stbi_image_free(load_data);		// avoid memory leak
 	}
 
 	// cleanup memory
 	stbi_image_free(tile_data);
 	stbi_image_free(atlas_data);
-	stbi_image_free(load_data);
+	
 
 }
 
