@@ -399,7 +399,7 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	lastTime = currentTime;
 }
 
-void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef)
+void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef)
 {
 
 
@@ -417,11 +417,14 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	int tile_width, tile_height, tile_nrChannels;
 	unsigned char* tile_data = stbi_load(tileTextureName.c_str(), &tile_width, &tile_height, &tile_nrChannels, 0);
 
-	std::cout << "----> Atlas texture width: " << atlas_width << std::endl;
-	std::cout << "----> Tile texture width: " << tile_width << std::endl;
+	std::cout << "---- > Atlas texture width: " << atlas_width << std::endl;
+	std::cout << "---- > Tile texture width: " << tile_width << std::endl;
 
 	// Step 1: initialzie the atlas map
 	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
+	in_atlasRef->setupTileArray(atlas_width, tile_width);
+	in_atlasRef->insertTileLookup(1, 0, 1, in_tileTextureName);				// insert data for tile 1, at x = 0, and y = 1
+	
 
 
 
@@ -448,6 +451,14 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 
 
 	// Step 3: create a temporary texture, set it up
+	TileLoadData dataToLoad = in_atlasRef->getTileLoadData(1);				// get the load data, to use it later for OpenGL		// fetch the load data
+	std::string loadingTileName = dataToLoad.filename;
+	int load_width, load_height, load_nrChannels;
+	unsigned char* load_data = stbi_load(loadingTileName.c_str(), &load_width, &load_height, &load_nrChannels, 0);
+	//std::cout << "!! Test: dataToLoad (x-pixel): " << dataToLoad.x_pixel_begin << std::endl;
+	//std::cout << "!! Test: dataToLoad (y-pixel): " << dataToLoad.y_pixel_begin << std::endl;
+
+
 	GLuint TextureB;
 	glGenTextures(1, &TextureB);
 	glBindTexture(GL_TEXTURE_2D, TextureB);
@@ -455,7 +466,7 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;
 	for (int x = 0; x < tile_loopLimit; x++)
 	{
-		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, tile_data);		// load tile data for each mip map level
+		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
 		tile_current_mipmap_dimension /= 2;
 	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
@@ -469,24 +480,30 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
 	unsigned int srcHeight = currentAtlasMeta.tileWidth;
 
-	unsigned int dstX = 0;
-	unsigned int dstY = 384;
-
-	std::cout << "Source height/width: " << currentAtlasMeta.tileWidth << std::endl;
-
+	//unsigned int dstX = 0;
+	//unsigned int dstY = 384;
+	unsigned int dstX = dataToLoad.x_pixel_begin;
+	unsigned int dstY = dataToLoad.y_pixel_begin;
 
 	for (unsigned int level = 0; level < tile_loopLimit; level++)
 	{
 		glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
-		std::cout << "Copying sub data..." << std::endl;
 		srcWidth /= 2;
 		srcHeight /= 2;
-		dstY /= 2;
+		if (dstY != 0)
+		{
+			dstY /= 2;
+		}
+		if (dstX != 0)
+		{
+			dstX /= 2;
+		}
 	}
 
 	// cleanup memory
 	stbi_image_free(tile_data);
 	stbi_image_free(atlas_data);
+	stbi_image_free(load_data);
 
 }
 
