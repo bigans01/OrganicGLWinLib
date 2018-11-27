@@ -399,46 +399,47 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	lastTime = currentTime;
 }
 
-void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef)
+void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
+	// gather file information
+	std::string atlasFolder = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/";
+	std::cout << "~~~ Atlas folder is: " << atlasFolder << std::endl;
+	std::string baseAtlasTexture = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/" + in_atlasPropertiesGLRef->atlasBase + ".jpg";
+	std::cout << "~~~ Base atlas texture is: " << baseAtlasTexture << std::endl;
 
+	std::vector<TileDataGLWIN>::iterator tileBegin = in_atlasPropertiesGLRef->tileList.begin();
+	std::vector<TileDataGLWIN>::iterator tileEnd = in_atlasPropertiesGLRef->tileList.end();
+	std::string firstTileTexture = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/" + tileBegin->texture_file + ".jpg";
+	std::cout << "~~~ Initial tile texture is: " << firstTileTexture << std::endl;
 
 
 	// set flip
 	stbi_set_flip_vertically_on_load(true);
 
 	//  get data on the atlas texture
-	std::string atlasTextureName = in_atlasTextureName;
+	std::string atlasTextureName = baseAtlasTexture;
 	int atlas_width, atlas_height, atlas_nrChannels;
 	unsigned char* atlas_data = stbi_load(atlasTextureName.c_str(), &atlas_width, &atlas_height, &atlas_nrChannels, 0);
 
 	// get data on the tile texture
-	std::string tileTextureName = in_tileTextureName;
+	std::string tileTextureName = firstTileTexture;
 	int tile_width, tile_height, tile_nrChannels;
 	unsigned char* tile_data = stbi_load(tileTextureName.c_str(), &tile_width, &tile_height, &tile_nrChannels, 0);
-
-	std::cout << "---- > Atlas texture width: " << atlas_width << std::endl;
-	std::cout << "---- > Tile texture width: " << tile_width << std::endl;
-
-
-
-
 
 	// Step 1: initialize the atlas map; add tiles as needed
 	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
 	in_atlasRef->setupTileArray(atlas_width, tile_width);
-	in_atlasRef->insertTileLookup(1, 0, 0, in_tileTextureName);				// insert data for tile 1, at x = 0, and y = 1	(Green tile)
-	in_atlasRef->insertTileLookup(2, 1, 1, "graphics/textures/test5.jpg");  // " 1, 1 = Blue tile
-
-
-
+	for (tileBegin; tileBegin != tileEnd; tileBegin++)
+	{ 
+			std::string loadingString = atlasFolder + tileBegin->texture_file + ".jpg";
+			in_atlasRef->insertTileLookup(tileBegin->materialID, tileBegin->array_x, tileBegin->array_y, loadingString);
+	}
 
 
 	// Step 2: set up the initial atlas texture, and set its max level
 	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
 	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
 	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
-	//std::cout << "|||||||| mip map level diff: " << currentAtlasMeta.mipMapLevelDiff << std::endl;
 	int atlas_loopLimit = currentAtlasMeta.atlasMaxLevel - currentAtlasMeta.mipMapLevelDiff;		// the loop limit for the calls to glTexImage2D
 	int atlas_current_mipmap_dimension = currentAtlasMeta.atlasWidth;		// get the width of the atlas in pixels, as the value to start
 	for (int x = 0; x < atlas_loopLimit; x++)
@@ -454,13 +455,6 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 
 
 
-
-
-
-
-
-
-
 	// Step 3: cycle through all tiles in the tileLookup map, and insert them
 	std::map<int, TileMeta>::iterator currentTile = in_atlasRef->tileLookup.begin();		// get the beginning iterator for the tile lookup
 	std::map<int, TileMeta>::iterator tileMapEnd = in_atlasRef->tileLookup.end();
@@ -471,9 +465,6 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
 		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load
 		unsigned char* load_data = stbi_load(loadingTileName.c_str(), &load_width, &load_height, &load_nrChannels, 0);
-		//std::cout << "!! Test: dataToLoad (x-pixel): " << dataToLoad.x_pixel_begin << std::endl;
-		//std::cout << "!! Test: dataToLoad (y-pixel): " << dataToLoad.y_pixel_begin << std::endl;
-
 
 		GLuint TextureB;														// the temporary texture to use
 		glGenTextures(1, &TextureB);
@@ -485,13 +476,7 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 			glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
 			tile_current_mipmap_dimension /= 2;									
 		}
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		unsigned int srcX = 0;	// for reading the bottom left corner, from the source
-		unsigned int srcY = 0;	// ""
 		unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
 		unsigned int srcHeight = currentAtlasMeta.tileWidth;
 
@@ -500,7 +485,7 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 
 		for (unsigned int level = 0; level < tile_loopLimit; level++)
 		{
-			glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, srcX, srcY, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+			glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, 0, 0, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
 			srcWidth /= 2;
 			srcHeight /= 2;
 			if (dstY != 0)		// can't divide by 0

@@ -51,6 +51,12 @@
     <ClInclude Include="TexturePoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AtlasPropertiesGL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileDataGLWIN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

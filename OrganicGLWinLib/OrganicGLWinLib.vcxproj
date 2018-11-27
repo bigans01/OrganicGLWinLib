@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="AtlasMap.h" />
     <ClInclude Include="AtlasMetaData.h" />
+    <ClInclude Include="AtlasPropertiesGL.h" />
     <ClInclude Include="AtlasTile.h" />
     <ClInclude Include="OrganicGLWinUtils.h" />
     <ClInclude Include="OrganicShaderLoader.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TexturePoints.h" />
     <ClInclude Include="TextureUV.h" />
+    <ClInclude Include="TileDataGLWIN.h" />
     <ClInclude Include="TileLoadData.h" />
     <ClInclude Include="TileMeta.h" />
   </ItemGroup>
