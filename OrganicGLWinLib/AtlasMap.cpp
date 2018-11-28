@@ -21,6 +21,7 @@ void AtlasMap::setupTileArray(int in_atlasPixelsLength, int in_tilePixelsLength)
 			//std::cout << "Tile (" << x << ", " << y << "): " << " | X float: " << tileRef->x_float_offset << " | Y float: " << tileRef->y_float_offset << " | X pixel: " << tileRef->x_pixel_offset << " | Y pixel: " << tileRef->y_pixel_offset << std::endl;
 		}
 	}
+	std::cout << ">>>>> Initialization complete..." << std::endl;
 }
 
 int AtlasMap::findTileIndex(int in_tileX, int in_tileY)

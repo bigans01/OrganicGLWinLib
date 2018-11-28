@@ -399,9 +399,10 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	lastTime = currentTime;
 }
 
-void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, std::string in_tileTextureName, GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+void OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	// gather file information
+	std::cout << "Prior to smart pointer get: " << std::endl;
 	std::string atlasFolder = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/";
 	std::cout << "~~~ Atlas folder is: " << atlasFolder << std::endl;
 	std::string baseAtlasTexture = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/" + in_atlasPropertiesGLRef->atlasBase + ".jpg";
@@ -454,7 +455,6 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 
-
 	// Step 3: cycle through all tiles in the tileLookup map, and insert them
 	std::map<int, TileMeta>::iterator currentTile = in_atlasRef->tileLookup.begin();		// get the beginning iterator for the tile lookup
 	std::map<int, TileMeta>::iterator tileMapEnd = in_atlasRef->tileLookup.end();
@@ -503,7 +503,6 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(std::string in_atlasTextureName, s
 	// cleanup memory
 	stbi_image_free(tile_data);
 	stbi_image_free(atlas_data);
-	
 
 }
 
