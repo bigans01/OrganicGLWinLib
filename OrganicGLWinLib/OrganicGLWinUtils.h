@@ -45,10 +45,11 @@ public:
 	static void initializeGlew();
 	static void computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
 	static void setGLFWInputMode(GLFWwindow* in_window);
-	static void setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);
+	static int setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);
 	static void multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections);
 	static void multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections);
 	static void multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections);
+	static void multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, int in_textureWidth);
 	static void shutdownOpenGLBasic(GLuint* in_terrainBufferID, GLuint* in_vertexArrayID, GLuint* in_programID);			// shuts down OpenGL for modes 0 through 2
 	static GLFWwindow* createGLFWWindow(int in_width, int in_height);
 	static void makeContextCurrent(GLFWwindow* in_window);

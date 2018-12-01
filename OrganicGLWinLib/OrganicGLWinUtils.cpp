@@ -399,14 +399,14 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	lastTime = currentTime;
 }
 
-void OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	// gather file information
 	std::cout << "Prior to smart pointer get: " << std::endl;
 	std::string atlasFolder = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/";
-	std::cout << "~~~ Atlas folder is: " << atlasFolder << std::endl;
+	std::cout << "~~~ !!+--> Atlas folder is: " << atlasFolder << std::endl;
 	std::string baseAtlasTexture = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/" + in_atlasPropertiesGLRef->atlasBase + ".jpg";
-	std::cout << "~~~ Base atlas texture is: " << baseAtlasTexture << std::endl;
+	std::cout << "~~~ !!+--> Base atlas texture is: " << baseAtlasTexture << std::endl;
 
 	std::vector<TileDataGLWIN>::iterator tileBegin = in_atlasPropertiesGLRef->tileList.begin();
 	std::vector<TileDataGLWIN>::iterator tileEnd = in_atlasPropertiesGLRef->tileList.end();
@@ -452,6 +452,7 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasM
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 
@@ -504,6 +505,9 @@ void OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasM
 	stbi_image_free(tile_data);
 	stbi_image_free(atlas_data);
 
+	// return the atlas pixel width
+	return atlas_width;
+
 }
 
 void OrganicGLWinUtils::createAndBindVertexArray(GLuint* in_bufferID)
@@ -541,6 +545,10 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	else if (in_mode == 2)
 	{
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode2_VertexShader.vertexshader", "graphics/shaders/Mode2_FragmentShader.fragmentshader");
+	}
+	else if (in_mode == 3)
+	{
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode3_VertexShader.vertexshader", "graphics/shaders/Mode3_FragmentShader.fragmentshader");
 	}
 }
 
@@ -644,6 +652,25 @@ void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_s
 	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
 	glUniform1i(*in_textureUniformRef, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
+	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+}
+
+void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, int in_textureWidth)
+{
+	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
+	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
+
+	glActiveTexture(GL_TEXTURE0);	// send updated texture uniform to shader
+	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
+	glUniform1i(*in_textureUniformRef, 0);
+	glUniform1f(*in_textureWidthRef, in_textureWidth);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
