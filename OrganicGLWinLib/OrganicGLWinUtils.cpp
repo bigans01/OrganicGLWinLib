@@ -404,9 +404,9 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	// gather file information
 	std::cout << "Prior to smart pointer get: " << std::endl;
 	std::string atlasFolder = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/";
-	std::cout << "~~~ !!!!+--> Atlas folder is: " << atlasFolder << std::endl;
+	std::cout << "~~~ ++!!!!+--> Atlas folder is: " << atlasFolder << std::endl;
 	std::string baseAtlasTexture = "graphics/textures/atlas/" + in_atlasPropertiesGLRef->atlasName + "/" + in_atlasPropertiesGLRef->atlasBase + ".jpg";
-	std::cout << "~~~ !!!!+--> Base atlas texture is: " << baseAtlasTexture << std::endl;
+	std::cout << "~~~ ++!!!!+--> Base atlas texture is: " << baseAtlasTexture << std::endl;
 
 	std::vector<TileDataGLWIN>::iterator tileBegin = in_atlasPropertiesGLRef->tileList.begin();
 	std::vector<TileDataGLWIN>::iterator tileEnd = in_atlasPropertiesGLRef->tileList.end();
@@ -450,6 +450,9 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	}
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 

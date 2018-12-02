@@ -22,6 +22,7 @@ class AtlasMap
 		void insertTileLookup(int in_tileID, int in_tileX, int in_tileY, std::string in_fileName);
 		TileLoadData getTileLoadData(int in_tileID);
 		TexturePoints getUVPointsForTerrainTile(int in_tileID, TexturePoints in_pointsToConvert);
+		//TexturePoints getBorderedUVPoints()
 		int someval = 0;
 	private:
 		int tilePixelsLength = 0;	// the nunber of pixels of each tile goes, in either dimension; since we square this value to get the area of a tile, we only need to store it once
