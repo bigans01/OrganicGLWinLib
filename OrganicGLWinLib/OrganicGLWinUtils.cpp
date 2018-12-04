@@ -750,15 +750,17 @@ void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_s
 	glDisableVertexAttribArray(1);
 }
 
-void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, int in_textureWidth)
+void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, glm::vec3* in_textureWidth)
 {
 	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
+	glm::vec3 vecRef = *in_textureWidth;
 	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
 
 	glActiveTexture(GL_TEXTURE0);	// send updated texture uniform to shader
 	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
 	glUniform1i(*in_textureUniformRef, 0);
-	glUniform1f(*in_textureWidthRef, in_textureWidth);
+	//glUniform1f(*in_textureWidthRef, in_textureWidth);
+	glUniform3fv(*in_textureWidthRef, 1, &vecRef[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
