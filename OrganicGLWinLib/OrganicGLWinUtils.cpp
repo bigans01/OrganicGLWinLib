@@ -493,11 +493,16 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 		glBindTexture(GL_TEXTURE_2D, TextureB);
 		int tile_loopLimit = currentAtlasMeta.tileMaxLevel;						// the loop limit for the tiles
 		int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;			// set the base tile width
+		/*
 		for (int x = 0; x < tile_loopLimit; x++)
 		{
 			glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
 			tile_current_mipmap_dimension /= 2;									
 		}
+		*/
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
+		glGenerateMipmap(GL_TEXTURE_2D);
 
 		unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
 		unsigned int srcHeight = currentAtlasMeta.tileWidth;
