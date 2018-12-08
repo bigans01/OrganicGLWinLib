@@ -4,12 +4,16 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-void OrganicGLWinUtils::createImmutableBufferMode1(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
+void OrganicGLWinUtils::createImmutableBufferMode1(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers)
 {
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glGenBuffers(1, in_bufferID);					// generate the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);	// bind the buffer
-	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+	glGenBuffers(1, in_swapBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_swapBufferID);
+	glBufferStorage(GL_ARRAY_BUFFER, 500000000, NULL, bufferStorageFlags);
+
 
 	// multiple attributes per vertex array means its not tightly packed, so 5th parameter represents the byte offset between consecutive attributes
 	/*
@@ -18,15 +22,18 @@ void OrganicGLWinUtils::createImmutableBufferMode1(GLuint* in_bufferID, int in_b
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);
 	*/
+	std::cout << "Mode 0 GL buffers set up OK. " << std::endl;
 }
 
-void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
+void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers)
 {
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glGenBuffers(1, in_bufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
-	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
-
+	glGenBuffers(1, in_swapBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_swapBufferID);
+	glBufferStorage(GL_ARRAY_BUFFER, 500000000, NULL, bufferStorageFlags);
 	/*
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(
@@ -41,15 +48,18 @@ void OrganicGLWinUtils::createImmutableBufferMode0(GLuint* in_bufferID, int in_b
 	);
 
 	*/
+	std::cout << "Mode 1 GL buffers set up OK. " << std::endl;
 }
 
-void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef)
+void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef)
 {
+	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glGenBuffers(1, in_bufferID);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
-	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
-
+	glGenBuffers(1, in_swapBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, *in_swapBufferID);
+	glBufferStorage(GL_ARRAY_BUFFER, 500000000, NULL, bufferStorageFlags);
 	
 	
 	// create texture buffers
@@ -70,6 +80,7 @@ void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, int in_b
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);
 	delete data;
 	
+	std::cout << "Mode 2 GL buffers set up OK. " << std::endl;
 }
 
 void OrganicGLWinUtils::createImmutableBuffer(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
@@ -685,6 +696,13 @@ void OrganicGLWinUtils::setBasicStates()
 void OrganicGLWinUtils::setClearColor(float in_red, float in_green, float in_blue, float in_alpha)
 {
 	glClearColor(in_red, in_green, in_blue, in_alpha);
+}
+
+void OrganicGLWinUtils::copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset)
+{
+	glBindBuffer(GL_COPY_READ_BUFFER, *in_readBufferID);	// set the read buffer
+	glBindBuffer(GL_COPY_WRITE_BUFFER, *in_writeBufferID);
+	glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, in_readByteOffset, in_writeByteOffset, in_readByteSize);
 }
 
 void OrganicGLWinUtils::initializeGlew()

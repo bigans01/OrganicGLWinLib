@@ -30,9 +30,9 @@
 class OrganicGLWinUtils
 {
 public:
-	static void createImmutableBufferMode1(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers);		// creates an immutable buffer, and sets appropriate vertexarray attributes for mode 0
-	static void createImmutableBufferMode0(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers);		// creates an immutable buffer, and sets appropriate vertexarray attributes for mode 1
-	static void createImmutableBufferMode2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers,  GLuint* in_textureRef);
+	static void createImmutableBufferMode1(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers);		// creates an immutable buffer, and sets appropriate vertexarray attributes for mode 0
+	static void createImmutableBufferMode0(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers);		// creates an immutable buffer, and sets appropriate vertexarray attributes for mode 1
+	static void createImmutableBufferMode2(GLuint* in_bufferID, GLuint* in_swapBufferID, int in_bufferSize, int in_numberOfBuffers,  GLuint* in_textureRef);
 	static void createImmutableBuffer(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers);
 	static void createImmutableBufferExperimental(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef, GLuint* in_textureRef2);
 	static void createImmutableBufferExperimental2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef);
@@ -57,6 +57,7 @@ public:
 	static void checkWindowValidity(GLFWwindow* in_window);
 	static void setBasicStates();																				// sets basic OpenGL states
 	static void setClearColor(float in_red, float in_green, float in_blue, float in_alpha);						// sets the background color
+	static void copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset);
 	static GLuint loadDDS(const char* imagepath);
 };
 
