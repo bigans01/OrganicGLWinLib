@@ -927,3 +927,15 @@ void OrganicGLWinUtils::IMGuiRenderAndDraw()
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+void OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9])
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 250), ImGuiSetCond_FirstUseEver);
+	bool window_val = true;
+	ImGui::Begin("World Location", &window_val);
+	ImGui::Text("Collection: %d, %d, %d", world_organicLoc[0], world_organicLoc[1], world_organicLoc[2]);
+	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
+	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
+	ImGui::Text("Absolute  : %f, %f, %f", world_precise[0], world_precise[1], world_precise[2]);
+	ImGui::End();
+}
