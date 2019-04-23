@@ -72,6 +72,10 @@ TexturePoints AtlasMap::getUVPointsForTerrainTile(int in_tileID, TexturePoints i
 	// find the index to look up, and get the offsets
 	int x_lookup = tileLookup[in_tileID].x_location;
 	int y_lookup = tileLookup[in_tileID].y_location;
+
+	returnUVcoords.U_tile_coord = x_lookup;		// store the tile location values
+	returnUVcoords.V_tile_coord = y_lookup;
+
 	int indexToFind = findTileIndex(x_lookup, y_lookup);
 	float U_offset = AtlasTileArray[indexToFind].x_float_offset;
 	float V_offset = AtlasTileArray[indexToFind].y_float_offset;

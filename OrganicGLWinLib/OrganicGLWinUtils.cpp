@@ -413,7 +413,7 @@ void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, floa
 	lastTime = currentTime;
 }
 
-int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef, float* in_atlasTileWidth, float* in_atlasWidth)
 {
 	// gather file information
 	std::cout << "Prior to smart pointer get: " << std::endl;
@@ -436,10 +436,17 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	int atlas_width, atlas_height, atlas_nrChannels;
 	unsigned char* atlas_data = stbi_load(atlasTextureName.c_str(), &atlas_width, &atlas_height, &atlas_nrChannels, 0);
 
+
 	// get data on the tile texture
 	std::string tileTextureName = firstTileTexture;
 	int tile_width, tile_height, tile_nrChannels;
 	unsigned char* tile_data = stbi_load(tileTextureName.c_str(), &tile_width, &tile_height, &tile_nrChannels, 0);
+
+	std::cout << "!!!! >>>> atlas_width: " << int(atlas_width) << std::endl;
+	std::cout << "!!!! >>>> tile_width: " << int(tile_width) << std::endl;
+
+	*in_atlasWidth = float(atlas_width);	// set the atlas width
+	*in_atlasTileWidth = float(tile_width); // set the atlas tile width
 
 	// Step 1: initialize the atlas map; add tiles as needed
 	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
@@ -455,6 +462,7 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
 	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
 	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
+	std::cout << "!!!! Atlas max level value is: " << atlasMaxLevelValue << std::endl;
 	int atlas_loopLimit = currentAtlasMeta.atlasMaxLevel - currentAtlasMeta.mipMapLevelDiff;		// the loop limit for the calls to glTexImage2D
 	int atlas_current_mipmap_dimension = currentAtlasMeta.atlasWidth;		// get the width of the atlas in pixels, as the value to start
 	for (int x = 0; x < atlas_loopLimit; x++)
@@ -464,6 +472,7 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	}
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7.0f);	// set the maximum value for this texture
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -473,12 +482,27 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0.05f);					// some progress with this
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 7.0f);						// SIGNIFICANT progress with this
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	// TEST 1
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	// TEST 2
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// TEST 3
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	// TEST 4
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+
+
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -776,7 +800,7 @@ void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_s
 	glDisableVertexAttribArray(1);
 }
 
-void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, glm::vec3* in_textureWidth)
+void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, glm::vec3* in_textureWidth, GLuint* in_atlasWidthRef, float in_atlasWidth, GLuint* in_atlasTileWidthRef, float in_atlasTileWidth)
 {
 	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
 	glm::vec3 vecRef = *in_textureWidth;
@@ -787,7 +811,11 @@ void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_s
 	glUniform1i(*in_textureUniformRef, 0);
 	//glUniform1f(*in_textureWidthRef, in_textureWidth);
 	glUniform3fv(*in_textureWidthRef, 1, &vecRef[0]);
+	glUniform1f(*in_atlasWidthRef, 1024.0f);
+	glUniform1f(*in_atlasTileWidthRef, 512.0f);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
+
+	/*
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
 	glEnableVertexAttribArray(1);
@@ -795,6 +823,19 @@ void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_s
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+	*/
+
+	// NEW (4/22/2019)
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)12);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
+	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 }
 
 void OrganicGLWinUtils::shutdownOpenGLBasic(GLuint* in_terrainBufferID, GLuint* in_vertexArrayID, GLuint* in_programID)
@@ -930,7 +971,9 @@ void OrganicGLWinUtils::IMGuiRenderAndDraw()
 
 void OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9])
 {
-	ImGui::SetNextWindowSize(ImVec2(300, 250), ImGuiSetCond_FirstUseEver);
+	//SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0, const ImVec2& pivot = ImVec2(0,0));
+	ImGui::SetNextWindowPos(ImVec2(700, 10));
+	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_FirstUseEver);
 	bool window_val = true;
 	ImGui::Begin("World Location", &window_val);
 	ImGui::Text("Collection: %d, %d, %d", world_organicLoc[0], world_organicLoc[1], world_organicLoc[2]);
