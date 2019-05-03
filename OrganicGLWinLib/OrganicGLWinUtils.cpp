@@ -497,7 +497,7 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 
 	// TEST 4
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 
@@ -811,8 +811,8 @@ void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_s
 	glUniform1i(*in_textureUniformRef, 0);
 	//glUniform1f(*in_textureWidthRef, in_textureWidth);
 	glUniform3fv(*in_textureWidthRef, 1, &vecRef[0]);
-	glUniform1f(*in_atlasWidthRef, 1024.0f);
-	glUniform1f(*in_atlasTileWidthRef, 512.0f);
+	glUniform1f(*in_atlasWidthRef, in_atlasWidth);
+	glUniform1f(*in_atlasTileWidthRef, in_atlasTileWidth);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
 
 	/*
@@ -980,5 +980,17 @@ void OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world
 	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
 	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
 	ImGui::Text("Absolute  : %f, %f, %f", world_precise[0], world_precise[1], world_precise[2]);
+	ImGui::End();
+}
+
+void OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
+{
+	ImGui::SetNextWindowPos(ImVec2(700, 150));
+	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_FirstUseEver);
+	bool window_val = true;
+	ImGui::Begin("Block Location", &window_val);
+	ImGui::Text("Collection: %d, %d, %d", world_organicLoc[0], world_organicLoc[1], world_organicLoc[2]);
+	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
+	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
 	ImGui::End();
 }
