@@ -169,6 +169,8 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="OrganicGLWinUtils.h" />
     <ClInclude Include="OrganicShaderLoader.h" />
+    <ClInclude Include="ShaderBase.h" />
+    <ClInclude Include="ShaderManagerDeferred1.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -188,6 +190,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="OrganicGLWinUtils.cpp" />
     <ClCompile Include="OrganicShaderLoader.cpp" />
+    <ClCompile Include="ShaderManagerDeferred1.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

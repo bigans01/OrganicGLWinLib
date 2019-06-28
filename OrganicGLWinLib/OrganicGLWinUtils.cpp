@@ -681,6 +681,11 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	{
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode3_VertexShader.vertexshader", "graphics/shaders/Mode3_FragmentShader.fragmentshader");
 	}
+	else if (in_mode == 4)
+	{
+		std::cout << "Loading deferred shaders..." << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode4_DeferredVS.vertexshader", "graphics/shaders/Mode4_DeferredFS.fragmentshader");
+	}
 }
 
 void OrganicGLWinUtils::initializeLibraryAndSetHints()
