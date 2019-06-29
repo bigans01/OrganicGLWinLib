@@ -24,6 +24,16 @@ void ShaderManagerDeferred1::initialize(int in_windowWidth, int in_windowHeight)
 	acquireSubroutineIndices();
 }
 
+void ShaderManagerDeferred1::shutdownGL()
+{
+
+}
+
+void ShaderManagerDeferred1::initializeShader(int in_windowWidth, int in_windowHeight, int in_terrainBufferSize)
+{
+
+}
+
 void ShaderManagerDeferred1::setupRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
@@ -269,7 +279,9 @@ void ShaderManagerDeferred1::runPass2()
 void ShaderManagerDeferred1::render()
 {
 	do {
-		computeFromInputs();
+		computeMatricesFromInputs();
+		updateMatricesAndDelta();
+
 		runPass1();
 		glFlush();
 		runPass2();
@@ -278,4 +290,9 @@ void ShaderManagerDeferred1::render()
 	}
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
+}
+
+void ShaderManagerDeferred1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+{
+
 }

@@ -171,6 +171,10 @@
     <ClInclude Include="OrganicShaderLoader.h" />
     <ClInclude Include="ShaderBase.h" />
     <ClInclude Include="ShaderManagerDeferred1.h" />
+    <ClInclude Include="ShaderManagerMode0.h" />
+    <ClInclude Include="ShaderManagerMode1.h" />
+    <ClInclude Include="ShaderManagerMode2.h" />
+    <ClInclude Include="ShaderManagerMode3.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -190,7 +194,12 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="OrganicGLWinUtils.cpp" />
     <ClCompile Include="OrganicShaderLoader.cpp" />
+    <ClCompile Include="ShaderBase.cpp" />
     <ClCompile Include="ShaderManagerDeferred1.cpp" />
+    <ClCompile Include="ShaderManagerMode0.cpp" />
+    <ClCompile Include="ShaderManagerMode1.cpp" />
+    <ClCompile Include="ShaderManagerMode2.cpp" />
+    <ClCompile Include="ShaderManagerMode3.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -17,8 +17,8 @@
 class ShaderManagerDeferred1 : public ShaderBase
 {
 public:
-	GLFWwindow* window;									// pointer to openGL window
-	int width, height;									// screen height, width
+	//GLFWwindow* window;									// pointer to openGL window
+	//int width, height;									// screen height, width
 	GLuint quadVaoID = 0;								// vertex array object ID
 	GLuint quadBufferID = 0;							// quad vertex data object ID
 
@@ -60,7 +60,10 @@ public:
 
 	// virtual functions (for later)
 	void initialize(int in_windowWidth, int in_windowHeight);
+	void initializeShader(int in_windowWidth, int in_windowHeight, int in_terrainBufferSize);
 	void render();
+	void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
+	void shutdownGL();
 
 	// independent, object specific values
 	void setupRenderQuad();
