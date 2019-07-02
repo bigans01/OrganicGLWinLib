@@ -7,11 +7,18 @@ void ShaderManagerDeferred1::initialize(int in_windowWidth, int in_windowHeight)
 	height = in_windowHeight;
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
+	OrganicGLWinUtils::checkWindowValidity(window);			// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::makeContextCurrent(window);
 	OrganicGLWinUtils::initializeGlew();
+	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
 	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.7f, 0.0f);	// background color
 	OrganicGLWinUtils::loadShadersViaMode(&programID, 4);
+
+	// NEW ---> setup IMGui
+	OrganicGLWinUtils::IMGuiInit(window);
+
+
 	// select the program for use
 	glUseProgram(programID);
 
@@ -282,9 +289,27 @@ void ShaderManagerDeferred1::render()
 		computeMatricesFromInputs();
 		updateMatricesAndDelta();
 
+		// IMGUI prep
+		ImGui_ImplOpenGL3_NewFrame();		// (required)
+		ImGui_ImplGlfw_NewFrame();	// setup the new frame (required)
+		ImGui::NewFrame();
+
+		ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);	// not sure what 2nd argument is here?
+		bool window_val = true;
+		ImGui::Begin("First Window Ever", &window_val);	// needs to accept a bool of true? hmmm ok
+		ImGui::Text("Options:");
+		ImGui::End();
+
+
 		runPass1();
 		glFlush();
 		runPass2();
+
+		// IMGUI render
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

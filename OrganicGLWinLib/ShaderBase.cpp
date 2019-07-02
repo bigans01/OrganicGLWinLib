@@ -114,6 +114,9 @@ GLFWwindow* ShaderBase::getWindow()
 void ShaderBase::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	OrganicGLWinUtils::setupTextureAtlasJPEG(&textID, in_atlasMapRef, in_atlasPropertiesGLRef, &atlasTileWidth, &atlasWidth);
+	std::cout << "Atlas dimension is: " << in_atlasMapRef->someval << std::endl;
+	std::cout << "!!~~~: acquired atlas tile width: " << atlasTileWidth << std::endl;
+	std::cout << "!!~~~: acquired atlas width: " << atlasWidth << std::endl;
 }
 
 int ShaderBase::getBufferSize()

@@ -171,6 +171,7 @@
     <ClInclude Include="OrganicShaderLoader.h" />
     <ClInclude Include="ShaderBase.h" />
     <ClInclude Include="ShaderManagerDeferred1.h" />
+    <ClInclude Include="ShaderManagerDeferred2.h" />
     <ClInclude Include="ShaderManagerMode0.h" />
     <ClInclude Include="ShaderManagerMode1.h" />
     <ClInclude Include="ShaderManagerMode2.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="OrganicShaderLoader.cpp" />
     <ClCompile Include="ShaderBase.cpp" />
     <ClCompile Include="ShaderManagerDeferred1.cpp" />
+    <ClCompile Include="ShaderManagerDeferred2.cpp" />
     <ClCompile Include="ShaderManagerMode0.cpp" />
     <ClCompile Include="ShaderManagerMode1.cpp" />
     <ClCompile Include="ShaderManagerMode2.cpp" />

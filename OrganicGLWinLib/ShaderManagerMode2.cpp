@@ -32,6 +32,12 @@ void ShaderManagerMode2::initializeShader(int in_windowWidth, int in_windowHeigh
 	textureUniform = glGetUniformLocation(shaderProgramID, "TextureSampler");
 	glUseProgram(shaderProgramID);
 
+	glBindBuffer(GL_ARRAY_BUFFER, terrainBufferID);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
+
 	// set initial values for other things
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);		// projection matrix : 45° Field of view, 4:3 ratio, display range : 0.1 unit <-> 100 units
 
@@ -52,10 +58,13 @@ void ShaderManagerMode2::render()
 
 void ShaderManagerMode2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	OrganicGLWinUtils::multiDrawArraysMode2(in_drawArrayID, in_startArray, in_vertexCount, &mvpHandle, &MVP, &textID, &textureUniform, in_numberOfCollections);
 }
 
 void ShaderManagerMode2::shutdownGL()
 {
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 	OrganicGLWinUtils::shutdownOpenGLBasic(&terrainBufferID, &organicGLVertexArrayID, &shaderProgramID);
 }

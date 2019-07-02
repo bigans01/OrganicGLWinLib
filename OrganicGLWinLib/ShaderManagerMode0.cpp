@@ -31,6 +31,19 @@ void ShaderManagerMode0::initializeShader(int in_windowWidth, int in_windowHeigh
 	mvpHandle = glGetUniformLocation(shaderProgramID, "MVP");
 	glUseProgram(shaderProgramID);
 
+	glBindBuffer(GL_ARRAY_BUFFER, terrainBufferID);		// bind to the draw array, to setup vertex attributes
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
+		(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
+							For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
+							*/
+	);
+
 	// set initial values for other things
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);		// projection matrix : 45° Field of view, 4:3 ratio, display range : 0.1 unit <-> 100 units
 
@@ -51,10 +64,12 @@ void ShaderManagerMode0::render()
 
 void ShaderManagerMode0::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	OrganicGLWinUtils::multiDrawArraysMode0(in_drawArrayID, in_startArray, in_vertexCount, &mvpHandle, &MVP, in_numberOfCollections);
 }
 
 void ShaderManagerMode0::shutdownGL()
 {
+	glDisableVertexAttribArray(0);
 	OrganicGLWinUtils::shutdownOpenGLBasic(&terrainBufferID, &organicGLVertexArrayID, &shaderProgramID);
 }

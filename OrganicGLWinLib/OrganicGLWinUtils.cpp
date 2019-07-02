@@ -680,6 +680,7 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	else if (in_mode == 3)
 	{
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode3_VertexShader.vertexshader", "graphics/shaders/Mode3_FragmentShader.fragmentshader");
+		//*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode5_Deferred2_VS.vertexshader", "graphics/shaders/Mode5_Deferred2_FS.fragmentshader");
 	}
 	else if (in_mode == 4)
 	{
@@ -754,22 +755,12 @@ void OrganicGLWinUtils::multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_s
 	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
 	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);		// bind to the draw array, to setup vertex attributes
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
-		(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
-							For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
-							*/
-	);
+	
 	//glBindBuffer(GL_DRAW_INDIRECT_BUFFER, *in_indirectBufferID);						// switch to indirect draw buffer
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// perform the draw
 
-	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);										// switch back to the draw array, to disable vertex attributes
-	glDisableVertexAttribArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);										// switch back to the draw array, to disable vertex attributes
+	//glDisableVertexAttribArray(0);
 }
 
 void OrganicGLWinUtils::multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections)
@@ -777,13 +768,9 @@ void OrganicGLWinUtils::multiDrawArraysMode1(GLuint* in_drawArrayID, GLint* in_s
 	glm::mat4 MVPref = *in_MVPmat4ref;	// send updated MVP transform to shader
 	glUniformMatrix4fv(*in_MVPuniformLocation, 1, GL_FALSE, &MVPref[0][0]);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);		// bind to the draw array, to setup vertex attributes
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
+
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+
 }
 
 void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections)
@@ -794,15 +781,9 @@ void OrganicGLWinUtils::multiDrawArraysMode2(GLuint* in_drawArrayID, GLint* in_s
 	glActiveTexture(GL_TEXTURE0);	// send updated texture uniform to shader
 	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
 	glUniform1i(*in_textureUniformRef, 0);
-
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
+
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
 }
 
 void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, GLuint* in_textureRef, GLuint* in_textureUniformRef, int in_numberOfCollections, GLuint* in_textureWidthRef, glm::vec3* in_textureWidth, GLuint* in_atlasWidthRef, float in_atlasWidth, GLuint* in_atlasTileWidthRef, float in_atlasTileWidth)
@@ -820,27 +801,7 @@ void OrganicGLWinUtils::multiDrawArraysMode3(GLuint* in_drawArrayID, GLint* in_s
 	glUniform1f(*in_atlasTileWidthRef, in_atlasTileWidth);
 	glBindBuffer(GL_ARRAY_BUFFER, *in_drawArrayID);
 
-	/*
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
 	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	*/
-
-	// NEW (4/22/2019)
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)12);
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
-	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
 }
 
 void OrganicGLWinUtils::shutdownOpenGLBasic(GLuint* in_terrainBufferID, GLuint* in_vertexArrayID, GLuint* in_programID)
