@@ -20,6 +20,10 @@ class ShaderBase
 		GLFWwindow* window;									// pointer to openGL window
 		int width, height;									// screen height, width
 
+		// retrieval values for OrganicSystem
+		int vaoAttribMode;		// the VAO attrib mode for rendering
+		int vaoAttribByteSize;		// the size, in bytes, of the combined VAO
+
 		// for the camera
 		glm::vec3 position = glm::vec3(30, 0, 5);									// Initial position of camera : on +30x, 0y, +5z
 		glm::vec3 direction;														// direction camera is facing
@@ -73,6 +77,8 @@ class ShaderBase
 		int getBufferSize();
 		glm::vec3* getPosition();
 		glm::vec3* getDirection();
+		int getVaoAttribMode();
+		int getVaoAttribByteSize();
 };
 
 #endif

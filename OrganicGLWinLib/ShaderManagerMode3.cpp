@@ -10,6 +10,11 @@ void ShaderManagerMode3::initializeShader(int in_windowWidth, int in_windowHeigh
 {
 	width = in_windowWidth;
 	height = in_windowHeight;
+
+	// set shader specific VAO values
+	vaoAttribMode = 3;
+	vaoAttribByteSize = 28;
+
 	OrganicGLWinUtils::initializeLibraryAndSetHints();
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);
 	OrganicGLWinUtils::checkWindowValidity(window);											// make sure the window is valid

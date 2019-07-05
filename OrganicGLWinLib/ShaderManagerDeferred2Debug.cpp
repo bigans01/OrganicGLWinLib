@@ -1,20 +1,15 @@
 #include "stdafx.h"
-#include "ShaderManagerDeferred2.h"
+#include "ShaderManagerDeferred2Debug.h"
 
-void ShaderManagerDeferred2::initialize(int in_windowWidth, int in_windowHeight)
+void ShaderManagerDeferred2Debug::initialize(int in_windowWidth, int in_windowHeight)
 {
 
 }
 
-void ShaderManagerDeferred2::initializeShader(int in_windowWidth, int in_windowHeight, int in_terrainBufferSize)
+void ShaderManagerDeferred2Debug::initializeShader(int in_windowWidth, int in_windowHeight, int in_terrainBufferSize)
 {
 	width = in_windowWidth;
 	height = in_windowHeight;
-
-	// set shader specific VAO values
-	vaoAttribMode = 3;
-	vaoAttribByteSize = 28;
-
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
 	OrganicGLWinUtils::checkWindowValidity(window);			// CHECK FOR DEFERRED? 
@@ -29,7 +24,7 @@ void ShaderManagerDeferred2::initializeShader(int in_windowWidth, int in_windowH
 	OrganicGLWinUtils::IMGuiInit(window);
 
 	// load shaders
-	OrganicGLWinUtils::loadShadersViaMode(&shaderProgramID, 4);		// load mode 5 shaders;	(3 will become 5, but only during testing, until OGLM functionality is revisited -- BE SURE to set the appropriate shader back when done!!)
+	OrganicGLWinUtils::loadShadersViaMode(&shaderProgramID, 5);		// load mode 5 shaders;	(3 will become 5, but only during testing, until OGLM functionality is revisited -- BE SURE to set the appropriate shader back when done!!)
 	OGLMVertexSubBufferSize = in_terrainBufferSize * 1000000;		// set terrain buffer size
 	OrganicGLWinUtils::createImmutableBufferMode2(&terrainBufferID, &terrainSwapID, OGLMVertexSubBufferSize, &textID);
 	mvpHandle = glGetUniformLocation(shaderProgramID, "MVP");
@@ -44,12 +39,11 @@ void ShaderManagerDeferred2::initializeShader(int in_windowWidth, int in_windowH
 
 	setupRenderQuad();
 	setupFBO();
-	//glActiveTexture(GL_TEXTURE0);
 	setupTerrainVAO();
 	acquireSubroutineIndices();
 }
 
-void ShaderManagerDeferred2::setMatrices()
+void ShaderManagerDeferred2Debug::setMatrices()
 {
 	MVP = projection * view * model;
 	mvpHandle = glGetUniformLocation(shaderProgramID, "MVP");	// find the MVP uniform
@@ -69,12 +63,12 @@ void ShaderManagerDeferred2::setMatrices()
 	glUniform1f(atlasTileWidthUniform, atlasTileWidth);
 }
 
-void ShaderManagerDeferred2::shutdownGL()
+void ShaderManagerDeferred2Debug::shutdownGL()
 {
 
 }
 
-void ShaderManagerDeferred2::setupRenderQuad()
+void ShaderManagerDeferred2Debug::setupRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
 	glGenBuffers(1, &quadBufferID);					// generate the buffer
@@ -100,7 +94,7 @@ void ShaderManagerDeferred2::setupRenderQuad()
 	glBindVertexArray(0);			// may not need to reset here, but lets do it anyway
 }
 
-void ShaderManagerDeferred2::setupFBO()
+void ShaderManagerDeferred2Debug::setupFBO()
 {
 	// set up the deferred FBO
 	GLuint depthBuf, posTex, colorTex;
@@ -131,26 +125,45 @@ void ShaderManagerDeferred2::setupFBO()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);				// reset back to the default OpenGL FBO
 }
 
-void ShaderManagerDeferred2::setupTerrainVAO()
+void ShaderManagerDeferred2Debug::setupTerrainVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&terrainVaoID);	// create/bind the VAO to quadVaoID
 	glBindBuffer(GL_ARRAY_BUFFER, terrainBufferID);	// bind to the immutable buffer before setting the attribs
-
+	GLfloat testTriangleData[] =
+	{
+		-2.0f, -2.0f, 0.0f, 0.0f, 0.0f,	0.0f, 0.0f, // lower left
+		2.0f, -2.0f, 0.0f, 1.0f, 0.0f,	0.0f, 0.0f,// lower right
+		-2.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,	// uper left
+	};
+	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * 7 * sizeof(float), testTriangleData);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)12);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
 	glEnableVertexAttribArray(2);
+
+	// set the triangle's texture in texture unit 0
+	glActiveTexture(GL_TEXTURE0);		// set active texture as unit 0
+	glGenTextures(1, &mainAlbedoText);
+	glBindTexture(GL_TEXTURE_2D, mainAlbedoText);
+	std::string testTexture = "testTexture.jpg";	// basic test texture
+	std::cout << "Attempting jpg load..." << std::endl;
+	int testTextureWidth;
+	int testTextureHeight;
+	int testTextureNRChannels;
+	unsigned char* testTextureData = stbi_load(testTexture.c_str(), &testTextureWidth, &testTextureHeight, &testTextureNRChannels, 0);	// retrieve the data from the texture
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, testTextureWidth, testTextureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, testTextureData);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void ShaderManagerDeferred2::acquireSubroutineIndices()
+void ShaderManagerDeferred2Debug::acquireSubroutineIndices()
 {
 	pass1index = glGetSubroutineIndex(shaderProgramID, GL_FRAGMENT_SHADER, "pass1");
 	pass2index = glGetSubroutineIndex(shaderProgramID, GL_FRAGMENT_SHADER, "pass2");
 }
 
-void ShaderManagerDeferred2::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
+void ShaderManagerDeferred2Debug::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
 {
 	glActiveTexture(texUnit);
 	glGenTextures(1, &texid);
@@ -160,21 +173,49 @@ void ShaderManagerDeferred2::createGBufText(GLenum texUnit, GLenum  format, GLui
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void ShaderManagerDeferred2::render()
+void ShaderManagerDeferred2Debug::render()
 {
+	do {
+		computeMatricesFromInputs();
+		updateMatricesAndDelta();
 
+		// IMGUI prep
+		ImGui_ImplOpenGL3_NewFrame();		// (required)
+		ImGui_ImplGlfw_NewFrame();	// setup the new frame (required)
+		ImGui::NewFrame();
+
+		ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);	// not sure what 2nd argument is here?
+		bool window_val = true;
+		ImGui::Begin("First Window Ever", &window_val);	// needs to accept a bool of true? hmmm ok
+		ImGui::Text("Options:");
+		ImGui::End();
+
+
+		runPass1();
+		glFlush();
+		runPass2();
+
+		// IMGUI render
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	} while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+		glfwWindowShouldClose(window) == 0);
 }
 
-void ShaderManagerDeferred2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void ShaderManagerDeferred2Debug::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	//updateMatricesForPass1();
-	runPass1(in_drawArrayID, in_startArray, in_vertexCount, in_numberOfCollections);
+	runPass1();
 	glFlush();
 	//std::cout << "Hey here we go..." << std::endl;
 	runPass2();
 }
 
-void ShaderManagerDeferred2::runPass1(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void ShaderManagerDeferred2Debug::runPass1()
 {
 	//std::cout << "number of collections is " << in_numberOfCollections << "!! " << std::endl;
 	//std::cout << "vertex count is: " << in_vertexCount[0] << std::endl;	// 1131
@@ -184,12 +225,12 @@ void ShaderManagerDeferred2::runPass1(GLuint* in_drawArrayID, GLint* in_startArr
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass1index);		// set appropriate variables for pass #1
 	glBindVertexArray(terrainVaoID);								// bind to the terrain VAO
 	setMatrices();
-	glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// draw the terrain
-	//glDrawArrays(GL_TRIANGLES, 0, 1131);
+	//glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// draw the terrain
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glFinish();
 }
 
-void ShaderManagerDeferred2::runPass2()
+void ShaderManagerDeferred2Debug::runPass2()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -203,7 +244,8 @@ void ShaderManagerDeferred2::runPass2()
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 }
 
-void ShaderManagerDeferred2::updateMatricesForPass1()
+/*
+void ShaderManagerDeferred2Debug::updateMatricesForPass1()
 {
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
@@ -221,4 +263,4 @@ void ShaderManagerDeferred2::updateMatricesForPass1()
 	model = glm::mat4(1.0);
 	MVP = projection * view * model;
 }
-
+*/

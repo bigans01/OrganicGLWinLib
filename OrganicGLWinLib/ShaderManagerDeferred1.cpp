@@ -13,7 +13,7 @@ void ShaderManagerDeferred1::initialize(int in_windowWidth, int in_windowHeight)
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
 	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.7f, 0.0f);	// background color
-	OrganicGLWinUtils::loadShadersViaMode(&programID, 4);
+	OrganicGLWinUtils::loadShadersViaMode(&programID, 5);
 
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);

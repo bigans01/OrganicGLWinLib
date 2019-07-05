@@ -459,6 +459,7 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 
 
 	// Step 2: set up the initial atlas texture, and set its max level
+	glActiveTexture(GL_TEXTURE0);				// be sure to set the appropriate texture unit!
 	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
 	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
 	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
@@ -685,6 +686,12 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	else if (in_mode == 4)
 	{
 		std::cout << "Loading deferred shaders..." << std::endl;
+		//*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode4_DeferredVS.vertexshader", "graphics/shaders/Mode4_DeferredFS.fragmentshader");
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode4_Deferred2_VS.vertexshader", "graphics/shaders/Mode4_Deferred2_FS.fragmentshader");
+	}
+	else if (in_mode == 5)
+	{
+		//*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode5_Deferred2_VS.vertexshader", "graphics/shaders/Mode5_Deferred2_FS.fragmentshader");
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/Mode4_DeferredVS.vertexshader", "graphics/shaders/Mode4_DeferredFS.fragmentshader");
 	}
 }

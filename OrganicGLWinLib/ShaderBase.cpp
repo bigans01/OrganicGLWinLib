@@ -12,6 +12,15 @@ GLuint* ShaderBase::getTerrainSwapID()
 	return &terrainSwapID;
 }
 
+int ShaderBase::getVaoAttribMode()
+{
+	return vaoAttribMode;
+}
+int ShaderBase::getVaoAttribByteSize()
+{
+	return vaoAttribByteSize;
+}
+
 void ShaderBase::computeMatricesFromInputs()
 {
 	// glfwGetTime is called only once, the first time this function is called
