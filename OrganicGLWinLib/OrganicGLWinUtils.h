@@ -43,6 +43,8 @@ public:
 	static void createImmutableBufferExperimental(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef, GLuint* in_textureRef2);
 	static void createImmutableBufferExperimental2(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef);
 	static void createImmutableBufferExperimental3(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef);
+	static void createFBO(GLuint* in_fboIDref);
+	static void createBuffer(GLuint* in_bufferIDref);
 	static AtlasMetaData findAtlasMetadata(int in_atlasWidth, int in_tileWidth);
 	static void createAndBindVertexArray(GLuint* in_bufferID);													// creates and binds a single vertex array
 	static void createAndBindDrawIndirectBuffer(GLuint* in_bufferID);											// creates and binds a single indirect buffer

@@ -66,6 +66,7 @@ void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, GLuint* 
 	
 	
 	// create texture buffers
+	/*
 	glGenTextures(1, &*in_textureRef);
 	glBindTexture(GL_TEXTURE_2D, *in_textureRef);
 
@@ -82,8 +83,8 @@ void OrganicGLWinUtils::createImmutableBufferMode2(GLuint* in_bufferID, GLuint* 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);
 	delete data;
-	
-	std::cout << ">> Mode 2 GL buffers set up OK. " << std::endl;
+	*/
+	std::cout << ">>>> Mode 2 GL buffers set up OK. " << std::endl;
 }
 
 void OrganicGLWinUtils::createImmutableBuffer(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers)
@@ -92,6 +93,16 @@ void OrganicGLWinUtils::createImmutableBuffer(GLuint* in_bufferID, int in_buffer
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
 	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+}
+
+void OrganicGLWinUtils::createBuffer(GLuint* in_bufferIDref)
+{
+	glGenBuffers(1, in_bufferIDref);					// generate the buffer
+}
+
+void OrganicGLWinUtils::createFBO(GLuint* in_fboIDref)
+{
+	glGenFramebuffers(1, in_fboIDref);
 }
 
 void OrganicGLWinUtils::createImmutableBufferExperimental(GLuint* in_bufferID, int in_bufferSize, int in_numberOfBuffers, GLuint* in_textureRef, GLuint* in_textureRef2)

@@ -1,0 +1,72 @@
+#include "stdafx.h"
+#include "Gear.h"
+
+void Gear::useProgram()
+{
+	glUseProgram(programID);
+}
+
+void Gear::setMVP(glm::mat4 in_MVPvalue)	// sets the MVP; should be called each frame
+{
+	MVP = in_MVPvalue;
+}
+
+void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
+{
+	int currentKey = gearMultiDrawArrayJobMap.size();
+	std::cout << ">>> ! Before insert of GLMultiDrawArrayJob into gear..." << std::endl;
+	gearMultiDrawArrayJobMap[currentKey] = in_job;
+	std::cout << ">>> ! After insert of GLMultiDrawArrayJob into gear..." << std::endl;
+	gearMultiDrawArrayJobLookup[in_jobName] = currentKey;
+}
+
+void Gear::registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID)
+{
+	int currentKey = gearPersistentBufferMap.size();
+	gearPersistentBufferMap[currentKey] = in_bufferID;
+	gearPersistentBufferLookup[in_bufferName] = currentKey;
+}
+
+void Gear::registerNewFBO(std::string in_fboName, GLuint in_bufferID)
+{
+	int currentKey = gearFboMap.size();
+	gearFboMap[currentKey] = in_bufferID;
+	gearFboLookup[in_fboName] = currentKey;
+}
+
+void Gear::registerNewTexture(std::string in_textureName, GLuint in_textureID)
+{
+	int currentKey = gearTextureMap.size();
+	gearTextureMap[currentKey] = in_textureID;
+	gearTextureLookup[in_textureName] = currentKey;
+}
+
+void Gear::registerNewBuffer(std::string in_bufferName, GLuint in_bufferID)
+{
+	int currentKey = gearBufferMap.size();
+	gearBufferMap[currentKey] = in_bufferID;
+	gearBufferLookup[in_bufferName] = currentKey;
+}
+
+void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformName)
+{
+	GLUniformRequest newRequest(in_dataType, in_uniformName);
+	//newRequest.dataType = in_dataType;
+	//newRequest.uniformName = in_uniformName;
+	uniformRequests.push_back(newRequest);
+}
+
+void Gear::insertMultiDrawArrayJobRequest(std::string in_jobName)
+{
+	multiDrawArrayJobRequests.push_back(in_jobName);
+}
+
+std::vector<GLUniformRequest>* Gear::getUniformRequests()
+{
+	return &uniformRequests;
+}
+
+std::vector<std::string>* Gear::getMultiDrawArrayJobRequests()
+{
+	return &multiDrawArrayJobRequests;
+}

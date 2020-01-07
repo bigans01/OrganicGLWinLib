@@ -23,7 +23,7 @@ void ShaderManagerDeferred2::initializeShader(int in_windowWidth, int in_windowH
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
 	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.7f, 0.0f);	// background color
-	OrganicGLWinUtils::createAndBindDrawIndirectBuffer(&organicGLIndirectBufferID);		// indirect draw buffer
+	//OrganicGLWinUtils::createAndBindDrawIndirectBuffer(&organicGLIndirectBufferID);		// indirect draw buffer
 
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
@@ -42,7 +42,7 @@ void ShaderManagerDeferred2::initializeShader(int in_windowWidth, int in_windowH
 	// enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	setupRenderQuad();
+	setupRenderQuad();											// continue from here, 12/17/2019 6:50 pm
 	setupFBO();
 	//glActiveTexture(GL_TEXTURE0);
 	setupTerrainVAO();
@@ -179,7 +179,7 @@ void ShaderManagerDeferred2::runPass1(GLuint* in_drawArrayID, GLint* in_startArr
 	//std::cout << "number of collections is " << in_numberOfCollections << "!! " << std::endl;
 	//std::cout << "vertex count is: " << in_vertexCount[0] << std::endl;	// 1131
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
 	glEnable(GL_DEPTH_TEST);
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass1index);		// set appropriate variables for pass #1
 	glBindVertexArray(terrainVaoID);								// bind to the terrain VAO
@@ -192,8 +192,17 @@ void ShaderManagerDeferred2::runPass1(GLuint* in_drawArrayID, GLint* in_startArr
 void ShaderManagerDeferred2::runPass2()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glDisable(GL_DEPTH_TEST);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//glDisable(GL_DEPTH_TEST);
+
+	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	view = glm::mat4(1.0);
 	model = glm::mat4(1.0);
 	projection = glm::mat4(1.0);
