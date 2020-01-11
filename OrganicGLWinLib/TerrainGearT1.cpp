@@ -38,7 +38,85 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 void TerrainGearT1::render()
 {
 	useProgram();	// switch to this shader's program.
+	//glActiveTexture(GL_TEXTURE0);
+	runPass1();
+	glFlush();
+	runPass2();
 }
+
+void TerrainGearT1::runPass1()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
+	glEnable(GL_DEPTH_TEST);
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass1index);		// set appropriate variables for pass #1
+	glBindVertexArray(terrainVaoID);								// bind to the terrain VAO
+	setPass1Matrices();
+	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("deferred");
+	//glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// draw the terrain
+	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);
+	//std::cout << "Draw count is: " << jobToUse.drawCount << std::endl;
+	glFinish();
+}
+
+void TerrainGearT1::runPass2()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
+
+	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
+	/*
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	*/
+
+	setPass2Matrices();
+	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass2index);		// set appropriate variables for pass #1
+	glBindVertexArray(quadVaoID);
+	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
+}
+
+void TerrainGearT1::setPass1Matrices()
+{
+	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");	// find the MVP uniform
+	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
+
+	//glm::mat4 mv = view * model;
+	GLuint mvUniform = glGetUniformLocation(programID, "ModelViewMatrix");
+	glUniformMatrix4fv(mvUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("ModelViewMatrix")[0][0]);
+
+	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
+	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));
+	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
+
+	//std::cout << "!!!!!! ATLAS VALUES ARE: ############################ " << std::endl;
+	//std::cout << "Atlas width: " << gearUniformRegistry.getFloat("atlasWidthUniform") << std::endl;
+}
+
+void TerrainGearT1::setPass2Matrices()
+{
+	glm::mat4 temp_Proj = glm::mat4(1.0);
+	glm::mat4 temp_View = glm::mat4(1.0);
+	glm::mat4 temp_Model = glm::mat4(1.0);
+
+	glm::mat4 temp_MVP = temp_Proj * temp_View * temp_Model;
+	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");			// find the MVP uniform
+	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &temp_MVP[0][0]);		// set the uniform
+
+	glm::mat4 temp_MV = temp_View * temp_Model;
+	GLuint modelViewHandle = glGetUniformLocation(programID, "ModelViewMatrix");
+	glUniformMatrix4fv(modelViewHandle, 1, GL_FALSE, &temp_MV[0][0]);
+
+	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
+	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));
+	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
+}
+
 
 void TerrainGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 {

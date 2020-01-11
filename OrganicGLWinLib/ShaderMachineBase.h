@@ -47,6 +47,12 @@ public:
 		// texture functions
 		GLuint getTextureID(std::string in_textureName);
 
+		// terrain deferred functions
+		GLuint* getTerrainBufferRef();
+		GLuint* getTerrainSwapRef();
+		GLuint getTerrainBufferID();
+		GLuint getTerrainSwapID();
+
 		 // "Terrain" vao data value retrieval functions for OrganicSystem
 		int getVaoAttribMode();
 		int getVaoAttribByteSize();
@@ -55,6 +61,7 @@ public:
 
 		glm::vec3* getPosition();
 		glm::vec3* getDirection();
+		GLFWwindow* getWindow();
 
 protected:
 		// misc
@@ -124,7 +131,6 @@ protected:
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
-		SimpleUnique simpleTest();
 };
 
 #endif;

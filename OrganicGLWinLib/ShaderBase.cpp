@@ -2,12 +2,12 @@
 #include "ShaderBase.h"
 
 double ShaderBase::lastTime = glfwGetTime();
-GLuint* ShaderBase::getTerrainBufferID()
+GLuint* ShaderBase::getTerrainBufferRef()
 {
 	return &terrainBufferID;
 }
 
-GLuint* ShaderBase::getTerrainSwapID()
+GLuint* ShaderBase::getTerrainSwapRef()
 {
 	return &terrainSwapID;
 }

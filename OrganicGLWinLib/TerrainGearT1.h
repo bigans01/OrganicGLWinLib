@@ -48,6 +48,10 @@ private:
 	// subRoutine index acquisition
 	void acquireSubroutineIndices();
 
+	void runPass1();
+	void runPass2();
+	void setPass1Matrices();
+	void setPass2Matrices();
 };
 
 #endif

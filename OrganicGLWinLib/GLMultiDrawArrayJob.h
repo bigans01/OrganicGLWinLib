@@ -21,23 +21,23 @@ class GLMultiDrawArrayJob
 		{
 
 			//std::cout << "!! Original draw count value: " << drawCount << std::endl;
-			std::cout << "!! Calling operator 1" << std::endl;
+			//std::cout << "!! Calling operator 1" << std::endl;
 			drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
-			std::cout << "!!!! Old draw count: " << drawCount << std::endl;
+			//std::cout << "!!!! Old draw count: " << drawCount << std::endl;
 			drawCount = job_b.drawCount;
-			std::cout << "!!!! New draw count: " << drawCount << std::endl;
+			//std::cout << "!!!! New draw count: " << drawCount << std::endl;
 
 			if (drawCount > 0)							// only do the below if there is data to copy.
 			{
 				multiStartIndices.reset(new GLint[drawCount]);
 				multiVertexCount.reset(new GLint[drawCount]);
-				/*
+				
 				for (int x = 0; x < drawCount; x++)
 				{
 					multiStartIndices[x] = job_b.multiStartIndices[x];
 					multiVertexCount[x] = job_b.multiVertexCount[x];
 				}
-				*/
+				
 			}
 			else if (drawCount == 0)
 			{
@@ -45,7 +45,7 @@ class GLMultiDrawArrayJob
 				multiStartIndices.reset();
 				multiVertexCount.reset();
 			}
-			std::cout << "!! End Calling operator 1" << std::endl;
+			//std::cout << "!! End Calling operator 1" << std::endl;
 			return *this;
 		}
 

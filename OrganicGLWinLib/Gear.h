@@ -37,30 +37,28 @@ class Gear
 		void setMVP(glm::mat4 in_MVPvalue);	// sets the MVP; should be called each frame.
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		
-		//template <typename GLEnumType, GLDataType in_dType> void sendUniform(int in_dataType, std::string in_uniformName, GLEnumType && in_value)
 		template <GLDataType in_dType, typename PassType> void sendUniform(std::string in_uniformName, PassType in_data)
 		{
 			if constexpr (in_dType == GLDataType::VEC2)
 			{
 				gearUniformRegistry.insertVec2(in_uniformName, in_data);
-				std::cout << "!!! VEC2 inserted!" << std::endl;
+				//std::cout << "!!! VEC2 inserted!" << std::endl;
 			}
-
 			else if constexpr (in_dType == GLDataType::VEC3)
 			{
 				gearUniformRegistry.insertVec3(in_uniformName, in_data);
-				std::cout << "!!! VEC3 inserted!" << std::endl;
+				//std::cout << "!!! VEC3 inserted!" << std::endl;
 			}
 			else if constexpr (in_dType == GLDataType::MAT4)
 			{
 				gearUniformRegistry.insertMat4(in_uniformName, in_data);
-				std::cout << "!!! MAT4 inserted!" << std::endl;
+				//std::cout << "!!! MAT4 inserted!" << std::endl;
 			}
 
 			else if constexpr (in_dType == GLDataType::FLOAT)
 			{
 				gearUniformRegistry.insertFloat(in_uniformName, in_data);
-				std::cout << "!!! FLOAT inserted!" << std::endl;
+				//std::cout << "!!! FLOAT inserted!" << std::endl;
 			}
 			
 		}
@@ -93,6 +91,7 @@ class Gear
 		void registerNewTexture(std::string in_textureName, GLuint in_textureID);
 		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
 		void insertMultiDrawArrayJobRequest(std::string in_jobName);
+		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
 
 };
 

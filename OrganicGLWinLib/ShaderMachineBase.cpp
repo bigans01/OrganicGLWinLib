@@ -34,6 +34,37 @@ GLuint* ShaderMachineBase::getTextureRef(std::string in_textureName)
 	return returnGLuint;
 }
 
+GLuint* ShaderMachineBase::getTerrainBufferRef()
+{
+	GLuint* returnGLuint;
+	int lookupID = persistentBufferLookup["terrain_main"];
+	returnGLuint = &persistentBufferMap[lookupID];
+	return returnGLuint;
+}
+
+GLuint* ShaderMachineBase::getTerrainSwapRef()
+{
+	GLuint* returnGLuint;
+	int lookupID = persistentBufferLookup["terrain_swap"];
+	returnGLuint = &persistentBufferMap[lookupID];
+	return returnGLuint;
+}
+
+GLuint ShaderMachineBase::getTerrainBufferID()
+{
+	GLuint returnGLuint;
+	int lookupID = persistentBufferLookup["terrain_main"];
+	returnGLuint = persistentBufferMap[lookupID];
+	return returnGLuint;
+}
+GLuint ShaderMachineBase::getTerrainSwapID()
+{
+	GLuint returnGLuint;
+	int lookupID = persistentBufferLookup["terrain_swap"];
+	returnGLuint = persistentBufferMap[lookupID];
+	return returnGLuint;
+}
+
 GLMultiDrawArrayJob* ShaderMachineBase::getMultiDrawArrayJobRef(std::string in_jobName)
 {
 	GLMultiDrawArrayJob* returnJob;
@@ -48,17 +79,8 @@ GLMultiDrawArrayJob ShaderMachineBase::getMultiDrawArrayJob(std::string in_jobNa
 	GLMultiDrawArrayJob returnJob;
 	int lookupID = multiDrawArrayJobLookup[in_jobName];
 	returnJob = multiDrawArrayJobMap[lookupID];
-	//returnJob.drawCount = 5;
 	return returnJob;
 }
-
-
-SimpleUnique ShaderMachineBase::simpleTest()
-{
-	SimpleUnique uniqueThing;
-	return uniqueThing;
-}
-
 
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
 {
@@ -256,9 +278,7 @@ void ShaderMachineBase::sendDrawJobs()
 		auto currentEnd = deRefedRequests.end();
 		for (currentBegin; currentBegin != currentEnd; currentBegin++)
 		{
-			std::cout << "!!! Sending draw job to gear..." << std::endl;
 			GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
-			std::cout << "!!! Job acquired, sending via call to gear..." << std::endl;
 			gearTrainBegin->second.get()->insertMultiDrawArrayJob(*currentBegin, jobToSend);
 		}
 	}
@@ -268,12 +288,12 @@ void ShaderMachineBase::registerDeferredDrawJob(std::string in_drawJobName, GLin
 {
 	GLMultiDrawArrayJob newJob;
 	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);
-	std::cout << "##### Callind insert for draw array job..." << std::endl;
 	insertNewMultiDrawArrayJob(in_drawJobName, newJob);
 }
 
 void ShaderMachineBase::swapAndPoll()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 }
@@ -324,20 +344,26 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName)
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
-	std::cout << "#### Begin of draw job insert function call.." << std::endl;
 	int currentSize = multiDrawArrayJobMap.size();
 	//GLMultiDrawArrayJob arrayJob;
 	//arrayJob.drawCount = 5;
 	multiDrawArrayJobMap[currentSize] = in_job;	// copy the job into the map (it will be empty at first, remember we are just registering it)
-	//multiDrawArrayJobMap[currentSize] = in_job;	// copy the job into the map (it will be empty at first, remember we are just registering it)
 	multiDrawArrayJobLookup[in_jobName] = currentSize;
+
+	//std::cout << "Begin vertex: 
 }
 
 glm::vec3* ShaderMachineBase::getPosition()
 {
 	return &position;
 }
+
 glm::vec3* ShaderMachineBase::getDirection()
 {
 	return &direction;
+}
+
+GLFWwindow* ShaderMachineBase::getWindow()
+{
+	return window;
 }

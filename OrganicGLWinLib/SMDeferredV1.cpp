@@ -48,6 +48,8 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// create the terrain gear
 	insertTerrainGear(0, programLookup["Mode4"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
@@ -58,6 +60,10 @@ void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL
 	insertNewTexture("terrainAtlas");
 	OrganicGLWinUtils::setupTextureAtlasJPEG(getTextureRef("terrainAtlas"), in_atlasMapRef, in_atlasPropertiesGLRef, uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
 
+	std::cout << "Atlas set up.................printing values: " << std::endl;
+	std::cout << "Atlas texture width: " << uniformRegistry.getFloat("atlasTextureWidth");
+	std::cout << "Atlas Tile texture width: "<< uniformRegistry.getFloat("atlasTileTextureWidth");
+
 	// send the value of the texture atlas ID to the 0 gear
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
@@ -65,6 +71,11 @@ void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL
 void SMDeferredV1::runAllShaders()
 {
 	// RESERVED FOR LATER USER
+	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
+	sendGearUniforms();	// send any other special uniform requests to each gear. 
+	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
+	runGearTrain();	  // run the draw/rendering for each gear
+	swapAndPoll();		// swap the buffers, poll for events
 }
 
 void SMDeferredV1::shutdownGL()

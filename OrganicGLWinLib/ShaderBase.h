@@ -68,8 +68,8 @@ class ShaderBase
 		virtual void shutdownGL() = 0;
 
 		// non-virtual functions
-		GLuint* getTerrainBufferID();
-		GLuint* getTerrainSwapID();
+		GLuint* getTerrainBufferRef();
+		GLuint* getTerrainSwapRef();
 		void computeMatricesFromInputs();
 		void updateMatricesAndDelta();
 		GLFWwindow* getWindow();

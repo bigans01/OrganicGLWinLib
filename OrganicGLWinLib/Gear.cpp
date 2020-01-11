@@ -14,9 +14,7 @@ void Gear::setMVP(glm::mat4 in_MVPvalue)	// sets the MVP; should be called each 
 void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentKey = gearMultiDrawArrayJobMap.size();
-	std::cout << ">>> ! Before insert of GLMultiDrawArrayJob into gear..." << std::endl;
 	gearMultiDrawArrayJobMap[currentKey] = in_job;
-	std::cout << ">>> ! After insert of GLMultiDrawArrayJob into gear..." << std::endl;
 	gearMultiDrawArrayJobLookup[in_jobName] = currentKey;
 }
 
@@ -51,8 +49,6 @@ void Gear::registerNewBuffer(std::string in_bufferName, GLuint in_bufferID)
 void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformName)
 {
 	GLUniformRequest newRequest(in_dataType, in_uniformName);
-	//newRequest.dataType = in_dataType;
-	//newRequest.uniformName = in_uniformName;
 	uniformRequests.push_back(newRequest);
 }
 
@@ -69,4 +65,12 @@ std::vector<GLUniformRequest>* Gear::getUniformRequests()
 std::vector<std::string>* Gear::getMultiDrawArrayJobRequests()
 {
 	return &multiDrawArrayJobRequests;
+}
+
+GLMultiDrawArrayJob Gear::getMultiDrawArrayJob(std::string in_jobName)
+{
+	GLMultiDrawArrayJob returnJob;
+	int lookupID = gearMultiDrawArrayJobLookup[in_jobName];
+	returnJob = gearMultiDrawArrayJobMap[lookupID];
+	return returnJob;
 }
