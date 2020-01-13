@@ -193,15 +193,10 @@ void ShaderManagerDeferred2::runPass2()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	//glDisable(GL_DEPTH_TEST);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
-		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 	view = glm::mat4(1.0);
 	model = glm::mat4(1.0);
@@ -210,6 +205,15 @@ void ShaderManagerDeferred2::runPass2()
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass2index);		// set appropriate variables for pass #1
 	glBindVertexArray(quadVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
+
+	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
+	
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 }
 
 void ShaderManagerDeferred2::updateMatricesForPass1()

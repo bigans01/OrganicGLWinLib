@@ -10,7 +10,7 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 
 	// get the uniforms; program must have been compiled before this
 	mvpHandle = glGetUniformLocation(programID, "MVP");
-	textureUniform = glGetUniformLocation(programID, "terrainTexture");
+	//textureUniform = glGetUniformLocation(programID, "terrainTexture");
 	worldPosUniform = glGetUniformLocation(programID, "worldPosition");
 	atlasWidthUniform = glGetUniformLocation(programID, "atlasTextureWidth");
 	atlasTileWidthUniform = glGetUniformLocation(programID, "atlasTileTextureWidth");
@@ -38,7 +38,6 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 void TerrainGearT1::render()
 {
 	useProgram();	// switch to this shader's program.
-	//glActiveTexture(GL_TEXTURE0);
 	runPass1();
 	glFlush();
 	runPass2();
@@ -55,30 +54,34 @@ void TerrainGearT1::runPass1()
 	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("deferred");
 	//glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// draw the terrain
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);
-	//std::cout << "Draw count is: " << jobToUse.drawCount << std::endl;
 	glFinish();
 }
 
 void TerrainGearT1::runPass2()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glDisable(GL_DEPTH_TEST);
-
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glDisable(GL_DEPTH_TEST);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
-	/*
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
-		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	*/
+
+	
+
+	
 
 	setPass2Matrices();
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass2index);		// set appropriate variables for pass #1
 	glBindVertexArray(quadVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
+
+	// copy the depth from deferred buffer to the default FBO, but only AFTER we have rendered the quad
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
 }
 
 void TerrainGearT1::setPass1Matrices()
@@ -93,9 +96,6 @@ void TerrainGearT1::setPass1Matrices()
 	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
 	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));
 	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
-
-	//std::cout << "!!!!!! ATLAS VALUES ARE: ############################ " << std::endl;
-	//std::cout << "Atlas width: " << gearUniformRegistry.getFloat("atlasWidthUniform") << std::endl;
 }
 
 void TerrainGearT1::setPass2Matrices()
@@ -123,17 +123,17 @@ void TerrainGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 	if (in_identifier == "terrain_main")
 	{
 		registerNewPersistentBuffer(in_identifier, in_gluInt);	// register the "terrain_main" PERSISTENT buffer
-		terrainBufferID = in_gluInt;		// set the main terrain buffer ID
+		//terrainBufferID = in_gluInt;		// set the main terrain buffer ID
 	}
 	else if (in_identifier == "terrain_swap")
 	{
 		registerNewPersistentBuffer(in_identifier, in_gluInt);	// register the "terrain_swap" PERSISTENT buffer
-		terrainSwapID = in_gluInt;			// set the swap terrain buffer ID
+		//terrainSwapID = in_gluInt;			// set the swap terrain buffer ID
 	}
 	else if (in_identifier == "render_quad_buffer")
 	{
 		registerNewBuffer(in_identifier, in_gluInt);			// register the "render_quad_buffer" NON-PERSISTENT buffer
-		quadBufferID = in_gluInt;
+		//quadBufferID = in_gluInt;
 		setUpRenderQuad();			// prepare the render quad
 	}
 	else if (in_identifier == "deferred_FBO")
@@ -162,7 +162,7 @@ void TerrainGearT1::executeGearFunction(std::string in_identifier)
 void TerrainGearT1::setUpRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
-	glBindBuffer(GL_ARRAY_BUFFER, quadBufferID);	// bind
+	glBindBuffer(GL_ARRAY_BUFFER, getBufferID("render_quad_buffer"));	// bind
 
 	GLfloat quadData[] =
 	{												// first 3 floats = position, 4th and 5th = texture coords. 
@@ -187,7 +187,7 @@ void TerrainGearT1::setUpRenderQuad()
 void TerrainGearT1::setupTerrainVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&terrainVaoID);	// create/bind the VAO to quadVaoID
-	glBindBuffer(GL_ARRAY_BUFFER, terrainBufferID);	// bind to the immutable buffer before setting the attribs
+	glBindBuffer(GL_ARRAY_BUFFER, getPersistentBufferID("terrain_main"));	// bind to the immutable buffer before setting the attribs
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);
 	glEnableVertexAttribArray(0);
@@ -203,14 +203,6 @@ void TerrainGearT1::acquireSubroutineIndices()
 	pass2index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass2");
 }
 
-// uniform sending definitions
-void TerrainGearT1::sendUniformMat4(std::string in_uniformVariableName, glm::mat4 in_mat4)
-{
-	if (in_uniformVariableName == "mv")
-	{
-		mv = in_mat4;
-	}
-}
 
 void TerrainGearT1::printData()
 {

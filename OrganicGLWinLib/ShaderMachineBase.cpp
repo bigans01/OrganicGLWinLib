@@ -96,6 +96,14 @@ void ShaderMachineBase::sendDataToPersistentBuffer(std::string in_bufferName, in
 	glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
 }
 
+void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
+	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+	//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+}
+
 int ShaderMachineBase::getVaoAttribMode()
 {
 	return vaoAttribMode;
@@ -107,10 +115,7 @@ int ShaderMachineBase::getVaoAttribByteSize()
 
 void ShaderMachineBase::computeMatricesFromInputs()
 {
-	// glfwGetTime is called only once, the first time this function is called
-//static double lastTime = glfwGetTime();
-
-// Compute time difference between current and last frame
+	// Compute time difference between current and last frame
 	currentTime = glfwGetTime();
 	deltaTime = float(currentTime - lastTime);
 
@@ -215,7 +220,6 @@ void ShaderMachineBase::sendGearUniforms()
 	auto gearTrainEnd = gearTrain.end();
 	for (gearTrainBegin; gearTrainBegin != gearTrainEnd; gearTrainBegin++)
 	{
-		//uniformRegistry.processGearUniformRequests(gearTrainBegin->second.get());	// must use "get" because of unique pointer.
 		std::vector<GLUniformRequest>* currentRequests = gearTrainBegin->second.get()->getUniformRequests();
 		std::vector<GLUniformRequest> deRefedRequests = *currentRequests;
 		auto currentBegin = deRefedRequests.begin();
@@ -261,8 +265,6 @@ void ShaderMachineBase::sendGearUniforms()
 			}
 			
 		}
-		
-		//gearTrainBegin->second.get()->sendUniform(
 	}
 }
 
@@ -284,7 +286,7 @@ void ShaderMachineBase::sendDrawJobs()
 	}
 }
 
-void ShaderMachineBase::registerDeferredDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void ShaderMachineBase::registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	GLMultiDrawArrayJob newJob;
 	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);
@@ -303,7 +305,6 @@ void ShaderMachineBase::insertNewPersistentBuffer(std::string in_bufferName, int
 	int currentSize = persistentBufferMap.size();	// get the index we will use
 	persistentBufferMap[currentSize] = 0;			// initialize to 0; but it will get changed.
 	OrganicGLWinUtils::createImmutableBuffer(&persistentBufferMap[currentSize], in_size, 1);	// pass a reference to the GLuint to bind to
-	//persistentBufferLookup[in_bufferName] = persistentBufferMap[currentSize];								// insert the lookup value
 	persistentBufferLookup[in_bufferName] = currentSize;								// insert the lookup value
 }
 
@@ -312,7 +313,6 @@ void ShaderMachineBase::insertNewFBO(std::string in_fboName)
 	int currentSize = fboMap.size();
 	fboMap[currentSize] = 0;	// initialize to 0; but will be changed in next function call
 	OrganicGLWinUtils::createFBO(&fboMap[currentSize]);	// create the FBO; only creates, doesn't do anything special
-	//fboLookup[in_fboName] = fboMap[currentSize];	// insert the lookup value
 	fboLookup[in_fboName] = currentSize;	// insert the lookup value
 }
 
@@ -321,7 +321,6 @@ void ShaderMachineBase::insertNewBuffer(std::string in_bufferName)
 	int currentSize = bufferMap.size();
 	bufferMap[currentSize] = 0;
 	OrganicGLWinUtils::createBuffer(&bufferMap[currentSize]);
-	//bufferLookup[in_bufferName] = bufferMap[currentSize];
 	bufferLookup[in_bufferName] = currentSize;
 }
 
@@ -329,7 +328,6 @@ void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 {
 	int currentSize = textureMap.size();
 	textureMap[currentSize] = 0;
-	//textureLookup[in_textureName] = textureMap[currentSize];
 	textureLookup[in_textureName] = currentSize;
 }
 
@@ -337,7 +335,6 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName)
 {
 	int currentSize = multiDrawArrayJobMap.size();
 	GLMultiDrawArrayJob arrayJob;
-	//arrayJob.drawCount = 5;
 	multiDrawArrayJobMap[currentSize] = arrayJob;	// copy the job into the map (it will be empty at first, remember we are just registering it)
 	multiDrawArrayJobLookup[in_jobName] = currentSize;
 }
@@ -345,12 +342,8 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName)
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentSize = multiDrawArrayJobMap.size();
-	//GLMultiDrawArrayJob arrayJob;
-	//arrayJob.drawCount = 5;
 	multiDrawArrayJobMap[currentSize] = in_job;	// copy the job into the map (it will be empty at first, remember we are just registering it)
 	multiDrawArrayJobLookup[in_jobName] = currentSize;
-
-	//std::cout << "Begin vertex: 
 }
 
 glm::vec3* ShaderMachineBase::getPosition()

@@ -165,6 +165,7 @@
     <ClInclude Include="GLMultiDrawArrayJob.h" />
     <ClInclude Include="GLUniformRegistry.h" />
     <ClInclude Include="GLUniformRequest.h" />
+    <ClInclude Include="HighlighterGearT1.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
     <ClCompile Include="GLUniformRegistry.cpp" />
     <ClCompile Include="GLUniformRequest.cpp" />
+    <ClCompile Include="HighlighterGearT1.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />

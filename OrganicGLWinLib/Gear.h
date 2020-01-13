@@ -24,17 +24,13 @@ class Gear
 		GLFWwindow* window;									// pointer to openGL window
 		int width, height;									// screen height, width
 		GLuint programID;									// the ID of the shader program this Gear uses
-		glm::mat4 MVP;
 
 		// virtual functions
 		virtual void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef) = 0;
 		virtual void render() = 0;
 		virtual void passGLuintValue(std::string in_identifier, GLuint in_gluInt) = 0;
 		virtual void executeGearFunction(std::string in_identifier) = 0;
-		virtual void sendUniformMat4(std::string in_uniformVariableName, glm::mat4 in_mat4) = 0;
 		virtual void printData() = 0;
-		
-		void setMVP(glm::mat4 in_MVPvalue);	// sets the MVP; should be called each frame.
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		
 		template <GLDataType in_dType, typename PassType> void sendUniform(std::string in_uniformName, PassType in_data)
@@ -92,6 +88,9 @@ class Gear
 		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
 		void insertMultiDrawArrayJobRequest(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
+
+		GLuint getBufferID(std::string in_bufferName);
+		GLuint getPersistentBufferID(std::string in_bufferName);
 
 };
 

@@ -32,7 +32,7 @@ public:
 		//virtual void 
 		//virtual void updateMVPinGears() = 0;	// called before drawing, and during call of multiDrawTerrain; updates MVP (and other possible uniforms) in each gear.
 
-		void registerDeferredDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
+		void registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
 
 		// persistent buffer functions
 		GLuint getPersistentBufferID(std::string in_bufferName);																	// gets the ID of the specified persistent buffer with the value of "in_bufferName"
@@ -40,6 +40,7 @@ public:
 
 		// buffer functions
 		GLuint getBufferID(std::string in_bufferName);
+		void sendDataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);
 
 		// FBO functions
 		GLuint getFBOID(std::string in_fboName);
@@ -131,6 +132,7 @@ protected:
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
+
 };
 
 #endif;

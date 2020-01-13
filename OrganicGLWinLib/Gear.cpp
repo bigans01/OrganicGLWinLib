@@ -6,11 +6,6 @@ void Gear::useProgram()
 	glUseProgram(programID);
 }
 
-void Gear::setMVP(glm::mat4 in_MVPvalue)	// sets the MVP; should be called each frame
-{
-	MVP = in_MVPvalue;
-}
-
 void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentKey = gearMultiDrawArrayJobMap.size();
@@ -44,6 +39,22 @@ void Gear::registerNewBuffer(std::string in_bufferName, GLuint in_bufferID)
 	int currentKey = gearBufferMap.size();
 	gearBufferMap[currentKey] = in_bufferID;
 	gearBufferLookup[in_bufferName] = currentKey;
+}
+
+GLuint Gear::getBufferID(std::string in_bufferName)
+{
+	GLuint returnGLuint;
+	int lookupID = gearBufferLookup[in_bufferName];
+	returnGLuint = gearBufferMap[lookupID];
+	return returnGLuint;
+}
+
+GLuint Gear::getPersistentBufferID(std::string in_bufferName)
+{
+	GLuint returnGLuint;
+	int lookupID = gearPersistentBufferLookup[in_bufferName];
+	returnGLuint = gearPersistentBufferMap[lookupID];
+	return returnGLuint;
 }
 
 void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformName)

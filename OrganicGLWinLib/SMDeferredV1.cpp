@@ -18,11 +18,13 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
-	// create the programs
-	createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
+
 
 
 	// ########################################################################## Terrain Gear set up
+	// create the programs
+	createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
+
 	// setup the immutable buffers, x2
 	int trueBufferSize = in_immutableBufferSize * 1000000;
 	insertNewPersistentBuffer("terrain_main", trueBufferSize);		// main terrain buffer
@@ -38,15 +40,18 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// create the deferred multiDrawCallJob
 	insertNewMultiDrawArrayJob("deferred");
 
-	// set up the uniform requests for the Terrain Gear
-	//uniformRegistry.
-
 	// other things to set up before inserting the terrain gear...
 	// ...
 	// ...
 
 	// create the terrain gear
 	insertTerrainGear(0, programLookup["Mode4"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+
+	// ########################################################################## Highlighter Gear set up
+	createMode0Program("Mode0");
+	insertNewBuffer("highlighter_buffer");
+	insertNewMultiDrawArrayJob("highlighter_draw_job");
+	insertHighlighterGear(1, programLookup["Mode0"]);
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -85,7 +90,7 @@ void SMDeferredV1::shutdownGL()
 
 void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
-	int currentSize = gearTrain.size();
+	//int currentSize = gearTrain.size();
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
@@ -96,6 +101,22 @@ void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 	gearTrain[in_gearID]->executeGearFunction("acquire_subroutine_indices");
 
 	std::cout << "!!! Terrain gear inserted. " << std::endl;
+}
+
+void SMDeferredV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
+	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
+}
+
+void SMDeferredV1::createMode0Program(std::string in_programName)
+{
+	int currentSize = programMap.size();
+	programMap[currentSize] = 0;
+	OrganicGLWinUtils::loadShadersViaMode(&programMap[currentSize], 0);
+	programLookup[in_programName] = programMap[currentSize];
 }
 
 void SMDeferredV1::createMode4Program(std::string in_programName)
@@ -139,21 +160,7 @@ void SMDeferredV1::updateUniformRegistry()
 	glm::mat4 currentMV = view * model;
 	uniformRegistry.insertMat4("ModelViewMatrix", currentMV); // update the MV
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
-	//uniformRegistry.insertFloat("atlasTextureWidth", 1.0f);		// width of the texture atlas,
-	//uniformRegistry.insertFloat("atlasTileTextureWidth", 0.5f);		// width of an individual tile in the texture atlas
 }
-
-/*
-void SMDeferredV1::updateMVPinGears()
-{
-	auto gearTrainBegin = gearTrain.begin();
-	auto gearTrainEnd = gearTrain.end();
-	for (gearTrainBegin; gearTrainBegin != gearTrainEnd; gearTrainBegin++)
-	{
-		gearTrainBegin->second->setMVP(MVP);	// pass the MVP to each gear
-	}
-}
-*/
 
 void SMDeferredV1::setupDeferredFBO()
 {

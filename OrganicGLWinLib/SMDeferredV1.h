@@ -15,6 +15,7 @@
 #include <unordered_map>
 #include <mutex>
 #include "TerrainGearT1.h"
+#include "HighlighterGearT1.h"
 
 class SMDeferredV1 : public ShaderMachineBase
 {
@@ -35,6 +36,9 @@ private:
 
 	//void insertNewPersistentBuffer(std::string in_bufferName, int in_size);
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
+	void insertHighlighterGear(int in_gearID, GLuint in_programID);
+
+	void createMode0Program(std::string in_programName);
 	void createMode4Program(std::string in_programName);
 	void setupDeferredFBO();		// sets up the deferred FBO, according to this Machine's needs/specifications
 
