@@ -63,12 +63,18 @@ void TerrainGearT1::runPass2()
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glDisable(GL_DEPTH_TEST);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// both bits must be set if we want to use gl_FragDepth in fragment shaders (see comments in shader
 	// TESTING ONLY -- allows depth values to be copied over!! (comment out above line of glDisbale(GL_DEPTH_TEST))
 
-	
+
 
 	
+	GLuint samplerID = glGetUniformLocation(programID, "DepthTexture");
+	glActiveTexture(GL_TEXTURE3);
+	GLuint someValue = 3;
+	glBindTexture(GL_TEXTURE_2D, someValue);	// 3 is the "depth" texture (no, it's not apparently)
+	glUniform1i(samplerID, 3);
 
 	setPass2Matrices();
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass2index);		// set appropriate variables for pass #1
@@ -76,6 +82,8 @@ void TerrainGearT1::runPass2()
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 
 	// copy the depth from deferred buffer to the default FBO, but only AFTER we have rendered the quad
+	
+	
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,

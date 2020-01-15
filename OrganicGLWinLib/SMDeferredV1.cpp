@@ -35,7 +35,8 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 
 	// create the deferred FBO; set it up
 	insertNewFBO("deferred_FBO");
-	setupDeferredFBO();
+	//setupDeferredFBO();
+	setupAlternativeDepthTexture();
 
 	// create the deferred multiDrawCallJob
 	insertNewMultiDrawArrayJob("deferred");
@@ -167,6 +168,7 @@ void SMDeferredV1::setupDeferredFBO()
 	// set up the deferred FBO
 	GLuint depthBuf, posTex, colorTex;
 	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
+	//OrganicGLWinUtils::setClearColor(70.0f, 0.0f, 0.0f, 0.0f);	// this is not FBO specific, just overwrites whatever was there before (for instance, the blue color).
 
 	// depth buffer
 	glGenRenderbuffers(1, &depthBuf);
@@ -180,6 +182,68 @@ void SMDeferredV1::setupDeferredFBO()
 
 	// attach textures to the frame buffer
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+
+	//GLuint depthTexture;
+	// D-1
+	/*
+	glActiveTexture(GL_TEXTURE3);
+	glGenTextures(1, &depthBuf);
+	glBindTexture(GL_TEXTURE_2D, depthBuf);
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
+	*/
+
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex, 0);
+
+	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(3, drawBuffers);
+
+	// check the buffer status
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);				// reset back to the default OpenGL FBO
+}
+
+void SMDeferredV1::setupAlternativeDepthTexture()
+{
+	// set up the deferred FBO
+	GLuint depthBuf, posTex, colorTex;
+	depthBuf = 0;
+	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
+
+
+	// create textures for position and color (bindings 1 and 2, respectively).
+	// unit 0 is reserved for original texture (albedo) lookup
+	createGBufText(GL_TEXTURE1, GL_RGB32F, posTex);		// g buffer for position = unit 1
+	createGBufText(GL_TEXTURE2, GL_RGB8, colorTex);		// g buffer for color = unit 2
+
+	// attach textures to the frame buffer
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+
+	//GLuint depthTexture;
+	// D-1
+	
+	
+	std::cout << "!!!!!!!!!!! Depth buf value (pre-assign) is: " << depthBuf << std::endl;
+	glActiveTexture(GL_TEXTURE3);
+	glGenTextures(1, &depthBuf);
+	glBindTexture(GL_TEXTURE_2D, depthBuf);
+	std::cout << "!!!!!!!!!!! Depth buf value is: " << depthBuf << std::endl;
+	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
+	
+
+
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex, 0);
 

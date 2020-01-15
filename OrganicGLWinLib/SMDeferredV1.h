@@ -44,6 +44,8 @@ private:
 
 	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);
 	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
+
+	void setupAlternativeDepthTexture();
 };
 
 #endif
