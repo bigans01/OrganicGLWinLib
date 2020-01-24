@@ -135,6 +135,21 @@
     <ClInclude Include="HighlighterGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SMDeferredV2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredComputeV1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainComputeGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeResultsGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -216,6 +231,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HighlighterGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredV2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredComputeV1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredComputeGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainComputeGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredComputeResultsGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SMDEFERREDV1_H
-#define SMDEFERREDV1_H
+#ifndef SMDEFERREDCOMPUTEV1_H
+#define SMDEFERREDCOMPUTEV1_H
 
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
@@ -14,10 +14,12 @@
 #include <map>
 #include <unordered_map>
 #include <mutex>
-#include "TerrainGearT1.h"
+#include "TerrainComputeGearT1.h"
+#include "DeferredComputeGearT1.h"
+#include "DeferredComputeResultsGearT1.h"
 #include "HighlighterGearT1.h"
 
-class SMDeferredV1 : public ShaderMachineBase
+class SMDeferredComputeV1 : public ShaderMachineBase
 {
 public:
 	// virtual functions (defined, inherited)
@@ -37,8 +39,11 @@ private:
 	//void insertNewPersistentBuffer(std::string in_bufferName, int in_size);
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
+	void insertComputeGear(int in_gearID, GLuint in_programID);
+	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 
 	void setupDeferredFBO();		// sets up the deferred FBO, according to this Machine's needs/specifications
+	void createComputeImage(std::string in_imageName);
 
 	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);
 	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values

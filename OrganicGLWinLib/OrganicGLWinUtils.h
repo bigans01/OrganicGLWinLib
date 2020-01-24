@@ -50,6 +50,8 @@ public:
 	static void createAndBindDrawIndirectBuffer(GLuint* in_bufferID);											// creates and binds a single indirect buffer
 	static void initializeLibraryAndSetHints();	// initializes the OpenGL library and the window; adds input(keypress) listening for the window
 	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
+	static void loadShadersViaMode(GLuint* in_programID, std::string in_programName);
+	static void loadComputeShader(GLuint* in_programID, std::string in_computeShaderName);
 	static void initializeGlew();
 	static void computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
 	static void setGLFWInputMode(GLFWwindow* in_window);

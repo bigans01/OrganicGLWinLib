@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "SMDeferredV1.h"
+#include "SMDeferredV2.h"
 
-void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
+void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
 	// basic initialization
 	width = in_windowWidth;
@@ -13,7 +13,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.7f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 23.7f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
@@ -25,7 +25,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// create the programs
 	//createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
 	//createMode4Program("TerrainGearT1");
-	createProgram("TerrainGearT1");
+	createProgram("TerrainGearT2");
 
 	// setup the immutable buffers, x2
 	int trueBufferSize = in_immutableBufferSize * 1000000;
@@ -48,7 +48,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// ...
 
 	// create the terrain gear
-	insertTerrainGear(0, programLookup["TerrainGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+	insertTerrainGear(0, programLookup["TerrainGearT2"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// ########################################################################## Highlighter Gear set up
 	//createMode0Program("Mode0");
@@ -62,7 +62,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+void SMDeferredV2::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	// register the atlas values; these should not need to change, and are not updated in calls to updateUniformRegistry -- thus, they only need to be registered once.
 	uniformRegistry.insertFloat("atlasTextureWidth", 1.0f);		// the "1.0f"s will get reset in the call to OrganicGLWinUtils::setupTextureAtlasJPEG
@@ -72,13 +72,13 @@ void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL
 
 	std::cout << "Atlas set up.................printing values: " << std::endl;
 	std::cout << "Atlas texture width: " << uniformRegistry.getFloat("atlasTextureWidth");
-	std::cout << "Atlas Tile texture width: "<< uniformRegistry.getFloat("atlasTileTextureWidth");
+	std::cout << "Atlas Tile texture width: " << uniformRegistry.getFloat("atlasTileTextureWidth");
 
 	// send the value of the texture atlas ID to the 0 gear
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMDeferredV1::runAllShaders()
+void SMDeferredV2::runAllShaders()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -88,12 +88,12 @@ void SMDeferredV1::runAllShaders()
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredV1::shutdownGL()
+void SMDeferredV2::shutdownGL()
 {
 
 }
 
-void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
+void SMDeferredV2::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	//int currentSize = gearTrain.size();
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainGearT1());
@@ -108,7 +108,7 @@ void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 	std::cout << "!!! Terrain gear inserted. " << std::endl;
 }
 
-void SMDeferredV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
+void SMDeferredV2::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
@@ -116,7 +116,7 @@ void SMDeferredV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }
 
-void SMDeferredV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void SMDeferredV2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	// clear the FBOs here;
 	// -each Gear's uniforms need to be appropriately set before glUseProgram is called for that gear.
@@ -129,7 +129,7 @@ void SMDeferredV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredV1::printDataForGears()
+void SMDeferredV2::printDataForGears()
 {
 	updateUniformRegistry();
 	sendGearUniforms();
@@ -140,7 +140,7 @@ void SMDeferredV1::printDataForGears()
 
 }
 
-void SMDeferredV1::updateUniformRegistry()
+void SMDeferredV2::updateUniformRegistry()
 {
 	// update the MVP
 	MVP = projection * view * model;
@@ -151,17 +151,13 @@ void SMDeferredV1::updateUniformRegistry()
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
 }
 
-void SMDeferredV1::setupDeferredFBO()
+void SMDeferredV2::setupDeferredFBO()
 {
 	// set up the deferred FBO
 	GLuint depthBuf, posTex, colorTex;
+	depthBuf = 0;
 	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
-	//OrganicGLWinUtils::setClearColor(70.0f, 0.0f, 0.0f, 0.0f);	// this is not FBO specific, just overwrites whatever was there before (for instance, the blue color).
 
-	// depth buffer
-	glGenRenderbuffers(1, &depthBuf);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 
 	// create textures for position and color (bindings 1 and 2, respectively).
 	// unit 0 is reserved for original texture (albedo) lookup
@@ -169,28 +165,30 @@ void SMDeferredV1::setupDeferredFBO()
 	createGBufText(GL_TEXTURE2, GL_RGB8, colorTex);		// g buffer for color = unit 2
 
 	// attach textures to the frame buffer
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
 
 	//GLuint depthTexture;
 	// D-1
-	/*
+
+
+	std::cout << "!!!!!!!!!!! Depth buf value (pre-assign) is: " << depthBuf << std::endl;
 	glActiveTexture(GL_TEXTURE3);
 	glGenTextures(1, &depthBuf);
 	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	std::cout << "!!!!!!!!!!! Depth buf value is: " << depthBuf << std::endl;
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
-	*/
+
 
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posTex, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex, 0);
 
-	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };		// output locations, under the "outputs" section of the fragment shader;
-																						// indicates relationship between the framebuffer's components, and the fragment shader's output locations.
+	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 	glDrawBuffers(3, drawBuffers);
 
 	// check the buffer status
@@ -199,7 +197,7 @@ void SMDeferredV1::setupDeferredFBO()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);				// reset back to the default OpenGL FBO
 }
 
-void SMDeferredV1::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
+void SMDeferredV2::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
 {
 	glActiveTexture(texUnit);
 	glGenTextures(1, &texid);

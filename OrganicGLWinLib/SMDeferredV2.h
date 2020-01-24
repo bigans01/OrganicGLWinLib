@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef SMDEFERREDV1_H
-#define SMDEFERREDV1_H
+#ifndef SMDEFERREDV2_H
+#define SMDEFERREDV2_H
 
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
@@ -17,7 +17,7 @@
 #include "TerrainGearT1.h"
 #include "HighlighterGearT1.h"
 
-class SMDeferredV1 : public ShaderMachineBase
+class SMDeferredV2 : public ShaderMachineBase
 {
 public:
 	// virtual functions (defined, inherited)

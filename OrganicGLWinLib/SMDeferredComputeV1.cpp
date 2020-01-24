@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "SMDeferredV1.h"
+#include "SMDeferredComputeV1.h"
 
-void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
+void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
 	// basic initialization
 	width = in_windowWidth;
@@ -13,7 +13,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.7f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 23.7f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
@@ -21,11 +21,11 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 
 
 
-	// ########################################################################## Terrain Gear set up
+	// ########################################################################## Terrain Gear (Compute) set up
 	// create the programs
 	//createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
 	//createMode4Program("TerrainGearT1");
-	createProgram("TerrainGearT1");
+	createProgram("TerrainComputeGearT1");
 
 	// setup the immutable buffers, x2
 	int trueBufferSize = in_immutableBufferSize * 1000000;
@@ -48,7 +48,17 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// ...
 
 	// create the terrain gear
-	insertTerrainGear(0, programLookup["TerrainGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+
+	// ########################################################################## Compute Gear set up
+	createComputeProgram("DeferredComputeGearT1");
+	createComputeImage("computeWrite");			// the name of the texture that contains the image the compute shader will write to
+	insertComputeGear(1, programLookup["DeferredComputeGearT1"]);
+
+	// ########################################################################## Compute results gear set up
+	createProgram("DeferredComputeResultsGearT1");
+	insertNewBuffer("compute_quad_buffer");
+	insertComputeResultsGear(2, programLookup["DeferredComputeResultsGearT1"]);
 
 	// ########################################################################## Highlighter Gear set up
 	//createMode0Program("Mode0");
@@ -56,13 +66,13 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
 	insertNewMultiDrawArrayJob("highlighter_draw_job");
-	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
+	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+void SMDeferredComputeV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	// register the atlas values; these should not need to change, and are not updated in calls to updateUniformRegistry -- thus, they only need to be registered once.
 	uniformRegistry.insertFloat("atlasTextureWidth", 1.0f);		// the "1.0f"s will get reset in the call to OrganicGLWinUtils::setupTextureAtlasJPEG
@@ -72,13 +82,13 @@ void SMDeferredV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL
 
 	std::cout << "Atlas set up.................printing values: " << std::endl;
 	std::cout << "Atlas texture width: " << uniformRegistry.getFloat("atlasTextureWidth");
-	std::cout << "Atlas Tile texture width: "<< uniformRegistry.getFloat("atlasTileTextureWidth");
+	std::cout << "Atlas Tile texture width: " << uniformRegistry.getFloat("atlasTileTextureWidth");
 
 	// send the value of the texture atlas ID to the 0 gear
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMDeferredV1::runAllShaders()
+void SMDeferredComputeV1::runAllShaders()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -88,15 +98,15 @@ void SMDeferredV1::runAllShaders()
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredV1::shutdownGL()
+void SMDeferredComputeV1::shutdownGL()
 {
 
 }
 
-void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
+void SMDeferredComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	//int currentSize = gearTrain.size();
-	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainGearT1());
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainComputeGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
@@ -105,10 +115,10 @@ void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
 	gearTrain[in_gearID]->executeGearFunction("acquire_subroutine_indices");
 
-	std::cout << "!!! Terrain gear inserted. " << std::endl;
+	std::cout << "!!! Terrain gear (Compute) inserted. " << std::endl;
 }
 
-void SMDeferredV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
+void SMDeferredComputeV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
@@ -116,7 +126,20 @@ void SMDeferredV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }
 
-void SMDeferredV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void SMDeferredComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+}
+
+void SMDeferredComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
+}
+
+void SMDeferredComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	// clear the FBOs here;
 	// -each Gear's uniforms need to be appropriately set before glUseProgram is called for that gear.
@@ -129,7 +152,7 @@ void SMDeferredV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredV1::printDataForGears()
+void SMDeferredComputeV1::printDataForGears()
 {
 	updateUniformRegistry();
 	sendGearUniforms();
@@ -140,57 +163,61 @@ void SMDeferredV1::printDataForGears()
 
 }
 
-void SMDeferredV1::updateUniformRegistry()
+void SMDeferredComputeV1::updateUniformRegistry()
 {
-	// update the MVP
-	MVP = projection * view * model;
+	// update the MVP; model is not needed here, as terrain is already translated to world space.
+	MVP = projection * view;
 	uniformRegistry.insertMat4("MVP", MVP);
 
-	glm::mat4 currentMV = view * model;
+	glm::mat4 currentMV = view;
 	uniformRegistry.insertMat4("ModelViewMatrix", currentMV); // update the MV
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
 }
 
-void SMDeferredV1::setupDeferredFBO()
+void SMDeferredComputeV1::setupDeferredFBO()
 {
 	// set up the deferred FBO
 	GLuint depthBuf, posTex, colorTex;
-	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
-	//OrganicGLWinUtils::setClearColor(70.0f, 0.0f, 0.0f, 0.0f);	// this is not FBO specific, just overwrites whatever was there before (for instance, the blue color).
+	depthBuf = 0;
+	insertNewTexture("depthBuf");
+	insertNewTexture("posTex");
+	insertNewTexture("colorTex");		// will be used by compute shader
 
-	// depth buffer
-	glGenRenderbuffers(1, &depthBuf);
-	glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
+
 
 	// create textures for position and color (bindings 1 and 2, respectively).
 	// unit 0 is reserved for original texture (albedo) lookup
-	createGBufText(GL_TEXTURE1, GL_RGB32F, posTex);		// g buffer for position = unit 1
-	createGBufText(GL_TEXTURE2, GL_RGB8, colorTex);		// g buffer for color = unit 2
+	createGBufText(GL_TEXTURE1, GL_RGB32F, getTextureLValueRef("posTex"));		// g buffer for position = unit 1 (posTex)
+	createGBufText(GL_TEXTURE2, GL_RGB8, getTextureLValueRef("colorTex"));		// g buffer for color = unit 2 (colorTex)
 
 	// attach textures to the frame buffer
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
 
 	//GLuint depthTexture;
 	// D-1
-	/*
+
+
+	std::cout << "!!!!!!!!!!! COMPUTE_V1: Depth buf value (pre-assign) is: " << getTextureID("depthBuf") << std::endl;
 	glActiveTexture(GL_TEXTURE3);
-	glGenTextures(1, &depthBuf);
-	glBindTexture(GL_TEXTURE_2D, depthBuf);
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT24, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glGenTextures(1, getTextureRef("depthBuf"));
+	glBindTexture(GL_TEXTURE_2D, getTextureID("depthBuf"));
+	std::cout << "!!!!!!!!!!! COMPUTE_V1: Position buf value is: " << getTextureID("posTex") << std::endl;
+	std::cout << "!!!!!!!!!!! COMPUTE_V1: Color buf value is: " << getTextureID("colorTex") << std::endl;
+	std::cout << "!!!!!!!!!!! COMPUTE_V1: Depth buf value is: " << getTextureID("depthBuf") << std::endl;
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuf, 0);
-	*/
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, getTextureID("depthBuf"), 0);
 
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posTex, 0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, colorTex, 0);
 
-	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };		// output locations, under the "outputs" section of the fragment shader;
-																						// indicates relationship between the framebuffer's components, and the fragment shader's output locations.
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, getTextureID("posTex"), 0);	// posTex
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, getTextureID("colorTex"), 0);	// colorTex
+
+	GLenum drawBuffers[] = { GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 	glDrawBuffers(3, drawBuffers);
 
 	// check the buffer status
@@ -199,7 +226,25 @@ void SMDeferredV1::setupDeferredFBO()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);				// reset back to the default OpenGL FBO
 }
 
-void SMDeferredV1::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
+void SMDeferredComputeV1::createComputeImage(std::string in_imageName)
+{
+	int tex_w = width;
+	int tex_h = height;
+	insertNewTexture(in_imageName);
+	glGenTextures(1, getTextureRef(in_imageName));
+	glActiveTexture(GL_TEXTURE4);						// compute will read from texture unit 4, to get the image.
+	glBindTexture(GL_TEXTURE_2D, getTextureID(in_imageName));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, tex_w, tex_h, 0, GL_RGBA, GL_FLOAT,
+		NULL);
+	glBindImageTexture(0, getTextureID(in_imageName), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);	// bind to image unit 0, for this texture (it can now be sampled in the compute shader)
+	std::cout << "!!!!!!! Compute Image Texture ID is: " << getTextureID("computeWrite") << std::endl;	// should be 4
+}
+
+void SMDeferredComputeV1::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
 {
 	glActiveTexture(texUnit);
 	glGenTextures(1, &texid);

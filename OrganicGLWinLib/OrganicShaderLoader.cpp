@@ -111,3 +111,51 @@ GLuint OrganicShaderLoader::LoadShaders(const char* vertex_file_path, const char
 
 	return ProgramID;
 }
+
+GLuint OrganicShaderLoader::LoadComputeShader(const char* compute_file_path)
+{
+	GLuint computeShaderID = glCreateShader(GL_COMPUTE_SHADER);
+
+	std::string VertexShaderCode;
+	std::ifstream VertexShaderStream(compute_file_path, std::ios::in);
+	if (VertexShaderStream.is_open()) {
+		std::string Line = "";
+		while (getline(VertexShaderStream, Line))
+			VertexShaderCode += "\n" + Line;
+		VertexShaderStream.close();
+	}
+	else {
+		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", compute_file_path);
+		getchar();
+		return 0;
+	}
+
+	GLint Result = GL_FALSE;
+	int InfoLogLength;
+
+	// Compile compute Shader
+	printf("Compiling compute shader : %s\n", compute_file_path);
+	char const * VertexSourcePointer = VertexShaderCode.c_str();
+	glShaderSource(computeShaderID, 1, &VertexSourcePointer, NULL);
+	glCompileShader(computeShaderID);
+
+	// Check compute Shader
+	glGetShaderiv(computeShaderID, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(computeShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	if (InfoLogLength > 0) {
+		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
+		glGetShaderInfoLog(computeShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+		printf("%s\n", &VertexShaderErrorMessage[0]);
+	}
+
+	// Link the program
+	printf("Linking compute program\n");
+	GLuint ProgramID = glCreateProgram();
+	glAttachShader(ProgramID, computeShaderID);
+	glLinkProgram(ProgramID);
+
+	glDetachShader(ProgramID, computeShaderID);
+	glDeleteShader(computeShaderID);
+
+	return ProgramID;
+}

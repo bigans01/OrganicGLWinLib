@@ -26,6 +26,13 @@ GLuint ShaderMachineBase::getTextureID(std::string in_textureName)
 	return returnGLuint;
 }
 
+GLuint& ShaderMachineBase::getTextureLValueRef(std::string in_textureName)
+{
+	int lookupID = textureLookup[in_textureName];
+	GLuint& returnLValue = textureMap[lookupID];
+	return returnLValue;
+}
+
 GLuint* ShaderMachineBase::getTextureRef(std::string in_textureName)
 {
 	GLuint* returnGLuint;
@@ -198,7 +205,7 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 	// For the next frame, the "last time" will be "now"
 	model = glm::mat4(1.0);
-	MVP = projection * view * model;
+	MVP = projection * view;		// model is NOT needed here for terrain drawing, since terrain data is in world space already.
 
 
 	lastTime = currentTime;
@@ -344,6 +351,22 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMul
 	int currentSize = multiDrawArrayJobMap.size();
 	multiDrawArrayJobMap[currentSize] = in_job;	// copy the job into the map (it will be empty at first, remember we are just registering it)
 	multiDrawArrayJobLookup[in_jobName] = currentSize;
+}
+
+void ShaderMachineBase::createProgram(std::string in_programName)
+{
+	int currentSize = programMap.size();
+	programMap[currentSize] = 0;
+	OrganicGLWinUtils::loadShadersViaMode(&programMap[currentSize], in_programName);
+	programLookup[in_programName] = programMap[currentSize];
+}
+
+void ShaderMachineBase::createComputeProgram(std::string in_programName)
+{
+	int currentSize = programMap.size();
+	programMap[currentSize] = 0;
+	OrganicGLWinUtils::loadComputeShader(&programMap[currentSize], in_programName);
+	programLookup[in_programName] = programMap[currentSize];
 }
 
 glm::vec3* ShaderMachineBase::getPosition()

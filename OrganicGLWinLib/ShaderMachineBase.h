@@ -47,6 +47,7 @@ public:
 
 		// texture functions
 		GLuint getTextureID(std::string in_textureName);
+		GLuint& getTextureLValueRef(std::string in_textureName);
 
 		// terrain deferred functions
 		GLuint* getTerrainBufferRef();
@@ -128,6 +129,10 @@ protected:
 		// draw job functions
 		void insertNewMultiDrawArrayJob(std::string in_jobName);
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
+
+		// program creation
+		void createProgram(std::string in_programName);
+		void createComputeProgram(std::string in_programName);
 		
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);

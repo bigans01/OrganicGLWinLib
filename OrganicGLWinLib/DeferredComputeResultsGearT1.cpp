@@ -1,0 +1,102 @@
+#include "stdafx.h"
+#include "DeferredComputeResultsGearT1.h"
+
+
+void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+{
+	width = in_width;
+	height = in_height;
+	window = in_windowRef;
+	programID = in_programID;
+
+	// set up the uniform requests
+	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
+	uniformRequests.push_back(reqMVP);
+
+	//GLUniformRequest modelViewMatrix(GLDataType::MAT4, "ModelViewMatrix");
+	//uniformRequests.push_back(modelViewMatrix);
+}
+void DeferredComputeResultsGearT1::render()
+{
+	useProgram();
+	setDrawMatrices();
+	drawQuad();
+}
+
+
+void DeferredComputeResultsGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
+{
+	if (in_identifier == "compute_quad_buffer")
+	{
+		std::cout << "!!!!! ++++ SETTING UP COMPUTE QUAD BUFFER" << std::endl;
+		registerNewBuffer(in_identifier, in_gluInt);			// register the "render_quad_buffer" NON-PERSISTENT buffer
+		//quadBufferID = in_gluInt;
+		setUpRenderQuad();			// prepare the render quad
+	}
+}
+
+void DeferredComputeResultsGearT1::executeGearFunction(std::string in_identifier)
+{
+
+}
+
+void DeferredComputeResultsGearT1::printData()
+{
+
+}
+
+void DeferredComputeResultsGearT1::setUpRenderQuad()
+{
+	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
+	glBindBuffer(GL_ARRAY_BUFFER, getBufferID("compute_quad_buffer"));	// bind
+
+	// quad points, and UVs
+	GLfloat quadData[] =
+	{												// first 3 floats = position, 4th and 5th = texture coords. 
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,		// 1st point, lower left
+		1.0f, -1.0f, 0.0f, 1.0f, 0.0f,		// 2nd point, lower right
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f,				// 3rd point, upper right
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,		// 4th point, lower left
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f,				// 5th point, upper right
+		-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,				// 6th point, upper left
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, 6 * 5 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
+	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
+	//glEnableVertexAttribArray(2);
+	//glBindVertexArray(0);			// may not need to reset here, but lets do it anyway
+
+
+}
+
+void DeferredComputeResultsGearT1::drawQuad()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);	// bind back to the default framebuffer
+	glBindVertexArray(quadVaoID);
+	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 1);		// hard coded, needs to change.
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void DeferredComputeResultsGearT1::setDrawMatrices()
+{
+	//GLuint mvpUniform = glGetUniformLocation(programID, "MVP");	// find the MVP uniform
+
+	glm::mat4 temp_Proj = glm::mat4(1.0);
+	glm::mat4 temp_View = glm::mat4(1.0);
+	glm::mat4 temp_Model = glm::mat4(1.0);
+
+	glm::mat4 temp_MVP = temp_Proj * temp_View * temp_Model;
+	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");			// find the MVP uniform
+	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &temp_MVP[0][0]);		// set the uniform
+
+	//glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
+}

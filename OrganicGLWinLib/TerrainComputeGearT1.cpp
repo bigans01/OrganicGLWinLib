@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "TerrainGearT1.h"
+#include "TerrainComputeGearT1.h"
 
-void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void TerrainComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
 {
 	width = in_width;
 	height = in_height;
@@ -35,15 +35,15 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 	multiDrawArrayJobRequests.push_back(deferredDrawRequest);
 
 }
-void TerrainGearT1::render()
+void TerrainComputeGearT1::render()
 {
 	useProgram();	// switch to this shader's program.
 	runPass1();
 	glFlush();
-	runPass2();
+	//runPass2();
 }
 
-void TerrainGearT1::runPass1()
+void TerrainComputeGearT1::runPass1()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
@@ -57,7 +57,7 @@ void TerrainGearT1::runPass1()
 	glFinish();
 }
 
-void TerrainGearT1::runPass2()
+void TerrainComputeGearT1::runPass2()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -83,16 +83,18 @@ void TerrainGearT1::runPass2()
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 
 	// copy the depth from deferred buffer to the default FBO, but only AFTER we have rendered the quad
-	
+
+	//std::cout << "Deferred FBO ID is: " << deferredFBO << std::endl;
+
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, deferredFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
 		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
+
 }
 
-void TerrainGearT1::setPass1Matrices()
+void TerrainComputeGearT1::setPass1Matrices()
 {
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");	// find the MVP uniform
 	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
@@ -106,7 +108,7 @@ void TerrainGearT1::setPass1Matrices()
 	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
 }
 
-void TerrainGearT1::setPass2Matrices()
+void TerrainComputeGearT1::setPass2Matrices()
 {
 	glm::mat4 temp_Proj = glm::mat4(1.0);
 	glm::mat4 temp_View = glm::mat4(1.0);
@@ -126,7 +128,7 @@ void TerrainGearT1::setPass2Matrices()
 }
 
 
-void TerrainGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
+void TerrainComputeGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 {
 	if (in_identifier == "terrain_main")
 	{
@@ -155,7 +157,7 @@ void TerrainGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 	}
 }
 
-void TerrainGearT1::executeGearFunction(std::string in_identifier)
+void TerrainComputeGearT1::executeGearFunction(std::string in_identifier)
 {
 	if (in_identifier == "setup_terrain_VAO")
 	{
@@ -167,7 +169,7 @@ void TerrainGearT1::executeGearFunction(std::string in_identifier)
 	}
 }
 
-void TerrainGearT1::setUpRenderQuad()
+void TerrainComputeGearT1::setUpRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
 	glBindBuffer(GL_ARRAY_BUFFER, getBufferID("render_quad_buffer"));	// bind
@@ -192,7 +194,7 @@ void TerrainGearT1::setUpRenderQuad()
 	glBindVertexArray(0);			// may not need to reset here, but lets do it anyway
 }
 
-void TerrainGearT1::setupTerrainVAO()
+void TerrainComputeGearT1::setupTerrainVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&terrainVaoID);	// create/bind the VAO to quadVaoID
 	glBindBuffer(GL_ARRAY_BUFFER, getPersistentBufferID("terrain_main"));	// bind to the immutable buffer before setting the attribs
@@ -205,14 +207,14 @@ void TerrainGearT1::setupTerrainVAO()
 	glEnableVertexAttribArray(2);
 }
 
-void TerrainGearT1::acquireSubroutineIndices()
+void TerrainComputeGearT1::acquireSubroutineIndices()
 {
 	pass1index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass1");
 	pass2index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass2");
 }
 
 
-void TerrainGearT1::printData()
+void TerrainComputeGearT1::printData()
 {
 	std::cout << "Atlas width: " << gearUniformRegistry.getFloat("atlasTextureWidth") << std::endl;
 	std::cout << "Atlas tile width: " << gearUniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;

@@ -161,6 +161,8 @@
     <ClInclude Include="AtlasMetaData.h" />
     <ClInclude Include="AtlasPropertiesGL.h" />
     <ClInclude Include="AtlasTile.h" />
+    <ClInclude Include="DeferredComputeGearT1.h" />
+    <ClInclude Include="DeferredComputeResultsGearT1.h" />
     <ClInclude Include="GLDataType.h" />
     <ClInclude Include="GLMultiDrawArrayJob.h" />
     <ClInclude Include="GLUniformRegistry.h" />
@@ -176,6 +178,9 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Gear.h" />
     <ClInclude Include="SimpleUnique.h" />
+    <ClInclude Include="SMDeferredComputeV1.h" />
+    <ClInclude Include="SMDeferredV2.h" />
+    <ClInclude Include="TerrainComputeGearT1.h" />
     <ClInclude Include="TerrainGearT1.h" />
     <ClInclude Include="OrganicGLWinUtils.h" />
     <ClInclude Include="OrganicShaderLoader.h" />
@@ -200,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
+    <ClCompile Include="DeferredComputeGearT1.cpp" />
+    <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
     <ClCompile Include="GLUniformRegistry.cpp" />
@@ -213,6 +220,9 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
+    <ClCompile Include="SMDeferredComputeV1.cpp" />
+    <ClCompile Include="SMDeferredV2.cpp" />
+    <ClCompile Include="TerrainComputeGearT1.cpp" />
     <ClCompile Include="TerrainGearT1.cpp" />
     <ClCompile Include="OrganicGLWinUtils.cpp" />
     <ClCompile Include="OrganicShaderLoader.cpp" />

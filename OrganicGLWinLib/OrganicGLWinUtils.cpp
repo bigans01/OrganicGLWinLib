@@ -707,6 +707,45 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, int in_mode)
 	}
 }
 
+void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_programName)
+{
+	if (in_programName == "TerrainGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainGearT1.vertexshader", "graphics/shaders/TerrainGearT1.fragmentshader");
+	}
+	else if (in_programName == "TerrainGearT2")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainGearT2 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainGearT2.vertexshader", "graphics/shaders/TerrainGearT2.fragmentshader");
+	}
+
+	else if (in_programName == "HighlighterGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR HighlighterGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/HighlighterGearT1.vertexshader", "graphics/shaders/HighlighterGearT1.fragmentshader");
+	}
+	else if (in_programName == "TerrainComputeGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainComputeGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainComputeGearT1.vertexshader", "graphics/shaders/TerrainComputeGearT1.fragmentshader");
+	}
+	else if (in_programName == "DeferredComputeResultsGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR DeferredComputeResultsGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/DeferredComputeResultsGearT1.vertexshader", "graphics/shaders/DeferredComputeResultsGearT1.fragmentshader");
+	}
+}
+
+void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_computeShaderName)
+{
+	if (in_computeShaderName == "DeferredComputeGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD COMPUTE SHADER FOR DeferredComputeT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadComputeShader("graphics/shaders/DeferredComputeGearT1.computeshader");
+	}
+}
+
 void OrganicGLWinUtils::initializeLibraryAndSetHints()
 {
 	if (!glfwInit())	// initialize GLFW library
