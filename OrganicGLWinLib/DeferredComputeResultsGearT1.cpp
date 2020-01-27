@@ -13,8 +13,6 @@ void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
 
-	//GLUniformRequest modelViewMatrix(GLDataType::MAT4, "ModelViewMatrix");
-	//uniformRequests.push_back(modelViewMatrix);
 }
 void DeferredComputeResultsGearT1::render()
 {
@@ -30,8 +28,11 @@ void DeferredComputeResultsGearT1::passGLuintValue(std::string in_identifier, GL
 	{
 		std::cout << "!!!!! ++++ SETTING UP COMPUTE QUAD BUFFER" << std::endl;
 		registerNewBuffer(in_identifier, in_gluInt);			// register the "render_quad_buffer" NON-PERSISTENT buffer
-		//quadBufferID = in_gluInt;
 		setUpRenderQuad();			// prepare the render quad
+	}
+	else if (in_identifier == "deferred_FBO")
+	{
+		registerNewFBO(in_identifier, in_gluInt);
 	}
 }
 
@@ -66,11 +67,6 @@ void DeferredComputeResultsGearT1::setUpRenderQuad()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
 	glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
-	//glEnableVertexAttribArray(2);
-	//glBindVertexArray(0);			// may not need to reset here, but lets do it anyway
-
-
 }
 
 void DeferredComputeResultsGearT1::drawQuad()
@@ -79,7 +75,8 @@ void DeferredComputeResultsGearT1::drawQuad()
 	glBindVertexArray(quadVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, 1);		// hard coded, needs to change.
+	// copy the depth from the deferred FBO that we put the G-buffers into, to the default FBO, but only AFTER we draw the triangles.
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, getFBOID("deferred_FBO"));		
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
 		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
@@ -88,15 +85,7 @@ void DeferredComputeResultsGearT1::drawQuad()
 
 void DeferredComputeResultsGearT1::setDrawMatrices()
 {
-	//GLuint mvpUniform = glGetUniformLocation(programID, "MVP");	// find the MVP uniform
-
-	glm::mat4 temp_Proj = glm::mat4(1.0);
-	glm::mat4 temp_View = glm::mat4(1.0);
-	glm::mat4 temp_Model = glm::mat4(1.0);
-
-	glm::mat4 temp_MVP = temp_Proj * temp_View * temp_Model;
+	glm::mat4 quadMatrix = glm::mat4(1.0);
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");			// find the MVP uniform
-	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &temp_MVP[0][0]);		// set the uniform
-
-	//glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
+	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &quadMatrix[0][0]);		// set the uniform
 }

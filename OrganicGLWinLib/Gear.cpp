@@ -57,6 +57,14 @@ GLuint Gear::getPersistentBufferID(std::string in_bufferName)
 	return returnGLuint;
 }
 
+GLuint Gear::getFBOID(std::string in_fboName)
+{
+	GLuint returnGLuint;
+	int lookupID = gearFboLookup[in_fboName];
+	returnGLuint = gearFboMap[lookupID];
+	return returnGLuint;
+}
+
 void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformName)
 {
 	GLUniformRequest newRequest(in_dataType, in_uniformName);

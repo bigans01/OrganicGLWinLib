@@ -91,6 +91,7 @@ class Gear
 
 		GLuint getBufferID(std::string in_bufferName);
 		GLuint getPersistentBufferID(std::string in_bufferName);
+		GLuint getFBOID(std::string in_fboName);
 
 };
 

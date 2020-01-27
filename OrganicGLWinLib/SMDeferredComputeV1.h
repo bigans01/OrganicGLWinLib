@@ -29,26 +29,18 @@ public:
 	void shutdownGL();
 	void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);		// called by OrganicSystem
 	void printDataForGears();
-	//void updateMVPinGears();
 
 private:
-	//std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers
-	//std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
-	//std::unordered_map<std::string, int> bufferLookup;					// used to look up buffer IDs
-
-	//void insertNewPersistentBuffer(std::string in_bufferName, int in_size);
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertComputeGear(int in_gearID, GLuint in_programID);
 	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 
-	void setupDeferredFBO();		// sets up the deferred FBO, according to this Machine's needs/specifications
-	void createComputeImage(std::string in_imageName);
+	void setupDeferredFBO();								// sets up the deferred FBO, according to this Machine's needs/specifications
+	void createComputeImage(std::string in_imageName);		// creates a read/write OpenGL image
 
-	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);
+	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);		// creates a G-Buffer texture for use by the deferred shader.
 	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
-
-	//void setupAlternativeDepthTexture();
 };
 
 #endif

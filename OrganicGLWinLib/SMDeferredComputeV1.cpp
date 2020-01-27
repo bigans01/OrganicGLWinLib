@@ -22,32 +22,14 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 
 
 	// ########################################################################## Terrain Gear (Compute) set up
-	// create the programs
-	//createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
-	//createMode4Program("TerrainGearT1");
 	createProgram("TerrainComputeGearT1");
-
-	// setup the immutable buffers, x2
-	int trueBufferSize = in_immutableBufferSize * 1000000;
+	int trueBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
 	insertNewPersistentBuffer("terrain_main", trueBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", trueBufferSize);		// terrain swap buffer
-
-	// set up the render quad buffer
-	insertNewBuffer("render_quad_buffer");
-
-	// create the deferred FBO; set it up
-	insertNewFBO("deferred_FBO");
+	insertNewBuffer("render_quad_buffer");							// set up the render quad buffer
+	insertNewFBO("deferred_FBO");									// create the deferred FBO; set it up
 	setupDeferredFBO();
-	//setupAlternativeDepthTexture();
-
-	// create the deferred multiDrawCallJob
 	insertNewMultiDrawArrayJob("deferred");
-
-	// other things to set up before inserting the terrain gear...
-	// ...
-	// ...
-
-	// create the terrain gear
 	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// ########################################################################## Compute Gear set up
@@ -61,15 +43,11 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	insertComputeResultsGear(2, programLookup["DeferredComputeResultsGearT1"]);
 
 	// ########################################################################## Highlighter Gear set up
-	//createMode0Program("Mode0");
-	//createMode0Program("HighlighterGearT1");
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
 	insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void SMDeferredComputeV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
@@ -137,15 +115,18 @@ void SMDeferredComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_prog
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
+	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
 void SMDeferredComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	// clear the FBOs here;
 	// -each Gear's uniforms need to be appropriately set before glUseProgram is called for that gear.
+	// -draw jobs are also sent, where necessary
+	// -gear train is run
+	// -buffers are swapped at end, to render overall results to screen.
 
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
-	//updateMVPinGears(); // update the MVP uniforms in each gear
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
@@ -156,11 +137,8 @@ void SMDeferredComputeV1::printDataForGears()
 {
 	updateUniformRegistry();
 	sendGearUniforms();
-	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
+	sendDrawJobs();	
 	gearTrain[0]->printData();
-
-	//GLMultiDrawArrayJob drawJobA = getMultiDrawArrayJob("deferred");
-
 }
 
 void SMDeferredComputeV1::updateUniformRegistry()
@@ -181,7 +159,7 @@ void SMDeferredComputeV1::setupDeferredFBO()
 	depthBuf = 0;
 	insertNewTexture("depthBuf");
 	insertNewTexture("posTex");
-	insertNewTexture("colorTex");		// will be used by compute shader
+	insertNewTexture("colorTex");		// will be used by compute shader, to read color data into an image
 
 	glBindFramebuffer(GL_FRAMEBUFFER, getFBOID("deferred_FBO"));
 
@@ -190,13 +168,6 @@ void SMDeferredComputeV1::setupDeferredFBO()
 	// unit 0 is reserved for original texture (albedo) lookup
 	createGBufText(GL_TEXTURE1, GL_RGB32F, getTextureLValueRef("posTex"));		// g buffer for position = unit 1 (posTex)
 	createGBufText(GL_TEXTURE2, GL_RGB8, getTextureLValueRef("colorTex"));		// g buffer for color = unit 2 (colorTex)
-
-	// attach textures to the frame buffer
-	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
-
-	//GLuint depthTexture;
-	// D-1
-
 
 	std::cout << "!!!!!!!!!!! COMPUTE_V1: Depth buf value (pre-assign) is: " << getTextureID("depthBuf") << std::endl;
 	glActiveTexture(GL_TEXTURE3);

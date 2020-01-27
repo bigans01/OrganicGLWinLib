@@ -234,21 +234,6 @@ void ShaderMachineBase::sendGearUniforms()
 		
 		for (currentBegin; currentBegin != currentEnd; currentBegin++)
 		{
-			// below are sample calls; save these somewhere
-			/*
-			glm::vec2 someVec2;
-			gearTrainBegin->second.get()->sendUniform<GLDataType::VEC2, glm::vec2>("vec2", someVec2);
-
-			glm::vec3 someVec;
-			gearTrainBegin->second.get()->sendUniform<GLDataType::VEC3, glm::vec3>("world", someVec);
-
-			glm::mat4 someMat = glm::mat4(1.0);
-			gearTrainBegin->second.get()->sendUniform<GLDataType::MAT4, glm::mat4>("MVP", someMat);
-
-			float someFloat = 0.0f;
-			gearTrainBegin->second.get()->sendUniform<GLDataType::FLOAT, float>("testFloat", someFloat);
-			*/
-			
 			GLUniformRequest currentRequest = *currentBegin;
 			if (currentRequest.dataType == GLDataType::VEC2)
 			{

@@ -33,13 +33,8 @@ private:
 
 	// deferred specific functions
 	GLuint deferredFBO = 0;
-	//GLuint quadBufferID = 0;							// quad vertex data object ID
-	GLuint quadVaoID = 0;
 	GLuint terrainVaoID = 0;
 	GLuint pass1index, pass2index;						// IDs of the program pass subroutine calls
-
-	// render quad set up
-	void setUpRenderQuad();
 
 	// terrain vao set up
 	void setupTerrainVAO();
@@ -47,10 +42,8 @@ private:
 	// subRoutine index acquisition
 	void acquireSubroutineIndices();
 
-	void runPass1();
-	void runPass2();
-	void setPass1Matrices();
-	void setPass2Matrices();
+	void writeToGBuffers();
+	void setMatrices();
 };
 
 #endif
