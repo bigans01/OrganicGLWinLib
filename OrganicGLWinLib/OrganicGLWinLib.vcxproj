@@ -177,6 +177,10 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Gear.h" />
+    <ClInclude Include="OrientedQuadQuadrant.h" />
+    <ClInclude Include="OrientedQuad.h" />
+    <ClInclude Include="OrientedQuadPoint.h" />
+    <ClInclude Include="QuadPointOrientation.h" />
     <ClInclude Include="SimpleUnique.h" />
     <ClInclude Include="SMDeferredComputeV1.h" />
     <ClInclude Include="SMDeferredV2.h" />

@@ -150,6 +150,18 @@
     <ClInclude Include="DeferredComputeResultsGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OrientedQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadQuadrant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadPointOrientation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

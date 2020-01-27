@@ -20,7 +20,6 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 
 
 
-
 	// ########################################################################## Terrain Gear (Compute) set up
 	createProgram("TerrainComputeGearT1");
 	int trueBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
