@@ -162,6 +162,12 @@
     <ClInclude Include="QuadPointOrientation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OrientedQuadPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadPlane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -258,6 +264,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DeferredComputeResultsGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OrientedQuadPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
