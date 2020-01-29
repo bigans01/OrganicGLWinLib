@@ -176,3 +176,21 @@ void OrientedQuadPanel::printDirections()
 	std::cout << "Dir 1: " << direction1.x << ", " << direction1.y << ", " << direction1.z << std::endl;
 	std::cout << "Dir 2: " << direction2.x << ", " << direction2.y << ", " << direction2.z << std::endl;
 }
+
+void OrientedQuadPanel::loadPointList()
+{
+	// load the direction vectors
+	pointList.push_back(&direction1);
+	pointList.push_back(&direction2);
+}
+
+void OrientedQuadPanel::applyQuaternionToPointList(glm::quat in_quaternion)
+{
+	auto vectorBegin = pointList.begin();
+	auto vectorEnd = pointList.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		**vectorBegin = in_quaternion * **vectorBegin;
+		std::cout << "!!!! Quaternion applied!" << std::endl;
+	}
+}

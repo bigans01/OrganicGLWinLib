@@ -6,6 +6,8 @@
 #include "OrientedQuad.h"
 #include "OrientedQuadPlane.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include <iostream>
 
@@ -21,8 +23,11 @@ class OrientedQuadPanel
 		OrientedQuad coreQuad;	// the quad at the center of the panel. this is the only quad that has a point which is shared among the other two OrientedQuadPanels, the "origin" in a HighlighterCorner (see OrganicCoreLib)
 		std::vector<OrientedQuad> dir1Quads;
 		std::vector<OrientedQuad> dir2Quads;
+		std::vector<glm::vec3*> pointList;		// a list of all points in this panel.
 
 		void printDirections();
+		void loadPointList();
+		void applyQuaternionToPointList(glm::quat in_quaternion);
 
 	private:
 		void determineInitialDirections();

@@ -1017,3 +1017,14 @@ void OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
 	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
 	ImGui::End();
 }
+
+glm::quat OrganicGLWinUtils::createQuaternion(float in_degrees, glm::vec3 in_unitVector)
+{
+	const float fullRadians360 = 6.28319;
+	float radianMultiplier = in_degrees / 360.0f;
+	float degreesToRadians = radianMultiplier * fullRadians360;
+
+	glm::quat returnQuat = glm::quat(cos(degreesToRadians / 2), sin(degreesToRadians / 2)*in_unitVector.x, sin(degreesToRadians / 2)*in_unitVector.y, sin(degreesToRadians / 2)*in_unitVector.z);
+
+	return returnQuat;
+}

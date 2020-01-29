@@ -13,6 +13,8 @@
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <stdio.h>
 #include <math.h>
 
@@ -69,6 +71,7 @@ public:
 	static void setClearColor(float in_red, float in_green, float in_blue, float in_alpha);						// sets the background color
 	static void copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset);
 	static GLuint loadDDS(const char* imagepath);
+	static glm::quat createQuaternion(float in_degrees, glm::vec3 in_unitVector);
 
 	// IMGUI functions
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context
