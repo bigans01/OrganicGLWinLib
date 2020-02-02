@@ -72,6 +72,7 @@ public:
 	static void copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset);
 	static GLuint loadDDS(const char* imagepath);
 	static glm::quat createQuaternion(float in_degrees, glm::vec3 in_unitVector);
+	static glm::vec3 roundDirectionalVector(glm::vec3 in_vec3);
 
 	// IMGUI functions
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context

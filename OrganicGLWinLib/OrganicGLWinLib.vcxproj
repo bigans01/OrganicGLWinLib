@@ -184,6 +184,7 @@
     <ClInclude Include="OrientedQuadQuadrant.h" />
     <ClInclude Include="OrientedQuad.h" />
     <ClInclude Include="OrientedQuadPoint.h" />
+    <ClInclude Include="OrientedQuadType.h" />
     <ClInclude Include="QuadPointOrientation.h" />
     <ClInclude Include="SimpleUnique.h" />
     <ClInclude Include="SMDeferredComputeV1.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />

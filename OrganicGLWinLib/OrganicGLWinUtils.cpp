@@ -1028,3 +1028,12 @@ glm::quat OrganicGLWinUtils::createQuaternion(float in_degrees, glm::vec3 in_uni
 
 	return returnQuat;
 }
+
+glm::vec3 OrganicGLWinUtils::roundDirectionalVector(glm::vec3 in_vec3)
+{
+	glm::vec3 returnVec = in_vec3;
+	returnVec.x = floor(in_vec3.x * 100 + 0.5) / 100;
+	returnVec.y = floor(in_vec3.y * 100 + 0.5) / 100;
+	returnVec.z = floor(in_vec3.z * 100 + 0.5) / 100;
+	return returnVec;
+}
