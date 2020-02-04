@@ -227,7 +227,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 	std::cout << ":: Direction 1: " << direction1.x << ", " << direction1.y << ", " << direction1.z << std::endl;
 	std::cout << ":: Direction 2: " << direction2.x << ", " << direction2.y << ", " << direction2.z << std::endl;
 
-	// X plane calcs
+	// ---------------------------- X plane calcs
 
 	// XPLANE_POSY_POSZ
 	if
@@ -281,8 +281,62 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		panelQuadrant = OrientedQuadQuadrant::XPLANE_POSY_NEGZ;
 	}
 
+	// ---------------------------- Y plane calcs
 
-	// Z plane calcs
+	// YPLANE_POSX_POSZ
+	else if
+	(
+		((direction1.x == 1.0f) && (direction2.z == 1.0f))
+		||
+		((direction2.x == 1.0f) && (direction1.z == 1.0f))
+	)
+	{
+		std::cout << "!!! Quad panel is now a YPLANE_POSX_POSZ! " << std::endl;
+		panelPlane = OrientedQuadPlane::Y;
+		panelQuadrant = OrientedQuadQuadrant::YPLANE_POSX_POSZ;
+	}
+
+	// YPLANE_POSX_NEGZ
+	else if
+	(
+		((direction1.x == 1.0f) && (direction2.z == -1.0f))
+		||
+		((direction2.x == 1.0f) && (direction1.z == -1.0f))
+	)
+	{
+		std::cout << "!!! Quad panel is now a YPLANE_POSX_NEGZ! " << std::endl;
+		panelPlane = OrientedQuadPlane::Y;
+		panelQuadrant = OrientedQuadQuadrant::YPLANE_POSX_NEGZ;
+	}
+
+	// YPLANE_NEGX_NEGZ
+	else if
+	(
+		((direction1.x == -1.0f) && (direction2.z == -1.0f))
+		||
+		((direction2.x == -1.0f) && (direction1.z == -1.0f))
+	)
+	{
+		std::cout << "!!! Quad panel is now a YPLANE_NEGX_NEGZ! " << std::endl;
+		panelPlane = OrientedQuadPlane::Y;
+		panelQuadrant = OrientedQuadQuadrant::YPLANE_NEGX_NEGZ;
+	}
+
+	// YPLANE_NEGX_POSZ
+	else if
+	(
+		((direction1.x == -1.0f) && (direction2.z == 1.0f))
+		||
+		((direction2.x == -1.0f) && (direction1.z == 1.0f))
+	)
+	{
+		std::cout << "!!! Quad panel is now a YPLANE_NEGX_POSZ! " << std::endl;
+		panelPlane = OrientedQuadPlane::Y;
+		panelQuadrant = OrientedQuadQuadrant::YPLANE_NEGX_POSZ;
+	}
+
+
+	// ---------------------------- Z plane calcs
 
 	// ZPLANE_POSX_POSY
 	else if 
