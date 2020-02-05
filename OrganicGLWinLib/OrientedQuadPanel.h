@@ -21,6 +21,7 @@ class OrientedQuadPanel
 		glm::vec3 panelOriginPoint;
 		glm::vec3 direction1;	// the normalized direction of the first quadrant,	used to determine the panel quadrant's orientation
 		glm::vec3 direction2;	// the normalized direction of the second quadrant,	used to determine the panel quadrant's orientation
+		float panelLength = 0.0f;	// it's not really a "length", but meh
 
 		std::vector<OrientedQuad> coreQuad;		// the quad at the center of the panel. this is the only quad that has a point which is shared among the other two OrientedQuadPanels, the "origin" in a HighlighterCorner (see OrganicCoreLib)
 		std::vector<OrientedQuad> dir1Quads;	
@@ -35,6 +36,7 @@ class OrientedQuadPanel
 	private:
 		void determineInitialDirections();
 		void recalculatePlaneAndQuadrant();
+		void fetchQuadPointRefs(std::vector<OrientedQuad>* in_quadVectorRef);
 };
 
 #endif

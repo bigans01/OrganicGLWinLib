@@ -18,11 +18,22 @@ void OrientedQuadPanel::createInitialQuads(float in_coreDim, float in_axisLength
 	someVec.y = 0;
 	someVec.z = 0;
 
+	// set the lengths
+	panelLength = in_axisLength;
+	float nonCoreLength = panelLength - in_coreDim;	// nonCoreLength is going to be the length of the non core quads. If the core quad has a .1 dim value, but the length of the total panel is 4.0f, the non core quad would be 3.99f.
+
 	// construct the core quad
-	OrientedQuad newCoreQuad(someVec, OrientedQuadType::SQUARE, in_coreDim, direction1, direction2);
+	OrientedQuad newCoreQuad(someVec, in_coreDim, direction1, direction2);	// construct the square
 	coreQuad.push_back(newCoreQuad);
 
+	// construct the dir1Quads
+	OrientedQuad dir1Quad(coreQuad.begin()->getPoint(1), in_coreDim, nonCoreLength, direction1, direction2);	// point 1 = on same trajectory as direction 1
+	coreQuad.push_back(dir1Quad);
 
+	OrientedQuad dir2Quad(coreQuad.begin()->getPoint(3), in_coreDim, nonCoreLength, direction2, direction1);	// point 3 = on same trajectory as direction 2
+	coreQuad.push_back(dir2Quad);
+
+	std::cout << "---------------------------------------" << std::endl;
 }
 
 void OrientedQuadPanel::determineInitialDirections()
@@ -198,6 +209,24 @@ void OrientedQuadPanel::loadPointList()
 	// load the direction vectors
 	pointList.push_back(&direction1);
 	pointList.push_back(&direction2);
+
+	// load the point refs from the quads in each directional vector
+	fetchQuadPointRefs(&dir1Quads);	
+	fetchQuadPointRefs(&dir2Quads);	
+}
+
+void OrientedQuadPanel::fetchQuadPointRefs(std::vector<OrientedQuad>* in_quadVectorRef)
+{
+	auto vectorBegin = in_quadVectorRef->begin();
+	auto vectorEnd = in_quadVectorRef->end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		// there are 4 points per quad, get their references
+		for (int x = 0; x < 4; x++)
+		{
+			pointList.push_back(vectorBegin->getPointRef(x));
+		}
+	}
 }
 
 void OrientedQuadPanel::applyQuaternionToPointList(glm::quat in_quaternion)
