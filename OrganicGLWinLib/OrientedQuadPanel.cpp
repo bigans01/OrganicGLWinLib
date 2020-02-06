@@ -28,10 +28,10 @@ void OrientedQuadPanel::createInitialQuads(float in_coreDim, float in_axisLength
 
 	// construct the dir1Quads
 	OrientedQuad dir1Quad(coreQuad.begin()->getPoint(1), in_coreDim, nonCoreLength, direction1, direction2);	// point 1 = on same trajectory as direction 1
-	coreQuad.push_back(dir1Quad);
+	dir1Quads.push_back(dir1Quad);
 
 	OrientedQuad dir2Quad(coreQuad.begin()->getPoint(3), in_coreDim, nonCoreLength, direction2, direction1);	// point 3 = on same trajectory as direction 2
-	coreQuad.push_back(dir2Quad);
+	dir2Quads.push_back(dir2Quad);
 
 	std::cout << "---------------------------------------" << std::endl;
 }
@@ -211,8 +211,53 @@ void OrientedQuadPanel::loadPointList()
 	pointList.push_back(&direction2);
 
 	// load the point refs from the quads in each directional vector
+	fetchQuadPointRefs(&coreQuad);
 	fetchQuadPointRefs(&dir1Quads);	
 	fetchQuadPointRefs(&dir2Quads);	
+}
+
+void OrientedQuadPanel::printPoints()
+{
+	// core quad points
+	std::cout << "!!! printing panel points.... " << std::endl;
+	auto coreBegin = coreQuad.begin();
+	auto coreEnd = coreQuad.end();
+	for (coreBegin; coreBegin != coreEnd; coreBegin++)
+	{
+		std::cout << "------Core quad points: " << std::endl;
+		for (int a = 0; a < 4; a++)
+		{
+			std::cout << a << ": " << coreBegin->quadPoints[a].worldSpaceCoord.x << ", " << coreBegin->quadPoints[a].worldSpaceCoord.y << ", " << coreBegin->quadPoints[a].worldSpaceCoord.z << std::endl;
+		}
+	}
+
+	// dir1 quad(s) points
+	auto dir1Begin = dir1Quads.begin();
+	auto dir1End = dir1Quads.end();
+	int dir1Index = 0;
+	for (dir1Begin; dir1Begin != dir1End; dir1Begin++)
+	{
+		std::cout << "------Dir 1 quad " << dir1Index << " points: " << std::endl;
+		for (int a = 0; a < 4; a++)
+		{
+			std::cout << a << ": " << dir1Begin->quadPoints[a].worldSpaceCoord.x << ", " << dir1Begin->quadPoints[a].worldSpaceCoord.y << ", " << dir1Begin->quadPoints[a].worldSpaceCoord.z << std::endl;
+		}
+		dir1Index++;
+	}
+
+	// dir2 quad(s) points
+	auto dir2Begin = dir2Quads.begin();
+	auto dir2End = dir2Quads.end();
+	int dir2Index = 0;
+	for (dir2Begin; dir2Begin != dir2End; dir2Begin++)
+	{
+		std::cout << "------Dir 2 quad " << dir2Index << " points: " << std::endl;
+		for (int a = 0; a < 4; a++)
+		{
+			std::cout << a << ": " << dir2Begin->quadPoints[a].worldSpaceCoord.x << ", " << dir2Begin->quadPoints[a].worldSpaceCoord.y << ", " << dir2Begin->quadPoints[a].worldSpaceCoord.z << std::endl;
+		}
+		dir2Index++;
+	}
 }
 
 void OrientedQuadPanel::fetchQuadPointRefs(std::vector<OrientedQuad>* in_quadVectorRef)

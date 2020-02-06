@@ -30,6 +30,7 @@ class OrientedQuadPanel
 
 		void printDirections();
 		void loadPointList();
+		void printPoints();
 		void createInitialQuads(float in_coreDim, float in_axisLength, float in_axisWidth);
 		void applyQuaternionToPointList(glm::quat in_quaternion);
 
