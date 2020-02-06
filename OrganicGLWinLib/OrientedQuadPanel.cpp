@@ -240,7 +240,7 @@ void OrientedQuadPanel::applyQuaternionToPointList(glm::quat in_quaternion)
 		std::cout << "!!!! --> Quaternion applied!" << std::endl;
 
 		// normalize the vector here
-		glm::vec3 roundedVector = OrganicGLWinUtils::roundDirectionalVector(**vectorBegin);
+		glm::vec3 roundedVector = OrganicGLWinUtils::roundVec3ToHundredths(**vectorBegin);
 		**vectorBegin = roundedVector;
 	}
 

@@ -27,16 +27,16 @@ OrientedQuad::OrientedQuad(glm::vec3 in_startPoint, float in_coreDim, glm::vec3 
 
 OrientedQuad::OrientedQuad(glm::vec3 in_startPoint, float in_widthDim, float in_lengthDim, glm::vec3 in_lengthDir, glm::vec3 in_widthDir)
 {
-	quadPoints[0].worldSpaceCoord = in_startPoint;
+	quadPoints[0].worldSpaceCoord = OrganicGLWinUtils::roundVec3ToHundredths(in_startPoint);
 	quadPoints[0].orientation = QuadPointOrientation::NEAREST_TO_ORIGIN;
 
-	quadPoints[1].worldSpaceCoord = in_startPoint + (in_lengthDim * in_lengthDir);
+	quadPoints[1].worldSpaceCoord = OrganicGLWinUtils::roundVec3ToHundredths(in_startPoint + (in_lengthDim * in_lengthDir));
 	quadPoints[1].orientation = QuadPointOrientation::FURTHEST_FROM_ORIGIN;
 
-	quadPoints[2].worldSpaceCoord = quadPoints[1].worldSpaceCoord + (in_widthDim * in_widthDir);
+	quadPoints[2].worldSpaceCoord = OrganicGLWinUtils::roundVec3ToHundredths(quadPoints[1].worldSpaceCoord + (in_widthDim * in_widthDir));
 	quadPoints[2].orientation = QuadPointOrientation::FURTHEST_FROM_ORIGIN;
 
-	quadPoints[3].worldSpaceCoord = quadPoints[2].worldSpaceCoord - (in_lengthDim * in_lengthDir);
+	quadPoints[3].worldSpaceCoord = OrganicGLWinUtils::roundVec3ToHundredths(quadPoints[2].worldSpaceCoord - (in_lengthDim * in_lengthDir));
 	quadPoints[3].orientation = QuadPointOrientation::NEAREST_TO_ORIGIN;
 
 	std::cout << "!!! (Non-core) > 0: " << quadPoints[0].worldSpaceCoord.x << ", " << quadPoints[0].worldSpaceCoord.y << ", " << quadPoints[0].worldSpaceCoord.z << std::endl;
