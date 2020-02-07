@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include "OrganicGLWinUtils.h"
+#include "Triangle.h"
 
 class OrientedQuadPanel
 {
@@ -30,6 +31,7 @@ class OrientedQuadPanel
 
 		void printDirections();
 		void loadPointList();
+		void loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef);
 		void printPoints();
 		void createInitialQuads(float in_coreDim, float in_axisLength, float in_axisWidth);
 		void applyQuaternionToPointList(glm::quat in_quaternion);

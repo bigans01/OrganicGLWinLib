@@ -216,6 +216,40 @@ void OrientedQuadPanel::loadPointList()
 	fetchQuadPointRefs(&dir2Quads);	
 }
 
+void OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef)
+{
+	// Load the core quads
+	auto coreBegin = coreQuad.begin();
+	auto coreEnd = coreQuad.end();
+	for (coreBegin; coreBegin != coreEnd; coreBegin++)
+	{
+		//std::cout << "------Core quad points: " << std::endl;
+		QuadTriangles trianglePair = coreBegin->getQuadTriangles();
+		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
+		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+	}
+
+	// Load the dir 1 quads
+	auto dir1Begin = dir1Quads.begin();
+	auto dir1End = dir1Quads.end();
+	for (dir1Begin; dir1Begin != dir1End; dir1Begin++)
+	{
+		QuadTriangles trianglePair = dir1Begin->getQuadTriangles();
+		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
+		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+	}
+
+	// Load the dir 2 quads
+	auto dir2Begin = dir2Quads.begin();
+	auto dir2End = dir2Quads.end();
+	for (dir2Begin; dir2Begin != dir2End; dir2Begin++)
+	{
+		QuadTriangles trianglePair = dir2Begin->getQuadTriangles();
+		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
+		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+	}
+}
+
 void OrientedQuadPanel::printPoints()
 {
 	// core quad points

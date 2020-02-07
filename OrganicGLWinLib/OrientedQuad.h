@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include "OrganicGLWinUtils.h"
+#include "QuadTriangles.h"
 
 class OrientedQuad
 {
@@ -21,6 +22,7 @@ class OrientedQuad
 		
 		glm::vec3* getPointRef(int in_pointIndex);
 		glm::vec3 getPoint(int in_pointIndex);
+		QuadTriangles getQuadTriangles();
 };
 
 #endif

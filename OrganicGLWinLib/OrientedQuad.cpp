@@ -54,3 +54,22 @@ glm::vec3 OrientedQuad::getPoint(int in_pointIndex)
 {
 	return quadPoints[in_pointIndex].worldSpaceCoord;
 }
+
+QuadTriangles OrientedQuad::getQuadTriangles()
+{
+	QuadTriangles returnQuadTriangles;
+	Triangle triangle1, triangle2;
+
+	triangle1.points[0] = quadPoints[0].worldSpaceCoord;
+	triangle1.points[1] = quadPoints[1].worldSpaceCoord;
+	triangle1.points[2] = quadPoints[2].worldSpaceCoord;
+
+	triangle2.points[0] = quadPoints[0].worldSpaceCoord;
+	triangle2.points[1] = quadPoints[2].worldSpaceCoord;
+	triangle2.points[2] = quadPoints[3].worldSpaceCoord;
+
+	returnQuadTriangles.triangles[0] = triangle1;
+	returnQuadTriangles.triangles[1] = triangle2;
+
+	return returnQuadTriangles;
+}

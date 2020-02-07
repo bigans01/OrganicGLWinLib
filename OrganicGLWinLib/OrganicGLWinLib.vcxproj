@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="AtlasMap.h" />
     <ClInclude Include="AtlasMetaData.h" />
     <ClInclude Include="AtlasPropertiesGL.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="OrientedQuadPoint.h" />
     <ClInclude Include="OrientedQuadType.h" />
     <ClInclude Include="QuadPointOrientation.h" />
+    <ClInclude Include="QuadTriangles.h" />
     <ClInclude Include="SimpleUnique.h" />
     <ClInclude Include="SMDeferredComputeV1.h" />
     <ClInclude Include="SMDeferredV2.h" />
