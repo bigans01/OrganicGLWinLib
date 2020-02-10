@@ -19,10 +19,10 @@ OrientedQuad::OrientedQuad(glm::vec3 in_startPoint, float in_coreDim, glm::vec3 
 	quadPoints[3].worldSpaceCoord = quadPoints[2].worldSpaceCoord - (in_dir1 * in_coreDim);
 	quadPoints[3].orientation = QuadPointOrientation::FURTHEST_FROM_ORIGIN;
 
-	std::cout << "!!!  > 0: " << quadPoints[0].worldSpaceCoord.x << ", " << quadPoints[0].worldSpaceCoord.y << ", " << quadPoints[0].worldSpaceCoord.z << std::endl;
-	std::cout << "!!!  > 1: " << quadPoints[1].worldSpaceCoord.x << ", " << quadPoints[1].worldSpaceCoord.y << ", " << quadPoints[1].worldSpaceCoord.z << std::endl;
-	std::cout << "!!!  > 2: " << quadPoints[2].worldSpaceCoord.x << ", " << quadPoints[2].worldSpaceCoord.y << ", " << quadPoints[2].worldSpaceCoord.z << std::endl;
-	std::cout << "!!!  > 3: " << quadPoints[3].worldSpaceCoord.x << ", " << quadPoints[3].worldSpaceCoord.y << ", " << quadPoints[3].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!!  > 0: " << quadPoints[0].worldSpaceCoord.x << ", " << quadPoints[0].worldSpaceCoord.y << ", " << quadPoints[0].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!!  > 1: " << quadPoints[1].worldSpaceCoord.x << ", " << quadPoints[1].worldSpaceCoord.y << ", " << quadPoints[1].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!!  > 2: " << quadPoints[2].worldSpaceCoord.x << ", " << quadPoints[2].worldSpaceCoord.y << ", " << quadPoints[2].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!!  > 3: " << quadPoints[3].worldSpaceCoord.x << ", " << quadPoints[3].worldSpaceCoord.y << ", " << quadPoints[3].worldSpaceCoord.z << std::endl;
 }
 
 OrientedQuad::OrientedQuad(glm::vec3 in_startPoint, float in_widthDim, float in_lengthDim, glm::vec3 in_lengthDir, glm::vec3 in_widthDir)
@@ -39,10 +39,10 @@ OrientedQuad::OrientedQuad(glm::vec3 in_startPoint, float in_widthDim, float in_
 	quadPoints[3].worldSpaceCoord = OrganicGLWinUtils::roundVec3ToHundredths(quadPoints[2].worldSpaceCoord - (in_lengthDim * in_lengthDir));
 	quadPoints[3].orientation = QuadPointOrientation::NEAREST_TO_ORIGIN;
 
-	std::cout << "!!! (Non-core) > 0: " << quadPoints[0].worldSpaceCoord.x << ", " << quadPoints[0].worldSpaceCoord.y << ", " << quadPoints[0].worldSpaceCoord.z << std::endl;
-	std::cout << "!!! (Non-core) > 1: " << quadPoints[1].worldSpaceCoord.x << ", " << quadPoints[1].worldSpaceCoord.y << ", " << quadPoints[1].worldSpaceCoord.z << std::endl;
-	std::cout << "!!! (Non-core) > 2: " << quadPoints[2].worldSpaceCoord.x << ", " << quadPoints[2].worldSpaceCoord.y << ", " << quadPoints[2].worldSpaceCoord.z << std::endl;
-	std::cout << "!!! (Non-core) > 3: " << quadPoints[3].worldSpaceCoord.x << ", " << quadPoints[3].worldSpaceCoord.y << ", " << quadPoints[3].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!! (Non-core) > 0: " << quadPoints[0].worldSpaceCoord.x << ", " << quadPoints[0].worldSpaceCoord.y << ", " << quadPoints[0].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!! (Non-core) > 1: " << quadPoints[1].worldSpaceCoord.x << ", " << quadPoints[1].worldSpaceCoord.y << ", " << quadPoints[1].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!! (Non-core) > 2: " << quadPoints[2].worldSpaceCoord.x << ", " << quadPoints[2].worldSpaceCoord.y << ", " << quadPoints[2].worldSpaceCoord.z << std::endl;
+	//std::cout << "!!! (Non-core) > 3: " << quadPoints[3].worldSpaceCoord.x << ", " << quadPoints[3].worldSpaceCoord.y << ", " << quadPoints[3].worldSpaceCoord.z << std::endl;
 }
 
 glm::vec3* OrientedQuad::getPointRef(int in_pointIndex)

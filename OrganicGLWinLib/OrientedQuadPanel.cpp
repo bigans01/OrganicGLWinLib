@@ -11,7 +11,7 @@ void OrientedQuadPanel::setInitialPanelData(OrientedQuadPlane in_panelPlane, Ori
 
 }
 
-void OrientedQuadPanel::createInitialQuads(float in_coreDim, float in_axisLength, float in_axisWidth)
+void OrientedQuadPanel::createInitialQuads(float in_axisWidth, float in_axisLength)
 {
 	glm::vec3 someVec;
 	someVec.x = 0;
@@ -20,17 +20,17 @@ void OrientedQuadPanel::createInitialQuads(float in_coreDim, float in_axisLength
 
 	// set the lengths
 	panelLength = in_axisLength;
-	float nonCoreLength = panelLength - in_coreDim;	// nonCoreLength is going to be the length of the non core quads. If the core quad has a .1 dim value, but the length of the total panel is 4.0f, the non core quad would be 3.99f.
+	float nonCoreLength = panelLength - in_axisWidth;	// nonCoreLength is going to be the length of the non core quads. If the core quad has a .1 dim value, but the length of the total panel is 4.0f, the non core quad would be 3.99f.
 
 	// construct the core quad
-	OrientedQuad newCoreQuad(someVec, in_coreDim, direction1, direction2);	// construct the square
+	OrientedQuad newCoreQuad(someVec, in_axisWidth, direction1, direction2);	// construct the square
 	coreQuad.push_back(newCoreQuad);
 
 	// construct the dir1Quads
-	OrientedQuad dir1Quad(coreQuad.begin()->getPoint(1), in_coreDim, nonCoreLength, direction1, direction2);	// point 1 = on same trajectory as direction 1
+	OrientedQuad dir1Quad(coreQuad.begin()->getPoint(1), in_axisWidth, nonCoreLength, direction1, direction2);	// point 1 = on same trajectory as direction 1
 	dir1Quads.push_back(dir1Quad);
 
-	OrientedQuad dir2Quad(coreQuad.begin()->getPoint(3), in_coreDim, nonCoreLength, direction2, direction1);	// point 3 = on same trajectory as direction 2
+	OrientedQuad dir2Quad(coreQuad.begin()->getPoint(3), in_axisWidth, nonCoreLength, direction2, direction1);	// point 3 = on same trajectory as direction 2
 	dir2Quads.push_back(dir2Quad);
 
 	std::cout << "---------------------------------------" << std::endl;
@@ -216,8 +216,10 @@ void OrientedQuadPanel::loadPointList()
 	fetchQuadPointRefs(&dir2Quads);	
 }
 
-void OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef)
+int OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef)
 {
+	int totalTriangles = 0;
+
 	// Load the core quads
 	auto coreBegin = coreQuad.begin();
 	auto coreEnd = coreQuad.end();
@@ -227,6 +229,7 @@ void OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triang
 		QuadTriangles trianglePair = coreBegin->getQuadTriangles();
 		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
 		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+		totalTriangles += 2;
 	}
 
 	// Load the dir 1 quads
@@ -237,6 +240,7 @@ void OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triang
 		QuadTriangles trianglePair = dir1Begin->getQuadTriangles();
 		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
 		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+		totalTriangles += 2;
 	}
 
 	// Load the dir 2 quads
@@ -247,7 +251,9 @@ void OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triang
 		QuadTriangles trianglePair = dir2Begin->getQuadTriangles();
 		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
 		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
+		totalTriangles += 2;
 	}
+	return totalTriangles;
 }
 
 void OrientedQuadPanel::printPoints()
@@ -316,7 +322,7 @@ void OrientedQuadPanel::applyQuaternionToPointList(glm::quat in_quaternion)
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
 	{
 		**vectorBegin = in_quaternion * **vectorBegin;
-		std::cout << "!!!! --> Quaternion applied!" << std::endl;
+		//std::cout << "!!!! --> Quaternion applied!" << std::endl;
 
 		// normalize the vector here
 		glm::vec3 roundedVector = OrganicGLWinUtils::roundVec3ToHundredths(**vectorBegin);
@@ -324,8 +330,31 @@ void OrientedQuadPanel::applyQuaternionToPointList(glm::quat in_quaternion)
 	}
 
 	recalculatePlaneAndQuadrant();
-	std::cout << "Post recalculate..." << std::endl;
+	//std::cout << "Post recalculate..." << std::endl;
 
+}
+
+void OrientedQuadPanel::applyTranslationToPointList(glm::vec3 in_translationVector)
+{
+	glm::mat4 translationMatrix = glm::translate(glm::mat4(), in_translationVector);
+	auto vectorBegin = pointList.begin();
+	auto vectorEnd = pointList.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		glm::vec4 convertedPoint;
+		convertedPoint.x = (**vectorBegin).x;
+		convertedPoint.y = (**vectorBegin).y;
+		convertedPoint.z = (**vectorBegin).z;
+		convertedPoint.a = 1.0f;				// value of a needs to be 1 to indicate that it's a position, and not a direction. See OpenGL tutorial 3 for explanation.
+
+		glm::vec4 translatedPoint = translationMatrix * convertedPoint;
+		glm::vec3 newPoint;
+		newPoint.x = translatedPoint.x;
+		newPoint.y = translatedPoint.y;
+		newPoint.z = translatedPoint.z;
+
+		**vectorBegin = newPoint;
+	}
 }
 
 void OrientedQuadPanel::recalculatePlaneAndQuadrant()
