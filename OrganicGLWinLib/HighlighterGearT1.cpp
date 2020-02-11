@@ -68,15 +68,24 @@ void HighlighterGearT1::setupHighlighterVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&highlighterVAO);	// create/bind the highlighter VAO
 	glBindBuffer(GL_ARRAY_BUFFER, getBufferID("highlighter_buffer"));	// bind to the highlighter buffer
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
-		(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
-							For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
-							*/
-	);
+
+	
+	//glVertexAttribPointer(
+	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+	//	3,                  // size
+	//	GL_FLOAT,           // type
+	//	GL_FALSE,           // normalized?
+	//	0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
+	//	(void*)0            /* array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
+	//						For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
+	//						*/
+	//);
+	
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
+
 	glEnableVertexAttribArray(0);
 }
