@@ -735,6 +735,12 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_
 		std::cout << "##### ATTEMPTING LOAD FOR DeferredComputeResultsGearT1 " << std::endl;
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/DeferredComputeResultsGearT1.vertexshader", "graphics/shaders/DeferredComputeResultsGearT1.fragmentshader");
 	}
+
+	else if (in_programName == "TerrainForwardGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainForwardGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainForwardGearT1.vertexshader", "graphics/shaders/TerrainForwardGearT1.fragmentshader");
+	}
 }
 
 void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_computeShaderName)
