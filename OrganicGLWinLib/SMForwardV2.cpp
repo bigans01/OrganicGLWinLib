@@ -13,7 +13,7 @@ void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 23.7f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(.23f, .37f, 23.7f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
