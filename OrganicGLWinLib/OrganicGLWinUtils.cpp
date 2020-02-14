@@ -741,6 +741,12 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_
 		std::cout << "##### ATTEMPTING LOAD FOR TerrainForwardGearT1 " << std::endl;
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainForwardGearT1.vertexshader", "graphics/shaders/TerrainForwardGearT1.fragmentshader");
 	}
+
+	else if (in_programName == "TerrainSimpleGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainSimpleGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainSimpleGearT1.vertexshader", "graphics/shaders/TerrainSimpleGearT1.fragmentshader");
+	}
 }
 
 void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_computeShaderName)

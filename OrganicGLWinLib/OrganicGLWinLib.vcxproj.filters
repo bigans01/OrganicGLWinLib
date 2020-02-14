@@ -186,6 +186,12 @@
     <ClInclude Include="TerrainForwardGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SMForwardV1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainSimpleGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -294,6 +300,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TerrainForwardGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMForwardV1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSimpleGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

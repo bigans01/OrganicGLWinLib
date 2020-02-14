@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "SMForwardV2.h"
+#include "SMForwardV1.h"
 
-void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
+void SMForwardV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
 	// basic initialization
 	width = in_windowWidth;
 	height = in_windowHeight;
 
 	// set shader specific VAO values
-	vaoAttribMode = 3;
-	vaoAttribByteSize = 28;
+	vaoAttribMode = 2;
+	vaoAttribByteSize = 20;
 
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
@@ -18,13 +18,13 @@ void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(.23f, .37f, 23.7f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(.23f, .37f, .3f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
-	// create the forward terrain gear
-	createProgram("TerrainForwardGearT1");
+	// create the simple terrain gear
+	createProgram("TerrainSimpleGearT1");
 
 	// setup the immutable buffers, x2
 	int trueBufferSize = in_immutableBufferSize * 1000000;
@@ -35,7 +35,7 @@ void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	insertNewMultiDrawArrayJob("terrain");
 
 	// create the terrain gear
-	insertTerrainGear(0, programLookup["TerrainForwardGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+	insertTerrainGear(0, programLookup["TerrainSimpleGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// create the highlighter gear
 	createProgram("HighlighterGearT1");
@@ -44,7 +44,7 @@ void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 }
 
-void SMForwardV2::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
+void SMForwardV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
 {
 	// register the atlas values; these should not need to change, and are not updated in calls to updateUniformRegistry -- thus, they only need to be registered once.
 	uniformRegistry.insertFloat("atlasTextureWidth", 1.0f);		// the "1.0f"s will get reset in the call to OrganicGLWinUtils::setupTextureAtlasJPEG
@@ -60,7 +60,7 @@ void SMForwardV2::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL*
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMForwardV2::runAllShaders()
+void SMForwardV1::runAllShaders()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -69,13 +69,29 @@ void SMForwardV2::runAllShaders()
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
 }
-
-void SMForwardV2::shutdownGL()
+void SMForwardV1::shutdownGL()
 {
 
 }
 
-void SMForwardV2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void SMForwardV1::insertTerrainGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainSimpleGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
+	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
+	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
+}
+
+void SMForwardV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
+	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
+}
+
+void SMForwardV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
 	//updateMVPinGears(); // update the MVP uniforms in each gear
@@ -84,8 +100,7 @@ void SMForwardV2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray,
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
 }
-
-void SMForwardV2::printDataForGears()
+void SMForwardV1::printDataForGears()
 {
 	updateUniformRegistry();
 	sendGearUniforms();
@@ -93,30 +108,11 @@ void SMForwardV2::printDataForGears()
 	gearTrain[0]->printData();
 }
 
-void SMForwardV2::insertTerrainGear(int in_gearID, GLuint in_programID)
-{
-	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainForwardGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
-	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
-	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
-	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
-}
 
-void SMForwardV2::insertHighlighterGear(int in_gearID, GLuint in_programID)
-{
-	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
-	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
-	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
-}
-
-void SMForwardV2::updateUniformRegistry()
+void SMForwardV1::updateUniformRegistry()
 {
 	// update the MVP
 	MVP = projection * view * model;
 	uniformRegistry.insertMat4("MVP", MVP);
-
-	glm::mat4 currentMV = view * model;
-	uniformRegistry.insertMat4("ModelViewMatrix", currentMV); // update the MV
-	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
 }
+

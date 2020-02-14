@@ -6,6 +6,11 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// basic initialization
 	width = in_windowWidth;
 	height = in_windowHeight;
+
+	// set shader specific VAO values
+	vaoAttribMode = 3;
+	vaoAttribByteSize = 28;
+
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
 	OrganicGLWinUtils::checkWindowValidity(window);			// CHECK FOR DEFERRED?
