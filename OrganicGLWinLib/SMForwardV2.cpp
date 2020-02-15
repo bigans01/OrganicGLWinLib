@@ -23,13 +23,16 @@ void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
+	// NEW ---> setup IMGui
+	OrganicGLWinUtils::IMGuiInit(window);
+
 	// create the forward terrain gear
 	createProgram("TerrainForwardGearT1");
 
 	// setup the immutable buffers, x2
-	int trueBufferSize = in_immutableBufferSize * 1000000;
-	insertNewPersistentBuffer("terrain_main", trueBufferSize);		// main terrain buffer
-	insertNewPersistentBuffer("terrain_swap", trueBufferSize);		// terrain swap buffer
+	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
+	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
+	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
 	// create the forward multiDrawCallJob
 	insertNewMultiDrawArrayJob("terrain");
@@ -60,7 +63,7 @@ void SMForwardV2::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL*
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMForwardV2::runAllShaders()
+void SMForwardV2::runAllShadersAndSwap()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -68,6 +71,15 @@ void SMForwardV2::runAllShaders()
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
+}
+
+void SMForwardV2::runAllShadersNoSwap()
+{
+	// RESERVED FOR LATER USER
+	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
+	sendGearUniforms();	// send any other special uniform requests to each gear. 
+	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
+	runGearTrain();	  // run the draw/rendering for each gear
 }
 
 void SMForwardV2::shutdownGL()

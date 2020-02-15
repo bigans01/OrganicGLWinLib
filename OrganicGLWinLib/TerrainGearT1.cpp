@@ -31,7 +31,7 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 	GLUniformRequest atlasTileTextureWidth(GLDataType::FLOAT, "atlasTileTextureWidth");
 	uniformRequests.push_back(atlasTileTextureWidth);
 
-	std::string deferredDrawRequest = "deferred";
+	std::string deferredDrawRequest = "terrain";
 	multiDrawArrayJobRequests.push_back(deferredDrawRequest);
 
 }

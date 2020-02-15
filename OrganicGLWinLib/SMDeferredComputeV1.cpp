@@ -23,18 +23,19 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
-
+	// NEW ---> setup IMGui
+	OrganicGLWinUtils::IMGuiInit(window);
 
 
 	// ########################################################################## Terrain Gear (Compute) set up
 	createProgram("TerrainComputeGearT1");
-	int trueBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
-	insertNewPersistentBuffer("terrain_main", trueBufferSize);		// main terrain buffer
-	insertNewPersistentBuffer("terrain_swap", trueBufferSize);		// terrain swap buffer
+	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
+	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
+	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 	insertNewBuffer("render_quad_buffer");							// set up the render quad buffer
 	insertNewFBO("deferred_FBO");									// create the deferred FBO; set it up
 	setupDeferredFBO();
-	insertNewMultiDrawArrayJob("deferred");
+	insertNewMultiDrawArrayJob("terrain");
 	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// ########################################################################## Compute Gear set up
@@ -71,7 +72,7 @@ void SMDeferredComputeV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPrope
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMDeferredComputeV1::runAllShaders()
+void SMDeferredComputeV1::runAllShadersAndSwap()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -79,6 +80,14 @@ void SMDeferredComputeV1::runAllShaders()
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
+}
+
+void SMDeferredComputeV1::runAllShadersNoSwap()
+{
+	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
+	sendGearUniforms();	// send any other special uniform requests to each gear. 
+	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
+	runGearTrain();	  // run the draw/rendering for each gear
 }
 
 void SMDeferredComputeV1::shutdownGL()

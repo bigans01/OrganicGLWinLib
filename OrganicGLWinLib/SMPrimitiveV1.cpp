@@ -23,13 +23,16 @@ void SMPrimitiveV1::initialize(int in_windowWidth, int in_windowHeight, int in_i
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
+	// NEW ---> setup IMGui
+	OrganicGLWinUtils::IMGuiInit(window);
+
 	// create the simple terrain gear
 	createProgram("TerrainPrimitiveGearT1");
 
 	// setup the immutable buffers, x2
-	int trueBufferSize = in_immutableBufferSize * 1000000;
-	insertNewPersistentBuffer("terrain_main", trueBufferSize);		// main terrain buffer
-	insertNewPersistentBuffer("terrain_swap", trueBufferSize);		// terrain swap buffer
+	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
+	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
+	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
 	// create the forward multiDrawCallJob
 	insertNewMultiDrawArrayJob("terrain");
@@ -59,7 +62,7 @@ void SMPrimitiveV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesG
 	gearTrain[0]->passGLuintValue("terrainAtlas", getTextureID("terrainAtlas"));
 }
 
-void SMPrimitiveV1::runAllShaders()
+void SMPrimitiveV1::runAllShadersAndSwap()
 {
 	// RESERVED FOR LATER USER
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -67,6 +70,15 @@ void SMPrimitiveV1::runAllShaders()
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
+}
+
+void SMPrimitiveV1::runAllShadersNoSwap()
+{
+	// RESERVED FOR LATER USER
+	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
+	sendGearUniforms();	// send any other special uniform requests to each gear. 
+	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
+	runGearTrain();	  // run the draw/rendering for each gear
 }
 
 void SMPrimitiveV1::shutdownGL()

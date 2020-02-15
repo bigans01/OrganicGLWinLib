@@ -368,3 +368,8 @@ GLFWwindow* ShaderMachineBase::getWindow()
 {
 	return window;
 }
+
+int ShaderMachineBase::getBufferSize()
+{
+	return terrainBufferSize;
+}

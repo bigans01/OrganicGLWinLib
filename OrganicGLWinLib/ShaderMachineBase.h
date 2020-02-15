@@ -24,7 +24,8 @@ public:
 		// virtual functions
 		virtual void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize) = 0;   // STEP 1
 		virtual void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef) = 0;	// STEP 2
-		virtual void runAllShaders() = 0;
+		virtual void runAllShadersAndSwap() = 0;
+		virtual void runAllShadersNoSwap() = 0;
 		virtual void shutdownGL() = 0;
 		virtual void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections) = 0;		// STEP 4
 		virtual void printDataForGears() = 0;
@@ -54,6 +55,9 @@ public:
 		GLuint* getTerrainSwapRef();
 		GLuint getTerrainBufferID();
 		GLuint getTerrainSwapID();
+
+		// size fetching functions
+		int getBufferSize();
 
 		 // "Terrain" vao data value retrieval functions for OrganicSystem
 		int getVaoAttribMode();
@@ -96,6 +100,9 @@ protected:
 		static double lastTime;
 		double currentTime;
 		float deltaTime;
+
+		// buffer sizes
+		int terrainBufferSize = 0;	// set when the ShaderMachine is initialized
 
 
 		// for the camera
