@@ -162,8 +162,10 @@
     <ClInclude Include="SMDebugV1.h" />
     <ClInclude Include="SMForwardV1.h" />
     <ClInclude Include="SMForwardV2.h" />
+    <ClInclude Include="SMPrimitiveV1.h" />
     <ClInclude Include="TerrainDebugGearT1.h" />
     <ClInclude Include="TerrainForwardGearT1.h" />
+    <ClInclude Include="TerrainPrimitiveGearT1.h" />
     <ClInclude Include="TerrainSimpleGearT1.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="AtlasMap.h" />
@@ -245,6 +247,7 @@
     <ClCompile Include="SMDeferredV2.cpp" />
     <ClCompile Include="SMForwardV1.cpp" />
     <ClCompile Include="SMForwardV2.cpp" />
+    <ClCompile Include="SMPrimitiveV1.cpp" />
     <ClCompile Include="TerrainComputeGearT1.cpp" />
     <ClCompile Include="TerrainDebugGearT1.cpp" />
     <ClCompile Include="TerrainForwardGearT1.cpp" />
@@ -266,6 +269,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
