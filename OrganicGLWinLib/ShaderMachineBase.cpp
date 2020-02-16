@@ -46,7 +46,6 @@ GLuint* ShaderMachineBase::getTerrainBufferRef()
 	GLuint* returnGLuint;
 	int lookupID = persistentBufferLookup["terrain_main"];
 	returnGLuint = &persistentBufferMap[lookupID];
-	//std::cout << "!!! (Machine) returning main buffer ref of: " << *returnGLuint << std::endl;
 	return returnGLuint;
 }
 
@@ -55,7 +54,6 @@ GLuint* ShaderMachineBase::getTerrainSwapRef()
 	GLuint* returnGLuint;
 	int lookupID = persistentBufferLookup["terrain_swap"];
 	returnGLuint = &persistentBufferMap[lookupID];
-	//std::cout << "!!! (Machine) returning swap buffer ref of: " << *returnGLuint << std::endl;
 	return returnGLuint;
 }
 
