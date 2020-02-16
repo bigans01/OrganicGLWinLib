@@ -51,7 +51,7 @@ void TerrainGearT1::runPass1()
 	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass1index);		// set appropriate variables for pass #1
 	glBindVertexArray(terrainVaoID);								// bind to the terrain VAO
 	setPass1Matrices();
-	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("deferred");
+	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("terrain");
 	//glMultiDrawArrays(GL_TRIANGLES, in_startArray, in_vertexCount, in_numberOfCollections);		// draw the terrain
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);
 	glFinish();

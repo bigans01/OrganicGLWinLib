@@ -71,6 +71,8 @@ void ShaderManagerMode3::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_star
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	OrganicGLWinUtils::multiDrawArraysMode3(in_drawArrayID, in_startArray, in_vertexCount, &mvpHandle, &MVP, &textID, &textureUniform, in_numberOfCollections, &worldPosUniform, &position, &atlasWidthUniform, atlasWidth, &atlasTileWidthUniform, atlasTileWidth);
+	int stupidThing = 3;
+	std::cout << "(Base) Vertex count: " << in_vertexCount[0] << std::endl;
 }
 
 void ShaderManagerMode3::shutdownGL()

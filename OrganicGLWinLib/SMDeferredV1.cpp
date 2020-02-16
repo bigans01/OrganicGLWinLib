@@ -29,14 +29,15 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 
 	// ########################################################################## Terrain Gear set up
 	// create the programs
-	//createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
-	//createMode4Program("TerrainGearT1");
 	createProgram("TerrainGearT1");
 
 	// setup the immutable buffers, x2
 	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
+
+	// create the deferred multiDrawCallJob
+	insertNewMultiDrawArrayJob("terrain");
 
 	// set up the render quad buffer
 	insertNewBuffer("render_quad_buffer");
@@ -46,8 +47,6 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	setupDeferredFBO();
 	//setupAlternativeDepthTexture();
 
-	// create the deferred multiDrawCallJob
-	insertNewMultiDrawArrayJob("terrain");
 
 	// other things to set up before inserting the terrain gear...
 	// ...

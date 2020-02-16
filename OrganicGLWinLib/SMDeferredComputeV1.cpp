@@ -105,7 +105,7 @@ void SMDeferredComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 	gearTrain[in_gearID]->passGLuintValue("render_quad_buffer", getBufferID("render_quad_buffer"));		// pass the render quad buffer
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));					// pass the deferred FBO
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
-	gearTrain[in_gearID]->executeGearFunction("acquire_subroutine_indices");
+	//gearTrain[in_gearID]->executeGearFunction("acquire_subroutine_indices");
 
 	std::cout << "!!! Terrain gear (Compute) inserted. " << std::endl;
 }

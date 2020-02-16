@@ -49,7 +49,7 @@ void TerrainComputeGearT1::writeToGBuffers()
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(terrainVaoID);								// bind to the terrain VAO
 	setMatrices();
-	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("deferred");
+	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("terrain");
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);
 	glFinish();
 }

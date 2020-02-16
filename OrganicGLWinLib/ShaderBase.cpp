@@ -4,11 +4,13 @@
 double ShaderBase::lastTime = glfwGetTime();
 GLuint* ShaderBase::getTerrainBufferRef()
 {
+	//std::cout << "!!!!!!!!!!!!!!!!! ShaderBase, main terrain buffer ID is: " << terrainBufferID << std::endl;
 	return &terrainBufferID;
 }
 
 GLuint* ShaderBase::getTerrainSwapRef()
 {
+	//std::cout << "!!!!!!!!!!!!!!!!! ShaderBase, swap buffer ID is: " << terrainSwapID << std::endl;
 	return &terrainSwapID;
 }
 

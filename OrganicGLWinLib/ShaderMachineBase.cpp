@@ -46,6 +46,7 @@ GLuint* ShaderMachineBase::getTerrainBufferRef()
 	GLuint* returnGLuint;
 	int lookupID = persistentBufferLookup["terrain_main"];
 	returnGLuint = &persistentBufferMap[lookupID];
+	//std::cout << "!!! (Machine) returning main buffer ref of: " << *returnGLuint << std::endl;
 	return returnGLuint;
 }
 
@@ -54,6 +55,7 @@ GLuint* ShaderMachineBase::getTerrainSwapRef()
 	GLuint* returnGLuint;
 	int lookupID = persistentBufferLookup["terrain_swap"];
 	returnGLuint = &persistentBufferMap[lookupID];
+	//std::cout << "!!! (Machine) returning swap buffer ref of: " << *returnGLuint << std::endl;
 	return returnGLuint;
 }
 
@@ -282,6 +284,7 @@ void ShaderMachineBase::registerDrawJob(std::string in_drawJobName, GLint* in_st
 {
 	GLMultiDrawArrayJob newJob;
 	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);
+	//std::cout << "!!!!!!!!! (Machine) job vertex count: " << in_vertexCount[0] << std::endl;
 	insertNewMultiDrawArrayJob(in_drawJobName, newJob);
 }
 
@@ -298,6 +301,7 @@ void ShaderMachineBase::insertNewPersistentBuffer(std::string in_bufferName, int
 	persistentBufferMap[currentSize] = 0;			// initialize to 0; but it will get changed.
 	OrganicGLWinUtils::createImmutableBuffer(&persistentBufferMap[currentSize], in_size, 1);	// pass a reference to the GLuint to bind to
 	persistentBufferLookup[in_bufferName] = currentSize;								// insert the lookup value
+	std::cout << "!!!!!!! ################ persistent buffer ID is: " << persistentBufferMap[currentSize] << std::endl;
 }
 
 void ShaderMachineBase::insertNewFBO(std::string in_fboName)
