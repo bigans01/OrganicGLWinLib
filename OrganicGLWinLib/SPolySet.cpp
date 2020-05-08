@@ -26,6 +26,16 @@ void SPolySet::configurePolys()
 	}
 }
 
+void SPolySet::configurePolysWithoutNormalCalcs()
+{
+	for (int x = 0; x < numberOfPolys; x++)
+	{
+		// PHASE 1: determine border lines, and planar normals; empty normals would already be calculated for these secondaries, if using this function as intended.
+		secondaryPolys[x].determinePrimalPoints();		// determine the primal points for the triangle
+		secondaryPolys[x].determineBorderLines();		// for each SPoly, determine its border lines.
+	}
+}
+
 void SPolySet::runPolyComparison()
 {
 	/*

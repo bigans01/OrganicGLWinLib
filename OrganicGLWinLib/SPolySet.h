@@ -26,6 +26,7 @@ public:
 
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();
+	void configurePolysWithoutNormalCalcs();
 	void runPolyComparison();
 	int checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* in_polyBPtr, int in_polyBID);
 	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
