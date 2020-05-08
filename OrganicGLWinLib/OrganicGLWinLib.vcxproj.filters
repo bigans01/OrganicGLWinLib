@@ -204,6 +204,24 @@
     <ClInclude Include="TerrainPrimitiveGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QuatRotationRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationPoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointTranslationCheck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyNormalFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -330,6 +348,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TerrainPrimitiveGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationPoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PointTranslationCheck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EmptyNormalFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

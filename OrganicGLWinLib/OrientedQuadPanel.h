@@ -33,6 +33,7 @@ class OrientedQuadPanel
 		void loadPointList();
 		int loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef);
 		void printPoints();
+		void clearQuadVectors();
 		void createInitialQuads(float in_axisWidth, float in_axisLength);
 		void applyQuaternionToPointList(glm::quat in_quaternion);
 		void applyTranslationToPointList(glm::vec3 in_translationVector);

@@ -159,6 +159,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EmptyNormalFinder.h" />
+    <ClInclude Include="PointTranslationCheck.h" />
+    <ClInclude Include="QuatRotationManager.h" />
+    <ClInclude Include="QuatRotationPoints.h" />
+    <ClInclude Include="QuatRotationRecord.h" />
+    <ClInclude Include="QuatRotationType.h" />
     <ClInclude Include="SMDebugV1.h" />
     <ClInclude Include="SMForwardV1.h" />
     <ClInclude Include="SMForwardV2.h" />
@@ -227,6 +233,7 @@
     <ClCompile Include="AtlasMap.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
+    <ClCompile Include="EmptyNormalFinder.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
     <ClCompile Include="GLUniformRegistry.cpp" />
@@ -240,6 +247,10 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
+    <ClCompile Include="PointTranslationCheck.cpp" />
+    <ClCompile Include="QuatRotationManager.cpp" />
+    <ClCompile Include="QuatRotationPoints.cpp" />
+    <ClCompile Include="QuatRotationRecord.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />

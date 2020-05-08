@@ -11,6 +11,14 @@ void OrientedQuadPanel::setInitialPanelData(OrientedQuadPlane in_panelPlane, Ori
 
 }
 
+void OrientedQuadPanel::clearQuadVectors()
+{
+	coreQuad.clear();
+	dir1Quads.clear();
+	dir2Quads.clear();
+	//pointList.clear();
+}
+
 void OrientedQuadPanel::createInitialQuads(float in_axisWidth, float in_axisLength)
 {
 	glm::vec3 someVec;
@@ -33,7 +41,7 @@ void OrientedQuadPanel::createInitialQuads(float in_axisWidth, float in_axisLeng
 	OrientedQuad dir2Quad(coreQuad.begin()->getPoint(3), in_axisWidth, nonCoreLength, direction2, direction1);	// point 3 = on same trajectory as direction 2
 	dir2Quads.push_back(dir2Quad);
 
-	std::cout << "---------------------------------------" << std::endl;
+	//std::cout << "---------------------------------------" << std::endl;
 }
 
 void OrientedQuadPanel::determineInitialDirections()
@@ -214,6 +222,8 @@ void OrientedQuadPanel::loadPointList()
 	fetchQuadPointRefs(&coreQuad);
 	fetchQuadPointRefs(&dir1Quads);	
 	fetchQuadPointRefs(&dir2Quads);	
+
+	//std::cout << "!! load point list called..." << std::endl;
 }
 
 int OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangleVectorRef)
@@ -237,6 +247,7 @@ int OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangl
 	auto dir1End = dir1Quads.end();
 	for (dir1Begin; dir1Begin != dir1End; dir1Begin++)
 	{
+		//std::cout << "------Dir 1 quad points: " << std::endl;
 		QuadTriangles trianglePair = dir1Begin->getQuadTriangles();
 		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
 		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
@@ -248,11 +259,13 @@ int OrientedQuadPanel::loadTrianglesIntoVector(std::vector<Triangle>* in_triangl
 	auto dir2End = dir2Quads.end();
 	for (dir2Begin; dir2Begin != dir2End; dir2Begin++)
 	{
+		//std::cout << "------Dir 2 quad points: " << std::endl;
 		QuadTriangles trianglePair = dir2Begin->getQuadTriangles();
 		in_triangleVectorRef->push_back(trianglePair.triangles[0]);
 		in_triangleVectorRef->push_back(trianglePair.triangles[1]);
 		totalTriangles += 2;
 	}
+	//std::cout << "!!!! Total triangles is: " << totalTriangles << std::endl;
 	return totalTriangles;
 }
 
@@ -306,6 +319,7 @@ void OrientedQuadPanel::fetchQuadPointRefs(std::vector<OrientedQuad>* in_quadVec
 	auto vectorEnd = in_quadVectorRef->end();
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
 	{
+		//std::cout << "!! < fetching point refs > " << std::endl;
 		// there are 4 points per quad, get their references
 		for (int x = 0; x < 4; x++)
 		{
@@ -339,6 +353,12 @@ void OrientedQuadPanel::applyTranslationToPointList(glm::vec3 in_translationVect
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(), in_translationVector);
 	auto vectorBegin = pointList.begin();
 	auto vectorEnd = pointList.end();
+
+	if (pointList.empty())
+	{
+		std::cout << "!!! Warning, point list is empty! " << std::endl;
+	}
+
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
 	{
 		glm::vec4 convertedPoint;
@@ -354,15 +374,17 @@ void OrientedQuadPanel::applyTranslationToPointList(glm::vec3 in_translationVect
 		newPoint.z = translatedPoint.z;
 
 		**vectorBegin = newPoint;
+
+		//std::cout << "New point: " << newPoint.x << ", " << newPoint.y << ", " << newPoint.z << std::endl;
 	}
 }
 
 void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 {
-	std::cout << "!!!!!! Recalculating quadrant..." << std::endl;
+	//std::cout << "!!!!!! Recalculating quadrant..." << std::endl;
 
-	std::cout << ":: Direction 1: " << direction1.x << ", " << direction1.y << ", " << direction1.z << std::endl;
-	std::cout << ":: Direction 2: " << direction2.x << ", " << direction2.y << ", " << direction2.z << std::endl;
+	//std::cout << ":: Direction 1: " << direction1.x << ", " << direction1.y << ", " << direction1.z << std::endl;
+	//std::cout << ":: Direction 2: " << direction2.x << ", " << direction2.y << ", " << direction2.z << std::endl;
 
 	// ---------------------------- X plane calcs
 
@@ -374,7 +396,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.y == 1.0f) && (direction1.z == 1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a XPLANE_POSY_POSZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a XPLANE_POSY_POSZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::X;
 		panelQuadrant = OrientedQuadQuadrant::XPLANE_POSY_POSZ;
 	}
@@ -387,7 +409,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.y == -1.0f) && (direction1.z == 1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a XPLANE_NEGY_POSZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a XPLANE_NEGY_POSZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::X;
 		panelQuadrant = OrientedQuadQuadrant::XPLANE_NEGY_POSZ;
 	}
@@ -400,7 +422,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.y == -1.0f) && (direction1.z == -1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a XPLANE_NEGY_NEGZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a XPLANE_NEGY_NEGZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::X;
 		panelQuadrant = OrientedQuadQuadrant::XPLANE_NEGY_NEGZ;
 	}
@@ -413,7 +435,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.y == 1.0f) && (direction1.z == -1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a XPLANE_POSY_NEGZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a XPLANE_POSY_NEGZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::X;
 		panelQuadrant = OrientedQuadQuadrant::XPLANE_POSY_NEGZ;
 	}
@@ -428,7 +450,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == 1.0f) && (direction1.z == 1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a YPLANE_POSX_POSZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a YPLANE_POSX_POSZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::Y;
 		panelQuadrant = OrientedQuadQuadrant::YPLANE_POSX_POSZ;
 	}
@@ -441,7 +463,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == 1.0f) && (direction1.z == -1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a YPLANE_POSX_NEGZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a YPLANE_POSX_NEGZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::Y;
 		panelQuadrant = OrientedQuadQuadrant::YPLANE_POSX_NEGZ;
 	}
@@ -454,7 +476,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == -1.0f) && (direction1.z == -1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a YPLANE_NEGX_NEGZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a YPLANE_NEGX_NEGZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::Y;
 		panelQuadrant = OrientedQuadQuadrant::YPLANE_NEGX_NEGZ;
 	}
@@ -467,7 +489,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == -1.0f) && (direction1.z == 1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a YPLANE_NEGX_POSZ! " << std::endl;
+		//std::cout << "!!! Quad panel is now a YPLANE_NEGX_POSZ! " << std::endl;
 		panelPlane = OrientedQuadPlane::Y;
 		panelQuadrant = OrientedQuadQuadrant::YPLANE_NEGX_POSZ;
 	}
@@ -483,7 +505,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == 1.0f) && (direction1.y == 1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a ZPLANE_POSX_POSY! " << std::endl;
+		//std::cout << "!!! Quad panel is now a ZPLANE_POSX_POSY! " << std::endl;
 		panelPlane = OrientedQuadPlane::Z;
 		panelQuadrant = OrientedQuadQuadrant::ZPLANE_POSX_POSY;
 	}
@@ -496,7 +518,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == 1.0f) && (direction1.y == -1.0f))
 	)
 	{
-		std::cout << "!!! Quad panel is now a ZPLANE_POSX_NEGY! " << std::endl;
+		//std::cout << "!!! Quad panel is now a ZPLANE_POSX_NEGY! " << std::endl;
 		panelPlane = OrientedQuadPlane::Z;
 		panelQuadrant = OrientedQuadQuadrant::ZPLANE_POSX_NEGY;
 	}
@@ -509,7 +531,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 		((direction2.x == -1.0f) && (direction1.y == -1.0f))
 		)
 	{
-		std::cout << "!!! Quad panel is now a ZPLANE_NEGX_NEGY! " << std::endl;
+		//std::cout << "!!! Quad panel is now a ZPLANE_NEGX_NEGY! " << std::endl;
 		panelPlane = OrientedQuadPlane::Z;
 		panelQuadrant = OrientedQuadQuadrant::ZPLANE_NEGX_NEGY;
 	}
@@ -522,7 +544,7 @@ void OrientedQuadPanel::recalculatePlaneAndQuadrant()
 			((direction2.x == -1.0f) && (direction1.y == 1.0f))
 			)
 	{
-		std::cout << "!!! Quad panel is now a ZPLANE_NEGX_POSY! " << std::endl;
+		//std::cout << "!!! Quad panel is now a ZPLANE_NEGX_POSY! " << std::endl;
 		panelPlane = OrientedQuadPlane::Z;
 		panelQuadrant = OrientedQuadQuadrant::ZPLANE_NEGX_POSY;
 	}
