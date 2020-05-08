@@ -159,16 +159,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CategorizedLine.h" />
+    <ClInclude Include="CleaveSequence.h" />
+    <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
+    <ClInclude Include="InterceptRegister.h" />
+    <ClInclude Include="IntersectionLine.h" />
+    <ClInclude Include="IntersectionLineGroup.h" />
+    <ClInclude Include="IntersectionResult.h" />
+    <ClInclude Include="IntersectionType.h" />
+    <ClInclude Include="IRGroup.h" />
+    <ClInclude Include="IRLine.h" />
+    <ClInclude Include="IRPointType.h" />
     <ClInclude Include="PointTranslationCheck.h" />
     <ClInclude Include="QuatRotationManager.h" />
     <ClInclude Include="QuatRotationPoints.h" />
     <ClInclude Include="QuatRotationRecord.h" />
     <ClInclude Include="QuatRotationType.h" />
+    <ClInclude Include="SliceFinder.h" />
     <ClInclude Include="SMDebugV1.h" />
     <ClInclude Include="SMForwardV1.h" />
     <ClInclude Include="SMForwardV2.h" />
     <ClInclude Include="SMPrimitiveV1.h" />
+    <ClInclude Include="SPoly.h" />
+    <ClInclude Include="SPolyBorderLines.h" />
+    <ClInclude Include="SPolyFracturer.h" />
+    <ClInclude Include="SPolyMorphTracker.h" />
+    <ClInclude Include="SPolySet.h" />
+    <ClInclude Include="STriangle.h" />
+    <ClInclude Include="STriangleLine.h" />
     <ClInclude Include="TerrainDebugGearT1.h" />
     <ClInclude Include="TerrainForwardGearT1.h" />
     <ClInclude Include="TerrainPrimitiveGearT1.h" />
@@ -231,6 +250,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
+    <ClCompile Include="CategorizedLine.cpp" />
+    <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
     <ClCompile Include="EmptyNormalFinder.cpp" />
@@ -245,6 +266,10 @@
     <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="InterceptRegister.cpp" />
+    <ClCompile Include="IntersectionLine.cpp" />
+    <ClCompile Include="IntersectionLineGroup.cpp" />
+    <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
@@ -253,12 +278,17 @@
     <ClCompile Include="QuatRotationRecord.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
+    <ClCompile Include="SliceFinder.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />
     <ClCompile Include="SMDeferredComputeV1.cpp" />
     <ClCompile Include="SMDeferredV2.cpp" />
     <ClCompile Include="SMForwardV1.cpp" />
     <ClCompile Include="SMForwardV2.cpp" />
     <ClCompile Include="SMPrimitiveV1.cpp" />
+    <ClCompile Include="SPoly.cpp" />
+    <ClCompile Include="SPolyFracturer.cpp" />
+    <ClCompile Include="SPolySet.cpp" />
+    <ClCompile Include="STriangle.cpp" />
     <ClCompile Include="TerrainComputeGearT1.cpp" />
     <ClCompile Include="TerrainDebugGearT1.cpp" />
     <ClCompile Include="TerrainForwardGearT1.cpp" />
