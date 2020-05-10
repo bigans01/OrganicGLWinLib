@@ -112,14 +112,45 @@ void QuatRotationManager::executeRotationsForZFracture()
 
 void QuatRotationManager::calculateEmptyNormal()
 {
+	glm::vec3 currentPoint0 = *rotationPointsRef->getFirstPointRef();
 	glm::vec3 currentPoint1 = *rotationPointsRef->getSecondPointRef();
 	glm::vec3 currentPoint2 = *rotationPointsRef->getThirdPointRef();
+	glm::vec3 currentMRP = *rotationPointsRef->getMRPRef();
 
 	glm::vec3* currentNormalRef = rotationPointsRef->getNormalRef();
 	*currentNormalRef = cross(currentPoint1, currentPoint2);
+	std::cout << "##!~~~~~ Points are: " << std::endl;
+	std::cout << "0: " << currentPoint0.x << ", " << currentPoint0.y << ", " << currentPoint0.z << std::endl;
+	std::cout << "1: " << currentPoint1.x << ", " << currentPoint1.y << ", " << currentPoint1.z << std::endl;
+	std::cout << "2: " << currentPoint2.x << ", " << currentPoint2.y << ", " << currentPoint2.z << std::endl;
+	std::cout << "MRP: " << currentMRP.x << ", " << currentMRP.y << ", " << currentMRP.z << std::endl;
 	std::cout << "##!~~~~~ current normal is: " << currentNormalRef->x << ", " << currentNormalRef->y << ", " << currentNormalRef->z << std::endl;
+
+	glm::vec3 calibratedEmptyNormal = checkForEmptyNormalCorrection(currentMRP, *currentNormalRef);
+	*currentNormalRef = calibratedEmptyNormal;
+
+	std::cout << "##!~~~~~ (calibrated) current normal is: " << currentNormalRef->x << ", " << currentNormalRef->y << ", " << currentNormalRef->z << std::endl;
+
+	//int someVal = 3;
+	//std::cin >> someVal;
 	//rotationPointsRef->pointsRef.push_back(currentNormal);
 }
+
+glm::vec3 QuatRotationManager::checkForEmptyNormalCorrection(glm::vec3 in_mrpCopy, glm::vec3 in_normalCopy)
+{
+	glm::vec3 returnVec = in_normalCopy;
+	
+	float mrp_y_normalized = in_mrpCopy.y / abs(in_mrpCopy.y);
+	float normal_y_normalized = in_normalCopy.y / abs(in_normalCopy.y);
+
+	if (mrp_y_normalized == normal_y_normalized)
+	{
+		returnVec *= -1;
+	}
+
+	return returnVec;
+}
+
 
 glm::vec3 QuatRotationManager::getEmptyNormal()
 {

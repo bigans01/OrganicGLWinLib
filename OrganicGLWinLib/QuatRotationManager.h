@@ -38,6 +38,7 @@ public:
 	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
 	void rotateToOriginalPosition();
 	void setDebugFlag(int in_debugFlag);
+	glm::vec3 checkForEmptyNormalCorrection(glm::vec3 in_mrpCopy, glm::vec3 in_normalCopy);
 	glm::vec3 getEmptyNormal();						// returns the calculated empty normal
 };
 

@@ -46,10 +46,16 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 		std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
 		std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
 	}
-
-	calculatedNormal = validCalculatedNormal;
-	std::cout << ">> MRP point is: " << mrp.x << ", " << mrp.y << ", " << mrp.z << std::endl;
-	std::cout << ">> Empty normal is: " << calculatedNormal.x << ", " << calculatedNormal.y << ", " << calculatedNormal.z << std::endl;
+	
+	calculatedNormal = glm::normalize(validCalculatedNormal);	// normalize to a unit vector.
+	//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
+	//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
+	//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+	//std::cout << ">> MRP point is: " << mrp.x << ", " << mrp.y << ", " << mrp.z << std::endl;
+	//std::cout << ">> Empty normal is: " << calculatedNormal.x << ", " << calculatedNormal.y << ", " << calculatedNormal.z << std::endl;
+	
+	//int sillyVal = 3;
+	//std::cin >> sillyVal;
 
 	/*
 	float radiansToRotateBy = getRadiansForXAlignmentS1(ab);
