@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "QuatRotationManager.h"
 
-void QuatRotationManager::initializeAndRun(QuatRotationPoints* in_quatPointsRef)
+void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef)
 {
 	rotationPointsRef = in_quatPointsRef;
 	pointARef = rotationPointsRef->getFirstPointRef();
@@ -22,7 +22,7 @@ void QuatRotationManager::initializeAndRun(QuatRotationPoints* in_quatPointsRef)
 		rotationOrder.push_back(rotateType);
 	}
 
-	executeRotations();		// run each rotation in the vector
+	executeRotationsForEmptyNormal();		// run each rotation against the points in the vector (for empty normal, prior to calculating it)
 	calculateEmptyNormal();
 	rotateToOriginalPosition();
 }
@@ -51,7 +51,7 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	executeRotationsForZFracture();
 }
 
-void QuatRotationManager::executeRotations()
+void QuatRotationManager::executeRotationsForEmptyNormal()
 {
 	auto vectorBegin = rotationOrder.begin();
 	auto vectorEnd = rotationOrder.end();
@@ -72,7 +72,7 @@ void QuatRotationManager::executeRotations()
 	if (pointCRef->y != pointARef->y)		// only rotate around X if point A's y and point C's y aren't equal (otherwise, its where we want it to be, which is all points having same Y)
 	{
 		std::cout << "!! Rotation around X required, performing..." << std::endl;
-		rotateAroundXAndPushIntoStack();
+		rotateAroundXToYZeroAndPushIntoStack();		// rotate the points so that Y = 0 for the triangle (but not for the MRP and empty normal)
 	}
 }
 
@@ -100,7 +100,13 @@ void QuatRotationManager::executeRotationsForZFracture()
 		}
 	}
 
-	if (pointCRef->y != pointARef->y)		// only rotate around X if point A's y and point C's y aren't equal (otherwise, its where we want it to be, which is all points having same Y)
+	// only rotate around X if these two conditions aren't met (same z, and pointCRef->y veering towards positive1)... otherwise, its where we want it to be, which is all points having same Z --AND-- pointCRef veers towards positive 1
+	if 
+	(
+		(pointCRef->z != pointARef->z)		// must be on same Z coordinate
+		&&									// --AND--
+		(pointCRef->y > 0)					// y for the third point must be positive
+	)
 	{
 		if (debugFlag == 1)
 		{
@@ -229,7 +235,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 	//rotationPointsRef->printPoints();
 }
 
-void QuatRotationManager::rotateAroundXAndPushIntoStack()
+void QuatRotationManager::rotateAroundXToYZeroAndPushIntoStack()
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;

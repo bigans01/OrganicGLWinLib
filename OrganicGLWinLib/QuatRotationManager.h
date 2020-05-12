@@ -24,15 +24,15 @@ public:
 	std::vector<QuatRotationType> rotationOrder;	// stores the types of rotations that need to be executed
 	std::stack<QuatRotationRecord> rotationRecords;
 
-	void initializeAndRun(QuatRotationPoints* in_quatPointsRef);
+	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef);
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatPointsRef);
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
-	void executeRotations();
+	void executeRotationsForEmptyNormal();
 	void executeRotationsForZFracture();
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack();
-	void rotateAroundXAndPushIntoStack();
+	void rotateAroundXToYZeroAndPushIntoStack();
 	void rotateAroundXForZFractureAndPushIntoStack();
 	float findRotationRadiansForZFracture(glm::vec3 in_vec3);
 	glm::quat createQuaternion(float radians, glm::vec3 in_angle);

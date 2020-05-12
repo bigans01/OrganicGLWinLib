@@ -4,6 +4,10 @@
 SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef)
 {
 	polyRef = in_sPolyRef;
+	std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
+	std::cout << "0: " << polyRef->primePoint0.x << ", " << polyRef->primePoint0.y << ", " << polyRef->primePoint0.z << std::endl;
+	std::cout << "1: " << polyRef->primePoint1.x << ", " << polyRef->primePoint1.y << ", " << polyRef->primePoint1.z << std::endl;
+	std::cout << "2: " << polyRef->primePoint2.x << ", " << polyRef->primePoint2.y << ", " << polyRef->primePoint2.z << std::endl;
 	morphTrackerRef = in_morphTrackerRef;
 	//generatePlanarNormalsForPoly();	// generate the planar normal for this poly before fracturing begins
 	rotationManager.setDebugFlag(polyRef->debugFlag);	// set the debug flag
@@ -11,6 +15,10 @@ SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTr
 	generatePlanarNormalsForPoly();		// generate the planar normals
 	printPointMetaData();				// show the points before we run the weave
 	checkForCleaveIntersections();		// check for any lines in each cleave sequence that intersect with other lines in another cleave sequence
+
+	int dumbVal = 3;
+	std::cout << "!!! Waiting for dumb input..." << std::endl;
+	std::cin >> dumbVal;
 }
 
 void SPolyFracturer::generatePlanarNormalsForPoly()
@@ -130,6 +138,7 @@ void SPolyFracturer::printPointMetaData()
 		// print the points
 		std::cout << (*pointsStart)->x << std::endl;
 		std::cout << "--------------------------------------------- Printing point meta-data for Fracturing process -----------------------------------------------------" << std::endl;
+		std::cout << "|| Group ID: " << polyRef->groupID << std::endl;
 		std::cout << "|| Triangle points " << std::endl;
 		for (int x = 0; x < 3; x++)
 		{

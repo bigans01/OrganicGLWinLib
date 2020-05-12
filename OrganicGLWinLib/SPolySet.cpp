@@ -716,7 +716,7 @@ void SPolySet::runTest1()		// runs use case 1
 	polyB.groupID = 1;		// set the group ID to 1
 	polyB.setMRP(pB_MRP);
 	polyB.addTriangle(polyBTriangle);
-	//polyB.addTriangle(polyBTriangle2);
+	polyB.addTriangle(polyBTriangle2);
 	//polyB.calculateEmptyNormal();
 	polyB.setDebugFlag(1);
 

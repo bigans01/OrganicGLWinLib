@@ -36,7 +36,7 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 	//glm::vec3 ab = point1Copy - point0Copy;		// get the ab_> vector, to do the alignment for
 	//std::cout << "Before rotation: " << ab.x << ", " << ab.y << ", " << ab.z << std::endl;
 
-	rotationManager.initializeAndRun(&quatPoints);
+	rotationManager.initializeAndRunForEmptyNormal(&quatPoints);
 	glm::vec3 validCalculatedNormal = rotationManager.getEmptyNormal();		// this will be stored in calculatedNormal when we are all done
 	if (pointTranslator.requiresTranslation == 1)
 	{
