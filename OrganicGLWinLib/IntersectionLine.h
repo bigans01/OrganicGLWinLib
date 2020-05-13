@@ -26,6 +26,8 @@ public:
 	void swapBorderToA();
 	void swapBorderToB();
 	void swapToA();
+
+	int getBorderLineIDFromSingularBorderLineCount();
 };
 
 #endif

@@ -159,9 +159,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BorderLineCycler.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
+    <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectionLine.h" />
@@ -250,8 +252,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
+    <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
+    <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
     <ClCompile Include="EmptyNormalFinder.cpp" />

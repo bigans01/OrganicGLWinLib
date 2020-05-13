@@ -72,7 +72,7 @@ void QuatRotationManager::executeRotationsForEmptyNormal()
 	if (pointCRef->y != pointARef->y)		// only rotate around X if point A's y and point C's y aren't equal (otherwise, its where we want it to be, which is all points having same Y)
 	{
 		std::cout << "!! Rotation around X required, performing..." << std::endl;
-		rotateAroundXToYZeroAndPushIntoStack();		// rotate the points so that Y = 0 for the triangle (but not for the MRP and empty normal)
+		rotateAroundXToYZeroAndPushIntoStack();		// rotate the points so that Y = 0 for the triangle (but the MRP and empty normal's y value will not be 0)
 	}
 }
 

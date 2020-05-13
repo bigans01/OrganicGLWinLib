@@ -279,6 +279,12 @@
     <ClInclude Include="SPolySet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLineCycler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CyclingDirectionFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -453,6 +459,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SPolySet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineCycler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CyclingDirectionFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

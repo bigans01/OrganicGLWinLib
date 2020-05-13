@@ -79,3 +79,17 @@ void IntersectionLine::swapToA()
 	isPointBOnBorder = tempPointAOnBorder;
 	pointBBorder = tempPointABorder;
 }
+
+int IntersectionLine::getBorderLineIDFromSingularBorderLineCount()
+{
+	int result = 0;		// may or may not be 0 in the end, but starts as 0 
+	if (isPointAOnBorder == 1)
+	{
+		result = pointABorder;
+	}
+	else if (isPointBOnBorder == 1)
+	{
+		result = pointBBorder;
+	}
+	return result;
+}
