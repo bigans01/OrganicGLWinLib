@@ -21,7 +21,10 @@ void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		auto pointsPtr = *pointsStart;
+
+		//std::cout << "--------> Point, pre-translation: " << pointsPtr->x << ", " << pointsPtr->y << ", " << pointsPtr->z << std::endl;
 		*pointsPtr += in_translation;
+		//std::cout << "--------> Point, post-translation: " << pointsPtr->x << ", " << pointsPtr->y << ", " << pointsPtr->z << std::endl;
 	}
 }
 
@@ -89,4 +92,38 @@ glm::vec3* QuatRotationPoints::getNormalRef()
 	pointsStart++;
 	pointsStart++;
 	return *pointsStart;
+}
+
+glm::vec3 QuatRotationPoints::getPointByIndex(int in_index)
+{
+	auto pointsStart = pointsRef.begin();
+	if (in_index == 0)	// get the first point
+	{
+		return **pointsStart;
+	}
+	else if (in_index != 0)
+	{
+		for (int x = 0; x < in_index; x++)	// iterate a number of times equal to in_index, if it isn't 0
+		{
+			pointsStart++;	// iterate
+		}
+		return **pointsStart;	// return whatever returns after in_index number of iterations
+	}
+}
+
+glm::vec3* QuatRotationPoints::getPointRefByIndex(int in_index)
+{
+	auto pointsStart = pointsRef.begin();
+	if (in_index == 0)	// get the first point
+	{
+		return *pointsStart;
+	}
+	else if (in_index != 0)
+	{
+		for (int x = 0; x < in_index; x++)	// iterate a number of times equal to in_index, if it isn't 0
+		{
+			pointsStart++;	// iterate
+		}
+		return *pointsStart;	// return whatever returns after in_index number of iterations
+	}
 }

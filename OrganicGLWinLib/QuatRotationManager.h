@@ -6,6 +6,7 @@
 #include "QuatRotationPoints.h"
 #include "QuatRotationType.h"
 #include "QuatRotationRecord.h"
+#include "CyclingDirection.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -26,9 +27,11 @@ public:
 
 	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef);
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatPointsRef);
+	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef);
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
 	void executeRotationsForZFracture();
+	void executeRotationsForCyclingDirectionFinder();
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack();

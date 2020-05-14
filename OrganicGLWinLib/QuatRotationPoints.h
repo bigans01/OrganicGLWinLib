@@ -23,6 +23,8 @@ public:
 	glm::vec3* getThirdPointRef();
 	glm::vec3* getMRPRef();
 	glm::vec3* getNormalRef();
+	glm::vec3 getPointByIndex(int in_index);
+	glm::vec3* getPointRefByIndex(int in_index);
 };
 
 #endif

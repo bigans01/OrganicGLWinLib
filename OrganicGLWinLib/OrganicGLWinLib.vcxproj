@@ -163,6 +163,7 @@
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
+    <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="InterceptRegister.h" />

@@ -51,6 +51,52 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	executeRotationsForZFracture();
 }
 
+CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef)
+{
+	rotationPointsRef = in_quatPointsRef;
+	CyclingDirection direction;
+
+	glm::vec3* borderLinePointARef = rotationPointsRef->getPointRefByIndex(0);
+	glm::vec3* borderLinePointBRef = rotationPointsRef->getPointRefByIndex(1);
+	pointARef = rotationPointsRef->getPointRefByIndex(2);	// get point A of categorized line
+	pointBRef = rotationPointsRef->getPointRefByIndex(3);	// get point B of categorized line
+	glm::vec3* categorizedLineEmptyNormal = rotationPointsRef->getPointRefByIndex(4);
+
+	std::cout << "BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
+	std::cout << "BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
+	std::cout << "Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
+	std::cout << "Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
+	std::cout << "Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
+
+	executeRotationsForCyclingDirectionFinder();
+	
+	std::cout << "-------------------After quaternion applied: " << std::endl;
+	std::cout << "BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
+	std::cout << "BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
+	std::cout << "Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
+	std::cout << "Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
+	std::cout << "Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
+
+	// find the direction, based on comparing the y's of the borderLine's points and the empty normal of the categorized line.
+	float normalizedBorderLinePointAY = borderLinePointARef->y / abs(borderLinePointARef->y);
+	float normalizedBorderLinePointBY = borderLinePointBRef->y / abs(borderLinePointBRef->y);
+	float normalizedEmptyNormalY = categorizedLineEmptyNormal->y / abs(categorizedLineEmptyNormal->y);
+
+	if (normalizedEmptyNormalY == normalizedBorderLinePointAY)
+	{
+		std::cout << "Direction is REVERSE" << std::endl;
+		direction = CyclingDirection::REVERSE;
+	}
+	else if (normalizedEmptyNormalY == normalizedBorderLinePointBY)
+	{
+		std::cout << "Direction is FORWARD" << std::endl;
+		direction = CyclingDirection::FORWARD;
+	}
+
+	return direction;
+	//pointARef = rotationPointsRef->
+}
+
 void QuatRotationManager::executeRotationsForEmptyNormal()
 {
 	auto vectorBegin = rotationOrder.begin();
@@ -113,6 +159,14 @@ void QuatRotationManager::executeRotationsForZFracture()
 			std::cout << "!!!! Rotation around X required, performing...(Z-fracture)" << std::endl;
 		}
 		rotateAroundXForZFractureAndPushIntoStack();
+	}
+}
+
+void QuatRotationManager::executeRotationsForCyclingDirectionFinder()
+{
+	if (pointBRef->y != 0)
+	{
+		rotateAroundZAndPushIntoStack();
 	}
 }
 
