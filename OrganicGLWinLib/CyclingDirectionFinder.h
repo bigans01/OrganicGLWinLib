@@ -8,6 +8,7 @@
 #include "QuatRotationPoints.h"
 #include "QuatRotationManager.h"
 #include "PointTranslationCheck.h"
+#include "CyclingDirection.h"
 
 class CyclingDirectionFinder
 {
@@ -25,6 +26,7 @@ public:
 	PointTranslationCheck pointTranslator;
 	SPolyBorderLines borderLine;
 	CategorizedLine categorizedLine;
+	CyclingDirection foundDirection;
 
 };
 

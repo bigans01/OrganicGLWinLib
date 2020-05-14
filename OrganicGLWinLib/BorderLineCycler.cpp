@@ -11,6 +11,11 @@ void BorderLineCycler::findCyclingDirection(SPolyBorderLines* in_borderLineRef, 
 		<< " empty normal: " << in_categorizedLineRef->emptyNormal.x << ", " << in_categorizedLineRef->emptyNormal.y << ", " << in_categorizedLineRef->emptyNormal.z << std::endl;
 
 	// find the cycling direction,
-	CyclingDirectionFinder(*in_borderLineRef, *in_categorizedLineRef);
-				
+	CyclingDirectionFinder cycleFinder(*in_borderLineRef, *in_categorizedLineRef);
+	direction = cycleFinder.foundDirection;	// store the direction
+}
+
+void BorderLineCycler::buildCycle(SPoly* in_sPolyRef, int in_borderLineStartIndex, int in_borderLineEndIndex)
+{
+	lineCycle.initialize(in_sPolyRef, in_borderLineStartIndex, in_borderLineEndIndex, direction);
 }

@@ -288,6 +288,9 @@
     <ClInclude Include="CyclingDirection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLineCycle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -468,6 +471,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CyclingDirectionFinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineCycle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,6 +11,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 
 	for (cleaveBegin; cleaveBegin != cleaveEnd; cleaveBegin++)
 	{
+		/*
 		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
 		auto sequenceEnd = cleaveBegin->second.cleavingLines.end();
 		for (sequenceBegin; sequenceBegin != sequenceEnd; sequenceBegin++)
@@ -27,7 +28,23 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 				BorderLineCycler lineCycler(in_sPolyRef);
 				int borderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
 				lineCycler.findCyclingDirection(&in_sPolyRef->borderLines[borderLineId], borderLineId, &sequenceBegin->second);	// find the direction to go off of, based off the border line
+				lineCycler.buildCycle(in_sPolyRef, borderLineId);		// build the cycle, once the direction is found.
 			}
 		}
+		*/
+
+		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();	// get first element
+		auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();	// get last element
+
+		// if the first line in the sequence is only one border line, do this; test
+		if (sequenceBegin->second.line.numberOfBorderLines == 1)
+		{
+			BorderLineCycler lineCycler(in_sPolyRef);
+			int beginLineborderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
+			int endLineborderLineId = sequenceEnd->second.line.getBorderLineIDFromSingularBorderLineCount();
+			lineCycler.findCyclingDirection(&in_sPolyRef->borderLines[beginLineborderLineId], beginLineborderLineId, &sequenceBegin->second);	// find the direction to go off of, based off the border line
+			lineCycler.buildCycle(in_sPolyRef, beginLineborderLineId, endLineborderLineId);		// build the cycle, once the direction is found.
+		}
+
 	}
 }

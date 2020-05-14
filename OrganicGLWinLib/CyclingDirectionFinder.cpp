@@ -24,6 +24,6 @@ CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCop
 	quatPoints.pointsRef.push_back(&categorizedLine.emptyNormal);
 
 	// run the appropriate rotation manager function
-	rotationManager.initializeAndRunForCyclingDirectionFinder(&quatPoints);
+	foundDirection = rotationManager.initializeAndRunForCyclingDirectionFinder(&quatPoints);
 
 }
