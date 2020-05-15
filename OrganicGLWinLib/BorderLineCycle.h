@@ -28,6 +28,7 @@ class BorderLineCycle
 		                                                //                         and the second set begins at 0, and iterates twice (so indices 0 and 1).
 		short secondIterationSetNumberOfIterations = 0;	// how many times the second set must iterate (see above)
 		void calculateNumberOfIterations();
+		int getTotalIterationCount();
 };
 
 #endif

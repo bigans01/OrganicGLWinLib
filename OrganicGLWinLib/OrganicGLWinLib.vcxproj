@@ -161,6 +161,8 @@
   <ItemGroup>
     <ClInclude Include="BorderLineCycle.h" />
     <ClInclude Include="BorderLineCycler.h" />
+    <ClInclude Include="BorderLineIntersectRecord.h" />
+    <ClInclude Include="BorderLineIntersectRecorder.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
@@ -256,6 +258,8 @@
     <ClCompile Include="AtlasMap.cpp" />
     <ClCompile Include="BorderLineCycle.cpp" />
     <ClCompile Include="BorderLineCycler.cpp" />
+    <ClCompile Include="BorderLineInterceptRecord.cpp" />
+    <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />

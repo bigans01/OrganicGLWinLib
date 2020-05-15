@@ -291,6 +291,12 @@
     <ClInclude Include="BorderLineCycle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -474,6 +480,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BorderLineCycle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineIntersectRecorder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineInterceptRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

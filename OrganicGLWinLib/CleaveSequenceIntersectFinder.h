@@ -10,6 +10,8 @@ class CleaveSequenceIntersectFinder
 {
 public:
 	CleaveSequenceIntersectFinder(SPoly* in_sPolyRef);
+	SPoly* sPolyRef;
+	void loadInterceptRecords();		// read all CleaveSequences, put the metadata about the borderlines they intercept into the borderlines.
 };
 
 #endif

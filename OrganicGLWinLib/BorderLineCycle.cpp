@@ -31,4 +31,94 @@ void BorderLineCycle::calculateNumberOfIterations()
 
 		std::cout << "REVERSE iteration values: first set: " << firstIterationSetNumberOfIterations << " | second set: " << secondIterationSetNumberOfIterations << std::endl;
 	}
+	int totalRequiredIterations = getTotalIterationCount();
+}
+
+int BorderLineCycle::getTotalIterationCount()
+{
+	int totalIterations = 0;
+	bool stopFlag = false;		// indicates when to stop.
+	int currentIndex = 0;		// the current index we are on.
+	if (direction == CyclingDirection::FORWARD)
+	{
+		// go through the first set, forward
+		currentIndex = startIndex;
+		for (int x = 0; x < firstIterationSetNumberOfIterations; x++)
+		{
+			if (currentIndex == endIndex) // we must stop
+			{
+				totalIterations++;
+				stopFlag = true;
+				break;
+			}
+			else
+			{
+				totalIterations++;		// only iterate until we stop.
+			}
+			currentIndex++;
+		}
+
+		// go through the second set, only if the stop flag is still false.
+		if (stopFlag == false)
+		{
+			currentIndex = 0;	// always start at index 0 in the second set, when going forward.
+			for (int x = 0; x < secondIterationSetNumberOfIterations; x++)
+			{
+				if (currentIndex == endIndex) // we must stop
+				{
+					totalIterations++;
+					stopFlag = true;
+					break;
+				}
+				else
+				{
+					totalIterations++;		// only iterate until we stop.
+				}
+				currentIndex++;
+			}
+		}
+
+	}
+	else if (direction == CyclingDirection::REVERSE)
+	{
+		// go through the first set, reverse
+		currentIndex = startIndex;
+		for (int x = firstIterationSetNumberOfIterations; x > 0; x--)
+		{
+			if (currentIndex == endIndex)
+			{
+				totalIterations++;
+				stopFlag = true;
+				break;
+			}
+			else
+			{
+				totalIterations++;
+			}
+			currentIndex--;
+		}
+
+		// go through the second set, only if the stop flag is still false.
+		if (stopFlag == false)
+		{
+			currentIndex = borderLineFinalIndex;	// when going reverse, the second set's first index value is the last index
+			for (int x = secondIterationSetNumberOfIterations; x > 0; x--)
+			{
+				if (currentIndex == endIndex) // we must stop
+				{
+					totalIterations++;
+					stopFlag = true;
+					break;
+				}
+				else
+				{
+					totalIterations++;		// only iterate until we stop.
+				}
+				currentIndex--;
+			}
+		}
+	}
+
+	std::cout << "Total iterations: " << totalIterations << std::endl;
+	return totalIterations;
 }

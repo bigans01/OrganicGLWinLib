@@ -28,7 +28,7 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 
 void SPolyFracturer::checkForCleaveIntersections()
 {
-	CleaveSequenceIntersectFinder intersectFinder(polyRef);
+	CleaveSequenceIntersectFinder intersectFinder(polyRef);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
 }
 
 void SPolyFracturer::runFracturing()

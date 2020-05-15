@@ -3,6 +3,9 @@
 
 CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 {
+	sPolyRef = in_sPolyRef;
+	loadInterceptRecords();
+
 	int cleaveMapSize = in_sPolyRef->cleaveMap.size();
 	auto cleaveBegin = in_sPolyRef->cleaveMap.begin();
 	auto cleaveEnd = in_sPolyRef->cleaveMap.end();
@@ -46,5 +49,28 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 			lineCycler.buildCycle(in_sPolyRef, beginLineborderLineId, endLineborderLineId);		// build the cycle, once the direction is found.
 		}
 
+	}
+}
+
+void CleaveSequenceIntersectFinder::loadInterceptRecords()
+{
+	auto cleaveBegin = sPolyRef->cleaveMap.begin();
+	auto cleaveEnd = sPolyRef->cleaveMap.end();
+	for (cleaveBegin; cleaveBegin != cleaveEnd; cleaveBegin++)		// cycle through each CleaveSequence
+	{
+		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
+		auto sequenceEnd = cleaveBegin->second.cleavingLines.end();
+		for (sequenceBegin; sequenceBegin != sequenceEnd; sequenceBegin++)	// cycle through each CategorizedLine in each CleaveSequence
+		{
+			if (sequenceBegin->second.line.numberOfBorderLines == 1)		// if it contains one interception, load the data into appropriate border line's BorderLineIntersectRecorder
+			{
+				int borderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// get the appropriate border line to insert data into.
+				SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[borderLineId];								// get the line ref.
+				borderLineRef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);		// first argument: the ID of the cleave sequence
+																																		// second argument: the ID of the categorized line we're inserting from the sequence
+																																		// third argument: a reference to the categorized line itself
+				std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
+			}	
+		}
 	}
 }
