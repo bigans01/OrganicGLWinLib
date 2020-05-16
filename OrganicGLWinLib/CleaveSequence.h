@@ -3,8 +3,8 @@
 #ifndef CLEAVESEQUENCE_H
 #define CLEAVESEQUENCE_H
 
-#include "CategorizedLine.h"
 #include <map>
+#include "CategorizedLine.h"
 
 class CleaveSequence
 {

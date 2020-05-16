@@ -5,6 +5,7 @@
 
 #include "SPoly.h"
 #include "BorderLineCycler.h"
+#include "CleaveSequence.h"
 
 class CleaveSequenceIntersectFinder
 {
