@@ -297,6 +297,9 @@
     <ClInclude Include="BorderLineIntersectRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecordType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

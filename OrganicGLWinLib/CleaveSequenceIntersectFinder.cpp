@@ -5,6 +5,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 {
 	sPolyRef = in_sPolyRef;
 	int cleaveMapSize = in_sPolyRef->cleaveMap.size();
+	
 
 	// only perform the check if the size is >= 1; we don't need to do any work if there aren't any cleave sequences.
 	if (cleaveMapSize >= 1)
@@ -12,7 +13,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
 		std::cout << "~~~ cleave map size: " << cleaveMapSize << std::endl;
 		auto cleaveBegin = in_sPolyRef->cleaveMap.begin();
-		
+
 		// strange, false positive error with cleavingLines below (5/16/2020)
 		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();	// get first element  (the border line in the cycle where the cycle begins, fetched from the first CategorizedLine in the sequence)
 		auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();	// get last element  (the border line in the cycle where the cycle ends, fetched from the last CategorizedLine in the sequence)
@@ -33,6 +34,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 
 void CleaveSequenceIntersectFinder::loadInterceptRecords()
 {
+	// load the records into the appropriate border lines
 	auto cleaveBegin = sPolyRef->cleaveMap.begin();
 	auto cleaveEnd = sPolyRef->cleaveMap.end();
 	for (cleaveBegin; cleaveBegin != cleaveEnd; cleaveBegin++)		// cycle through each CleaveSequence
@@ -50,6 +52,22 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 																																		// third argument: a reference to the categorized line itself
 				std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
 			}	
+		}
+	}
+
+	// cycle through each border line; if it has any records, determine those record types.
+	for (int x = 0; x < sPolyRef->numberOfBorderLines; x++)
+	{
+		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[x];
+		if (borderLineRef->intersectRecorder.records.size() > 0)	// only do the following if there are actually intersect records in the line.
+		{
+			std::cout << "Determining record types for border line: " << x << std::endl;
+			auto recordsBegin = borderLineRef->intersectRecorder.records.begin();
+			auto recordsEnd = borderLineRef->intersectRecorder.records.end();
+			for (recordsBegin; recordsBegin != recordsEnd; recordsBegin++)
+			{
+				recordsBegin->second.determineRecordType();
+			}
 		}
 	}
 }

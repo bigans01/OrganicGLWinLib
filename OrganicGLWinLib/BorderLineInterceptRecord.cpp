@@ -6,3 +6,11 @@ void BorderLineIntersectRecord::insertCategorizedLineRef(int in_categoriedLineID
 	lineRefs[in_categoriedLineID] = in_categorizedLineRef;
 	numberOfCatLines++;
 }
+
+void BorderLineIntersectRecord::determineRecordType()
+{
+	if (numberOfCatLines == 1)
+	{
+		recordType = BorderLineIntersectRecordType::OPEN;
+	}
+}
