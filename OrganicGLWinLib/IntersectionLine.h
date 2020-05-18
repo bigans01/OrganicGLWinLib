@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include "IntersectionResult.h"
+#include <iostream>
 
 class IntersectionLine
 {
@@ -28,6 +29,7 @@ public:
 	void swapToA();
 
 	int getBorderLineIDFromSingularBorderLineCount();
+	glm::vec3 getBorderPointFromSingularBorderLineCount();
 };
 
 #endif

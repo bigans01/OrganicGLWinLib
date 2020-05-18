@@ -45,6 +45,7 @@ public:
 	void runTest1();		// runs use case 1 
 	void runTest2();		// Summary: contains 2 groups (IDs 1 and 2) that go through a set of polys.
 	void runTest3();		// Summary: test for DISCONNECTED cleave type
+	void runTest4();
 
 };
 

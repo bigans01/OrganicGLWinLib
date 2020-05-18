@@ -16,7 +16,7 @@ SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTr
 	printPointMetaData();				// show the points before we run the weave
 	checkForCleaveIntersections();		// check for any lines in each cleave sequence that intersect with other lines in another cleave sequence
 
-	int dumbVal = 3;
+	int dumbVal = 5;
 	std::cout << "!!! Waiting for dumb input..." << std::endl;
 	std::cin >> dumbVal;
 }

@@ -3,6 +3,8 @@
 
 void IntersectionLine::addIntersectionResult(IntersectionResult in_result)
 {
+	//std::cout << "!!!! Add intersection result, point A: " << in_result.intersectedPoint.x << ", " << in_result.intersectedPoint.y << ", " << in_result.intersectedPoint.z << std::endl;
+
 	int currentNoOfPoints = numberOfPoints;
 	if (currentNoOfPoints == 0)		// insert into point A
 	{
@@ -92,4 +94,18 @@ int IntersectionLine::getBorderLineIDFromSingularBorderLineCount()
 		result = pointBBorder;
 	}
 	return result;
+}
+
+glm::vec3 IntersectionLine::getBorderPointFromSingularBorderLineCount()
+{
+	glm::vec3 borderPoint;
+	if (isPointAOnBorder == 1)
+	{
+		borderPoint = pointA;
+	}
+	else if (isPointBOnBorder == 1)
+	{
+		borderPoint = pointB;
+	}
+	return borderPoint;
 }

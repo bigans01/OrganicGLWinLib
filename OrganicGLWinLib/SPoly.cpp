@@ -663,6 +663,10 @@ void SPoly::printAllCleaveLines()
 	{
 		std::cout << ":::: NO cleave lines to print! :::: " << std::endl;
 	}
+	int someVal = 4;
+	std::cout << "Printing all cleave lines complete, enter number to continue..." << std::endl;
+	std::cin >> someVal; 
+
 	std::cout << "Testing...." << std::endl;
 }
 

@@ -68,7 +68,7 @@ void SPolySet::runPolyComparison()
 		{
 			if (!(x == y))	// never compare the poly to itself
 			{
-				std::cout << "Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
+				std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
 				std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
 
 				SPoly* polyA = &secondaryPolys[x];
@@ -114,7 +114,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 
 			// STEP 1
 			STriangle* polyBTrianglePtr = &in_polyBPtr->triangles[y]; // get the triangle of B
-			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing A to B " << std::endl;
+			std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing A to B " << std::endl;
 			for (int z = 0; z < 3; z++)		// run the lines of A through B 
 			{
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyBTrianglePtr, in_polyAPtr->triangles[x].triangleLines[z]);		// check if poly A's line intersected B...if they did, we need to add them to the IntersectionLine
@@ -133,10 +133,12 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 					else
 					{
 						std::cout << "Intersecting line was NOT a border line. (A to B)" << std::endl;
+						//std::cout << "!!! Points are: " << potentialLineAtoB.pointA.x << ", " << potentialLineAtoB.pointA.y << ", " << potentialLineAtoB.pointA.z << " |  " << potentialLineAtoB.pointB.x << ", " << potentialLineAtoB.pointB.y << ", " << potentialLineAtoB.pointB.z << std::endl;
 					}
 					//std::cout << "(1) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					potentialLineAtoB.addIntersectionResult(intersectResult);		// add the result to the intersect line
 					potentialLineAtoB.intersectedSecondaryID = in_polyBID;			// store the ID of the secondary that was intersected; this should always be B
+					//std::cout << "!!! Points are: " << potentialLineAtoB.pointA.x << ", " << potentialLineAtoB.pointA.y << ", " << potentialLineAtoB.pointA.z << " |  " << potentialLineAtoB.pointB.x << ", " << potentialLineAtoB.pointB.y << ", " << potentialLineAtoB.pointB.z << std::endl;
 					//std::cout << "(2) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					polyALineGroup.addIntersectionLine(potentialLineAtoB);			// only add a line to the group if the line intersection wtih poly B
 				}
@@ -146,7 +148,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			IntersectionLine mergedLineAtoB = polyALineGroup.mergeLines();
 
 			// STEP 2
-			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing B to A" << std::endl;
+			std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing B to A" << std::endl;
 			for (int z = 0; z < 3; z++)
 			{
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyATrianglePtr, polyBTrianglePtr->triangleLines[z]);				// check if poly B's line intersected A...if they did, we need to add them to the IntersectionLine
@@ -176,7 +178,16 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 
 			// STEP 3
 			// compare the IntersectionLines to determine the type of interect (if any) that was generated
+			
 			CategorizedLine currentCategorizedLine = determineCategorizedLine(mergedLineAtoB, mergedLineBtoA, in_polyBPtr->groupID, in_polyBPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
+			if (currentCategorizedLine.type != IntersectionType::NONE)
+			{
+				std::cout << "~~~~ Categorized line to add's points are: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << " | " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+			}
+			else if (currentCategorizedLine.type == IntersectionType::NONE)
+			{
+				std::cout << "~~~ Categorized line type is NONE; ignoring..." << std::endl;
+			}
 
 			// STEP 4
 			// add any CategorizedLine to polygonA's map that isn't NONE
@@ -188,9 +199,11 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 
 			polyALineGroup.reset();
 			polyBLineGroup.reset();
+
+			std::cout << "+++++++++ comparing next tertiary..." << std::endl;
 		}
 
-
+		std::cout << "------------++ done comparing current tertiary in triangle A; moving to next tertiary in triangle A..." << std::endl;
 
 	}
 	std::cout << "Current poly cleave size: " << in_polyAPtr->cleaveMap.size() << std::endl;
@@ -211,6 +224,16 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	glm::vec3 point0 = in_triangle.triangleLines[0].pointA;
 	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
 	glm::vec3 point2 = in_triangle.triangleLines[2].pointA;
+
+	
+	std::cout << "##########################################" << std::endl;
+	std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+	std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+	std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+	std::cout << "intersecting line, point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+	std::cout << "intersecting line, point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+	std::cout << "##########################################" << std::endl;
+	
 
 	glm::vec3 u = point1 - point0;	// u vector
 	glm::vec3 v = point2 - point0;	// v " 
@@ -296,24 +319,25 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 {
 	CategorizedLine returnLine;
 	// CASE 1: A is SLICED
-	//std::cout << "Line A, " << in_lineA.numberOfBorderLines << std::endl;
-	//std::cout << "Line B, " << in_lineB.numberOfBorderLines << std::endl;
+	std::cout << "Line A, " << in_lineA.numberOfBorderLines << std::endl;
+	std::cout << "Line B, " << in_lineB.numberOfBorderLines << std::endl;
 
 	if (in_lineA.numberOfBorderLines == 2)
 	{
-		//std::cout << "This line is a SLICE" << std::endl;
+
+		std::cout << "CASE 1: This line is a SLICE" << std::endl;
 		returnLine.convertLineToSlice(in_lineA);		// convert to SLICE, by sending in the slicing line, in_lineA
 	}
 
-	// CASE 2: B is SLICED, but A "engulfs" B
+	// CASE 2: B is SLICED, but A "engulfs" B; B may have 1 to 2 border lines
 	else if
 		(
-		(in_lineB.numberOfBorderLines == 2)
+		(in_lineB.numberOfBorderLines >= 1)
 			&&
 			(in_lineA.numberOfBorderLines == 0)
 			)
 	{
-		//std::cout << "Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
+		std::cout << "CASE 2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
 		returnLine.convertLineToNonbound(in_lineB);	// convert to NONBOUND, by sending in the engulfed line (which is in_lineB)
 	}
 
@@ -326,7 +350,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 			(in_lineA.numberOfBorderLines == 1)
 			)
 	{
-		//std::cout << "Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
+		std::cout << "CASE 3.1: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
 
 		//std::cout << "TA p0: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
 		//std::cout << "TB p0: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointA.z << std::endl;
@@ -383,6 +407,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 		//glm::vec3 newSecondPoint = findSecondPointForLine(in_lineA.pointA, in_lineB.pointA, in_lineB.pointB);
 		//returnLine.convertLineToPartialBound(in_lineA, in_lineB);		// convert to TWIN
 		//returnLine.convertLineToPartialBound(in_lineA, in_lineB, newSecondPoint);
+		std::cout << "CASE 3.2: " << std::endl;
 		std::cout << "!!! Return line border is: " << returnLine.line.pointABorder << std::endl;
 
 	}
@@ -400,7 +425,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 			(in_lineB.numberOfBorderLines == 1)
 			)
 	{
-		std::cout << "twin-style PARTIAL_BOUND detected. " << std::endl;
+		std::cout << "CASE 4: twin-style PARTIAL_BOUND detected. " << std::endl;
 		glm::vec3 newSecondPoint = findSecondPointForLine(in_lineA.pointA, in_lineB.pointA, in_lineB.pointB);
 		//returnLine.convertLineToPartialBound(in_lineA, in_lineB);		// convert to TWIN
 		returnLine.convertLineToPartialBound(in_lineA, in_lineB, newSecondPoint);
@@ -421,7 +446,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 			(in_lineB.numberOfBorderLines == 0)
 			)
 	{
-		std::cout << "NON-BOUND case 2 hit " << std::endl;
+		std::cout << "CASE 5: NON-BOUND case 2 hit " << std::endl;
 		glm::vec3 roundedA = in_lineA.pointA;
 		glm::vec3 roundedB = in_lineB.pointA;
 		if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
@@ -443,7 +468,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 			)
 	{
 		// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
-		std::cout << "No intercept detected. " << std::endl;
+		std::cout << "CASE 6: No intercept detected. " << std::endl;
 	}
 	returnLine.line.lineGroupID = in_groupID;
 	returnLine.emptyNormal = in_polyBEmptyNormal;
@@ -623,6 +648,7 @@ glm::quat SPolySet::createQuaternion(float radians, glm::vec3 in_angle)
 void SPolySet::performFracturing()
 {
 	// determine what needs to be fractured, by cycling through all secondaryPolys.
+	std::cout << "######## Calling performFracturing()" << std::endl;
 	for (int x = 0; x < secondaryPolys.size(); x++)
 	{
 		if (secondaryPolys[x].cleaveMap.size() != 0)	// fracture only if there are actual cleave map entries
@@ -635,6 +661,10 @@ void SPolySet::performFracturing()
 			SPolyFracturer fracturer(&secondaryPolys[x], &polyMorphTracker);
 		}
 	}
+
+	int continueVal = 3;
+	std::cout << "Fracturing for this poly complete; enter number to continue..." << std::endl;
+	std::cin >> continueVal;
 }
 
 void SPolySet::runTest1()		// runs use case 1 
@@ -900,6 +930,120 @@ void SPolySet::runTest3()
 
 	addPoly(polyA);
 	addPoly(polyB);
+	configurePolys();
+
+	runPolyComparison();		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
+	performFracturing();			// PHASE 3 run weave for new triangles
+
+	reset();
+}
+
+void SPolySet::runTest4()
+{
+	// the first poly
+	SPoly polyA;
+	glm::vec3 pA_0, pA_1, pA_2, pA_3;
+	glm::vec3 pA_MRP;		// mass reference point for polygon A
+
+	pA_MRP.x = 0.5f;
+	pA_MRP.y = 0.5f;
+	pA_MRP.z = -0.5f;
+
+	pA_0.x = 0.0f;
+	pA_0.y = 0.0f;
+	pA_0.z = 0.0f;
+
+	pA_1.x = 1.0f;
+	pA_1.y = 0.0f;
+	pA_1.z = 0.0f;
+
+	pA_2.x = 1.0f;
+	pA_2.y = 1.0f;
+	pA_2.z = 0.0f;
+
+	pA_3.x = 0.0f;
+	pA_3.y = 1.0f;
+	pA_3.z = 0.0f;
+
+	STriangle polyATriangle(pA_0, pA_1, pA_2);
+	STriangle polyATriangle2(pA_0, pA_2, pA_3);
+	polyA.groupID = 0;		// set the group ID to 0 (default anyway)
+	polyA.setMRP(pA_MRP);
+	polyA.addTriangle(polyATriangle);
+	polyA.addTriangle(polyATriangle2);
+
+	addPoly(polyA);
+	//polyA.calculateEmptyNormal();
+
+
+	// MRP for group 1
+	glm::vec3 group_1_MRP;
+	group_1_MRP.x = 1.0f;
+	group_1_MRP.y = .5f;
+	group_1_MRP.z = 0.0f;
+
+	// first poly of group 1 (top poly)
+	SPoly polyA_1;
+
+	// poly A, in group 1, points 0 through 3...
+	glm::vec3 pA_1_0, pA_1_1, pA_1_2, pA_1_3;
+	pA_1_0.x = 1.0f;
+	pA_1_0.y = .6f;
+	pA_1_0.z = 0.1f;
+
+	pA_1_1.x = 1.0f;
+	pA_1_1.y = .6f;
+	pA_1_1.z = -0.1f;
+
+	pA_1_2.x = 0.9f;
+	pA_1_2.y = .6f;
+	pA_1_2.z = -0.1f;
+
+	pA_1_3.x = 0.9f;
+	pA_1_3.y = 0.6f;
+	pA_1_3.z = 0.1f;
+
+	STriangle polyA_1_triangle1(pA_1_0, pA_1_1, pA_1_2);
+	STriangle polyA_1_triangle2(pA_1_0, pA_1_2, pA_1_3);
+	polyA_1.groupID = 1;
+	polyA_1.setMRP(group_1_MRP);
+	polyA_1.addTriangle(polyA_1_triangle1);
+	polyA_1.addTriangle(polyA_1_triangle2);
+
+	addPoly(polyA_1);
+
+
+
+	// second poly of group 1 (side poly)
+	SPoly polyB_1;
+	
+	// poly B, in group 1, points 0 through 3...
+	glm::vec3 pB_1_0, pB_1_1, pB_1_2, pB_1_3;
+	pB_1_0.x = .9f;
+	pB_1_0.y = .6f;
+	pB_1_0.z = 0.1f;
+
+	pB_1_1.x = .9f;
+	pB_1_1.y = .6f;
+	pB_1_1.z = -0.1f;
+
+	pB_1_2.x = .9f;
+	pB_1_2.y = .4f;
+	pB_1_2.z = -0.1f;
+
+	pB_1_3.x = .9f;
+	pB_1_3.y = .4f;
+	pB_1_3.z = 0.1f;
+
+	STriangle polyB_1_triangle1(pB_1_0, pB_1_1, pB_1_2);
+	STriangle polyB_1_triangle2(pB_1_0, pB_1_2, pB_1_3);
+	polyB_1.groupID = 1;
+	polyB_1.setMRP(group_1_MRP);
+	polyB_1.addTriangle(polyB_1_triangle1);
+	polyB_1.addTriangle(polyB_1_triangle2);
+
+	addPoly(polyB_1);
+
 	configurePolys();
 
 	runPolyComparison();		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
