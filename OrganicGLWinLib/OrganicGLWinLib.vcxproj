@@ -166,6 +166,7 @@
     <ClInclude Include="BorderLineIntersectRecordType.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CleaveSequence.h" />
+    <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />

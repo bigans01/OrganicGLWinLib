@@ -180,20 +180,13 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			// compare the IntersectionLines to determine the type of interect (if any) that was generated
 			
 			CategorizedLine currentCategorizedLine = determineCategorizedLine(mergedLineAtoB, mergedLineBtoA, in_polyBPtr->groupID, in_polyBPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
-			if (currentCategorizedLine.type != IntersectionType::NONE)
-			{
-				std::cout << "~~~~ Categorized line to add's points are: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << " | " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
-			}
-			else if (currentCategorizedLine.type == IntersectionType::NONE)
-			{
-				std::cout << "~~~ Categorized line type is NONE; ignoring..." << std::endl;
-			}
 
 			// STEP 4
 			// add any CategorizedLine to polygonA's map that isn't NONE
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
+				// new code for adding to LineSequenceFactory goes here
 				numberOfIntersections++;
 			}
 
@@ -318,18 +311,24 @@ float SPolySet::dot(glm::vec3 in_A, glm::vec3 in_B)
 CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, IntersectionLine in_lineB, int in_groupID, glm::vec3 in_polyBEmptyNormal)
 {
 	CategorizedLine returnLine;
-	// CASE 1: A is SLICED
+	// Remember, in_lineA is the IntersectionLine belonging to the polygon we are adding to (the result of tracing A's line's through the triangle of B).
+	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
+	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
+
+
+	// CASE 1: A is SLICED (A_SLICE)
 	std::cout << "Line A, " << in_lineA.numberOfBorderLines << std::endl;
 	std::cout << "Line B, " << in_lineB.numberOfBorderLines << std::endl;
 
-	if (in_lineA.numberOfBorderLines == 2)
+	if (in_lineA.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
 	{
 
-		std::cout << "CASE 1: This line is a SLICE" << std::endl;
-		returnLine.convertLineToSlice(in_lineA);		// convert to SLICE, by sending in the slicing line, in_lineA
+		std::cout << "CASE 1: This line is an A_SLICE" << std::endl;
+		returnLine.convertLineToSlice(in_lineA);		// convert to A_SLICE, by sending in the slicing line, in_lineA
 	}
 
-	// CASE 2: B is SLICED, but A "engulfs" B; B may have 1 to 2 border lines
+	// CASE 2: triangle B is SLICED -- but the triangle being slided only contains one border line. A "engulfs" B; B may have 1 to 2 border lines being hit, but none of the border lines in A are hit. This means: A had no border lines go through B, but B had one to two border lines go through A. So B is considered "SLICED." 
+	//          
 	else if
 		(
 		(in_lineB.numberOfBorderLines >= 1)

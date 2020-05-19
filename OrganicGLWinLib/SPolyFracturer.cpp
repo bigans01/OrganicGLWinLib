@@ -139,7 +139,7 @@ void SPolyFracturer::printPointMetaData()
 		std::cout << (*pointsStart)->x << std::endl;
 		std::cout << "--------------------------------------------- Printing point meta-data for Fracturing process -----------------------------------------------------" << std::endl;
 		std::cout << "|| Group ID: " << polyRef->groupID << std::endl;
-		std::cout << "|| Triangle points " << std::endl;
+		std::cout << "|| Prime Triangle points, after being translated to 2D X/Y plane: " << std::endl;
 		for (int x = 0; x < 3; x++)
 		{
 			std::cout << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
