@@ -7,6 +7,7 @@
 #include "SPolyBorderLines.h"
 #include "CategorizedLine.h"
 #include "CleaveSequence.h"
+#include "CleaveSequenceFactory.h"
 #include "InterceptRegister.h"
 #include "EmptyNormalFinder.h"
 #include "PointTranslationCheck.h"
@@ -32,6 +33,8 @@ public:
 	glm::vec3 polyEmptyNormal;		// the polygon's empty normal, which indicates the side of the triangle that contains "empty" space
 	glm::vec3 planarVector;			// a vector that lies on the plane of the triangle, but goes towards the center of the triangle, and is perpendicular to this line
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
+
+	CleaveSequenceFactory sequenceFactory;
 	std::map<int, CategorizedLine> categorizedLineMap;
 	std::map<int, CleaveSequence> cleaveMap;
 	int currentCleaveIndex = 0;	// the index of the current cleave to work on
@@ -39,6 +42,7 @@ public:
 
 	void determinePrimalPoints();
 	void determineBorderLines();
+	void buildCleaveSequences();
 	void setMRP(glm::vec3 in_mrp);
 	void calculateEmptyNormal();
 	void determinePlanarVectors();

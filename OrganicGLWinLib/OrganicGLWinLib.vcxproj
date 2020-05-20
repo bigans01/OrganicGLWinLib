@@ -165,6 +165,7 @@
     <ClInclude Include="BorderLineIntersectRecorder.h" />
     <ClInclude Include="BorderLineIntersectRecordType.h" />
     <ClInclude Include="CategorizedLine.h" />
+    <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
@@ -263,6 +264,8 @@
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
+    <ClCompile Include="CleaveSequence.cpp" />
+    <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />

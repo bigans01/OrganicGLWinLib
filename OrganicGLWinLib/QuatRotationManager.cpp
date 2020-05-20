@@ -54,7 +54,7 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef)
 {
 	rotationPointsRef = in_quatPointsRef;
-	CyclingDirection direction;
+	CyclingDirection direction = CyclingDirection::NOVAL;	// make the compiler happy
 
 	glm::vec3* borderLinePointARef = rotationPointsRef->getPointRefByIndex(0);
 	glm::vec3* borderLinePointBRef = rotationPointsRef->getPointRefByIndex(1);

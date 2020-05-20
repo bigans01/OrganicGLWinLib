@@ -369,6 +369,7 @@ void SPoly::insertCalibratedLine(CategorizedLine in_line)
 void SPoly::addSlicedCleave(int in_currentCleaveIndex, CategorizedLine in_categorizedLine)
 {
 	cleaveMap[in_currentCleaveIndex].cleavingLines[0] = in_categorizedLine;
+	//cleaveMap[in_currentCleaveIndex].insertNewLine(in_categorizedLine);
 	currentCleaveIndex++;
 }
 
@@ -412,6 +413,11 @@ void SPoly::moveLastCleave()
 		*/
 		constructCleaveLine();
 	}
+}
+
+void SPoly::buildCleaveSequences()
+{
+	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap);
 }
 
 void SPoly::constructCleaveLine()

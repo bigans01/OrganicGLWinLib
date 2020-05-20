@@ -109,3 +109,17 @@ glm::vec3 IntersectionLine::getBorderPointFromSingularBorderLineCount()
 	}
 	return borderPoint;
 }
+
+glm::vec3 IntersectionLine::getNonBorderPointFromSingularBorderLineCount()
+{
+	glm::vec3 nonBorderPoint;
+	if (isPointAOnBorder == 1)
+	{
+		nonBorderPoint = pointB;
+	}
+	else if (isPointBOnBorder == 1)
+	{
+		nonBorderPoint = pointA;
+	}
+	return nonBorderPoint;
+}

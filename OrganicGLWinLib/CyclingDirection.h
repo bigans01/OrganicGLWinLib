@@ -5,6 +5,7 @@
 
 enum class CyclingDirection
 {
+	NOVAL,
 	FORWARD,
 	REVERSE
 };

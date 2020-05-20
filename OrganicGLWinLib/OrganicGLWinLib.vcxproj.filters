@@ -303,6 +303,9 @@
     <ClInclude Include="CleaveSequenceFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CategorizedLineSearchResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -492,6 +495,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BorderLineInterceptRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

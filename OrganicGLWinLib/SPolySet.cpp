@@ -77,6 +77,11 @@ void SPolySet::runPolyComparison()
 			}
 			currentIndex++;
 		}
+		secondaryPolys[x].sequenceFactory.printLinesInPool();
+		secondaryPolys[x].buildCleaveSequences();
+		std::cout << "+++++ Enter number to go to next poly. " << std::endl;
+		int someVal = 3;
+		std::cin >> someVal;
 	}
 }
 
@@ -186,6 +191,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
+				in_polyAPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
 				// new code for adding to LineSequenceFactory goes here
 				numberOfIntersections++;
 			}

@@ -7,6 +7,7 @@
 #include "IntersectionResult.h"
 #include "IntersectionLine.h"
 #include "IntersectionLineGroup.h"
+#include "CleaveSequenceFactory.h"
 #include "CategorizedLine.h"
 #include "SliceFinder.h"
 #include "SPolyFracturer.h"

@@ -30,6 +30,7 @@ public:
 
 	int getBorderLineIDFromSingularBorderLineCount();
 	glm::vec3 getBorderPointFromSingularBorderLineCount();
+	glm::vec3 getNonBorderPointFromSingularBorderLineCount();
 };
 
 #endif
