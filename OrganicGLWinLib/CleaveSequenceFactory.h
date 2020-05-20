@@ -34,6 +34,9 @@ class CleaveSequenceFactory
 		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
 
+		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
+
 		CategorizedLineSearchResult checkForNextLine(glm::vec3 in_pointToSearch);
 };
 

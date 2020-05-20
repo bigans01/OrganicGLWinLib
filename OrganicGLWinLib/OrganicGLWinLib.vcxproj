@@ -169,6 +169,7 @@
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
+    <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
