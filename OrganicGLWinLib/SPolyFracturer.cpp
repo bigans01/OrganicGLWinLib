@@ -40,6 +40,7 @@ void SPolyFracturer::runFracturing()
 		applyTranslationToAllPoints(pointTranslator.getTranslationValue());	// apply the first translation value to all the points
 	}
 	populatePointsForQuaternions();	// populate the points before the quaternion is applied
+	std::cout << "### Translation for border line 0 point A executed..." << std::endl;
 	rotationManager.initializeAndRunForZFracture(&quatPoints);
 	//printPointMetaData();
 }

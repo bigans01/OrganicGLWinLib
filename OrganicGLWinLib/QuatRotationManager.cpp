@@ -38,6 +38,7 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	if (pointBRef->z != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		std::cout << "ROTATE_AROUND_Y required." << std::endl;
 		rotationOrder.push_back(rotateType); //push into the vector
 	}
 
@@ -45,6 +46,7 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	if (pointBRef->y != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		std::cout << "ROTATE_AROUND_Z required." << std::endl;
 		rotationOrder.push_back(rotateType);
 	}
 
@@ -68,7 +70,11 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	std::cout << "Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
 	std::cout << "Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
 
-	executeRotationsForCyclingDirectionFinder();
+
+
+	//executeRotationsForCyclingDirectionFinder();
+	rotateEmptyNormalToPosY(categorizedLineEmptyNormal);
+	//rotateAroundZForPosYNormalAndPushIntoStack(*categorizedLineEmptyNormal);
 	
 	std::cout << "-------------------After quaternion applied: " << std::endl;
 	std::cout << "BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
@@ -81,6 +87,10 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	float normalizedBorderLinePointAY = borderLinePointARef->y / abs(borderLinePointARef->y);
 	float normalizedBorderLinePointBY = borderLinePointBRef->y / abs(borderLinePointBRef->y);
 	float normalizedEmptyNormalY = categorizedLineEmptyNormal->y / abs(categorizedLineEmptyNormal->y);
+
+	std::cout << "|| Value of normalizedEmptyNormalY: " << normalizedEmptyNormalY << std::endl;
+	std::cout << "|| Normalized point A Y: " << normalizedBorderLinePointAY << std::endl;
+	std::cout << "|| Normalized point B Y: " << normalizedBorderLinePointBY << std::endl;
 
 	if (normalizedEmptyNormalY == normalizedBorderLinePointAY)
 	{
@@ -166,6 +176,7 @@ void QuatRotationManager::executeRotationsForCyclingDirectionFinder()
 {
 	if (pointBRef->y != 0)
 	{
+		std::cout << "####--> Rotating around z..." << std::endl;
 		rotateAroundZAndPushIntoStack();
 	}
 }
@@ -289,6 +300,45 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 	//rotationPointsRef->printPoints();
 }
 
+void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
+{
+	if (in_point->y != 1.0f)
+	{
+		float radians = 0.0f;
+		float fullRadian360 = 6.28319;
+
+		//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+		float atan2result = atan2(in_point->y, in_point->x); // find the radians we'll need to rotate by
+		//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
+		float firstPassRotateRadians;
+
+		if (atan2result > 0.0)
+		{
+			//firstPassRotateRadians = fullRadian360 - atan2result;
+			firstPassRotateRadians = atan2result;
+		}
+		else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+		{
+			//firstPassRotateRadians = abs(atan2result);
+			firstPassRotateRadians = fullRadian360 + atan2result;
+		}
+
+		if (debugFlag == 1)
+		{
+			std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
+		}
+		glm::vec3 rotationAroundZ;
+		rotationAroundZ.z = -1.0f;
+		QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundZ);
+
+		glm::quat originalQuat = s1record.returnOriginalRotation();
+		//*pointBRef = originalQuat * *pointBRef;	
+		rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+		rotationRecords.push(s1record);
+	}
+}
+
 void QuatRotationManager::rotateAroundXToYZeroAndPushIntoStack()
 {
 	float radians = 0.0f;
@@ -341,6 +391,42 @@ void QuatRotationManager::rotateAroundXForZFractureAndPushIntoStack()
 	//rotationPointsRef->printPoints();
 }
 
+void QuatRotationManager::rotateEmptyNormalToPosY(glm::vec3* in_normal)
+{
+	if (in_normal->x == 0.0f)	// rotate around y first, to x = 1.0f
+	{
+		float radiansToRotateBy = findRotationRadainsForGettingToPosXThroughY(*in_normal);
+
+		glm::vec3 rotateAroundY;
+		rotateAroundY.y = 1.0f;
+		QuatRotationRecord s1record(radiansToRotateBy, rotateAroundY);
+
+		glm::quat fractureQuat = s1record.returnOriginalRotation();
+		rotationPointsRef->applyQuaternion(fractureQuat);
+		rotationRecords.push(s1record);
+	}
+
+	// rotate to pos Y if it wasn't set already (y = 1.0f)
+	if (in_normal->y != 1.0f)
+	{
+		rotateAroundZForPosYNormalAndPushIntoStack(*in_normal);
+	}
+
+}
+
+void QuatRotationManager::rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal)
+{
+	float radiansToRotateBy = findRotationRadiansForGettingToPosYThroughZ(in_normal);
+
+	glm::vec3 rotateAroundZ;
+	rotateAroundZ.z = -1.0f;
+	QuatRotationRecord s1record(radiansToRotateBy, rotateAroundZ);
+
+	glm::quat fractureQuat = s1record.returnOriginalRotation();
+	rotationPointsRef->applyQuaternion(fractureQuat);
+	rotationRecords.push(s1record);
+}
+
 float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 {
 
@@ -351,7 +437,7 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);
-	float firstPassRotateRadians;
+	float firstPassRotateRadians = 0.0f;
 
 
 	if (debugFlag == 1)
@@ -412,6 +498,152 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 	}
 	degreesToRotateOnX = secondPassRotateFinal;
 	return degreesToRotateOnX;
+}
+
+float QuatRotationManager::findRotationRadainsForGettingToPosXThroughY(glm::vec3 in_vec3)
+{
+	float degreesToRotateOnY = 0.0f;
+	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+
+	// get the atan2 result, and analyze it
+	float atan2result = atan2(in_vec3.z, in_vec3.x);
+	float firstPassRotateRadians = 0.0f;
+
+	if (debugFlag == 1)
+	{
+		std::cout << "Atan result is: " << atan2result << std::endl;
+	}
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	glm::vec3 rotationAngle;
+	rotationAngle.y = 1.0f;
+	glm::quat rotationQuat = createQuaternion(firstPassRotateRadians, rotationAngle);
+	glm::vec3 rotationResult = rotationQuat * in_vec3;
+
+	glm::vec3 targetPosX;
+	targetPosX.x = 1.0f;
+	targetPosX = rotationQuat * targetPosX;
+
+
+	std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
+	std::cout << "Target pos X is at: " << targetPosX.x << ", " << targetPosX.y << ", " << targetPosX.z << std::endl;
+	std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
+	std::cout << ">>>> Attempting second pass rotation... " << std::endl;
+
+	float secondPassAtan = atan2(targetPosX.z, targetPosX.x);
+
+	if (debugFlag == 1)
+	{
+		std::cout << ">>>> Second pass a-tan is: " << secondPassAtan << std::endl;
+	}
+	float secondPassRotateRadians = 0.0f;
+	if (secondPassAtan > 0.0)
+	{
+		secondPassRotateRadians = secondPassAtan;
+	}
+	else if (secondPassAtan < 0.0)
+	{
+		secondPassRotateRadians = fullRadian360 + secondPassAtan;
+	}
+	float secondPassRotateFinal = fullRadian360 - secondPassRotateRadians;
+	glm::quat secondRotationQuat = createQuaternion(secondPassRotateFinal, rotationAngle);
+	glm::vec3 finalRotatedVec = secondRotationQuat * in_vec3;
+
+	std::cout << "(Rotate to Pos-X) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
+	std::cout << "(Rotate to Pos-X) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
+	std::cout << std::endl;
+
+	degreesToRotateOnY = secondPassRotateFinal;
+
+	int someVal = 3;
+	std::cin >> someVal;
+
+
+	return degreesToRotateOnY;
+}
+
+
+float QuatRotationManager::findRotationRadiansForGettingToPosYThroughZ(glm::vec3 in_vec3)
+{
+	// The overarching goal is to get to POS Y for this 3rd point(3rd point is the value that was passed in), by rotating around the Z axis
+
+	float degreesToRotateOnZ = 0.0f;
+	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+
+	// get the atan2 result, and analyze it
+	float atan2result = atan2(in_vec3.y, in_vec3.x);
+	float firstPassRotateRadians = 0.0f;
+
+
+	if (debugFlag == 1)
+	{
+		std::cout << "Atan result is: " << atan2result << std::endl;
+	}
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	glm::vec3 rotationAngle;
+	rotationAngle.z = -1.0f;
+	glm::quat rotationQuat = createQuaternion(firstPassRotateRadians, rotationAngle);
+	glm::vec3 rotationResult = rotationQuat * in_vec3;
+
+	glm::vec3 targetPosY;
+	targetPosY.y = 1.0f;
+	targetPosY = rotationQuat * targetPosY;
+
+
+	std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
+	std::cout << "Target pos Y is at: " << targetPosY.x << ", " << targetPosY.y << ", " << targetPosY.z << std::endl;
+	std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
+	std::cout << ">>>> Attempting second pass rotation... " << std::endl;
+
+	float secondPassAtan = atan2(targetPosY.y, targetPosY.x);
+
+	if (debugFlag == 1)
+	{
+		std::cout << ">>>> Second pass a-tan is: " << secondPassAtan << std::endl;
+	}
+	float secondPassRotateRadians;
+	if (secondPassAtan > 0.0)
+	{
+		secondPassRotateRadians = secondPassAtan;
+	}
+	else if (secondPassAtan < 0.0)
+	{
+		secondPassRotateRadians = fullRadian360 + secondPassAtan;
+	}
+	float secondPassRotateFinal = fullRadian360 - secondPassRotateRadians;
+	glm::quat secondRotationQuat = createQuaternion(secondPassRotateFinal, rotationAngle);
+	glm::vec3 finalRotatedVec = secondRotationQuat * in_vec3;
+
+	std::cout << "(Z-fracture) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
+	std::cout << "(Z-fracture) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
+	std::cout << std::endl;
+
+	degreesToRotateOnZ = secondPassRotateFinal;
+
+	int someVal = 3;
+	std::cin >> someVal;
+
+
+	return degreesToRotateOnZ;
 }
 
 glm::quat QuatRotationManager::createQuaternion(float radians, glm::vec3 in_angle)

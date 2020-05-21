@@ -29,6 +29,7 @@ int PointTranslationCheck::performCheck(glm::vec3 in_pointToCheck)
 
 glm::vec3 PointTranslationCheck::getTranslationValue()
 {
+	std::cout << "### Returning translation value: " << translationValue.x << ", " << translationValue.y << ", " << translationValue.z << std::endl;
 	return translationValue;
 }
 

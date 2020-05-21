@@ -35,9 +35,17 @@ public:
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack();
+	void rotateAroundZAndPushIntoStack(glm::vec3* in_point);
 	void rotateAroundXToYZeroAndPushIntoStack();
 	void rotateAroundXForZFractureAndPushIntoStack();
+
+	void rotateEmptyNormalToPosY(glm::vec3* in_normal);
+	void rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal);
+
 	float findRotationRadiansForZFracture(glm::vec3 in_vec3);
+	float findRotationRadiansForGettingToPosYThroughZ(glm::vec3 in_vec3);
+	float findRotationRadainsForGettingToPosXThroughY(glm::vec3 in_vec3);
+
 	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
 	void rotateToOriginalPosition();
 	void setDebugFlag(int in_debugFlag);

@@ -83,6 +83,7 @@ void SPolySet::runPolyComparison()
 		}
 		secondaryPolys[x].sequenceFactory.printLinesInPool();
 		secondaryPolys[x].buildCleaveSequences();
+		secondaryPolys[x].printAllCleaveLines();
 		std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		int someVal = 3;
 		std::cin >> someVal;
