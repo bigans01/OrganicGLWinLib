@@ -21,7 +21,7 @@ int PointTranslationCheck::performCheck(glm::vec3 in_pointToCheck)
 	}
 	else
 	{
-		std::cout << "!!! Point is at 0, 0, 0...no translation required." << std::endl;
+		// std::cout << "!!! Point is at 0, 0, 0...no translation required." << std::endl;
 	}
 
 	return returnValue;
@@ -29,7 +29,7 @@ int PointTranslationCheck::performCheck(glm::vec3 in_pointToCheck)
 
 glm::vec3 PointTranslationCheck::getTranslationValue()
 {
-	std::cout << "### Returning translation value: " << translationValue.x << ", " << translationValue.y << ", " << translationValue.z << std::endl;
+	//std::cout << "### Returning translation value: " << translationValue.x << ", " << translationValue.y << ", " << translationValue.z << std::endl;
 	return translationValue;
 }
 

@@ -64,42 +64,38 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	pointBRef = rotationPointsRef->getPointRefByIndex(3);	// get point B of categorized line
 	glm::vec3* categorizedLineEmptyNormal = rotationPointsRef->getPointRefByIndex(4);
 
-	std::cout << "BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
-	std::cout << "BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
-	std::cout << "Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
-	std::cout << "Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
-	std::cout << "Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | BorderLine Point A ref values " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
 
-
-
-	//executeRotationsForCyclingDirectionFinder();
-	rotateEmptyNormalToPosY(categorizedLineEmptyNormal);
-	//rotateAroundZForPosYNormalAndPushIntoStack(*categorizedLineEmptyNormal);
+	rotateEmptyNormalToPosY(categorizedLineEmptyNormal);		// rotate the normal to have Y = 1.0f, so that we may calculate the direction the appropriate way.
 	
-	std::cout << "-------------------After quaternion applied: " << std::endl;
-	std::cout << "BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
-	std::cout << "BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
-	std::cout << "Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
-	std::cout << "Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
-	std::cout << "Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
+	std::cout << "#- Cycling Direction    > -------------------After quaternions applied: " << std::endl;
+	std::cout << "#- Cycling Direction    > (Post-quat rotation) | BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Post-quat rotation) | BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Post-quat rotation) | Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Post-quat rotation) | Categorized Line Point B ref values: " << pointBRef->x << ", " << pointBRef->y << ", " << pointBRef->z << std::endl;
+	std::cout << "#- Cycling Direction    > (Post-quat rotation) | Categorized Line Empty Normal: " << categorizedLineEmptyNormal->x << ", " << categorizedLineEmptyNormal->y << ", " << categorizedLineEmptyNormal->z << std::endl;
 
 	// find the direction, based on comparing the y's of the borderLine's points and the empty normal of the categorized line.
 	float normalizedBorderLinePointAY = borderLinePointARef->y / abs(borderLinePointARef->y);
 	float normalizedBorderLinePointBY = borderLinePointBRef->y / abs(borderLinePointBRef->y);
 	float normalizedEmptyNormalY = categorizedLineEmptyNormal->y / abs(categorizedLineEmptyNormal->y);
 
-	std::cout << "|| Value of normalizedEmptyNormalY: " << normalizedEmptyNormalY << std::endl;
-	std::cout << "|| Normalized point A Y: " << normalizedBorderLinePointAY << std::endl;
-	std::cout << "|| Normalized point B Y: " << normalizedBorderLinePointBY << std::endl;
+	//std::cout << "|| Value of normalizedEmptyNormalY: " << normalizedEmptyNormalY << std::endl;
+	//std::cout << "|| Normalized point A Y: " << normalizedBorderLinePointAY << std::endl;
+	//std::cout << "|| Normalized point B Y: " << normalizedBorderLinePointBY << std::endl;
 
 	if (normalizedEmptyNormalY == normalizedBorderLinePointAY)
 	{
-		std::cout << "Direction is REVERSE" << std::endl;
+		std::cout << "#- Cycling Direction    > Direction is REVERSE, going towards border line's point A -> " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
 		direction = CyclingDirection::REVERSE;
 	}
 	else if (normalizedEmptyNormalY == normalizedBorderLinePointBY)
 	{
-		std::cout << "Direction is FORWARD" << std::endl;
+		std::cout << "#- Cycling Direction    > Direction is FORWARD, going towards border line's point B -> " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
 		direction = CyclingDirection::FORWARD;
 	}
 
@@ -393,7 +389,7 @@ void QuatRotationManager::rotateAroundXForZFractureAndPushIntoStack()
 
 void QuatRotationManager::rotateEmptyNormalToPosY(glm::vec3* in_normal)
 {
-	if (in_normal->x == 0.0f)	// rotate around y first, to x = 1.0f
+	if (in_normal->x != 1.0f)	// rotate around y first, to x = 1.0f
 	{
 		float radiansToRotateBy = findRotationRadainsForGettingToPosXThroughY(*in_normal);
 
@@ -509,6 +505,9 @@ float QuatRotationManager::findRotationRadainsForGettingToPosXThroughY(glm::vec3
 	float atan2result = atan2(in_vec3.z, in_vec3.x);
 	float firstPassRotateRadians = 0.0f;
 
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-X, via Y-axis) Passed point is:  " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-X, via Y-axis) Rotating passed point to Pos X (X = 1.0f), and finding degrees to rotate to get to it... " << std::endl;
+
 	if (debugFlag == 1)
 	{
 		std::cout << "Atan result is: " << atan2result << std::endl;
@@ -534,10 +533,10 @@ float QuatRotationManager::findRotationRadainsForGettingToPosXThroughY(glm::vec3
 	targetPosX = rotationQuat * targetPosX;
 
 
-	std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
-	std::cout << "Target pos X is at: " << targetPosX.x << ", " << targetPosX.y << ", " << targetPosX.z << std::endl;
-	std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
-	std::cout << ">>>> Attempting second pass rotation... " << std::endl;
+	//std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
+	//std::cout << "Target pos X is at: " << targetPosX.x << ", " << targetPosX.y << ", " << targetPosX.z << std::endl;
+	//std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Attempting second pass rotation... " << std::endl;
 
 	float secondPassAtan = atan2(targetPosX.z, targetPosX.x);
 
@@ -558,14 +557,14 @@ float QuatRotationManager::findRotationRadainsForGettingToPosXThroughY(glm::vec3
 	glm::quat secondRotationQuat = createQuaternion(secondPassRotateFinal, rotationAngle);
 	glm::vec3 finalRotatedVec = secondRotationQuat * in_vec3;
 
-	std::cout << "(Rotate to Pos-X) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
-	std::cout << "(Rotate to Pos-X) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-X, via Y-axis) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-X, via Y-axis) It was rotated to pos X, via this many radians: " << secondPassRotateFinal << std::endl;
 	std::cout << std::endl;
 
 	degreesToRotateOnY = secondPassRotateFinal;
 
-	int someVal = 3;
-	std::cin >> someVal;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 
 	return degreesToRotateOnY;
@@ -582,6 +581,9 @@ float QuatRotationManager::findRotationRadiansForGettingToPosYThroughZ(glm::vec3
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.x);
 	float firstPassRotateRadians = 0.0f;
+
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-Y, via Z-axis) Passed point is:  " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-Y, via Z-axis) Rotating passed point to Pos X (X = 1.0f), and finding degrees to rotate to get to it... " << std::endl;
 
 
 	if (debugFlag == 1)
@@ -609,10 +611,10 @@ float QuatRotationManager::findRotationRadiansForGettingToPosYThroughZ(glm::vec3
 	targetPosY = rotationQuat * targetPosY;
 
 
-	std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
-	std::cout << "Target pos Y is at: " << targetPosY.x << ", " << targetPosY.y << ", " << targetPosY.z << std::endl;
-	std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
-	std::cout << ">>>> Attempting second pass rotation... " << std::endl;
+	//std::cout << "Rotated point is: " << rotationResult.x << ", " << rotationResult.y << ", " << rotationResult.z << std::endl;
+	//std::cout << "Target pos Y is at: " << targetPosY.x << ", " << targetPosY.y << ", " << targetPosY.z << std::endl;
+	//std::cout << "Rotated by this many radians: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Attempting second pass rotation... " << std::endl;
 
 	float secondPassAtan = atan2(targetPosY.y, targetPosY.x);
 
@@ -633,14 +635,14 @@ float QuatRotationManager::findRotationRadiansForGettingToPosYThroughZ(glm::vec3
 	glm::quat secondRotationQuat = createQuaternion(secondPassRotateFinal, rotationAngle);
 	glm::vec3 finalRotatedVec = secondRotationQuat * in_vec3;
 
-	std::cout << "(Z-fracture) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
-	std::cout << "(Z-fracture) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-Y, via Z-axis) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
+	std::cout << "#- Quaternion Rotation  > (Rotate to Pos-Y, via Z-axis) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
 	std::cout << std::endl;
 
 	degreesToRotateOnZ = secondPassRotateFinal;
 
-	int someVal = 3;
-	std::cin >> someVal;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 
 	return degreesToRotateOnZ;

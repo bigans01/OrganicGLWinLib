@@ -697,17 +697,16 @@ glm::quat SPolySet::createQuaternion(float radians, glm::vec3 in_angle)
 void SPolySet::performFracturing()
 {
 	// determine what needs to be fractured, by cycling through all secondaryPolys.
-	std::cout << "######## Calling performFracturing()" << std::endl;
+	std::cout << "|||||||||||||| ************* Beginning fracturing attempts for all polys ************** ||||||||||||||" << std::endl;
 	for (int x = 0; x < secondaryPolys.size(); x++)
 	{
 		std::cout << "Cleave map size for poly " << x << ": " << secondaryPolys[x].cleaveMap.size() << std::endl;
 		if (secondaryPolys[x].cleaveMap.size() != 0)	// fracture only if there are actual cleave map entries
 		{
 			// pass the secondary poly to the PolyFracturer
-			if (secondaryPolys[x].debugFlag == 1)
-			{
-				std::cout << "~~~~~~~Poly requires fracturing, running..." << std::endl;
-			}
+			
+			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
+			
 			SPolyFracturer fracturer(&secondaryPolys[x], &polyMorphTracker);
 		}
 	}

@@ -38,10 +38,15 @@ void SPolyFracturer::runFracturing()
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
 		applyTranslationToAllPoints(pointTranslator.getTranslationValue());	// apply the first translation value to all the points
+		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required TRANSLATION..." << std::endl;
+	}
+	else if (pointTranslator.requiresTranslation == 0)
+	{
+		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required NO TRANSLATION..." << std::endl;
 	}
 	populatePointsForQuaternions();	// populate the points before the quaternion is applied
-	std::cout << "### Translation for border line 0 point A executed..." << std::endl;
 	rotationManager.initializeAndRunForZFracture(&quatPoints);
+	std::cout << "#- Quaternion Rotation  > All SPoly border line and cleave sequence points have been translated (Z is 0 for all border lines, aka \"Z-Planar\")" << std::endl;
 	//printPointMetaData();
 }
 

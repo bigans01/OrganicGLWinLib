@@ -10,8 +10,8 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 	// only perform the check if the size is >= 1; we don't need to do any work if there aren't any cleave sequences.
 	if (cleaveMapSize >= 1)
 	{
+		std::cout << "#- Records              > CleaveSequences found in cleaveMap; inserting intercept records into appropriate border lines...  " << cleaveMapSize << std::endl;
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
-		std::cout << "~~~ cleave map size: " << cleaveMapSize << std::endl;
 		auto cleaveBegin = in_sPolyRef->cleaveMap.begin();
 
 		// strange, false positive error with cleavingLines below (5/16/2020)

@@ -88,11 +88,12 @@ void SPoly::calculateEmptyNormal()
 
 void SPoly::determinePlanarVectors()
 {
+	std::cout << "#- Planar Vectors       > Calculating planar vectors for the triangles in the SPoly, (" << numberOfBorderLines << " border lines)... "  << std::endl;
 	if (numberOfBorderLines == 3)
 	{
 		//if (debugFlag == 1)
 		//{
-		std::cout << "(case 1) ~~~~~~~~~ Calculating planar vector for 1 triangle~~~~~~~~~~" << std::endl;
+		//std::cout << "(case 1) ~~~~~~~~~ Calculating planar vector for 1 triangle~~~~~~~~~~" << std::endl;
 		//}
 		findPlanarVectorsForThreeBorderLines(&borderLines[0], &borderLines[1], &borderLines[2]);
 	}
@@ -100,7 +101,7 @@ void SPoly::determinePlanarVectors()
 	{
 		//if (debugFlag == 1)
 		//{
-		std::cout << "(case 2) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
+		//std::cout << "(case 2) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
 		//}
 		//std::cout << "!!!! " << numberOfBorderLines << std::endl;
 		findPlanarVectorsForTwoBorderLines(&borderLines[0], &borderLines[1]);
@@ -110,7 +111,7 @@ void SPoly::determinePlanarVectors()
 	{
 		//if (debugFlag == 1)
 		//{
-		std::cout << "(case 3) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
+		//std::cout << "(case 3) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
 		//}
 	}
 }
@@ -202,7 +203,7 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 	{
 		std::cout << "!!! Final calculated planar vector is: " << in_borderLineRef->planarVector.x << ", " << in_borderLineRef->planarVector.y << ", " << in_borderLineRef->planarVector.z << std::endl;
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 }
 
 glm::vec3 SPoly::rotateForPlanarVectorCalc(glm::vec3* in_pointA, glm::vec3* in_pointB, glm::vec3* in_centroid)
