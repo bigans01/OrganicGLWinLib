@@ -3,22 +3,27 @@
 
 SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef)
 {
+
+	//auto truestart = std::chrono::high_resolution_clock::now();
+
 	polyRef = in_sPolyRef;
-	std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
-	std::cout << "0: " << polyRef->primePoint0.x << ", " << polyRef->primePoint0.y << ", " << polyRef->primePoint0.z << std::endl;
-	std::cout << "1: " << polyRef->primePoint1.x << ", " << polyRef->primePoint1.y << ", " << polyRef->primePoint1.z << std::endl;
-	std::cout << "2: " << polyRef->primePoint2.x << ", " << polyRef->primePoint2.y << ", " << polyRef->primePoint2.z << std::endl;
+	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
+	//std::cout << "0: " << polyRef->primePoint0.x << ", " << polyRef->primePoint0.y << ", " << polyRef->primePoint0.z << std::endl;
+	//std::cout << "1: " << polyRef->primePoint1.x << ", " << polyRef->primePoint1.y << ", " << polyRef->primePoint1.z << std::endl;
+	//std::cout << "2: " << polyRef->primePoint2.x << ", " << polyRef->primePoint2.y << ", " << polyRef->primePoint2.z << std::endl;
 	morphTrackerRef = in_morphTrackerRef;
 	//generatePlanarNormalsForPoly();	// generate the planar normal for this poly before fracturing begins
 	rotationManager.setDebugFlag(polyRef->debugFlag);	// set the debug flag
 	runFracturing();					// rotate points to same Z coordinates
 	generatePlanarNormalsForPoly();		// generate the planar normals
-	printPointMetaData();				// show the points before we run the weave
+	//printPointMetaData();				// show the points before we run the weave
+
+	auto truestart = std::chrono::high_resolution_clock::now();
 	checkForCleaveIntersections();		// check for any lines in each cleave sequence that intersect with other lines in another cleave sequence
 
-	int dumbVal = 5;
-	std::cout << "!!! Waiting for dumb input..." << std::endl;
-	std::cin >> dumbVal;
+	auto trueend = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> trueelapsed2 = trueend - truestart;
+	//std::cout << "#-> (After SPolyFracturer constructor) Fracturing Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 }
 
 void SPolyFracturer::generatePlanarNormalsForPoly()
@@ -33,20 +38,40 @@ void SPolyFracturer::checkForCleaveIntersections()
 
 void SPolyFracturer::runFracturing()
 {
+	auto truestart = std::chrono::high_resolution_clock::now();
 	PointTranslationCheck pointTranslator; // check for any translation
 	pointTranslator.performCheck(polyRef->borderLines[0].pointA);
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
+		//auto truestart = std::chrono::high_resolution_clock::now();
 		applyTranslationToAllPoints(pointTranslator.getTranslationValue());	// apply the first translation value to all the points
+		//auto trueend = std::chrono::high_resolution_clock::now();
+		//std::chrono::duration<double> trueelapsed = trueend - truestart;
+		//std::cout << "#-> (SPolyFracturer) translation application Time !!  >              " << std::fixed << trueelapsed.count() << std::endl;
 		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required TRANSLATION..." << std::endl;
 	}
 	else if (pointTranslator.requiresTranslation == 0)
 	{
 		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required NO TRANSLATION..." << std::endl;
 	}
+	//auto truestart = std::chrono::high_resolution_clock::now();
 	populatePointsForQuaternions();	// populate the points before the quaternion is applied
+	//auto trueend = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<double> trueelapsed = trueend - truestart;
+	//std::cout << "#-> (SPolyFracturer) point population Time !!  >              " << std::fixed << trueelapsed.count() << std::endl;
+
+	//auto truestart2 = std::chrono::high_resolution_clock::now();
 	rotationManager.initializeAndRunForZFracture(&quatPoints);
+	//auto trueend2 = std::chrono::high_resolution_clock::now();
+	//std::chrono::duration<double> trueelapsed2 = trueend2 - truestart2;
+	//std::cout << "#-> (SPolyFracturer) initialize and run Z-fracture Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
+
 	std::cout << "#- Quaternion Rotation  > All SPoly border line and cleave sequence points have been translated (Z is 0 for all border lines, aka \"Z-Planar\")" << std::endl;
+
+	auto trueend = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> trueelapsed = trueend - truestart;
+	//std::cout << "#-> (SPolyFracturer) entire Time !!  >              " << std::fixed << trueelapsed.count() << std::endl;
+
 	//printPointMetaData();
 }
 

@@ -60,9 +60,9 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(partialboundCount > 0) || (aslicedCount > 0)
 	)
 	{
-		std::cout << "## Partial count: " << partialboundCount << std::endl;
-		std::cout << "## Non-bound count: " << nonboundCount << std::endl;
-		std::cout << "## Sliced count: " << aslicedCount << std::endl;
+		//std::cout << "## Partial count: " << partialboundCount << std::endl;
+		//std::cout << "## Non-bound count: " << nonboundCount << std::endl;
+		//std::cout << "## Sliced count: " << aslicedCount << std::endl;
 
 		while (partialboundCount > 0)	// do this until all partial_bound lines have been accounted for. 
 		{
@@ -74,7 +74,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
 			insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
 			glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();	// get the searchable point from the first partial bound line we found in the previous step
-			std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
+			//std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
 
 
 			// first, work with the partially bound lines. Get the first available partial bound line in the map, scan for linking nonbound lines, until no more linking lines are found.
@@ -107,13 +107,13 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			CategorizedLineSearchResult finalResult = searchForLastPartialBoundLineForSequence(lastPointToSearch);
 			if (finalResult.wasFound == true)
 			{
-				std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
+				//std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
 				newSequence.insertLastLine(finalResult.returnLine);
 				newSequence.sequenceStatus = CleaveSequenceStatus::COMPLETE; // mark it as complete
 			}
 			else
 			{
-				std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
+				//std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
 				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 			}
 			//std::cout << "## Remaining number of partial bounds: " << partialboundCount << std::endl;
@@ -123,10 +123,10 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 			{
 				int cleaveMapRefSize = (*in_cleaveMapRef).size();
-				std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+				//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 				(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 				cleaveMapRefSize = (*in_cleaveMapRef).size();
-				std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+				//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
 			}
 		}
 	}
@@ -221,9 +221,9 @@ CategorizedLineSearchResult CleaveSequenceFactory::checkForNextLine(glm::vec3 in
 			searchResult.nextPointToFind = foundLine.line.pointB;	// set the next point to find.
 
 
-			std::cout << "!! Point (next line) was found! " << std::endl;
-			std::cout << "Point A: " << foundLine.line.pointA.x << ", " << foundLine.line.pointA.y << ", " << foundLine.line.pointA.z << " | Point B: " << foundLine.line.pointB.x << ", " << foundLine.line.pointB.y << ", " << foundLine.line.pointB.z << std::endl;
-			std::cout << "Number of remaining nonbounds: " << nonboundCount << std::endl;
+			//std::cout << "!! Point (next line) was found! " << std::endl;
+			//std::cout << "Point A: " << foundLine.line.pointA.x << ", " << foundLine.line.pointA.y << ", " << foundLine.line.pointA.z << " | Point B: " << foundLine.line.pointB.x << ", " << foundLine.line.pointB.y << ", " << foundLine.line.pointB.z << std::endl;
+			//std::cout << "Number of remaining nonbounds: " << nonboundCount << std::endl;
 		}
 
 	}
@@ -242,10 +242,10 @@ void CleaveSequenceFactory::printLinesInPool()
 	{
 		auto begin = partialboundMap.begin();
 		auto end = partialboundMap.end();
-		std::cout << ">>> --- Partial lines: " << std::endl;
+		//std::cout << ">>> --- Partial lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			//std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
 		}
 	}
 
@@ -254,10 +254,10 @@ void CleaveSequenceFactory::printLinesInPool()
 	{
 		auto begin = nonboundMap.begin();
 		auto end = nonboundMap.end();
-		std::cout << ">>> --- Non-bound lines: " << std::endl;
+		//std::cout << ">>> --- Non-bound lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			//std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
 		}
 	}
 }

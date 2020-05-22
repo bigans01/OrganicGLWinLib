@@ -38,7 +38,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 
 		//returnLine.
 		//std::cout << "!!! Merged 2 lines into a SLICE! " << std::endl;
-		std::cout << "CASE 1 HIT. " << std::endl;
+		//std::cout << "CASE 1 HIT. " << std::endl;
 	}
 
 	// CASE 2: check for "PARTIAL_BOUND" types
@@ -56,8 +56,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.numberOfBorderLines = 1;
 		returnLine.intersectedSecondaryID = lineMap[0].intersectedSecondaryID;
 		returnLine.numberOfPoints = 1;
-		std::cout << "CASE 2-A HIT. " << std::endl;
-		std::cout << "Return line border value: " << returnLine.pointABorder << std::endl;
+		//std::cout << "CASE 2-A HIT. " << std::endl;
+		//std::cout << "Return line border value: " << returnLine.pointABorder << std::endl;
 	}
 	else if
 		(
@@ -76,7 +76,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.numberOfBorderLines = 1;
 		returnLine.intersectedSecondaryID = borderLine->intersectedSecondaryID;
 		returnLine.numberOfPoints = 2;
-		std::cout << "CASE 2-B HIT. " << std::endl;
+		//std::cout << "CASE 2-B HIT. " << std::endl;
 	}
 	else if
 		(totalNumberOfLines == 1)

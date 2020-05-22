@@ -82,7 +82,7 @@ void SPoly::calculateEmptyNormal()
 	glm::vec3 point1 = triangles[0].triangleLines[1].pointA;
 	glm::vec3 point2 = triangles[0].triangleLines[2].pointA;
 	EmptyNormalFinder finder(point0, point1, point2, massOriginPoint);
-	std::cout << "!!!#####: Value of Empty Normal for this Poly is: " << finder.calculatedNormal.x << ", " << finder.calculatedNormal.y << ", " << finder.calculatedNormal.z << std::endl;
+	//std::cout << "!!!#####: Value of Empty Normal for this Poly is: " << finder.calculatedNormal.x << ", " << finder.calculatedNormal.y << ", " << finder.calculatedNormal.z << std::endl;
 	polyEmptyNormal = finder.calculatedNormal;
 }
 
@@ -289,7 +289,7 @@ void SPoly::addBorderLine(STriangleLine in_triangleLine)
 	SPolyBorderLines newBorderLine;
 	newBorderLine.pointA = in_triangleLine.pointA;
 	newBorderLine.pointB = in_triangleLine.pointB;
-	std::cout << "!!! Added border line: (" << numberOfBorderLines << "): " << newBorderLine.pointA.x << ", " << newBorderLine.pointA.y << ", " << newBorderLine.pointA.z << " | " << newBorderLine.pointB.x << ", " << newBorderLine.pointB.y << ", " << newBorderLine.pointB.z << std::endl;
+	//std::cout << "!!! Added border line: (" << numberOfBorderLines << "): " << newBorderLine.pointA.x << ", " << newBorderLine.pointA.y << ", " << newBorderLine.pointA.z << " | " << newBorderLine.pointB.x << ", " << newBorderLine.pointB.y << ", " << newBorderLine.pointB.z << std::endl;
 	borderLines[numberOfBorderLines++] = newBorderLine;
 }
 

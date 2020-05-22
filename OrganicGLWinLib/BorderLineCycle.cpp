@@ -11,8 +11,8 @@ void BorderLineCycle::initialize(SPoly* in_sPolyRef, int in_borderLineStartIndex
 	borderLineFinalIndex = numberOfBorderLines - 1;
 	calculateNumberOfIterations();
 
-	std::cout << "!! Border line cycle start index: " << startIndex << std::endl;
-	std::cout << "!! Border line cycle end index: " << endIndex << std::endl;
+	//std::cout << "!! Border line cycle start index: " << startIndex << std::endl;
+	//std::cout << "!! Border line cycle end index: " << endIndex << std::endl;
 }
 
 void BorderLineCycle::calculateNumberOfIterations()
@@ -22,16 +22,17 @@ void BorderLineCycle::calculateNumberOfIterations()
 		firstIterationSetNumberOfIterations = (borderLineFinalIndex - startIndex) + 1;
 		secondIterationSetNumberOfIterations = startIndex;
 
-		std::cout << "FORWARD iteration values: first set: " << firstIterationSetNumberOfIterations << " | second set: " << secondIterationSetNumberOfIterations << std::endl;
+		//std::cout << "FORWARD iteration values: first set: " << firstIterationSetNumberOfIterations << " | second set: " << secondIterationSetNumberOfIterations << std::endl;
 	}
 	else if (direction == CyclingDirection::REVERSE)
 	{
 		firstIterationSetNumberOfIterations = startIndex + 1;
 		secondIterationSetNumberOfIterations = (borderLineFinalIndex - startIndex);
 
-		std::cout << "REVERSE iteration values: first set: " << firstIterationSetNumberOfIterations << " | second set: " << secondIterationSetNumberOfIterations << std::endl;
+		//std::cout << "REVERSE iteration values: first set: " << firstIterationSetNumberOfIterations << " | second set: " << secondIterationSetNumberOfIterations << std::endl;
 	}
 	int totalRequiredIterations = getTotalIterationCount();
+	populateCycleArray();		// populate the cycling array.
 }
 
 int BorderLineCycle::getTotalIterationCount()
@@ -119,6 +120,42 @@ int BorderLineCycle::getTotalIterationCount()
 		}
 	}
 
-	std::cout << "Total iterations: " << totalIterations << std::endl;
+	// std::cout << "Total iterations: " << totalIterations << std::endl;
 	return totalIterations;
+}
+
+void BorderLineCycle::populateCycleArray()
+{
+	int currentIndex = 0;		// the current index we are on.
+	if (direction == CyclingDirection::FORWARD)
+	{
+		// go through the first set, forward; current index is always the start index that was established earlier.
+		int arrayIndex = 0;
+		currentIndex = startIndex;
+		for (int x = 0; x < firstIterationSetNumberOfIterations; x++)
+		{
+			std::cout << "Array element at " << arrayIndex++ << " will be for " << currentIndex++ << std::endl;
+		}
+
+		currentIndex = 0;
+		for (int x = 0; x < secondIterationSetNumberOfIterations; x++)
+		{
+			std::cout << "Array element at " << arrayIndex++ << " will be for " << currentIndex++ << std::endl;
+		}
+	}
+	else if (direction == CyclingDirection::REVERSE)
+	{
+		int arrayIndex = 0;
+		currentIndex = startIndex;
+		for (int x = firstIterationSetNumberOfIterations; x > 0; x--)
+		{
+			std::cout << "Array element at " << arrayIndex++ << " will be for " << currentIndex-- << std::endl;
+		}
+
+		currentIndex = borderLineFinalIndex;
+		for (int x = secondIterationSetNumberOfIterations; x > 0; x--)
+		{
+			std::cout << "Array element at " << arrayIndex++ << " will be for " << currentIndex-- << std::endl;
+		}
+	}
 }

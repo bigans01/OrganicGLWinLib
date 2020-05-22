@@ -10,6 +10,7 @@
 #include "QuatRotationManager.h"
 #include "CleaveSequenceIntersectFinder.h"
 #include "SPolyMorphTracker.h"
+#include <chrono>
 
 class SPolyFracturer
 {

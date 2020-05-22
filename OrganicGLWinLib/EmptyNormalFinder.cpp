@@ -9,10 +9,10 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 	glm::vec3 point2Copy = in_point2;
 	glm::vec3 mrp = in_massReferencePoint;
 
-	std::cout << "!!! Initial points are: " << std::endl;
-	std::cout << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-	std::cout << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-	std::cout << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+	//std::cout << "!!! Initial points are: " << std::endl;
+	//std::cout << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
+	//std::cout << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
+	//std::cout << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
 
 	quatPoints.pointsRef.push_back(&point0Copy);
 	quatPoints.pointsRef.push_back(&point1Copy);
@@ -25,10 +25,10 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 	if (pointTranslator.requiresTranslation == 1)
 	{
 		quatPoints.applyTranslation(pointTranslator.getTranslationValue());
-		std::cout << "!!! Points were translated; their values are: " << std::endl;
-		std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-		std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-		std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+		//std::cout << "!!! Points were translated; their values are: " << std::endl;
+		//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
+		//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
+		//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
 	}
 
 
@@ -41,10 +41,10 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 	if (pointTranslator.requiresTranslation == 1)
 	{
 		quatPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
-		std::cout << "!!!!!! Points were reverse translated; their values are: " << std::endl;
-		std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-		std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-		std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+		//std::cout << "!!!!!! Points were reverse translated; their values are: " << std::endl;
+		//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
+		//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
+		//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
 	}
 	
 	calculatedNormal = glm::normalize(validCalculatedNormal);	// normalize to a unit vector.

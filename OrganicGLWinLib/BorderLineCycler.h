@@ -9,6 +9,7 @@
 #include "CyclingDirectionFinder.h"
 #include "CyclingDirection.h"
 #include "BorderLineCycle.h"
+#include <chrono>
 
 class BorderLineCycler
 {

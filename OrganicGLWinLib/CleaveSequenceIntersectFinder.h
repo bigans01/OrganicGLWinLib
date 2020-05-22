@@ -6,6 +6,7 @@
 #include "SPoly.h"
 #include "BorderLineCycler.h"
 #include "CleaveSequence.h"
+#include <chrono>
 
 class CleaveSequenceIntersectFinder
 {
