@@ -27,6 +27,8 @@
 #include "AtlasMap.h"
 #include "AtlasPropertiesGL.h"
 #include "TileLoadData.h"
+#include "PointTranslationCheck.h"
+#include "QuatRotationPoints.h"
 #include "stb_image.h"
 
 #include "imgui/imgui.h"
@@ -73,6 +75,8 @@ public:
 	static GLuint loadDDS(const char* imagepath);
 	static glm::quat createQuaternion(float in_degrees, glm::vec3 in_unitVector);
 	static glm::vec3 roundVec3ToHundredths(glm::vec3 in_vec3);
+	static glm::vec3 findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
+	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 
 	// IMGUI functions
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context

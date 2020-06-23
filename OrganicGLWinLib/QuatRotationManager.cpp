@@ -53,6 +53,68 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	executeRotationsForZFracture();
 }
 
+glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatPointsRef)
+{
+	rotationPointsRef = in_quatPointsRef;
+	triangleNormalRef = rotationPointsRef->getPointRefByIndex(5);
+
+	// check if we need to rotate about the Y-axis to get to the normal to positive Z.
+	if (triangleNormalRef->z != 1.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		rotationOrder.push_back(rotateType);
+	}
+
+	// check if we need to rotate about the Z-axis so that the y of the normal is at 0
+	if (triangleNormalRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		rotationOrder.push_back(rotateType);
+	}
+
+	executeRotationsForPlanarSlide();
+
+	// acquire the sliding vector, before we rotate back.
+	float slidingVectorZ = rotationPointsRef->getPointByIndex(4).z;
+	glm::vec3 slidingVector;
+	slidingVector.z = slidingVectorZ;
+	glm::vec3* slidingVectorRef = rotationPointsRef->getPointRefByIndex(6);
+	*slidingVectorRef = slidingVector;
+
+	//std::cout << "Sliding vector before reverse rotate is: " << slidingVectorRef->x << ", " << slidingVectorRef->y << ", " << slidingVectorRef->z << std::endl;
+
+	rotateToOriginalPosition();
+
+	//std::cout << "Sliding vector after reverse rotate is: " << slidingVectorRef->x << ", " << slidingVectorRef->y << ", " << slidingVectorRef->z << std::endl;
+
+	return *slidingVectorRef;	// return the calculated sliding vector.
+
+}
+
+void QuatRotationManager::initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatPointsRef)
+{
+	rotationOrder.clear();
+	rotationPointsRef = in_quatPointsRef;
+	triangleNormalRef = rotationPointsRef->getPointRefByIndex(4);
+
+	// check if we need to rotate about the Y-axis to get to the normal to positive Z.
+	if (triangleNormalRef->z != 1.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		rotationOrder.push_back(rotateType);
+	}
+
+	// check if we need to rotate about the Z-axis so that the y of the normal is at 0
+	if (triangleNormalRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		rotationOrder.push_back(rotateType);
+	}
+
+	executeRotationsForPlanarSlide();
+
+}
+
 CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef)
 {
 	rotationPointsRef = in_quatPointsRef;
@@ -171,6 +233,35 @@ void QuatRotationManager::executeRotationsForZFracture()
 	}
 }
 
+void QuatRotationManager::executeRotationsForPlanarSlide()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
+		{
+			//if (debugFlag == 1)
+			//{
+				//std::cout << "!!!! Rotation around Y required, performing... (Planar sliding)" << std::endl;
+			//}
+			rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
+		}
+		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
+		{
+			//if (debugFlag == 1)
+			//{
+				//std::cout << "!!!! Rotation around Z required, performing...(Planar sliding)" << std::endl;
+			//}
+			//rotateAroundZAndPushIntoStack();
+			//rotateAroundXToYZeroAndPushIntoStack();
+			rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
+		}
+	}
+
+	//rotationPointsRef->printPoints();
+}
+
 void QuatRotationManager::executeRotationsForCyclingDirectionFinder()
 {
 	if (pointBRef->y != 0)
@@ -235,7 +326,7 @@ void QuatRotationManager::rotateAroundYAndPushIntoStack()
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;
 	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
-	float firstPassRotateRadians;
+	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
 	{
 		//firstPassRotateRadians = fullRadian360 - atan2result;
@@ -261,6 +352,73 @@ void QuatRotationManager::rotateAroundYAndPushIntoStack()
 	//return firstPassRotateRadians;
 }
 
+void QuatRotationManager::rotateAroundYToPosZForPlanarSlideAndPushIntoStack()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+	float atan2result = atan2(triangleNormalRef->z, triangleNormalRef->x); // find the radians we'll need to rotate by
+	float firstPassRotateRadians = 0.0f;
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	// to get to pos z = 1.0f, add 1.57 radians.
+	firstPassRotateRadians += ((fullRadian360 / 4) * 3);
+
+	glm::vec3 rotationAroundY;
+	rotationAroundY.y = 1.0f;
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundY);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationRecords.push(s1record);						// push into the stack
+
+	//std::cout << "################### (Planar slide) Printing points after Y-axis rotation to pos Z: " << std::endl;
+}
+
+void QuatRotationManager::rotateAroundXToYZeroForPlanarSlideAndPushIntoStack()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+
+	float atan2result = atan2(triangleNormalRef->y, triangleNormalRef->z);
+
+	float firstPassRotateRadians = 0.0f;
+
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+	//std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
+
+	glm::vec3 rotationAroundY;
+	rotationAroundY.x = 1.0f;
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundY);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationRecords.push(s1record);
+
+	//std::cout << "Printing points after X-axis bound rotation: (the final rotation?) " << std::endl;
+	//rotationPointsRef->printPoints();
+
+}
+
 void QuatRotationManager::rotateAroundZAndPushIntoStack()
 {
 	float radians = 0.0f;
@@ -270,7 +428,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 	float atan2result = atan2(pointBRef->y, pointBRef->x); // find the radians we'll need to rotate by
 	//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
-	float firstPassRotateRadians;
+	float firstPassRotateRadians = 0.0f;
 
 	if (atan2result > 0.0)
 	{
@@ -311,7 +469,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
 		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 		float atan2result = atan2(in_point->y, in_point->x); // find the radians we'll need to rotate by
 		//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
-		float firstPassRotateRadians;
+		float firstPassRotateRadians = 0.0f;
 
 		if (atan2result > 0.0)
 		{
@@ -346,7 +504,7 @@ void QuatRotationManager::rotateAroundXToYZeroAndPushIntoStack()
 
 	float atan2result = atan2(pointCRef->y, pointCRef->z);
 
-	float firstPassRotateRadians;
+	float firstPassRotateRadians = 0.0f;
 
 	if (atan2result > 0.0)
 	{

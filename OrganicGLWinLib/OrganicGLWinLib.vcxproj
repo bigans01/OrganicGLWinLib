@@ -170,6 +170,7 @@
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />
+    <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="TerrainForwardGearT1.h" />
     <ClInclude Include="TerrainPrimitiveGearT1.h" />
     <ClInclude Include="TerrainSimpleGearT1.h" />
+    <ClInclude Include="TileCoordinateProducer.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="AtlasMap.h" />
     <ClInclude Include="AtlasMetaData.h" />
@@ -257,6 +259,7 @@
     <ClInclude Include="TileDataGLWIN.h" />
     <ClInclude Include="TileLoadData.h" />
     <ClInclude Include="TileMeta.h" />
+    <ClInclude Include="UVTriangleCoordsGL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
@@ -329,6 +332,7 @@
     </ClCompile>
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
+    <ClCompile Include="TileCoordinateProducer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

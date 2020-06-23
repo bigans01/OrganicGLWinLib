@@ -309,6 +309,15 @@
     <ClInclude Include="CleaveSequenceStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TileCoordinateProducer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UVTriangleCoordsGL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -504,6 +513,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CleaveSequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCoordinateProducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -28,6 +28,48 @@ void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 	}
 }
 
+void QuatRotationPoints::applyNormalization(float in_normalizationValue)
+{
+	auto pointsStart = pointsRef.begin();
+	auto pointsEnd = pointsRef.end();
+	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
+	{
+		auto pointsPtr = *pointsStart;
+		pointsPtr->x = (pointsPtr->x) / in_normalizationValue;
+		pointsPtr->y = (pointsPtr->y) / in_normalizationValue;
+	}
+}
+
+void QuatRotationPoints::applyDimensionCorrections()
+{
+	auto pointsStart = pointsRef.begin();
+	auto pointsEnd = pointsRef.end();
+	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
+	{
+		auto pointsPtr = *pointsStart;
+		// check the x value
+		if (pointsPtr->x > 1.0f)
+		{
+			pointsPtr->x = 1.0f;
+		}
+		else if (pointsPtr->x < 0.0f)
+		{
+			pointsPtr->x = 0.0f;
+		}
+
+		// check the y value
+		if (pointsPtr->y > 1.0f)
+		{
+			pointsPtr->y = 1.0f;
+		}
+		else if (pointsPtr->y < 0.0f)
+		{
+			pointsPtr->y = 0.0f;
+		}
+
+	}
+}
+
 void QuatRotationPoints::printPoints()
 {
 	std::vector<glm::vec3*>::iterator pointsStart = pointsRef.begin();
@@ -39,6 +81,11 @@ void QuatRotationPoints::printPoints()
 		glm::vec3* currentPtr = *pointsStart;
 		std::cout << currentPtr->x << ", " << currentPtr->y << ", " << currentPtr->z << std::endl;
 	}
+}
+
+void QuatRotationPoints::clearPoints()
+{
+	pointsRef.clear();
 }
 
 glm::vec3 QuatRotationPoints::getFirstPoint()

@@ -22,18 +22,24 @@ public:
 	glm::vec3* pointARef;
 	glm::vec3* pointBRef;
 	glm::vec3* pointCRef;
+	glm::vec3* triangleNormalRef;					// a reference to the vec3 that is the calculate normal for a triangle
 	std::vector<QuatRotationType> rotationOrder;	// stores the types of rotations that need to be executed
 	std::stack<QuatRotationRecord> rotationRecords;
 
 	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef);
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatPointsRef);
+	glm::vec3 initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatPointsRef);
+	void initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatPointsRef);
 	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef);
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
 	void executeRotationsForZFracture();
 	void executeRotationsForCyclingDirectionFinder();
+	void executeRotationsForPlanarSlide();
 
 	void rotateAroundYAndPushIntoStack();
+	void rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
+	void rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack(glm::vec3* in_point);
 	void rotateAroundXToYZeroAndPushIntoStack();
