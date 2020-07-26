@@ -9,7 +9,7 @@
 class QuatRotationRecord
 {
 public:
-	const float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	const float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 	glm::quat originalQuat;	// the original quaternion used when this record was generated
 	float originalQuatRadians;
 	glm::vec3 quatRotationVector;

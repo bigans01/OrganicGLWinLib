@@ -18,7 +18,8 @@ public:
 	void shutdownGL();
 	void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);		// called by OrganicSystem
 	void printDataForGears();
-
+	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
+	void removeUnusedReplaceables();
 private:
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);

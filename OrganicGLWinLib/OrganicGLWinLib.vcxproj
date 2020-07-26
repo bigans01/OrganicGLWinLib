@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -201,6 +201,10 @@
     <ClInclude Include="STriangleLine.h" />
     <ClInclude Include="TerrainDebugGearT1.h" />
     <ClInclude Include="TerrainForwardGearT1.h" />
+    <ClInclude Include="TerrainJobResults.h" />
+    <ClInclude Include="TerrainMemoryMeta.h" />
+    <ClInclude Include="TerrainMemoryMoveMeta.h" />
+    <ClInclude Include="TerrainMemoryTracker.h" />
     <ClInclude Include="TerrainPrimitiveGearT1.h" />
     <ClInclude Include="TerrainSimpleGearT1.h" />
     <ClInclude Include="TileCoordinateProducer.h" />
@@ -330,6 +334,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TerrainMemoryTracker.cpp" />
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />

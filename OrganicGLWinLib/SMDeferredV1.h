@@ -29,7 +29,8 @@ public:
 	void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);		// called by OrganicSystem
 	void printDataForGears();
 	//void updateMVPinGears();
-
+	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
+	void removeUnusedReplaceables();
 private:
 	//std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers
 	//std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.

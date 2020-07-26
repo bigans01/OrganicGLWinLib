@@ -221,3 +221,52 @@ void SMDeferredV1::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
+
+void SMDeferredV1::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
+{
+	TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.checkForMemoryMovements(in_jobResults);		// check if there are any memory movements required
+	if (currentMeta.containsMovement == 1)
+	{
+		OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
+		int writeBackOffset = terrainMemoryTracker.insertNewCollection(in_jobResults);
+		OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
+
+		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
+
+		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
+		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
+		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
+
+	}
+	else if (currentMeta.containsMovement == 0)
+	{
+		terrainMemoryTracker.insertNewCollection(in_jobResults);
+		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
+		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
+		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
+		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
+	}
+}
+
+void SMDeferredV1::removeUnusedReplaceables()
+{
+	if (terrainMemoryTracker.getNumberOfUnusedReplaceables() != 0)
+	{
+		int numberOfTicks = terrainMemoryTracker.getNumberOfUnusedReplaceables();
+		for (int x = 0; x < numberOfTicks; x++)
+		{
+
+			TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.removeUnusedReplaceablesAndShift();
+			OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
+			int writeBackOffset = currentMeta.copyBackOffset;
+			OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
+			//std::cout << std::endl;
+			terrainMemoryTracker.outputAllElements();
+
+		}
+	}
+	else
+	{
+		//std::cout << "No unused replaceables to remove..." << std::endl;
+	}
+}
