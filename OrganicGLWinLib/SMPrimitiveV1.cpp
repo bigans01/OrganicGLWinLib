@@ -35,7 +35,7 @@ void SMPrimitiveV1::initialize(int in_windowWidth, int in_windowHeight, int in_i
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
 	// create the forward multiDrawCallJob
-	insertNewMultiDrawArrayJob("terrain");
+	//insertNewMultiDrawArrayJob("terrain");
 
 	// create the terrain gear
 	insertTerrainGear(0, programLookup["TerrainPrimitiveGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
@@ -43,7 +43,7 @@ void SMPrimitiveV1::initialize(int in_windowWidth, int in_windowHeight, int in_i
 	// create the highlighter gear
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	insertNewMultiDrawArrayJob("highlighter_draw_job");
+	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 }
 void SMPrimitiveV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)

@@ -140,7 +140,7 @@ protected:
 		void insertNewTexture(std::string in_textureName);
 		
 		// draw job functions
-		void insertNewMultiDrawArrayJob(std::string in_jobName);
+		//void insertNewMultiDrawArrayJob(std::string in_jobName);
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 
 		// program creation

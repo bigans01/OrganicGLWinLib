@@ -47,7 +47,7 @@ void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	//setupAlternativeDepthTexture();
 
 	// create the deferred multiDrawCallJob
-	insertNewMultiDrawArrayJob("terrain");
+	//insertNewMultiDrawArrayJob("terrain");
 
 	// other things to set up before inserting the terrain gear...
 	// ...
@@ -61,7 +61,7 @@ void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	//createMode0Program("HighlighterGearT1");
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	insertNewMultiDrawArrayJob("highlighter_draw_job");
+	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);

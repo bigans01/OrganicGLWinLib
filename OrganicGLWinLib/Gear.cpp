@@ -17,12 +17,14 @@ void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob i
 	{
 		targetKeyValue = doesJobExist->second;
 		gearMultiDrawArrayJobMap[targetKeyValue] = in_job;
+		//gearMultiDrawArrayJobLookup[in_jobName] = targetKeyValue;
 	}
 	else
 	{
 		gearMultiDrawArrayJobMap[targetKeyValue] = in_job;
 		gearMultiDrawArrayJobLookup[in_jobName] = targetKeyValue;
 	}
+	
 }
 
 void Gear::registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID)

@@ -272,8 +272,13 @@ void ShaderMachineBase::sendDrawJobs()
 		auto currentEnd = deRefedRequests.end();
 		for (currentBegin; currentBegin != currentEnd; currentBegin++)
 		{
-			GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
-			gearTrainBegin->second.get()->insertMultiDrawArrayJob(*currentBegin, jobToSend);
+			auto foundResult = multiDrawArrayJobLookup.find(*currentBegin);			// only send if the requested job actually exists (will produce erratic OpenGL data if we send a job that is built but hasn't been initialized yet, 
+																					// which is what would happen below if we didnt' do this, since getMultiDrawArrayJob assumes that it exists already)
+			if (foundResult != multiDrawArrayJobLookup.end())
+			{
+				GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
+				gearTrainBegin->second.get()->insertMultiDrawArrayJob(*currentBegin, jobToSend);
+			}
 		}
 	}
 }
@@ -325,16 +330,6 @@ void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 	textureLookup[in_textureName] = currentSize;
 }
 
-void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName)
-{
-	//int currentSize = multiDrawArrayJobMap.size();
-	//GLMultiDrawArrayJob arrayJob;
-	//multiDrawArrayJobMap[currentSize] = arrayJob;	// copy the job into the map (it will be empty at first, remember we are just registering it)
-	//multiDrawArrayJobLookup[in_jobName] = currentSize;
-
-	//std::cout << "Insert (1) size: " << currentSize << std::endl;
-}
-
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentSize = multiDrawArrayJobMap.size();
@@ -344,8 +339,10 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMul
 	auto doesJobExist = multiDrawArrayJobLookup.find(in_jobName);
 	if (doesJobExist != multiDrawArrayJobLookup.end())
 	{
+
 		targetKeyValue = doesJobExist->second;
 		multiDrawArrayJobMap[targetKeyValue] = in_job;
+		//multiDrawArrayJobLookup[in_jobName] = targetKeyValue;
 	}
 	else
 	{

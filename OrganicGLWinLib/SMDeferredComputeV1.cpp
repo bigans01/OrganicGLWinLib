@@ -35,7 +35,7 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	insertNewBuffer("render_quad_buffer");							// set up the render quad buffer
 	insertNewFBO("deferred_FBO");									// create the deferred FBO; set it up
 	setupDeferredFBO();
-	insertNewMultiDrawArrayJob("terrain");
+	//insertNewMultiDrawArrayJob("terrain");
 	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// ########################################################################## Compute Gear set up
@@ -51,7 +51,7 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	// ########################################################################## Highlighter Gear set up
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	insertNewMultiDrawArrayJob("highlighter_draw_job");
+	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
 
 }

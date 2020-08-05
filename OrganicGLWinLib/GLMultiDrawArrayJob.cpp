@@ -41,6 +41,9 @@ void GLMultiDrawArrayJob::updateDrawArrayData(GLuint in_drawJobBufferID, GLint* 
 	drawJobBufferID = in_drawJobBufferID;
 	drawCount = in_drawCount;
 	//std::cout << ">>>> new draw count will be: " << drawCount << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
+
 	multiStartIndices.reset(new GLint[drawCount]);
 	multiVertexCount.reset(new GLint[drawCount]);
 	for (int x = 0; x < drawCount; x++)

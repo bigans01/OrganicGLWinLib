@@ -37,7 +37,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
 	// create the deferred multiDrawCallJob
-	insertNewMultiDrawArrayJob("terrain");
+	//insertNewMultiDrawArrayJob("terrain");
 
 	// set up the render quad buffer
 	insertNewBuffer("render_quad_buffer");
@@ -60,7 +60,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	//createMode0Program("HighlighterGearT1");
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	insertNewMultiDrawArrayJob("highlighter_draw_job");
+	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);

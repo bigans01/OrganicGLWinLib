@@ -21,7 +21,6 @@ class GLMultiDrawArrayJob
 		{
 
 			//std::cout << "!! Original draw count value: " << drawCount << std::endl;
-			//std::cout << "!! Calling operator 1" << std::endl;
 			drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
 			//std::cout << "!!!! Old draw count: " << drawCount << std::endl;
 			drawCount = job_b.drawCount;
