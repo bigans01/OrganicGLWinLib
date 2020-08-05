@@ -8,9 +8,21 @@ void Gear::useProgram()
 
 void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
-	int currentKey = gearMultiDrawArrayJobMap.size();
-	gearMultiDrawArrayJobMap[currentKey] = in_job;
-	gearMultiDrawArrayJobLookup[in_jobName] = currentKey;
+	int currentKey = gearMultiDrawArrayJobMap.size();	// use this if it's a new job...
+	int targetKeyValue = currentKey;
+
+
+	auto doesJobExist = gearMultiDrawArrayJobLookup.find(in_jobName);
+	if (doesJobExist != gearMultiDrawArrayJobLookup.end())
+	{
+		targetKeyValue = doesJobExist->second;
+		gearMultiDrawArrayJobMap[targetKeyValue] = in_job;
+	}
+	else
+	{
+		gearMultiDrawArrayJobMap[targetKeyValue] = in_job;
+		gearMultiDrawArrayJobLookup[in_jobName] = targetKeyValue;
+	}
 }
 
 void Gear::registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID)

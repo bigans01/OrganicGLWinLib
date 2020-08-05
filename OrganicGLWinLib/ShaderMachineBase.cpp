@@ -327,17 +327,31 @@ void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName)
 {
-	int currentSize = multiDrawArrayJobMap.size();
-	GLMultiDrawArrayJob arrayJob;
-	multiDrawArrayJobMap[currentSize] = arrayJob;	// copy the job into the map (it will be empty at first, remember we are just registering it)
-	multiDrawArrayJobLookup[in_jobName] = currentSize;
+	//int currentSize = multiDrawArrayJobMap.size();
+	//GLMultiDrawArrayJob arrayJob;
+	//multiDrawArrayJobMap[currentSize] = arrayJob;	// copy the job into the map (it will be empty at first, remember we are just registering it)
+	//multiDrawArrayJobLookup[in_jobName] = currentSize;
+
+	//std::cout << "Insert (1) size: " << currentSize << std::endl;
 }
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentSize = multiDrawArrayJobMap.size();
-	multiDrawArrayJobMap[currentSize] = in_job;	// copy the job into the map (it will be empty at first, remember we are just registering it)
-	multiDrawArrayJobLookup[in_jobName] = currentSize;
+	int targetKeyValue = currentSize;
+
+
+	auto doesJobExist = multiDrawArrayJobLookup.find(in_jobName);
+	if (doesJobExist != multiDrawArrayJobLookup.end())
+	{
+		targetKeyValue = doesJobExist->second;
+		multiDrawArrayJobMap[targetKeyValue] = in_job;
+	}
+	else
+	{
+		multiDrawArrayJobMap[targetKeyValue] = in_job;
+		multiDrawArrayJobLookup[in_jobName] = targetKeyValue;
+	}
 }
 
 void ShaderMachineBase::createProgram(std::string in_programName)
