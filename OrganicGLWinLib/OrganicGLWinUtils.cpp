@@ -1071,6 +1071,25 @@ glm::vec3 OrganicGLWinUtils::findTriangleCentroid(glm::vec3 in_point0, glm::vec3
 	return foundCentroid;
 }
 
+glm::vec3 OrganicGLWinUtils::findTriangleCentroidDebug(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
+{
+	std::cout << "##### CALLED CENTROID DEBUG " << std::endl;
+	std::cout << "point 0 x: " << in_point0.x << std::endl;
+	std::cout << "point 1 x: " << in_point1.x << std::endl;
+	std::cout << "point 2 x: " << in_point2.x << std::endl;
+
+
+	glm::vec3 foundCentroid;
+	foundCentroid.x = (in_point0.x + in_point1.x + in_point2.x) / 3;
+	foundCentroid.y = (in_point0.y + in_point1.y + in_point2.y) / 3;
+	foundCentroid.z = (in_point0.z + in_point1.z + in_point2.z) / 3;
+
+
+	//std::cout << "Centroid X: " << foundCentroid.x << std::endl;
+	//std::cout << "Centroid y: " << foundCentroid.y << std::endl;
+	return foundCentroid;
+}
+
 glm::vec3 OrganicGLWinUtils::findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
 {
 	glm::vec3 returnVec;

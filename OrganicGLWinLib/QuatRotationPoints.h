@@ -15,6 +15,7 @@ public:
 	std::vector<glm::vec3*> pointsRef;	// contains the points to cycle through
 	void applyQuaternion(glm::quat in_quat);
 	void applyTranslation(glm::vec3 in_translation);
+	void printTrianglePoints();
 	void applyNormalization(float in_normalizationValue);
 	void applyDimensionCorrections();
 	void printPoints();

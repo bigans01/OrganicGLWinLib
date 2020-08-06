@@ -29,12 +29,17 @@ public:
 	PointTranslationCheck pointTranslator;
 	ContainerType containerType = ContainerType::UNDEFINED;	// always starts as UNDEFINED, but gets set in constructor
 	TexturePoints calculatedUV;
-	TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, ContainerType in_containerType);
+	TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, ContainerType in_containerType, int in_blueprintKeyX, int in_blueprintKeyY, int in_blueprintKeyZ);
 
 	TexturePoints getTexturePoints();
 private:
+	
+	int blueprintKey_x = 0;
+	int blueprintKey_y = 0;
+	int blueprintKey_z = 0;
+
 	glm::vec3 determineContainerCenter(ContainerType in_containerType);
-	glm::vec3 findPlanarSlidingVector(glm::vec3 in_triangleNormal);
+	glm::vec3 findPlanarSlidingVector(glm::vec3 in_triangleNormal, int in_blueprintKeyX, int in_blueprintKeyY, int in_blueprintKeyZ);
 	void applyPlanarSlidingVector();
 	void alignToZPlane();
 	void translateByMaximumDimensionValue();

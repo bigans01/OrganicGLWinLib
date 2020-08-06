@@ -78,6 +78,7 @@ public:
 	static glm::quat createQuaternion(float in_degrees, glm::vec3 in_unitVector);
 	static glm::vec3 roundVec3ToHundredths(glm::vec3 in_vec3);
 	static glm::vec3 findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
+	static glm::vec3 findTriangleCentroidDebug(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 
 	// IMGUI functions

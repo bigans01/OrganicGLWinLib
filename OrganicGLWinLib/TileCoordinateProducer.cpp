@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "TileCoordinateProducer.h"
 
-TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, ContainerType in_containerType)
+TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, ContainerType in_containerType, int in_blueprintKeyX, int in_blueprintKeyY, int in_blueprintKeyZ)
 {
 	// load point values
 	point0 = in_point0;
 	point1 = in_point1;
 	point2 = in_point2;
+
+	blueprintKey_x = in_blueprintKeyX;
+	blueprintKey_y = in_blueprintKeyY;
+	blueprintKey_z = in_blueprintKeyZ;
 
 	containerType = in_containerType;
 
@@ -20,6 +24,22 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 	containerCenter = determineContainerCenter(in_containerType);
 
 	// create copies of the calculated values;
+
+	/*
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "********* Original points, before translation/modification: " << std::endl;
+		//std::cout << "[0]: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+		//std::cout << "[1]: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+		//std::cout << "[2]: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+
+		//std::cout << "********* Blueprint key is: " << std::endl;
+		//std::cout << blueprintKey_x << ", " << blueprintKey_y << ", " << blueprintKey_z << std::endl;
+
+		//OrganicGLWinUtils::findTriangleCentroidDebug(point0, point1, point2);
+	}
+	*/
+
 	glm::vec3 point0Copy = point0;
 	glm::vec3 point1Copy = point1;
 	glm::vec3 point2Copy = point2;
@@ -30,6 +50,13 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 	//std::cout << "!!! centroid, prior to translation: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
 	//std::cout << "!!! container center, prior to translation: " << containerCenterCopy.x << ", " << containerCenterCopy.y << ", " << containerCenterCopy.z << std::endl;
 
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "!! Planar sliding vector will be: " << tempVec.x << ", " << tempVec.y << ", " << tempVec.z << std::endl;
+		//std::cout << "!! (1) Centroid is: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
+	}
+
+
 	// push back the copied values into the quat points
 	quatPoints.pointsRef.push_back(&point0Copy);
 	quatPoints.pointsRef.push_back(&point1Copy);
@@ -38,7 +65,12 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 	quatPoints.pointsRef.push_back(&containerCenterCopy);
 
 	// find the planar sliding vector
-	findPlanarSlidingVector(triangleNormalCopy);
+	glm::vec3 tempVec = findPlanarSlidingVector(triangleNormalCopy, blueprintKey_x, blueprintKey_y, blueprintKey_z);
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "!! Planar sliding vector will be: " << tempVec.x << ", " << tempVec.y << ", " << tempVec.z << std::endl;
+		//std::cout << "!! (2) Centroid is: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
+	}
 
 	// clear out the quat points; load them with the original points of the triangle
 	quatPoints.clearPoints();
@@ -98,7 +130,7 @@ glm::vec3 TileCoordinateProducer::determineContainerCenter(ContainerType in_cont
 	return returnVec;
 }
 
-glm::vec3 TileCoordinateProducer::findPlanarSlidingVector(glm::vec3 in_triangleNormal)
+glm::vec3 TileCoordinateProducer::findPlanarSlidingVector(glm::vec3 in_triangleNormal, int in_blueprintKeyX, int in_blueprintKeyY, int in_blueprintKeyZ)
 {
 	glm::vec3 returnVec;
 
@@ -154,10 +186,34 @@ void TileCoordinateProducer::alignToZPlane()
 {
 	//std::cout << "##### Attempting Z-plane alignment " << std::endl;
 	// check for translation, by analyzing the container centroid. (should be index 3 at this point)
-	pointTranslator.performCheck(quatPoints.getPointByIndex(3));
+	pointTranslator.performCheck(quatPoints.getPointByIndex(3), blueprintKey_x, blueprintKey_y, blueprintKey_z);
 	if (pointTranslator.requiresTranslation == 1)
 	{
+		/*
+		if (containerType == ContainerType::COLLECTION)
+		{
+			//std::cout << "!!! Translation required " << std::endl;
+			//std::cout << "--points are sliding vector is applied are: " << std::endl;
+			//std::cout << "[0]: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+			//std::cout << "[1]: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+			//std::cout << "[2]: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+
+			//quatPoints.printTrianglePoints();
+		}
+		*/
 		quatPoints.applyTranslation(pointTranslator.getTranslationValue());
+		/*
+		if (containerType == ContainerType::COLLECTION)
+		{
+			//quatPoints.printTrianglePoints();
+			glm::vec3 returnVec;
+			returnVec = pointTranslator.getTranslationValue();
+
+			//std::cout << "Sliding vector value is: " << returnVec.x << ", " << returnVec.y << ", " << returnVec.z << std::endl;
+
+			//quatPoints.printPoints();
+		}
+		*/
 	}
 
 	// push back the normal into the quat Points, only after translation has ocurred (normals shouldn't be translated)
@@ -186,6 +242,9 @@ void TileCoordinateProducer::translateByMaximumDimensionValue()
 	}
 	else if (containerType == ContainerType::COLLECTION)
 	{
+		translationValue.x = ((1.41421f) * 32) / 2;
+		translationValue.y = ((1.41421f) * 32) / 2;
+		translationValue.z = ((1.41421f) * 32) / 2;
 		// calculate max dimension value for a Collection and put it here later
 	}
 
@@ -209,6 +268,7 @@ void TileCoordinateProducer::normalizeToTileCoordinates()
 	else if (containerType == ContainerType::COLLECTION)
 	{
 		// calculate max dimension value for a Collection and put it here later
+		normalizationValue = 1.41421f * 32;
 	}
 	quatPoints.applyNormalization(normalizationValue);
 
@@ -234,10 +294,13 @@ void TileCoordinateProducer::loadUVCoords()
 	calculatedUV.UVpoints[2].U_coord = point2.x;
 	calculatedUV.UVpoints[2].V_coord = point2.y;
 
-	//std::cout << "********* UV coords are: *************" << std::endl;
-	//std::cout << "[0] " << calculatedUV.UVpoints[0].U_coord << ", " << calculatedUV.UVpoints[0].V_coord << std::endl;
-	//std::cout << "[1] " << calculatedUV.UVpoints[1].U_coord << ", " << calculatedUV.UVpoints[1].V_coord << std::endl;
-	//std::cout << "[2] " << calculatedUV.UVpoints[2].U_coord << ", " << calculatedUV.UVpoints[2].V_coord << std::endl;
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "********* UV coords are: *************" << std::endl;
+		//std::cout << "[0] " << calculatedUV.UVpoints[0].U_coord << ", " << calculatedUV.UVpoints[0].V_coord << std::endl;
+		//std::cout << "[1] " << calculatedUV.UVpoints[1].U_coord << ", " << calculatedUV.UVpoints[1].V_coord << std::endl;
+		//std::cout << "[2] " << calculatedUV.UVpoints[2].U_coord << ", " << calculatedUV.UVpoints[2].V_coord << std::endl;
+	}
 }
 
 TexturePoints TileCoordinateProducer::getTexturePoints()

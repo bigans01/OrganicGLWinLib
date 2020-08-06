@@ -28,6 +28,19 @@ void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 	}
 }
 
+void QuatRotationPoints::printTrianglePoints()
+{
+	
+	auto pointsStart = pointsRef.begin();
+	auto pointsEnd = pointsRef.end();
+	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
+	{
+		auto pointsPtr = *pointsStart;
+		std::cout << "##-> Point: " << pointsPtr->x << ", " << pointsPtr->y << ", " << pointsPtr->z << std::endl;
+	}
+	
+}
+
 void QuatRotationPoints::applyNormalization(float in_normalizationValue)
 {
 	auto pointsStart = pointsRef.begin();
