@@ -89,6 +89,14 @@ GLMultiDrawArrayJob ShaderMachineBase::getMultiDrawArrayJob(std::string in_jobNa
 	return returnJob;
 }
 
+GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::string in_jobName)
+{
+	GLDrawElementsInstancedJob returnJob;
+	int lookupID = drawElementsInstancedJobLookup[in_jobName];
+	returnJob = drawElementsInstancedJobMap[lookupID];
+	return returnJob;
+}
+
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
 {
 	GLuint returnGLuint;
@@ -266,22 +274,47 @@ void ShaderMachineBase::sendDrawJobs()
 	auto gearTrainEnd = gearTrain.end();
 	for (gearTrainBegin; gearTrainBegin != gearTrainEnd; gearTrainBegin++)
 	{
-		std::vector<std::string>* currentDrawJobRequests = gearTrainBegin->second.get()->getMultiDrawArrayJobRequests();
-		std::vector<std::string> deRefedRequests = *currentDrawJobRequests;
-		auto currentBegin = deRefedRequests.begin();
-		auto currentEnd = deRefedRequests.end();
-		for (currentBegin; currentBegin != currentEnd; currentBegin++)
+		sendMultiDrawArrayJobRequests(gearTrainBegin->second.get());				// if the gear has any multi draw array requests, send them.
+		sendDrawElementsInstancedRequests(gearTrainBegin->second.get());			// if the gear has any instanced drawing requests, send them.
+	}
+}
+
+void ShaderMachineBase::sendMultiDrawArrayJobRequests(Gear* in_gearRef)
+{
+	auto currentDrawJobRequests = in_gearRef->getMultiDrawArrayJobRequests();
+	auto deRefedRequests = *currentDrawJobRequests;
+	auto currentBegin = deRefedRequests.begin();
+	auto currentEnd = deRefedRequests.end();
+	for (currentBegin; currentBegin != currentEnd; currentBegin++)
+	{
+		auto foundResult = multiDrawArrayJobLookup.find(*currentBegin);			// only send if the requested job actually exists (will produce erratic OpenGL data if we send a job that is built but hasn't been initialized yet, 
+																				// which is what would happen below if we didnt' do this, since getMultiDrawArrayJob assumes that it exists already)
+		if (foundResult != multiDrawArrayJobLookup.end())
 		{
-			auto foundResult = multiDrawArrayJobLookup.find(*currentBegin);			// only send if the requested job actually exists (will produce erratic OpenGL data if we send a job that is built but hasn't been initialized yet, 
-																					// which is what would happen below if we didnt' do this, since getMultiDrawArrayJob assumes that it exists already)
-			if (foundResult != multiDrawArrayJobLookup.end())
-			{
-				GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
-				gearTrainBegin->second.get()->insertMultiDrawArrayJob(*currentBegin, jobToSend);
-			}
+			GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
+			in_gearRef->insertMultiDrawArrayJob(*currentBegin, jobToSend);
 		}
 	}
 }
+
+void ShaderMachineBase::sendDrawElementsInstancedRequests(Gear* in_gearRef)
+{
+	auto currentDrawJobRequests = in_gearRef->getDrawElementsInstancedRequests();
+	auto deRefedRequests = *currentDrawJobRequests;
+	auto currentBegin = deRefedRequests.begin();
+	auto currentEnd = deRefedRequests.end();
+	for (currentBegin; currentBegin != currentEnd; currentBegin++)
+	{
+		auto foundResult = drawElementsInstancedJobLookup.find(*currentBegin);			// only send if the requested job actually exists (will produce erratic OpenGL data if we send a job that is built but hasn't been initialized yet, 
+																				// which is what would happen below if we didnt' do this, since getMultiDrawArrayJob assumes that it exists already)
+		if (foundResult != drawElementsInstancedJobLookup.end())
+		{
+			GLDrawElementsInstancedJob jobToSend = getDrawElementsInstancedJob(*currentBegin);	// get the job to send
+			in_gearRef->insertDrawElementsInstancedJob(*currentBegin, jobToSend);
+		}
+	}
+}
+
 
 void ShaderMachineBase::registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {

@@ -330,6 +330,12 @@
     <ClInclude Include="TerrainMemoryTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InstancedHighlighterGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLDrawElementsInstancedJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -531,6 +537,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TerrainMemoryTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancedHighlighterGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

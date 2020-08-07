@@ -16,6 +16,7 @@
 #include "GLUniformRequest.h"
 #include "GLDataType.h"
 #include "GLMultiDrawArrayJob.h"
+#include "GLDrawElementsInstancedJob.h"
 
 class Gear
 {
@@ -32,6 +33,7 @@ class Gear
 		virtual void executeGearFunction(std::string in_identifier) = 0;
 		virtual void printData() = 0;
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
+		void insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);
 		
 		template <GLDataType in_dType, typename PassType> void sendUniform(std::string in_uniformName, PassType in_data)
 		{
@@ -61,23 +63,27 @@ class Gear
 		
 		std::vector<GLUniformRequest>* getUniformRequests();
 		std::vector<std::string>* getMultiDrawArrayJobRequests();
+		std::vector<std::string>* getDrawElementsInstancedRequests();
 
 	protected:
 		void useProgram();
 		std::vector<GLUniformRequest> uniformRequests;
 		std::vector<std::string> multiDrawArrayJobRequests;
+		std::vector<std::string> drawElementsInstancedRequests;
 
 		std::map<int, GLuint> gearBufferMap;									// for typical buffers (non-persistent)
 		std::map<int, GLuint> gearPersistentBufferMap;							// map that stores IDs of persistent buffers
 		std::map<int, GLuint> gearFboMap;										// " for frame buffer objects
 		std::map<int, GLuint> gearTextureMap;
 		std::map<int, GLMultiDrawArrayJob> gearMultiDrawArrayJobMap;
+		std::map<int, GLDrawElementsInstancedJob> gearDrawElementsInstancedJobMap;
 
 		std::unordered_map<std::string, int> gearBufferLookup;
 		std::unordered_map<std::string, int> gearPersistentBufferLookup;					// used to look up buffer IDs
 		std::unordered_map<std::string, int> gearFboLookup;
 		std::unordered_map<std::string, int> gearTextureLookup;
 		std::unordered_map<std::string, int> gearMultiDrawArrayJobLookup;
+		std::unordered_map<std::string, int> gearDrawElementsInstancedJobLookup;
 
 		GLUniformRegistry gearUniformRegistry;
 

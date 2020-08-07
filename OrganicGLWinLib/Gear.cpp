@@ -27,6 +27,25 @@ void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob i
 	
 }
 
+void Gear::insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
+{
+	int currentKey = gearDrawElementsInstancedJobMap.size();	// use this if it's a new job...
+	int targetKeyValue = currentKey;
+
+	auto doesJobExist = gearDrawElementsInstancedJobLookup.find(in_jobName);
+	if (doesJobExist != gearDrawElementsInstancedJobLookup.end())
+	{
+		targetKeyValue = doesJobExist->second;
+		gearDrawElementsInstancedJobMap[targetKeyValue] = in_job;
+	}
+	else
+	{
+		gearDrawElementsInstancedJobMap[targetKeyValue] = in_job;
+		gearDrawElementsInstancedJobLookup[in_jobName] = targetKeyValue;
+	}
+
+}
+
 void Gear::registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID)
 {
 	int currentKey = gearPersistentBufferMap.size();
@@ -98,6 +117,11 @@ std::vector<GLUniformRequest>* Gear::getUniformRequests()
 std::vector<std::string>* Gear::getMultiDrawArrayJobRequests()
 {
 	return &multiDrawArrayJobRequests;
+}
+
+std::vector<std::string>* Gear::getDrawElementsInstancedRequests()
+{
+	return &drawElementsInstancedRequests;
 }
 
 GLMultiDrawArrayJob Gear::getMultiDrawArrayJob(std::string in_jobName)

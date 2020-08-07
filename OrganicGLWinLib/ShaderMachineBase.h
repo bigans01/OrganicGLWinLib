@@ -16,6 +16,7 @@
 #include "AtlasMap.h"
 #include "AtlasPropertiesGL.h"
 #include "GLMultiDrawArrayJob.h"
+#include "GLDrawElementsInstancedJob.h"
 #include "SimpleUnique.h"
 #include "TerrainJobResults.h"
 #include "TerrainMemoryTracker.h"
@@ -89,6 +90,7 @@ protected:
 		std::map<int, GLuint> textureMap;									// " for textures
 		std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 		std::map<int, GLMultiDrawArrayJob> multiDrawArrayJobMap;
+		std::map<int, GLDrawElementsInstancedJob> drawElementsInstancedJobMap;
 
 		std::unordered_map<std::string, int> bufferLookup;
 		std::unordered_map<std::string, int> persistentBufferLookup;					// used to look up buffer IDs
@@ -96,7 +98,7 @@ protected:
 		std::unordered_map<std::string, int> fboLookup;
 		std::unordered_map<std::string, int> textureLookup;
 		std::unordered_map<std::string, int> multiDrawArrayJobLookup;
-
+		std::unordered_map<std::string, int> drawElementsInstancedJobLookup;
 
 		// "Terrain" vao data values
 		int vaoAttribMode;			// the VAO attrib mode for rendering
@@ -131,7 +133,9 @@ protected:
 		
 		//void sendGearUniforms();
 		void sendGearUniforms();
-		void sendDrawJobs();
+		void sendDrawJobs();	
+		void sendMultiDrawArrayJobRequests(Gear* in_gearRef);		// send multi draw array requests, if there are any, to the Gear
+		void sendDrawElementsInstancedRequests(Gear* in_gearRef);	// send draw elements instanced requests, if there are any, to the Gear
 
 		// buffer creation functions
 		void insertNewPersistentBuffer(std::string in_bufferName, int in_size);		// insert a persistent buffer
@@ -150,6 +154,7 @@ protected:
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
+		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);
 
 };
 
