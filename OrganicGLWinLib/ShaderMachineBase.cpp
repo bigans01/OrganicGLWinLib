@@ -119,6 +119,14 @@ void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_offse
 	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
 }
 
+void ShaderMachineBase::sendMat4DataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, glm::mat4* in_dataArray)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
+	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+	//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+}
+
 int ShaderMachineBase::getVaoAttribMode()
 {
 	return vaoAttribMode;
@@ -309,6 +317,7 @@ void ShaderMachineBase::sendDrawElementsInstancedRequests(Gear* in_gearRef)
 																				// which is what would happen below if we didnt' do this, since getMultiDrawArrayJob assumes that it exists already)
 		if (foundResult != drawElementsInstancedJobLookup.end())
 		{
+			//std::cout << "Sending instanced job request! " << std::endl;
 			GLDrawElementsInstancedJob jobToSend = getDrawElementsInstancedJob(*currentBegin);	// get the job to send
 			in_gearRef->insertDrawElementsInstancedJob(*currentBegin, jobToSend);
 		}
@@ -322,6 +331,13 @@ void ShaderMachineBase::registerDrawJob(std::string in_drawJobName, GLint* in_st
 	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);
 	//std::cout << "!!!!!!!!! (Machine) job vertex count: " << in_vertexCount[0] << std::endl;
 	insertNewMultiDrawArrayJob(in_drawJobName, newJob);
+}
+
+void ShaderMachineBase::registerDrawElementsInstancedJob(std::string in_instancedJobName, int in_numberOfElements)
+{
+	GLDrawElementsInstancedJob newJob;
+	newJob.numberOfElementsToRender = in_numberOfElements;
+	insertNewDrawElementsInstancedJob(in_instancedJobName, newJob);
 }
 
 void ShaderMachineBase::swapAndPoll()
@@ -381,6 +397,24 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMul
 	{
 		multiDrawArrayJobMap[targetKeyValue] = in_job;
 		multiDrawArrayJobLookup[in_jobName] = targetKeyValue;
+	}
+}
+
+void ShaderMachineBase::insertNewDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
+{
+	int currentSize = drawElementsInstancedJobMap.size();
+	int targetKeyValue = currentSize;
+
+	auto doesJobExist = drawElementsInstancedJobLookup.find(in_jobName);
+	if (doesJobExist != drawElementsInstancedJobLookup.end())
+	{
+		targetKeyValue = doesJobExist->second;
+		drawElementsInstancedJobMap[targetKeyValue] = in_job;
+	}
+	else
+	{
+		drawElementsInstancedJobMap[targetKeyValue] = in_job;
+		drawElementsInstancedJobLookup[in_jobName] = targetKeyValue;
 	}
 }
 

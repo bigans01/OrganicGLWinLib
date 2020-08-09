@@ -94,6 +94,7 @@ class Gear
 		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
 		void insertMultiDrawArrayJobRequest(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
+		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);
 
 		GLuint getBufferID(std::string in_bufferName);
 		GLuint getPersistentBufferID(std::string in_bufferName);

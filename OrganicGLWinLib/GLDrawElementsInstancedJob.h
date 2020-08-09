@@ -6,7 +6,7 @@
 class GLDrawElementsInstancedJob
 {
 	public:
-
+		int numberOfElementsToRender = 0;
 };
 
 #endif

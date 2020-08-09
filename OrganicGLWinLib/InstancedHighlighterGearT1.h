@@ -5,6 +5,7 @@
 
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
+#include "GLDrawElementsInstancedJob.h"
 
 class InstancedHighlighterGearT1 : public Gear
 {

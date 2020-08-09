@@ -27,7 +27,6 @@ void HighlighterGearT1::render()
 	//glDisable(GL_DEPTH_TEST);
 
 	//glClear(GL_DEPTH_BUFFER_BIT);
-
 	glBindVertexArray(highlighterVAO);								// bind to the terrain VAO, before drawing
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");		// find the MVP uniform
 	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform

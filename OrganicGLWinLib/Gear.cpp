@@ -32,6 +32,8 @@ void Gear::insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElements
 	int currentKey = gearDrawElementsInstancedJobMap.size();	// use this if it's a new job...
 	int targetKeyValue = currentKey;
 
+	//std::cout << "job has: " << in_job.numberOfElementsToRender << " elements to render. " << std::endl;
+
 	auto doesJobExist = gearDrawElementsInstancedJobLookup.find(in_jobName);
 	if (doesJobExist != gearDrawElementsInstancedJobLookup.end())
 	{
@@ -129,5 +131,13 @@ GLMultiDrawArrayJob Gear::getMultiDrawArrayJob(std::string in_jobName)
 	GLMultiDrawArrayJob returnJob;
 	int lookupID = gearMultiDrawArrayJobLookup[in_jobName];
 	returnJob = gearMultiDrawArrayJobMap[lookupID];
+	return returnJob;
+}
+
+GLDrawElementsInstancedJob Gear::getDrawElementsInstancedJob(std::string in_jobName)
+{
+	GLDrawElementsInstancedJob returnJob;
+	int lookupID = gearDrawElementsInstancedJobLookup[in_jobName];
+	returnJob = gearDrawElementsInstancedJobMap[lookupID];
 	return returnJob;
 }

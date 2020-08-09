@@ -175,6 +175,7 @@
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
+    <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectionLine.h" />

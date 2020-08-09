@@ -18,6 +18,7 @@
 #include "DeferredComputeGearT1.h"
 #include "DeferredComputeResultsGearT1.h"
 #include "HighlighterGearT1.h"
+#include "InstancedHighlighterGearT1.h"
 
 class SMDeferredComputeV1 : public ShaderMachineBase
 {
@@ -37,6 +38,7 @@ private:
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertComputeGear(int in_gearID, GLuint in_programID);
 	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
+	void insertInstancedHighlighterGear(int in_gearID, GLuint in_programID);
 
 	void setupDeferredFBO();								// sets up the deferred FBO, according to this Machine's needs/specifications
 	void createComputeImage(std::string in_imageName);		// creates a read/write OpenGL image

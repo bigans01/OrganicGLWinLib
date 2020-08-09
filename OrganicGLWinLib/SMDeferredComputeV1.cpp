@@ -54,6 +54,12 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
 
+	createProgram("InstancedHighlighterGearT1");
+	insertNewBuffer("mesh_buffer");
+	insertNewBuffer("matrices_buffer");
+	insertInstancedHighlighterGear(4, programLookup["InstancedHighlighterGearT1"]);
+
+
 }
 
 void SMDeferredComputeV1::setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef)
@@ -130,6 +136,15 @@ void SMDeferredComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_prog
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
+}
+
+void SMDeferredComputeV1::insertInstancedHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new InstancedHighlighterGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("mesh_buffer", getBufferID("mesh_buffer"));
+	gearTrain[in_gearID]->passGLuintValue("matrices_buffer", getBufferID("matrices_buffer"));
+	gearTrain[in_gearID]->executeGearFunction("setup_instancing_buffers_and_VAO");
 }
 
 void SMDeferredComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
