@@ -192,6 +192,7 @@
     <ClInclude Include="QuatRotationType.h" />
     <ClInclude Include="SliceFinder.h" />
     <ClInclude Include="SMDebugV1.h" />
+    <ClInclude Include="SMDeferredComputeLightingV1.h" />
     <ClInclude Include="SMForwardV1.h" />
     <ClInclude Include="SMForwardV2.h" />
     <ClInclude Include="SMPrimitiveV1.h" />
@@ -308,6 +309,7 @@
     <ClCompile Include="SimpleUnique.cpp" />
     <ClCompile Include="SliceFinder.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />
+    <ClCompile Include="SMDeferredComputeLightingV1.cpp" />
     <ClCompile Include="SMDeferredComputeV1.cpp" />
     <ClCompile Include="SMDeferredV2.cpp" />
     <ClCompile Include="SMForwardV1.cpp" />

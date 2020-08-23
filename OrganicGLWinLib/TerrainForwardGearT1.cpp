@@ -62,7 +62,12 @@ void TerrainForwardGearT1::setMatrices()
 	GLuint mvUniform = glGetUniformLocation(programID, "ModelViewMatrix");
 	glUniformMatrix4fv(mvUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("ModelViewMatrix")[0][0]);
 
-	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
+	glm::vec3 sampleOut = gearUniformRegistry.getVec3("worldPosition");
+
+	//std::cout << "World position is: " << sampleOut.x << ", " << sampleOut.y << ", " << sampleOut.z << std::endl;
+
+	//glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
+	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosition")[0]);					// REWORK BEGINS HERE
 	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));
 	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
 }

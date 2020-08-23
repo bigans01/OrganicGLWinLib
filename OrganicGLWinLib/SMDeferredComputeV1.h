@@ -25,7 +25,8 @@ class SMDeferredComputeV1 : public ShaderMachineBase
 public:
 	// virtual functions (defined, inherited)
 	void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize);
-	void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);	// STEP 2
+	//void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);	// STEP 2
+	void setupTextureAtlases();	// STEP 2
 	void runAllShadersAndSwap();
 	void runAllShadersNoSwap();
 	void shutdownGL();

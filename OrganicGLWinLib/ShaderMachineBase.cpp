@@ -33,6 +33,12 @@ GLuint& ShaderMachineBase::getTextureLValueRef(std::string in_textureName)
 	return returnLValue;
 }
 
+AtlasMap* ShaderMachineBase::getAtlasMapRef(std::string in_atlasName)
+{
+	int lookupID = atlasMapLookup[in_atlasName];
+	return &atlasMapMap[lookupID];
+}
+
 GLuint* ShaderMachineBase::getTextureRef(std::string in_textureName)
 {
 	GLuint* returnGLuint;
@@ -213,11 +219,24 @@ void ShaderMachineBase::updateMatricesAndDelta()
 	projection = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 400.0f);
 
 	// Camera matrix
+
+
 	view = glm::lookAt(
 		position,           // Camera is here
 		position + direction, // and looks here : at the same position, plus "direction"
 		up                  // Head is up (set to 0,-1,0 to look upside-down)
 	);
+
+	// new
+	// REWORK BEGINS HERE; USE THIS NOW. (8/23/2020)
+	/*
+	glm::vec3 dummyposition;
+	view = glm::lookAt(
+		dummyposition,
+		dummyposition + direction,
+		up
+	);
+	*/
 
 	// For the next frame, the "last time" will be "now"
 	model = glm::mat4(1.0);
@@ -377,6 +396,16 @@ void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 	int currentSize = textureMap.size();
 	textureMap[currentSize] = 0;
 	textureLookup[in_textureName] = currentSize;
+}
+
+void ShaderMachineBase::insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
+{
+	int currentSize = atlasMapMap.size();
+	AtlasMap newMap;
+	atlasMapMap[currentSize] = newMap;
+	atlasMapMap[currentSize].buildAtlas(in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
+
+	atlasMapLookup[in_atlasFolderName] = currentSize;
 }
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)

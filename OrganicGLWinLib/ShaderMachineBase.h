@@ -26,7 +26,8 @@ class ShaderMachineBase
 public:
 		// virtual functions
 		virtual void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize) = 0;   // STEP 1
-		virtual void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef) = 0;	// STEP 2
+		//virtual void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef) = 0;	// STEP 2
+		virtual void setupTextureAtlases() = 0;	// STEP 2
 		virtual void runAllShadersAndSwap() = 0;
 		virtual void runAllShadersNoSwap() = 0;
 		virtual void shutdownGL() = 0;
@@ -56,6 +57,9 @@ public:
 		// texture functions
 		GLuint getTextureID(std::string in_textureName);
 		GLuint& getTextureLValueRef(std::string in_textureName);
+
+		// atlas functions
+		AtlasMap* getAtlasMapRef(std::string in_atlasName);
 
 		// terrain deferred functions
 		GLuint* getTerrainBufferRef();
@@ -93,6 +97,7 @@ protected:
 		std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 		std::map<int, GLMultiDrawArrayJob> multiDrawArrayJobMap;
 		std::map<int, GLDrawElementsInstancedJob> drawElementsInstancedJobMap;
+		std::map<int, AtlasMap> atlasMapMap;
 
 		std::unordered_map<std::string, int> bufferLookup;
 		std::unordered_map<std::string, int> persistentBufferLookup;					// used to look up buffer IDs
@@ -101,6 +106,7 @@ protected:
 		std::unordered_map<std::string, int> textureLookup;
 		std::unordered_map<std::string, int> multiDrawArrayJobLookup;
 		std::unordered_map<std::string, int> drawElementsInstancedJobLookup;
+		std::unordered_map<std::string, int> atlasMapLookup;
 
 		// "Terrain" vao data values
 		int vaoAttribMode;			// the VAO attrib mode for rendering
@@ -144,6 +150,7 @@ protected:
 		void insertNewFBO(std::string in_fboName);									// insert a FBO
 		void insertNewBuffer(std::string in_bufferName);							// insert a typical, non-persistent buffer
 		void insertNewTexture(std::string in_textureName);
+		void insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
 		
 		// draw job functions
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);

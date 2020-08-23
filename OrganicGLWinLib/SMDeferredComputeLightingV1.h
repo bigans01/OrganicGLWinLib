@@ -1,13 +1,21 @@
 #pragma once
 
-#ifndef SMFORWARD_V1
-#define SMFORWARD_V1
+#ifndef SMDEFERREDCOMPUTELIGHTINGV1_H
+#define SMDEFERREDCOMPUTELIGHTINGV1_H
 
+#include <GL/glew.h>
+//#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "ShaderMachineBase.h"
-#include "TerrainSimpleGearT1.h"
-#include "HighlighterGearT1.h"
+#include "Gear.h"
+#include "OrganicGLWinUtils.h"
+#include <map>
+#include <unordered_map>
+#include <mutex>
 
-class SMForwardV1 : public ShaderMachineBase
+class SMDeferredComputeLightingV1 : public ShaderMachineBase
 {
 public:
 	// virtual functions (defined, inherited)
@@ -21,11 +29,9 @@ public:
 	void printDataForGears();
 	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
 	void removeUnusedReplaceables();
-private:
-	void insertTerrainGear(int in_gearID, GLuint in_programID);
-	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 
-	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
 };
 
 #endif
+
+
