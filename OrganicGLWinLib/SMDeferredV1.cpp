@@ -105,6 +105,9 @@ void SMDeferredV1::runAllShadersNoSwap()
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
+
+	//std::cout << "test: uniform for atlasTextureWidth: " << uniformRegistry.getFloat("atlasTextureWidth") << std::endl;
+	//std::cout << "test: uniform for atlasTileTextureWidth: " << uniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;
 }
 
 void SMDeferredV1::shutdownGL()

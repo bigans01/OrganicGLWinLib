@@ -1,14 +1,14 @@
 #pragma once
 
-#ifndef MSDEFERREDV1TERRAIN_H
-#define MSDEFERREDV1TERRAIN_H
+#ifndef TERRAINLIGHTINGCOMPUTEGEAR_T1
+#define TERRAINLIGHTINGCOMPUTEGEAR_T1
 
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
 
-class TerrainComputeGearT1 : public Gear
+class TerrainLightingComputeGearT1 : public Gear
 {
-public:
+	public:
 
 	// defined virtual functions (from MachineShader base class)
 	void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef);
@@ -16,6 +16,7 @@ public:
 	void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 	void executeGearFunction(std::string in_identifier);
 	void printData();
+
 private:
 
 	//GLuint terrainBufferID = 0;				// the primary terrain buffer
@@ -34,17 +35,12 @@ private:
 	// deferred specific functions
 	GLuint deferredFBO = 0;
 	GLuint terrainVaoID = 0;
-	GLuint pass1index, pass2index;						// IDs of the program pass subroutine calls
 
 	// terrain vao set up
 	void setupTerrainVAO();
-
-	// subRoutine index acquisition
-	//void acquireSubroutineIndices();
 
 	void writeToGBuffers();
 	void setMatrices();
 };
 
 #endif
-#pragma once

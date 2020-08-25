@@ -201,6 +201,167 @@ void AtlasMap::buildAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextur
 	
 }
 
+void AtlasMap::buildAtlasOnTextureUnit(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
+{
+	AtlasPropertiesGL properties = readGLData(in_atlasFolderName);
+
+
+	// gather information
+	std::cout << "Prior to smart pointer get: " << std::endl;
+	std::string atlasFolder = "graphics/textures/atlas/" + properties.atlasName + "/";
+	std::cout << "~~~ ++!!!!+--> Atlas folder is: " << atlasFolder << std::endl;
+	std::string baseAtlasTexture = "graphics/textures/atlas/" + properties.atlasName + "/" + properties.atlasBase + ".jpg";
+	std::cout << "~~~ ++!!!!+--> Base atlas texture is: " << baseAtlasTexture << std::endl;
+
+	std::vector<TileDataGLWIN>::iterator tileBegin = properties.tileList.begin();
+	std::vector<TileDataGLWIN>::iterator tileEnd = properties.tileList.end();
+	std::string firstTileTexture = "graphics/textures/atlas/" + properties.atlasName + "/" + tileBegin->texture_file + ".jpg";
+	std::cout << "~~~ Initial tile texture is: " << firstTileTexture << std::endl;
+
+	// set flip
+	stbi_set_flip_vertically_on_load(true);
+
+	//  get data on the atlas texture
+	std::string atlasTextureName = baseAtlasTexture;
+	int atlas_width, atlas_height, atlas_nrChannels;
+	unsigned char* atlas_data = stbi_load(atlasTextureName.c_str(), &atlas_width, &atlas_height, &atlas_nrChannels, 0);
+
+	// get data on the tile texture
+	std::string tileTextureName = firstTileTexture;
+	int tile_width, tile_height, tile_nrChannels;
+	unsigned char* tile_data = stbi_load(tileTextureName.c_str(), &tile_width, &tile_height, &tile_nrChannels, 0);
+
+	std::cout << "!!!! >>>> atlas_width: " << int(atlas_width) << std::endl;
+	std::cout << "!!!! >>>> tile_width: " << int(tile_width) << std::endl;
+
+
+	*in_atlasWidth = float(atlas_width);	// set the atlas width
+	*in_atlasTileWidth = float(tile_width); // set the atlas tile width
+
+	// Step 1: initialize the atlas map; add tiles as needed
+	AtlasMetaData currentAtlasMeta = findAtlasMetadata(atlas_width, tile_width);	// compare the two textures to get the atlas meta data
+	setupTileArray(atlas_width, tile_width);
+	for (tileBegin; tileBegin != tileEnd; tileBegin++)
+	{
+		std::string loadingString = atlasFolder + tileBegin->texture_file + ".jpg";
+		insertTileLookup(tileBegin->materialID, tileBegin->array_x, tileBegin->array_y, loadingString);
+	}
+
+	// Step 2: set up the initial atlas texture, and set its max level
+	glActiveTexture(in_texUnit);				// be sure to set the appropriate texture unit!
+	glGenTextures(1, &*in_atlasTextureRef);		// generate the atlas texture
+	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
+	int atlasMaxLevelValue = (currentAtlasMeta.atlasMaxLevel - 1) - currentAtlasMeta.mipMapLevelDiff;	// get the deepest level that the texture atlas should go (used below)
+	std::cout << "!!!! Atlas max level value is: " << atlasMaxLevelValue << std::endl;
+	int atlas_loopLimit = currentAtlasMeta.atlasMaxLevel - currentAtlasMeta.mipMapLevelDiff;		// the loop limit for the calls to glTexImage2D
+	int atlas_current_mipmap_dimension = currentAtlasMeta.atlasWidth;		// get the width of the atlas in pixels, as the value to start
+	for (int x = 0; x < atlas_loopLimit; x++)
+	{
+		glTexImage2D(GL_TEXTURE_2D, x, GL_RGBA8, atlas_current_mipmap_dimension, atlas_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, atlas_data);	// load atlas data for each mip map level
+		atlas_current_mipmap_dimension /= 2;
+	}
+	//glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7.0f);	// set the maximum value for this texture
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);							// experiment with these hints
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0.05f);					// some progress with this
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 7.0f);						// SIGNIFICANT progress with this
+
+	// TEST 1
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+	// TEST 2
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// TEST 3
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+	// TEST 4
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+
+
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	// Step 3: cycle through all tiles in the tileLookup map, and insert them
+	std::map<int, TileMeta>::iterator currentTile = tileLookup.begin();		// get the beginning iterator for the tile lookup
+	std::map<int, TileMeta>::iterator tileMapEnd = tileLookup.end();
+	for (currentTile; currentTile != tileMapEnd; ++currentTile)
+	{
+		int currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
+		TileLoadData dataToLoad = getTileLoadData(currentTileID);	// get the load data, to use it later for OpenGL
+		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
+		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load
+		unsigned char* load_data = stbi_load(loadingTileName.c_str(), &load_width, &load_height, &load_nrChannels, 0);
+
+		GLuint TextureB;														// the temporary texture to use
+		glGenTextures(1, &TextureB);
+		glBindTexture(GL_TEXTURE_2D, TextureB);
+		int tile_loopLimit = currentAtlasMeta.tileMaxLevel;						// the loop limit for the tiles
+		int tile_current_mipmap_dimension = currentAtlasMeta.tileWidth;			// set the base tile width
+
+
+
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tile_current_mipmap_dimension, tile_current_mipmap_dimension, 0, GL_RGB, GL_UNSIGNED_BYTE, load_data);		// load tile data for each mip map level
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		unsigned int srcWidth = currentAtlasMeta.tileWidth;	// width/height of the area to be copied; starts at 512 (one-quarter) for a 1024x1024 image
+		unsigned int srcHeight = currentAtlasMeta.tileWidth;
+
+		unsigned int dstX = dataToLoad.x_pixel_begin;
+		unsigned int dstY = dataToLoad.y_pixel_begin;
+
+		for (unsigned int level = 0; level < tile_loopLimit; level++)
+		{
+			glCopyImageSubData(TextureB, GL_TEXTURE_2D, level, 0, 0, 0, *in_atlasTextureRef, GL_TEXTURE_2D, level, dstX, dstY, 0, srcWidth, srcHeight, 1);
+			srcWidth /= 2;
+			srcHeight /= 2;
+			if (dstY != 0)		// can't divide by 0
+			{
+				dstY /= 2;
+			}
+			if (dstX != 0)		// "" ""
+			{
+				dstX /= 2;
+			}
+		}
+		stbi_image_free(load_data);		// avoid memory leak
+	}
+
+	glBindTexture(GL_TEXTURE_2D, *in_atlasTextureRef);	// bind it
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
+	// cleanup memory
+	stbi_image_free(tile_data);
+	stbi_image_free(atlas_data);
+
+	// return the atlas pixel width
+	//return atlas_width;
+}
+
 void AtlasMap::setupTileArray(int in_atlasPixelsLength, int in_tilePixelsLength)
 {
 	std::cout << ">>>>>>>>> Initializing tile array...." << std::endl;

@@ -408,6 +408,16 @@ void ShaderMachineBase::insertAndBuildNewAtlas(std::string in_atlasFolderName, G
 	atlasMapLookup[in_atlasFolderName] = currentSize;
 }
 
+void ShaderMachineBase::insertAndBuildNewAtlasToSpecifiedTextureChannel(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
+{
+	int currentSize = atlasMapMap.size();
+	AtlasMap newMap;
+	atlasMapMap[currentSize] = newMap;
+	atlasMapMap[currentSize].buildAtlasOnTextureUnit(in_texUnit, in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
+
+	atlasMapLookup[in_atlasFolderName] = currentSize;
+}
+
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
 	int currentSize = multiDrawArrayJobMap.size();

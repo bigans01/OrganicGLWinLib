@@ -61,6 +61,7 @@ class AtlasMap
 		void insertTileLookup(int in_tileID, int in_tileX, int in_tileY, std::string in_fileName);
 		AtlasPropertiesGL readGLData(std::string in_string);
 		void buildAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
+		void buildAtlasOnTextureUnit(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
 		TileLoadData getTileLoadData(int in_tileID);
 		TexturePoints getUVPointsForTerrainTile(int in_tileID, TexturePoints in_pointsToConvert);
 		//TexturePoints getBorderedUVPoints()

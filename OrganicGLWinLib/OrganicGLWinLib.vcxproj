@@ -173,6 +173,7 @@
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
+    <ClInclude Include="DeferredLightingComputeGearT1.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
@@ -192,7 +193,7 @@
     <ClInclude Include="QuatRotationType.h" />
     <ClInclude Include="SliceFinder.h" />
     <ClInclude Include="SMDebugV1.h" />
-    <ClInclude Include="SMDeferredComputeLightingV1.h" />
+    <ClInclude Include="SMDeferredLightingComputeV1.h" />
     <ClInclude Include="SMForwardV1.h" />
     <ClInclude Include="SMForwardV2.h" />
     <ClInclude Include="SMPrimitiveV1.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="TerrainDebugGearT1.h" />
     <ClInclude Include="TerrainForwardGearT1.h" />
     <ClInclude Include="TerrainJobResults.h" />
+    <ClInclude Include="TerrainLightingComputeGearT1.h" />
     <ClInclude Include="TerrainMemoryMeta.h" />
     <ClInclude Include="TerrainMemoryMoveMeta.h" />
     <ClInclude Include="TerrainMemoryTracker.h" />
@@ -282,6 +284,7 @@
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
+    <ClCompile Include="DeferredLightingComputeGearT1.cpp" />
     <ClCompile Include="EmptyNormalFinder.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
@@ -309,7 +312,7 @@
     <ClCompile Include="SimpleUnique.cpp" />
     <ClCompile Include="SliceFinder.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />
-    <ClCompile Include="SMDeferredComputeLightingV1.cpp" />
+    <ClCompile Include="SMDeferredLightingComputeV1.cpp" />
     <ClCompile Include="SMDeferredComputeV1.cpp" />
     <ClCompile Include="SMDeferredV2.cpp" />
     <ClCompile Include="SMForwardV1.cpp" />
@@ -340,6 +343,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TerrainLightingComputeGearT1.cpp" />
     <ClCompile Include="TerrainMemoryTracker.cpp" />
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />

@@ -150,7 +150,8 @@ protected:
 		void insertNewFBO(std::string in_fboName);									// insert a FBO
 		void insertNewBuffer(std::string in_bufferName);							// insert a typical, non-persistent buffer
 		void insertNewTexture(std::string in_textureName);
-		void insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
+		void insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);	// for everything before the lighting compute machine
+		void insertAndBuildNewAtlasToSpecifiedTextureChannel(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
 		
 		// draw job functions
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "TerrainComputeGearT1.h"
+#include "TerrainLightingComputeGearT1.h"
 
-void TerrainComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
 {
 	width = in_width;
 	height = in_height;
@@ -33,16 +33,16 @@ void TerrainComputeGearT1::initializeMachineShader(int in_width, int in_height, 
 
 	std::string deferredDrawRequest = "terrain";
 	multiDrawArrayJobRequests.push_back(deferredDrawRequest);
-
 }
-void TerrainComputeGearT1::render()
+
+void TerrainLightingComputeGearT1::render()
 {
-	useProgram();	
+	useProgram();
 	writeToGBuffers();
 	glFlush();
 }
 
-void TerrainComputeGearT1::writeToGBuffers()
+void TerrainLightingComputeGearT1::writeToGBuffers()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
@@ -53,8 +53,7 @@ void TerrainComputeGearT1::writeToGBuffers()
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);
 	glFinish();
 }
-
-void TerrainComputeGearT1::setMatrices()
+void TerrainLightingComputeGearT1::setMatrices()
 {
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");	// find the MVP uniform
 	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
@@ -68,7 +67,7 @@ void TerrainComputeGearT1::setMatrices()
 	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
 }
 
-void TerrainComputeGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
+void TerrainLightingComputeGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 {
 	if (in_identifier == "terrain_main")
 	{
@@ -80,61 +79,50 @@ void TerrainComputeGearT1::passGLuintValue(std::string in_identifier, GLuint in_
 		registerNewPersistentBuffer(in_identifier, in_gluInt);	// register the "terrain_swap" PERSISTENT buffer
 		//terrainSwapID = in_gluInt;			// set the swap terrain buffer ID
 	}
-	else if (in_identifier == "render_quad_buffer")
-	{
-		registerNewBuffer(in_identifier, in_gluInt);			// register the "render_quad_buffer" NON-PERSISTENT buffer
-		//quadBufferID = in_gluInt;
-	}
 	else if (in_identifier == "deferred_FBO")
 	{
 		registerNewFBO(in_identifier, in_gluInt);
 		deferredFBO = in_gluInt;
 	}
-	else if (in_identifier == "terrainAtlas")
-	{
-		registerNewTexture(in_identifier, in_gluInt);
-	}
 }
 
-void TerrainComputeGearT1::executeGearFunction(std::string in_identifier)
+void TerrainLightingComputeGearT1::executeGearFunction(std::string in_identifier)
 {
 	if (in_identifier == "setup_terrain_VAO")
 	{
 		setupTerrainVAO();
 	}
-
-	/*
-	else if (in_identifier == "acquire_subroutine_indices")
-	{
-		acquireSubroutineIndices();
-	}
-	*/
 }
 
-void TerrainComputeGearT1::setupTerrainVAO()
+void TerrainLightingComputeGearT1::setupTerrainVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&terrainVaoID);	// create/bind the VAO to terrainVaoID
 	glBindBuffer(GL_ARRAY_BUFFER, getPersistentBufferID("terrain_main"));	// bind to the immutable buffer before setting the attribs
 
+	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)0);	// world position
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)12);   // normal
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)24);	// calculated UV coordinates from OrganicSystem
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)32);	// tile ID in the atlas
+	glEnableVertexAttribArray(3);
+	
+
+	/*
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)12);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)20);
 	glEnableVertexAttribArray(2);
+	*/
 }
 
-/*
-void TerrainComputeGearT1::acquireSubroutineIndices()
-{
-	pass1index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass1");
-	pass2index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass2");
-}
-*/
-
-
-void TerrainComputeGearT1::printData()
+void TerrainLightingComputeGearT1::printData()
 {
 	std::cout << "Atlas width: " << gearUniformRegistry.getFloat("atlasTextureWidth") << std::endl;
 	std::cout << "Atlas tile width: " << gearUniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;
 }
+

@@ -339,7 +339,13 @@
     <ClInclude Include="GLInstancedCoordinateContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SMDeferredComputeLightingV1.h">
+    <ClInclude Include="TerrainLightingComputeGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredLightingComputeV1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredLightingComputeGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -548,7 +554,13 @@
     <ClCompile Include="InstancedHighlighterGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SMDeferredComputeLightingV1.cpp">
+    <ClCompile Include="TerrainLightingComputeGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredLightingComputeV1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredLightingComputeGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

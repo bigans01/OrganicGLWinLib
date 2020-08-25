@@ -762,9 +762,10 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_
 		std::cout << "##### ATTEMPTING LOAD FOR InstancedHighlighterGearT1" << std::endl;
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/InstancedHighlighterGearT1.vertexshader", "graphics/shaders/InstancedHighlighterGearT1.fragmentshader");
 	}
-	else if (in_programName == "TerrainGearT3")
+	else if (in_programName == "TerrainLightingComputeGearT1")
 	{
-		std::cout << "##### ATTEMPTING LOAD FOR TerrainGearT3" << std::endl;
+		std::cout << "##### ATTEMPTING LOAD FOR TerrainLightingComputeGearT1" << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/TerrainLightingComputeGearT1.vertexshader", "graphics/shaders/TerrainLightingComputeGearT1.fragmentshader");
 	}
 }
 
@@ -774,6 +775,11 @@ void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_c
 	{
 		std::cout << "##### ATTEMPTING LOAD COMPUTE SHADER FOR DeferredComputeT1 " << std::endl;
 		*in_programID = OrganicShaderLoader::LoadComputeShader("graphics/shaders/DeferredComputeGearT1.computeshader");
+	}
+	else if (in_computeShaderName == "DeferredLightingComputeGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD COMPUTE SHADER FOR DeferredComputeT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadComputeShader("graphics/shaders/DeferredLightingComputeGearT1.computeshader");
 	}
 }
 
