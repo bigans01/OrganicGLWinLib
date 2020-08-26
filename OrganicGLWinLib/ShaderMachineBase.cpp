@@ -280,6 +280,12 @@ void ShaderMachineBase::sendGearUniforms()
 				glm::vec3 dataToSend = uniformRegistry.getVec3(currentRequest.uniformName);
 				gearTrainBegin->second.get()->sendUniform<GLDataType::VEC3, glm::vec3>(currentRequest.uniformName, dataToSend);
 			}
+			else if (currentRequest.dataType == GLDataType::MAT3)
+			{
+				glm::mat3 dataToSend = uniformRegistry.getMat3(currentRequest.uniformName);
+				gearTrainBegin->second.get()->sendUniform<GLDataType::MAT3, glm::mat3>(currentRequest.uniformName, dataToSend);
+			}
+
 			else if (currentRequest.dataType == GLDataType::MAT4)
 			{
 				glm::mat4 dataToSend = uniformRegistry.getMat4(currentRequest.uniformName);

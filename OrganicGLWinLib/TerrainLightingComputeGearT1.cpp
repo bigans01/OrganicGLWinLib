@@ -19,6 +19,9 @@ void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
 
+	GLUniformRequest reqNormalMatrix(GLDataType::MAT3, "NormalMatrix");
+	uniformRequests.push_back(reqNormalMatrix);
+
 	GLUniformRequest modelViewMatrix(GLDataType::MAT4, "ModelViewMatrix");
 	uniformRequests.push_back(modelViewMatrix);
 
@@ -61,6 +64,9 @@ void TerrainLightingComputeGearT1::setMatrices()
 	//glm::mat4 mv = view * model;
 	GLuint mvUniform = glGetUniformLocation(programID, "ModelViewMatrix");
 	glUniformMatrix4fv(mvUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("ModelViewMatrix")[0][0]);
+
+	GLuint normalMatrixUniform = glGetUniformLocation(programID, "NormalMatrix");
+	glUniformMatrix3fv(normalMatrixUniform, 1, GL_FALSE, &gearUniformRegistry.getMat3("NormalMatrix")[0][0]);
 
 	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
 	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));

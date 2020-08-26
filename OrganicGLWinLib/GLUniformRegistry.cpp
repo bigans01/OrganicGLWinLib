@@ -11,6 +11,11 @@ void GLUniformRegistry::insertVec3(std::string in_stringValue, glm::vec3 in_vec3
 	regVec3[in_stringValue] = in_vec3;
 }
 
+void GLUniformRegistry::insertMat3(std::string in_stringValue, glm::mat3 in_mat3)
+{
+	regMat3[in_stringValue] = in_mat3;
+}
+
 void GLUniformRegistry::insertMat4(std::string in_stringValue, glm::mat4 in_mat4) 
 {
 	regMat4[in_stringValue] = in_mat4;
@@ -29,6 +34,11 @@ glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 glm::vec3 GLUniformRegistry::getVec3(std::string in_stringValue)
 {
 	return regVec3[in_stringValue];
+}
+
+glm::mat3 GLUniformRegistry::getMat3(std::string in_stringValue)
+{
+	return regMat3[in_stringValue];
 }
 
 glm::mat4 GLUniformRegistry::getMat4(std::string in_stringValue)

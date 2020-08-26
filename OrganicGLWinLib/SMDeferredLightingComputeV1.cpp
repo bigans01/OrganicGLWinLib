@@ -19,7 +19,8 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 37.7f, 0.0f);	// background color
+	//OrganicGLWinUtils::setClearColor(0.33f, 0.01f, 0.23f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 0.0f, 0.0f);	// background color
 
 
 	// enable depth dest
@@ -62,7 +63,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 
 
 
-	std::cout << "++++++++ SMDeferredLightingComputeV1 complete. " << std::endl;
+	std::cout << "++++++++ !! SMDeferredLightingComputeV1 complete. " << std::endl;
 	int someVal = 4;
 	std::cin >> someVal;
 }
@@ -280,6 +281,10 @@ void SMDeferredLightingComputeV1::updateUniformRegistry()
 	glm::mat4 currentMV = view;
 	uniformRegistry.insertMat4("ModelViewMatrix", currentMV); // update the MV
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
+
+	// insert the normal matrix for lighting
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view)));
+	uniformRegistry.insertMat3("NormalMatrix", normalMatrix);
 }
 
 void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)

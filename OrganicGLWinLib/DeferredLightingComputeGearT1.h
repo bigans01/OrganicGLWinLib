@@ -17,6 +17,7 @@ public:
 	void printData();
 
 private:
+	GLuint worldPosUniform;
 };
 
 #endif

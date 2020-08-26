@@ -47,6 +47,11 @@ class Gear
 				gearUniformRegistry.insertVec3(in_uniformName, in_data);
 				//std::cout << "!!! VEC3 inserted!" << std::endl;
 			}
+			else if constexpr (in_dType == GLDataType::MAT3)
+			{
+				gearUniformRegistry.insertMat3(in_uniformName, in_data);
+			}
+
 			else if constexpr (in_dType == GLDataType::MAT4)
 			{
 				gearUniformRegistry.insertMat4(in_uniformName, in_data);
