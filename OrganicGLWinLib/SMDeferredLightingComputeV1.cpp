@@ -283,7 +283,12 @@ void SMDeferredLightingComputeV1::updateUniformRegistry()
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
 
 	// insert the normal matrix for lighting
-	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view)));
+
+	//glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view)));
+
+	model = glm::mat4(1.0);
+	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
+
 	uniformRegistry.insertMat3("NormalMatrix", normalMatrix);
 }
 
