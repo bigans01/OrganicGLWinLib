@@ -220,17 +220,22 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 	// Camera matrix
 
-
+	
 	view = glm::lookAt(
 		position,           // Camera is here
 		position + direction, // and looks here : at the same position, plus "direction"
 		up                  // Head is up (set to 0,-1,0 to look upside-down)
 	);
+	
 
 	// new
 	// REWORK BEGINS HERE; USE THIS NOW. (8/23/2020)
+	
 	/*
 	glm::vec3 dummyposition;
+	dummyposition.x = 0.0f;
+	dummyposition.y = 0.0f;
+	dummyposition.z = 0.0f;
 	view = glm::lookAt(
 		dummyposition,
 		dummyposition + direction,

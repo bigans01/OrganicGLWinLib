@@ -165,12 +165,24 @@ void SMDeferredV1::printDataForGears()
 void SMDeferredV1::updateUniformRegistry()
 {
 	// update the MVP
+
+	/*
+	glm::vec3 dummyposition;
+	view = glm::lookAt(
+		dummyposition,
+		dummyposition + direction,
+		up
+	);
+	*/
+
 	MVP = projection * view * model;
 	uniformRegistry.insertMat4("MVP", MVP);
 
 	glm::mat4 currentMV = view * model;
 	uniformRegistry.insertMat4("ModelViewMatrix", currentMV); // update the MV
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
+
+	//std::cout << "position is: " << position.x << ", " << position.y << ", " << position.z << std::endl;
 }
 
 void SMDeferredV1::setupDeferredFBO()
