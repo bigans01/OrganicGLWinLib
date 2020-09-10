@@ -20,6 +20,7 @@
 #include "SimpleUnique.h"
 #include "TerrainJobResults.h"
 #include "TerrainMemoryTracker.h"
+#include "WorldLight.h"
 
 class ShaderMachineBase
 {
@@ -35,6 +36,7 @@ public:
 		virtual void printDataForGears() = 0;
 		virtual void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) = 0;
 		virtual void removeUnusedReplaceables() = 0;
+		virtual void insertWorldLight(WorldLight in_worldLight) = 0;
 
 		//virtual void 
 		//virtual void updateMVPinGears() = 0;	// called before drawing, and during call of multiDrawTerrain; updates MVP (and other possible uniforms) in each gear.

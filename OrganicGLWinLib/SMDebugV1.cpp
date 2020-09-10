@@ -180,3 +180,8 @@ void SMDebugV1::removeUnusedReplaceables()
 		//std::cout << "No unused replaceables to remove..." << std::endl;
 	}
 }
+
+void SMDebugV1::insertWorldLight(WorldLight in_worldLight)
+{
+
+}

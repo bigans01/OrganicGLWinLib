@@ -179,3 +179,8 @@ void SMForwardV1::removeUnusedReplaceables()
 		//std::cout << "No unused replaceables to remove..." << std::endl;
 	}
 }
+
+void SMForwardV1::insertWorldLight(WorldLight in_worldLight)
+{
+
+}

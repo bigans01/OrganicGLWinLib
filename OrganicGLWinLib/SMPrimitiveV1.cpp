@@ -179,3 +179,8 @@ void SMPrimitiveV1::removeUnusedReplaceables()
 		//std::cout << "No unused replaceables to remove..." << std::endl;
 	}
 }
+
+void SMPrimitiveV1::insertWorldLight(WorldLight in_worldLight)
+{
+
+}

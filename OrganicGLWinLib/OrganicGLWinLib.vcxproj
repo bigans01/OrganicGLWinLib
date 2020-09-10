@@ -270,6 +270,7 @@
     <ClInclude Include="TileLoadData.h" />
     <ClInclude Include="TileMeta.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
+    <ClInclude Include="WorldLight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />

@@ -271,3 +271,8 @@ void SMDeferredV2::removeUnusedReplaceables()
 		//std::cout << "No unused replaceables to remove..." << std::endl;
 	}
 }
+
+void SMDeferredV2::insertWorldLight(WorldLight in_worldLight)
+{
+
+}
