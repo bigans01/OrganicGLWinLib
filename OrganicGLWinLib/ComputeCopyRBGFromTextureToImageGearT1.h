@@ -1,13 +1,13 @@
 #pragma once
 
-#ifndef DEFERREDLIGHTINGCOMPUTEGEART1_H
-#define DEFERREDLIGHTINGCOMPUTEGEART1_H
+#ifndef COMPUTECOPYRGBFROMTEXTURETOIMAGEGEART1_H
+#define COMPUTECOPYRGBFROMTEXTURETOIMAGEGEART1_H
 
 #include "Gear.h"
+#include "OrganicGLWinUtils.h"
 
-class DeferredLightingComputeGearT1 : public Gear
+class ComputeCopyRBGFromTextureToImageGearT1 : public Gear
 {
-
 public:
 	// defined virtual functions (from MachineShader base class)
 	void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef);
@@ -17,10 +17,10 @@ public:
 	void printData();
 
 private:
-	GLuint worldPosUniform;
-	int currentTargetBinding = 1;		// always starts at 1.
-	void swapImageTargetBindings();
-	void resetSwapImage();
+	void setUpRenderQuad();
+	void drawQuad();
+	void setDrawMatrices();
+	GLuint quadVaoID = 0;
 };
 
 #endif

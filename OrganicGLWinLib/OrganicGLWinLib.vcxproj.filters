@@ -351,6 +351,9 @@
     <ClInclude Include="WorldLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -564,6 +567,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DeferredLightingComputeGearT1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

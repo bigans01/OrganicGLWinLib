@@ -39,27 +39,38 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	setupDeferredFBO();
 	insertTerrainGear(0, programLookup["TerrainLightingComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
+
+	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
+	createComputeImage(GL_TEXTURE31, "computeRead", 1);					// image unit 1, "read"
+	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
+
+
+	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
+	createComputeProgram("ComputeCopyRBGFromTextureToImageGearT1");
+	insertComputeTransferGear(1, programLookup["ComputeCopyRBGFromTextureToImageGearT1"]);
+
+
+
 	// ########################################################################## Compute Gear set up
 	createComputeProgram("DeferredLightingComputeGearT1");
-	createComputeImage(GL_TEXTURE11, "computeWrite");
-	insertComputeGear(1, programLookup["DeferredLightingComputeGearT1"]);
+	//createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
+	insertComputeGear(2, programLookup["DeferredLightingComputeGearT1"]);
 
 	// ########################################################################## Compute results gear set up
 	createProgram("DeferredComputeResultsGearT1");
-	insertNewBuffer("compute_quad_buffer");
-	insertComputeResultsGear(2, programLookup["DeferredComputeResultsGearT1"]);
+	insertComputeResultsGear(3, programLookup["DeferredComputeResultsGearT1"]);
 
 	// ########################################################################## Highlighter Gear set up
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
 	//insertNewMultiDrawArrayJob("highlighter_draw_job");
-	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
+	insertHighlighterGear(4, programLookup["HighlighterGearT1"]);
 
 	// ########################################################################## Instanced Highlighter Gear set up
 	createProgram("InstancedHighlighterGearT1");
 	insertNewBuffer("mesh_buffer");
 	insertNewBuffer("matrices_buffer");
-	insertInstancedHighlighterGear(4, programLookup["InstancedHighlighterGearT1"]);
+	insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
 
 
 
@@ -141,7 +152,7 @@ void SMDeferredLightingComputeV1::createGBufText(GLenum texUnit, GLenum  format,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void SMDeferredLightingComputeV1::createComputeImage(GLenum texUnit, std::string in_imageName)
+void SMDeferredLightingComputeV1::createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit)
 {
 	int tex_w = width;
 	int tex_h = height;
@@ -155,8 +166,8 @@ void SMDeferredLightingComputeV1::createComputeImage(GLenum texUnit, std::string
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, tex_w, tex_h, 0, GL_RGBA, GL_FLOAT,
 		NULL);
-	glBindImageTexture(0, getTextureID(in_imageName), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);	// bind to image unit 0, for this texture (it can now be sampled in the compute shader)
-	std::cout << "!!!!!!! Compute Image Texture ID is: " << getTextureID("computeWrite") << std::endl;	// should be 4
+	glBindImageTexture(in_imageUnit, getTextureID(in_imageName), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);	// bind to image unit 0, for this texture (it can now be sampled in the compute shader)
+	std::cout << "!!!!!!! Compute Image Texture ID is: " << getTextureID(in_imageName) << std::endl;	// should be 4
 }
 
 void SMDeferredLightingComputeV1::setupTextureAtlases()
@@ -214,6 +225,14 @@ void SMDeferredLightingComputeV1::insertTerrainGear(int in_gearID, GLuint in_pro
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
 
 	std::cout << "!!! Terrain gear (Lighting Compute) inserted. " << std::endl;
+}
+
+void SMDeferredLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new ComputeCopyRBGFromTextureToImageGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
+	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
 void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)

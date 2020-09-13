@@ -781,6 +781,12 @@ void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_c
 		std::cout << "##### ATTEMPTING LOAD COMPUTE SHADER FOR DeferredComputeT1 " << std::endl;
 		*in_programID = OrganicShaderLoader::LoadComputeShader("graphics/shaders/DeferredLightingComputeGearT1.computeshader");
 	}
+	else if (in_computeShaderName == "ComputeCopyRBGFromTextureToImageGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD COMPUTE SHADER FOR ComputeCopyRBGFromTextureToImageGearT1 " << std::endl;
+		*in_programID = OrganicShaderLoader::LoadComputeShader("graphics/shaders/ComputeCopyRBGFromTextureToImageGearT1.computeshader");
+	}
+
 }
 
 void OrganicGLWinUtils::initializeLibraryAndSetHints()

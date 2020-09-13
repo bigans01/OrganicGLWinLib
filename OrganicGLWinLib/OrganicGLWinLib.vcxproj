@@ -170,6 +170,7 @@
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />
+    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
@@ -282,6 +283,7 @@
     <ClCompile Include="CleaveSequence.cpp" />
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
+    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />

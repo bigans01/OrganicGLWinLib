@@ -1,8 +1,7 @@
 #include "stdafx.h"
-#include "DeferredComputeResultsGearT1.h"
+#include "ComputeCopyRBGFromTextureToImageGearT1.h"
 
-
-void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void ComputeCopyRBGFromTextureToImageGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
 {
 	width = in_width;
 	height = in_height;
@@ -13,16 +12,23 @@ void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
 }
-void DeferredComputeResultsGearT1::render()
+
+void ComputeCopyRBGFromTextureToImageGearT1::render()
 {
 	useProgram();
-	setDrawMatrices();
-	drawQuad();
+
+	//std::cout << "!! Executing compute transfer... " << std::endl;
+	//setDrawMatrices();
+	//drawQuad();
+	GLuint computeGroupsX = width / 16;	// 16 threads on x per work group
+	GLuint computeGroupsY = height / 16;	// 16 threads on y per work group
+	glDispatchCompute(computeGroupsX, computeGroupsY, 1);
+	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier
 }
 
-
-void DeferredComputeResultsGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
+void ComputeCopyRBGFromTextureToImageGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
 {
+	/*
 	if (in_identifier == "compute_quad_buffer")
 	{
 		std::cout << "!!!!! ++++ SETTING UP COMPUTE QUAD BUFFER" << std::endl;
@@ -33,20 +39,22 @@ void DeferredComputeResultsGearT1::passGLuintValue(std::string in_identifier, GL
 	{
 		registerNewFBO(in_identifier, in_gluInt);
 	}
+	*/
 }
 
-void DeferredComputeResultsGearT1::executeGearFunction(std::string in_identifier)
+void ComputeCopyRBGFromTextureToImageGearT1::executeGearFunction(std::string in_identifier)
+{
+	
+}
+
+void ComputeCopyRBGFromTextureToImageGearT1::printData()
 {
 
 }
 
-void DeferredComputeResultsGearT1::printData()
+void ComputeCopyRBGFromTextureToImageGearT1::setUpRenderQuad()
 {
-
-}
-
-void DeferredComputeResultsGearT1::setUpRenderQuad()
-{
+	/*
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID
 	glBindBuffer(GL_ARRAY_BUFFER, getBufferID("compute_quad_buffer"));	// bind
 
@@ -66,25 +74,30 @@ void DeferredComputeResultsGearT1::setUpRenderQuad()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 5, (void*)12);
 	glEnableVertexAttribArray(1);
+	*/
 }
 
-void DeferredComputeResultsGearT1::drawQuad()
+void ComputeCopyRBGFromTextureToImageGearT1::drawQuad()
 {
+	/*
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);	// bind back to the default framebuffer
 	glBindVertexArray(quadVaoID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 
 	// copy the depth from the deferred FBO that we put the G-buffers into, to the default FBO, but only AFTER we draw the triangles.
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, getFBOID("deferred_FBO"));		
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, getFBOID("deferred_FBO"));
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
 		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	*/
 }
 
-void DeferredComputeResultsGearT1::setDrawMatrices()
+void ComputeCopyRBGFromTextureToImageGearT1::setDrawMatrices()
 {
+	/*
 	glm::mat4 quadMatrix = glm::mat4(1.0);
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");			// find the MVP uniform
 	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &quadMatrix[0][0]);		// set the uniform
+	*/
 }

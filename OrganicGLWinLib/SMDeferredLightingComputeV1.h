@@ -21,6 +21,7 @@
 #include "DeferredComputeResultsGearT1.h"
 #include "HighlighterGearT1.h"
 #include "InstancedHighlighterGearT1.h"
+#include "ComputeCopyRBGFromTextureToImageGearT1.h"
 
 
 class SMDeferredLightingComputeV1 : public ShaderMachineBase
@@ -40,13 +41,14 @@ public:
 	void insertWorldLight(WorldLight in_worldLight);
 private:
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
+	void insertComputeTransferGear(int in_gearID, GLuint in_programID);
 	void insertComputeGear(int in_gearID, GLuint in_programID);
 	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertInstancedHighlighterGear(int in_gearID, GLuint in_programID);
 	void setupDeferredFBO();								// sets up the deferred FBO, according to this Machine's needs/specifications
 	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);		// creates a G-Buffer texture for use by the deferred shader.
-	void createComputeImage(GLenum texUnit, std::string in_imageName);		// creates a read/write OpenGL image
+	void createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit);		// creates a read/write OpenGL image
 	void updateUniformRegistry();
 };
 
