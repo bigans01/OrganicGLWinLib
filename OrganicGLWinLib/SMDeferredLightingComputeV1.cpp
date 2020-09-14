@@ -41,8 +41,9 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 
 
 	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
-	createComputeImage(GL_TEXTURE31, "computeRead", 1);					// image unit 1, "read"
 	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
+	createComputeImage(GL_TEXTURE31, "computeRead", 1);					// image unit 1, "read"
+	//createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 
 
 	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
@@ -239,6 +240,8 @@ void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_pro
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredLightingComputeGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->passGLuintValue("original_image_unit_1_texture_ID", getTextureID("computeWrite"));
+	gearTrain[in_gearID]->passGLuintValue("original_image_unit_2_texture_ID", getTextureID("computeRead"));
 
 	std::cout << "!!! Compute Lights gear (Lighting Compute) inserted. " << std::endl;
 }

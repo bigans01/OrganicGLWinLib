@@ -21,6 +21,9 @@ private:
 	int currentTargetBinding = 1;		// always starts at 1.
 	void swapImageTargetBindings();
 	void resetSwapImage();
+
+	int originalImageUnit1TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
+	int originalImageUnit2TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
 };
 
 #endif
