@@ -26,10 +26,10 @@ void DeferredLightingComputeGearT1::render()
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier
 
 	// test, apply the single light twice.
-	swapImageTargetBindings();
-	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosition")[0]);
-	glDispatchCompute(computeGroupsX, computeGroupsY, 1);
-	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier
+	//swapImageTargetBindings();
+	//glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosition")[0]);
+	//glDispatchCompute(computeGroupsX, computeGroupsY, 1);
+	//glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier
 
 	//resetSwapImage();		// may not be used
 }

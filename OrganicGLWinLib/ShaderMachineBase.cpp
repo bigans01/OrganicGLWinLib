@@ -253,12 +253,15 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 void ShaderMachineBase::runGearTrain()
 {
+	//std::cout << "## Running gear train... " << std::endl;
 	auto gearTrainBegin = gearTrain.begin();
 	auto gearTrainEnd = gearTrain.end();
 	for (gearTrainBegin; gearTrainBegin != gearTrainEnd; gearTrainBegin++)
 	{
+		//std::cout << "Requesting render for gear: " << gearTrainBegin->first << std::endl;
 		gearTrainBegin->second->render();
 	}
+	//std::cout << "## Gear train run complete. " << std::endl;
 }
 
 void ShaderMachineBase::sendGearUniforms()

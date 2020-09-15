@@ -9,8 +9,8 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	height = in_windowHeight;
 
 	// set shader specific VAO values
-	vaoAttribMode = 3;
-	vaoAttribByteSize = 28;
+	vaoAttribMode = 4;
+	vaoAttribByteSize = 40;
 
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
 	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
