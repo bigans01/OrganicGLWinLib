@@ -28,6 +28,9 @@ void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_
 	GLUniformRequest worldPosition(GLDataType::VEC3, "worldPosition");
 	uniformRequests.push_back(worldPosition);
 
+	GLUniformRequest globalAmbience(GLDataType::FLOAT, "globalAmbienceMultiplier");
+	uniformRequests.push_back(globalAmbience);
+
 	GLUniformRequest atlasTextureWidth(GLDataType::FLOAT, "atlasTextureWidth");
 	uniformRequests.push_back(atlasTextureWidth);
 
