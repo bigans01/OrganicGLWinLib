@@ -22,6 +22,7 @@
 #include "HighlighterGearT1.h"
 #include "InstancedHighlighterGearT1.h"
 #include "ComputeCopyRBGFromTextureToImageGearT1.h"
+#include "ComputeResolution.h"
 
 
 class SMDeferredLightingComputeV1 : public ShaderMachineBase

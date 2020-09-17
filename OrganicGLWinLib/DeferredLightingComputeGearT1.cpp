@@ -13,6 +13,14 @@ void DeferredLightingComputeGearT1::initializeMachineShader(int in_width, int in
 	GLUniformRequest worldPosition(GLDataType::VEC3, "worldPosition");		// for lighting testing.
 	uniformRequests.push_back(worldPosition);
 
+	// compute width
+	GLUniformRequest reqWidth(GLDataType::INT, "screenWidth");
+	uniformRequests.push_back(reqWidth);
+
+	// compute height
+	GLUniformRequest reqHeight(GLDataType::INT, "screenHeight");
+	uniformRequests.push_back(reqHeight);
+
 
 }
 

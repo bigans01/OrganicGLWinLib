@@ -63,6 +63,10 @@ class Gear
 				gearUniformRegistry.insertFloat(in_uniformName, in_data);
 				//std::cout << "!!! FLOAT inserted!" << std::endl;
 			}
+			else if constexpr (in_dType == GLDataType::INT)
+			{
+				gearUniformRegistry.insertInt(in_uniformName, in_data);
+			}
 			
 		}
 		

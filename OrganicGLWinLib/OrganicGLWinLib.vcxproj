@@ -171,6 +171,7 @@
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
+    <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />

@@ -10,7 +10,8 @@ enum class GLDataType
 	VEC3,
 	MAT3,
 	MAT4,
-	FLOAT
+	FLOAT,
+	INT
 };
 
 #endif

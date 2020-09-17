@@ -20,12 +20,14 @@ public:
 	void insertMat3(std::string in_stringValue, glm::mat3 in_mat3);
 	void insertMat4(std::string in_stringValue, glm::mat4 in_mat4);
 	void insertFloat(std::string in_stringValue, float in_float);
+	void insertInt(std::string in_stringValue, int in_int);
 
 	glm::vec2 getVec2(std::string in_stringValue);
 	glm::vec3 getVec3(std::string in_stringValue);
 	glm::mat3 getMat3(std::string in_stringValue);
 	glm::mat4 getMat4(std::string in_stringValue);
 	float getFloat(std::string in_stringValue);
+	int getInt(std::string in_stringValue);
 
 	float* getFloatRef(std::string in_stringValue);
 private:
@@ -34,6 +36,7 @@ private:
 	std::unordered_map<std::string, glm::mat3> regMat3;
 	std::unordered_map<std::string, glm::mat4> regMat4;
 	std::unordered_map<std::string, float> regFloat;
+	std::unordered_map<std::string, int> regInt;
 
 
 

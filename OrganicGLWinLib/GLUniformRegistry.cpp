@@ -26,6 +26,11 @@ void GLUniformRegistry::insertFloat(std::string in_stringValue, float in_float)
 	regFloat[in_stringValue] = in_float;
 }
 
+void GLUniformRegistry::insertInt(std::string in_stringValue, int in_int)
+{
+	regInt[in_stringValue] = in_int;
+}
+
 glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 {
 	return regVec2[in_stringValue];
@@ -49,6 +54,11 @@ glm::mat4 GLUniformRegistry::getMat4(std::string in_stringValue)
 float GLUniformRegistry::getFloat(std::string in_stringValue)
 {
 	return regFloat[in_stringValue];
+}
+
+int GLUniformRegistry::getInt(std::string in_stringValue)
+{
+	return regInt[in_stringValue];
 }
 
 float* GLUniformRegistry::getFloatRef(std::string in_stringValue)

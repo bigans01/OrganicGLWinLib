@@ -304,6 +304,11 @@ void ShaderMachineBase::sendGearUniforms()
 				float dataToSend = uniformRegistry.getFloat(currentRequest.uniformName);
 				gearTrainBegin->second.get()->sendUniform<GLDataType::FLOAT, float>(currentRequest.uniformName, dataToSend);
 			}
+			else if (currentRequest.dataType == GLDataType::INT)
+			{
+				int dataToSend = uniformRegistry.getInt(currentRequest.uniformName);
+				gearTrainBegin->second.get()->sendUniform<GLDataType::INT, int>(currentRequest.uniformName, dataToSend);
+			}
 			
 		}
 	}

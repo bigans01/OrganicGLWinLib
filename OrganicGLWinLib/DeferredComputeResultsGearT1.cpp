@@ -12,6 +12,14 @@ void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_
 	// set up the uniform requests
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
+
+	// compute width
+	GLUniformRequest reqWidth(GLDataType::INT, "screenWidth");
+	uniformRequests.push_back(reqWidth);
+
+	// compute height
+	GLUniformRequest reqHeight(GLDataType::INT, "screenHeight");
+	uniformRequests.push_back(reqHeight);
 }
 void DeferredComputeResultsGearT1::render()
 {

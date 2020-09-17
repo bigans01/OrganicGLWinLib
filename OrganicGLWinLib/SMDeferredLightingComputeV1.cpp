@@ -5,8 +5,11 @@
 void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
 	// basic initialization
-	width = in_windowWidth;
-	height = in_windowHeight;
+	//width = in_windowWidth;
+	//height = in_windowHeight;
+	ComputeResolution resolution(in_windowWidth, in_windowHeight, 16, 16);// use compute-adjusted coordinates, for a group size of 16
+	width = resolution.computeScreenWidth;
+	height = resolution.computeScreenHeight;
 
 	// set shader specific VAO values
 	vaoAttribMode = 4;
@@ -296,8 +299,12 @@ void SMDeferredLightingComputeV1::printDataForGears()
 
 void SMDeferredLightingComputeV1::updateUniformRegistry()
 {
+	// screen width/height uniforms, adjusted to compute group dimensions
+	uniformRegistry.insertInt("screenWidth", width);
+	uniformRegistry.insertInt("screenHeight", height);
+
 	// global ambience mutliplier
-	uniformRegistry.insertFloat("GlobalAmbienceMultiplier", globalAmbienceMultiplier);
+	uniformRegistry.insertFloat("globalAmbienceMultiplier", globalAmbienceMultiplier);
 
 	// update the MVP; model is not needed here, as terrain is already translated to world space.
 	MVP = projection * view;

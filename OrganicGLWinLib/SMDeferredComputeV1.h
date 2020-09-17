@@ -19,6 +19,7 @@
 #include "DeferredComputeResultsGearT1.h"
 #include "HighlighterGearT1.h"
 #include "InstancedHighlighterGearT1.h"
+#include "ComputeResolution.h"
 
 class SMDeferredComputeV1 : public ShaderMachineBase
 {

@@ -354,6 +354,9 @@
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeResolution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
