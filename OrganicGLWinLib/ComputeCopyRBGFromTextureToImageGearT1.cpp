@@ -39,7 +39,7 @@ void ComputeCopyRBGFromTextureToImageGearT1::render()
 
 	//std::cout << "Screen width/height: " << gearUniformRegistry.getInt("screenWidth") << " / " << gearUniformRegistry.getInt("screenHeight") << std::endl;
 
-	gearUniformRegistry.getInt("screenWidth");
+	//gearUniformRegistry.getInt("screenWidth");
 	glUniform1i(screenWidthUniform, gearUniformRegistry.getInt("screenWidth"));
 	glUniform1i(screenHeightUniform, gearUniformRegistry.getInt("screenHeight"));
 	glDispatchCompute(computeGroupsX, computeGroupsY, 1);

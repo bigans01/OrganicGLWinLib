@@ -22,6 +22,9 @@ private:
 	void swapImageTargetBindings();
 	void resetSwapImage();
 
+	int screenWidthUniform;
+	int screenHeightUniform;
+
 	int originalImageUnit1TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
 	int originalImageUnit2TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
 };

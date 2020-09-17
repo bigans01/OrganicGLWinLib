@@ -8,6 +8,8 @@ void DeferredLightingComputeGearT1::initializeMachineShader(int in_width, int in
 	window = in_windowRef;
 	programID = in_programID;
 
+	screenWidthUniform = glGetUniformLocation(programID, "screenWidth");
+	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");
 	worldPosUniform = glGetUniformLocation(programID, "worldPosition");
 
 	GLUniformRequest worldPosition(GLDataType::VEC3, "worldPosition");		// for lighting testing.
@@ -29,6 +31,9 @@ void DeferredLightingComputeGearT1::render()
 	useProgram();
 	GLuint computeGroupsX = width / 16;	// 16 threads on x per work group
 	GLuint computeGroupsY = height / 16;	// 16 threads on y per work group
+
+	glUniform1i(screenWidthUniform, gearUniformRegistry.getInt("screenWidth"));
+	glUniform1i(screenHeightUniform, gearUniformRegistry.getInt("screenHeight"));
 	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosition")[0]);
 	glDispatchCompute(computeGroupsX, computeGroupsY, 1);
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier

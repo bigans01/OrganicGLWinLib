@@ -9,6 +9,9 @@ void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_
 	window = in_windowRef;
 	programID = in_programID;
 
+	screenWidthUniform = glGetUniformLocation(programID, "screenWidth");
+	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");
+
 	// set up the uniform requests
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
@@ -80,6 +83,8 @@ void DeferredComputeResultsGearT1::drawQuad()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);	// bind back to the default framebuffer
 	glBindVertexArray(quadVaoID);
+	glUniform1i(screenWidthUniform, gearUniformRegistry.getInt("screenWidth"));
+	glUniform1i(screenHeightUniform, gearUniformRegistry.getInt("screenHeight"));
 	glDrawArrays(GL_TRIANGLES, 0, 6);		// draw the quad
 
 	// copy the depth from the deferred FBO that we put the G-buffers into, to the default FBO, but only AFTER we draw the triangles.

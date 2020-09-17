@@ -21,6 +21,9 @@ private:
 	void drawQuad();
 	void setDrawMatrices();
 	GLuint quadVaoID = 0;
+
+	int screenWidthUniform;
+	int screenHeightUniform;
 };
 
 #endif
