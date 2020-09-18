@@ -28,6 +28,7 @@ private:
 	GLuint worldPosUniform;
 	GLuint atlasWidthUniform;
 	GLuint atlasTileWidthUniform;
+	GLuint globalAmbienceMultiplierUniform;
 
 	// shader uniform values
 	//glm::mat4 mv;

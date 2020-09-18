@@ -11,6 +11,7 @@ void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_
 	// get the uniforms; program must have been compiled before this
 	mvpHandle = glGetUniformLocation(programID, "MVP");
 	//textureUniform = glGetUniformLocation(programID, "terrainTexture");
+	globalAmbienceMultiplierUniform = glGetUniformLocation(programID, "globalAmbienceMultiplier");
 	worldPosUniform = glGetUniformLocation(programID, "worldPosition");
 	atlasWidthUniform = glGetUniformLocation(programID, "atlasTextureWidth");
 	atlasTileWidthUniform = glGetUniformLocation(programID, "atlasTileTextureWidth");
@@ -74,6 +75,7 @@ void TerrainLightingComputeGearT1::setMatrices()
 	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosUniform")[0]);
 	glUniform1f(atlasWidthUniform, gearUniformRegistry.getFloat("atlasTextureWidth"));
 	glUniform1f(atlasTileWidthUniform, gearUniformRegistry.getFloat("atlasTileTextureWidth"));
+	glUniform1f(globalAmbienceMultiplierUniform, gearUniformRegistry.getFloat("globalAmbienceMultiplier"));
 }
 
 void TerrainLightingComputeGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
