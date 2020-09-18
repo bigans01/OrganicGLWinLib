@@ -35,6 +35,10 @@ void DeferredLightingComputeGearT1::render()
 	glUniform1i(screenWidthUniform, gearUniformRegistry.getInt("screenWidth"));
 	glUniform1i(screenHeightUniform, gearUniformRegistry.getInt("screenHeight"));
 	glUniform3fv(worldPosUniform, 1, &gearUniformRegistry.getVec3("worldPosition")[0]);
+
+	//glm::vec3 copyPosition = gearUniformRegistry.getVec3("worldPosition");
+	//std::cout << "World position is: " << copyPosition.x << ", " << copyPosition.y << ", " << copyPosition.z << std::endl;
+
 	glDispatchCompute(computeGroupsX, computeGroupsY, 1);
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);		// don't forget the memory barrier
 

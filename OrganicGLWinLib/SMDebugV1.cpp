@@ -74,6 +74,8 @@ void SMDebugV1::runAllShadersAndSwap()
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
+
+	
 }
 
 void SMDebugV1::runAllShadersNoSwap()
@@ -83,6 +85,8 @@ void SMDebugV1::runAllShadersNoSwap()
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
+
+	//std::cout << "Position is: " << position.x << ", " << position.y << ", " << position.z << std::endl;
 }
 
 void SMDebugV1::shutdownGL()
