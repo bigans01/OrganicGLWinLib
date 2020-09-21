@@ -312,7 +312,7 @@ void SMDeferredComputeV1::removeUnusedReplaceables()
 	}
 }
 
-void SMDeferredComputeV1::insertWorldLight(WorldLight in_worldLight)
+void SMDeferredComputeV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
 {
 
 }

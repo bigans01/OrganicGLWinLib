@@ -273,6 +273,8 @@
     <ClInclude Include="TileMeta.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="WorldLight.h" />
+    <ClInclude Include="WorldLightContainer.h" />
+    <ClInclude Include="WorldLightContainerMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
@@ -352,6 +354,7 @@
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
+    <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

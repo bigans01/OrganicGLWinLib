@@ -180,7 +180,7 @@ void SMForwardV1::removeUnusedReplaceables()
 	}
 }
 
-void SMForwardV1::insertWorldLight(WorldLight in_worldLight)
+void SMForwardV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
 {
 
 }

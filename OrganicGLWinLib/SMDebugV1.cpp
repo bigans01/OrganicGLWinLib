@@ -185,7 +185,7 @@ void SMDebugV1::removeUnusedReplaceables()
 	}
 }
 
-void SMDebugV1::insertWorldLight(WorldLight in_worldLight)
+void SMDebugV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
 {
 
 }

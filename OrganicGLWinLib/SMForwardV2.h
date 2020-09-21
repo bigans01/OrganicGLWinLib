@@ -21,7 +21,7 @@ public:
 	void printDataForGears();
 	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
 	void removeUnusedReplaceables();
-	void insertWorldLight(WorldLight in_worldLight);
+	void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight);
 private:
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);

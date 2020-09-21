@@ -32,7 +32,7 @@ public:
 	//void updateMVPinGears();
 	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
 	void removeUnusedReplaceables();
-	void insertWorldLight(WorldLight in_worldLight);
+	void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight);
 private:
 	//std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers
 	//std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.

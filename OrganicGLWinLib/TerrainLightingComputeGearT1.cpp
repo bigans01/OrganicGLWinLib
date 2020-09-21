@@ -119,7 +119,6 @@ void TerrainLightingComputeGearT1::setupTerrainVAO()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)32);	// tile ID in the atlas
 	glEnableVertexAttribArray(3);
-	
 
 	/*
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 7, (void*)0);

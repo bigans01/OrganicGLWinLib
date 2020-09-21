@@ -180,7 +180,7 @@ void SMPrimitiveV1::removeUnusedReplaceables()
 	}
 }
 
-void SMPrimitiveV1::insertWorldLight(WorldLight in_worldLight)
+void SMPrimitiveV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
 {
 
 }

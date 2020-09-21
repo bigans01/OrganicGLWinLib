@@ -13,6 +13,10 @@ class WorldLight
 		float linear = 0;
 		float quadratic = 0;
 		float radius = 0;
+		void updatePosition(glm::vec3 in_position)
+		{
+			position = in_position;
+		}
 };
 
 #endif
