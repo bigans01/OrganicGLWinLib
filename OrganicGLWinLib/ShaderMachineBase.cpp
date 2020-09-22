@@ -117,7 +117,7 @@ void ShaderMachineBase::sendDataToPersistentBuffer(std::string in_bufferName, in
 	glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
 }
 
-void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray)
+void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
 	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
@@ -125,12 +125,24 @@ void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_offse
 	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
 }
 
-void ShaderMachineBase::sendMat4DataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, glm::mat4* in_dataArray)
+void ShaderMachineBase::sendMat4DataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, glm::mat4* in_dataArray)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
 	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
 	//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
 	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+}
+
+void ShaderMachineBase::sendDataToSSBOBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
+	glBufferData(GL_SHADER_STORAGE_BUFFER, in_byteSizeToWrite, in_dataArray, GL_DYNAMIC_COPY);
+}
+
+void ShaderMachineBase::sendDataToSSBOBufferSub(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray)
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);
 }
 
 int ShaderMachineBase::getVaoAttribMode()

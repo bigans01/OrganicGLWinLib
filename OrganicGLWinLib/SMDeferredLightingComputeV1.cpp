@@ -32,8 +32,13 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
 
+
+	// ############################ SSBO for WorldLights set up
+	insertNewBuffer("world_lights_ssbo");
+
+
+
 	// ########################################################################## Terrain Gear (Lighting Compute) set up
-	
 	createProgram("TerrainLightingComputeGearT1");
 	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer

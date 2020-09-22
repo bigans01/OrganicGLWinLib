@@ -28,7 +28,6 @@ class ShaderMachineBase
 public:
 		// virtual functions
 		virtual void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize) = 0;   // STEP 1
-		//virtual void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef) = 0;	// STEP 2
 		virtual void setupTextureAtlases() = 0;	// STEP 2
 		virtual void runAllShadersAndSwap() = 0;
 		virtual void runAllShadersNoSwap() = 0;
@@ -39,20 +38,20 @@ public:
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
 
-		//virtual void 
-		//virtual void updateMVPinGears() = 0;	// called before drawing, and during call of multiDrawTerrain; updates MVP (and other possible uniforms) in each gear.
-
 		void registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
 		void registerDrawElementsInstancedJob(std::string in_instancedJobName, int in_numberOfElements);
 
 		// persistent buffer functions
 		GLuint getPersistentBufferID(std::string in_bufferName);																	// gets the ID of the specified persistent buffer with the value of "in_bufferName"
-		void sendDataToPersistentBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);	// send's data to " " " "
+		void sendDataToPersistentBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);	// send's data to " " " "; uses sub
 
 		// buffer functions
 		GLuint getBufferID(std::string in_bufferName);
-		void sendDataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);
-		void sendMat4DataToBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, glm::mat4* in_dataArray);
+		void sendDataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);						// does a full copy, rebuilding the buffer
+		void sendMat4DataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, glm::mat4* in_dataArray);					// full copy "" 
+		void sendDataToSSBOBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);					// full copy ""
+
+		void sendDataToSSBOBufferSub(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);	// uses sub data, no full copy
 
 		// FBO functions
 		GLuint getFBOID(std::string in_fboName);
