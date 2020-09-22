@@ -27,6 +27,7 @@ private:
 
 	int originalImageUnit1TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
 	int originalImageUnit2TextureID = 0;	// the original texture ID (before swapping occurs) of the first image unit, set by passGLuintValue
+	int worldLightsSSBOBufferID = 0;		// the buffer ID of the WorldLights SSBO
 };
 
 #endif

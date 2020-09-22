@@ -18,6 +18,10 @@ class WorldLightContainer
 		{
 			worldLights[in_lightID].updatePosition(in_position);
 		}
+		int getCombinedWorldLightBytes()		// return the total amount of bytes that this container uses, in regards to the combined byte size of all the world lights.
+		{
+			return (sizeof(WorldLight) * worldLights.size());
+		}
 };
 
 #endif

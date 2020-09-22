@@ -61,6 +61,10 @@ void DeferredLightingComputeGearT1::passGLuintValue(std::string in_identifier, G
 	{
 		originalImageUnit2TextureID = in_gluInt;
 	}
+	else if (in_identifier == "world_lights_ssbo_buffer_ID")
+	{
+		worldLightsSSBOBufferID = in_gluInt;
+	}
 }
 
 void DeferredLightingComputeGearT1::executeGearFunction(std::string in_identifier)

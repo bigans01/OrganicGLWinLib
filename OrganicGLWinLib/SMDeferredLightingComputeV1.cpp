@@ -250,6 +250,7 @@ void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_pro
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
 	gearTrain[in_gearID]->passGLuintValue("original_image_unit_1_texture_ID", getTextureID("computeWrite"));
 	gearTrain[in_gearID]->passGLuintValue("original_image_unit_2_texture_ID", getTextureID("computeRead"));
+	gearTrain[in_gearID]->passGLuintValue("world_lights_ssbo_buffer_ID", getBufferID("world_lights_ssbo"));
 
 	std::cout << "!!! Compute Lights gear (Lighting Compute) inserted. " << std::endl;
 }
