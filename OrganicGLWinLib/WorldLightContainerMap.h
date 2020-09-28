@@ -28,7 +28,7 @@ class WorldLightContainerMap
 			lightMap = containerMap_b.lightMap;						// copy the world light map
 			return *this;
 		}
-		float lightDataSize = 0;			// the size of the lightData array (see below)
+		int lightDataSize = 0;			// the size of the lightData array (see below)
 		std::unique_ptr<float[]> lightData;	// the smart pointer holding light data.
 		std::unordered_map<std::string, WorldLightContainer> lightMap;
 		void insertLightIntoStringedContainer(std::string in_stringContainerName, int in_lightID, WorldLight in_worldLight);

@@ -20,7 +20,7 @@ class WorldLightContainer
 		}
 		int getCombinedWorldLightBytes()		// return the total amount of bytes that this container uses, in regards to the combined byte size of all the world lights.
 		{
-			return (sizeof(WorldLight) * worldLights.size());
+			return int((sizeof(WorldLight) * worldLights.size()));
 		}
 };
 

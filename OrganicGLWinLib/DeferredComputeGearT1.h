@@ -17,6 +17,9 @@ public:
 	void printData();
 
 private:
+
+	int screenWidthUniform;
+	int screenHeightUniform;
 };
 
 

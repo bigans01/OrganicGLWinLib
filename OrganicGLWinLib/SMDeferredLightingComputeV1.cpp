@@ -11,6 +11,9 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	width = resolution.computeScreenWidth;
 	height = resolution.computeScreenHeight;
 
+	std::cout << "#### Width adjusted from: " << in_windowWidth << " to -> " << width << std::endl;
+	std::cout << "#### Height adjusted from: " << in_windowHeight << " to -> " << height << std::endl;
+
 	// set shader specific VAO values
 	vaoAttribMode = 4;
 	vaoAttribByteSize = 40;

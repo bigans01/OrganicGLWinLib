@@ -1029,6 +1029,14 @@ void OrganicGLWinUtils::IMGuiTestText()
 	ImGui::End();
 }
 
+void OrganicGLWinUtils::IMGuiTextButton()
+{
+	if (ImGui::Button("click here"))
+	{
+		std::cout << "Button was clicked! " << std::endl;
+	}
+}
+
 void OrganicGLWinUtils::IMGuiRenderAndDraw()
 {
 	ImGui::Render();

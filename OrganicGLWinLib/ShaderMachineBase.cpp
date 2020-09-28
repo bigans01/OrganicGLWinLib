@@ -164,7 +164,12 @@ void ShaderMachineBase::computeMatricesFromInputs()
 	double xpos, ypos;
 	int isFocused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
 
-	if (isFocused == 1)
+	if 
+	(
+		(isFocused == 1)
+		&&
+		(cameraBoundToMousePointer == true)
+	)
 	{
 		glfwGetCursorPos(window, &xpos, &ypos);
 
@@ -219,6 +224,11 @@ void ShaderMachineBase::computeMatricesFromInputs()
 		// Strafe left
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 			position -= right * deltaTime * speed;
+		}
+		// camera toggling
+		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		{
+			toggleCameraBoundToMousePointer();
 		}
 	}
 }
@@ -502,6 +512,18 @@ void ShaderMachineBase::createComputeProgram(std::string in_programName)
 	programMap[currentSize] = 0;
 	OrganicGLWinUtils::loadComputeShader(&programMap[currentSize], in_programName);
 	programLookup[in_programName] = programMap[currentSize];
+}
+
+void ShaderMachineBase::toggleCameraBoundToMousePointer()
+{
+	if (cameraBoundToMousePointer == true)
+	{
+		cameraBoundToMousePointer = false;
+	}
+	else if (cameraBoundToMousePointer == false)
+	{
+		cameraBoundToMousePointer = true;
+	}
 }
 
 glm::vec3* ShaderMachineBase::getPosition()

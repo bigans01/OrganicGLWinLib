@@ -85,6 +85,7 @@ public:
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context
 	static void IMGuiNewFrame();	// set up the IMGui frame
 	static void IMGuiTestText();	// a text box for testing purposes
+	static void IMGuiTextButton();
 	static void IMGuiRenderAndDraw();	// render and draw (all?) the IMGui stuff
 	static void IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// will prepare data and run imgui calls for displaying world location
 	static void IMGuiPrepBlockLocation(int world_organicLoc[9]);

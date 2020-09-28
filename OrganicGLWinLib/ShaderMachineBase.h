@@ -123,6 +123,9 @@ protected:
 		// buffer sizes
 		int terrainBufferSize = 0;	// set when the ShaderMachine is initialized
 
+		// mouse control 
+		bool cameraBoundToMousePointer = true;	
+
 
 		// for the camera
 		glm::vec3 position = glm::vec3(30, 0, 5);									// Initial position of camera : on +30x, 0y, +5z
@@ -163,6 +166,9 @@ protected:
 		// program creation
 		void createProgram(std::string in_programName);
 		void createComputeProgram(std::string in_programName);
+
+		// control toggling
+		void toggleCameraBoundToMousePointer();
 		
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
