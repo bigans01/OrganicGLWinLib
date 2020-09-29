@@ -35,6 +35,15 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
 
+	// NEW ---> setup IMGui buttons
+	//testButtonPanel.insertNewButton("button1");
+	//testButtonPanel.insertNewButton("button2");
+
+	// create the panel, then add buttons to panel.
+	buttonPanelContainer.insertNewPanel("panel1", 10, 10, 200, 100);
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "button2");
+
 
 	// ############################ SSBO for WorldLights set up
 	insertNewBuffer("world_lights_ssbo");

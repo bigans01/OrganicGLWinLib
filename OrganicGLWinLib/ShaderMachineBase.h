@@ -22,6 +22,9 @@
 #include "TerrainMemoryTracker.h"
 #include "WorldLight.h"
 #include "WorldLightContainerMap.h"
+//#include "ImGuiButtonPanel.h"
+#include "ImGuiButtonPanelContainer.h"
+#include "ImGuiButtonClickResult.h"
 
 class ShaderMachineBase
 {
@@ -84,6 +87,9 @@ public:
 
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
 
+		// imgui button panel testing
+		ImGuiButtonClickResult checkForClickedButtons();
+
 protected:
 		// misc
 		GLFWwindow* window;									// pointer to openGL window
@@ -141,6 +147,10 @@ protected:
 		float speed = 10.0f;															// 3 units / second
 		float mouseSpeed = 0.005f;
 
+		// imgui objects
+		//ImGuiButtonPanel testButtonPanel;
+		IMGuiButtonPanelContainer buttonPanelContainer;
+
 		// gearTrain related functions
 		void runGearTrain();
 		void swapAndPoll();
@@ -174,6 +184,8 @@ protected:
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
 		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);
+
+		
 
 };
 

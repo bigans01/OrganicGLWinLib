@@ -1031,10 +1031,15 @@ void OrganicGLWinUtils::IMGuiTestText()
 
 void OrganicGLWinUtils::IMGuiTextButton()
 {
+	ImGui::SetNextWindowPos(ImVec2(5, 10));
+	ImGui::SetNextWindowSize(ImVec2(100, 60), ImGuiSetCond_FirstUseEver);
+	bool window_val = true;
+	ImGui::Begin("Test Button", &window_val);
 	if (ImGui::Button("click here"))
 	{
 		std::cout << "Button was clicked! " << std::endl;
 	}
+	ImGui::End();
 }
 
 void OrganicGLWinUtils::IMGuiRenderAndDraw()
