@@ -12,7 +12,7 @@ class ImGuiButtonPanelContainer
 {
 	public:
 		std::unordered_map<std::string, ImGuiButtonPanel> panels;
-		void insertNewPanel(std::string in_panelName, int in_xOffset, int in_yOffset, int in_xSize, int in_ySize)
+		void insertNewPanel(std::string in_panelName, float in_xOffset, float in_yOffset, float in_xSize, float in_ySize)
 		{
 			ImGuiButtonPanel newPanel(in_panelName, in_xOffset, in_yOffset, in_xSize, in_ySize);
 			panels[in_panelName] = newPanel;

@@ -419,7 +419,7 @@ void ShaderMachineBase::swapAndPoll()
 
 void ShaderMachineBase::insertNewPersistentBuffer(std::string in_bufferName, int in_size)
 {
-	int currentSize = persistentBufferMap.size();	// get the index we will use
+	int currentSize = int(persistentBufferMap.size());	// get the index we will use
 	persistentBufferMap[currentSize] = 0;			// initialize to 0; but it will get changed.
 	OrganicGLWinUtils::createImmutableBuffer(&persistentBufferMap[currentSize], in_size, 1);	// pass a reference to the GLuint to bind to
 	persistentBufferLookup[in_bufferName] = currentSize;								// insert the lookup value
@@ -428,7 +428,7 @@ void ShaderMachineBase::insertNewPersistentBuffer(std::string in_bufferName, int
 
 void ShaderMachineBase::insertNewFBO(std::string in_fboName)
 {
-	int currentSize = fboMap.size();
+	int currentSize = int(fboMap.size());
 	fboMap[currentSize] = 0;	// initialize to 0; but will be changed in next function call
 	OrganicGLWinUtils::createFBO(&fboMap[currentSize]);	// create the FBO; only creates, doesn't do anything special
 	fboLookup[in_fboName] = currentSize;	// insert the lookup value
@@ -436,7 +436,7 @@ void ShaderMachineBase::insertNewFBO(std::string in_fboName)
 
 void ShaderMachineBase::insertNewBuffer(std::string in_bufferName)
 {
-	int currentSize = bufferMap.size();
+	int currentSize = int(bufferMap.size());
 	bufferMap[currentSize] = 0;
 	OrganicGLWinUtils::createBuffer(&bufferMap[currentSize]);
 	bufferLookup[in_bufferName] = currentSize;
@@ -444,14 +444,14 @@ void ShaderMachineBase::insertNewBuffer(std::string in_bufferName)
 
 void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 {
-	int currentSize = textureMap.size();
+	int currentSize = int(textureMap.size());
 	textureMap[currentSize] = 0;
 	textureLookup[in_textureName] = currentSize;
 }
 
 void ShaderMachineBase::insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
 {
-	int currentSize = atlasMapMap.size();
+	int currentSize = int(atlasMapMap.size());
 	AtlasMap newMap;
 	atlasMapMap[currentSize] = newMap;
 	atlasMapMap[currentSize].buildAtlas(in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
@@ -461,7 +461,7 @@ void ShaderMachineBase::insertAndBuildNewAtlas(std::string in_atlasFolderName, G
 
 void ShaderMachineBase::insertAndBuildNewAtlasToSpecifiedTextureChannel(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
 {
-	int currentSize = atlasMapMap.size();
+	int currentSize = int(atlasMapMap.size());
 	AtlasMap newMap;
 	atlasMapMap[currentSize] = newMap;
 	atlasMapMap[currentSize].buildAtlasOnTextureUnit(in_texUnit, in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
@@ -471,7 +471,7 @@ void ShaderMachineBase::insertAndBuildNewAtlasToSpecifiedTextureChannel(GLenum i
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
-	int currentSize = multiDrawArrayJobMap.size();
+	int currentSize = int(multiDrawArrayJobMap.size());
 	int targetKeyValue = currentSize;
 
 
@@ -492,7 +492,7 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMul
 
 void ShaderMachineBase::insertNewDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
 {
-	int currentSize = drawElementsInstancedJobMap.size();
+	int currentSize = int(drawElementsInstancedJobMap.size());
 	int targetKeyValue = currentSize;
 
 	auto doesJobExist = drawElementsInstancedJobLookup.find(in_jobName);
@@ -510,7 +510,7 @@ void ShaderMachineBase::insertNewDrawElementsInstancedJob(std::string in_jobName
 
 void ShaderMachineBase::createProgram(std::string in_programName)
 {
-	int currentSize = programMap.size();
+	int currentSize = int(programMap.size());
 	programMap[currentSize] = 0;
 	OrganicGLWinUtils::loadShadersViaMode(&programMap[currentSize], in_programName);
 	programLookup[in_programName] = programMap[currentSize];
@@ -518,7 +518,7 @@ void ShaderMachineBase::createProgram(std::string in_programName)
 
 void ShaderMachineBase::createComputeProgram(std::string in_programName)
 {
-	int currentSize = programMap.size();
+	int currentSize = int(programMap.size());
 	programMap[currentSize] = 0;
 	OrganicGLWinUtils::loadComputeShader(&programMap[currentSize], in_programName);
 	programLookup[in_programName] = programMap[currentSize];

@@ -193,7 +193,7 @@ void SMDeferredComputeV1::updateUniformRegistry()
 void SMDeferredComputeV1::setupDeferredFBO()
 {
 	// set up the deferred FBO
-	GLuint depthBuf, posTex, colorTex;
+	GLuint depthBuf;
 	depthBuf = 0;
 	insertNewTexture("depthBuf");
 	insertNewTexture("posTex");
