@@ -8,7 +8,7 @@
 #include "ImGuiButtonPanel.h"
 #include "ImGuiButtonClickResult.h"
 
-class IMGuiButtonPanelContainer
+class ImGuiButtonPanelContainer
 {
 	public:
 		std::unordered_map<std::string, ImGuiButtonPanel> panels;

@@ -44,6 +44,10 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button2");
 
+	//testPanel.insertNewSliderFloat("slider1", &globalAmbienceMultiplier, 0.0f, 1.0f);
+	sliderPanelContainer.insertNewPanel("adjustable uniforms", 10, 120, 200, 100);
+	sliderPanelContainer.insertSliderFloatIntoPanel("adjustable uniforms", "world light", &globalAmbienceMultiplier, 0.0f, 1.0f);
+
 
 	// ############################ SSBO for WorldLights set up
 	insertNewBuffer("world_lights_ssbo");
@@ -322,7 +326,7 @@ void SMDeferredLightingComputeV1::updateUniformRegistry()
 	uniformRegistry.insertInt("screenHeight", height);
 
 	// global ambience mutliplier
-	globalAmbienceMultiplier = 1.0f;
+	//globalAmbienceMultiplier = 1.0f;
 	uniformRegistry.insertFloat("globalAmbienceMultiplier", globalAmbienceMultiplier);
 
 	// update the MVP; model is not needed here, as terrain is already translated to world space.

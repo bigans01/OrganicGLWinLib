@@ -375,6 +375,15 @@
     <ClInclude Include="ImGuiButtonPanelContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiSliderFloat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSliderFloatPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSliderFloatPanelContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

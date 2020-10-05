@@ -105,8 +105,12 @@ GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::s
 
 ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
 {
-	//return testButtonPanel.getClickResult();
 	return buttonPanelContainer.checkAllPanelsForClickResults();
+}
+
+void ShaderMachineBase::renderSliders()
+{
+	sliderPanelContainer.runAllSliders();
 }
 
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)

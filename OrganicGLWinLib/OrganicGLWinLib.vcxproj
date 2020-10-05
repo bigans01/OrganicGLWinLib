@@ -183,6 +183,9 @@
     <ClInclude Include="ImGuiButtonClickResult.h" />
     <ClInclude Include="ImGuiButtonPanel.h" />
     <ClInclude Include="ImGuiButtonPanelContainer.h" />
+    <ClInclude Include="ImGuiSliderFloat.h" />
+    <ClInclude Include="ImGuiSliderFloatPanel.h" />
+    <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectionLine.h" />
