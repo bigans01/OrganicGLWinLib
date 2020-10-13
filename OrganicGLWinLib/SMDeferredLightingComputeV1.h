@@ -53,6 +53,7 @@ private:
 	void updateUniformRegistry();
 
 	float globalAmbienceMultiplier = 1.0f; // global ambience multiplier; used in DeferredLightingComputeLightContributionsT1
+
 };
 
 #endif

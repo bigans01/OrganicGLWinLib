@@ -92,6 +92,8 @@ public:
 		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
 		void renderSliders();								// will render single float interactable sliders
 
+		// set direction
+		void setDirection(float in_x, float in_y, float in_z);
 
 protected:
 		// misc
@@ -129,6 +131,8 @@ protected:
 		double currentTime;
 		float deltaTime;
 
+		bool wasFocusedPreviousFrame = false;
+
 		// buffer sizes
 		int terrainBufferSize = 0;	// set when the ShaderMachine is initialized
 
@@ -144,7 +148,13 @@ protected:
 		glm::mat4 view;																// (temporary) OpenGL view matrix
 		glm::mat4 model;															// (temporary) OpenGL model matrix
 		glm::mat4 MVP;
-		float horizontalAngle = 3.14f;												// Initial horizontal angle : toward -Z
+
+		//float horizontalAngle = 0.0f;												// Initial horizontal angle : toward -Z
+		//float horizontalAngle = 3.14f * .75f;												// Initial horizontal angle : toward -Z
+		float horizontalAngle = (3.14f * .75f) + 3.14f;
+																					// 3.14 = 0,0, 1
+																					// 3.14 * .75f = .7, 0, -.7
+																					// (3.14 * .75) + 3.14 = 
 		float verticalAngle = 0.0f;													// Initial vertical angle : none
 		float initialFoV = 45.0f;													// Initial Field of view
 		float speed = 10.0f;															// 3 units / second
@@ -182,12 +192,27 @@ protected:
 
 		// control toggling
 		void toggleCameraBoundToMousePointer();
+
+		// set direction
+		//void setDirection(float in_x, float in_y, float in_z);
 		
 		GLuint* getTextureRef(std::string in_textureName);
 		GLMultiDrawArrayJob* getMultiDrawArrayJobRef(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
 		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);
 
+		// test, call back function.
+		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		/*
+		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+			{
+				toggleCameraBoundToMousePointer();
+			}
+		}
+		*/
 
 
 		

@@ -32,6 +32,11 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
+
+	// set keyboard input callback function.
+	glfwSetWindowUserPointer(window, this);	// testing only.
+	glfwSetKeyCallback(window, keyCallBackWrapper);
+
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
 

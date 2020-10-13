@@ -166,6 +166,7 @@ int ShaderMachineBase::getVaoAttribByteSize()
 
 void ShaderMachineBase::computeMatricesFromInputs()
 {
+
 	// Compute time difference between current and last frame
 	currentTime = glfwGetTime();
 	deltaTime = float(currentTime - lastTime);
@@ -173,6 +174,28 @@ void ShaderMachineBase::computeMatricesFromInputs()
 	// Get mouse position
 	double xpos, ypos;
 	int isFocused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
+
+	// always set wasFocusedPreviousFrame to false if it isn't focused.
+	if (isFocused == 0)
+	{
+		wasFocusedPreviousFrame = false;
+	}
+
+
+	// do this check when the gets re-focused; i.e., the user clicks the window.
+	if
+	(
+		(isFocused == 1)
+		&&
+		(wasFocusedPreviousFrame == false)
+		//&&
+		//(cameraBoundToMousePointer == true)
+	)
+	{
+		glfwSetCursorPos(window, width / 2, height / 2);
+		wasFocusedPreviousFrame = true;
+		cameraBoundToMousePointer = true;
+	}
 
 	if 
 	(
@@ -205,7 +228,10 @@ void ShaderMachineBase::computeMatricesFromInputs()
 		);
 	}
 
-	//std::cout << "Direction vector: " << direction.x << ", " << direction.y << ", " << direction.z << endl;
+	int someVal = 3;
+	std::cout << "Direction vector: " << direction.x << ", " << direction.y << ", " << direction.z << std::endl;
+	std::cout << "Horizontal angle: " << horizontalAngle << std::endl;
+	std::cout << "Vertical angle: " << verticalAngle << std::endl;
 
 	// Right vector
 	glm::vec3 right = glm::vec3(
@@ -219,6 +245,8 @@ void ShaderMachineBase::computeMatricesFromInputs()
 
 	if (isFocused == 1)
 	{
+		
+
 		// Move forward
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 			position += direction * deltaTime * speed;
@@ -235,13 +263,28 @@ void ShaderMachineBase::computeMatricesFromInputs()
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 			position -= right * deltaTime * speed;
 		}
+
 		// camera toggling
-		if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-		{
-			toggleCameraBoundToMousePointer();
-		}
+		//if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		//{
+			//toggleCameraBoundToMousePointer();
+		//}
 	}
 }
+
+void ShaderMachineBase::keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->key_callback(window, key, scancode, action, mods);
+}
+
+void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+	{
+		toggleCameraBoundToMousePointer();
+	}
+}
+
 
 void ShaderMachineBase::updateMatricesAndDelta()
 {
@@ -532,8 +575,35 @@ void ShaderMachineBase::toggleCameraBoundToMousePointer()
 	}
 	else if (cameraBoundToMousePointer == false)
 	{
+		glfwSetCursorPos(window, width / 2, height / 2); // when setting back to true, set the cursor to center of the screen.
 		cameraBoundToMousePointer = true;
 	}
+}
+
+void ShaderMachineBase::setDirection(float in_x, float in_y, float in_z)
+{
+	direction.x = in_x;
+	direction.y = in_y;
+	direction.z = in_z;
+
+	glm::vec3 directionVec3(in_x, in_y, in_z);
+	glm::vec3 dirNormalized = glm::normalize(directionVec3);
+
+	const float doublePi = 3.14 * 2;
+
+	// set horizontal angle -- first value is x, second is z.
+	float horizontalSet = atan2(dirNormalized.x, dirNormalized.z);
+	//float horizontalSet = atan2(dirNormalized.z, dirNormalized.x);
+	//horizontalAngle = doublePi - horizontalSet;
+	horizontalAngle = horizontalSet;
+
+	// set vertical angle -- first value is y, second is z.
+	float verticalSet = atan2(dirNormalized.y, dirNormalized.z);
+	//float verticalSet = atan2(dirNormalized.z, dirNormalized.y);
+	//verticalAngle = doublePi - verticalSet;
+	verticalAngle = verticalSet;
+
+
 }
 
 glm::vec3* ShaderMachineBase::getPosition()

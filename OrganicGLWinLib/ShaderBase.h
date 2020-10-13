@@ -32,7 +32,7 @@ class ShaderBase
 		glm::mat4 view;																// (temporary) OpenGL view matrix
 		glm::mat4 model;															// (temporary) OpenGL model matrix
 		glm::mat4 MVP;
-		float horizontalAngle = 3.14f;												// Initial horizontal angle : toward -Z
+		float horizontalAngle = 0.0f;												// Initial horizontal angle : toward -Z
 		float verticalAngle = 0.0f;													// Initial vertical angle : none
 		float initialFoV = 45.0f;													// Initial Field of view
 		float speed = 10.0f;															// 3 units / second
