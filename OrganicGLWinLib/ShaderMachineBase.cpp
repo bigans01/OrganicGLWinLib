@@ -229,9 +229,9 @@ void ShaderMachineBase::computeMatricesFromInputs()
 	}
 
 	int someVal = 3;
-	std::cout << "Direction vector: " << direction.x << ", " << direction.y << ", " << direction.z << std::endl;
-	std::cout << "Horizontal angle: " << horizontalAngle << std::endl;
-	std::cout << "Vertical angle: " << verticalAngle << std::endl;
+	//std::cout << "Direction vector: " << direction.x << ", " << direction.y << ", " << direction.z << std::endl;
+	//std::cout << "Horizontal angle: " << horizontalAngle << std::endl;
+	//std::cout << "Vertical angle: " << verticalAngle << std::endl;
 
 	// Right vector
 	glm::vec3 right = glm::vec3(

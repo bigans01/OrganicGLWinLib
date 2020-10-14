@@ -150,7 +150,7 @@ protected:
 		glm::mat4 MVP;
 
 		//float horizontalAngle = 0.0f;												// Initial horizontal angle : toward -Z
-		//float horizontalAngle = 3.14f * .75f;												// Initial horizontal angle : toward -Z
+		//float horizontalAngle = 3.14f * .75f;										// Initial horizontal angle : toward -Z
 		float horizontalAngle = (3.14f * .75f) + 3.14f;
 																					// 3.14 = 0,0, 1
 																					// 3.14 * .75f = .7, 0, -.7
@@ -204,19 +204,6 @@ protected:
 		// test, call back function.
 		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		/*
-		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
-			{
-				toggleCameraBoundToMousePointer();
-			}
-		}
-		*/
-
-
-		
-
 };
 
 #endif;
