@@ -31,7 +31,7 @@ public:
 	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
 	glm::vec3 primePoint0, primePoint1, primePoint2;	// the very first points of the polygon
 	glm::vec3 polyEmptyNormal;		// the polygon's empty normal, which indicates the side of the triangle that contains "empty" space
-	glm::vec3 planarVector;			// a vector that lies on the plane of the triangle, but goes towards the center of the triangle, and is perpendicular to this line
+	//glm::vec3 planarVector;			// a vector that lies on the plane of the triangle, but goes towards the center of the triangle, and is perpendicular to this line
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
 
 	CleaveSequenceFactory sequenceFactory;

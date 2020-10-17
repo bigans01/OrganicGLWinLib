@@ -180,6 +180,34 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 		centroidPointCopy += translationValue;
 	}
 
+	// at this point, point A and B of line and the centroid itself should be translated, with point A at 0,0,0. So get the midpoint between A and B, 
+	// which is equal to point B / 2.
+
+
+	if (debugFlag == 1)
+	{
+		std::cout << "Post-translate (1) point A: " << pointACopy.x << ", " << pointACopy.y << ", " << pointACopy.z << ", " << std::endl;
+		std::cout << "Post-translate (1) point B: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << ", " << std::endl;
+		std::cout << "Centroid point (2) : " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
+	}
+	glm::vec3 lineMidPoint = pointBCopy;						
+	lineMidPoint /= 2;									
+
+	if (debugFlag == 1)
+	{
+		//std::cout << "#### line midpoint is " << pointBCopy.x << 
+	}
+
+	glm::vec3 translationValueForMidPoint = lineMidPoint *= -1;	// translation would be the inverse of the midpoint
+
+	pointACopy += translationValueForMidPoint;
+	pointBCopy += translationValueForMidPoint;
+	centroidPointCopy += translationValueForMidPoint;
+
+	// the planar vector should now equal whatever value the centroid is at.
+	in_borderLineRef->planarVector = centroidPointCopy;
+
+	/*
 	// now, rotate the line and the centroid point, if the line's points aren't on the same Y.
 	if (pointACopy.y != pointBCopy.y)
 	{
@@ -200,10 +228,19 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 			in_borderLineRef->planarVector.y = -1.0f;
 		}
 	}
+	*/
+
+
 	if (debugFlag == 1)
 	{
+		std::cout << "Post-translate point A: " << pointACopy.x << ", " << pointACopy.y << ", " << pointACopy.z << ", " << std::endl;
+		std::cout << "Post-translate point B: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << ", " << std::endl;
+		std::cout << "Post-translate Centroid point: " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
+
 		std::cout << "!!! Final calculated planar vector is: " << in_borderLineRef->planarVector.x << ", " << in_borderLineRef->planarVector.y << ", " << in_borderLineRef->planarVector.z << std::endl;
 	}
+
+
 	//std::cout << std::endl;
 }
 
