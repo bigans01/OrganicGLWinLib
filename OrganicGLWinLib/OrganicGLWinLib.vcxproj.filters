@@ -384,6 +384,15 @@
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LineWelder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIDPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassManipulationMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -603,6 +612,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WorldLightContainerMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineWelder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

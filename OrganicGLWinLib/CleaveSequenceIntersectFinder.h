@@ -7,6 +7,7 @@
 #include "BorderLineCycler.h"
 #include "CleaveSequence.h"
 #include <chrono>
+#include "LineWelder.h"
 
 class CleaveSequenceIntersectFinder
 {

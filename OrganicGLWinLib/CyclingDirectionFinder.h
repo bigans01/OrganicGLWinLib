@@ -9,11 +9,12 @@
 #include "QuatRotationManager.h"
 #include "PointTranslationCheck.h"
 #include "CyclingDirection.h"
+#include "MassManipulationMode.h"
 
 class CyclingDirectionFinder
 {
 public:
-	CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy);
+	CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode);
 
 
 	glm::vec3 borderLinePointA;

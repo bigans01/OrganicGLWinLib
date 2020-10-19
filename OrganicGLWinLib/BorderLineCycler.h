@@ -10,6 +10,7 @@
 #include "CyclingDirection.h"
 #include "BorderLineCycle.h"
 #include <chrono>
+#include "MassManipulationMode.h"
 
 class BorderLineCycler
 {
@@ -19,7 +20,7 @@ class BorderLineCycler
 		BorderLineCycle lineCycle;
 		SPoly* sPolyRef;
 		CyclingDirection direction = CyclingDirection::FORWARD;		// default is forward
-		void findCyclingDirection(SPolyBorderLines* in_borderLineRef, int in_borderLineIndex, CategorizedLine* in_categorizedLineRef);
+		void findCyclingDirection(SPolyBorderLines* in_borderLineRef, int in_borderLineIndex, CategorizedLine* in_categorizedLineRef, MassManipulationMode in_massManipulationMode);
 		void buildCycle(SPoly* in_sPolyRef, int in_borderLineStartIndex, int in_borderLineEndIndex);
 };
 

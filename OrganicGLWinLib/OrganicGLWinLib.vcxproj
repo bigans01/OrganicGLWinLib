@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="BorderLineCycle.h" />
     <ClInclude Include="BorderLineCycler.h" />
+    <ClInclude Include="BorderLineIDPair.h" />
     <ClInclude Include="BorderLineIntersectRecord.h" />
     <ClInclude Include="BorderLineIntersectRecorder.h" />
     <ClInclude Include="BorderLineIntersectRecordType.h" />
@@ -195,6 +196,8 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
+    <ClInclude Include="LineWelder.h" />
+    <ClInclude Include="MassManipulationMode.h" />
     <ClInclude Include="PointTranslationCheck.h" />
     <ClInclude Include="QuatRotationManager.h" />
     <ClInclude Include="QuatRotationPoints.h" />
@@ -315,6 +318,7 @@
     <ClCompile Include="IntersectionLine.cpp" />
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
+    <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />

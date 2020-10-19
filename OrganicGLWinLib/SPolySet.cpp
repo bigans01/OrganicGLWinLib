@@ -719,6 +719,10 @@ void SPolySet::performFracturing()
 			//std::cout << "!!! Waiting for dumb input..." << std::endl;
 			//std::cin >> dumbVal;
 		}
+		else if (secondaryPolys[x].cleaveMap.size() == 0)
+		{
+			std::cout << "!! No cleaveMaps found for this SPoly! " << std::endl;
+		}
 
 	}
 

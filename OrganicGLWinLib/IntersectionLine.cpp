@@ -96,6 +96,12 @@ int IntersectionLine::getBorderLineIDFromSingularBorderLineCount()
 	return result;
 }
 
+BorderLineIDPair IntersectionLine::getBorderLineIDPair()
+{
+	BorderLineIDPair pair(pointABorder, pointBBorder);
+	return pair;
+}
+
 glm::vec3 IntersectionLine::getBorderPointFromSingularBorderLineCount()
 {
 	glm::vec3 borderPoint;

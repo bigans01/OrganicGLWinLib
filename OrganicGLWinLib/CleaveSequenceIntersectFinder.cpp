@@ -18,6 +18,9 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 		//std::cout << "#-> (Intercept records ) record load Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 		
+		LineWelder welder(in_sPolyRef);
+
+		/*
 		auto cleaveBegin = in_sPolyRef->cleaveMap.begin();
 
 		// strange, false positive error with cleavingLines below (5/16/2020)
@@ -49,7 +52,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 			//std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 			//std::cout << "#-> (Build Cycle ) buildCycle call function Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 		}
-		
+		*/
 	}
 	
 }

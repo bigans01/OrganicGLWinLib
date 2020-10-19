@@ -16,6 +16,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <map>
+#include "MassManipulationMode.h"
 
 class SPoly
 {
@@ -33,6 +34,7 @@ public:
 	glm::vec3 polyEmptyNormal;		// the polygon's empty normal, which indicates the side of the triangle that contains "empty" space
 	//glm::vec3 planarVector;			// a vector that lies on the plane of the triangle, but goes towards the center of the triangle, and is perpendicular to this line
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
+	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
 
 	CleaveSequenceFactory sequenceFactory;
 	std::map<int, CategorizedLine> categorizedLineMap;
