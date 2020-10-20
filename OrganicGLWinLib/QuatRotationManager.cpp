@@ -50,6 +50,13 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 		rotationOrder.push_back(rotateType);
 	}
 
+	// now, check if the 3rd primal point is also on Z. if it is not, we need to rotate around X.
+	if (pointCRef->z != 0.0f)
+	{
+		//QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
+		//rotationOrder.push_back(rotateType);
+	}
+
 	executeRotationsForZFracture();
 }
 
@@ -217,12 +224,12 @@ void QuatRotationManager::executeRotationsForZFracture()
 		}
 	}
 
-	// only rotate around X if these two conditions aren't met (same z, and pointCRef->y veering towards positive1)... otherwise, its where we want it to be, which is all points having same Z --AND-- pointCRef veers towards positive 1
+	// only rotate around X if point C's z is not the same as point A's z.... otherwise, its where we want it to be, which is all points having same Z --AND-- pointCRef veers towards positive 1
 	if 
 	(
 		(pointCRef->z != pointARef->z)		// must be on same Z coordinate
-		&&									// --AND--
-		(pointCRef->y > 0)					// y for the third point must be positive
+		//&&									// --AND--
+		//(pointCRef->y > 0)					// y for the third point must be positive
 	)
 	{
 		if (debugFlag == 1)

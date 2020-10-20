@@ -15,9 +15,9 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 
 		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[0];
 
-		std::cout << "#--- Printing out begin and end points of first border line:" << std::endl; 
-		std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
-		std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
+		//std::cout << "#--- Printing out begin and end points of first border line:" << std::endl; 
+		//std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
+		//std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
 
 		auto truestart = std::chrono::high_resolution_clock::now();
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
@@ -28,6 +28,10 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::cout << "#--- Printing out begin and end points of first border line (pre-LineWelder):" << std::endl;
 		std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
 		std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
+
+		std::cout << "#--- Printing out begin and end points of second border line (pre-LineWelder):" << std::endl;
+		std::cout << "Point A: " << sPolyRef->borderLines[1].pointA.x << ", " << sPolyRef->borderLines[1].pointA.y << ", " << sPolyRef->borderLines[1].pointA.z << std::endl;
+		std::cout << "Point B: " << sPolyRef->borderLines[1].pointB.x << ", " << sPolyRef->borderLines[1].pointB.y << ", " << sPolyRef->borderLines[1].pointB.z << std::endl;
 
 		LineWelder welder(in_sPolyRef);
 

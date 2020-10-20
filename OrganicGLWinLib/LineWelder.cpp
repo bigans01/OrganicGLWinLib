@@ -37,10 +37,13 @@ void LineWelder::startWelding()
 
 	// Step 2: find the direction to cycle towards for the currentBorderLineID; i.e., do we start the cycling in the direction of point A or point B of this border line?
 	// Remember, if the MassManipulationMode is DESTRUCTION, we must invert the empty normal of the CategorizedLine we are using to find the direction.
+	// Also remember, we are going to use COPIES of the border lines and sequences, not the actual refs, when we need to find the CyclingDirection. (may need to change function parameters for this)
 	BorderLineCycler lineCycler(sPolyRef);
 	lineCycler.findCyclingDirection(&sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, &sequenceBegin->second, sPolyRef->massManipulationSetting);
 	findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, lineCycler.direction, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
 																										   // the ID of the CategorizedLine in the CleaveSequence, the direction
+
+	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
 }
 
 void LineWelder::findWeldingLines(int in_startingBorderLine, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair)
