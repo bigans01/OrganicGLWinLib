@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BorderLineCycler.h"
 
-void BorderLineCycler::findCyclingDirection(SPolyBorderLines* in_borderLineRef, int in_borderLineIndex, CategorizedLine* in_categorizedLineRef, MassManipulationMode in_massManipulationMode)
+CyclingDirection BorderLineCycler::findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode)
 {
 	//std::cout << "#- Cycling Direction    > Finding cycling direction for \"Z-Planar\" border line, by checking the first line in the first CleaveSequence..." << std::endl;
 	//std::cout << "#- Cycling Direction    > Referenced border line points, prior to empty normal re-orientation: point A " << in_borderLineRef->pointA.x << ", " << in_borderLineRef->pointA.y << ", " << in_borderLineRef->pointA.z
@@ -13,13 +13,14 @@ void BorderLineCycler::findCyclingDirection(SPolyBorderLines* in_borderLineRef, 
 
 	// find the cycling direction,
 	//auto truestart = std::chrono::high_resolution_clock::now();
-	CyclingDirectionFinder cycleFinder(*in_borderLineRef, *in_categorizedLineRef, in_massManipulationMode);
+	CyclingDirectionFinder cycleFinder(in_borderLineCopy, in_categorizedLineCopy, in_massManipulationMode);
 
 	//auto trueend = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 	//std::cout << "#-> (CyclingDirectionFinder) constructor Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 
 	direction = cycleFinder.foundDirection;	// store the direction
+	return direction;
 }
 
 void BorderLineCycler::buildCycle(SPoly* in_sPolyRef, int in_borderLineStartIndex, int in_borderLineEndIndex)

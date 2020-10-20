@@ -6,6 +6,12 @@ SPoly::SPoly()
 
 };
 
+void SPoly::setEmptyNormal(float in_x, float in_y, float in_z)
+{
+	glm::vec3 rawEmptyNormal(in_x, in_y, in_z);
+	polyEmptyNormal = glm::normalize(rawEmptyNormal);
+}
+
 void SPoly::determinePrimalPoints()
 {
 	primePoint0 = triangles[0].triangleLines[0].pointA;

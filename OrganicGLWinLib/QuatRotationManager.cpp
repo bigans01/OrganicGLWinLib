@@ -50,13 +50,6 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 		rotationOrder.push_back(rotateType);
 	}
 
-	// now, check if the 3rd primal point is also on Z. if it is not, we need to rotate around X.
-	if (pointCRef->z != 0.0f)
-	{
-		//QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
-		//rotationOrder.push_back(rotateType);
-	}
-
 	executeRotationsForZFracture();
 }
 
@@ -156,9 +149,9 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	float normalizedBorderLinePointBY = borderLinePointBRef->y / abs(borderLinePointBRef->y);
 	float normalizedEmptyNormalY = categorizedLineEmptyNormal->y / abs(categorizedLineEmptyNormal->y);
 
-	//std::cout << "|| Value of normalizedEmptyNormalY: " << normalizedEmptyNormalY << std::endl;
-	//std::cout << "|| Normalized point A Y: " << normalizedBorderLinePointAY << std::endl;
-	//std::cout << "|| Normalized point B Y: " << normalizedBorderLinePointBY << std::endl;
+	std::cout << "|| Value of normalizedEmptyNormalY: " << normalizedEmptyNormalY << std::endl;
+	std::cout << "|| Normalized point A Y: " << normalizedBorderLinePointAY << std::endl;
+	std::cout << "|| Normalized point B Y: " << normalizedBorderLinePointBY << std::endl;
 
 	if (normalizedEmptyNormalY == normalizedBorderLinePointAY)
 	{

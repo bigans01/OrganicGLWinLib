@@ -39,19 +39,21 @@ void LineWelder::startWelding()
 	// Remember, if the MassManipulationMode is DESTRUCTION, we must invert the empty normal of the CategorizedLine we are using to find the direction.
 	// Also remember, we are going to use COPIES of the border lines and sequences, not the actual refs, when we need to find the CyclingDirection. (may need to change function parameters for this)
 	BorderLineCycler lineCycler(sPolyRef);
-	lineCycler.findCyclingDirection(&sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, &sequenceBegin->second, sPolyRef->massManipulationSetting);
-	findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, lineCycler.direction, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
+
+	// send copies of the border line, and the corresponding categorized line in the CleaveMap that intercepted the border line, to find the direction.
+	CyclingDirection foundDirection = lineCycler.findCyclingDirection(sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, sequenceBegin->second, sPolyRef->massManipulationSetting);
+	findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, foundDirection, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
 																										   // the ID of the CategorizedLine in the CleaveSequence, the direction
 
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
 }
 
-void LineWelder::findWeldingLines(int in_startingBorderLine, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair)
+void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair)
 {
-	// get a ref to the intersect recorder in our starting border line.
-	BorderLineIntersectRecorder* intersectRecorderRef = &sPolyRef->borderLines[in_startingBorderLine].intersectRecorder;
-
 	// the point we start welding from, is equal to point A of the passed in parameter, in_beginningPointPair.
 	glm::vec3 weldingStartPoint = in_beginningPointPair.pointA;
 	std::cout << "Welding start point is: " << weldingStartPoint.x << ", " << weldingStartPoint.y << ", " << weldingStartPoint.z << std::endl;
+
+	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_startingBorderLineID, &sPolyRef->borderLines[in_startingBorderLineID], in_cyclingDirection);
 }

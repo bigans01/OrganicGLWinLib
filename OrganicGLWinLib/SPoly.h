@@ -42,6 +42,7 @@ public:
 	int currentCleaveIndex = 0;	// the index of the current cleave to work on
 	InterceptRegister intercepts; // the interceptRegister instance for this SPoly
 
+	void setEmptyNormal(float in_x, float in_y, float in_z);
 	void determinePrimalPoints();
 	void determineBorderLines();
 	void buildCleaveSequences();

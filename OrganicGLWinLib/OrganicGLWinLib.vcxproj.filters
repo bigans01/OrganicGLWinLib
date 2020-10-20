@@ -396,6 +396,9 @@
     <ClInclude Include="BorderLinePointPair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NeighboringCleaveSequenceFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -618,6 +621,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LineWelder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NeighboringCleaveSequenceFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
