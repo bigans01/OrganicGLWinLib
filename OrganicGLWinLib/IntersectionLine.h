@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "IntersectionResult.h"
 #include "BorderLineIDPair.h"
+#include "BorderLinePointPair.h"
 #include <iostream>
 
 class IntersectionLine
@@ -31,6 +32,8 @@ public:
 
 	int getBorderLineIDFromSingularBorderLineCount();
 	BorderLineIDPair getBorderLineIDPair();
+	BorderLinePointPair getBorderLinePointPair();
+	
 
 	glm::vec3 getBorderPointFromSingularBorderLineCount();
 	glm::vec3 getNonBorderPointFromSingularBorderLineCount();

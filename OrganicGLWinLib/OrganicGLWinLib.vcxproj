@@ -165,6 +165,7 @@
     <ClInclude Include="BorderLineIntersectRecord.h" />
     <ClInclude Include="BorderLineIntersectRecorder.h" />
     <ClInclude Include="BorderLineIntersectRecordType.h" />
+    <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />

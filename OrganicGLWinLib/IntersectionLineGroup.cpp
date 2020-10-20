@@ -16,6 +16,10 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	//std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
 	//std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
 
+	//std::cout << "! Line 0 is: " << std::endl;
+	//std::cout << "## Point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+	//std::cout << "## Point B: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
+
 	// CASE 1: check for "A_SLICE" or "B_SLICE" types
 	if
 		(
@@ -90,6 +94,10 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		//std::cout << "( " << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << ") " << std::endl;
 		//std::cout << "!!#!! border is: " << returnLine.pointABorder << std::endl;
 	}
+
+	//std::cout << "#### Return line stats ---> " << std::endl;
+	//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
+	//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
 
 	return returnLine;
 }

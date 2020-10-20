@@ -60,6 +60,13 @@ void SPolySet::runPolyComparison()
 	}
 	*/
 
+	//std::cout << "########### Poly comparison, checking line 2 of second STriangle in second SPoly: " << std::endl;
+	//std::cout << secondaryPolys[1].triangles[1].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointA.z << std::endl;
+	//std::cout << secondaryPolys[1].triangles[1].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointB.z << std::endl;
+
+	//int someval = 3;
+	//std::cin >> someval;
+
 	int compCount2 = numberOfPolys;
 	for (int x = 0; x < compCount2; x++)
 	{
@@ -76,6 +83,11 @@ void SPolySet::runPolyComparison()
 					//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
 					//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
 
+					//std::cout << "##### Current index is: " << currentIndex << std::endl;
+					//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
+					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
+					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
+
 					checkForIntersections(polyA, x, polyB, currentIndex);		// PHASE 1
 				}
 			}
@@ -88,6 +100,13 @@ void SPolySet::runPolyComparison()
 		int someVal = 3;
 		std::cin >> someVal;
 	}
+
+	//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (2) " << std::endl;
+	//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
+	//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
+
+	//someval = 3;
+	//std::cin >> someval;
 }
 
 int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* in_polyBPtr, int in_polyBID)
@@ -100,12 +119,19 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 	//std::cout << "polyA count: " << polyATertiaryCount << std::endl;
 	//std::cout << "polyB count: " << polyBTertiaryCount << std::endl;
 
-	//std::cout << ">>> A lines are: " << std::endl;
+	//std::cout << "########################## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ >>> A lines are: " << std::endl;
 	//std::cout << "0: " << in_polyAPtr->triangles[0].triangleLines[0].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[0].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointB.z << std::endl;
 	//std::cout << "1: " << in_polyAPtr->triangles[0].triangleLines[1].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[1].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.z << std::endl;
 	//std::cout << "2: " << in_polyAPtr->triangles[0].triangleLines[2].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[2].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.z << std::endl;
 
+	STriangle* tempBTrianglePtr = &in_polyBPtr->triangles[1];
+	//std::cout << "2, point A: " << tempBTrianglePtr->triangleLines[2].pointA.x << ", " << tempBTrianglePtr->triangleLines[2].pointA.y << ", " << tempBTrianglePtr->triangleLines[2].pointA.z << std::endl;
+	//std::cout << "2, point B: " << tempBTrianglePtr->triangleLines[2].pointB.x << ", " << tempBTrianglePtr->triangleLines[2].pointB.y << ", " << tempBTrianglePtr->triangleLines[2].pointB.z << std::endl;
 
+
+	//int someVal = 3;
+	//std::cout << "temp halt, enter integer. " << std::endl;
+	//std::cin >> someVal;
 
 	for (int x = 0; x < polyATertiaryCount; x++)					// compare each of poly A's tertiaries...
 	{
@@ -124,7 +150,13 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 
 			// STEP 1
 			STriangle* polyBTrianglePtr = &in_polyBPtr->triangles[y]; // get the triangle of B
-			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing A to B " << std::endl;
+			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of A to triangle of B " << std::endl;
+			//std::cout << ">>> B triangle points are: " << std::endl;
+			//std::cout << "0: " << polyBTrianglePtr->triangleLines[0].pointA.x << ", " << polyBTrianglePtr->triangleLines[0].pointA.y << ", " << polyBTrianglePtr->triangleLines[0].pointA.z << std::endl;
+			//std::cout << "1: " << polyBTrianglePtr->triangleLines[1].pointA.x << ", " << polyBTrianglePtr->triangleLines[1].pointA.y << ", " << polyBTrianglePtr->triangleLines[1].pointA.z << std::endl;
+			//std::cout << "2: " << polyBTrianglePtr->triangleLines[2].pointA.x << ", " << polyBTrianglePtr->triangleLines[2].pointA.y << ", " << polyBTrianglePtr->triangleLines[2].pointA.z << std::endl;
+			//std::cout << "2 (B): " << polyBTrianglePtr->triangleLines[2].pointB.x << ", " << polyBTrianglePtr->triangleLines[2].pointB.y << ", " << polyBTrianglePtr->triangleLines[2].pointB.z << std::endl;
+
 			for (int z = 0; z < 3; z++)		// run the lines of A through B 
 			{
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyBTrianglePtr, in_polyAPtr->triangles[x].triangleLines[z]);		// check if poly A's line intersected B...if they did, we need to add them to the IntersectionLine
@@ -158,7 +190,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			IntersectionLine mergedLineAtoB = polyALineGroup.mergeLines();
 
 			// STEP 2
-			// std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing B to A" << std::endl;
+			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of B to triangle of A" << std::endl;
 			for (int z = 0; z < 3; z++)
 			{
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyATrianglePtr, polyBTrianglePtr->triangleLines[z]);				// check if poly B's line intersected A...if they did, we need to add them to the IntersectionLine
@@ -171,7 +203,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 					{
 						//std::cout << "Intersecting line was a border line. It's ID is: " << intersectResult.borderLineID << std::endl;
 						//std::cout << "Line points: " << polyBTrianglePtr->triangleLines[z].pointA.x << ", " << polyBTrianglePtr->triangleLines[z].pointA.y << ", " << polyBTrianglePtr->triangleLines[z].pointA.z << " || "
-							//<< polyBTrianglePtr->triangleLines[z].pointB.x << ", " << polyBTrianglePtr->triangleLines[z].pointB.y << ", " << polyBTrianglePtr->triangleLines[z].pointB.z << std::endl;
+						//	<< polyBTrianglePtr->triangleLines[z].pointB.x << ", " << polyBTrianglePtr->triangleLines[z].pointB.y << ", " << polyBTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//potentialLineBtoA.numberOfBorderLines = 1;
 					}
 					else
@@ -230,9 +262,33 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	IntersectionResult returnResult;
 	glm::vec3 intersect_candidate;
 
+	//std::cout << "Checking if this line intersects: pointA: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << " | pointB: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+
 	glm::vec3 point0 = in_triangle.triangleLines[0].pointA;
 	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
 	glm::vec3 point2 = in_triangle.triangleLines[2].pointA;
+
+	int tempDebug = 0;
+	if
+	(
+		(in_triangleLine.pointA.x == 0.0f)
+		&&
+		(in_triangleLine.pointA.y == 0.0f)
+		&&
+		(in_triangleLine.pointA.z == 0.75f)
+
+		&&
+
+		(in_triangleLine.pointB.x == 0.0f)
+		&&
+		(in_triangleLine.pointB.y == 4.0f)
+		&&
+		(in_triangleLine.pointB.z == 0.75f)
+	)
+	{
+		//std::cout << "######## checkIfLineIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
+		tempDebug = 1;
+	}
 
 	/*
 	std::cout << "##########################################" << std::endl;
@@ -299,6 +355,12 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
 	returnResult.borderLineID = in_triangleLine.borderLineID;
 	returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+
+	if (tempDebug == 1)
+	{
+		//std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
+	}
+
 	return returnResult;
 	//return someVal;
 }

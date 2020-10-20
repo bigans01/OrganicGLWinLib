@@ -102,6 +102,32 @@ BorderLineIDPair IntersectionLine::getBorderLineIDPair()
 	return pair;
 }
 
+BorderLinePointPair IntersectionLine::getBorderLinePointPair()
+{
+	// remember, point A in pointPair should always be the point that hits the border line.
+
+	BorderLinePointPair pointPair;
+	if (numberOfPoints < 2)				
+	{
+		if (isPointAOnBorder == 1)
+		{
+			pointPair.pointA = pointA;
+			pointPair.pointB = pointB;
+		}
+		else if (isPointBOnBorder == 1)
+		{
+			pointPair.pointA = pointB;
+			pointPair.pointB = pointA;
+		}
+	}
+	else if (numberOfPoints == 2)			// for when one intersection line hits two different border lines (a straight line, for example)
+	{
+		pointPair.pointA = pointA;
+		pointPair.pointB = pointB;
+	}
+	return pointPair;
+}
+
 glm::vec3 IntersectionLine::getBorderPointFromSingularBorderLineCount()
 {
 	glm::vec3 borderPoint;

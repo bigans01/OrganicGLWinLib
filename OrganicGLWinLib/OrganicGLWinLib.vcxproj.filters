@@ -393,6 +393,9 @@
     <ClInclude Include="MassManipulationMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLinePointPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

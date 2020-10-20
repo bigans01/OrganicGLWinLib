@@ -12,12 +12,23 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 	if (cleaveMapSize >= 1)
 	{
 		std::cout << "#- Records              > CleaveSequences found in cleaveMap; inserting intercept records into appropriate border lines...  " << cleaveMapSize << std::endl;
+
+		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[0];
+
+		std::cout << "#--- Printing out begin and end points of first border line:" << std::endl; 
+		std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
+		std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
+
 		auto truestart = std::chrono::high_resolution_clock::now();
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
 		auto trueend = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 		//std::cout << "#-> (Intercept records ) record load Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 		
+		std::cout << "#--- Printing out begin and end points of first border line (pre-LineWelder):" << std::endl;
+		std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
+		std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
+
 		LineWelder welder(in_sPolyRef);
 
 		/*

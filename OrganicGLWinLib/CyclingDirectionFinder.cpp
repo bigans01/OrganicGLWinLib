@@ -13,6 +13,13 @@ CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCop
 	quatPoints.pointsRef.push_back(&categorizedLine.line.pointA);
 	quatPoints.pointsRef.push_back(&categorizedLine.line.pointB);
 
+	std::cout << ":::: cycling direction finder, pre translate: " << std::endl;
+	std::cout << "border Line point A: " << borderLine.pointA.x << ", " << borderLine.pointA.y << ", " << borderLine.pointA.z << std::endl;
+	std::cout << "border Line point B: " << borderLine.pointB.x << ", " << borderLine.pointB.y << ", " << borderLine.pointB.z << std::endl;
+	std::cout << "categorized line point A: " << categorizedLine.line.pointA.x << ", " << categorizedLine.line.pointA.y << ", " << categorizedLine.line.pointA.z << std::endl;
+	std::cout << "categorized line point B: " << categorizedLine.line.pointB.x << ", " << categorizedLine.line.pointB.y << ", " << categorizedLine.line.pointB.z << std::endl;
+
+
 	// check for any translation; the point to check will be the first point of the categorized line. (so a copy of the 3rd point in quatPoints, index 2)
 	pointTranslator.performCheck(quatPoints.getPointByIndex(2));
 	if (pointTranslator.requiresTranslation == 1)

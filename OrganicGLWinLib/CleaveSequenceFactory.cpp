@@ -47,6 +47,11 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIndex)
 {
 	CategorizedLine returnLine = partialboundMap[in_fetchIndex];
+
+	//std::cout << "************** Fetching and removing partial bound line, with points: " << std::endl;
+	//std::cout << "### point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
+	//std::cout << "### point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
+
 	partialboundMap.erase(in_fetchIndex);
 	partialboundCount--; // decrement the number of partial lines
 	return returnLine;
