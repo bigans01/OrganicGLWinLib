@@ -54,6 +54,10 @@ void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCl
 	glm::vec3 weldingStartPoint = in_beginningPointPair.pointA;
 	std::cout << "Welding start point is: " << weldingStartPoint.x << ", " << weldingStartPoint.y << ", " << weldingStartPoint.z << std::endl;
 
+	// determine the CleaveSequenceMeta for the CleaveSequence we are dealing with.
+	auto cleaveBegin = sPolyRef->cleaveMap.begin();
+	CleaveSequenceMeta foundSequenceMeta = cleaveBegin->second.getCleaveSequenceMeta();
+
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
 	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_startingBorderLineID, &sPolyRef->borderLines[in_startingBorderLineID], in_cyclingDirection);
 }

@@ -6,6 +6,7 @@
 #include "CategorizedLine.h"
 #include "CleaveSequenceStatus.h"
 #include <map>
+#include "CleaveSequenceMeta.h"
 
 class CleaveSequence
 {
@@ -18,6 +19,7 @@ public:
 	void insertFirstLine(CategorizedLine in_categorizedLine);
 	void insertNonboundLine(CategorizedLine in_categorizedLine);
 	void insertLastLine(CategorizedLine in_categorizedLine);
+	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();
 };
 

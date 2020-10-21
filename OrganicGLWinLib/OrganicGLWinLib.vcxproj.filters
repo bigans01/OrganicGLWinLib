@@ -399,6 +399,12 @@
     <ClInclude Include="NeighboringCleaveSequenceFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CleaveSequenceMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
