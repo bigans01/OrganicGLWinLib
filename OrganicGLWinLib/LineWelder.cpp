@@ -51,9 +51,16 @@ void LineWelder::startWelding()
 	// start welding from the first categorized line, in the first cleave, in the border line that the first categorized line is on.
 
 
-	findRemainingWeldingLines(currentBorderLineID, pointPair.pointA, &candidateListMap.candidateMap[currentBorderLineID]);
+	// for the below, pass in: 
+	// -the border line ID
+	// -the leading point
+	// -a reference to the corresponding CleaveSequenceCandidateList
+	// -the ID of the cleave sequence that the finder is starting its run from
+	findRemainingWeldingLines(currentBorderLineID, pointPair.pointA, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);	
+	
+																															
 
-	findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, foundDirection, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
+	//findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, foundDirection, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
 																										   // the ID of the CategorizedLine in the CleaveSequence, the direction
 
 
@@ -90,7 +97,7 @@ void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCl
 
 }
 
-void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef)
+void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
 {
 	std::cout << "Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
@@ -100,5 +107,6 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// -a referenece to the SPoly's cleave map
 	// -the CyclingDirection the LineWelder is running in
 	// -a reference to a set indicating the candidates (that is, selectable CleaveSequences that haven't been consumed/used) that exist on the border line that the finder runs on
-	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef);
+	// -the ID of the current CleaveSequence this finder will start from
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID);
 }

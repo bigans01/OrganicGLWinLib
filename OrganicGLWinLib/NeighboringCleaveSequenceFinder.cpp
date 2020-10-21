@@ -15,7 +15,12 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	{
 		std::cout << "+++ Note: neighbors exist! " << std::endl;
 
-		std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
+		//std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
+		//foundSet = intersectRecorderRef->getCleaveSequenceIDList();
+		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
+		foundSet.erase(finderStartingCleaveSequenceID);						// remove the finder's starting cleave sequence from the found set.
+
+		// testing only, print the lines.
 		auto foundSetBegin = foundSet.begin();
 		auto foundSetEnd = foundSet.end();
 		for (; foundSetBegin != foundSetEnd; foundSetBegin++)
