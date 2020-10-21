@@ -19,6 +19,7 @@ public:
 	void insertFirstLine(CategorizedLine in_categorizedLine);
 	void insertNonboundLine(CategorizedLine in_categorizedLine);
 	void insertLastLine(CategorizedLine in_categorizedLine);
+	void printCategorizedLines();
 	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();
 };

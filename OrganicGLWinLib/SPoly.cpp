@@ -513,7 +513,7 @@ void SPoly::organizeCurrentCleaveLines()
 		}
 
 		CategorizedLine firstFound = categorizedLineMap[firstFoundLineWithBorder];	// Step 2: get a copy of the first found line, and make sure it's swapped so that point A is the one with the border line.
-		firstFound.line.swapBorderToA();
+		firstFound.line.swapBorderToA();											// call this, in case point B (and not A) is on the border.
 		glm::vec3 pointToFind = firstFound.line.pointB;								// Step 3: get the point B of our line; search for it in the map
 		categorizedLineMap.erase(firstFoundLineWithBorder);								// Step 4: erase the first line we found that we used, from the original map.
 		int tempLineMapCurrentIndex = 0;

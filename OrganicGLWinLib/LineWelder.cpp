@@ -59,5 +59,5 @@ void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCl
 	CleaveSequenceMeta foundSequenceMeta = cleaveBegin->second.getCleaveSequenceMeta();
 
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
-	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_startingBorderLineID, &sPolyRef->borderLines[in_startingBorderLineID], in_cyclingDirection);
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_startingBorderLineID, &sPolyRef->borderLines[in_startingBorderLineID], &sPolyRef->cleaveMap, in_cyclingDirection);
 }

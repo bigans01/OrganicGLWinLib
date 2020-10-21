@@ -19,11 +19,11 @@ public:
 
 	glm::vec3 pointA;
 	short isPointAOnBorder = 0;
-	short pointABorder = 0;
+	short pointABorder = 0;			
 
 	glm::vec3 pointB;
 	short isPointBOnBorder = 0;
-	short pointBBorder = 0;
+	short pointBBorder = 0;			
 
 	void addIntersectionResult(IntersectionResult in_intersectResult);
 	void swapBorderToA();

@@ -21,6 +21,20 @@ void CleaveSequence::insertLastLine(CategorizedLine in_categorizedLine)
 	//std::cout << "Final line inserted: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << " | " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 }
 
+void CleaveSequence::printCategorizedLines()
+{
+	auto cleavingLinesBegin = cleavingLines.begin();
+	auto cleavingLinesEnd = cleavingLines.end();
+	for (; cleavingLinesBegin != cleavingLinesEnd; cleavingLinesBegin++)
+	{
+		std::cout << "[" << cleavingLinesBegin->first << "] | pointA: " << cleavingLinesBegin->second.line.pointA.x << ", " << cleavingLinesBegin->second.line.pointA.y << ", " << cleavingLinesBegin->second.line.pointA.z
+													<< " | pointB: " << cleavingLinesBegin->second.line.pointB.x << ", " << cleavingLinesBegin->second.line.pointB.y << ", " << cleavingLinesBegin->second.line.pointB.z 
+													<< " | A border: (is on border)-> " << cleavingLinesBegin->second.line.isPointAOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointABorder
+													<< " | B border: (is on border)-> " << cleavingLinesBegin->second.line.isPointBOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointBBorder
+													<< std::endl;
+	}
+}
+
 CleaveSequenceMeta CleaveSequence::getCleaveSequenceMeta()
 {
 	CleaveSequenceType sequenceType = CleaveSequenceType::UNDEFINED;	// it will be defined in next lines

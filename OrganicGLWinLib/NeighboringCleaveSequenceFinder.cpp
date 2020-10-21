@@ -14,6 +14,16 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	else if (intersectRecorderRef->records.size() > 1)
 	{
 		std::cout << "+++ Note: neighbors exist! " << std::endl;
+
+		std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
+		auto foundSetBegin = foundSet.begin();
+		auto foundSetEnd = foundSet.end();
+		for (; foundSetBegin != foundSetEnd; foundSetBegin++)
+		{
+			auto foundCleaveMap = (*cleaveMapRef).find(*foundSetBegin);
+			foundCleaveMap->second.printCategorizedLines();
+		}
+
 		intersectRecorderRef->printRecords();
 		findAndSortNeighboringCleaveSequences();
 		doNeighborsExist = true;

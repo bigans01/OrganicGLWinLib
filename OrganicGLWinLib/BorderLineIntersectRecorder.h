@@ -6,6 +6,7 @@
 #include <map>
 #include "BorderLineIntersectRecord.h"
 #include "CategorizedLine.h"
+#include <set>
 
 class BorderLineIntersectRecorder
 {
@@ -13,6 +14,7 @@ class BorderLineIntersectRecorder
 		std::map<int, BorderLineIntersectRecord> records;		// an ordered map of records.  the "int" represents the ID from the CleaveSequence map in the SPoly being fractured.
 		void insertNewRecord(int in_sequenceID, int in_categorizedLineID, CategorizedLine* in_categorizedLineRef);
 		void printRecords();
+		std::set<int> getCleaveSequenceIDList();
 };
 
 #endif

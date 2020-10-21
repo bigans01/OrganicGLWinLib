@@ -32,3 +32,15 @@ void BorderLineIntersectRecorder::printRecords()
 		}
 	}
 }
+
+std::set<int> BorderLineIntersectRecorder::getCleaveSequenceIDList()
+{
+	std::set<int> foundSet;
+	auto recordsBegin = records.begin();
+	auto recordsEnd = records.end();
+	for (; recordsBegin != recordsEnd; recordsBegin++)
+	{
+		foundSet.insert(recordsBegin->first);
+	}
+	return foundSet;
+}
