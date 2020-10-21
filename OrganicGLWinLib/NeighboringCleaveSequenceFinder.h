@@ -7,6 +7,7 @@
 #include "CyclingDirection.h"
 #include "BorderLineIntersectRecorder.h"
 #include "CleaveSequence.h"
+#include "CleaveSequenceCandidateList.h"
 
 class NeighboringCleaveSequenceFinder
 {
@@ -15,11 +16,13 @@ class NeighboringCleaveSequenceFinder
 		NeighboringCleaveSequenceFinder(int in_startingborderLineID, 
 										SPolyBorderLines* in_borderLineRef, 
 										std::map<int, CleaveSequence>* in_cleaveMapRef,
-										CyclingDirection in_cyclingDirection) : 
+										CyclingDirection in_cyclingDirection,
+										CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef) : 
 			startingBorderLineID(in_startingborderLineID),
 			borderLineRef(in_borderLineRef), 
 			cleaveMapRef(in_cleaveMapRef),
-			cyclingDirection(in_cyclingDirection) 
+			cyclingDirection(in_cyclingDirection),
+			cleaveSequenceCandidateListRef(in_cleaveSequenceCandidateListRef)
 		{
 			buildNeighboringCleaveSequenceMap();
 		};
@@ -28,6 +31,7 @@ class NeighboringCleaveSequenceFinder
 		int startingBorderLineID = 0;				// set upon initialization
 		SPolyBorderLines* borderLineRef = nullptr;	// set upon initialization
 		CyclingDirection cyclingDirection = CyclingDirection::NOVAL;	// set upon initialization, default is NOVAL
+		CleaveSequenceCandidateList* cleaveSequenceCandidateListRef = nullptr;		// set upon initialization
 		std::map<int, CleaveSequence>* cleaveMapRef = nullptr; // set upon initialization
 		bool doNeighborsExist = false;				// a flag that determines whether or not neighbors exist.
 		void buildNeighboringCleaveSequenceMap();

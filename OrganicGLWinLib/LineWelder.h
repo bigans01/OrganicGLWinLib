@@ -8,6 +8,7 @@
 #include "MassManipulationMode.h"
 #include "BorderLineCycler.h"
 #include "NeighboringCleaveSequenceFinder.h"
+#include "CleaveSequenceCandidateListMap.h"
 
 class LineWelder
 {
@@ -21,10 +22,13 @@ private:
 	SPoly* sPolyRef = nullptr;	// a reference to the SPoly we will be operating on for this LineWelder.
 	MassManipulationMode currentManipulationMode = MassManipulationMode::CREATION;	// CREATION is default value, but will be overrriden by the SPoly's value when
 																					// the LineWelder is constructed.
-
+	CyclingDirection foundDirection;	// the direction that the LineWelder is going in (FORWARD) = towards point B of border lines, (REVERSE) = towards point A of border lines.
+	CleaveSequenceCandidateListMap candidateListMap;
 	int currentBorderLineID = 0;	// the border line we'll be starting on.
 	int endingBorderLineID = 0;		// the border line we'll be ending on (the while loop will end when it hits this)
+	void buildCandidateListMap();
 	void startWelding();
+	void findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef);
 	void findWeldingLines(int in_startingBorderLineID, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair);
 };
 

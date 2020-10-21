@@ -169,6 +169,8 @@
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
+    <ClInclude Include="CleaveSequenceCandidateList.h" />
+    <ClInclude Include="CleaveSequenceCandidateListMap.h" />
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CleaveSequenceMeta.h" />

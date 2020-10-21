@@ -12,7 +12,7 @@ void LineWelder::startWelding()
 																	// will have exactly one border line. The end of the sequence will have another border line.
 	{
 		pointPair = sequenceBegin->second.line.getBorderLinePointPair();
-		currentBorderLineID = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
+		currentBorderLineID = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = sequenceEnd->second.line.getBorderLineIDFromSingularBorderLineCount();
 
 	}
@@ -21,11 +21,11 @@ void LineWelder::startWelding()
 	{
 		BorderLineIDPair retrievedPair = sequenceBegin->second.line.getBorderLineIDPair();
 		pointPair = sequenceBegin->second.line.getBorderLinePointPair();
-		currentBorderLineID = retrievedPair.pointABorderLineID;
+		currentBorderLineID = retrievedPair.pointABorderLineID;												// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = retrievedPair.pointBBorderLineID;
 	}
 
-	std::cout << "******** printing claave lines in the first sequence: " << std::endl;
+	std::cout << "******** printing cleave lines in the first sequence: " << std::endl;
 	auto testSequenceBegin = cleaveBegin->second.cleavingLines.begin();
 	auto testSequenceEnd = cleaveBegin->second.cleavingLines.end();
 	for (; testSequenceBegin != testSequenceEnd; testSequenceBegin++)
@@ -41,11 +41,41 @@ void LineWelder::startWelding()
 	BorderLineCycler lineCycler(sPolyRef);
 
 	// send copies of the border line, and the corresponding categorized line in the CleaveMap that intercepted the border line, to find the direction.
-	CyclingDirection foundDirection = lineCycler.findCyclingDirection(sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, sequenceBegin->second, sPolyRef->massManipulationSetting);
+	// store the direction in the LineWelder's foundDirection, so that we can use it throughout the process (should only ever need to find it once, and can be used 
+	// without ever having to change it.)
+	foundDirection = lineCycler.findCyclingDirection(sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, sequenceBegin->second, sPolyRef->massManipulationSetting);
+
+	// create the candidates map for each border line
+	buildCandidateListMap();
+
+	// start welding from the first categorized line, in the first cleave, in the border line that the first categorized line is on.
+
+
+	findRemainingWeldingLines(currentBorderLineID, pointPair.pointA, &candidateListMap.candidateMap[currentBorderLineID]);
+
 	findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, foundDirection, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
 																										   // the ID of the CategorizedLine in the CleaveSequence, the direction
 
+
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
+}
+
+void LineWelder::buildCandidateListMap()
+{
+	int numberOfBorderLines = sPolyRef->numberOfBorderLines;
+	for (int x = 0; x < numberOfBorderLines; x++)
+	{
+		std::cout << "|||| Candidate list for border line " << x << ": " << std::endl;
+		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[x];
+		auto recordsBegin = borderLineRef->intersectRecorder.records.begin();
+		auto recordsEnd = borderLineRef->intersectRecorder.records.end();
+		//candidateListMap.candidateMap[x].
+		for (; recordsBegin != recordsEnd; recordsBegin++)
+		{
+			std::cout << "> " << recordsBegin->first << std::endl;
+			candidateListMap.candidateMap[x].insertCandidate(recordsBegin->first);
+		}
+	}
 }
 
 void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair)
@@ -58,6 +88,17 @@ void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCl
 	auto cleaveBegin = sPolyRef->cleaveMap.begin();
 	CleaveSequenceMeta foundSequenceMeta = cleaveBegin->second.getCleaveSequenceMeta();
 
+}
+
+void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef)
+{
+	std::cout << "Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
-	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_startingBorderLineID, &sPolyRef->borderLines[in_startingBorderLineID], &sPolyRef->cleaveMap, in_cyclingDirection);
+	// pass in these parameters:
+	// -the border line that the finder needs to run on
+	// -a reference to border line that the finder will run on
+	// -a referenece to the SPoly's cleave map
+	// -the CyclingDirection the LineWelder is running in
+	// -a reference to a set indicating the candidates (that is, selectable CleaveSequences that haven't been consumed/used) that exist on the border line that the finder runs on
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef);
 }
