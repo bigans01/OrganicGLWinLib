@@ -413,7 +413,8 @@ void SPoly::insertCalibratedLine(CategorizedLine in_line)
 
 void SPoly::addSlicedCleave(int in_currentCleaveIndex, CategorizedLine in_categorizedLine)
 {
-	cleaveMap[in_currentCleaveIndex].cleavingLines[0] = in_categorizedLine;
+	//cleaveMap[in_currentCleaveIndex].cleavingLines[0] = in_categorizedLine;
+	cleaveMap[in_currentCleaveIndex].insertLineAtIndex(0, in_categorizedLine);
 	//cleaveMap[in_currentCleaveIndex].insertNewLine(in_categorizedLine);
 	currentCleaveIndex++;
 }
@@ -474,7 +475,8 @@ void SPoly::constructCleaveLine()
 	// take all the current categorized lines and form a new cleave line
 	for (int x = 0; x < numberOfLines; x++)
 	{
-		cleaveMap[currentCleaveIndex].cleavingLines[x] = categorizedLineMap[x];
+		//cleaveMap[currentCleaveIndex].cleavingLines[x] = categorizedLineMap[x];
+		cleaveMap[currentCleaveIndex].insertLineAtIndex(x, categorizedLineMap[x]);
 	}
 
 	// take the lines from the newly formed cleave line, and check if they intercept any border lines
@@ -597,7 +599,8 @@ int SPoly::determineCleaveTypeAndRegisterCatLines(int in_cleaveIndexID)
 	std::cout << "Number of categorized lines: " << numberOfCategorizedLines << std::endl;
 	for (int x = 0; x < numberOfCategorizedLines; x++)
 	{
-		auto currentCatLine = &cleaveSequenceRef->cleavingLines[x];		// get a ref to the current categorized line
+		//auto currentCatLine = &cleaveSequenceRef->cleavingLines[x];		// get a ref to the current categorized line
+		auto currentCatLine = cleaveSequenceRef->getCategorizedLineRef(x);
 		if (currentCatLine->line.numberOfBorderLines > 0)				// register any intercepts
 		{
 			currentBorderLineCount += currentCatLine->line.numberOfBorderLines;
@@ -607,7 +610,8 @@ int SPoly::determineCleaveTypeAndRegisterCatLines(int in_cleaveIndexID)
 	{
 		for (int x = 0; x < numberOfCategorizedLines; x++)
 		{
-			auto currentCatLine = &cleaveSequenceRef->cleavingLines[x];		// get a ref to the current categorized line
+			//auto currentCatLine = &cleaveSequenceRef->cleavingLines[x];		// get a ref to the current categorized line
+			auto currentCatLine = cleaveSequenceRef->getCategorizedLineRef(x);
 			if (currentCatLine->line.numberOfBorderLines > 0)				// register any intercepts
 			{
 				registerIntersectingCatLine(x, *currentCatLine);
@@ -724,4 +728,37 @@ void SPoly::printAllCleaveLines()
 void SPoly::setDebugFlag(int in_debugFlagValue)
 {
 	debugFlag = in_debugFlagValue;
+}
+
+CleaveSequenceCandidateListMap SPoly::buildCleaveSequenceCandidateListMap()
+{
+	CleaveSequenceCandidateListMap returnMap;
+	for (int x = 0; x < numberOfBorderLines; x++)
+	{
+		std::cout << "|||| Candidate list for border line " << x << ": " << std::endl;
+		SPolyBorderLines* borderLineRef = &borderLines[x];
+		auto recordsBegin = borderLineRef->intersectRecorder.records.begin();
+		auto recordsEnd = borderLineRef->intersectRecorder.records.end();
+		//candidateListMap.candidateMap[x].
+		for (; recordsBegin != recordsEnd; recordsBegin++)
+		{
+			std::cout << "> " << recordsBegin->first << std::endl;
+			//candidateListMap.candidateMap[x].insertCandidate(recordsBegin->first);
+			returnMap.candidateMap[x].insertCandidate(recordsBegin->first);
+		}
+	}
+	return returnMap;
+}
+
+CleaveSequenceMetaTracker SPoly::buildCleaveSequenceMetaTracker()
+{
+	CleaveSequenceMetaTracker returnTracker;
+	auto cleaveBegin = cleaveMap.begin();
+	auto cleaveEnd = cleaveMap.end();
+	for (; cleaveBegin != cleaveEnd; cleaveBegin++)
+	{
+		CleaveSequenceMeta currentMeta = cleaveBegin->second.getCleaveSequenceMeta();
+		returnTracker.insertNewCleaveSequence(cleaveBegin->first, currentMeta);
+	}
+	return returnTracker;
 }

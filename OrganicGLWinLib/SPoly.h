@@ -17,6 +17,8 @@
 #include <glm/gtx/quaternion.hpp>
 #include <map>
 #include "MassManipulationMode.h"
+#include "CleaveSequenceCandidateListMap.h"
+#include "CleaveSequenceMetaTracker.h"
 
 class SPoly
 {
@@ -75,6 +77,8 @@ public:
 	void printLines();
 	void printAllCleaveLines();
 	void setDebugFlag(int in_debugFlagValue);
+	CleaveSequenceCandidateListMap buildCleaveSequenceCandidateListMap();		// builds and returns a populaated CleaveSequenceCandidateListMap (for use by LineWelder)
+	CleaveSequenceMetaTracker buildCleaveSequenceMetaTracker();
 };
 
 #endif

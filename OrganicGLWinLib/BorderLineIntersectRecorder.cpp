@@ -29,6 +29,7 @@ void BorderLineIntersectRecorder::printRecords()
 			std::cout << "point A: " << lineRefsBegin->second->line.pointA.x << ", " << lineRefsBegin->second->line.pointA.y << ", " << lineRefsBegin->second->line.pointA.z << std::endl;
 			std::cout << "point B: " << lineRefsBegin->second->line.pointB.x << ", " << lineRefsBegin->second->line.pointB.y << ", " << lineRefsBegin->second->line.pointB.z << std::endl;
 			std::cout << "border line ID: " << lineRefsBegin->second->line.getBorderLineIDFromSingularBorderLineCount() << std::endl;
+			std::cout << "ID in sequence: " << lineRefsBegin->second->cleaveSequenceID << std::endl;
 		}
 	}
 }

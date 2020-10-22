@@ -1,23 +1,39 @@
 #include "stdafx.h"
 #include "CleaveSequence.h"
 
+void CleaveSequence::insertLineAtIndex(int in_index, CategorizedLine in_categorizedLine)
+{
+	CategorizedLine newLine = in_categorizedLine;	// copy
+	newLine.cleaveSequenceID = in_index;			// insert what the ID in the sequence will be, into the line.
+	cleavingLines[in_index] = newLine;
+}
+
 void CleaveSequence::insertFirstLine(CategorizedLine in_categorizedLine)
 {
-	cleavingLines[cleaveIndex++] = in_categorizedLine;
+	CategorizedLine newLine = in_categorizedLine;
+	newLine.cleaveSequenceID = cleaveIndex;
+	cleavingLines[cleaveIndex] = newLine;
+	cleaveIndex++;
 	currentPointToSearch = cleavingLines[0].line.getNonBorderPointFromSingularBorderLineCount();
 	//std::cout << "!! New line inserted into sequence: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << " | " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 }
 
 void CleaveSequence::insertNonboundLine(CategorizedLine in_categorizedLine)
 {
-	cleavingLines[cleaveIndex++] = in_categorizedLine;
+	CategorizedLine newLine = in_categorizedLine;
+	newLine.cleaveSequenceID = cleaveIndex;
+	cleavingLines[cleaveIndex] = newLine;
+	cleaveIndex++;
 	currentPointToSearch = in_categorizedLine.line.pointB;
 	//std::cout << "Next point to search is: " << currentPointToSearch.x << ", " << currentPointToSearch.y << ", " << currentPointToSearch.z << std::endl;
 }
 
 void CleaveSequence::insertLastLine(CategorizedLine in_categorizedLine)
 {
-	cleavingLines[cleaveIndex++] = in_categorizedLine;
+	CategorizedLine newLine = in_categorizedLine;
+	newLine.cleaveSequenceID = cleaveIndex;
+	cleavingLines[cleaveIndex] = newLine;
+	cleaveIndex++;
 	//std::cout << "Final line inserted: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << " | " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 }
 
@@ -33,6 +49,11 @@ void CleaveSequence::printCategorizedLines()
 													<< " | B border: (is on border)-> " << cleavingLinesBegin->second.line.isPointBOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointBBorder
 													<< std::endl;
 	}
+}
+
+CategorizedLine* CleaveSequence::getCategorizedLineRef(int in_categorizedLineID)
+{
+	return &cleavingLines[in_categorizedLineID];
 }
 
 CleaveSequenceMeta CleaveSequence::getCleaveSequenceMeta()

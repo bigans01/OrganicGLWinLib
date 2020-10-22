@@ -411,6 +411,9 @@
     <ClInclude Include="CleaveSequenceCandidateListMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CleaveSequenceMetaTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

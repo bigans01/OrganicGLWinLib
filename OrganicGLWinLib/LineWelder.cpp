@@ -45,8 +45,8 @@ void LineWelder::startWelding()
 	// without ever having to change it.)
 	foundDirection = lineCycler.findCyclingDirection(sPolyRef->borderLines[currentBorderLineID], currentBorderLineID, sequenceBegin->second, sPolyRef->massManipulationSetting);
 
-	// create the candidates map for each border line
-	buildCandidateListMap();
+	getCleaveSequenceCandidateListMap();	// create the candidates map for each border line, by calling on the SPoly to do it
+	getCleaveSequenceMetaTracker();			// builds the meta tracker, so that we may pass it to the NeighboringCleaveSequenceFinder
 
 	// start welding from the first categorized line, in the first cleave, in the border line that the first categorized line is on.
 
@@ -67,8 +67,9 @@ void LineWelder::startWelding()
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
 }
 
-void LineWelder::buildCandidateListMap()
+void LineWelder::getCleaveSequenceCandidateListMap()
 {
+	/*
 	int numberOfBorderLines = sPolyRef->numberOfBorderLines;
 	for (int x = 0; x < numberOfBorderLines; x++)
 	{
@@ -83,6 +84,13 @@ void LineWelder::buildCandidateListMap()
 			candidateListMap.candidateMap[x].insertCandidate(recordsBegin->first);
 		}
 	}
+	*/
+	candidateListMap = sPolyRef->buildCleaveSequenceCandidateListMap();
+}
+
+void LineWelder::getCleaveSequenceMetaTracker()
+{
+	metaTracker = sPolyRef->buildCleaveSequenceMetaTracker();
 }
 
 void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair)
@@ -108,5 +116,5 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// -the CyclingDirection the LineWelder is running in
 	// -a reference to a set indicating the candidates (that is, selectable CleaveSequences that haven't been consumed/used) that exist on the border line that the finder runs on
 	// -the ID of the current CleaveSequence this finder will start from
-	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID);
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker);
 }

@@ -15,6 +15,8 @@ public:
 	IntersectionLine line;
 	IntersectionType type = IntersectionType::NONE; // always starts as "NONE"
 	glm::vec3 emptyNormal;
+	int cleaveSequenceID = 0;						// represents the ID that this categorized line uses in the CleaveSequence it goes to 
+													//	(that is, if it even gets to a CleaveSequence; it may be dropped/deleted/discarded before getting there.).
 
 	void convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB, glm::vec3 in_newPointForLineA);
 	void convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB);
