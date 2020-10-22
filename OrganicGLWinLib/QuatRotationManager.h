@@ -17,7 +17,7 @@ class QuatRotationManager
 {
 public:
 	int debugFlag = 0;			// for debugging purposes 
-	QuatRotationPoints* rotationPointsRef;
+	QuatRotationPoints* rotationpointsRefVector;
 	glm::vec3 focusedLine;							// the line that we will be rotating until it's y and z values are equal (calculations are based around this line)
 	glm::vec3* pointARef;
 	glm::vec3* pointBRef;
@@ -26,11 +26,11 @@ public:
 	std::vector<QuatRotationType> rotationOrder;	// stores the types of rotations that need to be executed
 	std::stack<QuatRotationRecord> rotationRecords;
 
-	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef);
-	void initializeAndRunForZFracture(QuatRotationPoints* in_quatPointsRef);
-	glm::vec3 initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatPointsRef);
-	void initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatPointsRef);
-	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef);
+	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
+	void initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector);
+	glm::vec3 initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector);
+	void initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatpointsRefVector);
+	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatpointsRefVector);
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
 	void executeRotationsForZFracture();

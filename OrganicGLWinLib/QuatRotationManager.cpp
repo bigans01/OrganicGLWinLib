@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "QuatRotationManager.h"
 
-void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatPointsRef)
+void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatpointsRefVector)
 {
-	rotationPointsRef = in_quatPointsRef;
-	pointARef = rotationPointsRef->getFirstPointRef();
-	pointBRef = rotationPointsRef->getSecondPointRef();
-	pointCRef = rotationPointsRef->getThirdPointRef();
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointARef = rotationpointsRefVector->getFirstPointRef();
+	pointBRef = rotationpointsRefVector->getSecondPointRef();
+	pointCRef = rotationpointsRefVector->getThirdPointRef();
 
 	// check if we need to rotate about the Y-axis to get to the same Z values for the line
 	if (pointBRef->z != 0.0f)
@@ -27,12 +27,12 @@ void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_
 	rotateToOriginalPosition();
 }
 
-void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_quatPointsRef)
+void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector)
 {
-	rotationPointsRef = in_quatPointsRef;
-	pointARef = rotationPointsRef->getFirstPointRef();
-	pointBRef = rotationPointsRef->getSecondPointRef();
-	pointCRef = rotationPointsRef->getThirdPointRef();
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointARef = rotationpointsRefVector->getFirstPointRef();
+	pointBRef = rotationpointsRefVector->getSecondPointRef();
+	pointCRef = rotationpointsRefVector->getThirdPointRef();
 
 	// check if we need to rotate about the Y-axis to get to the same Z values for the line
 	if (pointBRef->z != 0.0f)
@@ -53,10 +53,10 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	executeRotationsForZFracture();
 }
 
-glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatPointsRef)
+glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector)
 {
-	rotationPointsRef = in_quatPointsRef;
-	triangleNormalRef = rotationPointsRef->getPointRefByIndex(5);
+	rotationpointsRefVector = in_quatpointsRefVector;
+	triangleNormalRef = rotationpointsRefVector->getPointRefByIndex(5);
 
 	// check if we need to rotate about the Y-axis to get to the normal to positive Z.
 	if (triangleNormalRef->z != 1.0f)
@@ -75,10 +75,10 @@ glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints
 	executeRotationsForPlanarSlide();
 
 	// acquire the sliding vector, before we rotate back.
-	float slidingVectorZ = rotationPointsRef->getPointByIndex(4).z;
+	float slidingVectorZ = rotationpointsRefVector->getPointByIndex(4).z;
 	glm::vec3 slidingVector;
 	slidingVector.z = slidingVectorZ;
-	glm::vec3* slidingVectorRef = rotationPointsRef->getPointRefByIndex(6);
+	glm::vec3* slidingVectorRef = rotationpointsRefVector->getPointRefByIndex(6);
 	*slidingVectorRef = slidingVector;
 
 	//std::cout << "Sliding vector before reverse rotate is: " << slidingVectorRef->x << ", " << slidingVectorRef->y << ", " << slidingVectorRef->z << std::endl;
@@ -91,11 +91,11 @@ glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints
 
 }
 
-void QuatRotationManager::initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatPointsRef)
+void QuatRotationManager::initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationOrder.clear();
-	rotationPointsRef = in_quatPointsRef;
-	triangleNormalRef = rotationPointsRef->getPointRefByIndex(4);
+	rotationpointsRefVector = in_quatpointsRefVector;
+	triangleNormalRef = rotationpointsRefVector->getPointRefByIndex(4);
 
 	// check if we need to rotate about the Y-axis to get to the normal to positive Z.
 	if (triangleNormalRef->z != 1.0f)
@@ -115,16 +115,16 @@ void QuatRotationManager::initializeAndRunForPlanarAlignmentToZ(QuatRotationPoin
 
 }
 
-CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatPointsRef)
+CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatpointsRefVector)
 {
-	rotationPointsRef = in_quatPointsRef;
+	rotationpointsRefVector = in_quatpointsRefVector;
 	CyclingDirection direction = CyclingDirection::NOVAL;	// make the compiler happy
 
-	glm::vec3* borderLinePointARef = rotationPointsRef->getPointRefByIndex(0);
-	glm::vec3* borderLinePointBRef = rotationPointsRef->getPointRefByIndex(1);
-	pointARef = rotationPointsRef->getPointRefByIndex(2);	// get point A of categorized line
-	pointBRef = rotationPointsRef->getPointRefByIndex(3);	// get point B of categorized line
-	glm::vec3* categorizedLineEmptyNormal = rotationPointsRef->getPointRefByIndex(4);
+	glm::vec3* borderLinePointARef = rotationpointsRefVector->getPointRefByIndex(0);
+	glm::vec3* borderLinePointBRef = rotationpointsRefVector->getPointRefByIndex(1);
+	pointARef = rotationpointsRefVector->getPointRefByIndex(2);	// get point A of categorized line
+	pointBRef = rotationpointsRefVector->getPointRefByIndex(3);	// get point B of categorized line
+	glm::vec3* categorizedLineEmptyNormal = rotationpointsRefVector->getPointRefByIndex(4);
 
 	
 	std::cout << "#- Cycling Direction    > (Pre-quat rotation)  | BorderLine Point A ref values " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
@@ -165,7 +165,7 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	}
 
 	return direction;
-	//pointARef = rotationPointsRef->
+	//pointARef = rotationpointsRefVector->
 }
 
 void QuatRotationManager::executeRotationsForEmptyNormal()
@@ -259,7 +259,7 @@ void QuatRotationManager::executeRotationsForPlanarSlide()
 		}
 	}
 
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 }
 
 void QuatRotationManager::executeRotationsForCyclingDirectionFinder()
@@ -273,12 +273,12 @@ void QuatRotationManager::executeRotationsForCyclingDirectionFinder()
 
 void QuatRotationManager::calculateEmptyNormal()
 {
-	glm::vec3 currentPoint0 = *rotationPointsRef->getFirstPointRef();
-	glm::vec3 currentPoint1 = *rotationPointsRef->getSecondPointRef();
-	glm::vec3 currentPoint2 = *rotationPointsRef->getThirdPointRef();
-	glm::vec3 currentMRP = *rotationPointsRef->getMRPRef();
+	glm::vec3 currentPoint0 = *rotationpointsRefVector->getFirstPointRef();
+	glm::vec3 currentPoint1 = *rotationpointsRefVector->getSecondPointRef();
+	glm::vec3 currentPoint2 = *rotationpointsRefVector->getThirdPointRef();
+	glm::vec3 currentMRP = *rotationpointsRefVector->getMRPRef();
 
-	glm::vec3* currentNormalRef = rotationPointsRef->getNormalRef();
+	glm::vec3* currentNormalRef = rotationpointsRefVector->getNormalRef();
 	*currentNormalRef = cross(currentPoint1, currentPoint2);
 	/*
 	std::cout << "##!~~~~~ Points are: " << std::endl;
@@ -295,7 +295,7 @@ void QuatRotationManager::calculateEmptyNormal()
 
 	//int someVal = 3;
 	//std::cin >> someVal;
-	//rotationPointsRef->pointsRef.push_back(currentNormal);
+	//rotationpointsRefVector->pointsRefVector.push_back(currentNormal);
 }
 
 glm::vec3 QuatRotationManager::checkForEmptyNormalCorrection(glm::vec3 in_mrpCopy, glm::vec3 in_normalCopy)
@@ -316,7 +316,7 @@ glm::vec3 QuatRotationManager::checkForEmptyNormalCorrection(glm::vec3 in_mrpCop
 
 glm::vec3 QuatRotationManager::getEmptyNormal()
 {
-	glm::vec3* currentNormalRef = rotationPointsRef->getNormalRef();
+	glm::vec3* currentNormalRef = rotationpointsRefVector->getNormalRef();
 	glm::vec3 returningNormal = *currentNormalRef;
 	return returningNormal;
 }
@@ -344,11 +344,11 @@ void QuatRotationManager::rotateAroundYAndPushIntoStack()
 
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	//*pointBRef = originalQuat * *pointBRef;	
-	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);						// push into the stack
 
 	//std::cout << "Printing points after Y-axis bound rotation: " << std::endl;
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 	//return firstPassRotateRadians;
 }
 
@@ -378,7 +378,7 @@ void QuatRotationManager::rotateAroundYToPosZForPlanarSlideAndPushIntoStack()
 
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	//*pointBRef = originalQuat * *pointBRef;	
-	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);						// push into the stack
 
 	//std::cout << "################### (Planar slide) Printing points after Y-axis rotation to pos Z: " << std::endl;
@@ -411,11 +411,11 @@ void QuatRotationManager::rotateAroundXToYZeroForPlanarSlideAndPushIntoStack()
 
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	//*pointBRef = originalQuat * *pointBRef;	
-	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
 
 	//std::cout << "Printing points after X-axis bound rotation: (the final rotation?) " << std::endl;
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 
 }
 
@@ -451,11 +451,11 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	//*pointBRef = originalQuat * *pointBRef;	
-	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
 
 	//std::cout << "Printing points after Z-axis bound rotation: " << std::endl;
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 }
 
 void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
@@ -492,7 +492,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
 
 		glm::quat originalQuat = s1record.returnOriginalRotation();
 		//*pointBRef = originalQuat * *pointBRef;	
-		rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+		rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 		rotationRecords.push(s1record);
 	}
 }
@@ -524,17 +524,17 @@ void QuatRotationManager::rotateAroundXToYZeroAndPushIntoStack()
 
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	//*pointBRef = originalQuat * *pointBRef;	
-	rotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
 
 	//std::cout << "Printing points after X-axis bound rotation: (the final rotation?) " << std::endl;
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 
 }
 
 void QuatRotationManager::rotateAroundXForZFractureAndPushIntoStack()
 {
-	glm::vec3 currentThirdPoint = *rotationPointsRef->getThirdPointRef();	// get a copy of the value of the 3rd primal point
+	glm::vec3 currentThirdPoint = *rotationpointsRefVector->getThirdPointRef();	// get a copy of the value of the 3rd primal point
 	float radiansToRotateBy = findRotationRadiansForZFracture(currentThirdPoint);	// get the number of radians to rotate by
 
 	//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
@@ -543,10 +543,10 @@ void QuatRotationManager::rotateAroundXForZFractureAndPushIntoStack()
 	QuatRotationRecord s1record(radiansToRotateBy, rotateAroundX);
 
 	glm::quat fractureQuat = s1record.returnOriginalRotation();
-	rotationPointsRef->applyQuaternion(fractureQuat);	// rotate all values by this one
+	rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
 
-	//rotationPointsRef->printPoints();
+	//rotationpointsRefVector->printPoints();
 }
 
 void QuatRotationManager::rotateEmptyNormalToPosY(glm::vec3* in_normal)
@@ -560,7 +560,7 @@ void QuatRotationManager::rotateEmptyNormalToPosY(glm::vec3* in_normal)
 		QuatRotationRecord s1record(radiansToRotateBy, rotateAroundY);
 
 		glm::quat fractureQuat = s1record.returnOriginalRotation();
-		rotationPointsRef->applyQuaternion(fractureQuat);
+		rotationpointsRefVector->applyQuaternion(fractureQuat);
 		rotationRecords.push(s1record);
 	}
 
@@ -581,7 +581,7 @@ void QuatRotationManager::rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 i
 	QuatRotationRecord s1record(radiansToRotateBy, rotateAroundZ);
 
 	glm::quat fractureQuat = s1record.returnOriginalRotation();
-	rotationPointsRef->applyQuaternion(fractureQuat);
+	rotationpointsRefVector->applyQuaternion(fractureQuat);
 	rotationRecords.push(s1record);
 }
 
@@ -828,8 +828,8 @@ void QuatRotationManager::rotateToOriginalPosition()
 		QuatRotationRecord currentRecord = rotationRecords.top();
 		//std::cout << "################# Reversing values... " << std::endl;
 		glm::quat reverseQuat = currentRecord.returnReverseRotation();
-		rotationPointsRef->applyQuaternion(reverseQuat);
-		//rotationPointsRef->printPoints();
+		rotationpointsRefVector->applyQuaternion(reverseQuat);
+		//rotationpointsRefVector->printPoints();
 
 		rotationRecords.pop();
 	}

@@ -11,6 +11,9 @@
 #include "CleaveSequenceCandidateList.h"
 #include "CleaveSequenceMetaTracker.h"
 #include "DistanceToPoint.h"
+#include "PointTranslationCheck.h"
+#include "QuatRotationManager.h"
+#include "QuatRotationPoints.h"
 
 class NeighboringCleaveSequenceFinder
 {

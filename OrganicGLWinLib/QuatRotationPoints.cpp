@@ -3,8 +3,8 @@
 
 void QuatRotationPoints::applyQuaternion(glm::quat in_quat)
 {
-	auto pointsStart = pointsRef.begin();
-	auto pointsEnd = pointsRef.end();
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		//glm::vec3 currentPoint = **pointsStart;
@@ -16,8 +16,8 @@ void QuatRotationPoints::applyQuaternion(glm::quat in_quat)
 
 void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 {
-	auto pointsStart = pointsRef.begin();
-	auto pointsEnd = pointsRef.end();
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		auto pointsPtr = *pointsStart;
@@ -31,8 +31,8 @@ void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 void QuatRotationPoints::printTrianglePoints()
 {
 	
-	auto pointsStart = pointsRef.begin();
-	auto pointsEnd = pointsRef.end();
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		auto pointsPtr = *pointsStart;
@@ -43,8 +43,8 @@ void QuatRotationPoints::printTrianglePoints()
 
 void QuatRotationPoints::applyNormalization(float in_normalizationValue)
 {
-	auto pointsStart = pointsRef.begin();
-	auto pointsEnd = pointsRef.end();
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		auto pointsPtr = *pointsStart;
@@ -55,8 +55,8 @@ void QuatRotationPoints::applyNormalization(float in_normalizationValue)
 
 void QuatRotationPoints::applyDimensionCorrections()
 {
-	auto pointsStart = pointsRef.begin();
-	auto pointsEnd = pointsRef.end();
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		auto pointsPtr = *pointsStart;
@@ -85,8 +85,8 @@ void QuatRotationPoints::applyDimensionCorrections()
 
 void QuatRotationPoints::printPoints()
 {
-	std::vector<glm::vec3*>::iterator pointsStart = pointsRef.begin();
-	std::vector<glm::vec3*>::iterator pointsEnd = pointsRef.end();
+	std::vector<glm::vec3*>::iterator pointsStart = pointsRefVector.begin();
+	std::vector<glm::vec3*>::iterator pointsEnd = pointsRefVector.end();
 	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
 	{
 		glm::vec3 lol;
@@ -98,38 +98,44 @@ void QuatRotationPoints::printPoints()
 
 void QuatRotationPoints::clearPoints()
 {
-	pointsRef.clear();
+	pointsRefVector.clear();
 }
 
 glm::vec3 QuatRotationPoints::getFirstPoint()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
+	return **pointsStart;
+}
+
+glm::vec3 QuatRotationPoints::getLastPoint()
+{
+	auto pointsStart = pointsRefVector.rbegin();
 	return **pointsStart;
 }
 
 glm::vec3 QuatRotationPoints::getSecondPoint()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	pointsStart++;
 	return **pointsStart;
 }
 
 glm::vec3* QuatRotationPoints::getFirstPointRef()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	return *pointsStart;
 }
 
 glm::vec3* QuatRotationPoints::getSecondPointRef()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	pointsStart++;
 	return *pointsStart;
 }
 
 glm::vec3* QuatRotationPoints::getThirdPointRef()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	pointsStart++;
 	pointsStart++;
 	return *pointsStart;
@@ -137,7 +143,7 @@ glm::vec3* QuatRotationPoints::getThirdPointRef()
 
 glm::vec3* QuatRotationPoints::getMRPRef()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	pointsStart++;
 	pointsStart++;
 	pointsStart++;
@@ -146,7 +152,7 @@ glm::vec3* QuatRotationPoints::getMRPRef()
 
 glm::vec3* QuatRotationPoints::getNormalRef()
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	pointsStart++;
 	pointsStart++;
 	pointsStart++;
@@ -156,7 +162,7 @@ glm::vec3* QuatRotationPoints::getNormalRef()
 
 glm::vec3 QuatRotationPoints::getPointByIndex(int in_index)
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	if (in_index == 0)	// get the first point
 	{
 		return **pointsStart;
@@ -173,7 +179,7 @@ glm::vec3 QuatRotationPoints::getPointByIndex(int in_index)
 
 glm::vec3* QuatRotationPoints::getPointRefByIndex(int in_index)
 {
-	auto pointsStart = pointsRef.begin();
+	auto pointsStart = pointsRefVector.begin();
 	if (in_index == 0)	// get the first point
 	{
 		return *pointsStart;

@@ -140,9 +140,9 @@ void SPolyFracturer::populatePointsForQuaternions()
 		std::cout << "Populate points for quaternion rotation(s)..." << std::endl;
 	}
 	// insert the primal points -- these should be inserted first
-	quatPoints.pointsRef.push_back(&polyRef->primePoint0);
-	quatPoints.pointsRef.push_back(&polyRef->primePoint1);
-	quatPoints.pointsRef.push_back(&polyRef->primePoint2);
+	quatPoints.pointsRefVector.push_back(&polyRef->primePoint0);
+	quatPoints.pointsRefVector.push_back(&polyRef->primePoint1);
+	quatPoints.pointsRefVector.push_back(&polyRef->primePoint2);
 
 
 	// insert the cleave map points, and their normals
@@ -154,9 +154,9 @@ void SPolyFracturer::populatePointsForQuaternions()
 		auto currentLinesEnd = cleaveMapBegin->second.cleavingLines.end();
 		for (currentLinesBegin; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
 		{
-			quatPoints.pointsRef.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
-			quatPoints.pointsRef.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
-			quatPoints.pointsRef.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
+			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
+			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
+			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
 		}
 	}
 
@@ -164,9 +164,9 @@ void SPolyFracturer::populatePointsForQuaternions()
 	int totalBorderLines = polyRef->numberOfBorderLines;
 	for (int x = 0; x < totalBorderLines; x++)
 	{
-		quatPoints.pointsRef.push_back(&polyRef->borderLines[x].pointA);	// push back point A
-		quatPoints.pointsRef.push_back(&polyRef->borderLines[x].pointB);	// ""
-		quatPoints.pointsRef.push_back(&polyRef->borderLines[x].planarVector);
+		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointA);	// push back point A
+		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointB);	// ""
+		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].planarVector);
 	}
 }
 
@@ -174,7 +174,7 @@ void SPolyFracturer::printPointMetaData()
 {
 	if (polyRef->debugFlag == 1)
 	{
-		std::vector<glm::vec3*>::iterator pointsStart = quatPoints.pointsRef.begin();
+		std::vector<glm::vec3*>::iterator pointsStart = quatPoints.pointsRefVector.begin();
 		// print the points
 		std::cout << (*pointsStart)->x << std::endl;
 		std::cout << "--------------------------------------------- Printing point meta-data for Fracturing process -----------------------------------------------------" << std::endl;
@@ -203,9 +203,9 @@ void SPolyFracturer::printPointMetaData()
 				pointsStart++;
 				std::cout << "--Empty normal: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
 				pointsStart++;
-				//quatPoints.pointsRef.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
-				//quatPoints.pointsRef.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
-				//quatPoints.pointsRef.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
+				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
+				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
+				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
 			}
 		}
 
@@ -215,9 +215,9 @@ void SPolyFracturer::printPointMetaData()
 		for (int x = 0; x < totalBorderLines; x++)
 		{
 			std::cout << "---Border line at " << x << " --- " << std::endl;
-			//quatPoints.pointsRef.push_back(&polyRef->borderLines[x].pointA);	// push back point A
-			//quatPoints.pointsRef.push_back(&polyRef->borderLines[x].pointB);	// ""
-			//quatPoints.pointsRef.push_back(&polyRef->borderLines[x].planarVector);
+			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointA);	// push back point A
+			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointB);	// ""
+			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].planarVector);
 			std::cout << "--Point A: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
 			pointsStart++;
 			std::cout << "--Point B: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
