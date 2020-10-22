@@ -77,3 +77,84 @@ glm::vec3 CleaveSequence::fetchPointToSearch()
 	//glm::vec3 nonBorderPoint = cleavingLines[0].line.getNonBorderPointFromSingularBorderLineCount();
 	return currentPointToSearch;
 }
+
+DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateFor)
+{
+	DistanceToPoint returnDistanceToPoint;
+	float currentShortest = 100000.0f;
+	if (cleavingLines.size() == 1)
+	{
+		auto categorizedLineIter = cleavingLines.begin();
+		glm::vec3 pointA = categorizedLineIter->second.line.pointA;
+		glm::vec3 pointB = categorizedLineIter->second.line.pointB;
+
+		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
+		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
+		float selectedMin = std::min(distOriginToA, distOriginToB);
+
+		// is the chosen min for A?
+		if (selectedMin == distOriginToA)
+		{
+			std::cout << "(SINGLE_LINE) Closest point is A" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointA;
+		}
+
+		// is the chosen min for B?
+		else if (selectedMin == distOriginToB)
+		{
+			std::cout << "(SINGLE_LINE) Closest point is B" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointB;
+		}
+
+		// special case, when they are equal
+		else if (distOriginToA == distOriginToB)
+		{
+			std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+		}
+
+	}
+	else if (cleavingLines.size() >= 1)
+	{
+		// remember, if there are two or more cleaving lines, the first and last should contain border points.
+		auto firstLine = cleavingLines.begin();
+		auto lastLine = cleavingLines.rbegin();
+
+		glm::vec3 pointA = firstLine->second.line.getBorderPointFromSingularBorderLineCount();
+		glm::vec3 pointB = lastLine->second.line.getBorderPointFromSingularBorderLineCount();
+
+		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
+		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
+
+		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+
+
+		float selectedMin = std::min(distOriginToA, distOriginToB);
+
+		// is the chosen min for A?
+		if (selectedMin == distOriginToA)
+		{
+			std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointA;
+		}
+
+		// is the chosen min for B?
+		else if (selectedMin == distOriginToB)
+		{
+			std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointB;
+		}
+
+		// special case, when they are equal
+		else if (distOriginToA == distOriginToB)
+		{
+			std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+		}
+
+	}
+	return returnDistanceToPoint;
+}

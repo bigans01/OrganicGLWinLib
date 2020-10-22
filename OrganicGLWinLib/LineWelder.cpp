@@ -116,5 +116,5 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// -the CyclingDirection the LineWelder is running in
 	// -a reference to a set indicating the candidates (that is, selectable CleaveSequences that haven't been consumed/used) that exist on the border line that the finder runs on
 	// -the ID of the current CleaveSequence this finder will start from
-	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker);
+	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker, in_leadingPoint);
 }

@@ -10,6 +10,7 @@
 #include "CleaveSequenceMeta.h"
 #include "CleaveSequenceCandidateList.h"
 #include "CleaveSequenceMetaTracker.h"
+#include "DistanceToPoint.h"
 
 class NeighboringCleaveSequenceFinder
 {
@@ -21,14 +22,16 @@ class NeighboringCleaveSequenceFinder
 										CyclingDirection in_cyclingDirection,
 										CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef,
 										int in_finderStartingCleaveSequenceID,
-										CleaveSequenceMetaTracker* in_cleaveSequenceMetaTrackerRef) : 
+										CleaveSequenceMetaTracker* in_cleaveSequenceMetaTrackerRef,
+										glm::vec3 in_sequenceFinderStartPoint) : 
 			startingBorderLineID(in_startingborderLineID),
 			borderLineRef(in_borderLineRef), 
 			cleaveMapRef(in_cleaveMapRef),
 			cyclingDirection(in_cyclingDirection),
 			cleaveSequenceCandidateListRef(in_cleaveSequenceCandidateListRef),
 			finderStartingCleaveSequenceID(in_finderStartingCleaveSequenceID),
-			cleaveSequenceMetaTrackerRef(in_cleaveSequenceMetaTrackerRef)
+			cleaveSequenceMetaTrackerRef(in_cleaveSequenceMetaTrackerRef),
+			sequenceFinderStartPoint(in_sequenceFinderStartPoint)
 		{
 			buildNeighboringCleaveSequenceMap();
 		};
@@ -39,8 +42,9 @@ class NeighboringCleaveSequenceFinder
 		std::map<int, CleaveSequence>* cleaveMapRef = nullptr; // set upon initialization
 		CyclingDirection cyclingDirection = CyclingDirection::NOVAL;	// set upon initialization, default is NOVAL
 		CleaveSequenceCandidateList* cleaveSequenceCandidateListRef = nullptr;		// set upon initialization
-		CleaveSequenceMetaTracker* cleaveSequenceMetaTrackerRef = nullptr;	// set upon initialization
 		int finderStartingCleaveSequenceID = 0;		// set upon initialization
+		CleaveSequenceMetaTracker* cleaveSequenceMetaTrackerRef = nullptr;	// set upon initialization
+		glm::vec3 sequenceFinderStartPoint;
 
 		std::set<int> foundSet;						// will contain the other CleaveSequences on this line, except the one that his the value specified by
 													// finderStartingCleaveSequenceID.

@@ -7,6 +7,8 @@
 #include "CleaveSequenceStatus.h"
 #include <map>
 #include "CleaveSequenceMeta.h"
+#include "DistanceToPoint.h"
+#include <algorithm>
 
 class CleaveSequence
 {
@@ -24,6 +26,7 @@ public:
 	CategorizedLine* getCategorizedLineRef(int in_categorizedLineID);
 	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();
+	DistanceToPoint fetchClosestPoint(glm::vec3 in_pointToCalculateFor);
 };
 
 #endif
