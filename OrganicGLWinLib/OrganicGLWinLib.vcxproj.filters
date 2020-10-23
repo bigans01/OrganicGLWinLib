@@ -417,6 +417,9 @@
     <ClInclude Include="DistanceToPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FoundCleaveSequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

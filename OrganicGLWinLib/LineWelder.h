@@ -10,6 +10,7 @@
 #include "NeighboringCleaveSequenceFinder.h"
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
+#include "FoundCleaveSequence.h"
 
 class LineWelder
 {

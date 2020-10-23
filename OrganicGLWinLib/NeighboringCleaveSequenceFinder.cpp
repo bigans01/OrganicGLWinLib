@@ -31,8 +31,13 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 
 		intersectRecorderRef->printRecords();
 		findAndSortNeighboringCleaveSequences();
-		doNeighborsExist = true;
+		
 	}
+}
+
+FoundCleaveSequence NeighboringCleaveSequenceFinder::getSelectedCleaveSequenceMeta()
+{
+	return selectedCleaveSequenceMeta;
 }
 
 bool NeighboringCleaveSequenceFinder::wereNeighborsFound()
@@ -55,6 +60,7 @@ void NeighboringCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	//  7. Only the closest points that are >= 0.0y after the translated are ones that should be considered, as the other ones all go the opposite direction.
 	//     In other words, if we are going CyclingDirection::FORWARD, point B should be equal to Y = 1.0f after the radians are applied -- and any 
 	//	   acceptable neighbor cleave sequences will have their closest points will be 0 < y <= 1.0f.
+	//  8. After clipping of invalid candidates is done, get the CleaveSequence that has the shortest distance to the sequenceFinderStartPoint.
 
 
 	std::map<int, DistanceToPoint> distanceToPointMap;
@@ -95,8 +101,8 @@ void NeighboringCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	// push the value we just determined into the quat points. This should always be the last value in the vector.
 	quatPoints.pointsRefVector.push_back(&selectedPointOfBorderLine);
 
-	//glm::vec3 rotationTargetPoint = quatPoints.getLastPoint();
-	//std::cout << ">>> Point to rotate to (pre translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
+	glm::vec3 rotationTargetPoint = quatPoints.getLastPoint();
+	std::cout << ">>> Point to rotate to (pre translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
 
 
 	// check for translation on the sequenceFinderStartPoint
@@ -107,9 +113,60 @@ void NeighboringCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		quatPoints.applyTranslation(pointTranslationChecker.getTranslationValue());		// Step 4
 	}
 
-	// find the radians needed to rotate the last point in quatPoints to positive Y, if needed.
-	glm::vec3 rotationTargetPoint = quatPoints.getLastPoint();
-	//std::cout << ">>> Point to rotate to (post translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
+	// find the radians needed to rotate the last point in quatPoints to positive Y -- if needed -- and then rotate
+	QuatRotationManager rotationManager;
+	rotationManager.initializeAndRunforAligningNeighboringCleaveSequencesToPosY(&quatPoints);			// Step 5 and Step 6
+	rotationTargetPoint = quatPoints.getLastPoint();
+	//glm::vec3 normalizedRotationTarget = glm::normalize(quatPoints.getLastPoint());	// get a normalized value of the rotation target point
+	std::cout << ">>> Point to rotate to (post translation, and rotation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
 	
-	
+	// let's print whats in the distanceToPointMap, to make sure it's OK
+	/*
+	distanceToPointMapBegin = distanceToPointMap.begin();
+	distanceToPointMapEnd = distanceToPointMap.end();
+	for (; distanceToPointMapBegin != distanceToPointMapEnd; distanceToPointMapBegin++)
+	{
+		std::cout << "Quat-rotated point:           [" << distanceToPointMapBegin->first << "] -> " << distanceToPointMapBegin->second.point.x << ", " << distanceToPointMapBegin->second.point.y << ", " << distanceToPointMapBegin->second.point.z << std::endl;
+		auto originalMapIter = originalCopy.find(distanceToPointMapBegin->first);
+		std::cout << "Corresponding original point: [" << distanceToPointMapBegin->first << "] -> " << originalMapIter->second.point.x << ", " << originalMapIter->second.point.y << ", " << originalMapIter->second.point.z << std::endl;
+	}
+	*/
+
+	// clip any point that isn't >= y = 0  (Step 7)
+	std::vector<int> candidateCleaveSequencesToRemove;
+	distanceToPointMapBegin = distanceToPointMap.begin();
+	distanceToPointMapEnd = distanceToPointMap.end();
+	for (; distanceToPointMapBegin != distanceToPointMapEnd; distanceToPointMapBegin++)
+	{
+		if ((distanceToPointMapBegin->second.point.y) < 0)	// if it's less than 0, it doesn't lie between the sequenceFinderStartPoint and the chosen end point of the border line,
+															// so it must be clipped (erased)
+		{
+			candidateCleaveSequencesToRemove.push_back(distanceToPointMapBegin->first);
+		}
+	}
+	auto removeBegin = candidateCleaveSequencesToRemove.begin();
+	auto removeEnd = candidateCleaveSequencesToRemove.end();
+	for (; removeBegin != removeEnd; removeBegin++)
+	{
+		distanceToPointMap.erase(*removeBegin);
+	}
+
+	// get the ID of the closest cleave sequence, and return the corresponding ID that was found in the originalCopy. (Step 8)
+	float closestDistance = 1000.0f;	// start this out really high
+	int currentShortestDistanceID = 0;
+	distanceToPointMapBegin = distanceToPointMap.begin();
+	distanceToPointMapEnd = distanceToPointMap.end();
+	for (; distanceToPointMapBegin != distanceToPointMapEnd; distanceToPointMapBegin++)
+	{
+		if (distanceToPointMapBegin->second.distance < closestDistance)
+		{
+			closestDistance = distanceToPointMapBegin->second.distance;
+			currentShortestDistanceID = distanceToPointMapBegin->first;
+			doNeighborsExist = true;		// this indicates that we actually found a legitimate neighbor to trace to.
+		}
+	}
+
+	// we found the shortest ID, so lets 
+	FoundCleaveSequence selectedSequence(currentShortestDistanceID, originalCopy[currentShortestDistanceID]);
+	selectedCleaveSequenceMeta = selectedSequence;
 }

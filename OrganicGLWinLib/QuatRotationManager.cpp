@@ -168,6 +168,13 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	//pointARef = rotationpointsRefVector->
 }
 
+void QuatRotationManager::initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	glm::vec3 pointToRotateTo = glm::normalize(rotationpointsRefVector->getLastPoint());
+	rotateAroundZForPosYNormalAndPushIntoStack(pointToRotateTo);
+}
+
 void QuatRotationManager::executeRotationsForEmptyNormal()
 {
 	auto vectorBegin = rotationOrder.begin();

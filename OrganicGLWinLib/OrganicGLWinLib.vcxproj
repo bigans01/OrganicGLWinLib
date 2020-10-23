@@ -185,6 +185,7 @@
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
     <ClInclude Include="DistanceToPoint.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
+    <ClInclude Include="FoundCleaveSequence.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="ImGuiButton.h" />

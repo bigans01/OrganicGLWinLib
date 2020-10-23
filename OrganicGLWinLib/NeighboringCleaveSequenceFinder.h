@@ -14,6 +14,7 @@
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
 #include "QuatRotationPoints.h"
+#include "FoundCleaveSequence.h"
 
 class NeighboringCleaveSequenceFinder
 {
@@ -39,6 +40,7 @@ class NeighboringCleaveSequenceFinder
 			buildNeighboringCleaveSequenceMap();
 		};
 		bool wereNeighborsFound();
+		FoundCleaveSequence getSelectedCleaveSequenceMeta();
 	private:
 		int startingBorderLineID = 0;				// set upon initialization
 		SPolyBorderLines* borderLineRef = nullptr;	// set upon initialization
@@ -52,6 +54,9 @@ class NeighboringCleaveSequenceFinder
 		std::set<int> foundSet;						// will contain the other CleaveSequences on this line, except the one that his the value specified by
 													// finderStartingCleaveSequenceID.
 		bool doNeighborsExist = false;				// a flag that determines whether or not neighbors exist.
+
+		FoundCleaveSequence selectedCleaveSequenceMeta;
+
 		void buildNeighboringCleaveSequenceMap();
 		void findAndSortNeighboringCleaveSequences();
 };
