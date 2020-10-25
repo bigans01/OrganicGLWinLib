@@ -8,10 +8,14 @@
 #include "BorderLineIDPair.h"
 #include "BorderLinePointPair.h"
 #include <iostream>
+#include "IntersectionLineValidity.h"
 
 class IntersectionLine
 {
 public:
+
+	IntersectionLineValidity lineValidity = IntersectionLineValidity::VALID;	// the default value is VALID, but becomes INVALID if both points of the line are the same.
+
 	int numberOfBorderLines = 0;	// the number of border lines this line "touches"
 	int numberOfPoints = 0;
 	int lineGroupID = 0;			// the group ID this line belongs to

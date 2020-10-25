@@ -3,8 +3,13 @@
 
 void LineWelder::startWelding()
 {
-	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has. 
+	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
+	// in addition, set that beginning cleave sequence to be the SUPER.
+
+	std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;
+
 	auto cleaveBegin = sPolyRef->cleaveMap.begin();
+	cleaveBegin->second.setSequenceAsSuper();							// set the CleaveSequence as a SUPER, so the welder knows when to end.
 	auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
 	auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
@@ -56,14 +61,18 @@ void LineWelder::startWelding()
 	// -the leading point
 	// -a reference to the corresponding CleaveSequenceCandidateList
 	// -the ID of the cleave sequence that the finder is starting its run from
-	findRemainingWeldingLines(currentBorderLineID, pointPair.pointA, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);	
-	
+	currentLeadingPoint = pointPair.pointA;			// set the beginning value for the currentLeadingPoint, before welding starts.
+	findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+	findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
 																															
 
 	//findWeldingLines(currentBorderLineID, cleaveBegin->first, sequenceBegin->first, foundDirection, pointPair); // pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
 																										   // the ID of the CategorizedLine in the CleaveSequence, the direction
 
 
+	std::cout << "### Welding complete, enter number to continue to next poly. " << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
 }
 
@@ -107,7 +116,7 @@ void LineWelder::findWeldingLines(int in_startingBorderLineID, int in_startingCl
 
 void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
 {
-	std::cout << "Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+	std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
 	// pass in these parameters:
 	// -the border line that the finder needs to run on
@@ -116,6 +125,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// -the CyclingDirection the LineWelder is running in
 	// -a reference to a set indicating the candidates (that is, selectable CleaveSequences that haven't been consumed/used) that exist on the border line that the finder runs on
 	// -the ID of the current CleaveSequence this finder will start from
+	int nextBorderLineID = 0;	// will be set by conditions below...
 	NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker, in_leadingPoint);
 	if (nextCleaveSequenceFinder.wereNeighborsFound() == true)
 	{
@@ -124,5 +134,47 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		std::cout << "| cleave sequence ID: " << discoveredSequence.cleaveSequenceID << std::endl;
 		std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
 		std::cout << "| point:              " << discoveredSequence.cleaveSequenceTracingBeginPoint.x << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.y << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.z << std::endl;
+
+		CleaveSequenceMeta* fetchedCleaveSequenceMeta = metaTracker.fetchCleaveSequence(discoveredSequence.cleaveSequenceID);	
+		currentHierarchyPositionOfLatestCleaveSequence = fetchedCleaveSequenceMeta->cleaveSequencePtr->hierarchyPosition;			// update the current hierarchy position to be the value of the neighboring CleaveSequence we just found.
+		fetchedCleaveSequenceMeta->determineCrawlDirectionFromPoint(discoveredSequence.cleaveSequenceTracingBeginPoint);			// for the cleave sequence we found, determine the the direction we'll go in.
+		int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfLines;
+		for (int x = 0; x < numberOfLinesToCrawl; x++)
+		{
+			std::cout << "| Crawling line... " << std::endl;
+			CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
+			// will need to do this with the lin here, such as making into a CrawlableLine
+			// ...
+			// ...
+			currentLeadingPoint = currentCategorizedLine.line.pointB;		// hard-coded test, remove later...
+			std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
+
+			// for the last iteration in this loop, get the next border line ID from the final categorized line in the sequence,
+			// so the welder knows where to start in the next iteration.
+			if (x == (numberOfLinesToCrawl - 1))
+			{
+				nextBorderLineID = fetchedCleaveSequenceMeta->acquireNextBorderLineID();
+				std::cout << "##!!!!! Next border line ID will be: " << nextBorderLineID << std::endl;
+			}
+		}
+
+		// check if the CleaveSequence has run all it's lines; if it has, we must remove it from the appropriate CleaveSequenceCandidateList.
+		bool isCleaveSequenceComplete = fetchedCleaveSequenceMeta->checkIfCleaveSequenceHasRunallCategorizedLines();
+		if (isCleaveSequenceComplete == true)
+		{
+			std::cout << "######### CleaveSequence is COMPLETE, removing from candidateList, the ID of: " << discoveredSequence.cleaveSequenceID << std::endl;
+			in_cleaveSequenceCandidateListRef->removeCandidate(discoveredSequence.cleaveSequenceID);
+			candidateListMap.candidateMap[currentBorderLineID] = (*in_cleaveSequenceCandidateListRef);
+		}
+
+
 	}
+	else if (nextCleaveSequenceFinder.wereNeighborsFound() == false)
+	{
+		std::cout << "!!! No neighbors found, from the leading point: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
+		nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+		std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
+	}
+	currentBorderLineID = nextBorderLineID;
+
 }

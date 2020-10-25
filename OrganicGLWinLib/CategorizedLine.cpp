@@ -40,6 +40,43 @@ void CategorizedLine::convertLinesToNonbound(IntersectionLine in_lineA, Intersec
 	line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;
 }
 
+void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB)
+{
+	// if in_lineA is the invalid one, use the points in  in_lineB.
+	if (in_lineA.lineValidity == IntersectionLineValidity::INVALID)
+	{
+		std::cout << "::::: Line categorization, INTERCEPT_POINT_PRECISE, lineA " << std::endl;
+
+		type = IntersectionType::INTERCEPTS_POINT_PRECISE;
+
+		// we don't know which border lines we will use yet, so set the value to two, and copy the values from the invalid line.
+		line.pointA = in_lineB.pointA;
+		line.pointB = in_lineB.pointB;
+		line.numberOfBorderLines = 2;
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_lineA.isPointAOnBorder;
+		line.isPointBOnBorder = 1;
+		line.pointBBorder = in_lineA.isPointAOnBorder;
+		
+		
+	}
+	else if (in_lineB.lineValidity == IntersectionLineValidity::INVALID)
+	{
+		std::cout << "::::: Line categorization, INTERCEPT_POINT_PRECISE, lineB " << std::endl;
+
+		type = IntersectionType::INTERCEPTS_POINT_PRECISE;
+
+		line.pointA = in_lineA.pointA;
+		line.pointB = in_lineA.pointB;
+		line.numberOfBorderLines = 2;
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_lineA.isPointAOnBorder;
+		line.isPointBOnBorder = 1;
+		line.pointBBorder = in_lineA.isPointAOnBorder;
+	}
+	// do for in_lineB? maybe.
+}
+
 
 void CategorizedLine::convertLineToSlice(IntersectionLine in_slicingLine)
 {

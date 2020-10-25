@@ -37,6 +37,42 @@ void CleaveSequence::insertLastLine(CategorizedLine in_categorizedLine)
 	//std::cout << "Final line inserted: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << " | " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 }
 
+int CleaveSequence::retrievedLineEndpointBorderLine(CleaveSequenceCrawlDirection in_crawlDirection)
+{
+	int returnBorderLineID = 0;
+	if (in_crawlDirection == CleaveSequenceCrawlDirection::FORWARD)
+	{
+		auto crawlBegin = cleavingLines.rbegin();		// when going forward, the last line in the sequence to get the border line ID will be at rbegin.
+		/*
+		if (crawlBegin->second.type == IntersectionType::A_SLICE)
+		{
+			returnBorderLineID = crawlBegin->second.line.pointBBorder;
+		}
+		else if (crawlBegin->second.type == IntersectionType::PARTIAL_BOUND)
+		{
+			returnBorderLineID = crawlBegin->second.line.pointBBorder;
+		}
+		*/
+		returnBorderLineID = crawlBegin->second.line.pointBBorder;
+	}
+	else if (in_crawlDirection == CleaveSequenceCrawlDirection::REVERSE)
+	{
+		auto crawlBegin = cleavingLines.begin();		// when going reverse, the last line in the sequence to get the border line ID will be at begin.
+		/*
+		if (crawlBegin->second.type == IntersectionType::A_SLICE)
+		{
+
+		}
+		else if (crawlBegin->second.type == IntersectionType::PARTIAL_BOUND)
+		{
+
+		}
+		*/
+		returnBorderLineID = crawlBegin->second.line.pointABorder;
+	}
+	return returnBorderLineID;
+}
+
 void CleaveSequence::printCategorizedLines()
 {
 	auto cleavingLinesBegin = cleavingLines.begin();
@@ -49,6 +85,11 @@ void CleaveSequence::printCategorizedLines()
 													<< " | B border: (is on border)-> " << cleavingLinesBegin->second.line.isPointBOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointBBorder
 													<< std::endl;
 	}
+}
+
+void CleaveSequence::setSequenceAsSuper()
+{
+	hierarchyPosition = LineWelderHierarchyPosition::SUPER;
 }
 
 CategorizedLine* CleaveSequence::getCategorizedLineRef(int in_categorizedLineID)
@@ -68,7 +109,7 @@ CleaveSequenceMeta CleaveSequence::getCleaveSequenceMeta()
 		sequenceType = CleaveSequenceType::MULTI_LINE;
 	}
 
-	CleaveSequenceMeta sequenceMeta(sequenceType, cleavingLines.size());
+	CleaveSequenceMeta sequenceMeta(sequenceType, cleavingLines.size(), this);
 	return sequenceMeta;
 }
 

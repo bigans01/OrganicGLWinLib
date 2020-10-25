@@ -22,6 +22,8 @@ public:
 	void convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB);
 	void convertLineToNonbound(IntersectionLine in_engulfedLine);
 	void convertLinesToNonbound(IntersectionLine in_lineA, IntersectionLine in_lineB);
+	void convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB);
+	
 	void convertLineToSlice(IntersectionLine in_slicingLine);
 	IRPointType checkIfPointIsInLine(glm::vec3 in_point);
 	void setEmptyNormal(glm::vec3 in_emptyNormal);

@@ -337,6 +337,36 @@ void SPoly::addBorderLine(STriangleLine in_triangleLine)
 	borderLines[numberOfBorderLines++] = newBorderLine;
 }
 
+int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction)
+{
+	int returnID = 0;
+	if (in_direction == CyclingDirection::FORWARD)
+	{
+		int lastIndex = numberOfBorderLines - 1;
+		if (in_currentBorderLineID == lastIndex)
+		{
+			returnID = 0;
+		}
+		else if (in_currentBorderLineID != lastIndex)
+		{
+			returnID = in_currentBorderLineID += 1;
+		}
+	}
+	else if (in_direction == CyclingDirection::REVERSE)
+	{
+		int firstIndex = 0;
+		if (in_currentBorderLineID == firstIndex)
+		{
+			returnID = (numberOfBorderLines - 1);
+		}
+		else if (in_currentBorderLineID != firstIndex)
+		{
+			returnID = in_currentBorderLineID -= 1;
+		}
+	}
+	return returnID;
+}
+
 void SPoly::addTriangle(STriangle in_triangle)
 {
 	triangles[numberOfTriangles++] = in_triangle;

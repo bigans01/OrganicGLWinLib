@@ -171,6 +171,7 @@
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceCandidateList.h" />
     <ClInclude Include="CleaveSequenceCandidateListMap.h" />
+    <ClInclude Include="CleaveSequenceCrawlDirection.h" />
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
     <ClInclude Include="CleaveSequenceMeta.h" />
@@ -199,12 +200,14 @@
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectionLine.h" />
     <ClInclude Include="IntersectionLineGroup.h" />
+    <ClInclude Include="IntersectionLineValidity.h" />
     <ClInclude Include="IntersectionResult.h" />
     <ClInclude Include="IntersectionType.h" />
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
     <ClInclude Include="LineWelder.h" />
+    <ClInclude Include="LineWelderHierarchyPosition.h" />
     <ClInclude Include="MassManipulationMode.h" />
     <ClInclude Include="NeighboringCleaveSequenceFinder.h" />
     <ClInclude Include="PointTranslationCheck.h" />
@@ -305,6 +308,7 @@
     <ClCompile Include="CleaveSequence.cpp" />
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
+    <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />

@@ -9,7 +9,16 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	// if it's the only intercept on this border line, that's ok.
 	if (intersectRecorderRef->records.size() == 1)
 	{
+		std::cout << "#### Note: record size was only 1. " << std::endl;
 
+		// testing only, print the lines.
+		auto foundSetBegin = foundSet.begin();
+		auto foundSetEnd = foundSet.end();
+		for (; foundSetBegin != foundSetEnd; foundSetBegin++)
+		{
+			std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
+
+		}
 	}
 	else if (intersectRecorderRef->records.size() > 1)
 	{
@@ -20,18 +29,28 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
 		foundSet.erase(finderStartingCleaveSequenceID);						// remove the finder's starting cleave sequence from the found set.
 
-		// testing only, print the lines.
-		auto foundSetBegin = foundSet.begin();
-		auto foundSetEnd = foundSet.end();
-		for (; foundSetBegin != foundSetEnd; foundSetBegin++)
+	
+		// if the set is empty, don't bother doing anything.
+		if (!foundSet.empty())
 		{
-			auto foundCleaveMap = (*cleaveMapRef).find(*foundSetBegin);
-			foundCleaveMap->second.printCategorizedLines();
-		}
+			// testing only, print the lines.
+			auto foundSetBegin = foundSet.begin();
+			auto foundSetEnd = foundSet.end();
+			for (; foundSetBegin != foundSetEnd; foundSetBegin++)
+			{
+				std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
 
-		intersectRecorderRef->printRecords();
-		findAndSortNeighboringCleaveSequences();
-		
+				auto foundCleaveMap = (*cleaveMapRef).find(*foundSetBegin);
+				foundCleaveMap->second.printCategorizedLines();
+			}
+
+			intersectRecorderRef->printRecords();
+			findAndSortNeighboringCleaveSequences();
+		}
+		else if (foundSet.empty())
+		{
+			std::cout << "###### ++++ Found set was EMPTY. " << std::endl;
+		}
 	}
 }
 

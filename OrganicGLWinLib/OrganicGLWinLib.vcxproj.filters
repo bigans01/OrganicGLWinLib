@@ -420,6 +420,15 @@
     <ClInclude Include="FoundCleaveSequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CleaveSequenceCrawlDirection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineWelderHierarchyPosition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionLineValidity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -645,6 +654,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NeighboringCleaveSequenceFinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceMeta.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

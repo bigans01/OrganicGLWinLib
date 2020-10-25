@@ -9,6 +9,8 @@
 #include "CleaveSequenceMeta.h"
 #include "DistanceToPoint.h"
 #include <algorithm>
+#include "LineWelderHierarchyPosition.h"
+#include "CleaveSequenceCrawlDirection.h"
 
 class CleaveSequence
 {
@@ -17,12 +19,16 @@ public:
 	int cleaveIndex = 0;
 	glm::vec3 currentPointToSearch;
 	CleaveSequenceStatus sequenceStatus = CleaveSequenceStatus::NOVAL;		// default is noval (make compiler happy)
+	LineWelderHierarchyPosition hierarchyPosition = LineWelderHierarchyPosition::SUB;	// by default, all lines will be a SUB; but at least one will get set to SUPER
+																						// during the LineWelder's welding process.
 
 	void insertLineAtIndex(int in_index, CategorizedLine in_categorizedLine);
 	void insertFirstLine(CategorizedLine in_categorizedLine);
 	void insertNonboundLine(CategorizedLine in_categorizedLine);
 	void insertLastLine(CategorizedLine in_categorizedLine);
+	int retrievedLineEndpointBorderLine(CleaveSequenceCrawlDirection in_crawlDirection);
 	void printCategorizedLines();
+	void setSequenceAsSuper();
 	CategorizedLine* getCategorizedLineRef(int in_categorizedLineID);
 	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();

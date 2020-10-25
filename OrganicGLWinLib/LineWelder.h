@@ -11,6 +11,7 @@
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
 #include "FoundCleaveSequence.h"
+#include "LineWelderHierarchyPosition.h"
 
 class LineWelder
 {
@@ -24,8 +25,11 @@ private:
 	SPoly* sPolyRef = nullptr;	// a reference to the SPoly we will be operating on for this LineWelder.
 	MassManipulationMode currentManipulationMode = MassManipulationMode::CREATION;	// CREATION is default value, but will be overrriden by the SPoly's value when
 																					// the LineWelder is constructed.
+	LineWelderHierarchyPosition currentHierarchyPositionOfLatestCleaveSequence = LineWelderHierarchyPosition::NOVAL;	// always starts as NOVAL, until a CleaveSequence is found -- at that point
+																														// this always changes to either SUB or SUPER.
 	CyclingDirection foundDirection;	// the direction that the LineWelder is going in (FORWARD) = towards point B of border lines, (REVERSE) = towards point A of border lines.
 	CleaveSequenceCandidateListMap candidateListMap;
+	glm::vec3 currentLeadingPoint;		
 	CleaveSequenceMetaTracker metaTracker;
 	int currentBorderLineID = 0;	// the border line we'll be starting on.
 	int endingBorderLineID = 0;		// the border line we'll be ending on (the while loop will end when it hits this)
