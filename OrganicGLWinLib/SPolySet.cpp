@@ -603,7 +603,7 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 	// ROOT CASE 2: At least one line is considered INVALID. (OR)
 	else if
 	(
-		(in_lineA.lineValidity == IntersectionLineValidity::INVALID)
+		(in_lineA.lineValidity == IntersectionLineValidity::INVALID) 
 		||		
 		(in_lineB.lineValidity == IntersectionLineValidity::INVALID)
 	)
@@ -619,8 +619,8 @@ CategorizedLine SPolySet::determineCategorizedLine(IntersectionLine in_lineA, In
 
 		std::cout << "line B, point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointA.z << std::endl;
 		std::cout << "line B, point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
-		std::cout << "line B, point A border: is on border? ->" << in_lineA.isPointAOnBorder << "; " << in_lineB.pointABorder << std::endl;
-		std::cout << "line B, point B border: is on border? ->" << in_lineA.isPointBOnBorder << "; " << in_lineB.pointBBorder << std::endl;
+		std::cout << "line B, point A border: is on border? ->" << in_lineB.isPointAOnBorder << "; " << in_lineB.pointABorder << std::endl;
+		std::cout << "line B, point B border: is on border? ->" << in_lineB.isPointBOnBorder << "; " << in_lineB.pointBBorder << std::endl;
 
 		int someVal = 3;
 		std::cin >> someVal;

@@ -49,16 +49,10 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 
 		type = IntersectionType::INTERCEPTS_POINT_PRECISE;
 
-		// we don't know which border lines we will use yet, so set the value to two, and copy the values from the invalid line.
+		
 		line.pointA = in_lineB.pointA;
 		line.pointB = in_lineB.pointB;
-		line.numberOfBorderLines = 2;
-		line.isPointAOnBorder = 1;
-		line.pointABorder = in_lineA.isPointAOnBorder;
-		line.isPointBOnBorder = 1;
-		line.pointBBorder = in_lineA.isPointAOnBorder;
-		
-		
+		line.numberOfBorderLines = 1;		
 	}
 	else if (in_lineB.lineValidity == IntersectionLineValidity::INVALID)
 	{
@@ -68,11 +62,7 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 
 		line.pointA = in_lineA.pointA;
 		line.pointB = in_lineA.pointB;
-		line.numberOfBorderLines = 2;
-		line.isPointAOnBorder = 1;
-		line.pointABorder = in_lineA.isPointAOnBorder;
-		line.isPointBOnBorder = 1;
-		line.pointBBorder = in_lineA.isPointAOnBorder;
+		line.numberOfBorderLines = 1;
 	}
 	// do for in_lineB? maybe.
 }

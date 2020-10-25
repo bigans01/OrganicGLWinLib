@@ -42,7 +42,13 @@ class CleaveSequenceFactory
 		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
 		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch);
 
-		CategorizedLineSearchResult checkForNextLine(glm::vec3 in_pointToSearch);
+		CategorizedLineSearchResult checkForNextNonboundLine(glm::vec3 in_pointToSearch);
+
+		// scenario processing -- a scenario just describes different cases that occur, for instance the case in which there is at least
+		// one CategorizedLine with an IntersectionType of INTERCEPTS_POINT_PRECISE.
+
+		void handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
+		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef);
 };
 
 #endif
