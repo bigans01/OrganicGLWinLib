@@ -50,10 +50,14 @@ CategorizedLine CleaveSequenceMeta::fetchNextCategorizedLineInSequence()
 	}
 	else if (crawlDirection == CleaveSequenceCrawlDirection::REVERSE)
 	{
+		std::cout << "### Entered REVERSE crawl else/if... " << std::endl;
+		std::cout << "Number of lines to crawl: " << cleaveSequencePtr->cleavingLines.size() << std::endl;
+		std::cout << "Current line index: " << currentLineIndex << std::endl;
 		auto categorizedLinesBegin = cleaveSequencePtr->cleavingLines.rbegin();	// start from the END of the map.
 		for (int x = 0; x < currentLineIndex; x++)		// iterate an amount of times equal to the current line index, to get to the next line
 														// revisit this later; is there an easier way to do this?
 		{
+			std::cout << "crawl iteration..." << std::endl;
 			categorizedLinesBegin++;
 		}
 		returnLine = categorizedLinesBegin->second;

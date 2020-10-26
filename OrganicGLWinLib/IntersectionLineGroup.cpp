@@ -140,10 +140,10 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	)
 	{
 		int someVal = 3;
-		std::cout << "++++++++++ point check halting, points are same! " << std::endl;
-		std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
-		std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
-		std::cin >> someVal;
+		//std::cout << "++++++++++ point check halting, points are same! " << std::endl;
+		//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
+		//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
+		//std::cin >> someVal;
 		returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
 	}
 

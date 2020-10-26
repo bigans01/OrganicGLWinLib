@@ -12,13 +12,20 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		std::cout << "#### Note: record size was only 1. " << std::endl;
 
 		// testing only, print the lines.
+		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
 		auto foundSetBegin = foundSet.begin();
-		auto foundSetEnd = foundSet.end();
-		for (; foundSetBegin != foundSetEnd; foundSetBegin++)
-		{
-			std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
+		std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
+		//auto foundSetEnd = foundSet.end();
+		//for (; foundSetBegin != foundSetEnd; foundSetBegin++)
+		//{
+		//	std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
 
-		}
+		//}
+		DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);	// there's only one sequence, so grab its DistanceToPoint value
+			// we found the shortest ID, so lets 
+		FoundCleaveSequence selectedSequence(*foundSetBegin, shortestPointStats);
+		selectedCleaveSequenceMeta = selectedSequence;
+		doNeighborsExist = true;		// this indicates that we actually found a legitimate neighbor to trace to.
 	}
 	else if (intersectRecorderRef->records.size() > 1)
 	{
