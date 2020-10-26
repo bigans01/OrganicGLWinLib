@@ -70,6 +70,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.intersectedSecondaryID = lineMap[0].intersectedSecondaryID;
 		returnLine.numberOfPoints = 1;
 		std::cout << "CASE 2-A HIT. " << std::endl;
+		std::cout << ":: (CASE 2-A) point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+		std::cout << ":: (CASE 2-A) point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 		//std::cout << "Return line border value: " << returnLine.pointABorder << std::endl;
 	}
 	else if
@@ -102,6 +104,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		(totalNumberOfLines == 1)
 	{
 		std::cout << "WHOA!! ONLY ONE!! " << std::endl;
+		std::cout << ":: point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+		std::cout << ":: point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 		returnLine.pointA = lineMap[0].pointA;
 		returnLine.pointABorder = lineMap[0].pointABorder;
 		returnLine.numberOfBorderLines = 0;
@@ -112,7 +116,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	}
 	else
 	{
-		//std::cout << "!!!! WARNING, No if/else case found!!! " << std::endl;
+		std::cout << "!!!! WARNING, No if/else case found!!! " << std::endl;
 		//std::cout << "Total number of lines: " << totalNumberOfLines << std::endl;
 		//std::cout << "Total number of intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
 	}

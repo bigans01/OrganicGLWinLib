@@ -136,7 +136,7 @@ CyclingDirection QuatRotationManager::initializeAndRunForCyclingDirectionFinder(
 	rotateEmptyNormalToPosY(categorizedLineEmptyNormal);		// rotate the normal to have Y = 1.0f, so that we may calculate the direction the appropriate way.
 	
 	
-	std::cout << "#- Cycling Direction    > -------------------After quaternions applied: " << std::endl;
+	std::cout << "#- Cycling Direction    > -------------------After quaternions applied (for rotation of empty normal to positive Y): " << std::endl;
 	std::cout << "#- Cycling Direction    > (Post-quat rotation) | BorderLine Point A ref values: " << borderLinePointARef->x << ", " << borderLinePointARef->y << ", " << borderLinePointARef->z << std::endl;
 	std::cout << "#- Cycling Direction    > (Post-quat rotation) | BorderLine Point B ref values: " << borderLinePointBRef->x << ", " << borderLinePointBRef->y << ", " << borderLinePointBRef->z << std::endl;
 	std::cout << "#- Cycling Direction    > (Post-quat rotation) | Categorized Line Point A ref values: " << pointARef->x << ", " << pointARef->y << ", " << pointARef->z << std::endl;

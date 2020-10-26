@@ -291,9 +291,9 @@ void CleaveSequenceFactory::printLinesInPool()
 
 void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
-	//std::cout << "## Partial count: " << partialboundCount << std::endl;
-		//std::cout << "## Non-bound count: " << nonboundCount << std::endl;
-		//std::cout << "## Sliced count: " << aslicedCount << std::endl;
+		std::cout << "## Partial count: " << partialboundCount << std::endl;
+		std::cout << "## Non-bound count: " << nonboundCount << std::endl;
+		std::cout << "## Sliced count: " << aslicedCount << std::endl;
 
 		// sliced checks.
 	auto slicedBegin = aslicedMap.begin();

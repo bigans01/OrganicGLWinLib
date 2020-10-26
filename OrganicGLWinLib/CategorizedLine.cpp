@@ -24,10 +24,17 @@ void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, Inter
 
 void CategorizedLine::convertLineToNonbound(IntersectionLine in_engulfedLine)
 {
+	std::cout << ":::: Engulfed NON_BOUND detected..." << std::endl;
+
+
 	type = IntersectionType::NON_BOUND;
 	line.numberOfBorderLines = 0;		// NON_BOUND will never have any border lines...
 	line.pointA = in_engulfedLine.pointA;		// ...but it's points are equal to the "engulfed" line
 	line.pointB = in_engulfedLine.pointB;
+
+	std::cout << ">> Engulfed, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	std::cout << ">> Engulfed, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+
 	line.intersectedSecondaryID = in_engulfedLine.intersectedSecondaryID;
 }
 

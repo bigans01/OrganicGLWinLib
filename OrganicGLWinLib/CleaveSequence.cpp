@@ -25,7 +25,11 @@ void CleaveSequence::insertNonboundLine(CategorizedLine in_categorizedLine)
 	cleavingLines[cleaveIndex] = newLine;
 	cleaveIndex++;
 	currentPointToSearch = in_categorizedLine.line.pointB;
-	//std::cout << "Next point to search is: " << currentPointToSearch.x << ", " << currentPointToSearch.y << ", " << currentPointToSearch.z << std::endl;
+	
+	std::cout << ":::: non-bound line, point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+	std::cout << ":::: non-bound line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
+
+	std::cout << ":: Inserted non-bound line; Next point to search is: " << currentPointToSearch.x << ", " << currentPointToSearch.y << ", " << currentPointToSearch.z << std::endl;
 }
 
 void CleaveSequence::insertLastLine(CategorizedLine in_categorizedLine)
