@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "CyclingDirectionFinder.h"
 
-CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode)
+//CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode)
+CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy)
 {
 	// copy the data from the inputs
 	borderLine = in_borderLineCopy;
@@ -28,10 +29,12 @@ CyclingDirectionFinder::CyclingDirectionFinder(SPolyBorderLines in_borderLineCop
 	}
 
 	// invert the normal if the mass manipulation mode is DESTRUCTION.
+	/*
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
 		categorizedLine.emptyNormal *= -1.0f;
 	}
+	*/
 
 	// the empty normal doesn't need to be translated.
 	quatPoints.pointsRefVector.push_back(&categorizedLine.emptyNormal);

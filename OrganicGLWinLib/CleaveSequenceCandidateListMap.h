@@ -10,6 +10,15 @@ class CleaveSequenceCandidateListMap
 {
 	public:
 		std::map<int, CleaveSequenceCandidateList> candidateMap;
+		void removeCandidateFromAllCandidateLists(int in_candidateCleaveSequenceID)
+		{
+			auto candidateListBegin = candidateMap.begin();
+			auto candidateListEnd = candidateMap.end();
+			for (; candidateListBegin != candidateListEnd; candidateListBegin++)
+			{
+				candidateListBegin->second.removeCandidate(in_candidateCleaveSequenceID);
+			}
+		}
 };
 
 #endif

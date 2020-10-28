@@ -20,7 +20,8 @@ class BorderLineCycler
 		BorderLineCycle lineCycle;
 		SPoly* sPolyRef;
 		CyclingDirection direction = CyclingDirection::FORWARD;		// default is forward
-		CyclingDirection findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode);
+		//CyclingDirection findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode);
+		CyclingDirection findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy);
 		void buildCycle(SPoly* in_sPolyRef, int in_borderLineStartIndex, int in_borderLineEndIndex);
 };
 

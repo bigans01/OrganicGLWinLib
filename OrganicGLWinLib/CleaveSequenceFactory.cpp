@@ -74,8 +74,22 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int i
 	return returnLine;
 }
 
-void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef)
+void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines(&in_borderLineArrayRef)[8], MassManipulationMode in_massManipulationMode)
 {
+	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
+	// set to MassManipulationMode::DESTRUCTION
+
+	std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+
+	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
+	{
+		std::cout << "!!!!!!! Destruction poly detected! " << std::endl;
+		invertAllEmptyNormals();
+	}
+	
+	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
+	determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);
+
 	// Typical case 1: only do this if there are partial bound lines or a-sliced lines, and exactly 0 intereceptPointPreciseCount; this is the typical situation.
 	if
 	(
@@ -93,13 +107,74 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount == 1)	// for a situation in which there is exactly one INTERCEPTS_POINT_PRECISE (this condition will change at a later date.)
 	)
 	{
-		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
+		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
+
+		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
 	}
+}
+
+void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(SPolyBorderLines(&in_borderLineArrayRef)[8])
+{
+	// go through each partial bound.
+	auto partialsBegin = partialboundMap.begin();
+	auto partialsEnd = partialboundMap.end();
+	for (; partialsBegin != partialsEnd; partialsBegin++)
+	{
+		partialsBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+	}
+
+	// go through each intersects_point_precise
+	auto pointsPreciseBegin = interceptsPointPreciseMap.begin();
+	auto pointsPreciseEnd = interceptsPointPreciseMap.end();
+	for (; pointsPreciseBegin != pointsPreciseEnd; pointsPreciseBegin++)
+	{
+		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+	}
+
+	std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
+
 }
 
 void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemovePartialBound(in_lineIndex));
+}
+
+void CleaveSequenceFactory::invertAllEmptyNormals()
+{
+	// invert nonbounds
+	auto nonBoundMapBegin = nonboundMap.begin();
+	auto nonBoundMapEnd = nonboundMap.end();
+	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
+	{
+		nonBoundMapBegin->second.emptyNormal *= -1.0f;
+	}
+
+	// invert partials
+	auto partialsBegin = partialboundMap.begin();
+	auto partialsEnd = partialboundMap.end();
+	for (; partialsBegin != partialsEnd; partialsBegin++)
+	{
+		partialsBegin->second.emptyNormal *= -1.0f;
+	}
+
+	// invert slices
+	auto slicesBegin = aslicedMap.begin();
+	auto slicesEnd = aslicedMap.end();
+	for (; slicesBegin != slicesEnd; slicesBegin++)
+	{
+		slicesBegin->second.emptyNormal *= -1.0f;
+	}
+
+	// invert intercept_points_precise
+	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
+	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
+	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
+	{
+		interceptsPreciseBegin->second.emptyNormal *= -1.0f;
+	}
 }
 
 CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch)
@@ -148,7 +223,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLine
 	return searchResult;
 }
 
-CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch)
+CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, SPolyBorderLines(&in_borderLineArrayRef)[8])
 {
 	CategorizedLineSearchResult searchResult;
 	if (interceptsPointPreciseCount > 0)
@@ -161,7 +236,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 		IRPointType pointCheckResult = IRPointType::NEITHER;	// starts out as NEITHER
 		for (interceptPointPreciseBegin; interceptPointPreciseBegin != interceptPointPreciseEnd; interceptPointPreciseBegin++)
 		{
-			//std::cout << "!! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
+			std::cout << "!! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
 
 			//std::cout << "!! Line points are: " << std::endl;
 			//std::cout << "Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
@@ -179,9 +254,13 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 			}		
 		}
 
+		std::cout << "hey I got here (1) " << std::endl;
+
 		// if it was found, do this stuff (should be able to ignore invalid iterators this way)
 		if (wasFound == true)
 		{
+			std::cout << "hey I got here (2) " << std::endl;
+
 			searchResult.wasFound = true;
 			//std::cout << "::::: set searchResult.wasFound as true..." << std::endl;
 			CategorizedLine foundLine = fetchAndRemoveInterceptPointPrecise(foundIndex);
@@ -190,11 +269,52 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 			// remember, when dealing with the ending partial line, the matched point should be "point A" of the border line; if it isn't, we must swap the line.
 			if (pointCheckResult == IRPointType::POINT_B)
 			{
+
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, point A: " << foundLine.line.pointA.x << ", " << foundLine.line.pointA.y << ", " << foundLine.line.pointA.z << std::endl;
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, point A border: " << foundLine.line.pointABorder << std::endl;
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, is point A on border: " << foundLine.line.isPointAOnBorder << std::endl;
+
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, point B: " << foundLine.line.pointB.x << ", " << foundLine.line.pointB.y << ", " << foundLine.line.pointB.z << std::endl;
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, point B border: " << foundLine.line.pointBBorder << std::endl;
+				std::cout << "(Pre-Alter) || ::: >> current categorized line, is point B on border: " << foundLine.line.isPointBOnBorder << std::endl;
+
+
+
+				std::cout << "!!! Had to swap to A! " << std::endl;
+
 				foundLine.line.swapToA();	// it's backwards; so swap the lines.
 
+				std::cout << "(Post-Alter) || ::: >> current categorized line, point A: " << foundLine.line.pointA.x << ", " << foundLine.line.pointA.y << ", " << foundLine.line.pointA.z << std::endl;
+				std::cout << "(Post-Alter) || ::: >> current categorized line, point A border: " << foundLine.line.pointABorder << std::endl;
+				std::cout << "(Post-Alter) || ::: >> current categorized line, is point A on border: " << foundLine.line.isPointAOnBorder << std::endl;
+
+				std::cout << "(Post-Alter) || ::: >> current categorized line, point B: " << foundLine.line.pointB.x << ", " << foundLine.line.pointB.y << ", " << foundLine.line.pointB.z << std::endl;
+				std::cout << "(Post-Alter) || ::: >> current categorized line, point B border: " << foundLine.line.pointBBorder << std::endl;
+				std::cout << "(Post-Alter) || ::: >> current categorized line, is point B on border: " << foundLine.line.isPointBOnBorder << std::endl;
 			}
 
-			foundLine.line.isPointBOnBorder = 1;		// after the swapToA -- if needed -- point B should be the one on the border line.
+			/*
+			std::cout << " **test** line empty normal: " << foundLine.emptyNormal.x << ", " << foundLine.emptyNormal.y << ", " << foundLine.emptyNormal.z << std::endl;
+
+			std::cout << " **test** point A border: " << foundLine.line.pointABorder << std::endl;
+			std::cout << " **test** point B border: " << foundLine.line.pointBBorder << std::endl;
+
+			// fetching border lines...
+			SPolyBorderLines borderLineA = in_borderLineArrayRef[foundLine.line.pointABorder];
+			SPolyBorderLines borderLineB = in_borderLineArrayRef[foundLine.line.pointBBorder];
+
+			// border line A:
+			std::cout << "Border Line A points: A: " << borderLineA.pointA.x << ", " << borderLineA.pointA.y << ", " << borderLineA.pointA.z << " | B: "
+				                                     << borderLineA.pointB.x << ", " << borderLineA.pointB.y << ", " << borderLineA.pointB.z << std::endl;
+
+			// border line A:
+			std::cout << "Border Line B points: A: " << borderLineB.pointA.x << ", " << borderLineB.pointA.y << ", " << borderLineB.pointA.z << " | B: "
+													 << borderLineB.pointB.x << ", " << borderLineB.pointB.y << ", " << borderLineB.pointB.z << std::endl;
+
+			generateManipulationDirectionsForIntersectsPointPrecise(borderLineA, foundLine.line.pointABorder, borderLineB, foundLine.line.pointBBorder, foundLine.emptyNormal);
+			*/
+
+			//foundLine.line.isPointBOnBorder = 1;		// after the swapToA -- if needed -- point B should be the one on the border line.
 
 			searchResult.returnLine = foundLine;	// store the appropriate line
 			searchResult.nextPointToFind = foundLine.line.pointB;	// set the next point to find.
@@ -206,8 +326,161 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 	{
 		searchResult.wasFound = false;
 	}
+
+	//std::cout << "~~~~~~ end of call to searchForInterceptPointPreciseCategorizedLine. " << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
+
 	return searchResult;
 
+}
+
+std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationDirectionsForIntersectsPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal)
+{
+	std::map<MassManipulationMode, int> returnMap;
+	// copy the border lines.
+	SPolyBorderLines borderLineACopy = in_borderLineA;
+	SPolyBorderLines borderLineBCopy = in_borderLineB;
+	glm::vec3 emptyNormalCopy = in_categorizedLineNormal;
+
+	// is in_borderLineA's point B equal to in_borderLineB's point A?
+
+
+	QuatRotationPoints rotationPoints;
+	glm::vec3 pointToTranslateAgainst;
+	if (borderLineACopy.pointB == borderLineBCopy.pointA)
+	{
+		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
+
+		pointToTranslateAgainst = borderLineACopy.pointB;
+
+		//rotationPoints.pointsRefVector.push
+	}
+	// otherwise, it's the other way around.
+	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
+	{
+		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
+
+		//borderLineBCopy.pointB
+
+		pointToTranslateAgainst = borderLineBCopy.pointB;
+	}
+
+	// do a translation check.
+	PointTranslationCheck translationChecker;
+	translationChecker.performCheck(pointToTranslateAgainst);
+	if (translationChecker.requiresTranslation == 1)
+	{
+		rotationPoints.applyTranslation(translationChecker.getTranslationValue());
+	}
+
+	// now, add the normal at the end.
+	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+
+	std::cout << ":::: Printing points: " << std::endl;
+	rotationPoints.printPoints();
+
+	QuatRotationManager rotationManager;
+	rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+
+	// determine which point it is that is positive y (check the first and third points.)
+	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
+	glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
+	glm::vec3 selectedPoint;
+	if (candidateOne.y > 0)
+	{
+		selectedPoint = candidateOne;
+	}
+	else if (candidateTwo.y > 0)
+	{
+		selectedPoint = candidateTwo;
+	}
+
+	// take the selected point, find out where it belongs; then set the appropriate forward/reverse IDs.
+	int forwardID, reverseID;
+
+	/*
+	if
+	(
+		(borderLineACopy.pointA == selectedPoint)
+		||
+		(borderLineACopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line A is the FORWARD line. " << std::endl;
+
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+
+	else if
+	(
+		(borderLineBCopy.pointA == selectedPoint)
+		||
+		(borderLineBCopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line B is the FORWARD line. " << std::endl;
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	*/
+
+	if
+	(
+		(borderLineACopy.pointA == selectedPoint)
+	)
+	{
+		std::cout << "Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+	else if
+	(
+		(borderLineACopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+	else if
+	(
+		(borderLineBCopy.pointA == selectedPoint)
+	)
+	{
+		std::cout << "Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	else if
+	(
+		(borderLineBCopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	
+
+	std::cout << "Forward ID: " << forwardID << std::endl;
+	std::cout << "Reverse ID: " << reverseID << std::endl;
+
+	return returnMap;
 }
 
 CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm::vec3 in_pointToSearch)
@@ -379,9 +652,10 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 	}
 }
 
-void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
+void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines (&in_borderLineArrayRef)[8])
 {
-	std::cout << "###!!!! Running specical case for INTERCEPTS_POINT_PRECISE. " << std::endl;
+	
+	std::cout << "###::::: !!!! Running specical case for INTERCEPTS_POINT_PRECISE. " << std::endl;
 
 	std::cout << "## Partial count: " << partialboundCount << std::endl;
 	std::cout << "## Non-bound count: " << nonboundCount << std::endl;
@@ -445,19 +719,23 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 			//newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
 			std::cout << "Warning, a corresponding PARTIAL_BOUND line was not found for this line; checking for INTERCEPT_POINT_PRECISE: " << std::endl;
-			std::cout << "Lines are: " << std::endl;
+
+			int reallyStupidValThanksCompiler = 100;
+
+			std::cout << "::: Lines are: " << std::endl;
 			newSequence.printCategorizedLines();
 
 			std::cout << ">>>> Current last point to search for against the INTERCEPTS_POINT_PRECISE IS: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
-			CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch);
+			CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch, in_borderLineArrayRef);
+			std::cout << ">>>> Found intercept point precise result... " << std::endl;
 			if (findInterceptPointPreciseResult.wasFound == true)
 			{
 				// before we insert the line, the pointB on border value for this new line must be equal to the pointA border value in the first part of the sequence.
 				// this is because 
 				auto firstLineInSequence = newSequence.cleavingLines.begin();
-				int borderIDForInterceptPointPrecise = firstLineInSequence->second.line.pointABorder;
-				std::cout << ">>> Border value to set is: " << borderIDForInterceptPointPrecise << std::endl;
-				findInterceptPointPreciseResult.returnLine.line.pointBBorder = borderIDForInterceptPointPrecise;
+				//int borderIDForInterceptPointPrecise = firstLineInSequence->second.line.pointABorder;
+				//std::cout << ">>> :::: Border value to set is: " << borderIDForInterceptPointPrecise << std::endl;
+				//findInterceptPointPreciseResult.returnLine.line.pointBBorder = borderIDForInterceptPointPrecise;
 
 				//std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
 				newSequence.insertLastLine(findInterceptPointPreciseResult.returnLine);
@@ -476,4 +754,9 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
 		}
 	}
+	
+
+	//int someVal = 3;
+	//std::cout << "Fix this shit, compiler. " << std::endl;
+	//std::cin >> someVal;
 }

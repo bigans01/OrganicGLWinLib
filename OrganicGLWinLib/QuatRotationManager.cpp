@@ -53,6 +53,62 @@ void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_qu
 	executeRotationsForZFracture();
 }
 
+void QuatRotationManager::initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	triangleNormalRef = rotationpointsRefVector->getPointRefByIndex(3);	// the last point in the QuatRotationPoints should equal the empty normal.
+
+	// check if we need to rotate about the Y-axis to get to the same Z values for the line
+	if (triangleNormalRef->z != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		//std::cout << "ROTATE_AROUND_Y required." << std::endl;
+		rotationOrder.push_back(rotateType); //push into the vector
+	}
+
+	// check if we need to rotate about the Z-axis to get to the same Y values for the line
+	if (triangleNormalRef->x != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+
+	executeRotationsForFindingBorderLine();
+}
+
+void QuatRotationManager::executeRotationsForFindingBorderLine()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
+		{
+			//if (debugFlag == 1)
+			//{
+				//std::cout << "!!!! Rotation around Y required, performing... (Planar sliding)" << std::endl;
+			//}
+			rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
+		}
+		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_X)
+		{
+			//if (debugFlag == 1)
+			//{
+			std::cout << "!!!! Rotation around Z required, performing...(Planar sliding)" << std::endl;
+			//}
+			//rotateAroundZAndPushIntoStack();
+			//rotateAroundXToYZeroAndPushIntoStack();
+			//rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
+			rotateAroundXForPositiveYBorderLineAndPushIntoStack();
+		}
+	}
+
+
+	std::cout << ":::::: Printingt points for executeRotationsForFindingBorderLine() " << std::endl;
+	rotationpointsRefVector->printPoints();
+}
+
 glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;
@@ -554,6 +610,21 @@ void QuatRotationManager::rotateAroundXForZFractureAndPushIntoStack()
 	rotationRecords.push(s1record);
 
 	//rotationpointsRefVector->printPoints();
+}
+
+void QuatRotationManager::rotateAroundXForPositiveYBorderLineAndPushIntoStack()
+{
+	glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(3);	// get a copy of the value of the 3rd primal point
+	float radiansToRotateBy = findRotationRadiansForZFracture(currentNormalValue);	// get the number of radians to rotate by
+
+	//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
+	glm::vec3 rotateAroundX;
+	rotateAroundX.x = 1.0f;
+	QuatRotationRecord s1record(radiansToRotateBy, rotateAroundX);
+
+	glm::quat fractureQuat = s1record.returnOriginalRotation();
+	rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
+	rotationRecords.push(s1record);
 }
 
 void QuatRotationManager::rotateEmptyNormalToPosY(glm::vec3* in_normal)

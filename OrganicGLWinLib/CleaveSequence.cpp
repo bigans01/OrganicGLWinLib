@@ -57,7 +57,28 @@ int CleaveSequence::retrievedLineEndpointBorderLine(CleaveSequenceCrawlDirection
 			returnBorderLineID = crawlBegin->second.line.pointBBorder;
 		}
 		*/
-		returnBorderLineID = crawlBegin->second.line.pointBBorder;
+
+		
+		std::cout << "::: >> current categorized line, point A: " << crawlBegin->second.line.pointA.x << ", " << crawlBegin->second.line.pointA.y << ", " << crawlBegin->second.line.pointA.z << std::endl;
+		std::cout << "::: >> current categorized line, point A border: " << crawlBegin->second.line.pointABorder << std::endl;
+		std::cout << "::: >> current categorized line, is point A on border: " << crawlBegin->second.line.isPointAOnBorder << std::endl;
+
+		std::cout << "::: >> current categorized line, point B: " << crawlBegin->second.line.pointB.x << ", " << crawlBegin->second.line.pointB.y << ", " << crawlBegin->second.line.pointB.z << std::endl;
+		std::cout << "::: >> current categorized line, point B border: " << crawlBegin->second.line.pointBBorder << std::endl;
+		std::cout << "::: >> current categorized line, is point B on border: " << crawlBegin->second.line.isPointBOnBorder << std::endl;
+
+		// check that the line isn't a INTERCEPTS_POINT_PRECISE
+		if (crawlBegin->second.type != IntersectionType::INTERCEPTS_POINT_PRECISE)
+		{
+			returnBorderLineID = crawlBegin->second.line.pointBBorder;
+		}
+		else if (crawlBegin->second.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+		{
+			std::cout << "!!! Attempting border line retrieval from INTERCEPTS_POINT_PRECISE" << std::endl;
+			returnBorderLineID = crawlBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
+		}
+
+		std::cout << "::::::::::: Return border line ID is: " << returnBorderLineID << std::endl;
 	}
 	else if (in_crawlDirection == CleaveSequenceCrawlDirection::REVERSE)
 	{
@@ -72,7 +93,14 @@ int CleaveSequence::retrievedLineEndpointBorderLine(CleaveSequenceCrawlDirection
 
 		}
 		*/
-		returnBorderLineID = crawlBegin->second.line.pointABorder;
+		if (crawlBegin->second.type != IntersectionType::INTERCEPTS_POINT_PRECISE)
+		{
+			returnBorderLineID = crawlBegin->second.line.pointABorder;
+		}
+		else if (crawlBegin->second.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+		{
+			returnBorderLineID = crawlBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
+		}
 	}
 	return returnBorderLineID;
 }

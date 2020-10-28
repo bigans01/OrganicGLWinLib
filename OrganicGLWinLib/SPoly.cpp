@@ -493,7 +493,9 @@ void SPoly::moveLastCleave()
 
 void SPoly::buildCleaveSequences()
 {
-	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap);
+	std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
+
+	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting);
 }
 
 void SPoly::constructCleaveLine()

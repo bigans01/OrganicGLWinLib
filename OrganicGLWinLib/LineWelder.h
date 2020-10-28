@@ -31,13 +31,14 @@ private:
 	CleaveSequenceCandidateListMap candidateListMap;
 	glm::vec3 currentLeadingPoint;		
 	CleaveSequenceMetaTracker metaTracker;
+
+	int beginningSequenceID = 0;	// the sequence ID where the welder will start, and begin.
 	int currentBorderLineID = 0;	// the border line we'll be starting on.
 	int endingBorderLineID = 0;		// the border line we'll be ending on (the while loop will end when it hits this)
 	void getCleaveSequenceCandidateListMap();	// calls the sPolyRef to return a built CleaveSequenceCandidateListMap
 	void getCleaveSequenceMetaTracker();		// calls the sPolyRef to return a built CleaveSequenceMetaTracker
 	void startWelding();
 	void findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID);
-	void findWeldingLines(int in_startingBorderLineID, int in_startingCleaveSequenceID, int in_categorizedLineInCleaveSequenceID, CyclingDirection in_cyclingDirection, BorderLinePointPair in_beginningPointPair);
 };
 
 #endif

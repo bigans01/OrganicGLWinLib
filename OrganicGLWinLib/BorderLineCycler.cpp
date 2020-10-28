@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "BorderLineCycler.h"
 
-CyclingDirection BorderLineCycler::findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode)
+//CyclingDirection BorderLineCycler::findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode)
+CyclingDirection BorderLineCycler::findCyclingDirection(SPolyBorderLines in_borderLineCopy, int in_borderLineIndex, CategorizedLine in_categorizedLineCopy)
 {
 	//std::cout << "#- Cycling Direction    > Finding cycling direction for \"Z-Planar\" border line, by checking the first line in the first CleaveSequence..." << std::endl;
 	//std::cout << "#- Cycling Direction    > Referenced border line points, prior to empty normal re-orientation: point A " << in_borderLineRef->pointA.x << ", " << in_borderLineRef->pointA.y << ", " << in_borderLineRef->pointA.z
@@ -13,7 +14,8 @@ CyclingDirection BorderLineCycler::findCyclingDirection(SPolyBorderLines in_bord
 
 	// find the cycling direction,
 	//auto truestart = std::chrono::high_resolution_clock::now();
-	CyclingDirectionFinder cycleFinder(in_borderLineCopy, in_categorizedLineCopy, in_massManipulationMode);
+	//CyclingDirectionFinder cycleFinder(in_borderLineCopy, in_categorizedLineCopy, in_massManipulationMode);
+	CyclingDirectionFinder cycleFinder(in_borderLineCopy, in_categorizedLineCopy);
 
 	//auto trueend = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<double> trueelapsed2 = trueend - truestart;

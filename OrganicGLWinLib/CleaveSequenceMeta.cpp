@@ -63,6 +63,15 @@ CategorizedLine CleaveSequenceMeta::fetchNextCategorizedLineInSequence()
 		returnLine = categorizedLinesBegin->second;
 	}
 	currentLineIndex++;
+	numberOfRemainingLines--;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceMeta::fetchFirstCategorizedLineForWelder()
+{
+	auto categorizedLinesBegin = cleaveSequencePtr->cleavingLines.rbegin();	// get the last line in the sequence.
+	CategorizedLine returnLine = categorizedLinesBegin->second;
+	numberOfRemainingLines--;
 	return returnLine;
 }
 

@@ -14,8 +14,8 @@
 class CyclingDirectionFinder
 {
 public:
-	CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode);
-
+	//CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy, MassManipulationMode in_massManipulationMode);
+	CyclingDirectionFinder(SPolyBorderLines in_borderLineCopy, CategorizedLine in_categorizedLineCopy);
 
 	glm::vec3 borderLinePointA;
 	glm::vec3 borderLinePointB;

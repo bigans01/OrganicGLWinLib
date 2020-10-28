@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CategorizedLine.h"
-
+#include "SPolyBorderLines.h"
 
 void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB, glm::vec3 in_newPointForLineA)
 {
@@ -59,7 +59,11 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 		
 		line.pointA = in_lineB.pointA;
 		line.pointB = in_lineB.pointB;
-		line.numberOfBorderLines = 1;		
+		line.numberOfBorderLines = 1;
+		
+		// set both intercepted border lines that were in line A; we'll use these later.
+		line.pointABorder = in_lineA.pointABorder;
+		line.pointBBorder = in_lineA.pointBBorder;
 	}
 	else if (in_lineB.lineValidity == IntersectionLineValidity::INVALID)
 	{
@@ -70,8 +74,286 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 		line.pointA = in_lineA.pointA;
 		line.pointB = in_lineA.pointB;
 		line.numberOfBorderLines = 1;
+
+		// set both intercepted border lines that were in line A; we'll use these later.
+		line.pointABorder = in_lineB.pointABorder;
+		line.pointBBorder = in_lineB.pointBBorder;
 	}
 	// do for in_lineB? maybe.
+}
+
+void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineArrayRef)[8])
+{
+	// logic for partial lines.
+	if (type == IntersectionType::PARTIAL_BOUND)
+	{
+		int categorizedLineBorderID = line.getBorderLineIDFromSingularBorderLineCount();
+		glm::vec3 borderPoint = line.getBorderPointFromSingularBorderLineCount();
+		glm::vec3 emptyNormalCopy = emptyNormal;		// get a copy of the normal, don't modify the original.
+
+		std::cout << "Border point is: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
+		std::cout << "Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
+		std::cout << "Border point is on border line: " << categorizedLineBorderID << std::endl;
+
+		QuatRotationPoints rotationPoints;
+		SPolyBorderLines borderLineCopy = in_borderLineArrayRef[categorizedLineBorderID];
+		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointA);
+		rotationPoints.pointsRefVector.push_back(&borderPoint);
+		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointB);
+
+		PointTranslationCheck pointTranslator;
+		pointTranslator.performCheck(rotationPoints.getPointByIndex(1));	// get the "borderPoint", translate to it if necessary.
+		if (pointTranslator.requiresTranslation == 1)
+		{
+			rotationPoints.applyTranslation(pointTranslator.getTranslationValue());
+		}
+
+		// now, add the normal at the end.
+		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+
+		QuatRotationManager rotationManager;
+		rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+
+		// determine which point it is that is positive y (check the first and third points.)
+		glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
+		glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
+		glm::vec3 selectedPoint;
+		if (candidateOne.y > 0)
+		{
+			selectedPoint = candidateOne;
+		}
+		else if (candidateTwo.y > 0)
+		{
+			selectedPoint = candidateTwo;
+		}
+
+		// if the selected point, is B of the border line, we go forward.
+		if (borderLineCopy.pointB == selectedPoint)
+		{
+			std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
+			direction = CyclingDirection::FORWARD;
+		}
+		else if (borderLineCopy.pointA == selectedPoint)
+		{
+
+			std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
+			direction = CyclingDirection::REVERSE;
+		}
+
+		std::cout << ">>> Enter number to check next partial bound... " << std::endl;
+		int someVal = 3;
+		std::cin >> someVal;
+	}
+
+	// logic for intercepts_point_precise
+	else if (type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+	{
+
+		// fetching border lines...
+		SPolyBorderLines borderLineA = in_borderLineArrayRef[line.pointABorder];
+		SPolyBorderLines borderLineB = in_borderLineArrayRef[line.pointBBorder];
+
+		// will set the direction of the line...
+		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal);
+	}
+}
+
+void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal)
+{
+	SPolyBorderLines borderLineACopy = in_borderLineA;
+	SPolyBorderLines borderLineBCopy = in_borderLineB;
+	glm::vec3 emptyNormalCopy = in_categorizedLineNormal;
+
+	// is in_borderLineA's point B equal to in_borderLineB's point A?
+
+
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
+				  
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
+	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
+
+	QuatRotationPoints rotationPoints;
+	glm::vec3 pointToTranslateAgainst;
+	if (borderLineACopy.pointB == borderLineBCopy.pointA)
+	{
+		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
+
+		pointToTranslateAgainst = borderLineACopy.pointB;
+
+		//rotationPoints.pointsRefVector.push
+	}
+	// otherwise, it's the other way around.
+	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
+	{
+		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
+		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
+		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
+
+		//borderLineBCopy.pointB
+
+		pointToTranslateAgainst = borderLineBCopy.pointB;
+	}
+
+	// do a translation check.
+	PointTranslationCheck translationChecker;
+	translationChecker.performCheck(pointToTranslateAgainst);
+	if (translationChecker.requiresTranslation == 1)
+	{
+		rotationPoints.applyTranslation(translationChecker.getTranslationValue());
+	}
+
+	// now, add the normal at the end.
+	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+
+	std::cout << ":::: Printing points: " << std::endl;
+	rotationPoints.printPoints();
+
+	QuatRotationManager rotationManager;
+	rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+
+	// determine which point it is that is positive y (check the first and third points.)
+	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
+	glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
+	glm::vec3 selectedPoint;
+	if (candidateOne.y > 0)
+	{
+		selectedPoint = candidateOne;
+	}
+	else if (candidateTwo.y > 0)
+	{
+		selectedPoint = candidateTwo;
+	}
+
+	// take the selected point, find out where it belongs; then set the appropriate forward/reverse IDs.
+	int forwardID, reverseID;
+
+	/*
+	if
+	(
+		(borderLineACopy.pointA == selectedPoint)
+		||
+		(borderLineACopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line A is the FORWARD line. " << std::endl;
+
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+
+	else if
+	(
+		(borderLineBCopy.pointA == selectedPoint)
+		||
+		(borderLineBCopy.pointB == selectedPoint)
+	)
+	{
+		std::cout << "Border Line B is the FORWARD line. " << std::endl;
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	*/
+
+	if (line.isPointAOnBorder == 1)
+	{
+		std::cout << ":::NOTICE: point A flagged as on border. " << std::endl;
+	}
+	if (line.isPointBOnBorder == 1)
+	{
+		std::cout << ":::NOTICE: point B flagged as on border. " << std::endl;
+	}
+
+
+	if
+		(
+		(borderLineACopy.pointA == selectedPoint)
+			)
+	{
+		std::cout << "Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+
+		direction = CyclingDirection::REVERSE;
+		
+		// always set point A as the "one on the border"
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_borderLineAID;
+		line.pointA = in_borderLineA.pointB;	// we go towards point A, so we'd store point B of Line A.
+
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+	else if
+		(
+		(borderLineACopy.pointB == selectedPoint)
+			)
+	{
+		std::cout << "Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+
+		direction = CyclingDirection::FORWARD;
+
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_borderLineAID;
+		line.pointA = in_borderLineA.pointA;	// we go towards point B, so we'd store point A of Line A.
+
+		forwardID = in_borderLineAID;
+		reverseID = in_borderLineBID;
+	}
+	else if
+		(
+		(borderLineBCopy.pointA == selectedPoint)
+			)
+	{
+		std::cout << "Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+
+		direction = CyclingDirection::REVERSE;
+
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_borderLineBID;
+		line.pointA = in_borderLineB.pointB;	// we go towards point A, so we'd store point B of Line B.
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	else if
+		(
+		(borderLineBCopy.pointB == selectedPoint)
+			)
+	{
+		std::cout << "Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+
+		direction = CyclingDirection::FORWARD;
+
+		line.isPointAOnBorder = 1;
+		line.pointABorder = in_borderLineBID;
+		line.pointA = in_borderLineB.pointA;	// we go towards point B, so we'd store point A of Line B.
+
+		forwardID = in_borderLineBID;
+		reverseID = in_borderLineAID;
+	}
+	line.isPointBOnBorder = 0;
+
+	std::cout << "::: Forward ID: " << forwardID << std::endl;
+	std::cout << "::: Reverse ID: " << reverseID << std::endl;
+
+	std::cout << "|| ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	std::cout << "|| ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
+	std::cout << "|| ::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
+				  
+	std::cout << "|| ::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+	std::cout << "|| ::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
+	std::cout << "|| ::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
+
+	std::cout << "Point A of line: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+
 }
 
 
