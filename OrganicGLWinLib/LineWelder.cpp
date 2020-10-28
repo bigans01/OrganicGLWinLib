@@ -16,6 +16,17 @@ void LineWelder::startWelding()
 	cleaveBegin->second.setSequenceAsSuper();							// set the CleaveSequence as a SUPER, so the welder knows when to end.
 	auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
 	auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();
+
+	// optional: print out number of lines in each cleave sequence.
+	/*
+	auto optionalSequenceBegin = sPolyRef->cleaveMap.begin();
+	auto optionalSequenceEnd = sPolyRef->cleaveMap.end();
+	for (; optionalSequenceBegin != optionalSequenceEnd; optionalSequenceBegin++)
+	{
+		std::cout << "Sequence [" << optionalSequenceBegin->first << "] has " << optionalSequenceBegin->second.cleavingLines.size() << " lines in it." << std::endl;
+	}
+	*/
+
 	foundDirection = sequenceBegin->second.direction;
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
 	if (sequenceBegin->second.line.numberOfBorderLines == 1)		// if there are multiple CategorizedLines in the cleave sequence, the first line in the sequence
@@ -189,7 +200,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			std::cout << "!!! No neighbors found, from the leading point: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+			currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
 			std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
+			std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 		}
 		currentBorderLineID = nextBorderLineID;
 	}
@@ -207,6 +220,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			//numberOfRemainingLines
 			//int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfLines;
 			int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfRemainingLines;
+
+			std::cout << "!!! Number of lines to crawl: " << numberOfLinesToCrawl << std::endl;
+
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
 			{
 				std::cout << "| Crawling line... " << std::endl;
@@ -241,7 +257,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			std::cout << "!!! The single intercept record was already consumed!!! " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+			currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
 			std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
+			std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 		}
 		currentBorderLineID = nextBorderLineID;
 	}
@@ -250,7 +268,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		// foundDirection
 		int nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
 		std::cout << ":: This border line has no records; producing line and proceeding to next border line with ID: " << nextBorderLineID << std::endl;
-
+		currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
+		std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
+		std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
 		currentBorderLineID = nextBorderLineID;
 

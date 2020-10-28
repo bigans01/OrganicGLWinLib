@@ -25,6 +25,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 		//std::cout << "#-> (Intercept records ) record load Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 		
+		/*
 		std::cout << "#--- Printing out begin and end points of first border line (pre-LineWelder):" << std::endl;
 		std::cout << "Point A: " << sPolyRef->borderLines[0].pointA.x << ", " << sPolyRef->borderLines[0].pointA.y << ", " << sPolyRef->borderLines[0].pointA.z << std::endl;
 		std::cout << "Point B: " << sPolyRef->borderLines[0].pointB.x << ", " << sPolyRef->borderLines[0].pointB.y << ", " << sPolyRef->borderLines[0].pointB.z << std::endl;
@@ -32,6 +33,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::cout << "#--- Printing out begin and end points of second border line (pre-LineWelder):" << std::endl;
 		std::cout << "Point A: " << sPolyRef->borderLines[1].pointA.x << ", " << sPolyRef->borderLines[1].pointA.y << ", " << sPolyRef->borderLines[1].pointA.z << std::endl;
 		std::cout << "Point B: " << sPolyRef->borderLines[1].pointB.x << ", " << sPolyRef->borderLines[1].pointB.y << ", " << sPolyRef->borderLines[1].pointB.z << std::endl;
+		*/
 
 		LineWelder welder(in_sPolyRef);
 

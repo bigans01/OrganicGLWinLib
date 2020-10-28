@@ -10,6 +10,7 @@
 #include "NeighboringCleaveSequenceFinder.h"
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
+#include "CleaveSequence.h"
 #include "FoundCleaveSequence.h"
 #include "LineWelderHierarchyPosition.h"
 

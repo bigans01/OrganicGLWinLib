@@ -54,6 +54,7 @@ public:
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.
+	glm::vec3 getBorderLineEndpoint(int in_currentBorderLineID, CyclingDirection in_direction);
 	void addTriangle(STriangle in_triangle);
 	void addCategorizedLine(CategorizedLine in_line);	// inserts a calibrated line -- calibrated meaning, the begin point of this line equals the end point of the previous
 	void addSlicedCleave(int in_currentCleaveIndex, CategorizedLine in_categorizedLine);

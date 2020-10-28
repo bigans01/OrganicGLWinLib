@@ -367,6 +367,20 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 	return returnID;
 }
 
+glm::vec3 SPoly::getBorderLineEndpoint(int in_currentBorderLineID, CyclingDirection in_direction)
+{
+	glm::vec3 returnPoint;
+	if (in_direction == CyclingDirection::FORWARD)
+	{
+		returnPoint = borderLines[in_currentBorderLineID].pointB;
+	}
+	else if (in_direction == CyclingDirection::REVERSE)
+	{
+		returnPoint = borderLines[in_currentBorderLineID].pointA;
+	}
+	return returnPoint;
+}
+
 void SPoly::addTriangle(STriangle in_triangle)
 {
 	triangles[numberOfTriangles++] = in_triangle;

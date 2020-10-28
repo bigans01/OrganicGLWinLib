@@ -9,13 +9,13 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	// if it's the only intercept on this border line, that's ok.
 	if (intersectRecorderRef->records.size() == 1)
 	{
-		std::cout << "#### Note: record size was only 1. " << std::endl;
+		//std::cout << "#### Note: record size was only 1. " << std::endl;
 
 		// testing only, print the lines.
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
 		if (foundSet.empty())
 		{
-			std::cout << "!!! Warning, set is EMPTY!" << std::endl;
+			std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
 			doNeighborsExist = false;
 		}
 		else if (!foundSet.empty())
@@ -59,7 +59,7 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 				foundCleaveMap->second.printCategorizedLines();
 			}
 
-			intersectRecorderRef->printRecords();
+			//intersectRecorderRef->printRecords();
 			findAndSortNeighboringCleaveSequences();
 		}
 		else if (foundSet.empty())
