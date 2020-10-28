@@ -157,3 +157,16 @@ glm::vec3 IntersectionLine::getNonBorderPointFromSingularBorderLineCount()
 	}
 	return nonBorderPoint;
 }
+
+glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirection in_direction)
+{
+	glm::vec3 returnVec;
+	if (in_direction == CyclingDirection::FORWARD)
+	{
+		return pointB;
+	}
+	else if (in_direction == CyclingDirection::REVERSE)
+	{
+		return pointA;
+	}
+}

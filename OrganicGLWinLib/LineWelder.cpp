@@ -14,8 +14,11 @@ void LineWelder::startWelding()
 	auto cleaveBegin = sPolyRef->cleaveMap.begin();						// get an iterator to the first cleave sequence
 	beginningSequenceID = cleaveBegin->first;							// set the begin/end cleave sequence ID.
 	cleaveBegin->second.setSequenceAsSuper();							// set the CleaveSequence as a SUPER, so the welder knows when to end.
-	auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
-	auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();
+	//auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();
+	//auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();
+
+	auto sequenceBegin = cleaveBegin->second.cleavingLines.rbegin();
+	auto sequenceEnd = cleaveBegin->second.cleavingLines.begin();
 
 	// optional: print out number of lines in each cleave sequence.
 	/*
@@ -32,19 +35,29 @@ void LineWelder::startWelding()
 	if (sequenceBegin->second.line.numberOfBorderLines == 1)		// if there are multiple CategorizedLines in the cleave sequence, the first line in the sequence
 																	// will have exactly one border line. The end of the sequence will have another border line.
 	{
-		pointPair = sequenceBegin->second.line.getBorderLinePointPair();
+		std::cout << "::: Branch hit for one border line... " << std::endl;
+		//pointPair = sequenceBegin->second.line.getBorderLinePointPair();
+		currentLeadingPoint = sequenceBegin->second.line.getBorderPointFromSingularBorderLineCount();
 		currentBorderLineID = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = sequenceEnd->second.line.getBorderLineIDFromSingularBorderLineCount();
+
+		std::cout << "::: test pass 1... " << std::endl;
+
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		// grab the CleaveSequenceMeta, so that we can retrieve the first line for the welder.
+
+		std::cout << "::: test pass 2... " << std::endl;
+
 		CategorizedLine currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
 
-
+		std::cout << "End branch... " << std::endl;
 	}
 	else if (sequenceBegin->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
 																	// get the borders from the pointA and pointB of this line.
 	{
+		std::cout << "::: Branch hit for two border lines... " << std::endl;
 		BorderLineIDPair retrievedPair = sequenceBegin->second.line.getBorderLineIDPair();
 		pointPair = sequenceBegin->second.line.getBorderLinePointPair();
+		currentLeadingPoint = pointPair.pointA;			// set the beginning value for the currentLeadingPoint, before welding starts.
 		currentBorderLineID = retrievedPair.pointABorderLineID;												// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = retrievedPair.pointBBorderLineID;
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		// grab the CleaveSequenceMeta, so that we can retrieve the first line for the welder.
@@ -59,6 +72,8 @@ void LineWelder::startWelding()
 		std::cout << "Printing line " << testSequenceBegin->first << std::endl;
 		std::cout << testSequenceBegin->second.line.pointA.x << ", " << testSequenceBegin->second.line.pointA.y << ", " << testSequenceBegin->second.line.pointA.z << std::endl;
 		std::cout << testSequenceBegin->second.line.pointB.x << ", " << testSequenceBegin->second.line.pointB.y << ", " << testSequenceBegin->second.line.pointB.z << std::endl;
+		std::cout << "Line, is pointA on border: " << testSequenceBegin->second.line.isPointAOnBorder << ", border value: " << testSequenceBegin->second.line.pointABorder << std::endl;
+		std::cout << "Line, is pointB on border: " << testSequenceBegin->second.line.isPointBOnBorder << ", border value: " << testSequenceBegin->second.line.pointBBorder << std::endl;
 	}
 
 	// Step 2: find the direction to cycle towards for the currentBorderLineID; i.e., do we start the cycling in the direction of point A or point B of this border line?
@@ -76,7 +91,12 @@ void LineWelder::startWelding()
 	//getCleaveSequenceMetaTracker();			// builds the meta tracker, so that we may pass it to the NeighboringCleaveSequenceFinder
 
 	// start welding from the first categorized line, in the first cleave, in the border line that the first categorized line is on.
-	currentLeadingPoint = pointPair.pointA;			// set the beginning value for the currentLeadingPoint, before welding starts.
+	//currentLeadingPoint = pointPair.pointA;			// set the beginning value for the currentLeadingPoint, before welding starts.//
+
+	int flermp = 3;
+
+	std::cout << "!!! Current pointPair pointA: " << pointPair.pointA.x << ", " << pointPair.pointA.y << ", " << pointPair.pointA.z << std::endl;
+	std::cout << "!!! Current pointPair pointB: " << pointPair.pointB.x << ", " << pointPair.pointB.y << ", " << pointPair.pointB.z << std::endl;
 	
 	// check border line IDs.
 	std::cout << "currentBorderLineID: " << currentBorderLineID << std::endl;
@@ -99,7 +119,7 @@ void LineWelder::startWelding()
 	CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);
 	std::cout << "Number of remaining lines in the beginning cleave sequence is: " << beginningCleaveSequenceMeta->numberOfRemainingLines << std::endl;
 	
-	std::cout << "### Welding complete, enter number to continue to next poly. " << std::endl;
+	std::cout << "### ............................................................................>>>>>>>>>>>>>> Welding complete, enter number to continue to next poly. " << std::endl;
 	int someVal = 3;
 	std::cin >> someVal;
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
@@ -172,7 +192,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 				// will need to do this with the lin here, such as making into a CrawlableLine
 				// ...
 				// ...
-				currentLeadingPoint = currentCategorizedLine.line.pointB;		// hard-coded test, remove later...
+				//currentLeadingPoint = currentCategorizedLine.line.pointB;		// hard-coded test, remove later...
+				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
 				std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
 				// for the last iteration in this loop, get the next border line ID from the final categorized line in the sequence,
@@ -230,7 +251,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 				// will need to do this with the lin here, such as making into a CrawlableLine
 				// ...
 				// ...
-				currentLeadingPoint = currentCategorizedLine.line.pointB;		// hard-coded test, remove later...
+				//currentLeadingPoint = currentCategorizedLine.line.pointB;		// hard-coded test, remove later...
+				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
 				std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
 				// for the last iteration in this loop, get the next border line ID from the final categorized line in the sequence,
