@@ -60,6 +60,7 @@ class CleaveSequenceFactory
 		void handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
 		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines (&in_borderLineArrayRef)[8]);
 
+		// this function may not be needed; potentially removable after review.
 		std::map<MassManipulationMode, int> generateManipulationDirectionsForIntersectsPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal);
 };
 

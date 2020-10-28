@@ -43,15 +43,15 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		//returnLine.
 		//std::cout << "!!! Merged 2 lines into a SLICE! " << std::endl;
 
-		std::cout << "+++++ Line 0: " << std::endl;
-		std::cout << "point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
-		std::cout << "point B: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
+		//std::cout << "+++++ Line 0: " << std::endl;
+		//std::cout << "point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+		//std::cout << "point B: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 
-		std::cout << "+++++ Line 1: " << std::endl;
-		std::cout << "point A: " << lineMap[1].pointA.x << ", " << lineMap[1].pointA.y << ", " << lineMap[1].pointA.z << std::endl;
-		std::cout << "point B: " << lineMap[1].pointB.x << ", " << lineMap[1].pointB.y << ", " << lineMap[1].pointB.z << std::endl;
+		//std::cout << "+++++ Line 1: " << std::endl;
+		//std::cout << "point A: " << lineMap[1].pointA.x << ", " << lineMap[1].pointA.y << ", " << lineMap[1].pointA.z << std::endl;
+		//std::cout << "point B: " << lineMap[1].pointB.x << ", " << lineMap[1].pointB.y << ", " << lineMap[1].pointB.z << std::endl;
 
-		std::cout << "CASE 1 HIT. " << std::endl;
+		//std::cout << "CASE 1 HIT. " << std::endl;
 	}
 
 	// CASE 2: check for "PARTIAL_BOUND" types
@@ -69,9 +69,9 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.numberOfBorderLines = 1;
 		returnLine.intersectedSecondaryID = lineMap[0].intersectedSecondaryID;
 		returnLine.numberOfPoints = 1;
-		std::cout << "CASE 2-A HIT. " << std::endl;
-		std::cout << ":: (CASE 2-A) point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
-		std::cout << ":: (CASE 2-A) point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
+		//std::cout << "CASE 2-A HIT. " << std::endl;
+		//std::cout << ":: (CASE 2-A) point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+		//std::cout << ":: (CASE 2-A) point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 		//std::cout << "Return line border value: " << returnLine.pointABorder << std::endl;
 	}
 	else if
@@ -92,31 +92,31 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.intersectedSecondaryID = borderLine->intersectedSecondaryID;
 		returnLine.numberOfPoints = 2;
 
-		std::cout << "Non-border line points: A-> " << nonBorderLine->pointA.x << ", " << nonBorderLine->pointA.y << ", " << nonBorderLine->pointA.z << std::endl;
-		std::cout << "Non-border line points: B-> " << nonBorderLine->pointB.x << ", " << nonBorderLine->pointB.y << ", " << nonBorderLine->pointB.z << std::endl;
+		//std::cout << "Non-border line points: A-> " << nonBorderLine->pointA.x << ", " << nonBorderLine->pointA.y << ", " << nonBorderLine->pointA.z << std::endl;
+		//std::cout << "Non-border line points: B-> " << nonBorderLine->pointB.x << ", " << nonBorderLine->pointB.y << ", " << nonBorderLine->pointB.z << std::endl;
 
-		std::cout << "Border line points:     A-> " << borderLine->pointA.x << ", " << borderLine->pointA.y << ", " << borderLine->pointA.z << std::endl;
-		std::cout << "Border line points:     B-> " << borderLine->pointB.x << ", " << borderLine->pointB.y << ", " << borderLine->pointB.z << std::endl;
+		//std::cout << "Border line points:     A-> " << borderLine->pointA.x << ", " << borderLine->pointA.y << ", " << borderLine->pointA.z << std::endl;
+		//std::cout << "Border line points:     B-> " << borderLine->pointB.x << ", " << borderLine->pointB.y << ", " << borderLine->pointB.z << std::endl;
 
-		std::cout << "CASE 2-B HIT. " << std::endl;
+		//std::cout << "CASE 2-B HIT. " << std::endl;
 	}
 	else if
 		(totalNumberOfLines == 1)
 	{
-		std::cout << "WHOA!! ONLY ONE!! " << std::endl;
-		std::cout << ":: point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
-		std::cout << ":: point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
+		//std::cout << "WHOA!! ONLY ONE!! " << std::endl;
+		//std::cout << ":: point A of this one Line is: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+		//std::cout << ":: point B of this one Line is: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 		returnLine.pointA = lineMap[0].pointA;
 		returnLine.pointABorder = lineMap[0].pointABorder;
 		returnLine.numberOfBorderLines = 0;
 		returnLine.intersectedSecondaryID = lineMap[0].intersectedSecondaryID;
 		returnLine.numberOfPoints = 1;
 		//std::cout << "( " << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << ") " << std::endl;
-		std::cout << "!!#!! border is: " << returnLine.pointABorder << std::endl;
+		//std::cout << "!!#!! border is: " << returnLine.pointABorder << std::endl;
 	}
 	else
 	{
-		std::cout << "!!!! WARNING, No if/else case found!!! " << std::endl;
+		//std::cout << "!!!! WARNING, No if/else case found!!! " << std::endl;
 		//std::cout << "Total number of lines: " << totalNumberOfLines << std::endl;
 		//std::cout << "Total number of intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
 	}

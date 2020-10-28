@@ -95,7 +95,7 @@ void QuatRotationManager::executeRotationsForFindingBorderLine()
 		{
 			//if (debugFlag == 1)
 			//{
-			std::cout << "!!!! Rotation around Z required, performing...(Planar sliding)" << std::endl;
+			//std::cout << "!!!! Rotation around Z required, performing...(Planar sliding)" << std::endl;
 			//}
 			//rotateAroundZAndPushIntoStack();
 			//rotateAroundXToYZeroAndPushIntoStack();
@@ -105,8 +105,8 @@ void QuatRotationManager::executeRotationsForFindingBorderLine()
 	}
 
 
-	std::cout << ":::::: Printingt points for executeRotationsForFindingBorderLine() " << std::endl;
-	rotationpointsRefVector->printPoints();
+	//std::cout << ":::::: Printingt points for executeRotationsForFindingBorderLine() " << std::endl;
+	//rotationpointsRefVector->printPoints();
 }
 
 glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector)

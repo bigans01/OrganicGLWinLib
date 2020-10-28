@@ -91,9 +91,9 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		glm::vec3 borderPoint = line.getBorderPointFromSingularBorderLineCount();
 		glm::vec3 emptyNormalCopy = emptyNormal;		// get a copy of the normal, don't modify the original.
 
-		std::cout << "Border point is: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
-		std::cout << "Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
-		std::cout << "Border point is on border line: " << categorizedLineBorderID << std::endl;
+		//std::cout << "Border point is: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
+		//std::cout << "Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
+		//std::cout << "Border point is on border line: " << categorizedLineBorderID << std::endl;
 
 		QuatRotationPoints rotationPoints;
 		SPolyBorderLines borderLineCopy = in_borderLineArrayRef[categorizedLineBorderID];
@@ -130,19 +130,19 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		// if the selected point, is B of the border line, we go forward.
 		if (borderLineCopy.pointB == selectedPoint)
 		{
-			std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
+			//std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
 			direction = CyclingDirection::FORWARD;
 		}
 		else if (borderLineCopy.pointA == selectedPoint)
 		{
 
-			std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
+			//std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
 			direction = CyclingDirection::REVERSE;
 		}
 
-		std::cout << ">>> Enter number to check next partial bound... " << std::endl;
-		int someVal = 3;
-		std::cin >> someVal;
+		//std::cout << ">>> Enter number to check next partial bound... " << std::endl;
+		//int someVal = 3;
+		//std::cin >> someVal;
 	}
 
 	// logic for intercepts_point_precise
@@ -166,7 +166,8 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	// is in_borderLineA's point B equal to in_borderLineB's point A?
 
-
+	
+	std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
@@ -174,6 +175,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
+	
 
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
@@ -264,6 +266,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	}
 	*/
 
+	/*
 	if (line.isPointAOnBorder == 1)
 	{
 		std::cout << ":::NOTICE: point A flagged as on border. " << std::endl;
@@ -272,7 +275,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	{
 		std::cout << ":::NOTICE: point B flagged as on border. " << std::endl;
 	}
-
+	*/
 
 	if
 		(
@@ -339,10 +342,13 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 		forwardID = in_borderLineBID;
 		reverseID = in_borderLineAID;
 	}
-	line.isPointBOnBorder = 0;
 
-	std::cout << "::: Forward ID: " << forwardID << std::endl;
-	std::cout << "::: Reverse ID: " << reverseID << std::endl;
+	// reset B border metadata, for clarity (also not needed.)
+	line.isPointBOnBorder = 0;
+	line.pointBBorder = 0;
+
+	std::cout << ">>::: Forward ID: " << forwardID << std::endl;
+	std::cout << ">>::: Reverse ID: " << reverseID << std::endl;
 
 	std::cout << "|| ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	std::cout << "|| ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
@@ -354,6 +360,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	std::cout << "Point A of line: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 
+	std::cout << ":::: END ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
 }
 
 

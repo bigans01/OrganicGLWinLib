@@ -414,21 +414,65 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
-	std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
+	//std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
 
 	// ROOT CASE 1: Both lines are considered valid.
 	if
 	(
 		(in_hostLine.lineValidity == IntersectionLineValidity::VALID)
-		&&
-		(in_guestLine.lineValidity == IntersectionLineValidity::VALID)
+		//&&
+		//(in_guestLine.lineValidity == IntersectionLineValidity::VALID)
 	)
 	{
+
+		// SPECIAL CASE: the guest line is invalid, but the host is not. The host line is a partial bound.
+		if
+		(
+			(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+		)
+		{
+			/*
+			std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
+
+
+			std::cout << "++++++Host line stats: " << std::endl;
+			std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
+			std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+
+			std::cout << "++++++Guest line stats: " << std::endl;
+			std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
+			std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+
+			std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+			std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+			std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
+			std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
+
+
+			std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+			std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+			std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
+			std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
+
+			std::cout << ":::: END TEST. " << std::endl;
+			*/
+			returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+			returnLine.line.numberOfBorderLines = 1;
+			returnLine.line.isPointAOnBorder = 1;
+			returnLine.line.pointABorder = in_hostLine.pointABorder;
+			returnLine.line.pointA = in_hostLine.pointA;
+			returnLine.line.pointB = in_hostLine.pointB;
+			returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+
+			int someVal = 3;
+			std::cin >> someVal;
+		}
+
 
 		// CASE 1.1: The host is SLICED (A_SLICE); the host triangle line has two border lines in it
 		//std::cout << "Line A, " << in_hostLine.numberOfBorderLines << std::endl;
 		//std::cout << "Line B, " << in_guestLine.numberOfBorderLines << std::endl;
-		if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
+		else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
 		{
 
 
@@ -446,6 +490,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			(in_hostLine.numberOfBorderLines == 0)
 		)
 		{
+			/*
 			std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
 			std::cout << "####### halting, temporary, to analyze lines..." << std::endl;
 
@@ -458,6 +503,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			std::cout << "Guest line, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
 			std::cout << "Guest line, number of points: " << in_guestLine.numberOfPoints << std::endl;
 			std::cout << "Guest line, number of border lines: " << in_guestLine.numberOfPoints << std::endl;
+			*/
 
 			IntersectionLine newLine;
 			if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
@@ -472,8 +518,8 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			}
 			
 
-			int someVal = 3;
-			std::cin >> someVal;
+			//int someVal = 3;
+			//std::cin >> someVal;
 
 			//returnLine.convertLineToNonbound(in_guestLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
 			returnLine.convertLineToNonbound(newLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
@@ -487,7 +533,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_hostLine.numberOfBorderLines == 1)
 				)
 		{
-			std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
+			//std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
 
 			//std::cout << "TA p0: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
 			//std::cout << "TB p0: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
@@ -507,7 +553,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines == 1)
 				)
 		{
-			std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
+			//std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
 			//std::cout << ":: Line A point count: " << in_hostLine.numberOfPoints << std::endl;
 			//std::cout << ":: Line B point count: " << in_guestLine.numberOfPoints << std::endl;
 			//std::cout << ":: Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
@@ -593,9 +639,9 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			{
 				
 
-				std::cout << "1.5.1, newLine case 1 triggered..." << std::endl;
-				std::cout << "Guest line border line count: " << in_guestLine.numberOfBorderLines << std::endl;
-				std::cout << "Host line border line count: " << in_hostLine.numberOfBorderLines << std::endl;
+				//std::cout << "1.5.1, newLine case 1 triggered..." << std::endl;
+				//std::cout << "Guest line border line count: " << in_guestLine.numberOfBorderLines << std::endl;
+				//std::cout << "Host line border line count: " << in_hostLine.numberOfBorderLines << std::endl;
 
 				newLine = in_hostLine;
 
@@ -618,7 +664,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			// CASE 1.5.2: >>>>
 			else if (in_hostLine.numberOfPoints == 2)
 			{
-				std::cout << "1.5.2, newLine case2 triggered..." << std::endl;
+				//std::cout << "1.5.2, newLine case2 triggered..." << std::endl;
 				newLine = in_hostLine;
 			}
 			
@@ -628,15 +674,28 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			//returnLine.line.pointB = in_hostLine.pointB;
 			//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
 
-			std::cout << "CASE 1.5: A hits B with one border line, but B doesn't hit A with any border lines" << std::endl;
-			std::cout << "(A) Number of points: " << in_hostLine.numberOfPoints << std::endl;
-			std::cout << "(A) Host Line Points are: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			std::cout << "(A) Guest Line Points are: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+			//std::cout << "CASE 1.5: A hits B with one border line, but B doesn't hit A with any border lines" << std::endl;
+			//std::cout << "(A) Number of points: " << in_hostLine.numberOfPoints << std::endl;
+			//std::cout << "(A) Host Line Points are: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+			//std::cout << "(A) Guest Line Points are: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
 
 
 			//int someVal = 3;
 			//std::cin >> someVal;
 		}
+
+		/*
+		else if
+		(
+			(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+		)
+		{
+			std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
+		
+		}
+		*/
 
 		// CASE 1.6: A has one line, B has one line; this is a TWIN (partial bound?)
 		else if
@@ -652,7 +711,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines == 1)
 				)
 		{
-			std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
+			//std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
 			glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
 			//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
 			returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
@@ -673,7 +732,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines == 0)
 				)
 		{
-			std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
+			//std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
 			glm::vec3 roundedA = in_hostLine.pointA;
 			glm::vec3 roundedB = in_guestLine.pointA;
 			if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
@@ -696,6 +755,8 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 		{
 			// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
 			//std::cout << "CASE 1.8: No intercept detected. " << std::endl;
+			//int someVal = 3;
+			//std::cin >> someVal;
 		}
 		returnLine.line.lineGroupID = in_groupID;
 		returnLine.emptyNormal = in_polyBEmptyNormal;
@@ -705,13 +766,29 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 	else if
 	(
 		(in_hostLine.lineValidity == IntersectionLineValidity::INVALID) 
-		||		
-		(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+		//||		
+		//(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
 	)
 	{
+		if (in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
+		{
+			std::cout << "~~~~ The host line is INVALID. " << std::endl;
+		}
+		if (in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+		{
+			std::cout << "~~~~ The guest line is INVALID. " << std::endl;
+		}
+
 		std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
 
-		std::cout << "CASE 1: This line is an A_SLICE" << std::endl;
+		std::cout << "++++++Host line stats: " << std::endl;
+		std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
+		std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+
+		std::cout << "++++++Guest line stats: " << std::endl;
+		std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
+		std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+
 		std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
 		std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
 		std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;

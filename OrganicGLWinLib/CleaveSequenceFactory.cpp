@@ -132,8 +132,8 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(SPolyB
 	}
 
 	std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 }
 
@@ -344,6 +344,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	glm::vec3 emptyNormalCopy = in_categorizedLineNormal;
 
 	// is in_borderLineA's point B equal to in_borderLineB's point A?
+
 
 
 	QuatRotationPoints rotationPoints;
