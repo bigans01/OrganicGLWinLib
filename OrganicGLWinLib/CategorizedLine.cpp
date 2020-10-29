@@ -166,7 +166,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	// is in_borderLineA's point B equal to in_borderLineB's point A?
 
-	
+	/*
 	std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
@@ -175,7 +175,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
-	
+	*/
 
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
@@ -347,9 +347,10 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	line.isPointBOnBorder = 0;
 	line.pointBBorder = 0;
 
-	std::cout << ">>::: Forward ID: " << forwardID << std::endl;
-	std::cout << ">>::: Reverse ID: " << reverseID << std::endl;
+	//std::cout << ">>::: Forward ID: " << forwardID << std::endl;
+	//std::cout << ">>::: Reverse ID: " << reverseID << std::endl;
 
+	/*
 	std::cout << "|| ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	std::cout << "|| ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
 	std::cout << "|| ::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
@@ -361,6 +362,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	std::cout << "Point A of line: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 
 	std::cout << ":::: END ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
+	*/
 }
 
 

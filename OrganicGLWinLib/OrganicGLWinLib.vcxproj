@@ -208,6 +208,7 @@
     <ClInclude Include="IRPointType.h" />
     <ClInclude Include="LineWelder.h" />
     <ClInclude Include="LineWelderHierarchyPosition.h" />
+    <ClInclude Include="LineWelderRunMode.h" />
     <ClInclude Include="MassManipulationMode.h" />
     <ClInclude Include="NeighboringCleaveSequenceFinder.h" />
     <ClInclude Include="PointTranslationCheck.h" />

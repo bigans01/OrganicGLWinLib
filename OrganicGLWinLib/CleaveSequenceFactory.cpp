@@ -704,7 +704,7 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 			}
 		}
 
-		// once the search for partially bound lines is done, look for the ending partially bound line for the sequence.
+		// once the search for non bound lines is done, look for the ending partially bound line for the sequence.
 		lastPointToSearch = newSequence.fetchPointToSearch();
 		std::cout << "### Current last point to search is: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 		CategorizedLineSearchResult finalResult = searchForLastPartialBoundLineForSequence(lastPointToSearch);
@@ -756,8 +756,11 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		}
 	}
 	
-
-	//int someVal = 3;
+	std::cout << "Remaining partial bound count: " << partialboundCount << std::endl;
+	std::cout << "Remaining nonbound count: " << nonboundCount << std::endl;
+	std::cout << "Remaining intercepts point count: " << interceptsPointPreciseCount << std::endl;
+	
+	int someVal = 3;
 	//std::cout << "Fix this shit, compiler. " << std::endl;
-	//std::cin >> someVal;
+	std::cin >> someVal;
 }

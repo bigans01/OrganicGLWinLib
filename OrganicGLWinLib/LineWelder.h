@@ -13,6 +13,7 @@
 #include "CleaveSequence.h"
 #include "FoundCleaveSequence.h"
 #include "LineWelderHierarchyPosition.h"
+#include "LineWelderRunMode.h"
 
 class LineWelder
 {
@@ -32,6 +33,8 @@ private:
 	CleaveSequenceCandidateListMap candidateListMap;
 	glm::vec3 currentLeadingPoint;		
 	CleaveSequenceMetaTracker metaTracker;
+
+	LineWelderRunMode runMode = LineWelderRunMode::NOVAL;	// begins as NOVAL, but should start as CONTINUE, and end as ENDING (when we are on the last border line of the welder)
 
 	int beginningSequenceID = 0;	// the sequence ID where the welder will start, and begin.
 	int currentBorderLineID = 0;	// the border line we'll be starting on.
