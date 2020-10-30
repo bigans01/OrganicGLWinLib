@@ -54,7 +54,7 @@ void SPolySet::runPolyComparison()
 
 			SPoly* polyA = &secondaryPolys[x];
 			SPoly* polyB = &secondaryPolys[currentIndex];
-			checkForIntersections(polyA, x, polyB, currentIndex);
+			produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);
 
 		}
 	}
@@ -90,7 +90,7 @@ void SPolySet::runPolyComparison()
 					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
 					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
 					std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
-					checkForIntersections(polyA, x, polyB, currentIndex);		// PHASE 1
+					produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
 				}
 			}
 			currentIndex++;
@@ -111,22 +111,22 @@ void SPolySet::runPolyComparison()
 	//std::cin >> someval;
 }
 
-int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* in_polyBPtr, int in_polyBID)
+int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID)
 {
 	int numberOfIntersections = 0;
 
-	int polyATertiaryCount = in_polyAPtr->numberOfTriangles;
-	int polyBTertiaryCount = in_polyBPtr->numberOfTriangles;
+	int hostPolyTriangleCount = in_hostPolyPtr->numberOfTriangles;
+	int guestPolyTriangleCount = in_guestPolyPtr->numberOfTriangles;
 
-	//std::cout << "polyA count: " << polyATertiaryCount << std::endl;
-	//std::cout << "polyB count: " << polyBTertiaryCount << std::endl;
+	//std::cout << "polyA count: " << hostPolyTriangleCount << std::endl;
+	//std::cout << "polyB count: " << guestPolyTriangleCount << std::endl;
 
 	//std::cout << "########################## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ >>> A lines are: " << std::endl;
 	//std::cout << "0: " << in_polyAPtr->triangles[0].triangleLines[0].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[0].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[0].pointB.z << std::endl;
 	//std::cout << "1: " << in_polyAPtr->triangles[0].triangleLines[1].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[1].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.z << std::endl;
 	//std::cout << "2: " << in_polyAPtr->triangles[0].triangleLines[2].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[2].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.z << std::endl;
 
-	STriangle* tempBTrianglePtr = &in_polyBPtr->triangles[1];
+	STriangle* tempBTrianglePtr = &in_guestPolyPtr->triangles[1];
 	//std::cout << "2, point A: " << tempBTrianglePtr->triangleLines[2].pointA.x << ", " << tempBTrianglePtr->triangleLines[2].pointA.y << ", " << tempBTrianglePtr->triangleLines[2].pointA.z << std::endl;
 	//std::cout << "2, point B: " << tempBTrianglePtr->triangleLines[2].pointB.x << ", " << tempBTrianglePtr->triangleLines[2].pointB.y << ", " << tempBTrianglePtr->triangleLines[2].pointB.z << std::endl;
 
@@ -135,14 +135,12 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 	//std::cout << "temp halt, enter integer. " << std::endl;
 	//std::cin >> someVal;
 
-	for (int x = 0; x < polyATertiaryCount; x++)					// compare each of poly A's tertiaries...
+	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
-		// >>>>>>>>>>>>>>>>>>>>> STEP 1
-		// compare A's line's to B
-		STriangle* polyATrianglePtr = &in_polyAPtr->triangles[x];	// " " 
+		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
 		IntersectionLineGroup hostLineGroup;						// the line group for poly A.
 		IntersectionLineGroup guestLineGroup;						// the line group for poly B.
-		for (int y = 0; y < polyBTertiaryCount; y++)					// .. to each of poly B's tertiaries...
+		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
 		{
 			// for each pair (that is, A's current STriangle to B's current STriangle in the iterations), we must:
 			// 1. compare the lines of STriangle A to that of STriangle B
@@ -150,18 +148,23 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			// 3. analyze the relationship between them
 
 
-			// STEP 1
-			STriangle* polyBTrianglePtr = &in_polyBPtr->triangles[y]; // get the triangle of B
+			// >>>>>>>>>>>>>>>>>>>>> STEP 1
+			// compare the host triangle lines, to the guest triangles.
+
+			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
 			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of A to triangle of B " << std::endl;
 			//std::cout << ">>> B triangle (Guest triangle) points are: " << std::endl;
-			//std::cout << "0: " << polyBTrianglePtr->triangleLines[0].pointA.x << ", " << polyBTrianglePtr->triangleLines[0].pointA.y << ", " << polyBTrianglePtr->triangleLines[0].pointA.z << std::endl;
-			//std::cout << "1: " << polyBTrianglePtr->triangleLines[1].pointA.x << ", " << polyBTrianglePtr->triangleLines[1].pointA.y << ", " << polyBTrianglePtr->triangleLines[1].pointA.z << std::endl;
-			//std::cout << "2: " << polyBTrianglePtr->triangleLines[2].pointA.x << ", " << polyBTrianglePtr->triangleLines[2].pointA.y << ", " << polyBTrianglePtr->triangleLines[2].pointA.z << std::endl;
-			//std::cout << "2 (B): " << polyBTrianglePtr->triangleLines[2].pointB.x << ", " << polyBTrianglePtr->triangleLines[2].pointB.y << ", " << polyBTrianglePtr->triangleLines[2].pointB.z << std::endl;
+			//std::cout << "0: " << guestTrianglePtr->triangleLines[0].pointA.x << ", " << guestTrianglePtr->triangleLines[0].pointA.y << ", " << guestTrianglePtr->triangleLines[0].pointA.z << std::endl;
+			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
+			//std::cout << "2: " << guestTrianglePtr->triangleLines[2].pointA.x << ", " << guestTrianglePtr->triangleLines[2].pointA.y << ", " << guestTrianglePtr->triangleLines[2].pointA.z << std::endl;
+			//std::cout << "2 (B): " << guestTrianglePtr->triangleLines[2].pointB.x << ", " << guestTrianglePtr->triangleLines[2].pointB.y << ", " << guestTrianglePtr->triangleLines[2].pointB.z << std::endl;
 
-			for (int z = 0; z < 3; z++)		// run the lines of A (the host) through triangle B (the guest)
+			for (int currentHostTriangleLine = 0; currentHostTriangleLine < 3; currentHostTriangleLine++)		// run the lines of A (the host) through triangle B (the guest)
 			{
-				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyBTrianglePtr, in_polyAPtr->triangles[x].triangleLines[z]);		// check if poly A's line intersected B...if they did, we need to add them to the IntersectionLine
+				// check if any of the host poly's lines intersected the guest poly...
+				// if they did, we need to add them to the IntersectionLine
+				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);		
+				
 
 				IntersectionLine potentialHostLine;		// the line that will store the intersections.
 				if (intersectResult.wasIntersectFound == 1)
@@ -185,7 +188,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 					}
 					//std::cout << "(1) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					potentialHostLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
-					potentialHostLine.intersectedSecondaryID = in_polyBID;			// store the ID of the secondary that was intersected; this should always be B
+					potentialHostLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					//std::cout << "!!! Points are: " << potentialLineAtoB.pointA.x << ", " << potentialLineAtoB.pointA.y << ", " << potentialLineAtoB.pointA.z << " |  " << potentialLineAtoB.pointB.x << ", " << potentialLineAtoB.pointB.y << ", " << potentialLineAtoB.pointB.z << std::endl;
 					//std::cout << "(2) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					hostLineGroup.addIntersectionLine(potentialHostLine);			// only add a line to the group if the line intersection wtih poly B
@@ -195,11 +198,13 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			// merge the found intersections for the candidate line, then make that result = potentialLineAtoB;
 			IntersectionLine mergedHostLine = hostLineGroup.mergeLines();
 
-			// STEP 2
+			// >>>>>>>>>>>>>>>>>>>>> STEP 2
+			// compare the GUEST triangle lines, to the host triangles.
+
 			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
 			for (int z = 0; z < 3; z++)		// run the lines of B (the guest) through triangle A (the host)
 			{
-				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*polyATrianglePtr, polyBTrianglePtr->triangleLines[z]);				// check if poly B's line intersected A...if they did, we need to add them to the IntersectionLine
+				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);				// check if poly B's line intersected A...if they did, we need to add them to the IntersectionLine
 
 				IntersectionLine potentialGuestLine;		// the line that will store the intersections.
 				if (intersectResult.wasIntersectFound == 1)
@@ -209,20 +214,20 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 					{
 						//std::cout << "(Guest lines going through Host Triangle) Intersecting line was a border line. It's ID is: " << intersectResult.borderLineID << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
-						//std::cout << "(Guest lines going through Host Triangle) Line points: " << polyBTrianglePtr->triangleLines[z].pointA.x << ", " << polyBTrianglePtr->triangleLines[z].pointA.y << ", " << polyBTrianglePtr->triangleLines[z].pointA.z << " || "
-						//	<< polyBTrianglePtr->triangleLines[z].pointB.x << ", " << polyBTrianglePtr->triangleLines[z].pointB.y << ", " << polyBTrianglePtr->triangleLines[z].pointB.z << std::endl;
+						//std::cout << "(Guest lines going through Host Triangle) Line points: " << guestTrianglePtr->triangleLines[z].pointA.x << ", " << guestTrianglePtr->triangleLines[z].pointA.y << ", " << guestTrianglePtr->triangleLines[z].pointA.z << " || "
+						//	<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//potentialLineBtoA.numberOfBorderLines = 1;
 					}
 					else
 					{
 						//std::cout << "(Guest lines going through Host Triangle) Intersecting line was NOT a border line. (B to A)" << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
-						//std::cout << "(Guest lines going through Host Triangle) Line points: " << polyBTrianglePtr->triangleLines[z].pointA.x << ", " << polyBTrianglePtr->triangleLines[z].pointA.y << ", " << polyBTrianglePtr->triangleLines[z].pointA.z << " || "
-						//	<< polyBTrianglePtr->triangleLines[z].pointB.x << ", " << polyBTrianglePtr->triangleLines[z].pointB.y << ", " << polyBTrianglePtr->triangleLines[z].pointB.z << std::endl;
+						//std::cout << "(Guest lines going through Host Triangle) Line points: " << guestTrianglePtr->triangleLines[z].pointA.x << ", " << guestTrianglePtr->triangleLines[z].pointA.y << ", " << guestTrianglePtr->triangleLines[z].pointA.z << " || "
+						//	<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//std::cout << "Intersecting line was NOT a border line. (B to A)" << std::endl;
 					}
 					potentialGuestLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
-					potentialGuestLine.intersectedSecondaryID = in_polyBID;			// store the ID of the secondary that was intersected; this should always be B
+					potentialGuestLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					guestLineGroup.addIntersectionLine(potentialGuestLine);			// only add a line to the group if the line intersection wtih poly B
 				}
 			}
@@ -232,7 +237,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			// STEP 3
 			// compare the IntersectionLines to determine the type of interect (if any) that was generated;
 			// it is important to remember that, the "view" or "context" of the categorized line is at is viewed from the host triangle.
-			CategorizedLine currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_polyBPtr->groupID, in_polyBPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
+			CategorizedLine currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_guestPolyPtr->groupID, in_guestPolyPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
 
 			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
@@ -244,7 +249,7 @@ int SPolySet::checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* i
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
-				in_polyAPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
+				in_hostPolyPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
 				// new code for adding to LineSequenceFactory goes here
 				numberOfIntersections++;
 			}

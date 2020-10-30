@@ -30,7 +30,7 @@ public:
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
 	void runPolyComparison();
-	int checkForIntersections(SPoly* in_polyAPtr, int in_polyAID, SPoly* in_polyBPtr, int in_polyBID);
+	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
 	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
 	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
 	float dot(glm::vec3 in_A, glm::vec3 in_B);
