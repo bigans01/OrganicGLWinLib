@@ -24,6 +24,7 @@ public:
 		currentManipulationMode = sPolyRef->massManipulationSetting;	// set the manipulation mode.
 		startWelding();
 	};
+	WeldedLinePool retrieveLinePool();
 private:
 	SPoly* sPolyRef = nullptr;	// a reference to the SPoly we will be operating on for this LineWelder.
 	MassManipulationMode currentManipulationMode = MassManipulationMode::CREATION;	// CREATION is default value, but will be overrriden by the SPoly's value when

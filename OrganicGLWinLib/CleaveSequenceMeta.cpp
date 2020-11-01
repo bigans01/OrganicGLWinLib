@@ -61,6 +61,10 @@ CategorizedLine CleaveSequenceMeta::fetchNextCategorizedLineInSequence()
 			categorizedLinesBegin++;
 		}
 		returnLine = categorizedLinesBegin->second;
+
+		// swap to A, since we're going into a reverse crawl direction. 
+		returnLine.line.swapToA();
+
 	}
 	currentLineIndex++;
 	numberOfRemainingLines--;

@@ -14,6 +14,17 @@ class WeldedLinePool
 			int currentIndex = pool.size();
 			pool[currentIndex] = in_weldedLineToInsert;
 		}
+		void printLines()
+		{
+			auto poolBegin = pool.begin();
+			auto poolEnd = pool.end();
+			for (; poolBegin != poolEnd; poolBegin++)
+			{
+				std::cout << "[" << poolBegin->first << "], Point A: " << poolBegin->second.pointA.x << ", " << poolBegin->second.pointA.y << ", " << poolBegin->second.pointA.z << ", "
+					<< "| Point B: " << poolBegin->second.pointB.x << ", " << poolBegin->second.pointB.y << ", " << poolBegin->second.pointB.z << ", "
+					<< "| Empty normal: " << poolBegin->second.emptyNormal.x << ", " << poolBegin->second.emptyNormal.y << ", " << poolBegin->second.emptyNormal.z << std::endl;
+			}
+		}
 	private:
 		std::map<int, WeldedLine> pool;
 };

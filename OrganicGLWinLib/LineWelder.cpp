@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "LineWelder.h"
 
+WeldedLinePool LineWelder::retrieveLinePool()
+{
+	return weldedLines;
+}
+
 void LineWelder::startWelding()
 {
 	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
@@ -29,7 +34,7 @@ void LineWelder::startWelding()
 		std::cout << "Sequence [" << optionalSequenceBegin->first << "] has " << optionalSequenceBegin->second.cleavingLines.size() << " lines in it." << std::endl;
 	}
 	*/
-
+	CategorizedLine currentCategorizedLine;
 	foundDirection = sequenceBegin->second.direction;
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
 	if (sequenceBegin->second.line.numberOfBorderLines == 1)		// if there are multiple CategorizedLines in the cleave sequence, the first line in the sequence
@@ -41,7 +46,7 @@ void LineWelder::startWelding()
 		currentBorderLineID = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = sequenceEnd->second.line.getBorderLineIDFromSingularBorderLineCount();
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		// grab the CleaveSequenceMeta, so that we can retrieve the first line for the welder.
-		CategorizedLine currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
+		currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
 
 		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 															//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
@@ -57,13 +62,18 @@ void LineWelder::startWelding()
 		currentBorderLineID = retrievedPair.pointABorderLineID;												// retrieve the border line to start at, from the first CleavingLine in the first CleavingSequence.
 		endingBorderLineID = retrievedPair.pointBBorderLineID;
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		// grab the CleaveSequenceMeta, so that we can retrieve the first line for the welder.
-		CategorizedLine currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
+		currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
 
 		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 			//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
+
 		std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
 	}
+
+	// insert the very first line of the welding pool.
+	WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+	weldedLines.insertLineIntoPool(beginningWeldedLine);
 
 	std::cout << "******** printing cleave lines in the first sequence: " << std::endl;
 	auto testSequenceBegin = cleaveBegin->second.cleavingLines.begin();
@@ -193,6 +203,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 				std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
 
+				WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+				weldedLines.insertLineIntoPool(beginningWeldedLine);
+
 				std::cout << "| Current line, point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				std::cout << "| Current line, point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
@@ -264,6 +277,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			{
 				std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
+
+				WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+				weldedLines.insertLineIntoPool(beginningWeldedLine);
 				// will need to do this with the lin here, such as making into a CrawlableLine
 				// ...
 				// ...
