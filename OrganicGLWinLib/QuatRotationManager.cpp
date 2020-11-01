@@ -77,6 +77,45 @@ void QuatRotationManager::initializeAndRunForFindingBorderLine(QuatRotationPoint
 	executeRotationsForFindingBorderLine();
 }
 
+void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);	
+	
+	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
+	if (pointBRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+
+	// otherwise, if it's already on Y = 0, do this:
+	if (pointBRef->y == 0.0f)
+	{
+		glm::vec3 centroid = in_quatpointsRefVector->getPointByIndex(2);
+		glm::vec3* centroidRef = in_quatpointsRefVector->getPointRefByIndex(2);
+		glm::vec3 emptyNormal;
+
+		if (centroid.y < 0)	// it's going negative y
+		{
+			emptyNormal.y = -1;
+		}
+		if (centroid.y > 0)
+		{
+			emptyNormal.y = 1;
+		}
+
+		*centroidRef = emptyNormal;
+	}
+
+	executeRotationsForFindingBorderLineEmptyNormal();
+	rotateToOriginalPosition();
+
+	//std::cout << "!!! ~~~~~~ Printing points for test of finding the empty normal for a border line: " << std::endl;
+	//rotationpointsRefVector->printPoints();
+}
+
 void QuatRotationManager::executeRotationsForFindingBorderLine()
 {
 	auto vectorBegin = rotationOrder.begin();
@@ -107,6 +146,20 @@ void QuatRotationManager::executeRotationsForFindingBorderLine()
 
 	//std::cout << ":::::: Printingt points for executeRotationsForFindingBorderLine() " << std::endl;
 	//rotationpointsRefVector->printPoints();
+}
+
+void QuatRotationManager::executeRotationsForFindingBorderLineEmptyNormal()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
+		{
+			rotateAroundZToFindBorderLineEmptyNormalAndPushIntoStack();
+		}
+	}
+
 }
 
 glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector)
@@ -516,6 +569,64 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 	//*pointBRef = originalQuat * *pointBRef;	
 	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
+
+	//std::cout << "Printing points after Z-axis bound rotation: " << std::endl;
+	//rotationpointsRefVector->printPoints();
+}
+
+void QuatRotationManager::rotateAroundZToFindBorderLineEmptyNormalAndPushIntoStack()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+
+	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+	float atan2result = atan2(pointBRef->y, pointBRef->x); // find the radians we'll need to rotate by
+	//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
+	float firstPassRotateRadians = 0.0f;
+
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	if (debugFlag == 1)
+	{
+		std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
+	}
+	glm::vec3 rotationAroundZ;
+	rotationAroundZ.z = -1.0f;
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundZ);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationRecords.push(s1record);
+
+	// check if the 3rd point (the centroid of the triangle is positive Y or negative Y; it's Y should never be 0, if we did things correctly (the triangle would be invalid).
+	glm::vec3 determinedEmptyNormal;
+	glm::vec3 currentCentroid = rotationpointsRefVector->getPointByIndex(2);
+	if (currentCentroid.y > 0)
+	{
+		determinedEmptyNormal.y = 1;
+	}
+	else if (currentCentroid.y < 0)
+	{
+		determinedEmptyNormal.y = -1;
+	}
+
+	glm::vec3* centroidRef = rotationpointsRefVector->getPointRefByIndex(2);
+	*centroidRef = determinedEmptyNormal;
+
+
+
+
 
 	//std::cout << "Printing points after Z-axis bound rotation: " << std::endl;
 	//rotationpointsRefVector->printPoints();

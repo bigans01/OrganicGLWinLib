@@ -16,6 +16,7 @@
 #include "QuatRotationPoints.h"
 #include "FoundCleaveSequence.h"
 #include "LineWelderRunMode.h"
+#include "WeldedLinePool.h"
 
 class NeighboringCleaveSequenceFinder
 {
@@ -29,7 +30,8 @@ class NeighboringCleaveSequenceFinder
 										int in_finderStartingCleaveSequenceID,
 										CleaveSequenceMetaTracker* in_cleaveSequenceMetaTrackerRef,
 										glm::vec3 in_sequenceFinderStartPoint,
-										LineWelderRunMode in_lineWelderRunMode) : 
+										LineWelderRunMode in_lineWelderRunMode,
+										WeldedLinePool* in_weldedLinePoolRef) : 
 			startingBorderLineID(in_startingborderLineID),
 			borderLineRef(in_borderLineRef), 
 			cleaveMapRef(in_cleaveMapRef),
@@ -38,7 +40,8 @@ class NeighboringCleaveSequenceFinder
 			finderStartingCleaveSequenceID(in_finderStartingCleaveSequenceID),
 			cleaveSequenceMetaTrackerRef(in_cleaveSequenceMetaTrackerRef),
 			sequenceFinderStartPoint(in_sequenceFinderStartPoint),
-			finderRunMode(in_lineWelderRunMode)
+			finderRunMode(in_lineWelderRunMode),
+			weldedLinePoolRef(in_weldedLinePoolRef)
 		{
 			buildNeighboringCleaveSequenceMap();
 		};
@@ -54,6 +57,7 @@ class NeighboringCleaveSequenceFinder
 		CleaveSequenceMetaTracker* cleaveSequenceMetaTrackerRef = nullptr;	// set upon initialization
 		glm::vec3 sequenceFinderStartPoint;
 		LineWelderRunMode finderRunMode = LineWelderRunMode::NOVAL;	// set upon initialization
+		WeldedLinePool* weldedLinePoolRef = nullptr;	// set upon initialization
 
 		std::set<int> foundSet;						// will contain the other CleaveSequences on this line, except the one that his the value specified by
 													// finderStartingCleaveSequenceID.

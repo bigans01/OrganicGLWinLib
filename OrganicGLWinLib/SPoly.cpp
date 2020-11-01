@@ -206,11 +206,21 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 
 	glm::vec3 translationValueForMidPoint = lineMidPoint *= -1;	// translation would be the inverse of the midpoint
 
-	pointACopy += translationValueForMidPoint;
-	pointBCopy += translationValueForMidPoint;
-	centroidPointCopy += translationValueForMidPoint;
+	//pointACopy += translationValueForMidPoint;
+	//pointBCopy += translationValueForMidPoint;
+	//centroidPointCopy += translationValueForMidPoint;
 
 	// the planar vector should now equal whatever value the centroid is at.
+
+	QuatRotationPoints rotationPoints;
+	rotationPoints.pointsRefVector.push_back(&pointACopy);
+	rotationPoints.pointsRefVector.push_back(&pointBCopy);
+	rotationPoints.pointsRefVector.push_back(&centroidPointCopy);
+
+	QuatRotationManager rotationManager;
+	rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);
+
+
 	in_borderLineRef->planarVector = centroidPointCopy;
 
 	/*

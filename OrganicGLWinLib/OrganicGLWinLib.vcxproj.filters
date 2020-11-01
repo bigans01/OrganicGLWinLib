@@ -432,6 +432,12 @@
     <ClInclude Include="LineWelderRunMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WeldedLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedLinePool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

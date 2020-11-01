@@ -14,6 +14,7 @@
 #include "FoundCleaveSequence.h"
 #include "LineWelderHierarchyPosition.h"
 #include "LineWelderRunMode.h"
+#include "WeldedLinePool.h"
 
 class LineWelder
 {
@@ -35,6 +36,7 @@ private:
 	CleaveSequenceMetaTracker metaTracker;
 
 	LineWelderRunMode runMode = LineWelderRunMode::NOVAL;	// begins as NOVAL, but should start as CONTINUE, and end as ENDING (when we are on the last border line of the welder)
+	WeldedLinePool weldedLines;
 
 	int beginningSequenceID = 0;	// the sequence ID where the welder will start, and begin.
 	int currentBorderLineID = 0;	// the border line we'll be starting on.

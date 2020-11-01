@@ -45,6 +45,7 @@ void LineWelder::startWelding()
 
 		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 															//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+		std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
 	}
 	else if (sequenceBegin->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
 																	// get the borders from the pointA and pointB of this line.
@@ -60,6 +61,8 @@ void LineWelder::startWelding()
 
 		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 			//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+
+		std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
 	}
 
 	std::cout << "******** printing cleave lines in the first sequence: " << std::endl;
@@ -155,13 +158,22 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// -the ID of the current CleaveSequence this finder will start from
 
 	std::cout << "====> Current border line ID is: " << in_currentBorderLineID << std::endl;
+	std::cout << "====> Current border line planar vector is: " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.x << ", " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.y << ", " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.z << std::endl;
 
 	//	// get a ref to the intersect recorder in our current border line.
 	BorderLineIntersectRecorder* intersectRecorderRef = &sPolyRef->borderLines[in_currentBorderLineID].intersectRecorder;
 	int nextBorderLineID = 0;	// will be set by conditions below...
 	if (intersectRecorderRef->records.size() > 1)	// only do this check if there are MULTIPLE CleaveSequences in a BorderLine
 	{
-		NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker, in_leadingPoint, runMode);
+		NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, 
+																&sPolyRef->borderLines[in_currentBorderLineID], 
+																&sPolyRef->cleaveMap, foundDirection, 
+																in_cleaveSequenceCandidateListRef, 
+																in_finderStartingCleaveSequenceID, 
+																&metaTracker, 
+																in_leadingPoint, 
+																runMode, 
+																&weldedLines);
 		if (nextCleaveSequenceFinder.wereNeighborsFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
@@ -225,7 +237,16 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	else if (intersectRecorderRef->records.size() == 1)		// only do this if there is ONE CleaveSequence in the current border line.
 	{
 		std::cout << "::: Note: border Line with ID: " << currentBorderLineID << " has only 1 intercept record. " << std::endl;
-		NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, &sPolyRef->borderLines[in_currentBorderLineID], &sPolyRef->cleaveMap, foundDirection, in_cleaveSequenceCandidateListRef, in_finderStartingCleaveSequenceID, &metaTracker, in_leadingPoint, runMode);
+		NeighboringCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, 
+																&sPolyRef->borderLines[in_currentBorderLineID], 
+																&sPolyRef->cleaveMap, 
+																foundDirection, 
+																in_cleaveSequenceCandidateListRef, 
+																in_finderStartingCleaveSequenceID,
+																&metaTracker, 
+																in_leadingPoint, 
+																runMode, 
+																&weldedLines);
 		if (nextCleaveSequenceFinder.wereNeighborsFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
