@@ -7,7 +7,7 @@
 #include "BorderLineIDPair.h"
 #include "MassManipulationMode.h"
 #include "BorderLineCycler.h"
-#include "NeighboringCleaveSequenceFinder.h"
+#include "NextCleaveSequenceFinder.h"
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
 #include "CleaveSequence.h"

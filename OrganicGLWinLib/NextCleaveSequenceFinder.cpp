@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "NeighboringCleaveSequenceFinder.h"
+#include "NextCleaveSequenceFinder.h"
 
-void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
+void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 {
 	// get a ref to the intersect recorder in our starting border line.
 	BorderLineIntersectRecorder* intersectRecorderRef = &borderLineRef->intersectRecorder;
@@ -16,7 +16,7 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		if (foundSet.empty())
 		{
 			std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
-			doNeighborsExist = false;
+			wasNextSequenceFound = false;
 		}
 		else if (!foundSet.empty())
 		{
@@ -33,14 +33,19 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 			if (shortestPointStats.distance != 0.0f)
 			{
 				FoundCleaveSequence selectedSequence(*foundSetBegin, shortestPointStats);
+
+				// because the distance between the sequenceFiderStartPoint and the shortest point isn't 0, we must insert a welded line.
+				WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
+				weldedLinePoolRef->insertLineIntoPool(newLine);
+
 				selectedCleaveSequenceMeta = selectedSequence;
-				doNeighborsExist = true;		// this indicates that we actually found a legitimate neighbor to trace to.
+				wasNextSequenceFound = true;		// this indicates that we actually found a legitimate neighbor to trace to.
 			}
 			else
 			{
 				std::cout << ":::: Distance is 0.0, no neighbors found. " << std::endl;
 
-				doNeighborsExist = false;
+				wasNextSequenceFound = false;
 			}
 		}
 	}
@@ -81,17 +86,17 @@ void NeighboringCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	}
 }
 
-FoundCleaveSequence NeighboringCleaveSequenceFinder::getSelectedCleaveSequenceMeta()
+FoundCleaveSequence NextCleaveSequenceFinder::getSelectedCleaveSequenceMeta()
 {
 	return selectedCleaveSequenceMeta;
 }
 
-bool NeighboringCleaveSequenceFinder::wereNeighborsFound()
+bool NextCleaveSequenceFinder::wasSequenceFound()
 {
-	return doNeighborsExist;
+	return wasNextSequenceFound;
 }
 
-void NeighboringCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
+void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 {
 	// remember, the first value (int) of the std::map<int, BorderLineIntersectRecord>, -- aka "record" -- represents the CleaveSequenceID.
 
@@ -208,7 +213,7 @@ void NeighboringCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		{
 			closestDistance = distanceToPointMapBegin->second.distance;
 			currentShortestDistanceID = distanceToPointMapBegin->first;
-			doNeighborsExist = true;		// this indicates that we actually found a legitimate neighbor to trace to.
+			wasNextSequenceFound = true;		// this indicates that we actually found a legitimate neighbor to trace to.
 		}
 	}
 

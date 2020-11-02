@@ -210,7 +210,7 @@
     <ClInclude Include="LineWelderHierarchyPosition.h" />
     <ClInclude Include="LineWelderRunMode.h" />
     <ClInclude Include="MassManipulationMode.h" />
-    <ClInclude Include="NeighboringCleaveSequenceFinder.h" />
+    <ClInclude Include="NextCleaveSequenceFinder.h" />
     <ClInclude Include="PointTranslationCheck.h" />
     <ClInclude Include="QuatRotationManager.h" />
     <ClInclude Include="QuatRotationPoints.h" />
@@ -335,7 +335,7 @@
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="LineWelder.cpp" />
-    <ClCompile Include="NeighboringCleaveSequenceFinder.cpp" />
+    <ClCompile Include="NextCleaveSequenceFinder.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />

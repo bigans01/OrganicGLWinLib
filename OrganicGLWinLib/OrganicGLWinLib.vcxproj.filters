@@ -396,9 +396,6 @@
     <ClInclude Include="BorderLinePointPair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NeighboringCleaveSequenceFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CleaveSequenceMeta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -436,6 +433,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WeldedLinePool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NextCleaveSequenceFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -662,10 +662,10 @@
     <ClCompile Include="LineWelder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NeighboringCleaveSequenceFinder.cpp">
+    <ClCompile Include="CleaveSequenceMeta.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CleaveSequenceMeta.cpp">
+    <ClCompile Include="NextCleaveSequenceFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

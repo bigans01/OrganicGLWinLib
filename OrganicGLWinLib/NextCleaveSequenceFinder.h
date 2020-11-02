@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef NEIGHBORINGCLEAVESEQUENCEFINDER_H
-#define NEIGHBORINGCLEAVESEQUENCEFINDER_H
+#ifndef NextCleaveSequenceFinder_H
+#define NextCleaveSequenceFinder_H
 
 #include "SPolyBorderLines.h"
 #include "CyclingDirection.h"
@@ -18,11 +18,11 @@
 #include "LineWelderRunMode.h"
 #include "WeldedLinePool.h"
 
-class NeighboringCleaveSequenceFinder
+class NextCleaveSequenceFinder
 {
 	public:
-		NeighboringCleaveSequenceFinder() {};		// just in case
-		NeighboringCleaveSequenceFinder(int in_startingborderLineID, 
+		NextCleaveSequenceFinder() {};		// just in case
+		NextCleaveSequenceFinder(int in_startingborderLineID, 
 										SPolyBorderLines* in_borderLineRef, 
 										std::map<int, CleaveSequence>* in_cleaveMapRef,
 										CyclingDirection in_cyclingDirection,
@@ -45,7 +45,7 @@ class NeighboringCleaveSequenceFinder
 		{
 			buildNeighboringCleaveSequenceMap();
 		};
-		bool wereNeighborsFound();
+		bool wasSequenceFound();
 		FoundCleaveSequence getSelectedCleaveSequenceMeta();
 	private:
 		int startingBorderLineID = 0;				// set upon initialization
@@ -61,7 +61,7 @@ class NeighboringCleaveSequenceFinder
 
 		std::set<int> foundSet;						// will contain the other CleaveSequences on this line, except the one that his the value specified by
 													// finderStartingCleaveSequenceID.
-		bool doNeighborsExist = false;				// a flag that determines whether or not neighbors exist.
+		bool wasNextSequenceFound = false;				// a flag that determines whether or not neighbors exist.
 
 		FoundCleaveSequence selectedCleaveSequenceMeta;
 

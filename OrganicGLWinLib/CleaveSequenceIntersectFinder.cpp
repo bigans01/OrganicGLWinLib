@@ -42,42 +42,6 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
 		linePool.printLines();
 		std::cin >> someVal;
-
-
-
-		/*
-		auto cleaveBegin = in_sPolyRef->cleaveMap.begin();
-
-		// strange, false positive error with cleavingLines below (5/16/2020)
-		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();	// get first element  (the border line in the cycle where the cycle begins, fetched from the first CategorizedLine in the sequence)
-		auto sequenceEnd = cleaveBegin->second.cleavingLines.rbegin();	// get last element  (the border line in the cycle where the cycle ends, fetched from the last CategorizedLine in the sequence)
-
-		// if the first line in the sequence is only one border line, do this; test
-		if (sequenceBegin->second.line.numberOfBorderLines == 1)
-		{
-			//auto truestart = std::chrono::high_resolution_clock::now();
-			BorderLineCycler lineCycler(in_sPolyRef);
-			int beginLineborderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
-			int endLineborderLineId = sequenceEnd->second.line.getBorderLineIDFromSingularBorderLineCount();
-			
-			//auto truestart = std::chrono::high_resolution_clock::now();
-			lineCycler.findCyclingDirection(&in_sPolyRef->borderLines[beginLineborderLineId], beginLineborderLineId, &sequenceBegin->second);	// find the direction to go off of, based off the border line			
-
-
-
-			//auto truestart = std::chrono::high_resolution_clock::now();
-			
-			//auto trueend = std::chrono::high_resolution_clock::now();
-			//std::chrono::duration<double> trueelapsed2 = trueend - truestart;
-			//std::cout << "#-> (BuildLineCycler) initialize function Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
-			
-			//auto truestart = std::chrono::high_resolution_clock::now();
-			lineCycler.buildCycle(in_sPolyRef, beginLineborderLineId, endLineborderLineId);		// build the cycle, once the direction is found.
-			//auto trueend = std::chrono::high_resolution_clock::now();
-			//std::chrono::duration<double> trueelapsed2 = trueend - truestart;
-			//std::cout << "#-> (Build Cycle ) buildCycle call function Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
-		}
-		*/
 	}
 	
 }
@@ -104,20 +68,7 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 				//std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
 			}	
 		}
-		
 
-		/*
-		auto firstLine = cleaveBegin->second.cleavingLines.begin();
-		int firstLineID = firstLine->second.line.getBorderLineIDFromSingularBorderLineCount();
-		SPolyBorderLines* firstLineRef = &sPolyRef->borderLines[firstLineID];
-		firstLineRef->intersectRecorder.insertNewRecord(cleaveBegin->first, firstLine->first, &firstLine->second);
-
-
-		auto lastLine = cleaveBegin->second.cleavingLines.rbegin();
-		int lastLineID = lastLine->second.line.getBorderLineIDFromSingularBorderLineCount();
-		SPolyBorderLines* lastLineRef = &sPolyRef->borderLines[lastLineID];
-		lastLineRef->intersectRecorder.insertNewRecord(cleaveBegin->first, lastLine->first, &lastLine->second);
-		*/
 	}
 
 	// cycle through each border line; if it has any records, determine those record types.
