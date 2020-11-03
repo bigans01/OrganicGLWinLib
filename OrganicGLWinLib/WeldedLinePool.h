@@ -4,7 +4,8 @@
 #define WELDEDLINEPOOL_H
 
 #include "WeldedLine.h"
-#include  <map>
+#include <iostream>
+#include <map>
 
 class WeldedLinePool
 {

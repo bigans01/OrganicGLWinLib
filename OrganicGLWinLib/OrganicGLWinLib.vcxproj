@@ -297,6 +297,7 @@
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="WeldedLine.h" />
     <ClInclude Include="WeldedLinePool.h" />
+    <ClInclude Include="WeldedTriangleBuilder.h" />
     <ClInclude Include="WorldLight.h" />
     <ClInclude Include="WorldLightContainer.h" />
     <ClInclude Include="WorldLightContainerMap.h" />
@@ -382,6 +383,7 @@
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
+    <ClCompile Include="WeldedTriangleBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -35,8 +35,11 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::cout << "Point B: " << sPolyRef->borderLines[1].pointB.x << ", " << sPolyRef->borderLines[1].pointB.y << ", " << sPolyRef->borderLines[1].pointB.z << std::endl;
 		*/
 
-		LineWelder welder(in_sPolyRef);		// weld the lines; put the results into the line pool.
+		// weld the lines; put the results into the line pool. Then, put it into the welded triangle builder.
+		LineWelder welder(in_sPolyRef);		
 		linePool = welder.retrieveLinePool();
+		WeldedTriangleBuilder builder;
+		builder.setWeldedLinePool(linePool);
 
 		int someVal = 5;
 		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
