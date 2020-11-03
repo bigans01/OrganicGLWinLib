@@ -6,6 +6,20 @@ WeldedLinePool LineWelder::retrieveLinePool()
 	return weldedLines;
 }
 
+void LineWelder::insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal)
+{
+	WeldedLine beginningWeldedLine(in_pointA, in_pointB, in_emptyNormal);
+	weldedLines.insertLineIntoPool(beginningWeldedLine);
+}
+
+void LineWelder::updateLeadingPointAndInsertNewWeldingLineFromBorderLineData()
+{
+	glm::vec3 newLineBeginPoint = currentLeadingPoint;
+	glm::vec3 newLineEmptyNormal = sPolyRef->borderLines[currentBorderLineID].planarVector;
+	currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
+	insertNewWeldingLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal);
+}
+
 void LineWelder::startWelding()
 {
 	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
@@ -181,9 +195,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			{
 				std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
-
-				WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
-				weldedLines.insertLineIntoPool(beginningWeldedLine);
+				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 
 				std::cout << "| Current line, point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				std::cout << "| Current line, point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
@@ -214,12 +226,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			std::cout << "!!! No neighbors found, from the leading point: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
-
-			glm::vec3 newLineBeginPoint = currentLeadingPoint;
-			glm::vec3 newLineEmptyNormal = sPolyRef->borderLines[currentBorderLineID].planarVector;
-			currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
-			WeldedLine newWeldedLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal);
-			weldedLines.insertLineIntoPool(newWeldedLine);
+			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 			std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
 			std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
@@ -254,9 +261,9 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			{
 				std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
+				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 
-				WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
-				weldedLines.insertLineIntoPool(beginningWeldedLine);
+
 				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
 				std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
@@ -282,12 +289,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			std::cout << "!!! The single intercept record was already consumed!!! " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
-
-			glm::vec3 newLineBeginPoint = currentLeadingPoint;
-			glm::vec3 newLineEmptyNormal = sPolyRef->borderLines[currentBorderLineID].planarVector;
-			currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
-			WeldedLine newWeldedLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal);
-			weldedLines.insertLineIntoPool(newWeldedLine);
+			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 			std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
 			std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
@@ -303,11 +305,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		int nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
 		std::cout << ":: This border line has no records; producing line and proceeding to next border line with ID: " << nextBorderLineID << std::endl;
 
-		glm::vec3 newLineBeginPoint = currentLeadingPoint;
-		glm::vec3 newLineEmptyNormal = sPolyRef->borderLines[currentBorderLineID].planarVector;
-		currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
-		WeldedLine newWeldedLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal);
-		weldedLines.insertLineIntoPool(newWeldedLine);
+		updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 		std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
 		std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;

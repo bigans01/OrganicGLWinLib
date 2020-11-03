@@ -3,16 +3,11 @@
 
 void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 {
-	// get a ref to the intersect recorder in our starting border line.
-	BorderLineIntersectRecorder* intersectRecorderRef = &borderLineRef->intersectRecorder;
-
 	// if it's the only intercept on this border line, that's ok.
+	BorderLineIntersectRecorder* intersectRecorderRef = &borderLineRef->intersectRecorder;
 	if (intersectRecorderRef->records.size() == 1)
 	{
-		//std::cout << "#### Note: record size was only 1. " << std::endl;
-
-		// testing only, print the lines.
-		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
+		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
 		if (foundSet.empty())
 		{
 			std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
@@ -22,29 +17,25 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		{
 			auto foundSetBegin = foundSet.begin();
 			std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
-			//auto foundSetEnd = foundSet.end();
-			//for (; foundSetBegin != foundSetEnd; foundSetBegin++)
-			//{
-			//	std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
-
-			//}
 			DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);	// there's only one sequence, so grab its DistanceToPoint value
-				// we found the shortest ID, so lets 
-			if (shortestPointStats.distance != 0.0f)
+
+			// because the distance between the sequenceFiderStartPoint and the shortest point isn't 0, we must insert a welded line.
+			if (shortestPointStats.distance != 0.0f)	
 			{
 				FoundCleaveSequence selectedSequence(*foundSetBegin, shortestPointStats);
-
-				// because the distance between the sequenceFiderStartPoint and the shortest point isn't 0, we must insert a welded line.
 				WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
 				weldedLinePoolRef->insertLineIntoPool(newLine);
 
 				selectedCleaveSequenceMeta = selectedSequence;
 				wasNextSequenceFound = true;		// this indicates that we actually found a legitimate neighbor to trace to.
 			}
+
+			// if the distance is 0, the shortestPointStats.point and sequenceFinderStartPoint are the same, so there is no line to produce.
+			// we also need to return false so that the calling LineWelder will produce the rest of the border line as the next WeldedLine.
+			// If the very first categorized line we start a LineWelder on is on a border line that contains just one record in its intersectRecorder, this would always be false.
 			else
 			{
-				std::cout << ":::: Distance is 0.0, no neighbors found. " << std::endl;
-
+				std::cout << ":::: !! shortestPointStats.point and sequenceFinderStartPoint match, returning false. " << std::endl;
 				wasNextSequenceFound = false;
 			}
 		}
@@ -168,7 +159,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	QuatRotationManager rotationManager;
 	rotationManager.initializeAndRunforAligningNeighboringCleaveSequencesToPosY(&quatPoints);			// Step 5 and Step 6
 	rotationTargetPoint = quatPoints.getLastPoint();
-	//glm::vec3 normalizedRotationTarget = glm::normalize(quatPoints.getLastPoint());	// get a normalized value of the rotation target point
+
 	std::cout << ">>> Point to rotate to (post translation, and rotation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
 	
 	// let's print whats in the distanceToPointMap, to make sure it's OK
