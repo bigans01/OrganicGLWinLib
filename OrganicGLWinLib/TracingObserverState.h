@@ -7,7 +7,7 @@ enum class TracingObserverState
 {
 	CONTINUE_OBSERVE,
 	FINAL_OBSERVE,
-	LINE_OF_SIGHT_BROKEN,
+	TERMINATED,		// used if the line of sight is broken, or radians are invalid. Should stop the TracingObserver.
 	FINISHED
 };
 

@@ -29,15 +29,22 @@ void TracingObserver::buildNewObservation(WeldedLine in_lineOfSight, WeldedLine 
 		{
 			// 1. build a triangle from the new candidate line, remove lines 0 and 1 in the pool, insert a new value for line 0 in the pool, and the shift the remainders by 1.
 			// 2. insert the triangle in some map
+			determineObservationState();	
+		}
+		else
+		{
+			currentObserverState == TracingObserverState::TERMINATED;
 		}
 
-		determineObservationState();	
 
 	}
 
-	if (currentObserverState != TracingObserverState::LINE_OF_SIGHT_BROKEN)
+	if (currentObserverState != TracingObserverState::TERMINATED)
 	{
-		// run logic for final observe
+		if (currentObserverState == TracingObserverState::FINAL_OBSERVE)
+		{
+			// run logic for final observe
+		}
 		// run logic for finished
 	}
 }
@@ -50,7 +57,7 @@ bool TracingObserver::checkIfLineOfSightIsBroken()
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightBroken == true)
 	{
-		currentObserverState = TracingObserverState::LINE_OF_SIGHT_BROKEN;
+		currentObserverState = TracingObserverState::TERMINATED;
 	}
 
 	return isLineOfSightBroken;
