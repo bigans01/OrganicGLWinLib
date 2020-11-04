@@ -239,6 +239,8 @@
     <ClInclude Include="TerrainPrimitiveGearT1.h" />
     <ClInclude Include="TerrainSimpleGearT1.h" />
     <ClInclude Include="TileCoordinateProducer.h" />
+    <ClInclude Include="TracingObserver.h" />
+    <ClInclude Include="TracingObserverState.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="AtlasMap.h" />
     <ClInclude Include="AtlasMetaData.h" />
@@ -383,6 +385,7 @@
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
+    <ClCompile Include="TracingObserver.cpp" />
     <ClCompile Include="WeldedTriangleBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>

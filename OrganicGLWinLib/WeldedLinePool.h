@@ -26,6 +26,21 @@ class WeldedLinePool
 					<< "| Empty normal: " << poolBegin->second.emptyNormal.x << ", " << poolBegin->second.emptyNormal.y << ", " << poolBegin->second.emptyNormal.z << std::endl;
 			}
 		}
+		int getPoolSize()
+		{
+			return pool.size();
+		}
+
+		WeldedLine fetchLineFromPoolViaIndex(int in_lineIndex)
+		{
+			return pool[in_lineIndex];
+		}
+		WeldedLine fetchLastLineInPool()
+		{
+			auto lastLine = pool.rbegin();
+			return lastLine->second;
+		}
+
 	private:
 		std::map<int, WeldedLine> pool;
 };

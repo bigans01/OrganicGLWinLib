@@ -441,6 +441,12 @@
     <ClInclude Include="WeldedTriangleBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TracingObserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TracingObserverState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -672,6 +678,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WeldedTriangleBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TracingObserver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
