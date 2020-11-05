@@ -31,6 +31,18 @@ class WeldedLinePool
 			return pool.size();
 		}
 
+		int getFirstElementID()
+		{
+			auto firstLine = pool.begin();
+			return firstLine->first;
+		}
+
+		int getLastElementID()
+		{
+			auto lastLine = pool.rbegin();
+			return lastLine->first;
+		}
+
 		WeldedLine fetchLineFromPoolViaIndex(int in_lineIndex)
 		{
 			return pool[in_lineIndex];
@@ -39,6 +51,10 @@ class WeldedLinePool
 		{
 			auto lastLine = pool.rbegin();
 			return lastLine->second;
+		}
+		std::map<int, WeldedLine>::iterator getPoolIteratior(int in_lineIndex)
+		{
+			return pool.find(in_lineIndex);
 		}
 
 	private:

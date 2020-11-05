@@ -447,6 +447,9 @@
     <ClInclude Include="TracingObserverState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WeldedLinePoolGuide.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

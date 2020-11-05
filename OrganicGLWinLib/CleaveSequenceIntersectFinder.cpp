@@ -45,7 +45,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 
 		WeldedTriangleBuilder builder;
 		builder.setWeldedLinePool(linePool);
-		//builder.runTracingObservers();
+		builder.runTracingObservers();
 
 		std::cin >> someVal;
 	}

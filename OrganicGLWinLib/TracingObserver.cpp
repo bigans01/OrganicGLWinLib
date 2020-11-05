@@ -6,11 +6,13 @@ void TracingObserver::setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef)
 	weldedLinePoolRef = in_weldedLinePoolRef;
 }
 
-void TracingObserver::buildNewObservation(WeldedLine in_lineOfSight, WeldedLine in_observationEndLine)
+void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 {
+	poolGuide = in_poolGuide;
 	remainingRadians = 1000.0f;
-	lineOfSight = in_lineOfSight;
-	observationEndLine = in_observationEndLine;
+	lineOfSight = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex);
+	observationEndLine = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.observationEndLineIndex);
+
 	//determineObservationRadians();
 	determineObservationState();
 
@@ -29,7 +31,7 @@ void TracingObserver::buildNewObservation(WeldedLine in_lineOfSight, WeldedLine 
 		{
 			// 1. build a triangle from the new candidate line, remove lines 0 and 1 in the pool, insert a new value for line 0 in the pool, and the shift the remainders by 1.
 			// 2. insert the triangle in some map
-			determineObservationState();	
+			determineObservationState();	// 3. update the state when we're done, to see if we terminate the while loop.
 		}
 		else
 		{
