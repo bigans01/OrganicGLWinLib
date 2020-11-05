@@ -8,6 +8,7 @@
 #include "QuatRotationManager.h"
 #include "TracingObserverState.h"
 #include "WeldedLinePoolGuide.h"
+#include "PointTranslationCheck.h"
 
 class TracingObserver
 {
@@ -15,6 +16,7 @@ class TracingObserver
 		void setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef);
 		void buildNewObservation(WeldedLinePoolGuide in_poolGuide);
 		//void buildNewObservation(WeldedLine in_lineOfSight, WeldedLine in_observationEndLine);
+		TracingObserverState getCurrentObserverState();
 	private:
 		TracingObserverState currentObserverState = TracingObserverState::CONTINUE_OBSERVE;		// default value assumes there is tracing to be done, but can be set to FINISHED if there are only 3 lines in the WeldedPool.
 		WeldedLinePool* weldedLinePoolRef = nullptr;

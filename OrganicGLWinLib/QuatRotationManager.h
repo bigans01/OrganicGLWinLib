@@ -34,6 +34,7 @@ public:
 	void initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
+	float initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector);
 
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
@@ -42,6 +43,7 @@ public:
 	void executeRotationsForPlanarSlide();
 	void executeRotationsForFindingBorderLine();
 	void executeRotationsForFindingBorderLineEmptyNormal();
+	float executeRotationsForFindingObserverRadians();
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
@@ -55,16 +57,25 @@ public:
 
 	void rotateEmptyNormalToPosY(glm::vec3* in_normal);
 	void rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal);
+	void rotateAroundZToYZero();
 
 	float findRotationRadiansForZFracture(glm::vec3 in_vec3);
 	float findRotationRadiansForGettingToPosYThroughZ(glm::vec3 in_vec3);
 	float findRotationRadainsForGettingToPosXThroughY(glm::vec3 in_vec3);
+
+	void flipOnXAxis();
+	float findRadiansForObservation();
 
 	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
 	void rotateToOriginalPosition();
 	void setDebugFlag(int in_debugFlag);
 	glm::vec3 checkForEmptyNormalCorrection(glm::vec3 in_mrpCopy, glm::vec3 in_normalCopy);
 	glm::vec3 getEmptyNormal();						// returns the calculated empty normal
+
+	// rounding functions
+	float roundToThousandths(float in_float);
+
+	float radianValue;				// may be optionally used by some functions.
 };
 
 #endif

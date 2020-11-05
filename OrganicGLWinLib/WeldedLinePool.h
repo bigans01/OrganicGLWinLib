@@ -56,6 +56,20 @@ class WeldedLinePool
 		{
 			return pool.find(in_lineIndex);
 		}
+		int fetchFollowingIndex(int in_lineIndex)
+		{
+			int returnValue = 0;
+			auto lastLineID = pool.rbegin()->first;
+			if (in_lineIndex == lastLineID)
+			{
+				returnValue = 0;
+			}
+			else
+			{
+				returnValue = in_lineIndex + 1;
+			}
+			return returnValue;
+		}
 
 	private:
 		std::map<int, WeldedLine> pool;

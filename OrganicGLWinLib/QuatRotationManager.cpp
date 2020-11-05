@@ -116,6 +116,157 @@ void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRo
 	//rotationpointsRefVector->printPoints();
 }
 
+float QuatRotationManager::initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointBRef = in_quatpointsRefVector->getPointRefByIndex(3);
+
+	// check if the slopes are the same; if they are, set a flag to indicate that the degrees will always be 180.
+	glm::vec3 observerSlope = rotationpointsRefVector->getPointByIndex(1) - rotationpointsRefVector->getPointByIndex(0);
+	glm::vec3 lineOfSightSlope = rotationpointsRefVector->getPointByIndex(3) - rotationpointsRefVector->getPointByIndex(2);
+
+	//std::cout << "-> Observer slope: " << observerSlope.x << ", " << observerSlope.y << ", " << observerSlope.z << std::endl;
+	//std::cout << "-> Line of Sight slope: " << lineOfSightSlope.x << ", " << lineOfSightSlope.y << ", " << lineOfSightSlope.z << std::endl;
+
+	//if (observerSlope == lineOfSightSlope)
+	//{
+	//	std::cout << "!!!!! WARNING: slopes are the same! " << std::endl;
+	//}
+
+
+	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
+	if (pointBRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+
+	return executeRotationsForFindingObserverRadians();
+}
+
+float QuatRotationManager::executeRotationsForFindingObserverRadians()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
+		{
+			rotateAroundZToYZero();		
+		}
+	}
+
+	// check if the normal of the lineOfSightCopy is negative y; flip it on X axis if so.
+	if (rotationpointsRefVector->getPointByIndex(5).y < 0)
+	{
+		std::cout << "!!! Note: Flip on x axis required... " << std::endl;
+		flipOnXAxis();
+	}
+
+	return findRadiansForObservation();
+}
+
+void QuatRotationManager::rotateAroundZToYZero()
+{
+	if (pointBRef->y != 0.0f)
+	{
+		float radians = 0.0f;
+		float fullRadian360 = 6.28319;
+
+		std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+		std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+		float atan2result = atan2(pointBRef->y, pointBRef->x); // find the radians we'll need to rotate by
+		//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
+		float firstPassRotateRadians = 0.0f;
+
+		std::cout << "::: atan2 result is: " << atan2result << std::endl;
+
+		if (atan2result > 0.0)
+		{
+			//firstPassRotateRadians = fullRadian360 - atan2result;
+			firstPassRotateRadians = atan2result;
+		}
+		else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+		{
+			//firstPassRotateRadians = abs(atan2result);
+			firstPassRotateRadians = fullRadian360 + atan2result;
+		}
+
+		if (debugFlag == 1)
+		{
+			std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
+		}
+		glm::vec3 rotationAroundZ;
+		rotationAroundZ.z = -1.0f;
+		QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundZ);
+
+		glm::quat originalQuat = s1record.returnOriginalRotation();
+		//*pointBRef = originalQuat * *pointBRef;	
+		rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+		rotationRecords.push(s1record);
+
+		std::cout << ":::: Observer calculation: Printing points after Z-axis bound rotation: " << std::endl;
+		rotationpointsRefVector->printPoints();
+
+		std::cout << ":::: Radian value is: " << radianValue << std::endl;
+	}
+}
+
+void QuatRotationManager::flipOnXAxis()
+{
+	glm::vec3 rotationAroundX;
+	rotationAroundX.x = -1.0f;
+	float rotateRadians = 6.28319 / 2;
+	QuatRotationRecord s1record(rotateRadians, rotationAroundX);
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+	std::cout << ":::: Observer calculation: Printing points after X-axis flip: " << std::endl;
+	rotationpointsRefVector->printPoints();
+}
+
+float QuatRotationManager::findRadiansForObservation()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+	pointARef = rotationpointsRefVector->getFirstPointRef();
+
+	std::cout << "!! Point A ref X is: " << pointARef->x << std::endl;
+	std::cout << "!! Point A ref Y is: " << pointARef->y << std::endl;
+
+	std::cout << "=========================== " << std::endl;
+
+	std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+	std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+
+	//float atan2result = roundToThousandths(atan2(pointARef->y, pointARef->x)); // find the radians we'll need to rotate by
+	float atan2result = atan2(pointARef->y, pointARef->x); // find the radians we'll need to rotate by
+	float firstPassRotateRadians = 0.0f;
+
+	std::cout << "::: atan2 result is: " << atan2result << std::endl;
+
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	std::cout << "#### Radian value for observation is: " << firstPassRotateRadians << std::endl;
+	radianValue = firstPassRotateRadians;
+	return firstPassRotateRadians;
+}
+
+float QuatRotationManager::roundToThousandths(float in_float)
+{
+	float calcedFloat = float(floor(in_float * 1000 + 0.5) / 1000);
+	return calcedFloat;
+}
+
 void QuatRotationManager::executeRotationsForFindingBorderLine()
 {
 	auto vectorBegin = rotationOrder.begin();
@@ -631,6 +782,8 @@ void QuatRotationManager::rotateAroundZToFindBorderLineEmptyNormalAndPushIntoSta
 	//std::cout << "Printing points after Z-axis bound rotation: " << std::endl;
 	//rotationpointsRefVector->printPoints();
 }
+
+
 
 void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
 {

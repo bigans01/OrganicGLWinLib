@@ -19,7 +19,10 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 	// only do this *while* (only test this while, don't run it entirely) we are in a CONTINUE_OBSERVE state.
 	while (currentObserverState == TracingObserverState::CONTINUE_OBSERVE)
 	{
+		std::cout << "::::: Running tick for TracingObserver, CONTINUE_OBSERVE: " << std::endl;
+
 		determineObservationRadians();
+
 
 
 		if 	
@@ -38,7 +41,9 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			currentObserverState == TracingObserverState::TERMINATED;
 		}
 
-
+		int someVal = 3;
+		std::cout << "::: Enter number to continue the loop of CONTINUE_OBSERVE. " << std::endl;
+		std::cin >> someVal;
 	}
 
 	if (currentObserverState != TracingObserverState::TERMINATED)
@@ -51,10 +56,21 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 	}
 }
 
+TracingObserverState TracingObserver::getCurrentObserverState()
+{
+	return currentObserverState;
+}
+
 bool TracingObserver::checkIfLineOfSightIsBroken()
 {
 	bool isLineOfSightBroken = false;
 
+	auto comparablesBegin = poolGuide.comparables.begin();
+	auto comparablesEnd = poolGuide.comparables.end();
+	for (; comparablesBegin != comparablesEnd; comparablesBegin++)
+	{
+		std::cout << "!! _> Comparison needed against line: " << *comparablesBegin << std::endl;
+	}
 
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightBroken == true)
@@ -71,16 +87,46 @@ void TracingObserver::determineObservationRadians()
 	WeldedLine lineOfSightCopy = lineOfSight;
 	WeldedLine observationEndLineCopy = observationEndLine;	
 
-	// do the calculation for radians
-	// float radianValue = some function;
-	// if (radianValue <= remainingRadians)
-	// {
-	//    areRemainingRadiansValid = true;
-	// }
-	// else
-	// {
-	//    areRemainingRadiansValue = false;
-	// }
+	QuatRotationPoints points;
+	points.pointsRefVector.push_back(&observationEndLineCopy.pointA);
+	points.pointsRefVector.push_back(&observationEndLineCopy.pointB);
+	points.pointsRefVector.push_back(&lineOfSightCopy.pointA);
+	points.pointsRefVector.push_back(&lineOfSightCopy.pointB);				// this will be  pointBRef in the quatRotationManager (index 3)
+
+	// adjust the x and y to 0, if need be.
+	// do a translation check.
+	glm::vec3 pointToTranslateAgainst;
+	pointToTranslateAgainst = points.getPointByIndex(1);
+	PointTranslationCheck translationChecker;
+	translationChecker.performCheck(pointToTranslateAgainst);
+	if (translationChecker.requiresTranslation == 1)
+	{
+		points.applyTranslation(translationChecker.getTranslationValue());
+	}
+
+	// last two elements of vector will be the empty normals; but should only be inserted post translation.
+	points.pointsRefVector.push_back(&observationEndLineCopy.emptyNormal);
+	points.pointsRefVector.push_back(&lineOfSightCopy.emptyNormal);			// index 5, which should check in the QuatRotationManager for flipping on the Y axis
+
+	QuatRotationManager rotationManager;
+	float calculatedRadians = rotationManager.initializeAndRunForFindingObserverRadians(&points);
+
+	std::cout << ":::::::::::::: Value of remainingRadians: " << remainingRadians << std::endl;
+	std::cout << ":::::::::::::: Value of calculatedRadians: " << calculatedRadians << std::endl;
+	
+	// verify observation validity for radians
+	if (calculatedRadians < remainingRadians)
+	{
+	   areRemainingRadiansValid = true;
+	   std::cout << "!> Observation is still VALID!" << std::endl;
+	}
+	else
+	{
+	   areRemainingRadiansValid = false;
+	   std::cout << "!> Observation is NO LONGER VALID!" << std::endl;
+	}
+
+	remainingRadians = calculatedRadians;
 }
 
 void TracingObserver::determineObservationState()
