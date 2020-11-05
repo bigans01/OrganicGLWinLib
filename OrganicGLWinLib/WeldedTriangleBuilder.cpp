@@ -12,7 +12,7 @@ void WeldedTriangleBuilder::runTracingObservers()
 	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
-	//WeldedLinePoolGuide poolGuide(1, &linePool);	// testing only, remove when needed.
+	//WeldedLinePoolGuide poolGuide(8, &linePool);	// testing only, remove when needed.
 	poolGuide.printGuideValues();
 
 	// un-comment below block when ready to test.

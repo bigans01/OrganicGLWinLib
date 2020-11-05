@@ -43,9 +43,14 @@ class WeldedLinePoolGuide
 				if (lineOfSightLineIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
 				{
 					lineOfSightLineIndex = 0;
+
 					observationEndLineIndex = weldedLinePoolRef->getLastElementID();
-					rearHook = 1;
-					frontHook = 2;
+					//rearHook = 1;
+					//frontHook = 2;
+					rearHook = incrementIndexAndFetchID();
+					frontHook = incrementIndexAndFetchID();
+
+					buildComparableList();
 				}
 				else
 				{
@@ -55,6 +60,8 @@ class WeldedLinePoolGuide
 					observationEndLineIndex = fetchPreviousIndex();
 					rearHook = incrementIndexAndFetchID();
 					frontHook = incrementIndexAndFetchID();
+
+					buildComparableList();
 				}
 			}
 		}
@@ -68,6 +75,13 @@ class WeldedLinePoolGuide
 			std::cout << "| rearHook: " << rearHook << std::endl;
 			std::cout << "| frontHook: " << frontHook << std::endl;
 			std::cout << "| observationEndLineIndex: " << observationEndLineIndex << std::endl;
+
+			auto comparablesBegin = comparables.begin();
+			auto comparablesEnd = comparables.end();
+			for (; comparablesBegin != comparablesEnd; comparablesBegin++)
+			{
+				std::cout << "|| comparable line: " << *comparablesBegin << std::endl;
+			}
 		}
 
 		int lineOfSightLineIndex;
@@ -112,6 +126,21 @@ class WeldedLinePoolGuide
 				reversableIndex = weldedLinePoolRef->getLastElementID();
 			}
 			return reversableIndex;
+		}
+
+		void buildComparableList()
+		{
+			std::cout << "!!!! building comparable list! " << std::endl;
+
+			int comparableCount = weldedLinePoolRef->getPoolSize() - 4;
+
+			std::cout << "!!!! comparable count is: " << comparableCount << std::endl;
+
+			for (int x = 0; x < comparableCount; x++)
+			{
+				int comparableID = incrementIndexAndFetchID();
+				comparables.push_back(comparableID);
+			}
 		}
 
 };
