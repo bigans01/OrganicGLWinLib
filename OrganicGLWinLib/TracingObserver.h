@@ -9,6 +9,7 @@
 #include "TracingObserverState.h"
 #include "WeldedLinePoolGuide.h"
 #include "PointTranslationCheck.h"
+#include "WeldedTriangleProducer.h"
 
 class TracingObserver
 {

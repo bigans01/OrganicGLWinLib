@@ -34,6 +34,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		{
 			// 1. build a triangle from the new candidate line, remove lines 0 and 1 in the pool, insert a new value for line 0 in the pool, and the shift the remainders by 1.
 			// 2. insert the triangle in some map
+
 			determineObservationState();	// 3. update the state when we're done, to see if we terminate the while loop.
 		}
 		else
@@ -65,12 +66,19 @@ bool TracingObserver::checkIfLineOfSightIsBroken()
 {
 	bool isLineOfSightBroken = false;
 
+	// need a new class here, that will take in a copy of the line pool and the current pool guide, and use it to verify the line of sight.
+	// this class should return a value of "true" or "false" which can then be used.
+	WeldedTriangleProducer triangleProducer(weldedLinePoolRef, poolGuide);
+
+	/*
 	auto comparablesBegin = poolGuide.comparables.begin();
 	auto comparablesEnd = poolGuide.comparables.end();
 	for (; comparablesBegin != comparablesEnd; comparablesBegin++)
 	{
 		std::cout << "!! _> Comparison needed against line: " << *comparablesBegin << std::endl;
+		// run function to get bool value for isLineOfSightBroken here.
 	}
+	*/
 
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightBroken == true)

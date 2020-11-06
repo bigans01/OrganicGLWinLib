@@ -43,9 +43,9 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
 		linePool.printLines();
 
-		WeldedTriangleBuilder builder;
-		builder.setWeldedLinePool(linePool);
-		builder.runTracingObservers();
+		WeldedTriangleGroupBuilder groupBuilder;
+		groupBuilder.setWeldedLinePool(linePool);
+		groupBuilder.runTracingObservers();
 
 		std::cin >> someVal;
 	}

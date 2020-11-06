@@ -9,7 +9,7 @@
 #include <chrono>
 #include "LineWelder.h"
 #include "WeldedLinePool.h"
-#include "WeldedTriangleBuilder.h"
+#include "WeldedTriangleGroupBuilder.h"
 
 class CleaveSequenceIntersectFinder
 {

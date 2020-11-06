@@ -34,6 +34,7 @@ public:
 	void initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
+	bool initializeAndRunForCheckingIfPointIswithinPlane(QuatRotationPoints* in_quatpointsRefVector);
 	float initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector);
 
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
@@ -44,6 +45,7 @@ public:
 	void executeRotationsForFindingBorderLine();
 	void executeRotationsForFindingBorderLineEmptyNormal();
 	float executeRotationsForFindingObserverRadians();
+	bool executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundYToPosZForPlanarSlideAndPushIntoStack();

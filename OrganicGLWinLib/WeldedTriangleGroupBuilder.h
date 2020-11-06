@@ -1,14 +1,14 @@
 #pragma once
 
-#ifndef WELDEDTRIANGLEBUILDER_H
-#define WELDEDTRIANGLEBUILDER_H
+#ifndef WeldedTriangleGroupBuilder_H
+#define WeldedTriangleGroupBuilder_H
 
 #include "WeldedLinePool.h"
 #include "TracingObserver.h"
 #include "WeldedLinePoolGuide.h"
 //#include "WeldedLinePool.h"
 
-class WeldedTriangleBuilder
+class WeldedTriangleGroupBuilder
 {
 public:
 	void setWeldedLinePool(WeldedLinePool in_weldedlinePool);

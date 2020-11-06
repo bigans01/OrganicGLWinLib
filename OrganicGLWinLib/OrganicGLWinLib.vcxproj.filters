@@ -438,9 +438,6 @@
     <ClInclude Include="NextCleaveSequenceFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WeldedTriangleBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TracingObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -448,6 +445,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WeldedLinePoolGuide.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleGroupBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleProducer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -680,10 +686,10 @@
     <ClCompile Include="NextCleaveSequenceFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WeldedTriangleBuilder.cpp">
+    <ClCompile Include="TracingObserver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TracingObserver.cpp">
+    <ClCompile Include="WeldedTriangleGroupBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

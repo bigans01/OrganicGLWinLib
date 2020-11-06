@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "WeldedTriangleBuilder.h"
+#include "WeldedTriangleGroupBuilder.h"
 
-void WeldedTriangleBuilder::setWeldedLinePool(WeldedLinePool in_weldedlinePool)
+void WeldedTriangleGroupBuilder::setWeldedLinePool(WeldedLinePool in_weldedlinePool)
 {
 	linePool = in_weldedlinePool;
 }
 
-void WeldedTriangleBuilder::runTracingObservers()
+void WeldedTriangleGroupBuilder::runTracingObservers()
 {
 	tracer.setWeldedLinePoolRef(&linePool);
-	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool
+	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool; the initial value should always be 0
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
 	//WeldedLinePoolGuide poolGuide(8, &linePool);	// testing only, remove when needed.
@@ -24,7 +24,7 @@ void WeldedTriangleBuilder::runTracingObservers()
 	
 }
 
-void WeldedTriangleBuilder::acquireWeldedLinesForWindowAndBuildObservation()
+void WeldedTriangleGroupBuilder::acquireWeldedLinesForWindowAndBuildObservation()
 {
 	//auto windowObservationEndLine = linePool.fetchLastLineInPool();
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
