@@ -29,7 +29,7 @@ class TracingObserver
 		bool isLineOfSightMaintained = true;
 		void determineObservationRadians();
 		void determineObservationState();
-		bool checkIfLineOfSightIsBroken();	// compares the current lineOfSight to comparable lines, to see if they intersect.
+		bool checkIfLineOfSightIsMaintained();	// compares the current lineOfSight to comparable lines, to see if they intersect.
 };
 
 #endif

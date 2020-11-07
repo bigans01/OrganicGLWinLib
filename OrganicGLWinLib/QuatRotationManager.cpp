@@ -232,13 +232,13 @@ void QuatRotationManager::rotateAroundZToYZero()
 		float radians = 0.0f;
 		float fullRadian360 = 6.28319;
 
-		std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
-		std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+		//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 		float atan2result = atan2(pointBRef->y, pointBRef->x); // find the radians we'll need to rotate by
 		//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
 		float firstPassRotateRadians = 0.0f;
 
-		std::cout << "::: atan2 result is: " << atan2result << std::endl;
+		//std::cout << "::: atan2 result is: " << atan2result << std::endl;
 
 		if (atan2result > 0.0)
 		{
@@ -253,7 +253,7 @@ void QuatRotationManager::rotateAroundZToYZero()
 
 		if (debugFlag == 1)
 		{
-			std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
+			//std::cout << "First pass rotate radians is: " << firstPassRotateRadians << std::endl;
 		}
 		glm::vec3 rotationAroundZ;
 		rotationAroundZ.z = -1.0f;
@@ -264,10 +264,10 @@ void QuatRotationManager::rotateAroundZToYZero()
 		rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 		rotationRecords.push(s1record);
 
-		std::cout << ":::: Observer calculation: Printing points after Z-axis bound rotation: " << std::endl;
-		rotationpointsRefVector->printPoints();
+		//std::cout << ":::: Observer calculation: Printing points after Z-axis bound rotation: " << std::endl;
+		//rotationpointsRefVector->printPoints();
 
-		std::cout << ":::: Radian value is: " << radianValue << std::endl;
+		//std::cout << ":::: Radian value is: " << radianValue << std::endl;
 	}
 }
 
