@@ -7,6 +7,7 @@
 #include "WeldedLinePoolGuide.h"
 #include "WeldedLine.h"
 #include "WeldedTriangle.h"
+#include "WeldedTriangleProductionResult.h"
 
 class WeldedTriangleProducer
 {
@@ -20,6 +21,11 @@ class WeldedTriangleProducer
 			checkIfAnyComparablesPointBAreInCandidateTriangle();
 		}
 		bool wasValidWeldedTriangleProduced = true;
+		WeldedTriangleProductionResult getProductionResult()
+		{
+			WeldedTriangleProductionResult result(wasValidWeldedTriangleProduced, candidateWeldedTriangle);
+			return result;
+		}
 	private:
 		WeldedLinePool* weldedLinePoolRef = nullptr;
 		WeldedLinePoolGuide linePoolGuide;

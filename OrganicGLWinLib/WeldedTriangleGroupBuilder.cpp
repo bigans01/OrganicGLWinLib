@@ -13,12 +13,14 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
 	//WeldedLinePoolGuide poolGuide(8, &linePool);	// testing only, remove when needed.
-	poolGuide.printGuideValues();
+	//poolGuide.printGuideValues();
 
 	// un-comment below block when ready to test.
 	
 	while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
 	{
+		std::cout << "###~~~~~ Building new observation. " << std::endl;
+		std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
 		acquireWeldedLinesForWindowAndBuildObservation();
 	}
 	

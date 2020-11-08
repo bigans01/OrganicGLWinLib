@@ -79,6 +79,11 @@ class WeldedTriangle
 
 			return isWithinTriangle;
 		}
+
+		WeldedLine fetchTriangleLine(int in_lineID)
+		{
+			return lines[in_lineID];
+		}
 	private:
 		WeldedLine lines[3];
 		glm::vec3 centroid;

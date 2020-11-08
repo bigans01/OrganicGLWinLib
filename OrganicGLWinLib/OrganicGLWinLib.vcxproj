@@ -303,6 +303,7 @@
     <ClInclude Include="WeldedTriangle.h" />
     <ClInclude Include="WeldedTriangleGroupBuilder.h" />
     <ClInclude Include="WeldedTriangleProducer.h" />
+    <ClInclude Include="WeldedTriangleProductionResult.h" />
     <ClInclude Include="WorldLight.h" />
     <ClInclude Include="WorldLightContainer.h" />
     <ClInclude Include="WorldLightContainerMap.h" />

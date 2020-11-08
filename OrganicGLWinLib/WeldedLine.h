@@ -14,6 +14,13 @@ class WeldedLine
 			pointB(in_pointB),
 			emptyNormal(in_emptyNormal)
 		{};
+		void swapPointsAndInvertNormal()
+		{
+			glm::vec3 tempPointA = pointA;				// save values of A, since it's being overwrriten
+			pointA = pointB;							// overwrite A with B
+			pointB = tempPointA;
+			emptyNormal *= -1.0f;
+		}
 		glm::vec3 pointA, pointB, emptyNormal;
 };
 

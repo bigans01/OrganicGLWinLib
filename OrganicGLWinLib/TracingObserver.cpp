@@ -20,6 +20,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 	while (currentObserverState == TracingObserverState::CONTINUE_OBSERVE)
 	{
 		std::cout << "::::: Running tick for TracingObserver, CONTINUE_OBSERVE: " << std::endl;
+		poolGuide.printGuideValues();
 
 		determineObservationRadians();
 
@@ -34,7 +35,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		{
 			// 1. build a triangle from the new candidate line, remove lines 0 and 1 in the pool, insert a new value for line 0 in the pool, and the shift the remainders by 1.
 
-			// NOTE: be sure to invert the last line in the WeldedTriangle.
+			// NOTE: be sure to invert the last line in the WeldedTriangle, before inserting as the "new" line into the pool.
 
 			// 2. insert the triangle in some map
 
@@ -55,6 +56,9 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		if (currentObserverState == TracingObserverState::FINAL_OBSERVE)
 		{
 			// run logic for final observe
+			std::cout << "!!!! Final observe detected. Enter number to continue. " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
 		}
 		// run logic for finished
 	}
@@ -69,10 +73,15 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 {
 	bool isLineOfSightMaintained = true;
 
+	std::cout << "###### (1) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+
 	// need a new class here, that will take in a copy of the line pool and the current pool guide, and use it to verify the line of sight.
 	// this class should return a value of "true" or "false" which can then be used.
 	WeldedTriangleProducer triangleProducer(weldedLinePoolRef, poolGuide);
-	isLineOfSightMaintained = triangleProducer.wasValidWeldedTriangleProduced;
+	std::cout << "###### (2) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+	//isLineOfSightMaintained = triangleProducer.wasValidWeldedTriangleProduced;
+	WeldedTriangleProductionResult productionResult = triangleProducer.getProductionResult();
+	isLineOfSightMaintained = productionResult.wasProductionValid;
 
 	/*
 	auto comparablesBegin = poolGuide.comparables.begin();
@@ -87,11 +96,24 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightMaintained == false)
 	{
+		std::cout << "###### This observation has been TERMINATED. " << std::endl;
+		std::cout << "###### (3) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
 		currentObserverState = TracingObserverState::TERMINATED;
 	}
 	else if (isLineOfSightMaintained == true)
 	{
 		std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
+		WeldedLine invertedLine = productionResult.producedTriangle.fetchTriangleLine(2);
+		invertedLine.swapPointsAndInvertNormal();
+		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
+
+		//WeldedLinePoolGuide newPoolGuide(poolGuide.lineOfSightLineIndex, weldedLinePoolRef);
+		//poolGuide = newPoolGuide;
+		poolGuide.weldedLinePoolRef->printLines();
+		//WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
+
+		lineOfSight = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex);
+		observationEndLine = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.observationEndLineIndex);
 	}
 
 	return isLineOfSightMaintained;

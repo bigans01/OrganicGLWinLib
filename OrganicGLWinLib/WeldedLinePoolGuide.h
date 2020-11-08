@@ -14,15 +14,20 @@ class WeldedLinePoolGuide
 			lineOfSightLineIndex(in_currentLineOfSightLineIndex),
 			weldedLinePoolRef(in_weldedLinePoolRef)
 		{
-			buildGuide();
+			buildGuide(in_currentLineOfSightLineIndex);
 		}
 
-		void buildGuide()
+		void buildGuide(int in_startingIndex)
 		{
+			std::cout << "#######_> Build guide; starting index is: " << in_startingIndex << std::endl;
+
 			if (weldedLinePoolRef->getPoolSize() == 4)	// logic for FINAL_OBSERVE
 			{
-				if (lineOfSightLineIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
+				std::cout << "! Branch 1 hit. " << std::endl;
+
+				if (in_startingIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
 				{
+					setBeginIteratorIndex(in_startingIndex);
 					lineOfSightLineIndex = 0;
 					observationEndLineIndex = weldedLinePoolRef->getLastElementID();
 					rearHook = 1;
@@ -30,18 +35,23 @@ class WeldedLinePoolGuide
 				}
 				else
 				{
-					setBeginIteratorIndex(lineOfSightLineIndex);
+					setBeginIteratorIndex(in_startingIndex);
 					//lineOfSightLineIndex = incrementIndexAndFetchID();
 
 					observationEndLineIndex = fetchPreviousIndex();
 					rearHook = incrementIndexAndFetchID();
 					frontHook = incrementIndexAndFetchID();
+
 				}
 			}
 			else  // logic for CONTINUE_OBSERVE
 			{
-				if (lineOfSightLineIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
+
+				std::cout << "! Branch 2 hit. " << std::endl;
+
+				if (in_startingIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
 				{
+					setBeginIteratorIndex(in_startingIndex);
 					lineOfSightLineIndex = 0;
 
 					observationEndLineIndex = weldedLinePoolRef->getLastElementID();
@@ -50,20 +60,32 @@ class WeldedLinePoolGuide
 					rearHook = incrementIndexAndFetchID();
 					frontHook = incrementIndexAndFetchID();
 
+
+					std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
+					std::cout << ">>> Front hook is now: " << frontHook << std::endl;
+
 					buildComparableList();
 				}
 				else
 				{
-					setBeginIteratorIndex(lineOfSightLineIndex);
+					std::cout << "!!! Branch 2.2 hit. " << std::endl;
+
+
+					setBeginIteratorIndex(in_startingIndex);
 					//lineOfSightLineIndex = incrementIndexAndFetchID();
 
 					observationEndLineIndex = fetchPreviousIndex();
 					rearHook = incrementIndexAndFetchID();
 					frontHook = incrementIndexAndFetchID();
 
+
+					std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
+					std::cout << ">>> Front hook is now: " << frontHook << std::endl;
+
 					buildComparableList();
 				}
 			}
+			
 		}
 
 		void printGuideValues()
@@ -84,6 +106,12 @@ class WeldedLinePoolGuide
 			}
 		}
 
+		void updateGuide(int in_startingIndex, WeldedLine in_weldedLine)
+		{
+			weldedLinePoolRef->replaceLinesAtStartingIndexAndUpdate(in_startingIndex, in_weldedLine);
+			buildGuide(in_startingIndex);
+		};
+
 		int lineOfSightLineIndex;
 		int rearHook;
 		int frontHook;
@@ -91,8 +119,8 @@ class WeldedLinePoolGuide
 
 		int currentIndex = 0;
 		std::vector<int> comparables;
-	private:
 		WeldedLinePool* weldedLinePoolRef = nullptr;
+	private:
 		//std::map<int, WeldedLine>::iterator beginIterator;
 		void setBeginIteratorIndex(int in_beginIterationIndex)
 		{
@@ -101,7 +129,12 @@ class WeldedLinePoolGuide
 		}
 		int incrementIndexAndFetchID()
 		{
+			
+
 			int endingMapID = weldedLinePoolRef->getLastElementID();
+
+			std::cout << "Increment and index call : currentIndex: " << currentIndex << " || endingID: " << endingMapID << std::endl;
+
 			if (currentIndex != endingMapID)
 			{
 				currentIndex++;
@@ -130,6 +163,7 @@ class WeldedLinePoolGuide
 
 		void buildComparableList()
 		{
+			comparables.clear();
 			std::cout << "!!!! building comparable list! " << std::endl;
 
 			int comparableCount = weldedLinePoolRef->getPoolSize() - 4;
