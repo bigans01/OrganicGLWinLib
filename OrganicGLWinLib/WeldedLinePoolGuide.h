@@ -32,6 +32,8 @@ class WeldedLinePoolGuide
 					observationEndLineIndex = weldedLinePoolRef->getLastElementID();
 					rearHook = 1;
 					frontHook = 2;
+
+					buildComparableList();
 				}
 				else
 				{
@@ -42,6 +44,7 @@ class WeldedLinePoolGuide
 					rearHook = incrementIndexAndFetchID();
 					frontHook = incrementIndexAndFetchID();
 
+					buildComparableList();
 				}
 			}
 			else  // logic for CONTINUE_OBSERVE

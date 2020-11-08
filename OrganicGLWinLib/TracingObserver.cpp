@@ -56,6 +56,26 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		if (currentObserverState == TracingObserverState::FINAL_OBSERVE)
 		{
 			// run logic for final observe
+			if
+			(
+				(areRemainingRadiansValid == true)
+				&&
+				(checkIfLineOfSightIsMaintained() == true)
+			)
+			{
+				// 1. build a triangle from the new candidate line, remove lines 0 and 1 in the pool, insert a new value for line 0 in the pool, and the shift the remainders by 1.
+
+				// NOTE: be sure to invert the last line in the WeldedTriangle, before inserting as the "new" line into the pool.
+
+				// 2. insert the triangle in some map
+
+				determineObservationState();	// 3. update the state when we're done, to see if we terminate the while loop.
+			}
+			else
+			{
+				currentObserverState == TracingObserverState::TERMINATED;
+			}
+
 			std::cout << "!!!! Final observe detected. Enter number to continue. " << std::endl;
 			int someVal = 3;
 			std::cin >> someVal;
