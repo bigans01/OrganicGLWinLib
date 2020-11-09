@@ -1001,6 +1001,8 @@ void SPolySet::performFracturing()
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
 			SPolyFracturer fracturer(&secondaryPolys[x], &polyMorphTracker);
+			insertPolyFracturingResults(x, &fracturer.producedPolys);
+
 			auto trueend = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> trueelapsed = trueend - truestart;
 			std::cout << "#-> Fracturing Time   > " << trueelapsed.count() << std::endl;
@@ -1011,9 +1013,31 @@ void SPolySet::performFracturing()
 		}
 		else if (secondaryPolys[x].cleaveMap.size() == 0)
 		{
+			insertOriginalPolyAsFracturingResult(x, secondaryPolys[x]);
 			std::cout << "!! No cleaveMaps found for this SPoly! " << std::endl;
 		}
 
+	}
+
+	// test only: let's make sure our resulting polys are grouped appropriately:
+	std::cout << "################################## Printing out produced contents of the SPolySet: " << std::endl;
+	auto polyResultsBegin = polyFracturingResults.begin();
+	auto polyResultsEnd = polyFracturingResults.end();
+	for (; polyResultsBegin != polyResultsEnd; polyResultsBegin++)
+	{
+		std::cout << ">> Parent SPoly ID: " << polyResultsBegin->first << ", child SPolys: " << std::endl;
+		auto childSPolyVectorBegin = polyResultsBegin->second.begin();
+		auto childSPolyVectorEnd = polyResultsBegin->second.end();
+		int currentID = 0;
+		for (; childSPolyVectorBegin != childSPolyVectorEnd; childSPolyVectorBegin++)
+		{
+			std::cout << "[" << currentID << "] " << std::endl;
+			for (int x = 0; x < 3; x++)
+			{
+				std::cout << "point " << x << ": " << (*childSPolyVectorBegin).triangles[0].triangleLines[x].pointA.x << ", " << (*childSPolyVectorBegin).triangles[0].triangleLines[x].pointA.y << ", " << (*childSPolyVectorBegin).triangles[0].triangleLines[x].pointA.z << std::endl;
+			}
+			currentID++;
+		}
 	}
 
 	auto trueend = std::chrono::high_resolution_clock::now();
@@ -1023,6 +1047,21 @@ void SPolySet::performFracturing()
 	//int continueVal = 3;
 	//std::cout << "Fracturing for this poly complete; enter number to continue..." << std::endl;
 	//std::cin >> continueVal;
+}
+
+void SPolySet::insertPolyFracturingResults(int in_originalSPolyID, std::vector<SPoly>* in_producedSPolyVectorRef)
+{
+	auto producedSPolyVectorBegin = (*in_producedSPolyVectorRef).begin();
+	auto producedSPolyVectorEnd = (*in_producedSPolyVectorRef).end();
+	for (; producedSPolyVectorBegin != producedSPolyVectorEnd; producedSPolyVectorBegin++)
+	{
+		polyFracturingResults[in_originalSPolyID].push_back(*producedSPolyVectorBegin);
+	}
+}
+
+void SPolySet::insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly)
+{
+	polyFracturingResults[in_originalSPolyID].push_back(in_sPoly);
 }
 
 void SPolySet::runTest1()		// runs use case 1 

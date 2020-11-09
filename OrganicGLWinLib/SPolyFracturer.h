@@ -11,14 +11,17 @@
 #include "CleaveSequenceIntersectFinder.h"
 #include "SPolyMorphTracker.h"
 #include <chrono>
+#include <vector>
 
 class SPolyFracturer
 {
 public:
 	SPoly* polyRef;		// a reference to the SPoly to produce a fractured version from
 	SPolyMorphTracker* morphTrackerRef;
+	PointTranslationCheck pointTranslator; // check for any translation
 	QuatRotationPoints quatPoints;
 	QuatRotationManager rotationManager;
+	std::vector<SPoly> producedPolys;
 
 	SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef);
 	void runFracturing();	// run the fracturing process

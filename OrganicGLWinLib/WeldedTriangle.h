@@ -29,6 +29,14 @@ class WeldedTriangle
 			}
 		}
 
+		WeldedTriangle(WeldedLine in_line0, WeldedLine in_line1, WeldedLine in_line2)
+		{
+			lines[0] = in_line0;
+			lines[1] = in_line1;
+			lines[2] = in_line2;
+			findCentroid();
+		}
+
 		bool checkIfPointIsWithinTriangle(glm::vec3 in_point)
 		{
 			bool isWithinTriangle = false;
@@ -84,6 +92,21 @@ class WeldedTriangle
 		{
 			return lines[in_lineID];
 		}
+
+		WeldedLine* fetchTriangleLineRef(int in_lineID)
+		{
+			return &lines[in_lineID];
+		}
+
+		void printPoints()
+		{
+			std::cout << "#### Printing points of this WeldedTriangle: " << std::endl;
+			for (int x = 0; x < 3; x++)
+			{
+				std::cout << "point " << x << ": " << lines[x].pointA.x << ",  " << lines[x].pointA.y << ",  " << lines[x].pointA.z << std::endl;
+			}
+		}
+
 	private:
 		WeldedLine lines[3];
 		glm::vec3 centroid;

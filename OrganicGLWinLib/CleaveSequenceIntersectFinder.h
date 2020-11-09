@@ -10,6 +10,8 @@
 #include "LineWelder.h"
 #include "WeldedLinePool.h"
 #include "WeldedTriangleGroupBuilder.h"
+#include <vector>
+#include "WeldedTriangle.h"
 
 class CleaveSequenceIntersectFinder
 {
@@ -18,6 +20,7 @@ public:
 	SPoly* sPolyRef;
 	void loadInterceptRecords();		// read all CleaveSequences, put the metadata about the borderlines they intercept into the borderlines.
 	WeldedLinePool linePool;
+	std::vector<WeldedTriangle> weldedTriangles;
 };
 
 #endif

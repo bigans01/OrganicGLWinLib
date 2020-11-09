@@ -6,6 +6,11 @@ void TracingObserver::setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef)
 	weldedLinePoolRef = in_weldedLinePoolRef;
 }
 
+void TracingObserver::setWeldedTriangleVectorRef(std::vector<WeldedTriangle>* in_weldedTriangleVectorRef)
+{
+	weldedTriangleVectorRef = in_weldedTriangleVectorRef;
+}
+
 void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 {
 	poolGuide = in_poolGuide;
@@ -80,6 +85,14 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			int someVal = 3;
 			std::cin >> someVal;
 		}
+		else if (currentObserverState == TracingObserverState::FINISHED)
+		{
+			// we're finished, just insert the final WeldedTriangle.
+			std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
+			//weldedLinePoolRef->printLines();
+			WeldedTriangle finalTriangle(weldedLinePoolRef->fetchLineFromPoolViaIndex(0), weldedLinePoolRef->fetchLineFromPoolViaIndex(1), weldedLinePoolRef->fetchLineFromPoolViaIndex(2));
+			weldedTriangleVectorRef->push_back(finalTriangle);
+		}
 		// run logic for finished
 	}
 }
@@ -125,12 +138,15 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 		std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
 		WeldedLine invertedLine = productionResult.producedTriangle.fetchTriangleLine(2);
 		invertedLine.swapPointsAndInvertNormal();
-		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
 
-		//WeldedLinePoolGuide newPoolGuide(poolGuide.lineOfSightLineIndex, weldedLinePoolRef);
-		//poolGuide = newPoolGuide;
+		// insert the triangle into the WeldedTriangle map (or vector?)
+		weldedTriangleVectorRef->push_back(productionResult.producedTriangle);
+
+		productionResult.producedTriangle.printPoints();
+		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
 		poolGuide.weldedLinePoolRef->printLines();
-		//WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
+
+		
 
 		lineOfSight = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex);
 		observationEndLine = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.observationEndLineIndex);

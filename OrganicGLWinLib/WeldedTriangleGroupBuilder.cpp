@@ -9,6 +9,7 @@ void WeldedTriangleGroupBuilder::setWeldedLinePool(WeldedLinePool in_weldedlineP
 void WeldedTriangleGroupBuilder::runTracingObservers()
 {
 	tracer.setWeldedLinePoolRef(&linePool);
+	tracer.setWeldedTriangleVectorRef(&weldedTriangleVector);
 	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool; the initial value should always be 0
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
@@ -23,6 +24,12 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 		std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
 		acquireWeldedLinesForWindowAndBuildObservation();
 	}
+	acquireWeldedLinesForWindowAndBuildObservation();
+
+
+	std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleVector.size() << std::endl;
+	int someVal = 5;
+	std::cin >> someVal;
 	
 }
 

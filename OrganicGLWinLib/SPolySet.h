@@ -25,11 +25,15 @@ public:
 	std::map<int, SPoly> secondaryPolys;	// holds up to 16 secondary polys
 	SPolyMorphTracker polyMorphTracker;
 	int numberOfPolys = 0;		// the number of polys
+	std::map<int, std::vector<SPoly>> polyFracturingResults;	// stores the results of each poly fracture attempt.
 
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
 	void runPolyComparison();
+	void insertPolyFracturingResults(int in_originalSPolyID, std::vector<SPoly>* in_producedSPolyVectorRef);
+	void insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly);
+
 	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
 	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
 	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);

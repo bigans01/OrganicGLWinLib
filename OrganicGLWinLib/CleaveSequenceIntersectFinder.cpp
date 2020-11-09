@@ -46,8 +46,10 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		WeldedTriangleGroupBuilder groupBuilder;
 		groupBuilder.setWeldedLinePool(linePool);
 		groupBuilder.runTracingObservers();
+		weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
 
-		std::cin >> someVal;
+
+		//std::cin >> someVal;
 	}
 	
 }

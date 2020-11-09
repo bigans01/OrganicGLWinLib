@@ -19,7 +19,7 @@ SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTr
 	//printPointMetaData();				// show the points before we run the weave
 
 	auto truestart = std::chrono::high_resolution_clock::now();
-	checkForCleaveIntersections();		// check for any lines in each cleave sequence that intersect with other lines in another cleave sequence
+	checkForCleaveIntersections();		// check for any lines in each cleave sequence that intersect with other lines in another cleave sequence; produce the results and store them.
 
 	auto trueend = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> trueelapsed2 = trueend - truestart;
@@ -34,12 +34,54 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 void SPolyFracturer::checkForCleaveIntersections()
 {
 	CleaveSequenceIntersectFinder intersectFinder(polyRef);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
+	quatPoints.clearPoints();															// clear out the quat points, so that we may insert the below.
+	auto weldedTrianglesBegin = intersectFinder.weldedTriangles.begin();
+	auto weldedTrianglesEnd = intersectFinder.weldedTriangles.end();
+	for (; weldedTrianglesBegin != weldedTrianglesEnd; weldedTrianglesBegin++)
+	{
+		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(0)->pointA);
+		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(1)->pointA);
+		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(2)->pointA);
+
+
+	}
+
+	// remember, work in reverse order: quaternions get reverse-applied, then reverse any translations.
+	rotationManager.rotateToOriginalPosition();
+	if (pointTranslator.requiresTranslation == 1)
+	{
+		quatPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
+	}
+
+	// after quaternions are reverse applied, and after any reverse translation is applied, produce the new SPolys.
+	int weldedTrianglesSize = intersectFinder.weldedTriangles.size();
+	auto pointsBegin = quatPoints.pointsRefVector.begin();
+	for (int x = 0; x < weldedTrianglesSize; x++)
+	{
+		glm::vec3 point0 = **pointsBegin;
+		pointsBegin++;
+		glm::vec3 point1 = **pointsBegin;
+		pointsBegin++;
+		glm::vec3 point2 = **pointsBegin;
+		pointsBegin++;
+		STriangle newTriangle(point0, point1, point2);
+		SPoly newPoly;
+		newPoly.polyEmptyNormal = polyRef->polyEmptyNormal;		// copy the original normal from the parent SPoly into the child SPolys.
+		newPoly.addTriangle(newTriangle);
+		producedPolys.push_back(newPoly);
+	}
+
+
+	quatPoints.printPoints();
+	std::cout << "####################### Poly fracturing complete..... " << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 }
 
 void SPolyFracturer::runFracturing()
 {
 	auto truestart = std::chrono::high_resolution_clock::now();
-	PointTranslationCheck pointTranslator; // check for any translation
+	//PointTranslationCheck pointTranslator; // check for any translation
 	pointTranslator.performCheck(polyRef->borderLines[0].pointA);
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
