@@ -22,10 +22,10 @@ class WeldedTriangle
 			findCentroid();
 			determineFinalLineNormal();
 
-			std::cout << ":::: WeldedTriangle lines are: " << std::endl;
+			//std::cout << ":::: WeldedTriangle lines are: " << std::endl;
 			for (int x = 0; x < 3; x++)
 			{
-				std::cout << "[" << x << "]: point A: " << lines[x].pointA.x << ", " << lines[x].pointA.y << ", " << lines[x].pointA.z << " | point B: " << lines[x].pointB.x << ", " << lines[x].pointB.y << ", " << lines[x].pointB.z << std::endl;
+				//std::cout << "[" << x << "]: point A: " << lines[x].pointA.x << ", " << lines[x].pointA.y << ", " << lines[x].pointA.z << " | point B: " << lines[x].pointB.x << ", " << lines[x].pointB.y << ", " << lines[x].pointB.z << std::endl;
 			}
 		}
 
@@ -81,7 +81,7 @@ class WeldedTriangle
 
 			if (withinPlaneCount == 3)
 			{
-				std::cout << "Point is WITHIN triangle. " << std::endl;
+				//std::cout << "Point is WITHIN triangle. " << std::endl;
 				isWithinTriangle = true;
 			}
 

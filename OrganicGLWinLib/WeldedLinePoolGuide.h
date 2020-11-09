@@ -19,11 +19,11 @@ class WeldedLinePoolGuide
 
 		void buildGuide(int in_startingIndex)
 		{
-			std::cout << "#######_> Build guide; starting index is: " << in_startingIndex << std::endl;
+			//std::cout << "#######_> Build guide; starting index is: " << in_startingIndex << std::endl;
 
 			if (weldedLinePoolRef->getPoolSize() == 4)	// logic for FINAL_OBSERVE
 			{
-				std::cout << "! Branch 1 hit. " << std::endl;
+				//std::cout << "! Branch 1 hit. " << std::endl;
 
 				if (in_startingIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
 				{
@@ -50,7 +50,7 @@ class WeldedLinePoolGuide
 			else  // logic for CONTINUE_OBSERVE
 			{
 
-				std::cout << "! Branch 2 hit. " << std::endl;
+				//std::cout << "! Branch 2 hit. " << std::endl;
 
 				if (in_startingIndex == weldedLinePoolRef->getFirstElementID())	// would be at the beginning of the WeldedLinePool's map
 				{
@@ -64,14 +64,14 @@ class WeldedLinePoolGuide
 					frontHook = incrementIndexAndFetchID();
 
 
-					std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
-					std::cout << ">>> Front hook is now: " << frontHook << std::endl;
+					//std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
+					//std::cout << ">>> Front hook is now: " << frontHook << std::endl;
 
 					buildComparableList();
 				}
 				else
 				{
-					std::cout << "!!! Branch 2.2 hit. " << std::endl;
+					//std::cout << "!!! Branch 2.2 hit. " << std::endl;
 
 
 					setBeginIteratorIndex(in_startingIndex);
@@ -82,8 +82,8 @@ class WeldedLinePoolGuide
 					frontHook = incrementIndexAndFetchID();
 
 
-					std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
-					std::cout << ">>> Front hook is now: " << frontHook << std::endl;
+					//std::cout << ">>> Rear hook is now: " << rearHook << std::endl;
+					//std::cout << ">>> Front hook is now: " << frontHook << std::endl;
 
 					buildComparableList();
 				}
@@ -136,7 +136,7 @@ class WeldedLinePoolGuide
 
 			int endingMapID = weldedLinePoolRef->getLastElementID();
 
-			std::cout << "Increment and index call : currentIndex: " << currentIndex << " || endingID: " << endingMapID << std::endl;
+			//std::cout << "Increment and index call : currentIndex: " << currentIndex << " || endingID: " << endingMapID << std::endl;
 
 			if (currentIndex != endingMapID)
 			{
@@ -167,11 +167,11 @@ class WeldedLinePoolGuide
 		void buildComparableList()
 		{
 			comparables.clear();
-			std::cout << "!!!! building comparable list! " << std::endl;
+			//std::cout << "!!!! building comparable list! " << std::endl;
 
 			int comparableCount = weldedLinePoolRef->getPoolSize() - 4;
 
-			std::cout << "!!!! comparable count is: " << comparableCount << std::endl;
+			//std::cout << "!!!! comparable count is: " << comparableCount << std::endl;
 
 			for (int x = 0; x < comparableCount; x++)
 			{

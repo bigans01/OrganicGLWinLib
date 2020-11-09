@@ -94,7 +94,7 @@ void SPoly::calculateEmptyNormal()
 
 void SPoly::determinePlanarVectors()
 {
-	std::cout << "#- Planar Vectors       > Calculating planar vectors for the triangles in the SPoly, (" << numberOfBorderLines << " border lines)... "  << std::endl;
+	//std::cout << "#- Planar Vectors       > Calculating planar vectors for the triangles in the SPoly, (" << numberOfBorderLines << " border lines)... "  << std::endl;
 	if (numberOfBorderLines == 3)
 	{
 		//if (debugFlag == 1)
@@ -517,7 +517,7 @@ void SPoly::moveLastCleave()
 
 void SPoly::buildCleaveSequences()
 {
-	std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
+	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 
 	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting);
 }
@@ -791,14 +791,14 @@ CleaveSequenceCandidateListMap SPoly::buildCleaveSequenceCandidateListMap()
 	CleaveSequenceCandidateListMap returnMap;
 	for (int x = 0; x < numberOfBorderLines; x++)
 	{
-		std::cout << "|||| Candidate list for border line " << x << ": " << std::endl;
+		//std::cout << "|||| Candidate list for border line " << x << ": " << std::endl;
 		SPolyBorderLines* borderLineRef = &borderLines[x];
 		auto recordsBegin = borderLineRef->intersectRecorder.records.begin();
 		auto recordsEnd = borderLineRef->intersectRecorder.records.end();
 		//candidateListMap.candidateMap[x].
 		for (; recordsBegin != recordsEnd; recordsBegin++)
 		{
-			std::cout << "> " << recordsBegin->first << std::endl;
+			//std::cout << "> " << recordsBegin->first << std::endl;
 			//candidateListMap.candidateMap[x].insertCandidate(recordsBegin->first);
 			returnMap.candidateMap[x].insertCandidate(recordsBegin->first);
 		}

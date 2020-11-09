@@ -87,9 +87,9 @@ void SPolyFracturer::runFracturing()
 	{
 		//auto truestart = std::chrono::high_resolution_clock::now();
 		
-		std::cout << "!! Border Line 0 points, prior to translation: " << std::endl;
-		std::cout << "!! Border Line 0, point A: " << polyRef->borderLines[0].pointA.x << ", " << polyRef->borderLines[0].pointA.y << ", " << polyRef->borderLines[0].pointA.z << std::endl;
-		std::cout << "!! Border Line 0, point B: " << polyRef->borderLines[0].pointB.x << ", " << polyRef->borderLines[0].pointB.y << ", " << polyRef->borderLines[0].pointB.z << std::endl;
+		//std::cout << "!! Border Line 0 points, prior to translation: " << std::endl;
+		//std::cout << "!! Border Line 0, point A: " << polyRef->borderLines[0].pointA.x << ", " << polyRef->borderLines[0].pointA.y << ", " << polyRef->borderLines[0].pointA.z << std::endl;
+		//std::cout << "!! Border Line 0, point B: " << polyRef->borderLines[0].pointB.x << ", " << polyRef->borderLines[0].pointB.y << ", " << polyRef->borderLines[0].pointB.z << std::endl;
 
 		applyTranslationToAllPoints(pointTranslator.getTranslationValue());	// apply the first translation value to all the points
 		//auto trueend = std::chrono::high_resolution_clock::now();
@@ -99,11 +99,11 @@ void SPolyFracturer::runFracturing()
 		
 
 
-		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required TRANSLATION..." << std::endl;
+		//std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required TRANSLATION..." << std::endl;
 	}
 	else if (pointTranslator.requiresTranslation == 0)
 	{
-		std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required NO TRANSLATION..." << std::endl;
+		//std::cout << "#- Border Line Analysis > Analyzing border line 0 point A for translation...Border line 0 point A required NO TRANSLATION..." << std::endl;
 	}
 	//auto truestart = std::chrono::high_resolution_clock::now();
 	populatePointsForQuaternions();	// populate the points before the quaternion is applied
@@ -117,7 +117,7 @@ void SPolyFracturer::runFracturing()
 	//std::chrono::duration<double> trueelapsed2 = trueend2 - truestart2;
 	//std::cout << "#-> (SPolyFracturer) initialize and run Z-fracture Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
 
-	std::cout << "#- Quaternion Rotation  > All SPoly border line and cleave sequence points have been translated (Z is 0 for all border lines, aka \"Z-Planar\")" << std::endl;
+	//std::cout << "#- Quaternion Rotation  > All SPoly border line and cleave sequence points have been translated (Z is 0 for all border lines, aka \"Z-Planar\")" << std::endl;
 
 	auto trueend = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> trueelapsed = trueend - truestart;

@@ -24,7 +24,7 @@ void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, Inter
 
 void CategorizedLine::convertLineToNonbound(IntersectionLine in_engulfedLine)
 {
-	std::cout << ":::: Engulfed NON_BOUND detected..." << std::endl;
+	//std::cout << ":::: Engulfed NON_BOUND detected..." << std::endl;
 
 
 	type = IntersectionType::NON_BOUND;
@@ -32,8 +32,8 @@ void CategorizedLine::convertLineToNonbound(IntersectionLine in_engulfedLine)
 	line.pointA = in_engulfedLine.pointA;		// ...but it's points are equal to the "engulfed" line
 	line.pointB = in_engulfedLine.pointB;
 
-	std::cout << ">> Engulfed, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
-	std::cout << ">> Engulfed, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+	//std::cout << ">> Engulfed, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	//std::cout << ">> Engulfed, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 
 	line.intersectedSecondaryID = in_engulfedLine.intersectedSecondaryID;
 }
@@ -181,7 +181,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	glm::vec3 pointToTranslateAgainst;
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
-		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+		//std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
@@ -194,7 +194,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
-		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+		//std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
@@ -216,8 +216,8 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	// now, add the normal at the end.
 	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
 
-	std::cout << ":::: Printing points: " << std::endl;
-	rotationPoints.printPoints();
+	//std::cout << ":::: Printing points: " << std::endl;
+	//rotationPoints.printPoints();
 
 	QuatRotationManager rotationManager;
 	rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);

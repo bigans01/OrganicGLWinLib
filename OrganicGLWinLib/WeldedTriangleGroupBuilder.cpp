@@ -20,16 +20,16 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 	
 	while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
 	{
-		std::cout << "###~~~~~ Building new observation. " << std::endl;
-		std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
+		//std::cout << "###~~~~~ Building new observation. " << std::endl;
+		//std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
 		acquireWeldedLinesForWindowAndBuildObservation();
 	}
 	acquireWeldedLinesForWindowAndBuildObservation();
 
 
 	std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleVector.size() << std::endl;
-	int someVal = 5;
-	std::cin >> someVal;
+	//int someVal = 5;
+	//std::cin >> someVal;
 	
 }
 

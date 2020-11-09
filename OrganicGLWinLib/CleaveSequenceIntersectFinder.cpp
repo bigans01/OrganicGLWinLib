@@ -11,7 +11,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 	
 	if (cleaveMapSize >= 1)
 	{
-		std::cout << "#- Records              > CleaveSequences found in cleaveMap; inserting intercept records into appropriate border lines...  " << cleaveMapSize << std::endl;
+		//std::cout << "#- Records              > CleaveSequences found in cleaveMap; inserting intercept records into appropriate border lines...  " << cleaveMapSize << std::endl;
 
 		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[0];
 
@@ -40,8 +40,8 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		linePool = welder.retrieveLinePool();
 
 		int someVal = 5;
-		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
-		linePool.printLines();
+		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
+		//linePool.printLines();
 
 		WeldedTriangleGroupBuilder groupBuilder;
 		groupBuilder.setWeldedLinePool(linePool);
@@ -86,7 +86,7 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[x];
 		if (borderLineRef->intersectRecorder.records.size() > 0)	// only do the following if there are actually intersect records in the line.
 		{
-			std::cout << "Determining record types for border line: " << x << std::endl;
+			//std::cout << "Determining record types for border line: " << x << std::endl;
 			auto recordsBegin = borderLineRef->intersectRecorder.records.begin();
 			auto recordsEnd = borderLineRef->intersectRecorder.records.end();
 			for (recordsBegin; recordsBegin != recordsEnd; recordsBegin++)

@@ -164,12 +164,12 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 		(rotationpointsRefVector->getPointByIndex(3).y > 0)
 	)
 	{
-		std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
+		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
 		isWithinPlane = true;
 	}
 	else
 	{
-		std::cout << "!!!! Point is not within triangle! " << std::endl;
+		//std::cout << "!!!! Point is not within triangle! " << std::endl;
 	}
 	return isWithinPlane;
 }
@@ -218,7 +218,7 @@ float QuatRotationManager::executeRotationsForFindingObserverRadians()
 	// check if the normal of the lineOfSightCopy is negative y; flip it on X axis if so.
 	if (rotationpointsRefVector->getPointByIndex(5).y < 0)
 	{
-		std::cout << "!!! Note: Flip on x axis required... " << std::endl;
+		//std::cout << "!!! Note: Flip on x axis required... " << std::endl;
 		flipOnXAxis();
 	}
 
@@ -289,19 +289,19 @@ float QuatRotationManager::findRadiansForObservation()
 	float fullRadian360 = 6.28319;
 	pointARef = rotationpointsRefVector->getFirstPointRef();
 
-	std::cout << "!! Point A ref X is: " << pointARef->x << std::endl;
-	std::cout << "!! Point A ref Y is: " << pointARef->y << std::endl;
+	//std::cout << "!! Point A ref X is: " << pointARef->x << std::endl;
+	//std::cout << "!! Point A ref Y is: " << pointARef->y << std::endl;
 
-	std::cout << "=========================== " << std::endl;
+	//std::cout << "=========================== " << std::endl;
 
-	std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
-	std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 
 	//float atan2result = roundToThousandths(atan2(pointARef->y, pointARef->x)); // find the radians we'll need to rotate by
 	float atan2result = atan2(pointARef->y, pointARef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 
-	std::cout << "::: atan2 result is: " << atan2result << std::endl;
+	//std::cout << "::: atan2 result is: " << atan2result << std::endl;
 
 	if (atan2result > 0.0)
 	{
@@ -314,7 +314,7 @@ float QuatRotationManager::findRadiansForObservation()
 		firstPassRotateRadians = fullRadian360 + atan2result;
 	}
 
-	std::cout << "#### Radian value for observation is: " << firstPassRotateRadians << std::endl;
+	//std::cout << "#### Radian value for observation is: " << firstPassRotateRadians << std::endl;
 	radianValue = firstPassRotateRadians;
 	return firstPassRotateRadians;
 }
@@ -1052,7 +1052,6 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 	{
 		std::cout << "(Z-fracture) Final rotated vec is: " << finalRotatedVec.x << ", " << finalRotatedVec.y << ", " << finalRotatedVec.z << std::endl;
 		std::cout << "(Z-fracture) It was rotated to pos Y, via this many radians: " << secondPassRotateFinal << std::endl;
-		std::cout << std::endl;
 	}
 	degreesToRotateOnX = secondPassRotateFinal;
 	return degreesToRotateOnX;

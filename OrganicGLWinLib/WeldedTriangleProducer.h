@@ -57,7 +57,7 @@ class WeldedTriangleProducer
 			auto comparablesEnd = linePoolGuide.comparables.end();
 			for (; comparablesBegin != comparablesEnd; comparablesBegin++)
 			{
-				std::cout << "Checking against comparable line, having the ID: " << *comparablesBegin << std::endl;
+				//std::cout << "Checking against comparable line, having the ID: " << *comparablesBegin << std::endl;
 
 				glm::vec3 pointToCheck = weldedLinePoolRef->fetchLineFromPoolViaIndex(*comparablesBegin).pointB;
 				bool wasWithinTriangle = candidateWeldedTriangle.checkIfPointIsWithinTriangle(pointToCheck);

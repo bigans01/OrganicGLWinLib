@@ -10,13 +10,13 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
 		if (foundSet.empty())
 		{
-			std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
+			//std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
 			wasNextSequenceFound = false;
 		}
 		else if (!foundSet.empty())
 		{
 			auto foundSetBegin = foundSet.begin();
-			std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
+			//std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
 			DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);	// there's only one sequence, so grab its DistanceToPoint value
 
 			// because the distance between the sequenceFiderStartPoint and the shortest point isn't 0, we must insert a welded line.
@@ -35,15 +35,15 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 			// If the very first categorized line we start a LineWelder on is on a border line that contains just one record in its intersectRecorder, this would always be false.
 			else
 			{
-				std::cout << ":::: !! shortestPointStats.point and sequenceFinderStartPoint match, returning false. " << std::endl;
+				//std::cout << ":::: !! shortestPointStats.point and sequenceFinderStartPoint match, returning false. " << std::endl;
 				wasNextSequenceFound = false;
 			}
 		}
 	}
 	else if (intersectRecorderRef->records.size() > 1)
 	{
-		std::cout << "+++ Note: neighbors exist! " << std::endl;
-		std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
+		//std::cout << "+++ Note: neighbors exist! " << std::endl;
+		//std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
 
 		//std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
 		//foundSet = intersectRecorderRef->getCleaveSequenceIDList();
@@ -61,10 +61,10 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 			auto foundSetEnd = foundSet.end();
 			for (; foundSetBegin != foundSetEnd; foundSetBegin++)
 			{
-				std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
+				//std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
 
 				auto foundCleaveMap = (*cleaveMapRef).find(*foundSetBegin);
-				foundCleaveMap->second.printCategorizedLines();
+				//foundCleaveMap->second.printCategorizedLines();
 			}
 
 			//intersectRecorderRef->printRecords();
@@ -72,7 +72,7 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		}
 		else if (foundSet.empty())
 		{
-			std::cout << "###### ++++ Found set was EMPTY. " << std::endl;
+			//std::cout << "###### ++++ Found set was EMPTY. " << std::endl;
 		}
 	}
 }
@@ -112,7 +112,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	{
 		DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);		// Step 1
 		distanceToPointMap[*foundSetBegin] = shortestPointStats;																// Step 2
-		std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
+		//std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
 	}
 
 	std::map<int, DistanceToPoint> originalCopy = distanceToPointMap;	// create a copy of the map, so that when we find the nearest CleaveSequence by its ID, 
@@ -144,7 +144,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	quatPoints.pointsRefVector.push_back(&selectedPointOfBorderLine);
 
 	glm::vec3 rotationTargetPoint = quatPoints.getLastPoint();
-	std::cout << ">>> Point to rotate to (pre translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
+	//std::cout << ">>> Point to rotate to (pre translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
 
 
 	// check for translation on the sequenceFinderStartPoint
@@ -160,7 +160,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	rotationManager.initializeAndRunforAligningNeighboringCleaveSequencesToPosY(&quatPoints);			// Step 5 and Step 6
 	rotationTargetPoint = quatPoints.getLastPoint();
 
-	std::cout << ">>> Point to rotate to (post translation, and rotation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
+	//std::cout << ">>> Point to rotate to (post translation, and rotation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
 	
 	// let's print whats in the distanceToPointMap, to make sure it's OK
 	/*

@@ -142,8 +142,8 @@ class WeldedLinePool
 
 			pool = updatedPool;
 
-			std::cout << ":::::::: Values of pool, post update: " << std::endl;
-			printLines();
+			//std::cout << ":::::::: Values of pool, post update: " << std::endl;
+			//printLines();
 		};
 
 	private:

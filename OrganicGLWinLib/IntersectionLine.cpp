@@ -91,9 +91,9 @@ int IntersectionLine::getBorderLineIDFromSingularBorderLineCount()
 	}
 	else if (isPointBOnBorder == 1)
 	{
-		std::cout << "!!! Point B is on border! " << std::endl;
+		//std::cout << "!!! Point B is on border! " << std::endl;
 		result = pointBBorder;
-		std::cout << "!!! Result will be: " << result << std::endl;
+		//std::cout << "!!! Result will be: " << result << std::endl;
 	}
 	return result;
 }

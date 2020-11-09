@@ -26,10 +26,10 @@ void CleaveSequence::insertNonboundLine(CategorizedLine in_categorizedLine)
 	cleaveIndex++;
 	currentPointToSearch = in_categorizedLine.line.pointB;
 	
-	std::cout << ":::: non-bound line, point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
-	std::cout << ":::: non-bound line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
+	//std::cout << ":::: non-bound line, point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+	//std::cout << ":::: non-bound line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 
-	std::cout << ":: Inserted non-bound line; Next point to search is: " << currentPointToSearch.x << ", " << currentPointToSearch.y << ", " << currentPointToSearch.z << std::endl;
+	//std::cout << ":: Inserted non-bound line; Next point to search is: " << currentPointToSearch.x << ", " << currentPointToSearch.y << ", " << currentPointToSearch.z << std::endl;
 }
 
 void CleaveSequence::insertLastLine(CategorizedLine in_categorizedLine)
@@ -74,11 +74,11 @@ int CleaveSequence::retrievedLineEndpointBorderLine(CleaveSequenceCrawlDirection
 		}
 		else if (crawlBegin->second.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 		{
-			std::cout << "!!! Attempting border line retrieval from INTERCEPTS_POINT_PRECISE" << std::endl;
+			//std::cout << "!!! Attempting border line retrieval from INTERCEPTS_POINT_PRECISE" << std::endl;
 			returnBorderLineID = crawlBegin->second.line.getBorderLineIDFromSingularBorderLineCount();
 		}
 
-		std::cout << "::::::::::: Return border line ID is: " << returnBorderLineID << std::endl;
+		//std::cout << "::::::::::: Return border line ID is: " << returnBorderLineID << std::endl;
 	}
 	else if (in_crawlDirection == CleaveSequenceCrawlDirection::REVERSE)
 	{
@@ -168,7 +168,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// is the chosen min for A?
 		if (selectedMin == distOriginToA)
 		{
-			std::cout << "(SINGLE_LINE) Closest point is A" << std::endl;
+			//std::cout << "(SINGLE_LINE) Closest point is A" << std::endl;
 			returnDistanceToPoint.distance = selectedMin;
 			returnDistanceToPoint.point = pointA;
 		}
@@ -176,7 +176,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// is the chosen min for B?
 		else if (selectedMin == distOriginToB)
 		{
-			std::cout << "(SINGLE_LINE) Closest point is B" << std::endl;
+			//std::cout << "(SINGLE_LINE) Closest point is B" << std::endl;
 			returnDistanceToPoint.distance = selectedMin;
 			returnDistanceToPoint.point = pointB;
 		}
@@ -184,7 +184,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// special case, when they are equal
 		else if (distOriginToA == distOriginToB)
 		{
-			std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+			//std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
 		}
 
 	}
@@ -200,8 +200,8 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);
@@ -209,7 +209,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// is the chosen min for A?
 		if (selectedMin == distOriginToA)
 		{
-			std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+			//std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
 			returnDistanceToPoint.distance = selectedMin;
 			returnDistanceToPoint.point = pointA;
 		}
@@ -217,7 +217,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// is the chosen min for B?
 		else if (selectedMin == distOriginToB)
 		{
-			std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+			//std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
 			returnDistanceToPoint.distance = selectedMin;
 			returnDistanceToPoint.point = pointB;
 		}
@@ -225,7 +225,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		// special case, when they are equal
 		else if (distOriginToA == distOriginToB)
 		{
-			std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+			//std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
 		}
 
 	}

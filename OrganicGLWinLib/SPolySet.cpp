@@ -777,36 +777,36 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 	{
 		if (in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
 		{
-			std::cout << "~~~~ The host line is INVALID. " << std::endl;
+			//std::cout << "~~~~ The host line is INVALID. " << std::endl;
 		}
 		if (in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
 		{
-			std::cout << "~~~~ The guest line is INVALID. " << std::endl;
+			//std::cout << "~~~~ The guest line is INVALID. " << std::endl;
 		}
 
-		std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
+		//std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
 
-		std::cout << "++++++Host line stats: " << std::endl;
-		std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
-		std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+		//std::cout << "++++++Host line stats: " << std::endl;
+		//std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
+		//std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
 
-		std::cout << "++++++Guest line stats: " << std::endl;
-		std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
-		std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+		//std::cout << "++++++Guest line stats: " << std::endl;
+		//std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
+		//std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
 
-		std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-		std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-		std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
-		std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
+		//std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+		//std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+		//std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
+		//std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
 
 
-		std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-		std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-		std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
-		std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
+		//std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+		//std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+		//std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
+		//std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
 
-		int someVal = 3;
-		std::cin >> someVal;
+		//int someVal = 3;
+		//std::cin >> someVal;
 
 		returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
 		returnLine.line.lineGroupID = in_groupID;
@@ -987,7 +987,7 @@ glm::quat SPolySet::createQuaternion(float radians, glm::vec3 in_angle)
 void SPolySet::performFracturing()
 {
 	// determine what needs to be fractured, by cycling through all secondaryPolys.
-	 std::cout << "|||||||||||||| ************* Beginning fracturing attempts for all polys ************** ||||||||||||||" << std::endl;
+	 //std::cout << "|||||||||||||| ************* Beginning fracturing attempts for all polys ************** ||||||||||||||" << std::endl;
 	auto truestart = std::chrono::high_resolution_clock::now();
 	for (int x = 0; x < secondaryPolys.size(); x++)
 	{

@@ -24,8 +24,8 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 	// only do this *while* (only test this while, don't run it entirely) we are in a CONTINUE_OBSERVE state.
 	while (currentObserverState == TracingObserverState::CONTINUE_OBSERVE)
 	{
-		std::cout << "::::: Running tick for TracingObserver, CONTINUE_OBSERVE: " << std::endl;
-		poolGuide.printGuideValues();
+		//std::cout << "::::: Running tick for TracingObserver, CONTINUE_OBSERVE: " << std::endl;
+		//poolGuide.printGuideValues();
 
 		determineObservationRadians();
 
@@ -51,9 +51,9 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			currentObserverState == TracingObserverState::TERMINATED;
 		}
 
-		int someVal = 3;
-		std::cout << "::: Enter number to continue the loop of CONTINUE_OBSERVE. " << std::endl;
-		std::cin >> someVal;
+		//int someVal = 3;
+		//std::cout << "::: Enter number to continue the loop of CONTINUE_OBSERVE. " << std::endl;
+		//std::cin >> someVal;
 	}
 
 	if (currentObserverState != TracingObserverState::TERMINATED)
@@ -81,14 +81,14 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 				currentObserverState == TracingObserverState::TERMINATED;
 			}
 
-			std::cout << "!!!! Final observe detected. Enter number to continue. " << std::endl;
-			int someVal = 3;
-			std::cin >> someVal;
+			//std::cout << "!!!! Final observe detected. Enter number to continue. " << std::endl;
+			//int someVal = 3;
+			//std::cin >> someVal;
 		}
 		else if (currentObserverState == TracingObserverState::FINISHED)
 		{
 			// we're finished, just insert the final WeldedTriangle.
-			std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
+			//std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
 			//weldedLinePoolRef->printLines();
 			WeldedTriangle finalTriangle(weldedLinePoolRef->fetchLineFromPoolViaIndex(0), weldedLinePoolRef->fetchLineFromPoolViaIndex(1), weldedLinePoolRef->fetchLineFromPoolViaIndex(2));
 			weldedTriangleVectorRef->push_back(finalTriangle);
@@ -106,12 +106,12 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 {
 	bool isLineOfSightMaintained = true;
 
-	std::cout << "###### (1) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+	//std::cout << "###### (1) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
 
 	// need a new class here, that will take in a copy of the line pool and the current pool guide, and use it to verify the line of sight.
 	// this class should return a value of "true" or "false" which can then be used.
 	WeldedTriangleProducer triangleProducer(weldedLinePoolRef, poolGuide);
-	std::cout << "###### (2) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+	//std::cout << "###### (2) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
 	//isLineOfSightMaintained = triangleProducer.wasValidWeldedTriangleProduced;
 	WeldedTriangleProductionResult productionResult = triangleProducer.getProductionResult();
 	isLineOfSightMaintained = productionResult.wasProductionValid;
@@ -129,22 +129,22 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightMaintained == false)
 	{
-		std::cout << "###### This observation has been TERMINATED. " << std::endl;
-		std::cout << "###### (3) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+		//std::cout << "###### This observation has been TERMINATED. " << std::endl;
+		//std::cout << "###### (3) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
 		currentObserverState = TracingObserverState::TERMINATED;
 	}
 	else if (isLineOfSightMaintained == true)
 	{
-		std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
+		//std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
 		WeldedLine invertedLine = productionResult.producedTriangle.fetchTriangleLine(2);
 		invertedLine.swapPointsAndInvertNormal();
 
 		// insert the triangle into the WeldedTriangle map (or vector?)
 		weldedTriangleVectorRef->push_back(productionResult.producedTriangle);
 
-		productionResult.producedTriangle.printPoints();
+		//productionResult.producedTriangle.printPoints();
 		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
-		poolGuide.weldedLinePoolRef->printLines();
+		//poolGuide.weldedLinePoolRef->printLines();
 
 		
 
@@ -185,19 +185,19 @@ void TracingObserver::determineObservationRadians()
 	QuatRotationManager rotationManager;
 	float calculatedRadians = rotationManager.initializeAndRunForFindingObserverRadians(&points);
 
-	std::cout << ":::::::::::::: Value of remainingRadians: " << remainingRadians << std::endl;
-	std::cout << ":::::::::::::: Value of calculatedRadians: " << calculatedRadians << std::endl;
+	//std::cout << ":::::::::::::: Value of remainingRadians: " << remainingRadians << std::endl;
+	//std::cout << ":::::::::::::: Value of calculatedRadians: " << calculatedRadians << std::endl;
 	
 	// verify observation validity for radians
 	if (calculatedRadians < remainingRadians)
 	{
 	   areRemainingRadiansValid = true;
-	   std::cout << "!> Observation is still VALID!" << std::endl;
+	   //std::cout << "!> Observation is still VALID!" << std::endl;
 	}
 	else
 	{
 	   areRemainingRadiansValid = false;
-	   std::cout << "!> Observation is NO LONGER VALID!" << std::endl;
+	   //std::cout << "!> Observation is NO LONGER VALID!" << std::endl;
 	}
 
 	remainingRadians = calculatedRadians;
