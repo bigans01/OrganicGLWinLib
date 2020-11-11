@@ -36,6 +36,7 @@ public:
 
 	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
 	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
+	IntersectionResult checkIfLineIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_line);
 	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
 	float dot(glm::vec3 in_A, glm::vec3 in_B);
 	CategorizedLine determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_lineA, IntersectionLine in_lineB, int in_groupID, glm::vec3 in_polyBEmptyNormal);

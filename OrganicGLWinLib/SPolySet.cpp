@@ -135,6 +135,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	//std::cout << "temp halt, enter integer. " << std::endl;
 	//std::cin >> someVal;
 
+	// perform a co-planar test here; if the two poly's arent' coplanar, proceed with normal operations.
+
 	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
@@ -193,6 +195,12 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					//std::cout << "(2) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					hostLineGroup.addIntersectionLine(potentialHostLine);			// only add a line to the group if the line intersection wtih poly B
 				}
+
+				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
+				if (intersectResult.wasIntersectFound == 2)
+				{
+
+				}
 				//std::cout << "Current number of border lines is: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 			}
 			// merge the found intersections for the candidate line, then make that result = potentialLineAtoB;
@@ -229,6 +237,11 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					potentialGuestLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
 					potentialGuestLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					guestLineGroup.addIntersectionLine(potentialGuestLine);			// only add a line to the group if the line intersection wtih poly B
+				}
+				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
+				if (intersectResult.wasIntersectFound == 2)
+				{
+
 				}
 			}
 			// merge the found intersections for the candidate line, then make that result = potentialLineBtoA;
@@ -389,6 +402,129 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 
 	return returnResult;
 	//return someVal;
+}
+
+IntersectionResult SPolySet::checkIfLineIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_triangleLine)
+{
+	//int someVal = 0;
+	IntersectionResult returnResult;
+	glm::vec3 intersect_candidate;
+
+	//std::cout << "Checking if this line intersects: pointA: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << " | pointB: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+
+	glm::vec3 point0 = in_triangle.triangleLines[0].pointA;
+	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
+	glm::vec3 point2 = in_triangle.triangleLines[2].pointA;
+
+	int tempDebug = 0;
+	/*
+	if
+	(
+		//(in_triangleLine.pointA.x == 4.0f)
+		//&&
+		//(in_triangleLine.pointA.y == 0.0f)
+		//&&
+		//(in_triangleLine.pointA.z == 0.0f)
+
+		//&&
+
+		//(in_triangleLine.pointB.x == 4.0f)
+		//&&
+		//(in_triangleLine.pointB.y == 4.0f)
+		//&&
+		//(in_triangleLine.pointB.z == 0.0f)
+	)
+	{
+		std::cout << "######## checkIfLineIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
+		std::cout << "Points of triangle line are: " << std::endl;
+		std::cout << "Point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+		std::cout << "Point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+		tempDebug = 1;
+	}
+	*/
+
+	/*
+	std::cout << "##########################################" << std::endl;
+	std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+	std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+	std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+	std::cout << "intersecting line, point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+	std::cout << "intersecting line, point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+	std::cout << "##########################################" << std::endl;
+	*/
+
+	glm::vec3 u = point1 - point0;	// u vector
+	glm::vec3 v = point2 - point0;	// v " 
+
+	//std::cout << "U: " << u.x << ", " << u.y << ", " << u.z << std::endl;
+	//std::cout << "V: " << v.x << ", " << v.y << ", " << v.z << std::endl;
+	glm::vec3 N = cross(u, v);		// the normal of the triangle
+	//N.z = -1.0f;
+	//std::cout << "Normal: " << N.x << ", " << N.y << ", " << N.z << std::endl;
+
+	glm::vec3 dir = in_triangleLine.pointB - in_triangleLine.pointA;
+	glm::vec3 w0 = in_triangleLine.pointA - point0;
+
+	float a = -dot(N, w0);
+	float b = dot(N, dir);
+	if (fabs(b) < SMALL_NUM) {     // ray is  parallel to triangle plane
+
+		std::cout << "!! Warning, B is less than SMALL_NUM. " << std::endl;
+		if (a == 0)                 // ray lies in triangle plane
+			//return 2;
+			returnResult.setResult(2);
+		//else return 0;              // ray disjoint from plane
+		else returnResult.setResult(0);
+	}
+
+	std::cout << "A is: " << a << std::endl;
+	std::cout << "B is: " << b << std::endl;
+
+	float r = a / b;
+	if (r < 0.0)
+		//return 0;
+		returnResult.setResult(0);
+
+	std::cout << "R is: " << r << std::endl;
+	std::cout << "Dir is: " << dir.x << ", " << dir.y << ", " << dir.z << std::endl;
+
+	intersect_candidate = in_triangleLine.pointA + (r * dir);
+
+	// is I inside T?
+	glm::vec3 w;
+	float    uu, uv, vv, wu, wv, D;
+	uu = dot(u, u);
+	uv = dot(u, v);
+	vv = dot(v, v);
+	w = intersect_candidate - point0;
+	wu = dot(w, u);
+	wv = dot(w, v);
+	D = uv * uv - uu * vv;
+
+	// get and test parametric coords
+	float s, t;
+	s = (uv * wv - vv * wu) / D;
+	if (s < 0.0 || s > 1.0)         // I is outside T
+		//return 0;
+		returnResult.setResult(0);
+	t = (uv * wu - uu * wv) / D;
+	if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+		//return 0;
+		returnResult.setResult(0);
+	//return 1;
+	returnResult.setResult(1);
+	returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+	returnResult.borderLineID = in_triangleLine.borderLineID;
+	returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+
+
+	std::cout << "### Was intersect found result will be: " << returnResult.wasIntersectFound << std::endl;
+	std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
+	
+
+	return returnResult;
 }
 
 

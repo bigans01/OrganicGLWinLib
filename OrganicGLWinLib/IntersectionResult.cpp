@@ -7,5 +7,6 @@ void IntersectionResult::setResult(int in_result)
 	{
 		wasIntersectFound = in_result;
 		wasResultSet = 1;
+		//wasResultSet = in_result;
 	}
 }

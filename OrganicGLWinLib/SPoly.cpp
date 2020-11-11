@@ -37,7 +37,17 @@ void SPoly::determineBorderLines()
 	}
 	else
 	{
-
+		addBorderLine(triangles[0].triangleLines[0]);
+		addBorderLine(triangles[0].triangleLines[1]);
+		int lastTriangleIndex = (numberOfTriangles - 1);
+		int numberOfIntermediateTriangles = (numberOfTriangles - 2);
+		int intermediateStartIndex = 1;
+		for (int x = 0; x < numberOfIntermediateTriangles; x++)
+		{
+			addBorderLine(triangles[intermediateStartIndex++].triangleLines[1]);
+		}
+		addBorderLine(triangles[lastTriangleIndex].triangleLines[1]);
+		addBorderLine(triangles[lastTriangleIndex].triangleLines[2]);
 	}
 
 	// after the lines get added, go through each STriangle to have it identify which of its lines are border lines
@@ -119,12 +129,27 @@ void SPoly::determinePlanarVectors()
 		//{
 		//std::cout << "(case 3) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
 		//}
+
+		std::cout << "###################### finding Planar vectors for " << numberOfTriangles << " STriangles. " << std::endl;
+
+		glm::vec3 rootPoint = borderLines[0].pointA;
+		findPlanarVectorsForTwoBorderLines(&borderLines[0], &borderLines[1]);
+		int numberOfIntermediateTriangles = (numberOfTriangles - 2);
+		int intermediateStartIndex = 1;
+		int intermediateCurrentBorderLine = 2;
+		for (int x = 0; x < numberOfIntermediateTriangles; x++)
+		{
+			findPlanarVectorForSingleBorderLine(rootPoint, &borderLines[intermediateCurrentBorderLine++]);
+		}
+		findPlanarVectorsForTwoBorderLines(&borderLines[intermediateCurrentBorderLine], &borderLines[intermediateCurrentBorderLine + 1]);
+
 	}
 }
 
-void SPoly::findPlanarVectorForSingleBorderLine(glm::vec3 in_point0, SPolyBorderLines* in_borderLineOneRef)
+void SPoly::findPlanarVectorForSingleBorderLine(glm::vec3 in_triangleFanRootPoint, SPolyBorderLines* in_borderLineOneRef)
 {
-
+	glm::vec3 centroidPoint = findCentroid(in_triangleFanRootPoint, in_borderLineOneRef->pointB, in_borderLineOneRef->pointB);
+	calculatePlanarVector(in_borderLineOneRef, centroidPoint);
 }
 
 void SPoly::findPlanarVectorsForTwoBorderLines(SPolyBorderLines* in_borderLineOneRef, SPolyBorderLines* in_borderLineTwoRef)
@@ -165,6 +190,9 @@ glm::vec3 SPoly::findCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec
 
 void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 in_centroidPoint)
 {
+	// NOTE: this function requires all points to be coplanar on Z-plane.
+
+
 	glm::vec3 pointACopy = in_borderLineRef->pointA;
 	glm::vec3 pointBCopy = in_borderLineRef->pointB;
 	glm::vec3 centroidPointCopy = in_centroidPoint; // get a copy of the centroid input parameter, so that we may modify it
@@ -726,6 +754,28 @@ void SPoly::printLines()
 		{
 			std::cout << x << ": " << categorizedLineMap[x].line.pointA.x << ", " << categorizedLineMap[x].line.pointA.y << "," << categorizedLineMap[x].line.pointA.z << " | " << categorizedLineMap[x].line.pointB.x << ", " << categorizedLineMap[x].line.pointB.y << ", " << categorizedLineMap[x].line.pointB.z << std::endl;
 		}
+	}
+}
+
+void SPoly::printBorderLines()
+{
+	for (int x = 0; x < numberOfBorderLines; x++)
+	{
+		std::cout << "|||| Border Line " << x << std::endl;
+		std::cout << "| point A: " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
+		std::cout << "| point B: " << borderLines[x].pointB.x << ", " << borderLines[x].pointB.y << ", " << borderLines[x].pointB.z << std::endl;
+	}
+}
+
+void SPoly::printPlanarVectors()
+{
+	std::cout << "|||| Printing planar vectors for border lines... " << std::endl;
+	for (int x = 0; x < numberOfBorderLines; x++)
+	{
+		std::cout << "|||| Border Line " << x << std::endl;
+		//std::cout << "| point A: " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
+		//std::cout << "| point B: " << borderLines[x].pointB.x << ", " << borderLines[x].pointB.y << ", " << borderLines[x].pointB.z << std::endl;
+		std::cout << "| Planar vector: " << borderLines[x].planarVector.x << ", " << borderLines[x].planarVector.y << ", " << borderLines[x].planarVector.z << std::endl;
 	}
 }
 

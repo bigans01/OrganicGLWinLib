@@ -77,6 +77,8 @@ public:
 	void registerIntersectingCatLine(int lineIndex, CategorizedLine in_line);	// prepares to insert the intersecting cat line; will call insertIntersectingCatLine with the appropriate arguments, based on qualifying criteria
 	void insertIntersectingCatLine(int in_borderLineID, int in_catLineGroupID, int in_catLineID, IRPointType point_type, glm::vec3 in_point);	// wrapper-style function; inserts the intersecting line into the intercept register (by calling InterceptRegister.insertCatLine)
 	void organizeCurrentCleaveLines();
+	void printBorderLines();
+	void printPlanarVectors();
 	void printLines();
 	void printAllCleaveLines();
 	void setDebugFlag(int in_debugFlagValue);
