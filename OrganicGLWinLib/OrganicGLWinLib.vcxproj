@@ -181,6 +181,8 @@
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ContainerType.h" />
+    <ClInclude Include="CoplanarChecker.h" />
+    <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
@@ -320,6 +322,7 @@
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
+    <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />

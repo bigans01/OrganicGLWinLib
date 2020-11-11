@@ -36,6 +36,7 @@ public:
 	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
 	bool initializeAndRunForCheckingIfPointIswithinPlane(QuatRotationPoints* in_quatpointsRefVector);
 	float initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector);
+	bool initializeAndRunForCheckingCoplanarity(QuatRotationPoints* in_quatpointsRefVector);
 
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
@@ -46,6 +47,7 @@ public:
 	void executeRotationsForFindingBorderLineEmptyNormal();
 	float executeRotationsForFindingObserverRadians();
 	bool executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
+	bool executeRotationsForCheckingCoplanarity();
 
 	void rotateAroundYAndPushIntoStack();
 	void rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
@@ -60,6 +62,8 @@ public:
 	void rotateEmptyNormalToPosY(glm::vec3* in_normal);
 	void rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal);
 	void rotateAroundZToYZero();
+
+	bool checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 in_otherPoint);
 
 	float findRotationRadiansForZFracture(glm::vec3 in_vec3);
 	float findRotationRadiansForGettingToPosYThroughZ(glm::vec3 in_vec3);
@@ -76,6 +80,7 @@ public:
 
 	// rounding functions
 	float roundToThousandths(float in_float);
+	float roundRadiansForRightAngleCheck(float in_angleInRadians);
 
 	float radianValue;				// may be optionally used by some functions.
 };

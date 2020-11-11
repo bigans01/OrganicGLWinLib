@@ -79,19 +79,29 @@ void SPolySet::runPolyComparison()
 			{
 				SPoly* polyA = &secondaryPolys[x];
 				SPoly* polyB = &secondaryPolys[currentIndex];
+				// determine if we need to do the special case, where polyA and polyB are coplanar.
+				CoplanarChecker checker(polyA, polyB);
+		
+					// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
 
-				if (polyA->groupID != polyB->groupID)		// don't compare polys in the same group to each other
-				{
-					//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
-					//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
+						// if they are coplanar AND polyA is a group 1 poly, do this
 
-					//std::cout << "##### Current index is: " << currentIndex << std::endl;
-					//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
-					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
-					//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
-					std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
-					produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
-				}
+
+					// otherwise, if they are not coplanar, do the following.
+
+
+					if (polyA->groupID != polyB->groupID)		// don't compare polys in the same group to each other
+					{
+						//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
+						//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
+
+						//std::cout << "##### Current index is: " << currentIndex << std::endl;
+						//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
+						//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
+						//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
+						std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
+						produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
+					}
 			}
 			currentIndex++;
 		}
