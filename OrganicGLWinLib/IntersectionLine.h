@@ -34,6 +34,7 @@ public:
 	void swapBorderToA();
 	void swapBorderToB();
 	void swapToA();
+	bool wasSwapped = false;
 
 	int getBorderLineIDFromSingularBorderLineCount();
 	BorderLineIDPair getBorderLineIDPair();

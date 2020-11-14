@@ -80,6 +80,8 @@ void IntersectionLine::swapToA()
 	pointB = tempPointA;
 	isPointBOnBorder = tempPointAOnBorder;
 	pointBBorder = tempPointABorder;
+
+	wasSwapped = true;
 }
 
 int IntersectionLine::getBorderLineIDFromSingularBorderLineCount()
@@ -163,10 +165,33 @@ glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirecti
 	glm::vec3 returnVec;
 	if (in_direction == CyclingDirection::FORWARD)
 	{
-		return pointB;
+		std::cout << ">>> Fetchin point for CyclingDirection::FORWARD" << std::endl;
+		glm::vec3 returnPoint;
+		if (wasSwapped == true)
+		{
+			returnPoint = pointA;
+		}
+		else
+		{
+			returnPoint = pointB;
+		}
+
+		return returnPoint;
 	}
 	else if (in_direction == CyclingDirection::REVERSE)
 	{
-		return pointA;
+		std::cout << ">>> Fetchin point for CyclingDirection::REVERSE" << std::endl;
+
+		glm::vec3 returnPoint;
+		if (wasSwapped == true)
+		{
+			returnPoint = pointB;
+		}
+		else
+		{
+			returnPoint = pointA;
+		}
+
+		return returnPoint;
 	}
 }

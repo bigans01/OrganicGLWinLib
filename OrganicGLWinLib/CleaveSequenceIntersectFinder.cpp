@@ -37,19 +37,30 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 
 		// weld the lines; put the results into the line pool. Then, put it into the welded triangle builder.
 		LineWelder welder(in_sPolyRef);		
-		linePool = welder.retrieveLinePool();
-
-		int someVal = 5;
-		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
-		//linePool.printLines();
-
-		WeldedTriangleGroupBuilder groupBuilder;
-		groupBuilder.setWeldedLinePool(linePool);
-		groupBuilder.runTracingObservers();
-		weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
+		while (welder.getRemainingCandidateCount() > 0)
+		{
+			welder.startWelding();
 
 
-		//std::cin >> someVal;
+			// rebuild the winepool, until the welder has done all it's runs.
+			linePool = welder.retrieveLinePool();
+
+			int someVal = 5;
+			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
+			linePool.printLines();
+
+			WeldedTriangleGroupBuilder groupBuilder;
+			groupBuilder.setWeldedLinePool(linePool);
+
+			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Welded line pool set.: " << std::endl;
+
+			groupBuilder.runTracingObservers();
+			weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
+
+			welder.clearLinePool();
+
+			std::cin >> someVal;
+		}
 	}
 	
 }

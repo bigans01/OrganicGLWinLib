@@ -30,6 +30,23 @@ class CleaveSequenceCandidateList
 				std::cout << *setBegin << std::endl;
 			}
 		}
+		void updateCounter(int* in_counterRef)
+		{
+			auto setBegin = candidateSet.begin();
+			auto setEnd = candidateSet.end();
+			for (; setBegin != setEnd; setBegin++)
+			{
+				(*in_counterRef)++;
+			}
+		}
+		int getCandidateSetSize()
+		{
+			return candidateSet.size();
+		}
+		int getFirstAvailableCandidate()
+		{
+			return *candidateSet.begin();
+		}
 	private:
 		std::set<int> candidateSet;
 

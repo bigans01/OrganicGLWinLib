@@ -146,6 +146,11 @@ class WeldedLinePool
 			//printLines();
 		};
 
+		void clearPool()
+		{
+			pool.clear();
+		}
+
 	private:
 		std::map<int, WeldedLine> pool;
 		void incrementIterator(std::map<int, WeldedLine>::iterator* in_iterator)

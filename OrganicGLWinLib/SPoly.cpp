@@ -853,6 +853,9 @@ CleaveSequenceCandidateListMap SPoly::buildCleaveSequenceCandidateListMap()
 			returnMap.candidateMap[x].insertCandidate(recordsBegin->first);
 		}
 	}
+
+	std::cout << "!!!! Size of return map is : -> " << returnMap.candidateMap.size() << std::endl;
+
 	return returnMap;
 }
 

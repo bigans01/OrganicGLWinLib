@@ -3,10 +3,15 @@
 
 void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 {
+	//std::cout << "!!! *******BEGIN******** Sequence finder start point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
+
+
 	// if it's the only intercept on this border line, that's ok.
 	BorderLineIntersectRecorder* intersectRecorderRef = &borderLineRef->intersectRecorder;
 	if (intersectRecorderRef->records.size() == 1)
 	{
+		std::cout << ":::: entered branch for size == 1" << std::endl;
+
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
 		if (foundSet.empty())
 		{
@@ -45,17 +50,22 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		//std::cout << "+++ Note: neighbors exist! " << std::endl;
 		//std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
 
+		std::cout << ":::: entered branch for size > 1" << std::endl;
 		//std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
 		//foundSet = intersectRecorderRef->getCleaveSequenceIDList();
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
 		if (finderRunMode == LineWelderRunMode::CONTINUE)	// only do this if we're in "continue" mode
 		{
+			std::cout << "******** Performing continue mode check; will remove the ID of " << finderStartingCleaveSequenceID << " from the foundSet. " << std::endl;
+
 			foundSet.erase(finderStartingCleaveSequenceID);						// remove the finder's starting cleave sequence from the found set.
 		}
 	
-		// if the set is empty, don't bother doing anything.
+		// the set contains some things.
 		if (!foundSet.empty())
 		{
+
+			//std::cout << "!!! Note, case 2 for when records size > 1 entered. " << std::endl;
 			// testing only, print the lines.
 			auto foundSetBegin = foundSet.begin();
 			auto foundSetEnd = foundSet.end();
@@ -70,6 +80,8 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 			//intersectRecorderRef->printRecords();
 			findAndSortNeighboringCleaveSequences();
 		}
+
+		// if the set is empty, don't bother doing anything.
 		else if (foundSet.empty())
 		{
 			//std::cout << "###### ++++ Found set was EMPTY. " << std::endl;
@@ -208,7 +220,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		}
 	}
 
-	// we found the shortest ID, so lets 
+	// we found the shortest ID...
 	FoundCleaveSequence selectedSequence(currentShortestDistanceID, originalCopy[currentShortestDistanceID]);
 	selectedCleaveSequenceMeta = selectedSequence;
 }
