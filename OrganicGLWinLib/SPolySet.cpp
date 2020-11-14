@@ -81,13 +81,21 @@ void SPolySet::runPolyComparison()
 				SPoly* polyB = &secondaryPolys[currentIndex];
 				// determine if we need to do the special case, where polyA and polyB are coplanar.
 				CoplanarChecker checker(polyA, polyB);
-		
-					// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
 
-						// if they are coplanar AND polyA is a group 1 poly, do this
-
-
-					// otherwise, if they are not coplanar, do the following.
+				// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
+				if (checker.coplanarityDetected == true)	
+				{
+					// if they are coplanar AND polyA is a group 1 poly, do this
+					if (polyA->groupID == 1)	
+					{
+						std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
+						coplanarTracker.insertCoplanarRelationship(x, polyA, currentIndex, polyB);
+					}
+				}
+				// otherwise, if they are not coplanar, do the following.
+				else
+				{
+					
 
 
 					if (polyA->groupID != polyB->groupID)		// don't compare polys in the same group to each other
@@ -102,6 +110,7 @@ void SPolySet::runPolyComparison()
 						std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
 						produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
 					}
+				}
 			}
 			currentIndex++;
 		}

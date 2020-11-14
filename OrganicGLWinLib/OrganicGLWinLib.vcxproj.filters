@@ -465,6 +465,15 @@
     <ClInclude Include="CoplanarComparisonCandidatePoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyRefMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarRelationships.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarRelationshipTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

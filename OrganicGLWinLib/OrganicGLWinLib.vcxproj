@@ -183,6 +183,8 @@
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
+    <ClInclude Include="CoplanarRelationships.h" />
+    <ClInclude Include="CoplanarRelationshipTracker.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
@@ -228,6 +230,7 @@
     <ClInclude Include="SPolyBorderLines.h" />
     <ClInclude Include="SPolyFracturer.h" />
     <ClInclude Include="SPolyMorphTracker.h" />
+    <ClInclude Include="SPolyRefMap.h" />
     <ClInclude Include="SPolySet.h" />
     <ClInclude Include="STriangle.h" />
     <ClInclude Include="STriangleLine.h" />

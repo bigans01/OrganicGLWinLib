@@ -19,6 +19,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <chrono>
 #include "CoplanarChecker.h"
+#include "CoplanarRelationshipTracker.h"
 
 class SPolySet
 {
@@ -27,6 +28,7 @@ public:
 	SPolyMorphTracker polyMorphTracker;
 	int numberOfPolys = 0;		// the number of polys
 	std::map<int, std::vector<SPoly>> polyFracturingResults;	// stores the results of each poly fracture attempt.
+	CoplanarRelationshipTracker coplanarTracker;
 
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();

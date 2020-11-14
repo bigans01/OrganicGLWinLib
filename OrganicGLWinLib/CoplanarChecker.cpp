@@ -22,7 +22,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 		}
 	}
 
-	std::cout << "++++++++++++ performing co planar analysis (1) " << std::endl;
+	//std::cout << "++++++++++++ performing co planar analysis (1) " << std::endl;
 
 	// get the appropriate points
 	if
@@ -39,7 +39,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 		auto triangleBCandidateSetBegin = triangleBCandidates.availableCandidates.begin();
 		auto triangleBCandidateSetEnd = triangleBCandidates.availableCandidates.end();
 
-		std::cout << "++++++++++++ performing co planar analysis (2) " << std::endl;
+		//std::cout << "++++++++++++ performing co planar analysis (2) " << std::endl;
 
 		int requiredCoplanarityCount = triangleBCandidates.availableCandidates.size();
 		int currentCoplanarityCount = 0;
@@ -72,7 +72,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 			if (currentCoplanarityCount == requiredCoplanarityCount)
 			{
 				coplanarityDetected = true;
-				std::cout << ">>>>>>>>>>>>>>> Poly A is Co-planar to Poly B! " << std::endl;
+				//std::cout << ">>>>>>>>>>>>>>> Poly A is Co-planar to Poly B! " << std::endl;
 			}
 		}
 	}

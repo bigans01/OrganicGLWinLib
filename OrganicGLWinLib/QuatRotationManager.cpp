@@ -211,14 +211,14 @@ bool QuatRotationManager::initializeAndRunForCheckingCoplanarity(QuatRotationPoi
 	pointBRef = in_quatpointsRefVector->getPointRefByIndex(2);	// get a ref to the point to compare to; we need to rotate this point to 1,0,0. (we should be using the normal.)
 	if (pointBRef->x !=	1.0f)
 	{
-		std::cout << "::::::: Co-planarity: rotate around Z required. " << std::endl;
+		//std::cout << "::::::: Co-planarity: rotate around Z required. " << std::endl;
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
 		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
 		rotationOrder.push_back(rotateType);		// should call rotateAroundZToYZero();
 	}
 	if (pointBRef->z != 0.0f)
 	{
-		std::cout << "::::::: Co-planarity: rotate around Y required. " << std::endl;
+		//std::cout << "::::::: Co-planarity: rotate around Y required. " << std::endl;
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;		// rotate around Y to x = 1.0f
 		rotationOrder.push_back(rotateType);		// should call rotateAroundZToYZero();
 	}
@@ -247,16 +247,16 @@ bool QuatRotationManager::executeRotationsForCheckingCoplanarity()
 	// check if the point we're comparing to (the point in the other SPoly that's being compared to)
 	if (rotationpointsRefVector->getPointByIndex(1).y < 0)
 	{
-		std::cout << "!!! Note: Flip on x axis required... " << std::endl;
+		//std::cout << "!!! Note: Flip on x axis required... " << std::endl;
 		flipOnXAxis();
 	}
 
-	rotationpointsRefVector->printPoints();
+	//rotationpointsRefVector->printPoints();
 	isCoplanar = checkForRightAngle(rotationpointsRefVector->getPointByIndex(2), rotationpointsRefVector->getPointByIndex(1));
 
-	std::cout << "::::::::::::: Coplanarity-testing, halt. " << std::endl;
-	int someVal = 5;
-	std::cin >> someVal;
+	//std::cout << "::::::::::::: Coplanarity-testing, halt. " << std::endl;
+	//int someVal = 5;
+	//std::cin >> someVal;
 
 	return isCoplanar;
 }
@@ -273,7 +273,7 @@ bool QuatRotationManager::checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 i
 	//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
 	float firstPassRotateRadians = 0.0f;
 
-	std::cout << "::: atan2 result is: " << atan2result << std::endl;
+	//std::cout << "::: atan2 result is: " << atan2result << std::endl;
 
 	if (atan2result > 0.0)
 	{
@@ -286,13 +286,13 @@ bool QuatRotationManager::checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 i
 		firstPassRotateRadians = fullRadian360 + atan2result;
 	}
 
-	std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
 	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
 	if (firstPassRotateRadians == 1.5708f)
 	{
 		wasRightAngleFound = true;
-		std::cout << "!!! Right angle detected. " << std::endl;
+		//std::cout << "!!! Right angle detected. " << std::endl;
 	}
 
 	return wasRightAngleFound;
