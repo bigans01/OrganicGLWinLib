@@ -30,7 +30,10 @@ public:
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector);
 	glm::vec3 initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatpointsRefVector);
+
 	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatpointsRefVector);
+	void initializeAndRunForCyclingDirectionFinderV2(QuatRotationPoints* in_quatpointsRefVector);
+
 	void initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
@@ -41,7 +44,10 @@ public:
 	void calculateEmptyNormal();					// find the empty normal (should only be run when all points of triangle are on y
 	void executeRotationsForEmptyNormal();
 	void executeRotationsForZFracture();
+
 	void executeRotationsForCyclingDirectionFinder();
+	void executeRotationsForCyclingDirectionFinderV2();
+
 	void executeRotationsForPlanarSlide();
 	void executeRotationsForFindingBorderLine();
 	void executeRotationsForFindingBorderLineEmptyNormal();

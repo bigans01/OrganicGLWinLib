@@ -77,6 +77,37 @@ void QuatRotationManager::initializeAndRunForFindingBorderLine(QuatRotationPoint
 	executeRotationsForFindingBorderLine();
 }
 
+void QuatRotationManager::initializeAndRunForCyclingDirectionFinderV2(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	triangleNormalRef = rotationpointsRefVector->getPointRefByIndex(3);	// the last point in the QuatRotationPoints should equal the empty normal.
+
+	// check if we need to rotate about the Y-axis to get to the same Z values for the line
+	if (triangleNormalRef->z != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		//std::cout << "ROTATE_AROUND_Y required." << std::endl;
+		rotationOrder.push_back(rotateType); //push into the vector
+	}
+
+	// check if we need to rotate about the Z-axis to get to the same Y values for the line
+	if (triangleNormalRef->x != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+
+	// if x and z are 0, but the y is negative -1.0f, we still need to get to y = 1.0f.
+	if (triangleNormalRef->y == -1.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		rotationOrder.push_back(rotateType);
+	}
+
+	executeRotationsForCyclingDirectionFinderV2();
+}
+
 void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;
@@ -450,6 +481,42 @@ void QuatRotationManager::executeRotationsForFindingBorderLine()
 			//rotateAroundXToYZeroAndPushIntoStack();
 			//rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
 			rotateAroundXForPositiveYBorderLineAndPushIntoStack();
+		}
+	}
+
+
+	//std::cout << ":::::: Printingt points for executeRotationsForFindingBorderLine() " << std::endl;
+	//rotationpointsRefVector->printPoints();
+}
+
+void QuatRotationManager::executeRotationsForCyclingDirectionFinderV2()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
+		{
+			//if (debugFlag == 1)
+			//{
+				//std::cout << "!!!! Rotation around Y required, performing... (Planar sliding)" << std::endl;
+			//}
+			rotateAroundYToPosZForPlanarSlideAndPushIntoStack();
+		}
+		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_X)
+		{
+			//if (debugFlag == 1)
+			//{
+			//std::cout << "!!!! Rotation around Z required, performing...(Planar sliding)" << std::endl;
+			//}
+			//rotateAroundZAndPushIntoStack();
+			//rotateAroundXToYZeroAndPushIntoStack();
+			//rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
+			rotateAroundXForPositiveYBorderLineAndPushIntoStack();
+		}
+		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
+		{
+			rotateAroundZForPosYNormalAndPushIntoStack(rotationpointsRefVector->getPointByIndex(3));
 		}
 	}
 

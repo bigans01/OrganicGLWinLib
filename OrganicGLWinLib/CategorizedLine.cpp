@@ -92,7 +92,7 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		glm::vec3 emptyNormalCopy = emptyNormal;		// get a copy of the normal, don't modify the original.
 
 		//std::cout << "Border point is: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
-		//std::cout << "Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
+		std::cout << "Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
 		//std::cout << "Border point is on border line: " << categorizedLineBorderID << std::endl;
 
 		QuatRotationPoints rotationPoints;
@@ -112,7 +112,8 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
 
 		QuatRotationManager rotationManager;
-		rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+		rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
 
 		// determine which point it is that is positive y (check the first and third points.)
 		glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
@@ -130,13 +131,13 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		// if the selected point, is B of the border line, we go forward.
 		if (borderLineCopy.pointB == selectedPoint)
 		{
-			//std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
+			std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
 			direction = CyclingDirection::FORWARD;
 		}
 		else if (borderLineCopy.pointA == selectedPoint)
 		{
 
-			//std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
+			std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
 			direction = CyclingDirection::REVERSE;
 		}
 
@@ -220,7 +221,8 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	//rotationPoints.printPoints();
 
 	QuatRotationManager rotationManager;
-	rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+	//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
+	rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
 
 	// determine which point it is that is positive y (check the first and third points.)
 	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);

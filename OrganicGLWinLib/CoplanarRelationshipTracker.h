@@ -26,6 +26,10 @@ public:
 		std::cout << "-> tracked SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].trackedSPolyRef->numberOfBorderLines << std::endl;
 		std::cout << "-> related SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].relationshipMap.refMap[in_relatedSPolyID]->numberOfBorderLines << std::endl;
 	}
+	void buildCategorizedLinesForCoplanarRelationship(int in_trackedSPolyID)
+	{
+
+	}
 };
 
 #endif

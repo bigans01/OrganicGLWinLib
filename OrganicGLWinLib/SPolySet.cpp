@@ -79,41 +79,49 @@ void SPolySet::runPolyComparison()
 			{
 				SPoly* polyA = &secondaryPolys[x];
 				SPoly* polyB = &secondaryPolys[currentIndex];
-				// determine if we need to do the special case, where polyA and polyB are coplanar.
-				CoplanarChecker checker(polyA, polyB);
 
-				// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
-				if (checker.coplanarityDetected == true)	
+				if (polyA->groupID != polyB->groupID)		// don't compare polys in the same group to each other
 				{
-					// if they are coplanar AND polyA is a group 1 poly, do this
-					if (polyA->groupID == 1)	
+
+					// determine if we need to do the special case, where polyA and polyB are coplanar.
+					CoplanarChecker checker(polyA, polyB);
+
+					// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
+					if (checker.coplanarityDetected == true)	
 					{
-						std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
-						coplanarTracker.insertCoplanarRelationship(x, polyA, currentIndex, polyB);
+						// if they are coplanar AND polyA is a group 1 poly, do this
+						if (polyA->groupID == 1)	
+						{
+							std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
+							coplanarTracker.insertCoplanarRelationship(x, polyA, currentIndex, polyB);
+						}
 					}
-				}
-				// otherwise, if they are not coplanar, do the following.
-				else
-				{
+					// otherwise, if they are not coplanar, do the following.
+					else
+					{
 					
 
 
-					if (polyA->groupID != polyB->groupID)		// don't compare polys in the same group to each other
-					{
-						//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
-						//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
 
-						//std::cout << "##### Current index is: " << currentIndex << std::endl;
-						//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
-						//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
-						//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
-						std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
-						produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
+							//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
+							//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
+
+							//std::cout << "##### Current index is: " << currentIndex << std::endl;
+							//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
+							//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
+							//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
+							std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
+							produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
 					}
 				}
 			}
 			currentIndex++;
 		}
+
+		// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
+		// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
+		coplanarTracker.buildCategorizedLinesForCoplanarRelationship(x);
+
 		secondaryPolys[x].sequenceFactory.printLinesInPool();
 		secondaryPolys[x].buildCleaveSequences();
 		//secondaryPolys[x].printAllCleaveLines();

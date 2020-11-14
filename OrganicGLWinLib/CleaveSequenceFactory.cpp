@@ -149,6 +149,7 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
+		std::cout << "!! Inverting nonbound..." << std::endl;
 		nonBoundMapBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -157,6 +158,7 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
+		std::cout << "!! Inverting partial..." << std::endl;
 		partialsBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -165,6 +167,7 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto slicesEnd = aslicedMap.end();
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
+		std::cout << "!! Inverting slice..." << std::endl;
 		slicesBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -173,6 +176,7 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
+		std::cout << "!! Inverting intercept_points_precise..." << std::endl;
 		interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 	}
 }
