@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CleaveSequence.h"
+#include "CategorizedLine.h"
 
 void CleaveSequence::insertLineAtIndex(int in_index, CategorizedLine in_categorizedLine)
 {

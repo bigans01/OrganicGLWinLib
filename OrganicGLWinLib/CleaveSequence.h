@@ -3,7 +3,7 @@
 #ifndef CLEAVESEQUENCE_H
 #define CLEAVESEQUENCE_H
 
-#include "CategorizedLine.h"
+//#include "CategorizedLine.h"
 #include "CleaveSequenceStatus.h"
 #include <map>
 #include "CleaveSequenceMeta.h"
@@ -12,6 +12,7 @@
 #include "LineWelderHierarchyPosition.h"
 #include "CleaveSequenceCrawlDirection.h"
 
+class CategorizedLine;
 class CleaveSequence
 {
 public:
