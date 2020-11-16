@@ -164,7 +164,15 @@ void LineWelder::startWelding()
 	{
 		runMode = LineWelderRunMode::ENDING;
 		std::cout << "############# SPECIAL LOGIC NEEDED. " << std::endl;
-		findRemainingWeldingLinesClosedCircuit(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+		if (sPolyRef->massManipulationSetting == MassManipulationMode::DESTRUCTION)		// this function should only ever be called when in destruction mode;
+																						// the plan for this logic needs to be reworked a bit.
+		{
+			findRemainingWeldingLinesClosedCircuit(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+		}
+		else if (sPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
+		{
+			findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+		}
 	}
 
 
