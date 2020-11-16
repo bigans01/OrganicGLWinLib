@@ -215,11 +215,13 @@
     <ClInclude Include="LineWelderRunMode.h" />
     <ClInclude Include="MassManipulationMode.h" />
     <ClInclude Include="NextCleaveSequenceFinder.h" />
+    <ClInclude Include="PermitType.h" />
     <ClInclude Include="PointTranslationCheck.h" />
     <ClInclude Include="QuatRotationManager.h" />
     <ClInclude Include="QuatRotationPoints.h" />
     <ClInclude Include="QuatRotationRecord.h" />
     <ClInclude Include="QuatRotationType.h" />
+    <ClInclude Include="SelfComparePermit.h" />
     <ClInclude Include="SliceFinder.h" />
     <ClInclude Include="SMDebugV1.h" />
     <ClInclude Include="SMDeferredLightingComputeV1.h" />

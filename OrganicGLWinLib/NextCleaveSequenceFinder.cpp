@@ -8,11 +8,17 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 
 	// if it's the only intercept on this border line, that's ok.
 	BorderLineIntersectRecorder* intersectRecorderRef = &borderLineRef->intersectRecorder;
+
+	
+
+
 	if (intersectRecorderRef->records.size() == 1)
 	{
 		std::cout << ":::: entered branch for size == 1" << std::endl;
 
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
+		checkForperformingFirstPermitAction();
+
 		if (foundSet.empty())
 		{
 			//std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
@@ -20,29 +26,7 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		}
 		else if (!foundSet.empty())
 		{
-			auto foundSetBegin = foundSet.begin();
-			//std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
-			DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);	// there's only one sequence, so grab its DistanceToPoint value
-
-			// because the distance between the sequenceFiderStartPoint and the shortest point isn't 0, we must insert a welded line.
-			if (shortestPointStats.distance != 0.0f)	
-			{
-				FoundCleaveSequence selectedSequence(*foundSetBegin, shortestPointStats);
-				WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
-				weldedLinePoolRef->insertLineIntoPool(newLine);
-
-				selectedCleaveSequenceMeta = selectedSequence;
-				wasNextSequenceFound = true;		// this indicates that we actually found a legitimate neighbor to trace to.
-			}
-
-			// if the distance is 0, the shortestPointStats.point and sequenceFinderStartPoint are the same, so there is no line to produce.
-			// we also need to return false so that the calling LineWelder will produce the rest of the border line as the next WeldedLine.
-			// If the very first categorized line we start a LineWelder on is on a border line that contains just one record in its intersectRecorder, this would always be false.
-			else
-			{
-				//std::cout << ":::: !! shortestPointStats.point and sequenceFinderStartPoint match, returning false. " << std::endl;
-				wasNextSequenceFound = false;
-			}
+			findAndSortNeighboringCleaveSequences();
 		}
 	}
 	else if (intersectRecorderRef->records.size() > 1)
@@ -51,31 +35,16 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		//std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
 
 		std::cout << ":::: entered branch for size > 1" << std::endl;
-		//std::set<int> foundSet = intersectRecorderRef->getCleaveSequenceIDList();
-		//foundSet = intersectRecorderRef->getCleaveSequenceIDList();
-		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
-		if (finderRunMode == LineWelderRunMode::CONTINUE)	// only do this if we're in "continue" mode
-		{
-			std::cout << "******** Performing continue mode check; will remove the ID of " << finderStartingCleaveSequenceID << " from the foundSet. " << std::endl;
 
-			foundSet.erase(finderStartingCleaveSequenceID);						// remove the finder's starting cleave sequence from the found set.
-		}
-	
-		// the set contains some things.
+		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
+		checkForperformingFirstPermitAction();
+
+		/*
 		if (!foundSet.empty())
 		{
 
 			//std::cout << "!!! Note, case 2 for when records size > 1 entered. " << std::endl;
 			// testing only, print the lines.
-			auto foundSetBegin = foundSet.begin();
-			auto foundSetEnd = foundSet.end();
-			for (; foundSetBegin != foundSetEnd; foundSetBegin++)
-			{
-				//std::cout << "Set value: [" << *foundSetBegin << "]" << std::endl;
-
-				auto foundCleaveMap = (*cleaveMapRef).find(*foundSetBegin);
-				//foundCleaveMap->second.printCategorizedLines();
-			}
 
 			//intersectRecorderRef->printRecords();
 			findAndSortNeighboringCleaveSequences();
@@ -86,7 +55,48 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		{
 			//std::cout << "###### ++++ Found set was EMPTY. " << std::endl;
 		}
+		*/
+
+		if (foundSet.empty())
+		{
+			//std::cout << ">> The single CleaveSequence in this line has already been consumed, returning false." << std::endl;
+			wasNextSequenceFound = false;
+		}
+		else if (!foundSet.empty())
+		{
+			findAndSortNeighboringCleaveSequences();
+		}
+
 	}
+}
+
+void NextCleaveSequenceFinder::checkForperformingFirstPermitAction()
+{
+	if 
+	(
+		(passedPermit.first_permit_action == true)
+		&&
+		(passedPermit.permType == PermitType::TYPICAL)
+	)
+	{	
+		std::cout << ">>> Permit is typical; no self-compare permitted on first welding." << std::endl;
+		foundSet.erase(passedPermit.cleaveSequenceID);
+	}
+}
+
+bool NextCleaveSequenceFinder::checkToPerformSpecialPointFetch()
+{
+	bool result = false;
+	if
+	(
+		(passedPermit.first_permit_action == true)
+		&&
+		(passedPermit.permType == PermitType::SAME_BORDER_LINE)
+	)
+	{
+		result = true;
+	}
+	return result;
 }
 
 FoundCleaveSequence NextCleaveSequenceFinder::getSelectedCleaveSequenceMeta()
@@ -122,9 +132,22 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	auto foundSetEnd = foundSet.end();
 	for (; foundSetBegin != foundSetEnd; foundSetBegin++)
 	{
-		DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);		// Step 1
+		//DistanceToPoint shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointSelfCompare(sequenceFinderStartPoint);		// Step 1
+		DistanceToPoint shortestPointStats;
+		if (checkToPerformSpecialPointFetch() == true)
+		{
+			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointSelfCompare(sequenceFinderStartPoint);
+		}
+		else
+		{
+			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);
+		}
+
+
+
+
 		distanceToPointMap[*foundSetBegin] = shortestPointStats;																// Step 2
-		//std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
+		std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
 	}
 
 	std::map<int, DistanceToPoint> originalCopy = distanceToPointMap;	// create a copy of the map, so that when we find the nearest CleaveSequence by its ID, 
@@ -205,6 +228,21 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		distanceToPointMap.erase(*removeBegin);
 	}
 
+	// optional: print out the distances
+	/*
+	auto printBegin = distanceToPointMap.begin();
+	auto printEnd = distanceToPointMap.end();
+	std::cout << ">>>>>>>> Printing distances..." << std::endl;
+	for (; printBegin != printEnd; printBegin++)
+	{
+		std::cout << "[" << printBegin->first << "] distance: " << printBegin->second.distance << "; point ->"
+			<< printBegin->second.point.x << ", "
+			<< printBegin->second.point.y << ", "
+			<< printBegin->second.point.z << std::endl;
+	}
+	std::cout << ">>>>>>>> Ending print distances..." << std::endl;
+	*/
+
 	// get the ID of the closest cleave sequence, and return the corresponding ID that was found in the originalCopy. (Step 8)
 	float closestDistance = 1000.0f;	// start this out really high
 	int currentShortestDistanceID = 0;
@@ -220,7 +258,17 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		}
 	}
 
+	if (wasNextSequenceFound == true)
+	{
+		std::cout << "!!! Note, wasNextSequenceFound is set to TRUE" << std::endl;
+	}
+
 	// we found the shortest ID...
 	FoundCleaveSequence selectedSequence(currentShortestDistanceID, originalCopy[currentShortestDistanceID]);
 	selectedCleaveSequenceMeta = selectedSequence;
+
+	// debug call...
+	std::cout << "++++++++++ Special halt for NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()..." << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 }

@@ -192,6 +192,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 	else if (cleavingLines.size() >= 1)
 	{
 		// remember, if there are two or more cleaving lines, the first and last should contain border points.
+	// remember, if there are two or more cleaving lines, the first and last should contain border points.
 		auto firstLine = cleavingLines.begin();
 		auto lastLine = cleavingLines.rbegin();
 
@@ -201,8 +202,8 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);
@@ -230,5 +231,132 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		}
 
 	}
+	std::cout << "+++++++++++++++ (Typical) Fetch closest point halt. " << std::endl;
+	int someVal = 5;
+	std::cin >> someVal;
+
+	return returnDistanceToPoint;
+}
+
+DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor)
+{
+	DistanceToPoint returnDistanceToPoint;
+	float currentShortest = 100000.0f;
+	if (cleavingLines.size() == 1)
+	{
+		auto categorizedLineIter = cleavingLines.begin();
+		glm::vec3 pointA = categorizedLineIter->second.line.pointA;
+		glm::vec3 pointB = categorizedLineIter->second.line.pointB;
+
+		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
+		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
+		float selectedMin = std::min(distOriginToA, distOriginToB);
+
+		// is the chosen min for A?
+		if (selectedMin == distOriginToA)
+		{
+			//std::cout << "(SINGLE_LINE) Closest point is A" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointA;
+		}
+
+		// is the chosen min for B?
+		else if (selectedMin == distOriginToB)
+		{
+			//std::cout << "(SINGLE_LINE) Closest point is B" << std::endl;
+			returnDistanceToPoint.distance = selectedMin;
+			returnDistanceToPoint.point = pointB;
+		}
+
+		// special case, when they are equal
+		else if (distOriginToA == distOriginToB)
+		{
+			//std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+		}
+
+	}
+	else if (cleavingLines.size() >= 1)
+	{
+		// remember, if there are two or more cleaving lines, the first and last should contain border points.
+		auto firstLine = cleavingLines.begin();
+		auto lastLine = cleavingLines.rbegin();
+
+		glm::vec3 pointA = firstLine->second.line.getBorderPointFromSingularBorderLineCount();
+		glm::vec3 pointB = lastLine->second.line.getBorderPointFromSingularBorderLineCount();
+
+		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
+		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
+
+		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+
+
+		float selectedMin = std::min(distOriginToA, distOriginToB);
+
+		// handle case 1: distToOriginA or distToOriginB is equal to 0.
+		if
+		(
+			(distOriginToA == 0.0f)
+			||
+			(distOriginToB == 0.0f)
+		)
+		{
+			std::cout << "++++++++ fetchClosestPoint, distance logic check branch 1 entered..." << std::endl;
+			if (distOriginToA != 0.0f)
+			{
+				std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				returnDistanceToPoint.distance = distOriginToA;
+				returnDistanceToPoint.point = pointA;
+			}
+			else
+			{
+				std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				returnDistanceToPoint.distance = distOriginToB;
+				returnDistanceToPoint.point = pointB;
+			}
+			
+		}
+
+		// handle case 2: neither have a distance of 0; we just need to get the minimum
+		else
+		{
+			// is the chosen min for A?
+			if
+				(
+				(selectedMin == distOriginToA)
+					//&&
+					//(distOriginToA != 0.0f)
+					)
+			{
+				std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				returnDistanceToPoint.distance = selectedMin;
+				returnDistanceToPoint.point = pointA;
+			}
+
+			// is the chosen min for B?
+			else if
+				(
+				(selectedMin == distOriginToB)
+					//&&
+					//(distOriginToB != 0.0f)
+					)
+			{
+				std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				returnDistanceToPoint.distance = selectedMin;
+				returnDistanceToPoint.point = pointB;
+			}
+
+			// special case, when they are equal
+			else if (distOriginToA == distOriginToB)
+			{
+				//std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
+			}
+		}
+	}
+
+	std::cout << "+++++++++++++++ (Self-compare) Fetch closest point halt. " << std::endl;
+	int someVal = 5;
+	std::cin >> someVal;
+
 	return returnDistanceToPoint;
 }

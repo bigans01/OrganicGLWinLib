@@ -30,9 +30,16 @@ void LineWelder::clearLinePool()
 	weldedLines.clearPool();
 }
 
+void LineWelder::checkIfInsertionOfWeldingLineIsPermitted(int in_cleaveSequenceID)
+{
+
+}
+
 void LineWelder::startWelding()
 {
 	runMode = LineWelderRunMode::CONTINUE; // reset the value to CONTINUE.
+	permit.resetPermit();				   // must be reset before continuing.
+	//isSelfComparePermitted = false;		   // reset back to false.
 	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
 	// in addition, set that beginning cleave sequence to be the SUPER.
 
@@ -140,6 +147,7 @@ void LineWelder::startWelding()
 	CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);
 	if (currentBorderLineID != endingBorderLineID)		// only do this, if the first sequence doesn't start AND end on the same border line.
 	{
+		permit.setPermitInitialData(PermitType::TYPICAL, beginningSequenceID);
 		while (currentBorderLineID != endingBorderLineID)
 		{
 			// pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
@@ -162,41 +170,17 @@ void LineWelder::startWelding()
 
 	else if (currentBorderLineID == endingBorderLineID)		// the cleave sequence begins and ends on the same border line
 	{
-		runMode = LineWelderRunMode::ENDING;
+		runMode = LineWelderRunMode::ENDING;		// this may not need to be set here; be sure to experiment with this later. (11/16/2020)
+		permit.setPermitInitialData(PermitType::SAME_BORDER_LINE, beginningSequenceID);
 		std::cout << "############# SPECIAL LOGIC NEEDED. " << std::endl;
-		if (sPolyRef->massManipulationSetting == MassManipulationMode::DESTRUCTION)		// this function should only ever be called when in destruction mode;
-																						// the plan for this logic needs to be reworked a bit.
-		{
-			findRemainingWeldingLinesClosedCircuit(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
-		}
-		else if (sPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
-		{
-			findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
-		}
+		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
 	}
 
 
 	runMode = LineWelderRunMode::ENDING;
 	while (beginningCleaveSequenceMeta->numberOfRemainingLines > 0)
 	{
-		if (currentBorderLineID != endingBorderLineID)		// only do this, if the first sequence doesn't start AND end on the same border line.
-		{
-			findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
-		}
-		else if (currentBorderLineID == endingBorderLineID)		// the cleave sequence begins and ends on the same border line
-		{
-			//runMode = LineWelderRunMode::ENDING;
-			//std::cout << "############# SPECIAL LOGIC NEEDED. " << std::endl;
-			if (sPolyRef->massManipulationSetting == MassManipulationMode::DESTRUCTION)		// this function should only ever be called when in destruction mode;
-																							// the plan for this logic needs to be reworked a bit.
-			{
-				findRemainingWeldingLinesClosedCircuit(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
-			}
-			else if (sPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
-			{
-				findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
-			}
-		}
+		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
 		//std::cout << "##!!! Iterating ENDING while... " << std::endl;
 		//int someVal = 5;
 		//std::cin >> someVal;
@@ -260,11 +244,12 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																&metaTracker, 
 																in_leadingPoint, 
 																runMode, 
-																&weldedLines);
+																&weldedLines,
+																permit);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
-			std::cout << ":::::::: Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+			std::cout << ":::::::: (Multiple Intersect Records) Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 			std::cout << "||||||||| neighboring cleave sequence was found, stats are: " << std::endl;
 			std::cout << "| cleave sequence ID: " << discoveredSequence.cleaveSequenceID << std::endl;
 			std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
@@ -346,12 +331,13 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																&metaTracker, 
 																in_leadingPoint, 
 																runMode, 
-																&weldedLines);
+																&weldedLines, 
+																permit);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
 
-			std::cout << ":::::::: Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+			std::cout << ":::::::: (Single Intersect Record) Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 			std::cout << "||||||||| neighboring cleave sequence was found, stats are: " << std::endl;
 			std::cout << "| cleave sequence ID: " << discoveredSequence.cleaveSequenceID << std::endl;
 			std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
@@ -361,6 +347,16 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			currentHierarchyPositionOfLatestCleaveSequence = fetchedCleaveSequenceMeta->cleaveSequencePtr->hierarchyPosition;			// update the current hierarchy position to be the value of the neighboring CleaveSequence we just found.
 			fetchedCleaveSequenceMeta->determineCrawlDirectionFromPoint(discoveredSequence.cleaveSequenceTracingBeginPoint);			// for the cleave sequence we found, determine the the direction we'll go in.
 			int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfRemainingLines;
+
+			if (discoveredSequence.distance != 0.0f)
+			{
+				std::cout << "!!! Note, distance is NOT 0, need to insert a line. " << std::endl;
+				insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
+				//WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
+
+
+				//weldedLinePoolRef->insertLineIntoPool(newLine);
+			}
 
 			//std::cout << "!!! Number of lines to crawl: " << numberOfLinesToCrawl << std::endl;
 
@@ -397,7 +393,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		}
 		else if (nextCleaveSequenceFinder.wasSequenceFound() == false)
 		{
-			std::cout << "!!! The single intercept record was already consumed!!! " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
+			std::cout << "!!! The single intercept record was already consumed!!! Will insert new line... " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
 			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
@@ -423,6 +419,13 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		currentBorderLineID = nextBorderLineID;
 
 	}
+
+	// update the permit action flag to false.
+	permit.first_permit_action = false;
+
+	std::cout << "#########_> completed iteration of findRemainingWeldingLines" << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 }
 
 void LineWelder::findRemainingWeldingLinesClosedCircuit(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)

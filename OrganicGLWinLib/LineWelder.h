@@ -15,6 +15,7 @@
 #include "LineWelderHierarchyPosition.h"
 #include "LineWelderRunMode.h"
 #include "WeldedLinePool.h"
+#include "SelfComparePermit.h"
 
 class LineWelder
 {
@@ -40,9 +41,13 @@ private:
 	CleaveSequenceCandidateListMap candidateListMap;
 	glm::vec3 currentLeadingPoint;		
 	CleaveSequenceMetaTracker metaTracker;
+	SelfComparePermit permit;
 
 	LineWelderRunMode runMode = LineWelderRunMode::NOVAL;	// begins as NOVAL, but should start as CONTINUE, and end as ENDING (when we are on the last border line of the welder)
 	WeldedLinePool weldedLines;
+
+	//bool isSelfComparePermitted = false;
+	//int selfCompareCleaveSequenceID = 0;
 
 	int beginningSequenceID = 0;	// the sequence ID where the welder will start, and begin.
 	int currentBorderLineID = 0;	// the border line we'll be starting on.
@@ -54,6 +59,7 @@ private:
 	void findRemainingWeldingLinesClosedCircuit(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID);
 	void insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal);
 	void updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
+	void checkIfInsertionOfWeldingLineIsPermitted(int in_cleaveSequenceID);
 };
 
 #endif

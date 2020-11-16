@@ -34,6 +34,7 @@ public:
 	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();
 	DistanceToPoint fetchClosestPoint(glm::vec3 in_pointToCalculateFor);
+	DistanceToPoint fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor);
 };
 
 #endif

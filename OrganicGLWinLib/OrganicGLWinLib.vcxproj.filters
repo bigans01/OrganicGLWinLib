@@ -474,6 +474,12 @@
     <ClInclude Include="CoplanarRelationshipTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SelfComparePermit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PermitType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
