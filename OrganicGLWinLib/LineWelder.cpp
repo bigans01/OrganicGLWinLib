@@ -30,31 +30,17 @@ void LineWelder::clearLinePool()
 	weldedLines.clearPool();
 }
 
-void LineWelder::checkIfInsertionOfWeldingLineIsPermitted(int in_cleaveSequenceID)
-{
-
-}
-
 void LineWelder::startWelding()
 {
+	//std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;
 	runMode = LineWelderRunMode::CONTINUE; // reset the value to CONTINUE.
 	permit.resetPermit();				   // must be reset before continuing.
-	//isSelfComparePermitted = false;		   // reset back to false.
 	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
 	// in addition, set that beginning cleave sequence to be the SUPER.
-
-	//getCleaveSequenceCandidateListMap();	// create the candidates map for each border line, by calling on the SPoly to do it
-	//getCleaveSequenceMetaTracker();			// builds the meta tracker, so that we may pass it to the NextCleaveSequenceFinder
-
-	std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;
-
-	//auto cleaveBegin = sPolyRef->cleaveMap.begin();						
-
 	int nextAvailableCandidate = candidateListMap.fetchNextAvailableCandidate();
 	auto cleaveBegin = sPolyRef->cleaveMap.find(nextAvailableCandidate);
 
 	beginningSequenceID = cleaveBegin->first;							
-	//cleaveBegin->second.setSequenceAsSuper();							// set the CleaveSequence as a SUPER, so the welder knows when to end.
 
 	auto startingCategorizedLine = cleaveBegin->second.cleavingLines.rbegin();
 	auto endingCategorizedLine = cleaveBegin->second.cleavingLines.begin();
@@ -94,9 +80,9 @@ void LineWelder::startWelding()
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);	
 		currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
 
-		std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
-															<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
-		std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
+		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
+			//												<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+		//std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
 	}
 	else if (startingCategorizedLine->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
 																			// get the borders from the pointA and pointB of this line.
@@ -426,44 +412,4 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	std::cout << "#########_> completed iteration of findRemainingWeldingLines" << std::endl;
 	int someVal = 3;
 	std::cin >> someVal;
-}
-
-void LineWelder::findRemainingWeldingLinesClosedCircuit(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
-{
-	std::cout << "====> ## SPECIAL CASE ## -> Current border line ID is: " << in_currentBorderLineID << std::endl;
-	std::cout << "====> ## SPECIAL CASE ## -> Current border line planar vector is: " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.x << ", " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.y << ", " << sPolyRef->borderLines[in_currentBorderLineID].planarVector.z << std::endl;
-	
-	CleaveSequenceMeta* fetchedCleaveSequenceMeta = metaTracker.fetchCleaveSequence(in_finderStartingCleaveSequenceID);
-	glm::vec3 cleaveSequenceStartPoint = fetchedCleaveSequenceMeta->cleaveSequencePtr->cleavingLines.begin()->second.line.pointA;
-	
-	std::cout << "----> Cleave sequence start point is: " << cleaveSequenceStartPoint.x << ", " << cleaveSequenceStartPoint.y << ", " << cleaveSequenceStartPoint.z << std::endl;
-	std::cout << "----> leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
-
-	fetchedCleaveSequenceMeta->determineCrawlDirectionFromPoint(cleaveSequenceStartPoint);			// for the cleave sequence we found, determine the the direction we'll go in.
-	if (cleaveSequenceStartPoint != in_leadingPoint)
-	{
-		std::cout << "!!! Points are not equal, so let's insert a line." << std::endl;
-		insertNewWeldingLine(in_leadingPoint, cleaveSequenceStartPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
-
-		//fetchedCleaveSequenceMeta->determineCrawlDirectionFromPoint(cleaveSequenceStartPoint);			// for the cleave sequence we found, determine the the direction we'll go in.
-		int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfRemainingLines;
-		for (int x = 0; x < numberOfLinesToCrawl; x++)
-		{
-			std::cout << "| Crawling line... " << std::endl;
-			CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
-			insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
-
-			std::cout << "| Current line, point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
-			std::cout << "| Current line, point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
-
-			currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
-		}
-
-		bool isCleaveSequenceComplete = fetchedCleaveSequenceMeta->checkIfCleaveSequenceHasRunallCategorizedLines();
-		if (isCleaveSequenceComplete == true)
-		{
-			std::cout << "######### CleaveSequence is COMPLETE, removing from candidateList, the ID of: " << in_finderStartingCleaveSequenceID << std::endl;
-			candidateListMap.removeCandidateFromAllCandidateLists(in_finderStartingCleaveSequenceID);
-		}
-	}
 }

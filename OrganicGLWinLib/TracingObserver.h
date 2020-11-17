@@ -11,19 +11,20 @@
 #include "PointTranslationCheck.h"
 #include "WeldedTriangleProducer.h"
 #include "WeldedTriangleProductionResult.h"
+#include "WeldedTriangleContainer.h"
 
 class TracingObserver
 {
 	public:
 		void setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef);
-		void setWeldedTriangleVectorRef(std::vector<WeldedTriangle>* in_weldedTriangleVectorRef);
+		void setWeldedTriangleVectorRef(WeldedTriangleContainer* in_weldedTriangleVectorRef);
 		void buildNewObservation(WeldedLinePoolGuide in_poolGuide);
 		//void buildNewObservation(WeldedLine in_lineOfSight, WeldedLine in_observationEndLine);
 		TracingObserverState getCurrentObserverState();
 	private:
 		TracingObserverState currentObserverState = TracingObserverState::CONTINUE_OBSERVE;		// default value assumes there is tracing to be done, but can be set to FINISHED if there are only 3 lines in the WeldedPool.
 		WeldedLinePool* weldedLinePoolRef = nullptr;
-		std::vector<WeldedTriangle>* weldedTriangleVectorRef = nullptr;
+		WeldedTriangleContainer* weldedTriangleVectorRef = nullptr;
 		WeldedLine lineOfSight;
 		WeldedLine observationEndLine;
 		WeldedLinePoolGuide poolGuide;

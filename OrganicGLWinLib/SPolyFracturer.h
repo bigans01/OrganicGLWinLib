@@ -16,6 +16,7 @@
 class SPolyFracturer
 {
 public:
+	int originalPolyID = 0;	// the ID of the original poly, from the SPolySet.
 	SPoly* polyRef;		// a reference to the SPoly to produce a fractured version from
 	SPolyMorphTracker* morphTrackerRef;
 	PointTranslationCheck pointTranslator; // check for any translation
@@ -23,7 +24,7 @@ public:
 	QuatRotationManager rotationManager;
 	std::vector<SPoly> producedPolys;
 
-	SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef);
+	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef);
 	void runFracturing();	// run the fracturing process
 	void applyTranslationToAllPoints(glm::vec3 in_translationOffset);	// applies a point translation to all points (but not the normals)
 	void populatePointsForQuaternions();	// populates the point ref vector in rotationPoints with all cleave line points, normals, and border lines; all of these will need to be transformed by the quaternion(s)

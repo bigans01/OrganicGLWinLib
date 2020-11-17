@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "CleaveSequenceIntersectFinder.h"
 
-CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
+CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef)
 {
-	
 	sPolyRef = in_sPolyRef;
+	triangleSupergroup.setOriginalSPolyID(in_originalPolyID);
 	int cleaveMapSize = in_sPolyRef->cleaveMap.size();
 	
 	// only perform the check if the size is >= 1; we don't need to do any work if there aren't any cleave sequences.
@@ -39,28 +39,23 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(SPoly* in_sPolyRef)
 		LineWelder welder(in_sPolyRef);		
 		while (welder.getRemainingCandidateCount() > 0)
 		{
-			welder.startWelding();
-
-
-			// rebuild the winepool, until the welder has done all it's runs.
-			linePool = welder.retrieveLinePool();
-
-			int someVal = 5;
-			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Printing lines in welding pool: " << std::endl;
+			welder.startWelding();							// perform one welding run
+			linePool = welder.retrieveLinePool();			
 			linePool.printLines();
-
 			WeldedTriangleGroupBuilder groupBuilder;
 			groupBuilder.setWeldedLinePool(linePool);
-
-			//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Welded line pool set.: " << std::endl;
-
 			groupBuilder.runTracingObservers();
-			weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
+			//weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
+			triangleSupergroup.insertTriangleContainer(std::move(groupBuilder.weldedTriangleVector));
 
 			welder.clearLinePool();
 
+			std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
+			int someVal = 5;
 			std::cin >> someVal;
 		}
+
+		triangleSupergroup.printPointsInSupergroup();
 	}
 	
 }

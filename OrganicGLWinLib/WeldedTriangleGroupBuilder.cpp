@@ -33,7 +33,7 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 
 	//std::cout << "getPoolSize, post check" << std::endl;
 
-	std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleVector.size() << std::endl;
+	std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleVector.triangleMap.size() << std::endl;
 	//int someVal = 5;
 	//std::cin >> someVal;
 	

@@ -308,9 +308,11 @@
     <ClInclude Include="WeldedLinePool.h" />
     <ClInclude Include="WeldedLinePoolGuide.h" />
     <ClInclude Include="WeldedTriangle.h" />
+    <ClInclude Include="WeldedTriangleContainer.h" />
     <ClInclude Include="WeldedTriangleGroupBuilder.h" />
     <ClInclude Include="WeldedTriangleProducer.h" />
     <ClInclude Include="WeldedTriangleProductionResult.h" />
+    <ClInclude Include="WeldedTriangleSupergroup.h" />
     <ClInclude Include="WorldLight.h" />
     <ClInclude Include="WorldLightContainer.h" />
     <ClInclude Include="WorldLightContainerMap.h" />

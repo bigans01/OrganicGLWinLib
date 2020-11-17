@@ -6,6 +6,7 @@
 #include "WeldedLinePool.h"
 #include "TracingObserver.h"
 #include "WeldedLinePoolGuide.h"
+#include "WeldedTriangleContainer.h"
 #include <vector>
 
 class WeldedTriangleGroupBuilder
@@ -13,7 +14,7 @@ class WeldedTriangleGroupBuilder
 public:
 	void setWeldedLinePool(WeldedLinePool in_weldedlinePool);
 	void runTracingObservers();
-	std::vector<WeldedTriangle> weldedTriangleVector;
+	WeldedTriangleContainer weldedTriangleVector;
 private:
 	WeldedLinePool linePool;
 	TracingObserver tracer;

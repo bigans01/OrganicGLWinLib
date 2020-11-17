@@ -480,6 +480,12 @@
     <ClInclude Include="PermitType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WeldedTriangleSupergroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

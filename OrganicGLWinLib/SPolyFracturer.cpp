@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "SPolyFracturer.h"
 
-SPolyFracturer::SPolyFracturer(SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef)
+SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef)
 {
 
 	//auto truestart = std::chrono::high_resolution_clock::now();
 
+	originalPolyID = in_originalPolyID;
 	polyRef = in_sPolyRef;
 	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
 	//std::cout << "0: " << polyRef->primePoint0.x << ", " << polyRef->primePoint0.y << ", " << polyRef->primePoint0.z << std::endl;
@@ -33,8 +34,10 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 
 void SPolyFracturer::checkForCleaveIntersections()
 {
-	CleaveSequenceIntersectFinder intersectFinder(polyRef);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
+	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
 	quatPoints.clearPoints();															// clear out the quat points, so that we may insert the below.
+
+	/*
 	auto weldedTrianglesBegin = intersectFinder.weldedTriangles.begin();
 	auto weldedTrianglesEnd = intersectFinder.weldedTriangles.end();
 	for (; weldedTrianglesBegin != weldedTrianglesEnd; weldedTrianglesBegin++)
@@ -45,6 +48,9 @@ void SPolyFracturer::checkForCleaveIntersections()
 
 
 	}
+	*/
+
+	intersectFinder.triangleSupergroup.loadTrianglesIntoQuatRotationPoints(&quatPoints);
 
 	// remember, work in reverse order: quaternions get reverse-applied, then reverse any translations.
 	rotationManager.rotateToOriginalPosition();
@@ -54,6 +60,8 @@ void SPolyFracturer::checkForCleaveIntersections()
 	}
 
 	// after quaternions are reverse applied, and after any reverse translation is applied, produce the new SPolys.
+	/*
+	
 	int weldedTrianglesSize = intersectFinder.weldedTriangles.size();
 	auto pointsBegin = quatPoints.pointsRefVector.begin();
 	for (int x = 0; x < weldedTrianglesSize; x++)
@@ -70,7 +78,7 @@ void SPolyFracturer::checkForCleaveIntersections()
 		newPoly.addTriangle(newTriangle);
 		producedPolys.push_back(newPoly);
 	}
-
+	*/
 
 	quatPoints.printPoints();
 	std::cout << "####################### Poly fracturing complete..... " << std::endl;

@@ -11,16 +11,17 @@
 #include "WeldedLinePool.h"
 #include "WeldedTriangleGroupBuilder.h"
 #include <vector>
-#include "WeldedTriangle.h"
+#include "WeldedTriangleSupergroup.h"
 
 class CleaveSequenceIntersectFinder
 {
 public:
-	CleaveSequenceIntersectFinder(SPoly* in_sPolyRef);
+	CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef);
+	int originalPolyID = 0;
 	SPoly* sPolyRef;
 	void loadInterceptRecords();		// read all CleaveSequences, put the metadata about the borderlines they intercept into the borderlines.
 	WeldedLinePool linePool;
-	std::vector<WeldedTriangle> weldedTriangles;
+	WeldedTriangleSupergroup triangleSupergroup;
 };
 
 #endif

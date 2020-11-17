@@ -6,7 +6,7 @@ void TracingObserver::setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef)
 	weldedLinePoolRef = in_weldedLinePoolRef;
 }
 
-void TracingObserver::setWeldedTriangleVectorRef(std::vector<WeldedTriangle>* in_weldedTriangleVectorRef)
+void TracingObserver::setWeldedTriangleVectorRef(WeldedTriangleContainer* in_weldedTriangleVectorRef)
 {
 	weldedTriangleVectorRef = in_weldedTriangleVectorRef;
 }
@@ -91,7 +91,8 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			//std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
 			//weldedLinePoolRef->printLines();
 			WeldedTriangle finalTriangle(weldedLinePoolRef->fetchLineFromPoolViaIndex(0), weldedLinePoolRef->fetchLineFromPoolViaIndex(1), weldedLinePoolRef->fetchLineFromPoolViaIndex(2));
-			weldedTriangleVectorRef->push_back(finalTriangle);
+			//weldedTriangleVectorRef->push_back(finalTriangle);
+			weldedTriangleVectorRef->insertWeldedTriangle(finalTriangle);
 		}
 		// run logic for finished
 	}
@@ -140,7 +141,8 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 		invertedLine.swapPointsAndInvertNormal();
 
 		// insert the triangle into the WeldedTriangle map (or vector?)
-		weldedTriangleVectorRef->push_back(productionResult.producedTriangle);
+		//weldedTriangleVectorRef->push_back(productionResult.producedTriangle);
+		weldedTriangleVectorRef->insertWeldedTriangle(productionResult.producedTriangle);
 
 		//productionResult.producedTriangle.printPoints();
 		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
