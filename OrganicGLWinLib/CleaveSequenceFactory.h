@@ -20,7 +20,7 @@ class CleaveSequenceFactory
 	public:
 		void addCategorizedLine(CategorizedLine in_categorizedLine);
 		//void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines* in_borderLineArrayRef);
-		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines (&in_borderLineArrayRef)[8], MassManipulationMode in_massManipulationMode);
+		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode);
 		void printLinesInPool();
 
 
@@ -41,7 +41,7 @@ class CleaveSequenceFactory
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
 
-		void determineCyclingDirectionsForCategorizedLines(SPolyBorderLines(&in_borderLineArrayRef)[8]);
+		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
 		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
@@ -50,7 +50,7 @@ class CleaveSequenceFactory
 		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void invertAllEmptyNormals();
 		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
-		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, SPolyBorderLines(&in_borderLineArrayRef)[8]);
+		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, std::map<int, SPolyBorderLines>);
 
 		CategorizedLineSearchResult checkForNextNonboundLine(glm::vec3 in_pointToSearch);
 
@@ -58,7 +58,7 @@ class CleaveSequenceFactory
 		// one CategorizedLine with an IntersectionType of INTERCEPTS_POINT_PRECISE.
 
 		void handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
-		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines (&in_borderLineArrayRef)[8]);
+		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef);
 
 		// this function may not be needed; potentially removable after review.
 		std::map<MassManipulationMode, int> generateManipulationDirectionsForIntersectsPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal);

@@ -74,7 +74,7 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int i
 	return returnLine;
 }
 
-void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines(&in_borderLineArrayRef)[8], MassManipulationMode in_massManipulationMode)
+void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode)
 {
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
@@ -113,7 +113,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	}
 }
 
-void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(SPolyBorderLines(&in_borderLineArrayRef)[8])
+void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 {
 	// go through each partial bound.
 	auto partialsBegin = partialboundMap.begin();
@@ -227,7 +227,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLine
 	return searchResult;
 }
 
-CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, SPolyBorderLines(&in_borderLineArrayRef)[8])
+CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, std::map<int, SPolyBorderLines>)
 {
 	CategorizedLineSearchResult searchResult;
 	if (interceptsPointPreciseCount > 0)
@@ -657,7 +657,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 	}
 }
 
-void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines (&in_borderLineArrayRef)[8])
+void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 {
 	
 	//std::cout << "###::::: !!!! Running specical case for INTERCEPTS_POINT_PRECISE. " << std::endl;

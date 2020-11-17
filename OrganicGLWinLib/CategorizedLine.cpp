@@ -82,8 +82,10 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 	// do for in_lineB? maybe.
 }
 
-void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineArrayRef)[8])
+void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
+//void CategorizedLine::determineCyclingDirection(SPolyBorderLines in_borderLineArrayRef)
 {
+	
 	// logic for partial lines.
 	if (type == IntersectionType::PARTIAL_BOUND)
 	{
@@ -157,6 +159,7 @@ void CategorizedLine::determineCyclingDirection(SPolyBorderLines(&in_borderLineA
 		// will set the direction of the line...
 		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal);
 	}
+	
 }
 
 void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal)

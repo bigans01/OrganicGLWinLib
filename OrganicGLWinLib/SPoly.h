@@ -25,8 +25,12 @@ class SPoly
 {
 public:
 	SPoly();
-	STriangle triangles[8];		// 8 possible triangles
-	SPolyBorderLines borderLines[8];	// the number of secondary poly border lines. For example, a square would have 4 border lines, out of a total of 5 lines.
+	//STriangle triangles[8];		// 8 possible triangles
+	//SPolyBorderLines borderLines[8];	// the number of secondary poly border lines. For example, a square would have 4 border lines, out of a total of 5 lines.
+	//std::map<int, SPolyBorderLines>
+	std::map<int, STriangle> triangles;
+	std::map<int, SPolyBorderLines> borderLines;
+
 	int numberOfBorderLines = 0;
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)

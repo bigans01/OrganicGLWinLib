@@ -9,10 +9,10 @@
 #include <iostream>
 #include <glm/glm.hpp>
 #include "CyclingDirection.h"
-//#include "SPolyBorderLines.h"
 #include "QuatRotationManager.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
+#include <map>
 
 
 class SPolyBorderLines;
@@ -32,7 +32,7 @@ public:
 	void convertLinesToNonbound(IntersectionLine in_lineA, IntersectionLine in_lineB);
 	void convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB);
 
-	void determineCyclingDirection(SPolyBorderLines(&in_borderLineArrayRef)[8]);
+	void determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef);
 	void generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal);
 	
 	void convertLineToSlice(IntersectionLine in_slicingLine);
