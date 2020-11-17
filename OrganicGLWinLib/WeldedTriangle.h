@@ -37,6 +37,14 @@ class WeldedTriangle
 			findCentroid();
 		}
 
+		void shiftLines()
+		{
+			WeldedLine line2Copy = lines[2];
+			lines[2] = lines[1];
+			lines[1] = lines[0];
+			lines[0] = line2Copy;
+		}
+
 		bool checkIfPointIsWithinTriangle(glm::vec3 in_point)
 		{
 			bool isWithinTriangle = false;

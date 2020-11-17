@@ -4,6 +4,7 @@
 CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef)
 {
 	sPolyRef = in_sPolyRef;
+	originalPolyID = in_originalPolyID;
 	triangleSupergroup.setOriginalSPolyID(in_originalPolyID);
 	int cleaveMapSize = in_sPolyRef->cleaveMap.size();
 	
@@ -46,7 +47,15 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 			groupBuilder.setWeldedLinePool(linePool);
 			groupBuilder.runTracingObservers();
 			//weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
-			triangleSupergroup.insertTriangleContainer(std::move(groupBuilder.weldedTriangleVector));
+			//triangleSupergroup.insertTriangleContainer(std::move(groupBuilder.weldedTriangleVector));
+
+			auto containerVectorBegin = groupBuilder.weldedTriangleContainerVector.begin();
+			auto containerVectorEnd = groupBuilder.weldedTriangleContainerVector.end();
+			for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+			{
+				triangleSupergroup.insertTriangleContainer(std::move(*containerVectorBegin));
+			}
+
 
 			welder.clearLinePool();
 

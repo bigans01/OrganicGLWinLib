@@ -9,7 +9,7 @@ void WeldedTriangleGroupBuilder::setWeldedLinePool(WeldedLinePool in_weldedlineP
 void WeldedTriangleGroupBuilder::runTracingObservers()
 {
 	tracer.setWeldedLinePoolRef(&linePool);
-	tracer.setWeldedTriangleVectorRef(&weldedTriangleVector);
+	tracer.setWeldedTriangleContainerVectorRef(&weldedTriangleContainerVector);
 	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool; the initial value should always be 0
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
@@ -29,11 +29,13 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 
 	//std::cout << "getPoolSize, pre check 2" << std::endl;
 
-	acquireWeldedLinesForWindowAndBuildObservation();
+	//acquireWeldedLinesForWindowAndBuildObservation();
+	handleFinalObservation();
 
 	//std::cout << "getPoolSize, post check" << std::endl;
 
-	std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleVector.triangleMap.size() << std::endl;
+	//std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleContainerVector.triangleMap.size() << std::endl;
+
 	//int someVal = 5;
 	//std::cin >> someVal;
 	
@@ -45,12 +47,54 @@ void WeldedTriangleGroupBuilder::acquireWeldedLinesForWindowAndBuildObservation(
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
 	//tracer.buildNewObservation(linePool.fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex), linePool.fetchLineFromPoolViaIndex(poolGuide.observationEndLineIndex));
 	tracer.buildNewObservation(poolGuide);		// build it, let it run
+	weldedTriangleContainerVector.push_back(tracer.currentContainer);
 	if (tracer.getCurrentObserverState() == TracingObserverState::TERMINATED)	// if it was prematurely terminated, we must increment the currentLineOfSightIndex
 																				// before creating the new poolGuide
 	{
 		currentLineOfSightLineIndex = linePool.fetchFollowingIndex(currentLineOfSightLineIndex);
 	}
 
-
 	// if the result of the observation is a termination, fetch whatever was produced, and increment the currentObservationLineIndex by one.
+}
+
+void WeldedTriangleGroupBuilder::handleFinalObservation()
+{
+	// this would run once the observation is marked as FINISHED.
+	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
+	tracer.buildNewObservation(poolGuide);		// build it, let it run
+	auto lastContainer = weldedTriangleContainerVector.rbegin();
+	auto lastTriangleInLastContainer = lastContainer->triangleMap.rbegin();
+	auto tracerContainer = tracer.currentContainer.triangleMap.begin();	// since there's only one triangle that will be produced, just get a pointer to it.
+
+	// we will compare the points of the last line in the most recent triangle, to the first line in the newest triangle we are about to add.
+	WeldedLine* mostRecentTriangleWeldedLineRef = lastTriangleInLastContainer->second.fetchTriangleLineRef(2);	
+	WeldedLine* lastTriangleWeldedLineRef = tracerContainer->second.fetchTriangleLineRef(0);
+	bool isAligned = false;
+	while (isAligned == false)
+	{
+		if
+		(
+			// the first line in the new triangle is equivalent to the reverse of line 2 in the preceding triangle, when aligned properly.
+			(lastTriangleWeldedLineRef->pointA == mostRecentTriangleWeldedLineRef->pointB)
+			&&
+			(lastTriangleWeldedLineRef->pointB == mostRecentTriangleWeldedLineRef->pointA)
+		)
+		{
+			//std::cout << "Triangle is aligned! " << std::endl;
+			isAligned = true;
+		}
+		else
+		{
+			tracerContainer->second.shiftLines();
+		}
+
+		//std::cout << "!! Looping alignment while..." << std::endl;
+		//int someVal = 3;
+		//std::cin >> someVal;
+	}
+
+
+
+	// before we insert the last triangle, we must make sure it is aligned to the rule of the triangle fan (should be done from the previous loop)
+	lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
 }

@@ -22,7 +22,7 @@ public:
 	PointTranslationCheck pointTranslator; // check for any translation
 	QuatRotationPoints quatPoints;
 	QuatRotationManager rotationManager;
-	std::vector<SPoly> producedPolys;
+	std::vector<SPoly> producedPolys;			// SPolySupergroup would go here
 
 	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef);
 	void runFracturing();	// run the fracturing process

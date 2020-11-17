@@ -59,7 +59,12 @@ void SPolyFracturer::checkForCleaveIntersections()
 		quatPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
 	}
 
-	// after quaternions are reverse applied, and after any reverse translation is applied, produce the new SPolys.
+	// Remember: 1 WeldedTriangle = 1 STriangle
+	//			 1 WeldedTriangleContainer = 1 SPoly 
+
+
+	// after quaternions are reverse applied, and after any reverse translation is applied, produce the new SPolys; by putting them into 
+	// an SPolySupergroup.
 	/*
 	
 	int weldedTrianglesSize = intersectFinder.weldedTriangles.size();

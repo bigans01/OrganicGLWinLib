@@ -6,13 +6,14 @@ void TracingObserver::setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef)
 	weldedLinePoolRef = in_weldedLinePoolRef;
 }
 
-void TracingObserver::setWeldedTriangleVectorRef(WeldedTriangleContainer* in_weldedTriangleVectorRef)
+void TracingObserver::setWeldedTriangleContainerVectorRef(std::vector<WeldedTriangleContainer>* in_weldedTriangleVectorRef)
 {
-	weldedTriangleVectorRef = in_weldedTriangleVectorRef;
+	weldedTriangleVectorContainerRef = in_weldedTriangleVectorRef;
 }
 
 void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 {
+	currentContainer.triangleMap.clear();	// clear, before we insert new triangles.
 	poolGuide = in_poolGuide;
 	remainingRadians = 1000.0f;
 	lineOfSight = weldedLinePoolRef->fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex);
@@ -92,7 +93,8 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			//weldedLinePoolRef->printLines();
 			WeldedTriangle finalTriangle(weldedLinePoolRef->fetchLineFromPoolViaIndex(0), weldedLinePoolRef->fetchLineFromPoolViaIndex(1), weldedLinePoolRef->fetchLineFromPoolViaIndex(2));
 			//weldedTriangleVectorRef->push_back(finalTriangle);
-			weldedTriangleVectorRef->insertWeldedTriangle(finalTriangle);
+			//weldedTriangleVectorRef->insertWeldedTriangle(finalTriangle);
+			currentContainer.insertWeldedTriangle(finalTriangle);
 		}
 		// run logic for finished
 	}
@@ -142,7 +144,8 @@ bool TracingObserver::checkIfLineOfSightIsMaintained()
 
 		// insert the triangle into the WeldedTriangle map (or vector?)
 		//weldedTriangleVectorRef->push_back(productionResult.producedTriangle);
-		weldedTriangleVectorRef->insertWeldedTriangle(productionResult.producedTriangle);
+		//weldedTriangleVectorRef->insertWeldedTriangle(productionResult.producedTriangle);
+		currentContainer.insertWeldedTriangle(productionResult.producedTriangle);
 
 		//productionResult.producedTriangle.printPoints();
 		poolGuide.updateGuide(poolGuide.lineOfSightLineIndex, invertedLine);
