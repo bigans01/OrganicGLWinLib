@@ -12,6 +12,7 @@
 #include "SPolyMorphTracker.h"
 #include <chrono>
 #include <vector>
+#include "SPolySupergroup.h"
 
 class SPolyFracturer
 {
@@ -22,7 +23,8 @@ public:
 	PointTranslationCheck pointTranslator; // check for any translation
 	QuatRotationPoints quatPoints;
 	QuatRotationManager rotationManager;
-	std::vector<SPoly> producedPolys;			// SPolySupergroup would go here
+	//std::vector<SPoly> producedPolys;			// SPolySupergroup would go here
+	SPolySupergroup sPolySG;
 
 	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef);
 	void runFracturing();	// run the fracturing process

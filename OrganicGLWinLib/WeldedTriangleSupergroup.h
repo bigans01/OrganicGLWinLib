@@ -23,7 +23,7 @@ class WeldedTriangleSupergroup
 
 		void printPointsInSupergroup()
 		{
-				auto triangleContainerMapBegin = triangleContainerMap.begin();
+			auto triangleContainerMapBegin = triangleContainerMap.begin();
 			auto triangleContainerMapEnd = triangleContainerMap.end();
 			for (; triangleContainerMapBegin != triangleContainerMapEnd; triangleContainerMapBegin++)
 			{

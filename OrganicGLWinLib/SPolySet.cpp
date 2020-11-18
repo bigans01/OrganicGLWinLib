@@ -1164,7 +1164,7 @@ void SPolySet::performFracturing()
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
 			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker);
-			insertPolyFracturingResults(x, &fracturer.producedPolys);
+			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> trueelapsed = trueend - truestart;
@@ -1183,6 +1183,7 @@ void SPolySet::performFracturing()
 	}
 
 	// test only: let's make sure our resulting polys are grouped appropriately:
+	/*
 	std::cout << "################################## Printing out produced contents of the SPolySet: " << std::endl;
 	auto polyResultsBegin = polyFracturingResults.begin();
 	auto polyResultsEnd = polyFracturingResults.end();
@@ -1202,6 +1203,7 @@ void SPolySet::performFracturing()
 			currentID++;
 		}
 	}
+	*/
 
 	auto trueend = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> trueelapsed2 = trueend - truestart;
@@ -1212,19 +1214,23 @@ void SPolySet::performFracturing()
 	//std::cin >> continueVal;
 }
 
-void SPolySet::insertPolyFracturingResults(int in_originalSPolyID, std::vector<SPoly>* in_producedSPolyVectorRef)
+void SPolySet::insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup)
 {
+	/*
 	auto producedSPolyVectorBegin = (*in_producedSPolyVectorRef).begin();
 	auto producedSPolyVectorEnd = (*in_producedSPolyVectorRef).end();
 	for (; producedSPolyVectorBegin != producedSPolyVectorEnd; producedSPolyVectorBegin++)
 	{
 		polyFracturingResults[in_originalSPolyID].push_back(*producedSPolyVectorBegin);
 	}
+	*/
+	polyFracturingResults.supergroupMap[in_originalSPolyID] = in_producedSupergroup;
 }
 
 void SPolySet::insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly)
 {
-	polyFracturingResults[in_originalSPolyID].push_back(in_sPoly);
+	//polyFracturingResults[in_originalSPolyID].push_back(in_sPoly);
+	polyFracturingResults.supergroupMap[in_originalSPolyID].insertSPoly(in_sPoly);
 }
 
 void SPolySet::runTest1()		// runs use case 1 

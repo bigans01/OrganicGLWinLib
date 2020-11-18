@@ -64,26 +64,28 @@ void SPolyFracturer::checkForCleaveIntersections()
 
 
 	// after quaternions are reverse applied, and after any reverse translation is applied, produce the new SPolys; by putting them into 
-	// an SPolySupergroup.
-	/*
-	
-	int weldedTrianglesSize = intersectFinder.weldedTriangles.size();
-	auto pointsBegin = quatPoints.pointsRefVector.begin();
-	for (int x = 0; x < weldedTrianglesSize; x++)
+	// an SPolySupergroup (sPolySG)
+
+	auto triangleSupergroupBegin = intersectFinder.triangleSupergroup.triangleContainerMap.begin();
+	auto triangleSupergroupEnd = intersectFinder.triangleSupergroup.triangleContainerMap.end();
+	for (; triangleSupergroupBegin != triangleSupergroupEnd; triangleSupergroupBegin++)
 	{
-		glm::vec3 point0 = **pointsBegin;
-		pointsBegin++;
-		glm::vec3 point1 = **pointsBegin;
-		pointsBegin++;
-		glm::vec3 point2 = **pointsBegin;
-		pointsBegin++;
-		STriangle newTriangle(point0, point1, point2);
 		SPoly newPoly;
-		newPoly.polyEmptyNormal = polyRef->polyEmptyNormal;		// copy the original normal from the parent SPoly into the child SPolys.
-		newPoly.addTriangle(newTriangle);
-		producedPolys.push_back(newPoly);
+		auto triangleContainerBegin = triangleSupergroupBegin->second.triangleMap.begin();
+		auto triangleContainerEnd = triangleSupergroupBegin->second.triangleMap.end();
+		for (; triangleContainerBegin != triangleContainerEnd; triangleContainerBegin++)
+		{
+			glm::vec3 weldedTrianglePoint0 = triangleContainerBegin->second.fetchTriangleLine(0).pointA;
+			glm::vec3 weldedTrianglePoint1 = triangleContainerBegin->second.fetchTriangleLine(1).pointA;
+			glm::vec3 weldedTrianglePoint2 = triangleContainerBegin->second.fetchTriangleLine(2).pointA;
+			STriangle newTriangle(weldedTrianglePoint0, weldedTrianglePoint1, weldedTrianglePoint2);
+			newPoly.polyEmptyNormal = polyRef->polyEmptyNormal;
+			newPoly.addTriangle(newTriangle);
+		}
+		sPolySG.insertSPoly(newPoly);	// insert the new poly when we are all done
 	}
-	*/
+	//sPolySG.printSPolys();
+
 
 	quatPoints.printPoints();
 	std::cout << "####################### Poly fracturing complete..... " << std::endl;

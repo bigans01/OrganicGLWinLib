@@ -231,9 +231,13 @@
     <ClInclude Include="SPoly.h" />
     <ClInclude Include="SPolyBorderLines.h" />
     <ClInclude Include="SPolyFracturer.h" />
+    <ClInclude Include="SPolyHierarchyLocation.h" />
+    <ClInclude Include="SPolyHierarchyLocationMap.h" />
     <ClInclude Include="SPolyMorphTracker.h" />
     <ClInclude Include="SPolyRefMap.h" />
     <ClInclude Include="SPolySet.h" />
+    <ClInclude Include="SPolySupergroup.h" />
+    <ClInclude Include="SPolySupergroupManager.h" />
     <ClInclude Include="STriangle.h" />
     <ClInclude Include="STriangleLine.h" />
     <ClInclude Include="TerrainDebugGearT1.h" />

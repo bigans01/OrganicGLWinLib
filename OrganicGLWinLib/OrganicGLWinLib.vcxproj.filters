@@ -486,6 +486,18 @@
     <ClInclude Include="WeldedTriangleContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyHierarchyLocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyHierarchyLocationMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolySupergroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolySupergroupManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
