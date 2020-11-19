@@ -50,7 +50,11 @@ void CategorizedLine::convertLinesToNonbound(IntersectionLine in_lineA, Intersec
 void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB)
 {
 	// if in_lineA is the invalid one, use the points in  in_lineB.
-	if (in_lineA.lineValidity == IntersectionLineValidity::INVALID)
+	if 
+	(
+		(in_lineA.lineValidity == IntersectionLineValidity::INVALID)
+		&& (in_lineB.lineValidity == IntersectionLineValidity::VALID)
+	)
 	{
 		std::cout << "::::: Line categorization, INTERCEPT_POINT_PRECISE, lineA " << std::endl;
 
@@ -65,7 +69,11 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 		line.pointABorder = in_lineA.pointABorder;
 		line.pointBBorder = in_lineA.pointBBorder;
 	}
-	else if (in_lineB.lineValidity == IntersectionLineValidity::INVALID)
+	else if 
+	(
+		(in_lineB.lineValidity == IntersectionLineValidity::INVALID)
+		&& (in_lineA.lineValidity == IntersectionLineValidity::VALID)
+	)
 	{
 		std::cout << "::::: Line categorization, INTERCEPT_POINT_PRECISE, lineB " << std::endl;
 
@@ -79,13 +87,18 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 		line.pointABorder = in_lineB.pointABorder;
 		line.pointBBorder = in_lineB.pointBBorder;
 	}
+	else
+	{
+		std::cout << "!!!!!!!! ++++ > WARNING, both lines considered invalid! " << std::endl;
+	}
 	// do for in_lineB? maybe.
 }
 
 void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 //void CategorizedLine::determineCyclingDirection(SPolyBorderLines in_borderLineArrayRef)
 {
-	
+	std::cout << "Determining cycling direction for this line; the line's parent SPoly is: " << parentPoly << std::endl;
+
 	// logic for partial lines.
 	if (type == IntersectionType::PARTIAL_BOUND)
 	{
@@ -170,7 +183,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	// is in_borderLineA's point B equal to in_borderLineB's point A?
 
-	/*
+	
 	std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
@@ -179,7 +192,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
 	std::cout << "(Pre-Alter) || ::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
-	*/
+	
 
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;

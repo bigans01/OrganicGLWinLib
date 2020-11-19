@@ -24,6 +24,7 @@ public:
 	glm::vec3 emptyNormal;
 	CyclingDirection direction = CyclingDirection::NOVAL;	// default value is NOVAL; may be set otherwise.
 	int cleaveSequenceID = 0;						// represents the ID that this categorized line uses in the CleaveSequence it goes to 
+	int parentPoly = 0;								// the index ID of the SPoly in the SPolySet that spawned this line.
 													//	(that is, if it even gets to a CleaveSequence; it may be dropped/deleted/discarded before getting there.).
 
 	void convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB, glm::vec3 in_newPointForLineA);

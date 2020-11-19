@@ -40,6 +40,7 @@ class CleaveSequenceFactory
 		void insertPartialBoundLine(CategorizedLine in_line);
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
+		void clipTwinCategorizedLinesofInterceptPointPrecise();
 
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 

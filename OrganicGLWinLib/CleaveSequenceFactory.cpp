@@ -45,6 +45,53 @@ void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line
 	interceptsPointPreciseMap[interceptsPointPreciseCount++] = in_line;
 }
 
+void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
+{
+	std::map<int, int> twinCounterMap;
+	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
+	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
+	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
+	{
+		twinCounterMap[interceptsPreciseBegin->second.parentPoly]++;
+	}
+
+	std::set<int> removalSet;
+	auto twinCounterMapBegin = twinCounterMap.begin();
+	auto twinCounterMapEnd = twinCounterMap.end();
+	for (; twinCounterMapBegin != twinCounterMapEnd; twinCounterMapBegin++)
+	{
+		if (twinCounterMapBegin->second == 2)	// there's a twin found.
+		{
+			removalSet.insert(twinCounterMapBegin->first);		// insert the ID of the parent poly into the removal set, as we use this in the next step.
+		}
+	}
+
+	std::vector<int> mappedValuesToRemove;
+	auto removalRunBegin = interceptsPointPreciseMap.begin();
+	auto removalRunEnd = interceptsPointPreciseMap.end();
+	for (; removalRunBegin != removalRunEnd; removalRunBegin++)
+	{
+		auto wasFoundInSet = removalSet.find(removalRunBegin->second.parentPoly);
+		if (wasFoundInSet != removalSet.end())
+		{
+			std::cout << "!!! Found a twin to remove..." << std::endl;
+			mappedValuesToRemove.push_back(removalRunBegin->first);
+		}
+	}
+
+	auto erasingBegin = mappedValuesToRemove.begin();
+	auto erasingEnd = mappedValuesToRemove.end();
+	for (; erasingBegin != erasingEnd; erasingBegin++)
+	{
+		interceptsPointPreciseMap.erase(*erasingBegin);
+		interceptsPointPreciseCount--;
+	}
+
+	std::cout << "!!! clipping complete, size of interceptsPointPreciseMap is: " << interceptsPointPreciseMap.size() << std::endl;
+	int someValAwYeah = 7;
+	std::cin >> someValAwYeah;
+}
+
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 {
 	CategorizedLine returnLine = nonboundMap[in_fetchIndex];
@@ -79,7 +126,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
 
-	//std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+	std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
@@ -98,6 +145,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount == 0)	
 	)
 	{
+		std::cout << ">>> Handling typical scenario" << std::endl;
+
 		handleScenarioTypical(in_cleaveMapRef);
 	}
 
@@ -109,8 +158,18 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 
+		std::cout << ">>> Handling precise scenario" << std::endl;
+
 		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
 	}
+	else
+	{
+		std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
+		int someVal = 3;
+		std::cin >> someVal;
+	}
+
+	std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
 }
 
 void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
@@ -120,20 +179,32 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
+		std::cout << ">>>>>>> Determining partial cycling direction..." << std::endl;
 		partialsBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
 
 	// go through each intersects_point_precise
+	std::cout << ":::::::::: Points precise map size: " << interceptsPointPreciseMap.size() << std::endl;
+	std::cout << "....enter number to continue. " << std::endl;
+
+	// check if there's a condition where there are exactly two categorized lines having the IntersectionType, INTERCEPTS_POINT_PRECISE, and 
+	// which belong to the same parent poly. If this condition is TRUE, these lines must be removed.
+	clipTwinCategorizedLinesofInterceptPointPrecise();
+
+	int someVal8 = 7;
+	std::cin >> someVal8;
+
 	auto pointsPreciseBegin = interceptsPointPreciseMap.begin();
 	auto pointsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; pointsPreciseBegin != pointsPreciseEnd; pointsPreciseBegin++)
 	{
+		std::cout << ">>>>>>> Determining points precise cycling direction..." << std::endl;
 		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
 
-	//std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
-	//int someVal = 3;
-	//std::cin >> someVal;
+	std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 
 }
 

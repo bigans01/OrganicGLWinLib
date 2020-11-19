@@ -13,8 +13,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	int totalNumberOfLines = lineMap.size();										// get the total number of lines
 	int totalNumberOfBorderLineIntercepts = findNumberOfBorderLineIntercepts();		// get the total number of intercepts
 
-	//std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
-	//std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
+	std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
+	std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
 
 	//std::cout << "! Line 0 is: " << std::endl;
 	//std::cout << "## Point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
@@ -140,10 +140,14 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	)
 	{
 		int someVal = 3;
-		//std::cout << "++++++++++ point check halting, points are same! " << std::endl;
+		std::cout << "++++++++++ point check halting, points are same! " << std::endl;
 		//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
 		//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
 		//std::cin >> someVal;
+		returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
+	}
+	if (totalNumberOfLines == 0)
+	{
 		returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
 	}
 
