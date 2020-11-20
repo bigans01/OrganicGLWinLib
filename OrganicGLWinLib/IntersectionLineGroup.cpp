@@ -7,11 +7,36 @@ void IntersectionLineGroup::addIntersectionLine(IntersectionLine in_intersection
 	//std::cout << "Intersection line border value is: " << in_intersectionLine.numberOfBorderLines << std::endl;
 }
 
+bool IntersectionLineGroup::performInvalidCheck()
+{
+	bool isInvalidPossible = false;
+	if (lineMap.size() == 2)
+	{
+		std::cout << "####~~~~~~~~ Line map size is 2 (performInvalidCheck); printing lines: " << std::endl;
+		for (int x = 0; x < 2; x++)
+		{
+			std::cout << "[" << x << "], point A: " << lineMap[x].pointA.x << ", " << lineMap[x].pointA.y << ", " << lineMap[x].pointA.z
+				<< " | point B: " << lineMap[x].pointB.x << ", " << lineMap[x].pointB.y << ", " << lineMap[x].pointB.z << std::endl;
+		}
+
+		//if (lineMap[0].pointB == lineMap[0].pointA)
+		if (lineMap[0].pointA == lineMap[1].pointA)
+		{
+			std::cout << "NOTE! invalid is possible..." << std::endl;
+			isInvalidPossible = true;
+		}
+
+	}
+	return isInvalidPossible;
+}
+
 IntersectionLine IntersectionLineGroup::mergeLines()
 {
 	IntersectionLine returnLine;
 	int totalNumberOfLines = lineMap.size();										// get the total number of lines
 	int totalNumberOfBorderLineIntercepts = findNumberOfBorderLineIntercepts();		// get the total number of intercepts
+
+	bool invalidPossibilityFlag = performInvalidCheck();
 
 	std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
 	std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
@@ -134,6 +159,9 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		//!((returnLine.pointA.x == 0) && (returnLine.pointA.y == 0) && (returnLine.pointA.z == 0))
 		(totalNumberOfLines > 0)
 
+		&&
+		(invalidPossibilityFlag == true)
+
 		//&&
 
 		//!((returnLine.pointB.x == 0) && (returnLine.pointB.y == 0) && (returnLine.pointB.z == 0))
@@ -148,7 +176,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	}
 	if (totalNumberOfLines == 0)
 	{
-		returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
+		//std::cout << "++++++++++ invalid, due to 0 lines! " << std::endl;
+		//returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
 	}
 
 	std::cout << "#### Return line stats ---> " << std::endl;

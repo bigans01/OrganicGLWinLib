@@ -47,6 +47,7 @@ public:
 	float dot(glm::vec3 in_A, glm::vec3 in_B);
 	double doubledot(glm::vec3 in_A, glm::vec3 in_B);
 	CategorizedLine determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_lineA, IntersectionLine in_lineB, int in_groupID, glm::vec3 in_polyBEmptyNormal);
+	bool checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB);
 	glm::vec3 findSecondPointForLine(glm::vec3 in_beginPoint, glm::vec3 in_candidate1, glm::vec3 in_candidate2);
 	glm::vec3 roundPointToHundredths(glm::vec3 in_point);
 	int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);

@@ -135,6 +135,8 @@ void SPolySet::runPolyComparison()
 
 		secondaryPolys[x].buildCleaveSequences();
 		//secondaryPolys[x].printAllCleaveLines();
+		secondaryPolys[x].printAllCleaveLines();
+
 		std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		int someVal = 3;
 		std::cin >> someVal;
@@ -286,6 +288,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				if (intersectResult.wasIntersectFound == 2)
 				{
 					std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle)" << std::endl;
+					int someVal = 6;
+					std::cin >> someVal;
 				}
 				
 			}
@@ -357,147 +361,253 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
 	glm::vec3 point2 = in_triangle.triangleLines[2].pointA;
 
-	/*
-	if
-	(
-		(in_triangleLine.pointA == point0)
-		||
-		(in_triangleLine.pointA == point1)
-		||
-		(in_triangleLine.pointA == point2)
-	)
+
+	int matchCount = 0;
+
+	// attempt match of point A of the triangleLine to all 3 points:
+	for (int x = 0; x < 3; x++)
 	{
-
-	}
-	*/
-
-
-	int tempDebug = 0;
-	/*
-	if
-	(
-		//(in_triangleLine.pointA.x == 4.0f)
-		//&&
-		//(in_triangleLine.pointA.y == 0.0f)
-		//&&
-		//(in_triangleLine.pointA.z == 0.0f)
-
-		//&&
-
-		//(in_triangleLine.pointB.x == 4.0f)
-		//&&
-		//(in_triangleLine.pointB.y == 4.0f)
-		//&&
-		//(in_triangleLine.pointB.z == 0.0f)
-	)
-	{
-		std::cout << "######## checkIfLineIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
-		std::cout << "Points of triangle line are: " << std::endl;
-		std::cout << "Point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
-		std::cout << "Point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
-		tempDebug = 1;
-	}
-	*/
-
-	/*
-	std::cout << "##########################################" << std::endl;
-	std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
-	std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
-	std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
-	std::cout << "intersecting line, point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
-	std::cout << "intersecting line, point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
-	std::cout << "##########################################" << std::endl;
-	*/
-
-	glm::vec3 u = point1 - point0;	// u vector
-	glm::vec3 v = point2 - point0;	// v " 
-
-	//std::cout << "U: " << u.x << ", " << u.y << ", " << u.z << std::endl;
-	//std::cout << "V: " << v.x << ", " << v.y << ", " << v.z << std::endl;
-	glm::vec3 N = cross(u, v);		// the normal of the triangle
-	//N.z = -1.0f;
-
-
-	glm::vec3 dir = in_triangleLine.pointB - in_triangleLine.pointA;
-	glm::vec3 w0 = in_triangleLine.pointA - point0;
-
-	std::cout << "Normal: " << N.x << ", " << N.y << ", " << N.z << std::endl;
-	std::cout << "Dir: " << dir.x << ", " << dir.y << ", " << dir.z << std::endl;
-
-	float a = -dot(N, w0);
-	float b = dot(N, dir);
-	double doubleb = doubledot(N, dir);
-
-
-	//std::cout <<std::setprecision(9);
-	std::cout << "(a) is: " << a << std::endl;
-	std::cout << "(b) is: " << b << std::endl;
-	std::cout << "(doubleb) is: " << doubleb << std::endl;
-
-	// remember, if SMALL_NUM is too sensitive (i.e., too precise in the IEEE float), there may be a "miss" on detecting when
-	// the passed-in STriangleLine's two points exactly match two points in the STriangle. 
-	if (fabs(b) < SMALL_NUM) {     // ray is  parallel to triangle plane
-
-		std::cout << "!!! Logic for less than SMALL_NUM entered....enter number to continue. " << std::endl;
-		int someValAwesome = 3;
-		std::cin >> someValAwesome;
-
-		//if (a == 0)                 // ray lies in triangle plane
-		if (a < SMALL_NUM)
-			//return 2;
-			returnResult.setResult(2);
-		//else return 0;              // ray disjoint from plane
-		else returnResult.setResult(0);
+		if (in_triangleLine.pointA == in_triangle.triangleLines[x].pointA)
+		{
+			matchCount++;
+		}
 	}
 
-	float r = a / b;
-	if (r < 0.0)
-		//return 0;
-		returnResult.setResult(0);
-
-	intersect_candidate = in_triangleLine.pointA + (r * dir);
-
-	// is I inside T?
-	glm::vec3 w;
-	float    uu, uv, vv, wu, wv, D;
-	uu = dot(u, u);
-	uv = dot(u, v);
-	vv = dot(v, v);
-	w = intersect_candidate - point0;
-	wu = dot(w, u);
-	wv = dot(w, v);
-	D = uv * uv - uu * vv;
-
-	// get and test parametric coords
-	float s, t;
-	s = (uv * wv - vv * wu) / D;
-	if (s < 0.0 || s > 1.0)         // I is outside T
-		//return 0;
-		returnResult.setResult(0);
-	t = (uv * wu - uu * wv) / D;
-	if (t < 0.0 || (s + t) > 1.0)  // I is outside T
-		//return 0;
-		returnResult.setResult(0);
-	//return 1;
-	returnResult.setResult(1);
-	returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
-	returnResult.borderLineID = in_triangleLine.borderLineID;
-	returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
-
-
-
-	std::cout << "Resulting intersect attempt value: " << returnResult.wasIntersectFound << std::endl;
-	std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
-
-	if (tempDebug == 1)
+	// ...of point B
+	for (int x = 0; x < 3; x++)
 	{
+		if (in_triangleLine.pointB == in_triangle.triangleLines[x].pointA)
+		{
+			matchCount++;
+		}
+	}
+
+	std::cout << "##### Matchcount is: " << matchCount << std::endl;
+
+	// condition one, matchCount is 2
+	if (matchCount == 2)
+	{
+		std::cout << "~~~~~~~~~~~~~~~~ note special case; the triangleLine matches a line exactly in the incoming triangle. flagging as 2." << std::endl;
+	}
+
+	// condition two, matchCount is 1
+	else if (matchCount == 1)
+	{
+
+		if
+			(
+			(in_triangleLine.pointA == point0)
+				||
+				(in_triangleLine.pointA == point1)
+				||
+				(in_triangleLine.pointA == point2)
+
+				||
+				(in_triangleLine.pointB == point0)
+				||
+				(in_triangleLine.pointB == point1)
+				||
+				(in_triangleLine.pointB == point2)
+				)
+		{
+			if (in_triangleLine.pointA == point0)
+			{
+				std::cout << "!-> Intersection notice: point A of the line, equals point0." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point0);					// the intercept point should be rounded to hundredths!
+			}
+			else if (in_triangleLine.pointA == point1)
+			{
+				std::cout << "!-> Intersection notice: point A of the line, equals point1." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point1);					// the intercept point should be rounded to hundredths!
+			}
+
+			else if (in_triangleLine.pointA == point2)
+			{
+				std::cout << "!-> Intersection notice: point A of the line, equals point2." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point2);					// the intercept point 
+			}
+			else if (in_triangleLine.pointB == point0)
+			{
+				std::cout << "!-> Intersection notice: point B of the line, equals point0." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point0);					// the intercept point 
+			}
+			else if (in_triangleLine.pointB == point1)
+			{
+				std::cout << "!-> Intersection notice: point B of the line, equals point1." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point1);					// the intercept point 
+			}
+			else if (in_triangleLine.pointB == point2)
+			{
+				std::cout << "!-> Intersection notice: point B of the line, equals point2." << std::endl;
+				returnResult.setResult(1);
+				returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+				returnResult.borderLineID = in_triangleLine.borderLineID;
+				returnResult.intersectedPoint = roundPointToHundredths(point2);					// the intercept point 
+			}
+
+
+		}
+		
+		
+		//return someVal;
+	}
+	else if (matchCount == 0)
+	{
+
+
+		int tempDebug = 0;
+		/*
+		if
+		(
+			//(in_triangleLine.pointA.x == 4.0f)
+			//&&
+			//(in_triangleLine.pointA.y == 0.0f)
+			//&&
+			//(in_triangleLine.pointA.z == 0.0f)
+
+			//&&
+
+			//(in_triangleLine.pointB.x == 4.0f)
+			//&&
+			//(in_triangleLine.pointB.y == 4.0f)
+			//&&
+			//(in_triangleLine.pointB.z == 0.0f)
+		)
+		{
+			std::cout << "######## checkIfLineIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
+			std::cout << "Points of triangle line are: " << std::endl;
+			std::cout << "Point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+			std::cout << "Point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+			tempDebug = 1;
+		}
+		*/
+
+		/*
+		std::cout << "##########################################" << std::endl;
+		std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+		std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+		std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+		std::cout << "intersecting line, point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+		std::cout << "intersecting line, point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+		std::cout << "##########################################" << std::endl;
+		*/
+
+		glm::vec3 u = point1 - point0;	// u vector
+		glm::vec3 v = point2 - point0;	// v " 
+
+		//std::cout << "U: " << u.x << ", " << u.y << ", " << u.z << std::endl;
+		//std::cout << "V: " << v.x << ", " << v.y << ", " << v.z << std::endl;
+		glm::vec3 N = cross(u, v);		// the normal of the triangle
+		//N.z = -1.0f;
+
+
+		glm::vec3 dir = in_triangleLine.pointB - in_triangleLine.pointA;
+		glm::vec3 w0 = in_triangleLine.pointA - point0;
+
+		std::cout << "Normal: " << N.x << ", " << N.y << ", " << N.z << std::endl;
+		std::cout << "Dir: " << dir.x << ", " << dir.y << ", " << dir.z << std::endl;
+
+		float a = -dot(N, w0);
+		float b = dot(N, dir);
+		double doubleb = doubledot(N, dir);
+
+
+		//std::cout <<std::setprecision(9);
+		std::cout << "(a) is: " << a << std::endl;
+		std::cout << "(b) is: " << b << std::endl;
+		std::cout << "(doubleb) is: " << doubleb << std::endl;
+
+		// remember, if SMALL_NUM is too sensitive (i.e., too precise in the IEEE float), there may be a "miss" on detecting when
+		// the passed-in STriangleLine's two points exactly match two points in the STriangle. 
+		if (fabs(b) < SMALL_NUM) {     // ray is  parallel to triangle plane
+
+			std::cout << "!!! Logic for less than SMALL_NUM entered....enter number to continue. " << std::endl;
+			int someValAwesome = 3;
+			std::cin >> someValAwesome;
+
+			//if (a == 0)                 // ray lies in triangle plane
+			if (a < SMALL_NUM)
+				//return 2;
+				returnResult.setResult(2);
+			//else return 0;              // ray disjoint from plane
+			else returnResult.setResult(0);
+		}
+
+		float r = a / b;
+		if (r < 0.0)
+		{
+			std::cout << "!! Note: r is  less than 0. " << std::endl;
+			//return 0;
+			returnResult.setResult(0);
+		}
+
+		intersect_candidate = in_triangleLine.pointA + (r * dir);
+
+		// is I inside T?
+		glm::vec3 w;
+		float    uu, uv, vv, wu, wv, D;
+		uu = dot(u, u);
+		uv = dot(u, v);
+		vv = dot(v, v);
+		w = intersect_candidate - point0;
+		wu = dot(w, u);
+		wv = dot(w, v);
+		D = uv * uv - uu * vv;
+
+		// get and test parametric coords
+		float s, t;
+		s = (uv * wv - vv * wu) / D;
+
+		std::cout << "--> Value of s: " << s << std::endl;
+		if (s < 0.0 || s > 1.0)         // I is outside S
+			//return 0;
+		{
+			std::cout << "!! Note: I is outside S. " << std::endl;
+			returnResult.setResult(0);
+		}
+		t = (uv * wu - uu * wv) / D;
+
+		std::cout << "--> Value of t: " << t << std::endl;
+		if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+			//return 0;
+		{
+			std::cout << "!! Note: I is outside T. " << std::endl;
+			returnResult.setResult(0);
+		}
+		//return 1;
+		returnResult.setResult(1);
+		returnResult.wasIntersectOnBorderLine = in_triangleLine.isBorderLine;
+		returnResult.borderLineID = in_triangleLine.borderLineID;
+		returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+
+
+
+		std::cout << "Resulting intersect attempt value: " << returnResult.wasIntersectFound << std::endl;
 		std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
-		int someVal = 3;
-		std::cin >> someVal;
-	}
 
+		if (tempDebug == 1)
+		{
+			std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
+		}
+	}
 	return returnResult;
-	//return someVal;
 }
 
 IntersectionResult SPolySet::checkIfLineIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_triangleLine)
@@ -653,6 +763,33 @@ double SPolySet::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 	return x_multiplied + y_multiplied + z_multiplied;
 }
 
+bool SPolySet::checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB)
+{
+	//std::cout << ">>>>> checking for same point condition..." << std::endl;
+	//std::cout << "line A -> point A: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
+	//std::cout << "line A -> point B: " << in_lineA.pointB.x << ", " << in_lineA.pointB.y << ", " << in_lineA.pointB.z << std::endl;
+	//std::cout << "line B -> point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointB.z << std::endl;
+	//std::cout << "line B -> point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
+
+	bool wasDetected = false;
+	if
+	(
+		(in_lineA.pointA == in_lineA.pointB)		// the line's point's equal each other
+		&&
+		(in_lineB.pointA == in_lineB.pointB)		// ...
+		&&
+		(in_lineA.pointA == in_lineB.pointA)		// and all the points are the same.
+
+	)
+	{
+		std::cout << "############################################### Notice: checkForSameCondition was found as true; no intersection exists. " << std::endl;
+		int stupidVal = 3;
+		std::cin >> stupidVal;
+		wasDetected = true;
+	}
+	return wasDetected;
+}
+
 CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_hostLine, IntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal)
 {
 	CategorizedLine returnLine;
@@ -662,24 +799,438 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 
 	//std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
 
-	// ROOT CASE 1: Both lines are considered valid.
-	if
-	(
-		(in_hostLine.lineValidity == IntersectionLineValidity::VALID)
-		//&&
-		//(in_guestLine.lineValidity == IntersectionLineValidity::VALID)
-	)
+	//std::cout << "## !! Silly test: " << std::endl;
+	//int someVal7 = 3;
+	//in_hostLine.lineGroupID = 7;
+	//std::cout << "## Host line group ID is now: " << in_hostLine.lineGroupID << std::endl;
+	//std::cin >> someVal7;
+
+	// very first check: check for exact same point condition.
+	bool conditionCheck = checkForSamePointCondition(in_hostLine, in_guestLine);
+	if (conditionCheck == false)
 	{
 
-		// SPECIAL CASE: the guest line is invalid, but the host is not. The host line is a partial bound.
+		// ROOT CASE 1: Both lines are considered valid.
 		if
-		(
-			(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
-		)
+			(
+			(in_hostLine.lineValidity == IntersectionLineValidity::VALID)
+				//&&
+				//(in_guestLine.lineValidity == IntersectionLineValidity::VALID)
+				)
 		{
-			
-			std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
 
+			// SPECIAL CASE: the guest line is invalid, but the host is not. The host line is a partial bound.
+			if
+				(
+				(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+					)
+			{
+
+				std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++ HOST-VALID, GUEST-INVALID, branch entered..." << std::endl;
+				std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
+
+
+				std::cout << "++++++Host line stats: " << std::endl;
+				std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
+				std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+
+				std::cout << "++++++Guest line stats: " << std::endl;
+				std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
+				std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+
+				std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+				std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+				std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
+				std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
+
+
+				std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+				std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
+				std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
+
+				std::cout << ":::: END TEST. " << std::endl;
+
+				returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+				returnLine.line.numberOfBorderLines = 1;
+				returnLine.line.isPointAOnBorder = 1;
+				returnLine.line.pointABorder = in_hostLine.pointABorder;
+				returnLine.line.pointA = in_hostLine.pointA;
+				returnLine.line.pointB = in_hostLine.pointB;
+				returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+
+
+
+				/*
+				bool isConversionToInterceptsPointPreciseValid = true;
+				if
+				(
+					(
+						(in_guestLine.numberOfBorderLines == 0)
+						&&
+						(in_guestLine.pointA == in_guestLine.pointB)
+					)
+
+
+					||
+
+					(
+						(in_hostLine.numberOfBorderLines == 0)
+						&&
+						(in_hostLine.pointA == in_hostLine.pointB)
+					)
+				)
+				{
+					std::cout << "!!!!! NOTICE: this isn't a valid selection for INTERCEPTS_POINT_PRECISE; the CategorizedLine will stay as IntersectionType::NONE." << std::endl;
+					isConversionToInterceptsPointPreciseValid = false;
+				}
+
+
+				if (isConversionToInterceptsPointPreciseValid == true)
+				{
+					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+					returnLine.line.numberOfBorderLines = 1;
+					returnLine.line.isPointAOnBorder = 1;
+					returnLine.line.pointABorder = in_hostLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.pointA;
+					returnLine.line.pointB = in_hostLine.pointB;
+					returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+				}
+
+				else if (isConversionToInterceptsPointPreciseValid == false)
+				{
+					returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
+					returnLine.line.lineGroupID = in_groupID;
+					returnLine.emptyNormal = in_polyBEmptyNormal;
+				}
+				*/
+
+
+				/*
+				if (isConversionToInterceptsPointPreciseValid == true)
+				{
+
+					returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
+					returnLine.line.lineGroupID = in_groupID;
+					returnLine.emptyNormal = in_polyBEmptyNormal;
+				}
+				*/
+				int someVal = 3;
+				std::cin >> someVal;
+			}
+
+
+			// CASE 1.1: The host is SLICED (A_SLICE); the host triangle line has two border lines in it
+			//std::cout << "Line A, " << in_hostLine.numberOfBorderLines << std::endl;
+			//std::cout << "Line B, " << in_guestLine.numberOfBorderLines << std::endl;
+			else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
+			{
+
+
+				returnLine.convertLineToSlice(in_hostLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
+			}
+
+			// CASE 1.2: the guest triangle is SLICED -- but the triangle being sliced only contains one border line. The host "engulfs" B, in one of two ways; 
+			// B may have 1 to 2 border lines being hit, but none of the border lines in A are hit. 
+			// This means: A had no border lines go through B, but B had one to two border lines go through A. So B is considered "SLICED." 
+			//          
+			else if
+				(
+				(in_guestLine.numberOfBorderLines >= 1)
+					&&
+					(in_hostLine.numberOfBorderLines == 0)
+					)
+			{
+				/*
+				std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
+				std::cout << "####### halting, temporary, to analyze lines..." << std::endl;
+
+				std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+				std::cout << "Host line, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+				std::cout << "Host A, number of points: " << in_hostLine.numberOfPoints << std::endl;
+				std::cout << "Host A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+
+				std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+				std::cout << "Guest line, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				std::cout << "Guest line, number of points: " << in_guestLine.numberOfPoints << std::endl;
+				std::cout << "Guest line, number of border lines: " << in_guestLine.numberOfPoints << std::endl;
+				*/
+
+				IntersectionLine newLine;
+				if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
+				{
+					newLine = in_guestLine;
+					newLine.pointB = in_hostLine.pointA;
+					newLine.numberOfPoints = 2;
+				}
+				else if (in_guestLine.numberOfPoints == 2)
+				{
+					newLine = in_guestLine;
+				}
+
+
+				//int someVal = 3;
+				//std::cin >> someVal;
+
+				//returnLine.convertLineToNonbound(in_guestLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
+				returnLine.convertLineToNonbound(newLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
+			}
+
+			// CASE 1.3: PARTIAL_BOUND -- condition 1
+			else if
+				(
+				(in_guestLine.numberOfBorderLines == 2)
+					&&
+					(in_hostLine.numberOfBorderLines == 1)
+					)
+			{
+				//std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
+
+				//std::cout << "TA p0: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+				//std::cout << "TB p0: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+				//std::cout << "TB p1: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				//std::cout << "Line A stats: point A border = " << in_hostLine.isPointAOnBorder << " | point B border = " << in_hostLine.isPointBOnBorder << std::endl;
+				//std::cout << "Line B stats: point A border = " << in_guestLine.isPointAOnBorder << " | point B border = " << in_guestLine.isPointBOnBorder << std::endl;
+
+				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				//std::cout << "Second point is: " << newSecondPoint.x << ", " << newSecondPoint.y << ", " << newSecondPoint.z << std::endl;
+				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);	// convert to PARTIAL_BOUND
+			}
+			// CASE 1.4: PARTIAL_BOUND -- condition 1
+			else if
+				(
+				(in_hostLine.numberOfBorderLines == 1)
+					&&
+					(in_guestLine.numberOfBorderLines == 1)
+					)
+			{
+				//std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
+				//std::cout << ":: Line A point count: " << in_hostLine.numberOfPoints << std::endl;
+				//std::cout << ":: Line B point count: " << in_guestLine.numberOfPoints << std::endl;
+				//std::cout << ":: Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+				//std::cout << ":: Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				/*
+				std::cout << "PARTIAL_BOUND via condition 3.2 detected. " << std::endl;
+				std::cout << "Line A point count: " << in_hostLine.numberOfPoints << std::endl;
+				std::cout << "Line B point count: " << in_guestLine.numberOfPoints << std::endl;
+				std::cout << "Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+				std::cout << "Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				std::cout << "-----Borders: " << std::endl;
+				std::cout << "Line A: " << std::endl;
+				std::cout << "Point A: " << in_hostLine.pointABorder << std::endl;
+				std::cout << "Point B: " << in_hostLine.pointBBorder << std::endl;
+				std::cout << "Line B: " << std::endl;
+				std::cout << "Point A: " << in_guestLine.pointABorder << std::endl;
+				std::cout << "Point B: " << in_guestLine.pointBBorder << std::endl;
+				*/
+				if (in_hostLine.numberOfPoints == 2)	// one of these should be 2
+				{
+					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+					returnLine.line.numberOfBorderLines = 1;
+					returnLine.line.isPointAOnBorder = 1;
+					returnLine.line.pointABorder = in_hostLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.pointA;
+					returnLine.line.pointB = in_hostLine.pointB;
+					returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+				}
+				else if (in_guestLine.numberOfPoints == 2)
+				{
+					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+					returnLine.line.numberOfBorderLines = 1;
+					returnLine.line.isPointAOnBorder = 1;
+					returnLine.line.pointABorder = in_hostLine.pointABorder;
+					returnLine.line.pointA = in_guestLine.pointA;
+					returnLine.line.pointB = in_guestLine.pointB;
+					returnLine.line.intersectedSecondaryID = in_guestLine.intersectedSecondaryID;
+				}
+				//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
+				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
+				//std::cout << "CASE 3.2: " << std::endl;
+				//std::cout << "!!! Return line border is: " << returnLine.line.pointABorder << std::endl;
+
+			}
+
+			// CASE 1.5 PARTIAL_BOUND -- condition 2
+			else if
+				(
+				(in_hostLine.numberOfBorderLines == 1)		// A hit's B, but it's only one border line
+					&&
+					(in_guestLine.numberOfBorderLines == 0)		// B "engulfs" A, but B has no border lines going through A
+					)
+			{
+
+
+				returnLine.type = IntersectionType::PARTIAL_BOUND;
+				returnLine.line.numberOfBorderLines = 1;
+				/*
+				if (in_hostLine.isPointAOnBorder == 1)
+				{
+					returnLine.line.isPointAOnBorder = 1;
+				}
+				else if (in_hostLine.isPointBOnBorder == 1)
+				{
+					returnLine.line.isPointBOnBorder = 1;
+				}
+				*/
+
+				IntersectionLine newLine;
+
+				// ******One of two cases is possible; in both cases, The point A of the host line
+				//             would have to be on a border.
+				// CASE 1.5.1: either both the host and guest lines have 1 intersection point,
+				//                -OR-
+				// CASE 1.5.2: the host line has two points, even though it only has 1 border line. The point A of the host line
+				//             would have to be on a border.
+				//
+
+
+				// CASE 1.5.1: >>>>
+				if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
+				{
+
+
+					//std::cout << "1.5.1, newLine case 1 triggered..." << std::endl;
+					//std::cout << "Guest line border line count: " << in_guestLine.numberOfBorderLines << std::endl;
+					//std::cout << "Host line border line count: " << in_hostLine.numberOfBorderLines << std::endl;
+
+					newLine = in_hostLine;
+
+					// remember, in this case, the host line is on a border, so we must store the border line data from that;
+					// (this should always come from point A, when there is one border line)
+					newLine.isPointAOnBorder = 1;
+					newLine.pointABorder = in_hostLine.pointABorder;
+					newLine.pointB = in_guestLine.pointA;
+
+					newLine.numberOfPoints = 2;
+				}
+				/*
+				else if (in_guestLine.numberOfPoints == 2)
+				{
+					std::cout << "3.3, newLine case 2 triggered..." << std::endl;
+					newLine = in_guestLine;
+				}
+				*/
+
+				// CASE 1.5.2: >>>>
+				else if (in_hostLine.numberOfPoints == 2)
+				{
+					//std::cout << "1.5.2, newLine case2 triggered..." << std::endl;
+					newLine = in_hostLine;
+				}
+
+				returnLine.line = newLine;
+
+				//returnLine.line.pointA = in_hostLine.pointA;
+				//returnLine.line.pointB = in_hostLine.pointB;
+				//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+
+				//std::cout << "CASE 1.5: A hits B with one border line, but B doesn't hit A with any border lines" << std::endl;
+				//std::cout << "(A) Number of points: " << in_hostLine.numberOfPoints << std::endl;
+				//std::cout << "(A) Host Line Points are: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+				//std::cout << "(A) Guest Line Points are: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+
+
+				//int someVal = 3;
+				//std::cin >> someVal;
+			}
+
+			/*
+			else if
+			(
+				(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+			)
+			{
+				std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
+				int someVal = 3;
+				std::cin >> someVal;
+
+			}
+			*/
+
+			// CASE 1.6: A has one line, B has one line; this is a TWIN (partial bound?)
+			else if
+				(
+				(in_hostLine.numberOfPoints == 1)	// check the number of point intercepts (not lines)
+					&&
+					(in_hostLine.numberOfBorderLines == 1)
+
+					&&
+
+					(in_guestLine.numberOfPoints == 1)	// " "
+					&&
+					(in_guestLine.numberOfBorderLines == 1)
+					)
+			{
+				//std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
+				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
+				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
+			}
+
+			// CASE 1.7: NON-BOUND line is formed
+
+			else if
+				(
+				(in_hostLine.numberOfPoints == 1)
+					&&
+					(in_hostLine.numberOfBorderLines == 0)
+
+					&&
+
+					(in_guestLine.numberOfPoints == 1)
+					&&
+					(in_guestLine.numberOfBorderLines == 0)
+					)
+			{
+				//std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
+				glm::vec3 roundedA = in_hostLine.pointA;
+				glm::vec3 roundedB = in_guestLine.pointA;
+				if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
+				{
+					returnLine.convertLinesToNonbound(in_hostLine, in_guestLine);
+				}
+				else
+				{
+					returnLine.type = IntersectionType::NONE;	// it's invalid, so set to 1
+				}
+			}
+
+			// CASE 1.8: there is no intercept between them.
+			else if
+				(
+				(in_hostLine.numberOfPoints == 0)
+					&&
+					(in_guestLine.numberOfPoints == 0)
+					)
+			{
+				// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
+				//std::cout << "CASE 1.8: No intercept detected. " << std::endl;
+				//int someVal = 3;
+				//std::cin >> someVal;
+			}
+			returnLine.line.lineGroupID = in_groupID;
+			returnLine.emptyNormal = in_polyBEmptyNormal;
+			//std::cout << "!!!-> GroupID is: " << in_groupID << std::endl;
+		}
+		// ROOT CASE 2: At least one line is considered INVALID. (OR)
+		else if
+			(
+			(in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
+				//||		
+				//(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+				)
+		{
+			if (in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
+			{
+				std::cout << "~~~~ The host line is INVALID. " << std::endl;
+			}
+			if (in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+			{
+				std::cout << "~~~~ The guest line is INVALID. " << std::endl;
+			}
+
+			std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
 
 			std::cout << "++++++Host line stats: " << std::endl;
 			std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
@@ -693,370 +1244,49 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
 			std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
 			std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
+			std::cout << "line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
 
 
 			std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
 			std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
 			std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
 			std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
+			std::cout << "line A, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
 
-			std::cout << ":::: END TEST. " << std::endl;
-			
-			//returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
-			//returnLine.line.numberOfBorderLines = 1;
-			//returnLine.line.isPointAOnBorder = 1;
-			//returnLine.line.pointABorder = in_hostLine.pointABorder;
-			//returnLine.line.pointA = in_hostLine.pointA;
-			//returnLine.line.pointB = in_hostLine.pointB;
-			//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
 
+			/*
+			bool isConversionToInterceptsPointPreciseValid = true;
+			if
+			(
+				(
+					(in_guestLine.numberOfBorderLines == 0)
+					&&
+					(in_guestLine.pointA == in_guestLine.pointB)
+				)
+				||
+
+				(
+					(in_hostLine.numberOfBorderLines == 0)
+					&&
+					(in_hostLine.pointA == in_hostLine.pointB)
+				)
+			)
+			{
+				std::cout << "!!!!! NOTICE: this isn't a valid selection for INTERCEPTS_POINT_PRECISE; the CategorizedLine will stay as IntersectionType::NONE." << std::endl;
+				isConversionToInterceptsPointPreciseValid = false;
+			}
+			if (isConversionToInterceptsPointPreciseValid == true)
+			{
+			*/
 
 			returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
 			returnLine.line.lineGroupID = in_groupID;
 			returnLine.emptyNormal = in_polyBEmptyNormal;
+			//}
 
 			int someVal = 3;
 			std::cin >> someVal;
 		}
-
-
-		// CASE 1.1: The host is SLICED (A_SLICE); the host triangle line has two border lines in it
-		//std::cout << "Line A, " << in_hostLine.numberOfBorderLines << std::endl;
-		//std::cout << "Line B, " << in_guestLine.numberOfBorderLines << std::endl;
-		else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
-		{
-
-
-			returnLine.convertLineToSlice(in_hostLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
-		}
-
-		// CASE 1.2: the guest triangle is SLICED -- but the triangle being sliced only contains one border line. The host "engulfs" B, in one of two ways; 
-		// B may have 1 to 2 border lines being hit, but none of the border lines in A are hit. 
-		// This means: A had no border lines go through B, but B had one to two border lines go through A. So B is considered "SLICED." 
-		//          
-		else if
-		(
-			(in_guestLine.numberOfBorderLines >= 1)
-			&&
-			(in_hostLine.numberOfBorderLines == 0)
-		)
-		{
-			/*
-			std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
-			std::cout << "####### halting, temporary, to analyze lines..." << std::endl;
-
-			std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-			std::cout << "Host line, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			std::cout << "Host A, number of points: " << in_hostLine.numberOfPoints << std::endl;
-			std::cout << "Host A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
-
-			std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-			std::cout << "Guest line, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-			std::cout << "Guest line, number of points: " << in_guestLine.numberOfPoints << std::endl;
-			std::cout << "Guest line, number of border lines: " << in_guestLine.numberOfPoints << std::endl;
-			*/
-
-			IntersectionLine newLine;
-			if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
-			{
-				newLine = in_guestLine;
-				newLine.pointB = in_hostLine.pointA;
-				newLine.numberOfPoints = 2;
-			}
-			else if (in_guestLine.numberOfPoints == 2)
-			{
-				newLine = in_guestLine;
-			}
-			
-
-			//int someVal = 3;
-			//std::cin >> someVal;
-
-			//returnLine.convertLineToNonbound(in_guestLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
-			returnLine.convertLineToNonbound(newLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
-		}
-
-		// CASE 1.3: PARTIAL_BOUND -- condition 1
-		else if
-			(
-			(in_guestLine.numberOfBorderLines == 2)
-				&&
-				(in_hostLine.numberOfBorderLines == 1)
-				)
-		{
-			//std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
-
-			//std::cout << "TA p0: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-			//std::cout << "TB p0: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-			//std::cout << "TB p1: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-			//std::cout << "Line A stats: point A border = " << in_hostLine.isPointAOnBorder << " | point B border = " << in_hostLine.isPointBOnBorder << std::endl;
-			//std::cout << "Line B stats: point A border = " << in_guestLine.isPointAOnBorder << " | point B border = " << in_guestLine.isPointBOnBorder << std::endl;
-
-			glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
-			//std::cout << "Second point is: " << newSecondPoint.x << ", " << newSecondPoint.y << ", " << newSecondPoint.z << std::endl;
-			returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);	// convert to PARTIAL_BOUND
-		}
-		// CASE 1.4: PARTIAL_BOUND -- condition 1
-		else if
-			(
-			(in_hostLine.numberOfBorderLines == 1)
-				&&
-				(in_guestLine.numberOfBorderLines == 1)
-				)
-		{
-			//std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
-			//std::cout << ":: Line A point count: " << in_hostLine.numberOfPoints << std::endl;
-			//std::cout << ":: Line B point count: " << in_guestLine.numberOfPoints << std::endl;
-			//std::cout << ":: Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			//std::cout << ":: Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-			/*
-			std::cout << "PARTIAL_BOUND via condition 3.2 detected. " << std::endl;
-			std::cout << "Line A point count: " << in_hostLine.numberOfPoints << std::endl;
-			std::cout << "Line B point count: " << in_guestLine.numberOfPoints << std::endl;
-			std::cout << "Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			std::cout << "Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-			std::cout << "-----Borders: " << std::endl;
-			std::cout << "Line A: " << std::endl;
-			std::cout << "Point A: " << in_hostLine.pointABorder << std::endl;
-			std::cout << "Point B: " << in_hostLine.pointBBorder << std::endl;
-			std::cout << "Line B: " << std::endl;
-			std::cout << "Point A: " << in_guestLine.pointABorder << std::endl;
-			std::cout << "Point B: " << in_guestLine.pointBBorder << std::endl;
-			*/
-			if (in_hostLine.numberOfPoints == 2)	// one of these should be 2
-			{
-				returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
-				returnLine.line.numberOfBorderLines = 1;
-				returnLine.line.isPointAOnBorder = 1;
-				returnLine.line.pointABorder = in_hostLine.pointABorder;
-				returnLine.line.pointA = in_hostLine.pointA;
-				returnLine.line.pointB = in_hostLine.pointB;
-				returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
-			}
-			else if (in_guestLine.numberOfPoints == 2)
-			{
-				returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
-				returnLine.line.numberOfBorderLines = 1;
-				returnLine.line.isPointAOnBorder = 1;
-				returnLine.line.pointABorder = in_hostLine.pointABorder;
-				returnLine.line.pointA = in_guestLine.pointA;
-				returnLine.line.pointB = in_guestLine.pointB;
-				returnLine.line.intersectedSecondaryID = in_guestLine.intersectedSecondaryID;
-			}
-			//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
-			//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
-			//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
-			//std::cout << "CASE 3.2: " << std::endl;
-			//std::cout << "!!! Return line border is: " << returnLine.line.pointABorder << std::endl;
-
-		}
-
-		// CASE 1.5 PARTIAL_BOUND -- condition 2
-		else if
-		(
-			(in_hostLine.numberOfBorderLines == 1)		// A hit's B, but it's only one border line
-			&&
-			(in_guestLine.numberOfBorderLines == 0)		// B "engulfs" A, but B has no border lines going through A
-		)
-		{
-
-
-			returnLine.type = IntersectionType::PARTIAL_BOUND;
-			returnLine.line.numberOfBorderLines = 1;
-			/*
-			if (in_hostLine.isPointAOnBorder == 1)
-			{
-				returnLine.line.isPointAOnBorder = 1;
-			}
-			else if (in_hostLine.isPointBOnBorder == 1)
-			{
-				returnLine.line.isPointBOnBorder = 1;
-			}
-			*/
-
-			IntersectionLine newLine;
-			
-			// ******One of two cases is possible; in both cases, The point A of the host line
-			//             would have to be on a border.
-			// CASE 1.5.1: either both the host and guest lines have 1 intersection point,
-			//                -OR-
-			// CASE 1.5.2: the host line has two points, even though it only has 1 border line. The point A of the host line
-			//             would have to be on a border.
-			//
-
-
-			// CASE 1.5.1: >>>>
-			if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
-			{
-				
-
-				//std::cout << "1.5.1, newLine case 1 triggered..." << std::endl;
-				//std::cout << "Guest line border line count: " << in_guestLine.numberOfBorderLines << std::endl;
-				//std::cout << "Host line border line count: " << in_hostLine.numberOfBorderLines << std::endl;
-
-				newLine = in_hostLine;
-
-				// remember, in this case, the host line is on a border, so we must store the border line data from that;
-				// (this should always come from point A, when there is one border line)
-				newLine.isPointAOnBorder = 1;
-				newLine.pointABorder = in_hostLine.pointABorder;
-				newLine.pointB = in_guestLine.pointA;
-
-				newLine.numberOfPoints = 2;
-			}
-			/*
-			else if (in_guestLine.numberOfPoints == 2)
-			{
-				std::cout << "3.3, newLine case 2 triggered..." << std::endl;
-				newLine = in_guestLine;
-			}
-			*/
-			
-			// CASE 1.5.2: >>>>
-			else if (in_hostLine.numberOfPoints == 2)
-			{
-				//std::cout << "1.5.2, newLine case2 triggered..." << std::endl;
-				newLine = in_hostLine;
-			}
-			
-			returnLine.line = newLine;
-
-			//returnLine.line.pointA = in_hostLine.pointA;
-			//returnLine.line.pointB = in_hostLine.pointB;
-			//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
-
-			//std::cout << "CASE 1.5: A hits B with one border line, but B doesn't hit A with any border lines" << std::endl;
-			//std::cout << "(A) Number of points: " << in_hostLine.numberOfPoints << std::endl;
-			//std::cout << "(A) Host Line Points are: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			//std::cout << "(A) Guest Line Points are: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-
-
-			//int someVal = 3;
-			//std::cin >> someVal;
-		}
-
-		/*
-		else if
-		(
-			(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
-		)
-		{
-			std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
-			int someVal = 3;
-			std::cin >> someVal;
-		
-		}
-		*/
-
-		// CASE 1.6: A has one line, B has one line; this is a TWIN (partial bound?)
-		else if
-			(
-			(in_hostLine.numberOfPoints == 1)	// check the number of point intercepts (not lines)
-				&&
-				(in_hostLine.numberOfBorderLines == 1)
-
-				&&
-
-				(in_guestLine.numberOfPoints == 1)	// " "
-				&&
-				(in_guestLine.numberOfBorderLines == 1)
-				)
-		{
-			//std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
-			glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
-			//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
-			returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
-		}
-
-		// CASE 1.7: NON-BOUND line is formed
-
-		else if
-			(
-			(in_hostLine.numberOfPoints == 1)
-				&&
-				(in_hostLine.numberOfBorderLines == 0)
-
-				&&
-
-				(in_guestLine.numberOfPoints == 1)
-				&&
-				(in_guestLine.numberOfBorderLines == 0)
-				)
-		{
-			//std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
-			glm::vec3 roundedA = in_hostLine.pointA;
-			glm::vec3 roundedB = in_guestLine.pointA;
-			if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
-			{
-				returnLine.convertLinesToNonbound(in_hostLine, in_guestLine);
-			}
-			else
-			{
-				returnLine.type = IntersectionType::NONE;	// it's invalid, so set to 1
-			}
-		}
-
-		// CASE 1.8: there is no intercept between them.
-		else if
-			(
-			(in_hostLine.numberOfPoints == 0)
-				&&
-				(in_guestLine.numberOfPoints == 0)
-				)
-		{
-			// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
-			//std::cout << "CASE 1.8: No intercept detected. " << std::endl;
-			//int someVal = 3;
-			//std::cin >> someVal;
-		}
-		returnLine.line.lineGroupID = in_groupID;
-		returnLine.emptyNormal = in_polyBEmptyNormal;
-		//std::cout << "!!!-> GroupID is: " << in_groupID << std::endl;
-	}
-	// ROOT CASE 2: At least one line is considered INVALID. (OR)
-	else if
-	(
-		(in_hostLine.lineValidity == IntersectionLineValidity::INVALID) 
-		//||		
-		//(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
-	)
-	{
-		if (in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
-		{
-			std::cout << "~~~~ The host line is INVALID. " << std::endl;
-		}
-		if (in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
-		{
-			std::cout << "~~~~ The guest line is INVALID. " << std::endl;
-		}
-
-		std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
-
-		std::cout << "++++++Host line stats: " << std::endl;
-		std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
-		std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
-
-		std::cout << "++++++Guest line stats: " << std::endl;
-		std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
-		std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
-
-		std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-		std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-		std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
-		std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
-
-
-		std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-		std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-		std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
-		std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
-
-		int someVal = 3;
-		std::cin >> someVal;
-
-		returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
-		returnLine.line.lineGroupID = in_groupID;
-		returnLine.emptyNormal = in_polyBEmptyNormal;
 	}
 	return returnLine;
 }

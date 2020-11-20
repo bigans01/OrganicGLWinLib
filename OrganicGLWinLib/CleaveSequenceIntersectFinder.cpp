@@ -22,6 +22,12 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 
 		auto truestart = std::chrono::high_resolution_clock::now();
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
+		printCurrentLineValuesInCleaveSequences();
+		
+		std::cout << "## Finished printing current cleave sequence line values..." << std::endl;
+		int sillyVal7 = 3;
+		std::cin >> sillyVal7;
+
 		auto trueend = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;
 		//std::cout << "#-> (Intercept records ) record load Time !!  > " << std::fixed << trueelapsed2.count() << std::endl;
@@ -111,4 +117,24 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 		}
 	}
 	
+}
+
+void CleaveSequenceIntersectFinder::printCurrentLineValuesInCleaveSequences()
+{
+	// load the records into the appropriate border lines
+	auto cleaveBegin = sPolyRef->cleaveMap.begin();
+	auto cleaveEnd = sPolyRef->cleaveMap.end();
+	for (cleaveBegin; cleaveBegin != cleaveEnd; cleaveBegin++)		// cycle through each CleaveSequence
+	{
+		std::cout << ">>> Sequence: " << cleaveBegin->first << std::endl;
+		auto sequenceBegin = cleaveBegin->second.cleavingLines.begin();		// ""
+		auto sequenceEnd = cleaveBegin->second.cleavingLines.end();			// ""
+		for (sequenceBegin; sequenceBegin != sequenceEnd; sequenceBegin++)	// cycle through each CategorizedLine in each CleaveSequence
+		{
+			std::cout << "Current line in sequence: "
+				<< "point A-> " << sequenceBegin->second.line.pointA.x << ", " << sequenceBegin->second.line.pointA.y << ", " << sequenceBegin->second.line.pointA.z
+				<< "point B-> " << sequenceBegin->second.line.pointB.x << ", " << sequenceBegin->second.line.pointB.y << ", " << sequenceBegin->second.line.pointB.z << std::endl;
+		}
+
+	}
 }

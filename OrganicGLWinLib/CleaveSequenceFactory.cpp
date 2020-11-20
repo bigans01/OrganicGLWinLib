@@ -14,6 +14,7 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
+		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
 		insertNonboundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
@@ -27,10 +28,18 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B border: " << in_categorizedLine.line.pointBBorder << std::endl;
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, is point B on border: " << in_categorizedLine.line.isPointBOnBorder << std::endl;
+
+		if (in_categorizedLine.line.pointA != in_categorizedLine.line.pointB)
+		{
+			insertInterceptsPointPrecise(in_categorizedLine);
+		}
+		else
+		{
+			std::cout << "!!!! NOTICE: precise not inserted, due to the points being the same. " << std::endl;
+		}
+
 		int someadd = 3;
 		std::cin >> someadd;
-
-		insertInterceptsPointPrecise(in_categorizedLine);
 	}
 	else
 	{
@@ -330,9 +339,9 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 		{
 			std::cout << "!! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
 
-			//std::cout << "!! Line points are: " << std::endl;
-			//std::cout << "Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
-			//std::cout << "Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
+			std::cout << "!! Line points are: " << std::endl;
+			std::cout << "Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
+			std::cout << "Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
 
 			
 			pointCheckResult = interceptPointPreciseBegin->second.checkIfPointIsInLine(in_pointToSearch);
@@ -635,10 +644,10 @@ void CleaveSequenceFactory::printLinesInPool()
 	{
 		auto begin = partialboundMap.begin();
 		auto end = partialboundMap.end();
-		//std::cout << ">>> --- Partial lines: " << std::endl;
+		std::cout << ">>> --- Partial lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			//std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
 		}
 	}
 
@@ -647,10 +656,22 @@ void CleaveSequenceFactory::printLinesInPool()
 	{
 		auto begin = nonboundMap.begin();
 		auto end = nonboundMap.end();
-		//std::cout << ">>> --- Non-bound lines: " << std::endl;
+		std::cout << ">>> --- Non-bound lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			//std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+		}
+	}
+
+	// intercepts point precise count
+	if (interceptsPointPreciseCount > 0)
+	{
+		auto begin = interceptsPointPreciseMap.begin();
+		auto end = interceptsPointPreciseMap.end();
+		for (; begin != end; begin++)
+		{
+			std::cout << ">>> --- Intercepts point precise lines: " << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
 		}
 	}
 }
