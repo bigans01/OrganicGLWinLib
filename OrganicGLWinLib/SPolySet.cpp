@@ -121,7 +121,7 @@ void SPolySet::runPolyComparison()
 			currentIndex++;
 		}
 
-		std::cout << "|||| Finished for this SPoly" << std::endl;
+		std::cout << "|||| Finished for this SPoly ->" << x << std::endl;
 
 		// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
 		// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
@@ -677,7 +677,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
 		)
 		{
-			/*
+			
 			std::cout << ":::: testing of new categorized line case, halt. " << std::endl;
 
 
@@ -701,14 +701,19 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
 
 			std::cout << ":::: END TEST. " << std::endl;
-			*/
-			returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
-			returnLine.line.numberOfBorderLines = 1;
-			returnLine.line.isPointAOnBorder = 1;
-			returnLine.line.pointABorder = in_hostLine.pointABorder;
-			returnLine.line.pointA = in_hostLine.pointA;
-			returnLine.line.pointB = in_hostLine.pointB;
-			returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+			
+			//returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+			//returnLine.line.numberOfBorderLines = 1;
+			//returnLine.line.isPointAOnBorder = 1;
+			//returnLine.line.pointABorder = in_hostLine.pointABorder;
+			//returnLine.line.pointA = in_hostLine.pointA;
+			//returnLine.line.pointB = in_hostLine.pointB;
+			//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+
+
+			returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
+			returnLine.line.lineGroupID = in_groupID;
+			returnLine.emptyNormal = in_polyBEmptyNormal;
 
 			int someVal = 3;
 			std::cin >> someVal;
@@ -1238,7 +1243,7 @@ void SPolySet::performFracturing()
 		{
 			// pass the secondary poly to the PolyFracturer
 			
-			//std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
+			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
 			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker);
@@ -1255,7 +1260,7 @@ void SPolySet::performFracturing()
 		else if (secondaryPolys[x].cleaveMap.size() == 0)
 		{
 			insertOriginalPolyAsFracturingResult(x, secondaryPolys[x]);
-			std::cout << "!! No cleaveMaps found for this SPoly! " << std::endl;
+			std::cout << "!! No cleaveMaps found for this SPoly! [" << x << "] " << std::endl;
 		}
 
 	}

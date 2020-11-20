@@ -196,9 +196,12 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
+
+	std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
+
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
-		//std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
@@ -211,7 +214,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
-		//std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
@@ -229,9 +232,12 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	{
 		rotationPoints.applyTranslation(translationChecker.getTranslationValue());
 	}
+	std::cout << ">>>> Rotation manager initialized (1)...." << std::endl;
+
 
 	// now, add the normal at the end.
 	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+	std::cout << ">>>> Rotation manager initialized (2)...." << std::endl;
 
 	//std::cout << ":::: Printing points: " << std::endl;
 	//rotationPoints.printPoints();
@@ -239,6 +245,8 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	QuatRotationManager rotationManager;
 	//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
 	rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+
+	std::cout << ">>>> Rotation manager initialized (3)...." << std::endl;
 
 	// determine which point it is that is positive y (check the first and third points.)
 	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);

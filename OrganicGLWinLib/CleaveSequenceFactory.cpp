@@ -9,6 +9,7 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::PARTIAL_BOUND)
 	{
+		std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
 		insertPartialBoundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
@@ -17,6 +18,18 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 	{
+		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
+		std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine, point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point A border: " << in_categorizedLine.line.pointABorder << std::endl;
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, is point A on border: " << in_categorizedLine.line.isPointAOnBorder << std::endl;
+
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B border: " << in_categorizedLine.line.pointBBorder << std::endl;
+		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, is point B on border: " << in_categorizedLine.line.isPointBOnBorder << std::endl;
+		int someadd = 3;
+		std::cin >> someadd;
+
 		insertInterceptsPointPrecise(in_categorizedLine);
 	}
 	else
@@ -88,6 +101,7 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 	}
 
 	std::cout << "!!! clipping complete, size of interceptsPointPreciseMap is: " << interceptsPointPreciseMap.size() << std::endl;
+
 	int someValAwYeah = 7;
 	std::cin >> someValAwYeah;
 }
@@ -201,6 +215,9 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 		std::cout << ">>>>>>> Determining points precise cycling direction..." << std::endl;
 		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
+
+	std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;
+	std::cout << "!!! Size of interceptsPointPreciseMap: " << interceptsPointPreciseMap.size() << std::endl;
 
 	std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
 	int someVal = 3;

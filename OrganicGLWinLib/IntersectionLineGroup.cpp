@@ -151,6 +151,18 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
 	}
 
+	std::cout << "#### Return line stats ---> " << std::endl;
+	std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
+	std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
+	if (returnLine.lineValidity == IntersectionLineValidity::VALID)
+	{
+		std::cout << "#### Line is VALID" << std::endl;
+	}
+	else
+	{
+		std::cout << "#### Line is INVALID" << std::endl;
+	}
+
 	return returnLine;
 }
 
