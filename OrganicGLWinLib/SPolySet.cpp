@@ -252,6 +252,14 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					hostLineGroup.addIntersectionLine(potentialHostLine);			// only add a line to the group if the line intersection wtih poly B
 				}
 
+				if (intersectResult.wasIntersectFound == 2)
+				{
+					std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (host lines compared to guest triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
+					std::cout << "(Host lines going through Guest Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
+					std::cout << "(Host lines going through Guest Triangle) Line points: " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.z << " || "
+								<< in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.z << std::endl;
+				}
+
 				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
 				if (intersectResult.wasIntersectFound == 3)
 				{
@@ -304,6 +312,12 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					guestLineGroup.addIntersectionLine(potentialGuestLine);			// only add a line to the group if the line intersection wtih poly B
 				}
 				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
+				if (intersectResult.wasIntersectFound == 2)
+				{
+					std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
+				}
+
+
 				if (intersectResult.wasIntersectFound == 3)
 				{
 					//std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
@@ -570,9 +584,34 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 			//std::cin >> someValAwesome;
 
 			//if (a == 0)                 // ray lies in triangle plane
-			if (a < SMALL_NUM)
+			//if (a < SMALL_NUM)
+
+			if							  // ray lies in triangle plane
+			(
+				(a < SMALL_NUM)
+				&&
+				(a > (SMALL_NUM*-1.0f))
+			)
+			{
 				//return 2;
+				/*
+				std::cout << "!!!! a AND b are less than small num; stats are: " << std::endl;
+				std::cout << "a: " << a << std::endl;
+				std::cout << "b: " << b << std::endl;
+				std::cout << "Normal: " << N.x << ", " << N.y << ", " << N.z << std::endl;
+				std::cout << "Dir: " << dir.x << ", " << dir.y << ", " << dir.z << std::endl;
+				std::cout << "point0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+				std::cout << "intersecting line, point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
+				std::cout << "intersecting line, point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+				std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+				std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+				std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+				*/
+
+				std::cout << "::> Line is lies within triangle. " << std::endl;
+
 				returnResult.setResult(2);
+			}
 			//else return 0;              // ray disjoint from plane
 			else returnResult.setResult(0);
 		}
