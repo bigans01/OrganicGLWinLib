@@ -101,7 +101,7 @@ class WeldedLinePool
 						<< "| Point B: " << poolBegin->second.pointB.x << ", " << poolBegin->second.pointB.y << ", " << poolBegin->second.pointB.z << ", "
 						<< "| Empty normal: " << poolBegin->second.emptyNormal.x << ", " << poolBegin->second.emptyNormal.y << ", " << poolBegin->second.emptyNormal.z << std::endl;
 				}
-				std::cout << "::::::::::::: END TEST |" << std::endl;
+				std::cout << "::::::::::::: END::::: END TEST |" << std::endl;
 				*/
 
 

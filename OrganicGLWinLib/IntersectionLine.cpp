@@ -165,7 +165,7 @@ glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirecti
 	glm::vec3 returnVec;
 	if (in_direction == CyclingDirection::FORWARD)
 	{
-		std::cout << ">>> Fetchin point for CyclingDirection::FORWARD" << std::endl;
+		//std::cout << ">>> Fetchin point for CyclingDirection::FORWARD" << std::endl;
 		glm::vec3 returnPoint;
 		if (wasSwapped == true)
 		{
@@ -180,7 +180,7 @@ glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirecti
 	}
 	else if (in_direction == CyclingDirection::REVERSE)
 	{
-		std::cout << ">>> Fetchin point for CyclingDirection::REVERSE" << std::endl;
+		//std::cout << ">>> Fetchin point for CyclingDirection::REVERSE" << std::endl;
 
 		glm::vec3 returnPoint;
 		if (wasSwapped == true)

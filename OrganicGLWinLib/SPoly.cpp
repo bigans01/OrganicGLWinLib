@@ -854,7 +854,7 @@ CleaveSequenceCandidateListMap SPoly::buildCleaveSequenceCandidateListMap()
 		}
 	}
 
-	std::cout << "!!!! Size of return map is : -> " << returnMap.candidateMap.size() << std::endl;
+	//std::cout << "!!!! Size of return map is : -> " << returnMap.candidateMap.size() << std::endl;
 
 	return returnMap;
 }

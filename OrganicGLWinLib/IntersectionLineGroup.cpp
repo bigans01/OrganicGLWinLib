@@ -12,17 +12,17 @@ bool IntersectionLineGroup::performInvalidCheck()
 	bool isInvalidPossible = false;
 	if (lineMap.size() == 2)
 	{
-		std::cout << "####~~~~~~~~ Line map size is 2 (performInvalidCheck); printing lines: " << std::endl;
+		//std::cout << "####~~~~~~~~ Line map size is 2 (performInvalidCheck); printing lines: " << std::endl;
 		for (int x = 0; x < 2; x++)
 		{
-			std::cout << "[" << x << "], point A: " << lineMap[x].pointA.x << ", " << lineMap[x].pointA.y << ", " << lineMap[x].pointA.z
-				<< " | point B: " << lineMap[x].pointB.x << ", " << lineMap[x].pointB.y << ", " << lineMap[x].pointB.z << std::endl;
+			//std::cout << "[" << x << "], point A: " << lineMap[x].pointA.x << ", " << lineMap[x].pointA.y << ", " << lineMap[x].pointA.z
+			//	<< " | point B: " << lineMap[x].pointB.x << ", " << lineMap[x].pointB.y << ", " << lineMap[x].pointB.z << std::endl;
 		}
 
 		//if (lineMap[0].pointB == lineMap[0].pointA)
 		if (lineMap[0].pointA == lineMap[1].pointA)
 		{
-			std::cout << "NOTE! invalid is possible..." << std::endl;
+			//std::cout << "NOTE! invalid is possible..." << std::endl;
 			isInvalidPossible = true;
 		}
 
@@ -38,8 +38,8 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 
 	bool invalidPossibilityFlag = performInvalidCheck();
 
-	std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
-	std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
+	//std::cout << "! total number of lines: " << totalNumberOfLines << std::endl;
+	//std::cout << "! total number of border line intercepts: " << totalNumberOfBorderLineIntercepts << std::endl;
 
 	//std::cout << "! Line 0 is: " << std::endl;
 	//std::cout << "## Point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
@@ -168,7 +168,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 	)
 	{
 		int someVal = 3;
-		std::cout << "++++++++++ point check halting, points are same! " << std::endl;
+		//std::cout << "++++++++++ point check halting, points are same! " << std::endl;
 		//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
 		//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
 		//std::cin >> someVal;
@@ -180,16 +180,16 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		//returnLine.lineValidity = IntersectionLineValidity::INVALID;	// flag it as invalid.
 	}
 
-	std::cout << "#### Return line stats ---> " << std::endl;
-	std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
-	std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
+	//std::cout << "#### Return line stats ---> " << std::endl;
+	//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
+	//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
 	if (returnLine.lineValidity == IntersectionLineValidity::VALID)
 	{
-		std::cout << "#### Line is VALID" << std::endl;
+		//std::cout << "#### Line is VALID" << std::endl;
 	}
 	else
 	{
-		std::cout << "#### Line is INVALID" << std::endl;
+		//std::cout << "#### Line is INVALID" << std::endl;
 	}
 
 	return returnLine;

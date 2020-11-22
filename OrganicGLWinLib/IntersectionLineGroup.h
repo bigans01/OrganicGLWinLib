@@ -15,7 +15,7 @@ public:
 
 	void addIntersectionLine(IntersectionLine in_intersectionLine);
 	IntersectionLine mergeLines();
-	bool performInvalidCheck();
+	bool performInvalidCheck();					// may not be worth using; flag for removal.
 	int findNumberOfBorderLineIntercepts();
 	void reset();								// reset the line group, so it has appropriate values in next iteration
 	IntersectionLine* findSingleBorderLine();

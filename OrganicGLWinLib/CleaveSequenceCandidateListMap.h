@@ -42,7 +42,7 @@ class CleaveSequenceCandidateListMap
 			{
 				candidateListBegin->second.updateCounter(&remainingCandidateCount);
 			}
-			std::cout << "!!! Remaining number of candidates: " << remainingCandidateCount << std::endl;
+			//std::cout << "!!! Remaining number of candidates: " << remainingCandidateCount << std::endl;
 		};
 
 		int fetchNextAvailableCandidate()

@@ -14,7 +14,7 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 
 	if (intersectRecorderRef->records.size() == 1)
 	{
-		std::cout << ":::: entered branch for size == 1" << std::endl;
+		//std::cout << ":::: entered branch for size == 1" << std::endl;
 
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
 		checkForperformingFirstPermitAction();
@@ -34,7 +34,7 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		//std::cout << "+++ Note: neighbors exist! " << std::endl;
 		//std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
 
-		std::cout << ":::: entered branch for size > 1" << std::endl;
+		//std::cout << ":::: entered branch for size > 1" << std::endl;
 
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
 		checkForperformingFirstPermitAction();
@@ -260,7 +260,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 
 	if (wasNextSequenceFound == true)
 	{
-		std::cout << "!!! Note, wasNextSequenceFound is set to TRUE" << std::endl;
+		//std::cout << "!!! Note, wasNextSequenceFound is set to TRUE" << std::endl;
 	}
 
 	// we found the shortest ID...
@@ -268,7 +268,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	selectedCleaveSequenceMeta = selectedSequence;
 
 	// debug call...
-	std::cout << "++++++++++ Special halt for NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()..." << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	//std::cout << "++++++++++ Special halt for NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()..." << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
 }

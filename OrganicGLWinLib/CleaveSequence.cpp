@@ -202,8 +202,8 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);
@@ -231,9 +231,9 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		}
 
 	}
-	std::cout << "+++++++++++++++ (Typical) Fetch closest point halt. " << std::endl;
-	int someVal = 5;
-	std::cin >> someVal;
+	//std::cout << "+++++++++++++++ (Typical) Fetch closest point halt. " << std::endl;
+	//int someVal = 5;
+	//std::cin >> someVal;
 
 	return returnDistanceToPoint;
 }

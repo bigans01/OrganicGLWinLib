@@ -22,11 +22,11 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 
 		auto truestart = std::chrono::high_resolution_clock::now();
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
-		printCurrentLineValuesInCleaveSequences();
+		//printCurrentLineValuesInCleaveSequences();
 		
-		std::cout << "## Finished printing current cleave sequence line values..." << std::endl;
-		int sillyVal7 = 3;
-		std::cin >> sillyVal7;
+		//std::cout << "## Finished printing current cleave sequence line values..." << std::endl;
+		//int sillyVal7 = 3;
+		//std::cin >> sillyVal7;
 
 		auto trueend = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;

@@ -14,11 +14,12 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
-		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
+		//std::cout << "!!! Adding NON_BOUND line. " << std::endl;
 		insertNonboundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 	{
+		/*
 		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
 		std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine, point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
@@ -28,22 +29,22 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, point B border: " << in_categorizedLine.line.pointBBorder << std::endl;
 		std::cout << "(Pre-Alter) || ::: >> current categorized in_categorizedLine.line, is point B on border: " << in_categorizedLine.line.isPointBOnBorder << std::endl;
-
+		*/
 		if (in_categorizedLine.line.pointA != in_categorizedLine.line.pointB)
 		{
 			insertInterceptsPointPrecise(in_categorizedLine);
 		}
 		else
 		{
-			std::cout << "!!!! NOTICE: precise not inserted, due to the points being the same. " << std::endl;
+			//std::cout << "!!!! NOTICE: precise not inserted, due to the points being the same. " << std::endl;
 		}
 
-		int someadd = 3;
-		std::cin >> someadd;
+		//int someadd = 3;
+		//std::cin >> someadd;
 	}
 	else
 	{
-		std::cout << "!!!! WARNING, other line type discovered..." << std::endl;
+		//std::cout << "!!!! WARNING, other line type discovered..." << std::endl;
 	}
 }
 
@@ -109,10 +110,10 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 		interceptsPointPreciseCount--;
 	}
 
-	std::cout << "!!! clipping complete, size of interceptsPointPreciseMap is: " << interceptsPointPreciseMap.size() << std::endl;
+	//std::cout << "!!! clipping complete, size of interceptsPointPreciseMap is: " << interceptsPointPreciseMap.size() << std::endl;
 
-	int someValAwYeah = 7;
-	std::cin >> someValAwYeah;
+	//int someValAwYeah = 7;
+	//std::cin >> someValAwYeah;
 }
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
@@ -149,11 +150,11 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
 
-	std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+	//std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
-		std::cout << "!!!!!!! Destruction poly detected! " << std::endl;
+		//std::cout << "!!!!!!! Destruction poly detected! " << std::endl;
 		invertAllEmptyNormals();
 	}
 	
@@ -168,7 +169,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount == 0)	
 	)
 	{
-		std::cout << ">>> Handling typical scenario" << std::endl;
+		//std::cout << ">>> Handling typical scenario" << std::endl;
 
 		handleScenarioTypical(in_cleaveMapRef);
 	}
@@ -181,18 +182,19 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 
-		std::cout << ">>> Handling precise scenario" << std::endl;
+		//std::cout << ">>> Handling precise scenario" << std::endl;
 
 		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
 	}
 	else
 	{
-		std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
-		int someVal = 3;
-		std::cin >> someVal;
+		//std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
+		//std::cout << "!! Number of interceptsPointPrecise: " << interceptsPointPreciseCount << std::endl;
+		//int someVal = 3;
+		//std::cin >> someVal;
 	}
 
-	std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
+	//std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
 }
 
 void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
@@ -202,35 +204,35 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
-		std::cout << ">>>>>>> Determining partial cycling direction..." << std::endl;
+		//std::cout << ">>>>>>> Determining partial cycling direction..." << std::endl;
 		partialsBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
 
 	// go through each intersects_point_precise
-	std::cout << ":::::::::: Points precise map size: " << interceptsPointPreciseMap.size() << std::endl;
-	std::cout << "....enter number to continue. " << std::endl;
+	//std::cout << ":::::::::: Points precise map size: " << interceptsPointPreciseMap.size() << std::endl;
+	//std::cout << "....enter number to continue. " << std::endl;
 
 	// check if there's a condition where there are exactly two categorized lines having the IntersectionType, INTERCEPTS_POINT_PRECISE, and 
 	// which belong to the same parent poly. If this condition is TRUE, these lines must be removed.
 	clipTwinCategorizedLinesofInterceptPointPrecise();
 
-	int someVal8 = 7;
-	std::cin >> someVal8;
+	//int someVal8 = 7;
+	//std::cin >> someVal8;
 
 	auto pointsPreciseBegin = interceptsPointPreciseMap.begin();
 	auto pointsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; pointsPreciseBegin != pointsPreciseEnd; pointsPreciseBegin++)
 	{
-		std::cout << ">>>>>>> Determining points precise cycling direction..." << std::endl;
+		//std::cout << ">>>>>>> Determining points precise cycling direction..." << std::endl;
 		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
 
-	std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;
-	std::cout << "!!! Size of interceptsPointPreciseMap: " << interceptsPointPreciseMap.size() << std::endl;
+	//std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;
+	//std::cout << "!!! Size of interceptsPointPreciseMap: " << interceptsPointPreciseMap.size() << std::endl;
 
-	std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	//std::cout << ":::::::: FINISHED determining cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE..." << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 }
 
@@ -834,10 +836,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 
 			//std::cout << "Warning, a corresponding PARTIAL_BOUND line was not found for this line; checking for INTERCEPT_POINT_PRECISE: " << std::endl;
 
-			int reallyStupidValThanksCompiler = 100;
-
 			//std::cout << "::: Lines are: " << std::endl;
-			newSequence.printCategorizedLines();
+			//newSequence.printCategorizedLines();
 
 			//std::cout << ">>>> Current last point to search for against the INTERCEPTS_POINT_PRECISE IS: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 			CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch, in_borderLineArrayRef);
@@ -873,7 +873,7 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 	//std::cout << "Remaining nonbound count: " << nonboundCount << std::endl;
 	//std::cout << "Remaining intercepts point count: " << interceptsPointPreciseCount << std::endl;
 	
-	int someVal = 3;
+	//int someVal = 3;
 	//std::cout << "Fix this shit, compiler. " << std::endl;
-	std::cin >> someVal;
+	//std::cin >> someVal;
 }

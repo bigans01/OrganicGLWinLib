@@ -24,12 +24,12 @@ void CleaveSequenceMeta::determineCrawlDirectionFromPoint(glm::vec3 in_pointToDe
 	{
 		if (in_pointToDetermineFrom == cleaveSequencePtr->cleavingLines.begin()->second.line.pointA)		// if the point to determine equals point A, we go FORWARD.
 		{
-			std::cout << "|||> Crawl direction is FORWARD!" << std::endl;
+			//std::cout << "|||> Crawl direction is FORWARD!" << std::endl;
 			crawlDirection = CleaveSequenceCrawlDirection::FORWARD;
 		}
 		else if (in_pointToDetermineFrom == cleaveSequencePtr->cleavingLines.rbegin()->second.line.pointB)	// otherwise, it must be point B in the line at the end of the CategorizedLines (cleavingLines)
 		{
-			std::cout << "|||> Crawl direction is BACKWARD!" << std::endl;
+			//std::cout << "|||> Crawl direction is BACKWARD!" << std::endl;
 			crawlDirection = CleaveSequenceCrawlDirection::REVERSE;
 		}
 	}

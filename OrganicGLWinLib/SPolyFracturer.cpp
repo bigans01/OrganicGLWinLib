@@ -10,10 +10,10 @@ SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyM
 	polyRef = in_sPolyRef;
 	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
 
-	std::cout << "********************************************************* Printing cleave sequence values, prior to runFracturing " << std::endl;
-	polyRef->printAllCleaveLines();
-	int stopVal = 3;
-	std::cin >> stopVal;
+	//std::cout << "********************************************************* Printing cleave sequence values, prior to runFracturing " << std::endl;
+	//polyRef->printAllCleaveLines();
+	//int stopVal = 3;
+	//std::cin >> stopVal;
 
 
 	//std::cout << "0: " << polyRef->primePoint0.x << ", " << polyRef->primePoint0.y << ", " << polyRef->primePoint0.z << std::endl;
@@ -133,8 +133,8 @@ void SPolyFracturer::runFracturing()
 	//auto truestart = std::chrono::high_resolution_clock::now();
 	populatePointsForQuaternions();	// populate the points before the quaternion is applied
 
-	std::cout << " ######################################################################################### ******************************************* PRE PRINT " << std::endl;
-	printPointMetaData();
+	//std::cout << " ######################################################################################### ******************************************* PRE PRINT " << std::endl;
+	//printPointMetaData();
 
 	//auto trueend = std::chrono::high_resolution_clock::now();
 	//std::chrono::duration<double> trueelapsed = trueend - truestart;
@@ -152,11 +152,11 @@ void SPolyFracturer::runFracturing()
 	std::chrono::duration<double> trueelapsed = trueend - truestart;
 	//std::cout << "#-> (SPolyFracturer) entire Time !!  >              " << std::fixed << trueelapsed.count() << std::endl;
 
-	std::cout << " ######################################################################################### ******************************************* POST PRINT " << std::endl;
+	//std::cout << " ######################################################################################### ******************************************* POST PRINT " << std::endl;
 	printPointMetaData();
-	std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||~~~~~~~~~~~~~~~~~~~~~~~~ finished printing meta data. " << std::endl;
-	int finish = 3;
-	std::cin >> finish;
+	//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||~~~~~~~~~~~~~~~~~~~~~~~~ finished printing meta data. " << std::endl;
+	//int finish = 3;
+	//std::cin >> finish;
 }
 
 void SPolyFracturer::applyTranslationToAllPoints(glm::vec3 in_translationOffset)
