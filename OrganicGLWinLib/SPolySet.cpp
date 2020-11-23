@@ -39,36 +39,6 @@ void SPolySet::configurePolysWithoutNormalCalcs()
 
 void SPolySet::runPolyComparison()
 {
-	/*
-	int comparisonCount = numberOfPolys - 1;	// the number of SPolys that the current poly will compare to is equal to the number of polys - 1
-	for (int x = 0; x < numberOfPolys; x++)
-	{
-		int currentIndex = 0;	// the current index of what we will be comparing to
-		for (int y = 0; y < comparisonCount; y++)
-		{
-			if (x == y)		// don't compare a poly to itself; skip this iteration
-			{
-				currentIndex++;
-			}
-			std::cout << "Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
-			std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
-
-			SPoly* polyA = &secondaryPolys[x];
-			SPoly* polyB = &secondaryPolys[currentIndex];
-			produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);
-
-		}
-	}
-	*/
-
-	//std::cout << "########### Poly comparison, checking line 2 of second STriangle in second SPoly: " << std::endl;
-	//std::cout << secondaryPolys[1].triangles[1].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointA.z << std::endl;
-	//std::cout << secondaryPolys[1].triangles[1].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[1].triangleLines[2].pointB.z << std::endl;
-
-	//int someval = 3;
-	//std::cin >> someval;
-
-	int generationCounter = 0;
 	int compCount2 = numberOfPolys;
 
 	// First pass: check for non-planar categorized lines to produce, but load any non-planar relationships we find into the
@@ -102,17 +72,8 @@ void SPolySet::runPolyComparison()
 					// otherwise, if they are not coplanar, do the following.
 					else
 					{
-					
-
-
-
 							//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
-							//std::cout << "!!! Number of polys is: " << numberOfPolys << std::endl;
-
 							//std::cout << "##### Current index is: " << currentIndex << std::endl;
-							//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (Loop)" << std::endl;
-							//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
-							//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| --> Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
 							//std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
 							produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
@@ -124,38 +85,26 @@ void SPolySet::runPolyComparison()
 		}
 
 		//std::cout << "|||| Finished for this SPoly ->" << x << std::endl;
-
-		// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
-		// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
-		coplanarTracker.buildCategorizedLinesForCoplanarRelationship(x);
-
-		//std::cout << "|||| Finished coplanar check..." << std::endl;
-
-		
+		//coplanarTracker.buildCategorizedLinesForCoplanarRelationship(x);
 	}
 
 	// Second pass: execute the relationships found in the coplanarTracker, if any
+	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
+	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
+	coplanarTracker.buildCoplanarCategorizedLines();
+	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 	// Lastly: build the CleaveSequences
 	for (int x = 0; x < compCount2; x++)
 	{
 		//secondaryPolys[x].sequenceFactory.printLinesInPool();
-
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
-
 		secondaryPolys[x].buildCleaveSequences();
 		//secondaryPolys[x].printAllCleaveLines();
-		//secondaryPolys[x].printAllCleaveLines();
-
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
-
-	//std::cout << "########### Poly comparison, checking line 2 of first STriangle in SPoly: (2) " << std::endl;
-	//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointA.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointA.z << std::endl;
-	//std::cout << secondaryPolys[1].triangles[0].triangleLines[2].pointB.x << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.y << ", " << secondaryPolys[1].triangles[0].triangleLines[2].pointB.z << std::endl;
-
 	//someval = 3;
 	//std::cin >> someval;
 }

@@ -21,6 +21,16 @@ class CoplanarRelationships
 		{
 			relationshipMap.insertSPolyRef(in_sPolyIndex, in_sPolyRef);
 		}
+		void rotateToXYPlaneAndCompare()
+		{
+			// step 1: rotate involved SPolys to the XY plane
+
+
+			// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
+			//		if CREATION -> use CoplanarMassCreator
+			//		if DESTRUCTION -> use CoplanarMassDestroyer
+
+		}
 };
 
 #endif
