@@ -20,6 +20,7 @@
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
 #include "CyclingDirection.h"
+#include "QuatRotationPoints.h"
 
 class SPoly
 {
@@ -70,6 +71,7 @@ public:
 														// a DISCONNECTED cleave is a set of categorized lines, in which none of the said lines has a border line intercept. In other words, the
 														// cleave line is contained completely within the area of the polygon
 														// the return value indicates if it is CONNECTED (1) or DISCONNECTED (0)
+	void loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	void findPlanarVectorForSingleBorderLine(glm::vec3 in_point0, SPolyBorderLines* in_borderLineOneRef);
 	void findPlanarVectorsForTwoBorderLines(SPolyBorderLines* in_borderLineOneRef, SPolyBorderLines* in_borderLineTwoRef);

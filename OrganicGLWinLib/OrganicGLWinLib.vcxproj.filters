@@ -740,5 +740,8 @@
     <ClCompile Include="CoplanarRelationshipTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CoplanarRelationships.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

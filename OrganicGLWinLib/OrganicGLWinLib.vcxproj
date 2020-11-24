@@ -334,6 +334,7 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
+    <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
