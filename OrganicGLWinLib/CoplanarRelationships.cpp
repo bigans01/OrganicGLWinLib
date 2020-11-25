@@ -17,7 +17,8 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 	// 1.1: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
 	// 1.1.1: load points from the trackedSpolyRef
-	trackedSPolyRef->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
+	//trackedSPolyRef->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
+	trackedSPolyRef->loadPrimalsTrianglesAndBordersIntoQuatPoints(&coplanarPoints);
 
 	// 1.1.2: load points from the related SPolys
 	auto relatedSPolysBegin = relationshipMap.refMap.begin();
@@ -40,6 +41,19 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		std::cout << "!! prime point 0 requires no translation. " << std::endl;
 	}
 
+	// 1.3 rotate points by the quaternion
+	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
+
+	std::cout << "--> printing lines for tracked SPoly " << std::endl;
+	trackedSPolyRef->printBorderLines();
+	relatedSPolysBegin = relationshipMap.refMap.begin();
+	relatedSPolysEnd = relationshipMap.refMap.end();
+	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
+	{
+		std::cout << "-->printing lines for related SPoly " << std::endl;
+		relatedSPolysBegin->second->printBorderLines();
+	}
+	
 
 	// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
 	//		if CREATION -> use CoplanarMassCreator

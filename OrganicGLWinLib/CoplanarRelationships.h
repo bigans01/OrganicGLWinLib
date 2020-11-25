@@ -5,6 +5,7 @@
 
 #include "SPoly.h"
 #include "SPolyRefMap.h"
+#include "QuatRotationManager.h"
 #include "QuatRotationPoints.h"
 #include "PointTranslationCheck.h"
 
@@ -14,6 +15,7 @@ class CoplanarRelationships
 		int trackedPolyID = 0;
 		SPoly* trackedSPolyRef = nullptr;
 		SPolyRefMap relationshipMap;
+		QuatRotationManager rotationManager;
 		QuatRotationPoints coplanarPoints;
 		PointTranslationCheck pointTranslator;
 		void setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef);

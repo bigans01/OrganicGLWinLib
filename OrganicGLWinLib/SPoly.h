@@ -72,6 +72,7 @@ public:
 														// cleave line is contained completely within the area of the polygon
 														// the return value indicates if it is CONNECTED (1) or DISCONNECTED (0)
 	void loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
+	void loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	void findPlanarVectorForSingleBorderLine(glm::vec3 in_point0, SPolyBorderLines* in_borderLineOneRef);
 	void findPlanarVectorsForTwoBorderLines(SPolyBorderLines* in_borderLineOneRef, SPolyBorderLines* in_borderLineTwoRef);

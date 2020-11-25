@@ -688,6 +688,35 @@ void SPoly::loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_qua
 	}
 }
 
+void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
+{
+	// load the primals
+	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint0);
+	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint1);
+	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint2);
+
+	// load STriangles.
+	auto trianglesBegin = triangles.begin();
+	auto trianglesEnd = triangles.end();
+	for (; trianglesBegin != trianglesEnd; trianglesBegin++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointA);
+			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointB);
+		}
+	}
+
+	// load SPolyBorderLines.
+	auto borderLinesBegin = borderLines.begin();
+	auto borderLinesEnd = borderLines.end();
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointA);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointB);
+	}
+}
+
 int SPoly::determineCleaveTypeAndRegisterCatLines(int in_cleaveIndexID)
 {
 	// determine the type here; first get the CleaveSequence
