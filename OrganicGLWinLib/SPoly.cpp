@@ -700,6 +700,7 @@ void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_
 	auto trianglesEnd = triangles.end();
 	for (; trianglesBegin != trianglesEnd; trianglesBegin++)
 	{
+		// load the lines of each STriangle
 		for (int x = 0; x < 3; x++)
 		{
 			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointA);

@@ -8,10 +8,31 @@
 #include "QuatRotationManager.h"
 #include "QuatRotationPoints.h"
 #include "PointTranslationCheck.h"
+#include "CoplanarMassManipulator.h"
+#include "CoplanarMassCreator.h"
+#include <mutex>
 
 class CoplanarRelationships
 {
 	public:
+		//CoplanarRelationships() {};
+
+		
+		CoplanarRelationships();
+		
+		CoplanarRelationships& operator=(const CoplanarRelationships& in_coplanarRelationshipsB)
+		{
+			trackedPolyID = in_coplanarRelationshipsB.trackedPolyID;
+			trackedSPolyRef = in_coplanarRelationshipsB.trackedSPolyRef;
+			relationshipMap = in_coplanarRelationshipsB.relationshipMap;
+			//rotationManager = in_coplanarRelationshipsB.rotationManager;
+			//coplanarPoints = in_coplanarRelationshipsB.coplanarPoints;
+			//pointTranslator = in_coplanarRelationshipsB.pointTranslator;
+			return *this;
+		}
+		
+
+		std::unique_ptr<CoplanarMassManipulator> manipulator;		// for either CREATION or DESTRUCTION modes
 		int trackedPolyID = 0;
 		SPoly* trackedSPolyRef = nullptr;
 		SPolyRefMap relationshipMap;

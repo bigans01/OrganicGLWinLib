@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "CoplanarRelationships.h"
 
+
+CoplanarRelationships::CoplanarRelationships()
+{
+
+}
+
+
 void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef)
 {
 	trackedPolyID = in_trackedPolyID;
@@ -58,5 +65,10 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
 	//		if CREATION -> use CoplanarMassCreator
 	//		if DESTRUCTION -> use CoplanarMassDestroyer
-
+	if (trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
+	{
+		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
+		manipulator.reset(new CoplanarMassCreator());
+		manipulator->initialize(trackedSPolyRef, relationshipMap);
+	}
 }

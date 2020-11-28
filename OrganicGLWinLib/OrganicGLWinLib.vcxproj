@@ -183,6 +183,8 @@
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
+    <ClInclude Include="CoplanarMassCreator.h" />
+    <ClInclude Include="CoplanarMassManipulator.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
     <ClInclude Include="CyclingDirection.h" />
@@ -334,8 +336,10 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
+    <ClCompile Include="CoplanarMassCreator.cpp" />
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
+    <ClCompile Include="CoplanarMassManipulator.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
