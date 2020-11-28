@@ -65,10 +65,24 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
 	//		if CREATION -> use CoplanarMassCreator
 	//		if DESTRUCTION -> use CoplanarMassDestroyer
+	// arguments:
+	// 1.) a reference to the tracked SPoly
+	// 2.) a copy of the relationship map
+	// 3.) a referenece to this instance's instantiaton of coplanarPoints. This is because we will first append the new CategorizedLines produced by the 
+	// CoplanarMassManipulator, apply the quaternion to them, then remove the references to the empty normal, before translating the points of the categorized lines.
+	// All of this data should be insreted at the end of the coplanarPoints.
+
+	// 2.1: set the manipulator, run as CREATION or DESTRUCTION after initializing.
 	if (trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
 	{
 		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
 		manipulator.reset(new CoplanarMassCreator());
-		manipulator->initialize(trackedSPolyRef, relationshipMap);
+		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
 	}
+
+	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation.
+
+	// 2.3: before translating back, remove references to the empty normals of the newly produced categorized lines.
+
+	// 2.4: lastly, translate all involved SPolys back to their original position.
 }
