@@ -78,6 +78,7 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
 		manipulator.reset(new CoplanarMassCreator());
 		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
+		manipulator->runMassManipulation();
 	}
 
 	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation.

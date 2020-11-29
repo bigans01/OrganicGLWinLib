@@ -8,7 +8,7 @@
 class CoplanarMassCreator : public CoplanarMassManipulator
 {
 	public:
-		//void initialize(SPoly* in_trackedSPolyRef, SPolyRefMap in_sPolyRefMap);
+		void runMassManipulation();
 	private:
 };
 
