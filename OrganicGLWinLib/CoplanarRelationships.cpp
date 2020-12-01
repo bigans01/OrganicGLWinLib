@@ -50,6 +50,9 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 	// 1.3 rotate points by the quaternion
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
+	
+	// do rounding 
+	coplanarPoints.roundAllPointsToHundredths();
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
 	trackedSPolyRef->printBorderLines();
@@ -81,9 +84,29 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		manipulator->runMassManipulation();
 	}
 
-	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation.
+	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation, and then round back.
+	rotationManager.rotateToOriginalPosition();
+	coplanarPoints.roundAllPointsToHundredths();
 
 	// 2.3: before translating back, remove references to the empty normals of the newly produced categorized lines.
 
 	// 2.4: lastly, translate all involved SPolys back to their original position.
+	if (pointTranslator.requiresTranslation == 1)
+	{
+		coplanarPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
+	}
+	
+	// Do rounding.
+	
+
+	std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+	std::cout << "--> printing lines for tracked SPoly " << std::endl;
+	trackedSPolyRef->printBorderLines();
+	relatedSPolysBegin = relationshipMap.refMap.begin();
+	relatedSPolysEnd = relationshipMap.refMap.end();
+	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
+	{
+		std::cout << "-->printing lines for related SPoly " << std::endl;
+		relatedSPolysBegin->second->printBorderLines();
+	}
 }

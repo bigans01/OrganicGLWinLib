@@ -8,6 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include <iostream>
+#include "OrganicGLWinUtils.h"
 
 class QuatRotationPoints
 {
@@ -20,6 +21,7 @@ public:
 	void applyDimensionCorrections();
 	void printPoints();
 	void clearPoints();
+	void roundAllPointsToHundredths();
 	glm::vec3 getFirstPoint();
 	glm::vec3 getLastPoint();
 	glm::vec3 getSecondPoint();

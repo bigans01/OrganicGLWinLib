@@ -101,6 +101,16 @@ void QuatRotationPoints::clearPoints()
 	pointsRefVector.clear();
 }
 
+void QuatRotationPoints::roundAllPointsToHundredths()
+{
+	auto pointsStart = pointsRefVector.begin();
+	auto pointsEnd = pointsRefVector.end();
+	for (pointsStart; pointsStart != pointsEnd; pointsStart++)
+	{
+		**pointsStart = OrganicGLWinUtils::roundVec3ToHundredths(**pointsStart);					// will cause a break, due to namespaace conflict with std::min?
+	}
+}
+
 glm::vec3 QuatRotationPoints::getFirstPoint()
 {
 	auto pointsStart = pointsRefVector.begin();
