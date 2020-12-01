@@ -164,7 +164,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
-		float selectedMin = (std::min)(distOriginToA, distOriginToB);			// parentheses are needed here, see
+		float selectedMin = std::min(distOriginToA, distOriginToB);			// see
 																				// https://stackoverflow.com/questions/5004858/why-is-stdmin-failing-when-windows-h-is-included
 
 		// is the chosen min for A?
@@ -207,7 +207,7 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
-		float selectedMin = (std::min)(distOriginToA, distOriginToB);		// parentheses are needed here, see line 168 for URL (above)
+		float selectedMin = std::min(distOriginToA, distOriginToB);		// see line 168 for URL (above)
 																				
 
 		// is the chosen min for A?
@@ -252,7 +252,7 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
-		float selectedMin = (std::min)(distOriginToA, distOriginToB);		// parentheses are needed here, see line 168 for URL (above)
+		float selectedMin = std::min(distOriginToA, distOriginToB);		//  see line 168 for URL (above)
 
 		// is the chosen min for A?
 		if (selectedMin == distOriginToA)
@@ -293,7 +293,7 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
-		float selectedMin = (std::min)(distOriginToA, distOriginToB);			// parentheses are needed here, see line 168 for URL (above)
+		float selectedMin = std::min(distOriginToA, distOriginToB);			// see line 168 for URL (above)
 
 		// handle case 1: distToOriginA or distToOriginB is equal to 0.
 		if
