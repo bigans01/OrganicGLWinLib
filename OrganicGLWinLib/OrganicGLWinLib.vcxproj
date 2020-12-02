@@ -181,6 +181,7 @@
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ContainerType.h" />
+    <ClInclude Include="CoplanarCategorizedLineProducer.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
     <ClInclude Include="CoplanarMassCreator.h" />
@@ -212,6 +213,8 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
+    <ClInclude Include="LineSegment.h" />
+    <ClInclude Include="LineSegmentIntersectAnalyzer.h" />
     <ClInclude Include="LineWelder.h" />
     <ClInclude Include="LineWelderHierarchyPosition.h" />
     <ClInclude Include="LineWelderRunMode.h" />
@@ -309,6 +312,7 @@
     <ClInclude Include="TileDataGLWIN.h" />
     <ClInclude Include="TileLoadData.h" />
     <ClInclude Include="TileMeta.h" />
+    <ClInclude Include="TwoDPoint.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="WeldedLine.h" />
     <ClInclude Include="WeldedLinePool.h" />
@@ -335,6 +339,7 @@
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
+    <ClCompile Include="CoplanarCategorizedLineComparison.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CoplanarMassCreator.cpp" />
     <ClCompile Include="CoplanarRelationships.cpp" />
@@ -361,6 +366,7 @@
     <ClCompile Include="IntersectionLine.cpp" />
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
+    <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />

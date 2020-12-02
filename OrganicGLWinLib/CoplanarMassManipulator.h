@@ -6,6 +6,7 @@
 #include "SPoly.h"
 #include "SPolyRefMap.h"
 #include "QuatRotationPoints.h"
+#include "CoplanarCategorizedLineProducer.h"
 #include <map>
 
 class CoplanarMassManipulator

@@ -504,6 +504,18 @@
     <ClInclude Include="CoplanarMassCreator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoplanarCategorizedLineProducer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineSegmentIntersectAnalyzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -753,6 +765,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CoplanarMassManipulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarCategorizedLineComparison.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineSegmentIntersectAnalyzer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

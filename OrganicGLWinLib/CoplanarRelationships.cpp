@@ -48,10 +48,8 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		std::cout << "!! prime point 0 requires no translation. " << std::endl;
 	}
 
-	// 1.3 rotate points by the quaternion
+	// 1.3 rotate points by the quaternion, to get to Z = 0, then round
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
-	
-	// do rounding 
 	coplanarPoints.roundAllPointsToHundredths();
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
@@ -95,8 +93,6 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	{
 		coplanarPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
 	}
-	
-	// Do rounding.
 	
 
 	std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;

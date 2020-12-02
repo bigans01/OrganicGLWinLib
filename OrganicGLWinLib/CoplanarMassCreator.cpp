@@ -31,7 +31,7 @@ void CoplanarMassCreator::runMassManipulation()
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
-												// (Step 2: ) produce the co-planar categorized lines -- if any -- that the related SPoly would create in the tracked SPoly.
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second);		// (Step 2: ) produce the co-planar categorized lines -- if any -- that the related SPoly would create in the tracked SPoly.
 												//		      We assume that the tracked/related SPolys have all been rotated to Z = 0. (rounding to hundredths may be needed too).
 												// (Step 3: ) build the CleaveSequence, if there is one to build.
 												// (Step 4: ) perform the fracturing, if it needs to be done; remember, the tracked SPoly's copy (trackedCopy) must be set to 
