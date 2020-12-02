@@ -18,9 +18,12 @@ class LineSegmentIntersectAnalyzer
 		};
 		LineSegment lineSegmentA;
 		LineSegment lineSegmentB;
+		TwoDPoint r, s;
 	private:
 		void performAnalysis();
+		bool checkForColinearOverlap();
 		float calculate2DCross(TwoDPoint in_crossPointA, TwoDPoint in_crossPointB);
+		float calculate2DDot(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB);
 };
 
 #endif
