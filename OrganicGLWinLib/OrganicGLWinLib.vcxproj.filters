@@ -516,6 +516,12 @@
     <ClInclude Include="TwoDPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LineSegmentIntersectType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineSegmentIntersectResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

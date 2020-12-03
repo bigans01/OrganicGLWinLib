@@ -215,6 +215,8 @@
     <ClInclude Include="IRPointType.h" />
     <ClInclude Include="LineSegment.h" />
     <ClInclude Include="LineSegmentIntersectAnalyzer.h" />
+    <ClInclude Include="LineSegmentIntersectResult.h" />
+    <ClInclude Include="LineSegmentIntersectType.h" />
     <ClInclude Include="LineWelder.h" />
     <ClInclude Include="LineWelderHierarchyPosition.h" />
     <ClInclude Include="LineWelderRunMode.h" />

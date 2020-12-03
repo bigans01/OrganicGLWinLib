@@ -4,21 +4,8 @@
 void LineSegmentIntersectAnalyzer::performAnalysis()
 {
 	// see this URL: https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-
-
-	// get the 2D slope for segment A, r
-	//float segmentASlopeX = lineSegmentA.b.x - lineSegmentA.a.x;
-	//float segmentASlopeY = lineSegmentA.b.y - lineSegmentA.a.y;
-	//TwoDPoint r(segmentASlopeX, segmentASlopeY);
-	r = lineSegmentA.b - lineSegmentA.a;
-
-
-	// get the 2D slope for segment B, s
-	//std::cout << "subtracting " << lineSegmentB.b.x << " from " << lineSegmentB.a.x << std::endl;
-	//float segmentBSlopeX = lineSegmentB.b.x - lineSegmentB.a.x;
-	//float segmentBSlopeY = lineSegmentB.b.y - lineSegmentB.a.y;
-	//TwoDPoint s(segmentBSlopeX, segmentBSlopeY);
-	s = lineSegmentB.b - lineSegmentB.a;
+	r = lineSegmentA.b - lineSegmentA.a;		// get the 2D slope for segment A, r
+	s = lineSegmentB.b - lineSegmentB.a;		// get the 2D slope for segment B, s
 
 
 	// first part of numerator, used in both the t and u solving equations
@@ -34,24 +21,9 @@ void LineSegmentIntersectAnalyzer::performAnalysis()
 	
 	float crossNumeratorA = calculate2DCross(preCrossNumerator, s);
 	float crossDenominatorA = calculate2DCross(r, s);
-
-	std::cout << "crossNumeratorA is: " << crossNumeratorA << std::endl;
-	std::cout << "crossDenominatorA is: " << crossDenominatorA << std::endl;
-
-	// 0 division protection:
-	//float t = crossNumeratorA / crossDenominatorA;						// this should be set as t
-	float t = 0.0f;
-	if
-	(
-		(crossNumeratorA != 0.0f)
-		&&
-		(crossDenominatorA != 0.0f)
-	)
-	{
-		t = crossNumeratorA / crossDenominatorA;
-	}
-	
-
+	//std::cout << "crossNumeratorA is: " << crossNumeratorA << std::endl;
+	//std::cout << "crossDenominatorA is: " << crossDenominatorA << std::endl;
+	float t = calculateLineSegmentIntersectScalar(crossNumeratorA, crossDenominatorA);
 	std::cout << "Line Segment A scalar (variable t) is : " << t << std::endl;
 
 	// *************** Segment B, solve for u (scalar value for Segment B)
@@ -59,26 +31,12 @@ void LineSegmentIntersectAnalyzer::performAnalysis()
 	// subtract point A of LineSegmentB
 
 	float crossNumeratorB = calculate2DCross(preCrossNumerator, r);
-	//std::cout << "!!! (1) Prior to branching, r is : " << r.x << ", " << r.y << std::endl;
-
 	float crossDenominatorB = calculate2DCross(r, s);
-	//float u = crossNumeratorB / crossDenominatorB;
-	float u = 0.0f;
-	if
-	(
-		(crossNumeratorB != 0.0f)
-		&&
-		(crossDenominatorB != 0.0f)
-	)
-	{
-		u = crossNumeratorB / crossDenominatorB;
-	}
-
-	//std::cout << "!!! (2) Prior to branching, r is : " << r.x << ", " << r.y << std::endl;
+	float u = calculateLineSegmentIntersectScalar(crossNumeratorB, crossDenominatorB);
 	std::cout << "Line Segment B scalar (variable u) is : " << u << std::endl;
 
+	/*
 	// test the point values 
-
 	// Segment A
 	TwoDPoint segmentAStart = lineSegmentA.a;
 	TwoDPoint segmentASlopeScaled = (r * t);
@@ -92,11 +50,9 @@ void LineSegmentIntersectAnalyzer::performAnalysis()
 	TwoDPoint intersectedCalcPointB = segmentBStart;
 	intersectedCalcPointB += segmentBSlopeScaled;
 	std::cout << "Segment B, intersected point: " << intersectedCalcPointB.x << ", " << intersectedCalcPointB.y << std::endl;
+	*/
 
 	float rsCross = calculate2DCross(r, s);
-
-	std::cout << "!!! (3) Prior to branching, r is : " << r.x << ", " << r.y << std::endl;
-
 	if (rsCross == 0.0f)	
 	{
 		// COLINEAR conditions
@@ -139,7 +95,10 @@ void LineSegmentIntersectAnalyzer::performAnalysis()
 	)
 	{
 		// NONCOLINEAR_INTERSECT
+		analyzedResult.intersectType = LineSegmentIntersectType::NONCOLINEAR_INTERSECT;
+		analyzedResult.intersectedPoint = lineSegmentA.a + (r * t);
 		std::cout << "Lines intersect! " << std::endl;
+		std::cout << "!!! Intersection point is: " << analyzedResult.intersectedPoint.x << ", " << analyzedResult.intersectedPoint.y << std::endl;
 	}
 	else
 	{
@@ -150,47 +109,40 @@ void LineSegmentIntersectAnalyzer::performAnalysis()
 	
 }
 
+float LineSegmentIntersectAnalyzer::calculateLineSegmentIntersectScalar(float in_numerator, float in_denominator)
+{
+	float scalarValue = 0.0f;
+
+	// check for 0 division safety
+	if
+	(		
+		(in_numerator != 0.0f)
+		&&
+		(in_denominator != 0.0f)
+	)
+	{
+		scalarValue = in_numerator / in_denominator;
+	}
+	return scalarValue;
+}
+
 float LineSegmentIntersectAnalyzer::calculate2DCross(TwoDPoint in_crossPointA, TwoDPoint in_crossPointB)
 {
-	//glm::vec3 returnVec;
-
-	//returnVec.x = (in_A.y * in_B.z) - (in_A.z * in_B.y);
-	//returnVec.y = (in_A.z * in_B.x) - (in_A.x * in_B.z);
-	//returnVec.z = (in_A.x * in_B.y) - (in_A.y * in_B.x);
-
-	//return returnVec;
-
 	float crossValue;
 	crossValue = (in_crossPointA.x * in_crossPointB.y) - (in_crossPointA.y * in_crossPointB.x);
-	//if (crossValue == 0.0f)
-	//{
-		//std::cout << "!!! Warning: 0 cross detected! " << std::endl;
-	//}
 	return crossValue;
 }
 
 float LineSegmentIntersectAnalyzer::calculate2DDot(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB)
 {
-	//std::cout << "#### pointA: " << in_dotPointA.x << ", " << in_dotPointA.y << std::endl;
-	//std::cout << "#### pointB: " << in_dotPointB.x << ", " << in_dotPointB.y << std::endl;
-
 	return (in_dotPointA.x * in_dotPointB.x) + (in_dotPointA.y * in_dotPointB.y);
 }
 
 bool LineSegmentIntersectAnalyzer::checkForColinearOverlap()
 {
 	bool returnValue = false;
-
-	//std::cout << "**** r is: " << r.x << ", " << r.y << std::endl;
-	//std::cout << "********** Line segment B, pointA: " << lineSegmentB.a.x << ", " << lineSegmentB.a.y << std::endl;
-	//std::cout << "********** Line segment A, pointA: " << lineSegmentA.a.x << ", " << lineSegmentA.a.y << std::endl;
-
 	float t0 = calculate2DDot((lineSegmentB.a - lineSegmentA.a), r) / calculate2DDot(r, r);
-	float t1 = calculate2DDot((lineSegmentB.a + s - lineSegmentA.a), r) / calculate2DDot(r, r);
-
-	//std::cout << "t0 is: " << t0 << std::endl;
-	//std::cout << "t1 is: " << t1 << std::endl;
-
+	//float t1 = calculate2DDot((lineSegmentB.a + s - lineSegmentA.a), r) / calculate2DDot(r, r);
 	if
 	(
 		(t0 <= 1)
