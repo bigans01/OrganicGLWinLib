@@ -15,6 +15,13 @@ class LineSegment
 			b.x = in_Bx;
 			b.y = in_By;
 		};
+		LineSegment(TwoDPoint in_twoDPointA, TwoDPoint in_twoDPointB)
+		{
+			a.x = in_twoDPointA.x;
+			a.y = in_twoDPointA.y;
+			b.x = in_twoDPointB.x;
+			b.y = in_twoDPointB.y;
+		}
 		TwoDPoint a;
 		TwoDPoint b;
 };
