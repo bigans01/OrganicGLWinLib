@@ -7,27 +7,27 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 	// test the basic line intersection finder class...
 
 	// typical intersect test.
-	LineSegment lineSegmentA(0, 0, 3, 1);	// a line with point A at 0,0, and point B at 3,1	-- should result in a t of .75
-	//LineSegment lineSegmentA(3, 1, 0, 0);	// a line with point A at 3,1, and point B at 0,0	-- should result in a t of .25
-	LineSegment lineSegmentB(3, 0, 1, 2);	// "" ""
+	TwoDLineSegment TwoDLineSegmentA(0, 0, 3, 1);	// a line with point A at 0,0, and point B at 3,1	-- should result in a t of .75
+	//TwoDLineSegment TwoDLineSegmentA(3, 1, 0, 0);	// a line with point A at 3,1, and point B at 0,0	-- should result in a t of .25
+	TwoDLineSegment TwoDLineSegmentB(3, 0, 1, 2);	// "" ""
 
 
 	// non-overlap test.
-	//LineSegment lineSegmentA(0, 0, 2, 0);
-	//LineSegment lineSegmentB(3, 0, 5, 0);
+	//TwoDLineSegment TwoDLineSegmentA(0, 0, 2, 0);
+	//TwoDLineSegment TwoDLineSegmentB(3, 0, 5, 0);
 
 	// overlap test
-	//LineSegment lineSegmentA(0, 0, 2, 0);
-	//LineSegment lineSegmentB(1, 0, 3, 0);
+	//TwoDLineSegment TwoDLineSegmentA(0, 0, 2, 0);
+	//TwoDLineSegment TwoDLineSegmentB(1, 0, 3, 0);
 
 	// parallel test
-	//LineSegment lineSegmentA(0, 0, 2, 0);
-	//LineSegment lineSegmentB(3, 2, 5, 2);
+	//TwoDLineSegment TwoDLineSegmentA(0, 0, 2, 0);
+	//TwoDLineSegment TwoDLineSegmentB(3, 2, 5, 2);
 
 	// non-intersect test
-	//LineSegment lineSegmentA(0, 0, 2, 0);
-	//LineSegment lineSegmentB(3, 5, 5, 0);
-	LineSegmentIntersectAnalyzer analyzer(lineSegmentA, lineSegmentB);
+	//TwoDLineSegment TwoDLineSegmentA(0, 0, 2, 0);
+	//TwoDLineSegment TwoDLineSegmentB(3, 5, 5, 0);
+	TwoDLineSegmentIntersectAnalyzer analyzer(TwoDLineSegmentA, TwoDLineSegmentB);
 
 
 
@@ -42,9 +42,9 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 	auto trackedBorderLinesEnd = trackedSPolyRef->borderLines.end();
 	for (; trackedBorderLinesBegin != trackedBorderLinesEnd; trackedBorderLinesBegin++)
 	{
-		TwoDPoint trackedSegmentA = convertGlmVec3To2D(trackedBorderLinesBegin->second.pointA);
-		TwoDPoint trackedSegmentB = convertGlmVec3To2D(trackedBorderLinesBegin->second.pointB);
-		LineSegment trackedSegment(trackedSegmentA, trackedSegmentB);
+		TwoDPoint trackedSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(trackedBorderLinesBegin->second.pointA);
+		TwoDPoint trackedSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(trackedBorderLinesBegin->second.pointB);
+		TwoDLineSegment trackedSegment(trackedSegmentA, trackedSegmentB);
 
 		std::cout << "!! Current trackedBorderLine points are: A->" << trackedSegmentA.x << ", " << trackedSegmentA.y << " | " 
 														  << " B->" << trackedSegmentB.x << ", " << trackedSegmentB.y << std::endl;
@@ -55,20 +55,34 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 		{
 			for (int x = 0; x < 3; x++)
 			{
-				TwoDPoint currentSTriangleLineSegmentA = convertGlmVec3To2D(relatedSTrianglesBegin->second.triangleLines[x].pointA);
-				TwoDPoint currentSTriangleLineSegmentB = convertGlmVec3To2D(relatedSTrianglesBegin->second.triangleLines[x].pointB);
-				LineSegment currentSTriangleLineSegmment(currentSTriangleLineSegmentA, currentSTriangleLineSegmentB);
+				TwoDPoint currentSTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(relatedSTrianglesBegin->second.triangleLines[x].pointA);
+				TwoDPoint currentSTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(relatedSTrianglesBegin->second.triangleLines[x].pointB);
+				TwoDLineSegment currentSTriangleTwoDLineSegment(currentSTriangleTwoDLineSegmentA, currentSTriangleTwoDLineSegmentB);
 
-				std::cout << "--> Comparing trackedBorderLine against currentSTriangleLineSegment with these points: A-> " << currentSTriangleLineSegmentA.x << ", " << currentSTriangleLineSegmentA.y << " | "
-																												<< " B-> " << currentSTriangleLineSegmentB.x << ", " << currentSTriangleLineSegmentB.y << std::endl;
-				LineSegmentIntersectAnalyzer comparator(trackedSegment, currentSTriangleLineSegmment);
-
+				std::cout << "--> Comparing trackedBorderLine against currentSTriangleTwoDLineSegment with these points: A-> " << currentSTriangleTwoDLineSegmentA.x << ", " << currentSTriangleTwoDLineSegmentA.y << " | "
+																												<< " B-> " << currentSTriangleTwoDLineSegmentB.x << ", " << currentSTriangleTwoDLineSegmentB.y << std::endl;
+				TwoDLineSegmentIntersectAnalyzer comparator(trackedSegment, currentSTriangleTwoDLineSegment);
+				TwoDLineSegmentJudge judge(comparator.analyzedResult, currentSTriangleTwoDLineSegment, trackedSPolyRef);
 
 				// perform analysis here.
 			}
 		}
 	}
 
+	/*
+	std::cout << "############# Testing function for if point is within triangle. " << std::endl;
+	glm::vec3 pointToCheck;
+	pointToCheck.x = .5;
+	pointToCheck.y = .5;
+
+	glm::vec3 trianglePoint1;
+	glm::vec3 trianglePoint2;
+	trianglePoint2.y = 1.0f;
+	glm::vec3 trianglePoint3;
+	trianglePoint3.x = 1.0f;
+
+	OrganicGLWinUtils::checkIfPointLiesWithinTriangle(pointToCheck, trianglePoint1, trianglePoint2, trianglePoint3);
+	*/
 }
 
 TwoDPoint CoplanarCategorizedLineProducer::convertGlmVec3To2D(glm::vec3 in_glmvec3)

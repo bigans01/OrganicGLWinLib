@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "OrganicGLWinUtils.h"
 #include "QuatRotationPoints.h"
 
 void QuatRotationPoints::applyQuaternion(glm::quat in_quat)

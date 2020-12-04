@@ -213,10 +213,11 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
-    <ClInclude Include="LineSegment.h" />
-    <ClInclude Include="LineSegmentIntersectAnalyzer.h" />
-    <ClInclude Include="LineSegmentIntersectResult.h" />
-    <ClInclude Include="LineSegmentIntersectType.h" />
+    <ClInclude Include="ThreeDLineSegment.h" />
+    <ClInclude Include="TwoDLineSegment.h" />
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />
+    <ClInclude Include="TwoDLineSegmentIntersectResult.h" />
+    <ClInclude Include="TwoDLineSegmentIntersectType.h" />
     <ClInclude Include="LineWelder.h" />
     <ClInclude Include="LineWelderHierarchyPosition.h" />
     <ClInclude Include="LineWelderRunMode.h" />
@@ -314,6 +315,7 @@
     <ClInclude Include="TileDataGLWIN.h" />
     <ClInclude Include="TileLoadData.h" />
     <ClInclude Include="TileMeta.h" />
+    <ClInclude Include="TwoDLineSegmentJudge.h" />
     <ClInclude Include="TwoDPoint.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="WeldedLine.h" />

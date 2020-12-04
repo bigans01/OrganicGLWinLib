@@ -1,9 +1,9 @@
 #pragma once
 
-#ifndef LINESEGMENTINTERSECTTYPE_H
-#define LINESEGMENTINTERSECTTYPE_H
+#ifndef TwoDLineSegmentINTERSECTTYPE_H
+#define TwoDLineSegmentINTERSECTTYPE_H
 
-enum class LineSegmentIntersectType
+enum class TwoDLineSegmentIntersectType
 {
 	COLINEAR_OVERLAP,
 	COLINEAR_NOOVERLAP,

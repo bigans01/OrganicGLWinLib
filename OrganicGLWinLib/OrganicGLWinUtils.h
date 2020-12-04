@@ -31,8 +31,12 @@
 #include "AtlasPropertiesGL.h"
 #include "TileLoadData.h"
 #include "PointTranslationCheck.h"
+#include "QuatRotationManager.h"
 #include "QuatRotationPoints.h"
 #include "stb_image.h"
+#include "TwoDLineSegment.h"
+#include "TwoDPoint.h"
+#include "ThreeDLineSegment.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -81,6 +85,8 @@ public:
 	static glm::vec3 findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static glm::vec3 findTriangleCentroidDebug(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
+	static bool checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck, glm::vec3 in_trianglePoint0, glm::vec3 in_trianglePoint1, glm::vec3 in_trianglePoint2);
+	static TwoDPoint convertGlmVec3To2D(glm::vec3 in_glmvec3);
 
 	// IMGUI functions
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context

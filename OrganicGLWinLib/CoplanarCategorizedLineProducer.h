@@ -3,9 +3,10 @@
 #define COPLANARCATEGORIZEDLINEPRODUCER_H
 
 #include "SPoly.h"
-#include "LineSegment.h"
-#include "LineSegmentIntersectAnalyzer.h"
+#include "TwoDLineSegment.h"
+#include "TwoDLineSegmentIntersectAnalyzer.h"
 #include "TwoDPoint.h"
+#include "OrganicGLWinUtils.h"
 
 class CoplanarCategorizedLineProducer
 {

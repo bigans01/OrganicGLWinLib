@@ -507,19 +507,25 @@
     <ClInclude Include="CoplanarCategorizedLineProducer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineSegment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LineSegmentIntersectAnalyzer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TwoDPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineSegmentIntersectType.h">
+    <ClInclude Include="TwoDLineSegment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineSegmentIntersectResult.h">
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreeDLineSegment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentJudge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

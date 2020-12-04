@@ -8,8 +8,9 @@
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include <iostream>
-#include "OrganicGLWinUtils.h"
+//#include "OrganicGLWinUtils.h"
 
+class OrganicGLWinUtils;
 class QuatRotationPoints
 {
 public:
