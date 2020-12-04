@@ -420,6 +420,7 @@
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
+    <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>

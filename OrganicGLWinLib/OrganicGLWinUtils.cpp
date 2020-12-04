@@ -1269,3 +1269,9 @@ TwoDPoint OrganicGLWinUtils::convertGlmVec3To2D(glm::vec3 in_glmvec3)
 	TwoDPoint returnPoint(in_glmvec3.x, in_glmvec3.y);
 	return returnPoint;
 }
+
+glm::vec3 OrganicGLWinUtils::convert2DToGlmVec3(TwoDPoint in_twoDPoint)
+{
+	glm::vec3 returnVec(in_twoDPoint.x, in_twoDPoint.y, 0);
+	return returnVec;
+}

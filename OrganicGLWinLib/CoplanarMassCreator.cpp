@@ -10,9 +10,9 @@ void CoplanarMassCreator::runMassManipulation()
 	// "consumes" of the tracked SPoly.
 	// To do this, we must do the following for EACH related SPoly:
 	// 1.) Clear the COPY of the tracked SPoly that we are using (i.e., clear its CleaveSequences and BorderLineInterceptRecords)
-	// 2.) Get the categorized lines that each related SPoly produces in the tracked SPoly.
-	// 3.) Build a CleaveSequence in the tracked SPoly from these newly produced lines. (via SPoly::buildCleaveSequences())
-	// 4.) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. SPolyFracturer may need a new constructor/function to handle this.
+	// 2.) (Done in CoplanarCategorizedLineProducer) Get the categorized lines that each related SPoly produces in the tracked SPoly.
+	// 3.) (Done in CoplanarCategorizedLineProducer) Build a CleaveSequence in the tracked SPoly from these newly produced lines. (via SPoly::buildCleaveSequences())
+	// 4.) (Done in CoplanarCategorizedLineProducer) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. SPolyFracturer may need a new constructor/function to handle this.
 	//	   --OR-- needs a new class to handle the fracturing, such as SPolyCoplanarFracturer.
 	//     NOTE: the copied SPoly will need to be set as MassManipulationMode::DESTRUCTION, since we want to get the area of the triangles that are "cut" out of 
 	//     the tracked SPoly's area as a result of the related SPoly intersecting with it.
@@ -31,11 +31,7 @@ void CoplanarMassCreator::runMassManipulation()
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
-		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second);		// (Step 2: ) produce the co-planar categorized lines -- if any -- that the related SPoly would create in the tracked SPoly.
-												//		      We assume that the tracked/related SPolys have all been rotated to Z = 0. (rounding to hundredths may be needed too).
-												// (Step 3: ) build the CleaveSequence, if there is one to build.
-												// (Step 4: ) perform the fracturing, if it needs to be done; remember, the tracked SPoly's copy (trackedCopy) must be set to 
-												//            have MassManipulationMode::DESTRUCTION. Then, when the fracturing is done, acquire the resulting SPolySupergroup's SPoly's STriangles. 
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second);		
 												//            For each STriangle in the SPoly, acquire it's area, and get the total.
 
 												// (Step 5: ) Get area.

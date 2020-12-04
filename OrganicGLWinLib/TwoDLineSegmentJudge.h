@@ -6,6 +6,8 @@
 #include "TwoDLineSegmentIntersectResult.h"
 #include "TwoDLineSegment.h"
 #include "SPoly.h"
+#include "OrganicGLWinUtils.h"
+#include <iostream>
 
 
 class TwoDLineSegmentJudge
@@ -15,10 +17,14 @@ class TwoDLineSegmentJudge
 			suspectResult(in_suspectResult),
 			suspectLine(in_suspectLine),
 			trackedSPolyCopyRef(in_trackedSPolyCopyRef)
-		{};
+		{
+			runJudgement();
+		};
 		TwoDLineSegmentIntersectResult suspectResult;
 		TwoDLineSegment suspectLine;
 		SPoly* trackedSPolyCopyRef = nullptr;
+	private:
+		void runJudgement();
 };
 
 #endif
