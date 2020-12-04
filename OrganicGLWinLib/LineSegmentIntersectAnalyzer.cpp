@@ -142,15 +142,36 @@ bool LineSegmentIntersectAnalyzer::checkForColinearOverlap()
 {
 	bool returnValue = false;
 	float t0 = calculate2DDot((lineSegmentB.a - lineSegmentA.a), r) / calculate2DDot(r, r);
-	//float t1 = calculate2DDot((lineSegmentB.a + s - lineSegmentA.a), r) / calculate2DDot(r, r);
-	if
-	(
-		(t0 <= 1)
-		&&
-		(t0 >= 0)
-	)
+	float t1 = calculate2DDot((lineSegmentB.a + s - lineSegmentA.a), r) / calculate2DDot(r, r);
+	float rsDot = calculate2DDot(s, r);
+
+	std::cout << "Dot of s and r is: " << rsDot << std::endl;
+	std::cout << "#### t0 is: " << t0 << std::endl;
+	std::cout << "#### t1 is: " << t1 << std::endl;
+
+	if (rsDot > 0)	// lines go in same direction
 	{
-		returnValue = true;	// overlaps
+		if
+		(
+			(t0 <= 1)
+			&&
+			(t0 >= 0)
+		)
+		{
+			returnValue = true;	// overlaps
+		}
+	}
+	else if (rsDot < 0)	// lines go in opposite directions
+	{
+		if
+		(
+			(t1 <= 1)
+			&&
+			(t1 >= 0)
+		)
+		{
+			returnValue = true;	// overlaps
+		}
 	}
 	return returnValue;
 }
