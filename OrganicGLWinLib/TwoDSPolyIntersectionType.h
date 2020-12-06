@@ -1,0 +1,13 @@
+#pragma once
+#ifndef TWODPOLYINTERSECTIONTYPE_H
+#define TWODPOLYINTERSECTIONTYPE_H
+
+enum class TwoDSPolyIntersectionType
+{
+	HIT_BORDERLINE,
+	HIT_NONBORDERLINE,
+	NO_HIT,
+	NOVAL
+};
+
+#endif

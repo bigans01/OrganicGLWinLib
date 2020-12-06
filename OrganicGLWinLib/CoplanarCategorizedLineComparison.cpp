@@ -106,15 +106,29 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 															   << currentHostTriangleTwoDLineSegmentB.x << ", " << currentHostTriangleTwoDLineSegmentB.y << std::endl;
 
 					TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment);	// run the comparator.
-					if (comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
+					if // do this, as long as the resulting line comparison isn't classified as any of the COLINEAR tpyes (COLINEAR_OVERLAP, COLINEAR_NOOVERLAP)
+					(
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
+						||
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NO_INTERSECT)
+						||
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::PARALLEL)
+					)
 					{
-						// -if the guest segment hit a host segment that was a border line, then IntersectionMetadata::HIT_BORDERLINE
-						// -if the guest segment hit a host segment that was NOT a border line, then IntersectionMetaData::HIT_NONBORDERLINE
+						// -if the guest segment hit a host segment that was a border line, then TwoDPolyIntersectionType::HIT_BORDERLINE
+						// -if the guest segment hit a host segment that was NOT a border line, then TwoDPolyIntersectionType::HIT_NONBORDERLINE
 						// ...either way, register the HIT.
+						currentGuestTriangleSegment.attemptIntersectionInsert(comparator.analyzedResult, &hostTrianglePtr->triangleLines[z]);
 					}
 
 					// judge the currentGuestTriangleSegment; put the result into TwoDLineSegmentMetaTracker container.
 				}
+
+				// after the current related line has compared itself to all 3 lines of the current tracked STriangle, analyze the results.
+				// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
+				// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
+				// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
+				currentGuestTriangleSegment.attemptCategorizedLineConstruction();
 			}
 		}
 		/*

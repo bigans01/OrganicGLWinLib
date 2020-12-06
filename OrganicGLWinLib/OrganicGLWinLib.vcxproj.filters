@@ -528,6 +528,12 @@
     <ClInclude Include="TwoDLineSegmentJudge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TwoDSPolyIntersectionType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDSPolyIntersectionRecord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -786,6 +792,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TwoDLineSegmentJudge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
