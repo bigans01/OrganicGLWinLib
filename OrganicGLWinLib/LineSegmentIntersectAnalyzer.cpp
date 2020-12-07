@@ -96,7 +96,7 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	{
 		// NONCOLINEAR_INTERSECT
 		analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
-		analyzedResult.intersectedPoint = TwoDLineSegmentA.a + (r * t);
+		analyzedResult.intersectedPoint = round2DPointToHundredths(TwoDLineSegmentA.a + (r * t));
 		std::cout << "Lines intersect! " << std::endl;
 		std::cout << "!!! Intersection point is: " << analyzedResult.intersectedPoint.x << ", " << analyzedResult.intersectedPoint.y << std::endl;
 	}
@@ -174,4 +174,12 @@ bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 		}
 	}
 	return returnValue;
+}
+
+TwoDPoint TwoDLineSegmentIntersectAnalyzer::round2DPointToHundredths(TwoDPoint in_point)
+{
+	TwoDPoint returnPoint = in_point;
+	returnPoint.x = floor(in_point.x * 100 + 0.5) / 100;
+	returnPoint.y = floor(in_point.y * 100 + 0.5) / 100;
+	return returnPoint;
 }

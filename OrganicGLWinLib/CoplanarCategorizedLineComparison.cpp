@@ -89,6 +89,9 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 		for (int currentGuestTriangleIndex = 0; currentGuestTriangleIndex < guestPolyTriangleCount; currentGuestTriangleIndex++)					// .. to each of poly B's tertiaries...
 		{
 			STriangle* currentGuestTrianglePtr = &relatedSPolyRef->triangles[currentGuestTriangleIndex];			// for the current triangle we're comparing to
+			glm::vec3 currentGuestTriangleCentroid = OrganicGLWinUtils::findTriangleCentroid(currentGuestTrianglePtr->triangleLines[0].pointA,
+																							currentGuestTrianglePtr->triangleLines[1].pointA,
+																							currentGuestTrianglePtr->triangleLines[2].pointA);
 			for (int y = 0; y < 3; y++)		// for looping through guestTrianglePtr's lines
 			{
 				TwoDPoint currentGuestTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(currentGuestTrianglePtr->triangleLines[y].pointA);
@@ -128,7 +131,7 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
 				// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 				// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
-				currentGuestTriangleSegment.attemptCategorizedLineConstruction();
+				currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
 			}
 		}
 		/*

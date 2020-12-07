@@ -4,11 +4,13 @@
 
 #include "TwoDLineSegmentIntersectResult.h"
 #include "TwoDPoint.h"
+#include "STriangle.h"
 #include "STriangleLine.h"
 #include <vector>
 #include "TwoDSPolyIntersectionRecord.h"
 #include "TwoDSPolyIntersectionType.h"
 #include "CategorizedLine.h"
+#include "OrganicGLWinUtils.h"
 
 class TwoDLineSegment
 {
@@ -33,7 +35,8 @@ class TwoDLineSegment
 		bool containsCategorizedLine = false;	// set to true if/when a valid categorized line is determined.
 
 		void attemptIntersectionInsert(TwoDLineSegmentIntersectResult in_result, STriangleLine* in_triangleLineRef);
-		void attemptCategorizedLineConstruction();
+		void attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr);
+		glm::vec3 determineCoplanarCategorizedLineEmptyNormal(glm::vec3 in_guestTriangleCentroid, glm::vec3 in_pointA, glm::vec3 in_pointB);
 	private:
 		std::vector<TwoDSPolyIntersectionRecord> intersectionRecords;
 		int numberOfIntersectedBorderLines = 0;

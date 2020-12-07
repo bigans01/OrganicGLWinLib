@@ -45,31 +45,61 @@ void TwoDLineSegment::insertIntersectionRecord(TwoDSPolyIntersectionType in_inte
 	intersectionRecords.push_back(newRecord);
 }
 
-void TwoDLineSegment::attemptCategorizedLineConstruction()
+void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr)
 {
 	// -if 2 HIT_BORDER_LINE,																			  -> A_SLICE
 	// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
 	// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 	// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
 
-	// branch for one HIT_BORDER_LINE
-	if (numberOfIntersectedBorderLines == 1)
+	if (intersectionRecords.size() == 1)
 	{
-		if (numberOfIntersectedNonBorderLines == 1)
+
+	}
+
+	else if (intersectionRecords.size() == 2)
+	{
+		// 1 HIT_BORDER_LINE, 1 HIT_NONBORDERLINE
+		if (numberOfIntersectedBorderLines == 1)	// branch for one HIT_BORDER_LINE
 		{
-			// 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE, -> PARTIAL_BOUND
+
 		}
-		else
+
+
+		// 2 HIT_BORDER_LINE, -> A_SLICE
+		if (numberOfIntersectedBorderLines == 2)
 		{
-			// 1 HIT_BORDER_LINE, but need to determine the other point; find which point in the segment lies within the triangle and then -> PARTIAL_BOUND
+			std::cout << "!! Branch for a A_SLICE categorized line entered. " << std::endl;
+			containsCategorizedLine = true;
+			CategorizedLine newLine;
+			auto recordsBegin = intersectionRecords.begin();
+			newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+			newLine.line.isPointAOnBorder = 1;
+			newLine.line.pointABorder = recordsBegin->intersectedBorderLineID;
+
+			recordsBegin++;
+			newLine.line.pointB = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+			newLine.line.isPointBOnBorder = 1;
+			newLine.line.pointBBorder = recordsBegin->intersectedBorderLineID;
+
+			newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+			newLine.type = IntersectionType::A_SLICE;
+
+			std::cout << "!! Newly formed CategorizedLine stats are: " << std::endl;
+			std::cout << "Point A: " << newLine.line.pointA.x << ", " << newLine.line.pointA.y << ", " << newLine.line.pointA.z << std::endl;
+			std::cout << "isPointAOnBorder: " << newLine.line.isPointAOnBorder << std::endl;
+			std::cout << "pointABorder" << newLine.line.pointABorder << std::endl;
+			std::cout << "Point B: " << newLine.line.pointB.x << ", " << newLine.line.pointB.y << ", " << newLine.line.pointB.z << std::endl;
+			std::cout << "isPointBOnBorder: " << newLine.line.isPointBOnBorder << std::endl;
+			std::cout << "pointBBorder" << newLine.line.pointBBorder << std::endl;
+
+			
 		}
 	}
 
-
-	// 2 HIT_BORDER_LINE, -> A_SLICE
-	if (numberOfIntersectedBorderLines == 2)
+	else if (intersectionRecords.size() == 3)
 	{
-		std::cout << "!! Branch for a A_SLICE categorized line entered. " << std::endl;
+
 	}
 
 	// No hits -- check for -> NON_BOUND
@@ -81,6 +111,22 @@ void TwoDLineSegment::attemptCategorizedLineConstruction()
 	)
 	{
 		std::cout << "!! Branch for potential NON_BOUND entered. " << std::endl;
+		glm::vec3 convertedPointA = OrganicGLWinUtils::convert2DToGlmVec3(a);
+		glm::vec3 convertedPointB = OrganicGLWinUtils::convert2DToGlmVec3(b);
+		if
+		(	
+			(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPointA, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+			&&
+			(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPointB, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+		)
+		{
+			std::cout << "!! this segment is a NON_BOUND that exists within the area of the compared-to STriangle. " << std::endl;
+			containsCategorizedLine = true;
+		}
+		else
+		{
+			std::cout << "!! this segment doesn't lie within the compared-to STriangle; no CategorizedLine exists! " << std::endl;
+		}
 	}
 	/*
 	else if 
@@ -88,4 +134,37 @@ void TwoDLineSegment::attemptCategorizedLineConstruction()
 
 	)
 	*/
+}
+
+glm::vec3 TwoDLineSegment::determineCoplanarCategorizedLineEmptyNormal(glm::vec3 in_guestTriangleCentroid, glm::vec3 in_pointA, glm::vec3 in_pointB)
+{
+	glm::vec3 calculatedEmptyNormal;
+	glm::vec3 segmentACopy = in_pointA;
+	glm::vec3 segmentBCopy = in_pointB;
+	glm::vec3 centroidCopy = in_guestTriangleCentroid;
+
+	QuatRotationPoints quatPoints;
+	QuatRotationManager rotationManager;
+	PointTranslationCheck pointTranslator;
+
+	quatPoints.pointsRefVector.push_back(&segmentACopy);
+	quatPoints.pointsRefVector.push_back(&segmentBCopy);
+	quatPoints.pointsRefVector.push_back(&centroidCopy);
+
+	pointTranslator.performCheck(quatPoints.getFirstPoint());
+	if (pointTranslator.requiresTranslation == 1)
+	{
+		quatPoints.applyTranslation(pointTranslator.getTranslationValue());
+	}
+
+	// after translation, insert a reference to the calculatedEmptyNormal
+	quatPoints.pointsRefVector.push_back(&calculatedEmptyNormal);
+
+	rotationManager.initializeAndRunForCoplanarCategorizedLineEmptyNormal(&quatPoints);
+
+	std::cout << "!!!!! --> Calculated empty normal is: " << calculatedEmptyNormal.x << ", " << calculatedEmptyNormal.y << ",  " << calculatedEmptyNormal.z << std::endl;
+	
+
+
+	return calculatedEmptyNormal;
 }

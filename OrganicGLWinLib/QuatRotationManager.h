@@ -30,6 +30,7 @@ public:
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector);
 	glm::vec3 initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForPlanarAlignmentToZ(QuatRotationPoints* in_quatpointsRefVector);
+	void initializeAndRunForCoplanarCategorizedLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
 
 	CyclingDirection initializeAndRunForCyclingDirectionFinder(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForCyclingDirectionFinderV2(QuatRotationPoints* in_quatpointsRefVector);
@@ -50,6 +51,7 @@ public:
 
 	void executeRotationsForPlanarSlide();
 	void executeRotationsForFindingBorderLine();
+	void executeRotationsForFindingCoplanarCategorizedLineEmptyNormal();
 	void executeRotationsForFindingBorderLineEmptyNormal();
 	float executeRotationsForFindingObserverRadians();
 	bool executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
@@ -60,6 +62,8 @@ public:
 	void rotateAroundXToYZeroForPlanarSlideAndPushIntoStack();
 	void rotateAroundZAndPushIntoStack();
 	void rotateAroundZToFindBorderLineEmptyNormalAndPushIntoStack();
+	void rotateAroundZToFindCoplanarCategorizedLineEmptyNormalAndPushIntoStack();
+
 	void rotateAroundZAndPushIntoStack(glm::vec3* in_point);
 	void rotateAroundXToYZeroAndPushIntoStack();
 	void rotateAroundXForZFractureAndPushIntoStack();

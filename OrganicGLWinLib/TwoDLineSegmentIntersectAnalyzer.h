@@ -25,6 +25,7 @@ class TwoDLineSegmentIntersectAnalyzer
 	private:
 		void performAnalysis();
 		bool checkForColinearOverlap();
+		TwoDPoint round2DPointToHundredths(TwoDPoint in_point);
 		float calculate2DCross(TwoDPoint in_crossPointA, TwoDPoint in_crossPointB);
 		float calculate2DDot(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB);
 		float calculateTwoDLineSegmentIntersectScalar(float in_numerator, float in_denominator);
