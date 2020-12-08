@@ -124,6 +124,17 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 						currentGuestTriangleSegment.attemptIntersectionInsert(comparator.analyzedResult, &hostTrianglePtr->triangleLines[z]);
 					}
 
+					if  // check whether or not the current guets line segment is colinear to any of the lines in the compared-to host triangle.
+					(
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_NOOVERLAP)
+						||
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_OVERLAP)
+					)
+					{
+						std::cout << "!!! NOTICE: this line is colinear to another line in the host triangle. No CategorizedLine should exist. " << std::endl;
+						currentGuestTriangleSegment.isColinearToAnotherLine = true;
+					}
+
 					// judge the currentGuestTriangleSegment; put the result into TwoDLineSegmentMetaTracker container.
 				}
 
@@ -132,6 +143,10 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 				// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
 				currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
+				if (currentGuestTriangleSegment.containsCategorizedLine == true)
+				{
+					std::cout << "!!! Inserting categorized line into pool..." << std::endl;
+				}
 			}
 		}
 		/*

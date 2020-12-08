@@ -61,10 +61,12 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 			if (checkForColinearOverlap() == true)		// COLINEAR_OVERLAP
 			{
 				std::cout << "Lines are colinear overlap! " << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::COLINEAR_OVERLAP;
 			}
 			else   // COLINEAR_NOOVERLAP
 			{
 				std::cout << "Lines are colinear, and don't overlap! " << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::COLINEAR_NOOVERLAP;
 			}
 			
 		}

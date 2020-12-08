@@ -33,6 +33,7 @@ class TwoDLineSegment
 		TwoDPoint a;
 		TwoDPoint b;
 		bool containsCategorizedLine = false;	// set to true if/when a valid categorized line is determined.
+		bool isColinearToAnotherLine = false;	// set to true if this line segment is colinear to any other line in the host triangle it's compared to
 
 		void attemptIntersectionInsert(TwoDLineSegmentIntersectResult in_result, STriangleLine* in_triangleLineRef);
 		void attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr);
