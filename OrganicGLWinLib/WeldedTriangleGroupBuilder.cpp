@@ -18,20 +18,31 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 
 	// un-comment below block when ready to test.
 
-	//std::cout << "getPoolSize, pre check" << std::endl;
+	std::cout << "getPoolSize, pre check: " << linePool.getPoolSize() << std::endl;
 	
-	while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+	if (linePool.getPoolSize() > 3)
 	{
-		//std::cout << "###~~~~~ Building new observation. " << std::endl;
-		//std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
-		acquireWeldedLinesForWindowAndBuildObservation();
+		while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+		{
+			//std::cout << "###~~~~~ Building new observation. " << std::endl;
+			//std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
+			acquireWeldedLinesForWindowAndBuildObservation();
+		}
+
+		std::cout << "getPoolSize, post check: " << linePool.getPoolSize() << std::endl;
+
+		//std::cout << "getPoolSize, pre check 2" << std::endl;
+
+		//acquireWeldedLinesForWindowAndBuildObservation();
+		handleFinalObservation();
 	}
-
-	//std::cout << "getPoolSize, pre check 2" << std::endl;
-
-	//acquireWeldedLinesForWindowAndBuildObservation();
-	handleFinalObservation();
-
+	else if (linePool.getPoolSize() == 3)
+	{
+		WeldedTriangle newTriangle(linePool.fetchLineFromPoolViaIndex(0), linePool.fetchLineFromPoolViaIndex(1), linePool.fetchLineFromPoolViaIndex(2));
+		tracer.currentContainer.insertWeldedTriangle(newTriangle);
+		weldedTriangleContainerVector.push_back(tracer.currentContainer);
+		linePool.clearPool();
+	}
 	//std::cout << "getPoolSize, post check" << std::endl;
 
 	//std::cout << "Estimated number of triangles that will be produced is: " << weldedTriangleContainerVector.triangleMap.size() << std::endl;
@@ -62,13 +73,25 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 	// this would run once the observation is marked as FINISHED.
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
 	tracer.buildNewObservation(poolGuide);		// build it, let it run
+
+	std::cout << "Fetch (1) " << std::endl;
+	std::cout << "weldedTriangleContainerVector size is: " << weldedTriangleContainerVector.size() << std::endl;
+	
 	auto lastContainer = weldedTriangleContainerVector.rbegin();
 	auto lastTriangleInLastContainer = lastContainer->triangleMap.rbegin();
 	auto tracerContainer = tracer.currentContainer.triangleMap.begin();	// since there's only one triangle that will be produced, just get a pointer to it.
 
 	// we will compare the points of the last line in the most recent triangle, to the first line in the newest triangle we are about to add.
+
+	std::cout << "Fetch (2) " << std::endl;
+
 	WeldedLine* mostRecentTriangleWeldedLineRef = lastTriangleInLastContainer->second.fetchTriangleLineRef(2);	
 	WeldedLine* lastTriangleWeldedLineRef = tracerContainer->second.fetchTriangleLineRef(0);
+
+	std::cout << "*** Prior to welded line printout " << std::endl;
+	std::cout << "Most recent welded line, point A: " << mostRecentTriangleWeldedLineRef->pointA.x << ", " << mostRecentTriangleWeldedLineRef->pointA.y << ", " << mostRecentTriangleWeldedLineRef->pointA.z << std::endl;
+	std::cout << "Last triangle welded line, point A: " << lastTriangleWeldedLineRef->pointA.x << ", " << lastTriangleWeldedLineRef->pointA.y << ", " << lastTriangleWeldedLineRef->pointA.z << std::endl;
+
 	bool isAligned = false;
 	while (isAligned == false)
 	{
@@ -88,12 +111,12 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 			tracerContainer->second.shiftLines();
 		}
 
-		//std::cout << "!! Looping alignment while..." << std::endl;
+		std::cout << "!! Looping alignment while..." << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
 
-
+	std::cout << "!!! handleFinalObservation, while loop complete..." << std::endl;
 
 	// before we insert the last triangle, we must make sure it is aligned to the rule of the triangle fan (should be done from the previous loop)
 	lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));

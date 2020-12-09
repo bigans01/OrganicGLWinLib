@@ -1360,7 +1360,7 @@ void SPolySet::performFracturing()
 			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
-			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker);
+			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z);
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();

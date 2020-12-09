@@ -89,7 +89,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		else if (currentObserverState == TracingObserverState::FINISHED)
 		{
 			// we're finished, just insert the final WeldedTriangle.
-			//std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
+			std::cout << ":::: Test; - observation is finished, printing out the lines of the last WeldedTriangle: " << std::endl;
 			//weldedLinePoolRef->printLines();
 			WeldedTriangle finalTriangle(weldedLinePoolRef->fetchLineFromPoolViaIndex(0), weldedLinePoolRef->fetchLineFromPoolViaIndex(1), weldedLinePoolRef->fetchLineFromPoolViaIndex(2));
 			//weldedTriangleVectorRef->push_back(finalTriangle);

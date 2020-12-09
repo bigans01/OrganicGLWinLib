@@ -45,13 +45,14 @@ void TwoDLineSegment::insertIntersectionRecord(TwoDSPolyIntersectionType in_inte
 	intersectionRecords.push_back(newRecord);
 }
 
-void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr)
+CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr)
 {
 	// -if 2 HIT_BORDER_LINE,																			  -> A_SLICE
 	// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
 	// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 	// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
 
+	CategorizedLine newLine;
 	if (isColinearToAnotherLine == false)
 	{
 
@@ -62,7 +63,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 			{
 				std::cout << "!! Branch for a PARTIAL_BOUND categorized line entered. " << std::endl;
 				containsCategorizedLine = true;
-				CategorizedLine newLine;
+				
 				auto recordsBegin = intersectionRecords.begin();
 				newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
 				newLine.line.isPointAOnBorder = 1;
@@ -88,6 +89,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 					newLine.line.pointB = convertedSegmentPointB;
 				}
 				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+				newLine.line.numberOfBorderLines = 1;
 				newLine.type = IntersectionType::PARTIAL_BOUND;
 				std::cout << "!! Newly formed CategorizedLine stats are: " << std::endl;
 				std::cout << "Point A: " << newLine.line.pointA.x << ", " << newLine.line.pointA.y << ", " << newLine.line.pointA.z << std::endl;
@@ -107,7 +109,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 
 				std::cout << "!! Branch for a PARTIAL_BOUND categorized line entered. " << std::endl;
 				containsCategorizedLine = true;
-				CategorizedLine newLine;
+				//CategorizedLine newLine;
 				// one record should be HIT_BORDERLINE, one should be HIT_NONBORDERLINE
 				auto recordsBegin = intersectionRecords.begin();
 				auto recordsEnd = intersectionRecords.end();
@@ -125,6 +127,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 					}
 				}
 				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+				newLine.line.numberOfBorderLines = 1;
 				newLine.type = IntersectionType::PARTIAL_BOUND;
 
 			}
@@ -135,7 +138,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 			{
 				std::cout << "!! Branch for a A_SLICE categorized line entered. " << std::endl;
 				containsCategorizedLine = true;
-				CategorizedLine newLine;
+				//CategorizedLine newLine;
 				auto recordsBegin = intersectionRecords.begin();
 				newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
 				newLine.line.isPointAOnBorder = 1;
@@ -147,6 +150,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 				newLine.line.pointBBorder = recordsBegin->intersectedBorderLineID;
 
 				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+				newLine.line.numberOfBorderLines = 2;
 				newLine.type = IntersectionType::A_SLICE;
 
 				std::cout << "!! Newly formed CategorizedLine stats are: " << std::endl;
@@ -193,6 +197,7 @@ void TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in_guestTrian
 			}
 		}
 	}
+	return newLine;
 }
 
 glm::vec3 TwoDLineSegment::determineCoplanarCategorizedLineEmptyNormal(glm::vec3 in_guestTriangleCentroid, glm::vec3 in_pointA, glm::vec3 in_pointB)

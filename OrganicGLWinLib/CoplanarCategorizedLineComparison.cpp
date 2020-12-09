@@ -142,10 +142,11 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
 				// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 				// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
-				currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
+				CategorizedLine attemptedCategorizedLine = currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
 				if (currentGuestTriangleSegment.containsCategorizedLine == true)
 				{
 					std::cout << "!!! Inserting categorized line into pool..." << std::endl;
+					categorizedLinePoolRef->insertLineIntoPool(attemptedCategorizedLine);
 				}
 			}
 		}

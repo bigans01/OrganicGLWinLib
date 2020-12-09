@@ -378,8 +378,12 @@ void SPoly::addBorderLine(STriangleLine in_triangleLine)
 int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction)
 {
 	int returnID = 0;
+	std::cout << "Fetching next border line ID..." << std::endl;
+
+
 	if (in_direction == CyclingDirection::FORWARD)
 	{
+		std::cout << "!! Entered  branch for forward. " << std::endl;
 		int lastIndex = numberOfBorderLines - 1;
 		if (in_currentBorderLineID == lastIndex)
 		{
@@ -392,6 +396,7 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 	}
 	else if (in_direction == CyclingDirection::REVERSE)
 	{
+		std::cout << "!! Entered  branch for reverse. " << std::endl;
 		int firstIndex = 0;
 		if (in_currentBorderLineID == firstIndex)
 		{
@@ -401,6 +406,10 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 		{
 			returnID = in_currentBorderLineID -= 1;
 		}
+	}
+	else if (in_direction == CyclingDirection::NOVAL)
+	{
+		std::cout << "!!! WARNING, no direction detected. " << std::endl;
 	}
 	return returnID;
 }

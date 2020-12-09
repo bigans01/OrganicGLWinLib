@@ -167,6 +167,7 @@
     <ClInclude Include="BorderLineIntersectRecordType.h" />
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
+    <ClInclude Include="CategorizedLinePool.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
     <ClInclude Include="CleaveSequenceCandidateList.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
+    <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />

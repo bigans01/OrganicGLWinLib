@@ -65,9 +65,9 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 
 			welder.clearLinePool();
 
-			std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
-			int someVal = 5;
-			std::cin >> someVal;
+			//std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
+			//int someVal = 5;
+			//std::cin >> someVal;
 		}
 
 		triangleSupergroup.printPointsInSupergroup();
@@ -87,15 +87,30 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 		auto sequenceEnd = cleaveBegin->second.cleavingLines.end();			// ""
 		for (sequenceBegin; sequenceBegin != sequenceEnd; sequenceBegin++)	// cycle through each CategorizedLine in each CleaveSequence
 		{
-			if (sequenceBegin->second.line.numberOfBorderLines == 1)		// if it contains one interception, load the data into appropriate border line's BorderLineIntersectRecorder
+			std::cout << "!! Cycling through cleaveSequence..." << std::endl;
+			std::cout << "!! number of border lines is: " << sequenceBegin->second.line.numberOfBorderLines << std::endl;
+
+			if (sequenceBegin->second.line.numberOfBorderLines == 1)		// it's a PARTIAL_BOUND; if it contains one interception, load the data into appropriate border line's BorderLineIntersectRecorder
 			{
 				int borderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// get the appropriate border line to insert data into.
 				SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[borderLineId];								// get the line ref.
 				borderLineRef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);		// first argument: the ID of the cleave sequence
 																																		// second argument: the ID of the categorized line we're inserting from the sequence
 																																		// third argument: a reference to the categorized line itself
-				//std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
+				std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
 			}	
+			else if (sequenceBegin->second.line.numberOfBorderLines == 2)		// it's an A_SLICE
+			{
+				std::cout << "## Number of border lines is 2!" << std::endl;
+				int borderLineAId = sequenceBegin->second.line.pointABorder;
+				SPolyBorderLines* borderLineARef = &sPolyRef->borderLines[borderLineAId];
+				borderLineARef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);
+
+				int borderLineBId = sequenceBegin->second.line.pointBBorder;
+				SPolyBorderLines* borderLineBRef = &sPolyRef->borderLines[borderLineBId];
+				borderLineBRef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);
+
+			}
 		}
 
 	}

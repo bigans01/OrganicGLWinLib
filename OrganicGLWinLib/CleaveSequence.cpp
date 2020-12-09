@@ -117,6 +117,7 @@ void CleaveSequence::printCategorizedLines()
 													<< " | A border: (is on border)-> " << cleavingLinesBegin->second.line.isPointAOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointABorder
 													<< " | B border: (is on border)-> " << cleavingLinesBegin->second.line.isPointBOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointBBorder
 													<< std::endl;
+		std::cout << "Number of border lines: " << cleavingLinesBegin->second.line.numberOfBorderLines << std::endl;
 	}
 }
 

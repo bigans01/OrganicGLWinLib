@@ -48,6 +48,16 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 }
 
+void CleaveSequenceFactory::transferCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef)
+{
+	auto inPoolLinesBegin = in_categorizedLinePoolRef->linePool.begin();
+	auto inPoolLinesEnd = in_categorizedLinePoolRef->linePool.end();
+	for (; inPoolLinesBegin != inPoolLinesEnd; inPoolLinesBegin++)
+	{
+		addCategorizedLine(*inPoolLinesBegin);
+	}
+}
+
 void CleaveSequenceFactory::insertNonboundLine(CategorizedLine in_line)
 {
 	nonboundMap[nonboundCount++] = in_line;
@@ -116,6 +126,8 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 	//std::cin >> someValAwYeah;
 }
 
+
+
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 {
 	CategorizedLine returnLine = nonboundMap[in_fetchIndex];
@@ -134,6 +146,14 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIn
 
 	partialboundMap.erase(in_fetchIndex);
 	partialboundCount--; // decrement the number of partial lines
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
+{
+	CategorizedLine returnLine = aslicedMap[in_fetchIndex];
+	aslicedMap.erase(in_fetchIndex);
+	aslicedCount--;
 	return returnLine;
 }
 
@@ -227,6 +247,14 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
 	}
 
+
+	auto aslicedBegin = aslicedMap.begin();
+	auto aslicedEnd = aslicedMap.end();
+	for (; aslicedBegin != aslicedEnd; aslicedBegin++)
+	{
+		aslicedBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+	}
+
 	//std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;
 	//std::cout << "!!! Size of interceptsPointPreciseMap: " << interceptsPointPreciseMap.size() << std::endl;
 
@@ -239,6 +267,11 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemovePartialBound(in_lineIndex));
+}
+
+void CleaveSequenceFactory::insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
+{
+	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASlice(in_lineIndex));
 }
 
 void CleaveSequenceFactory::invertAllEmptyNormals()
@@ -765,6 +798,26 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
 		}
+	}
+
+	if (aslicedCount > 0)
+	{
+		std::cout << "STOP! It's hammer time. " << std::endl;
+
+		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
+		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
+		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
+		CleaveSequence newSequence;
+		insertASliceLineForSequence(&newSequence, firstLineID);
+		int cleaveMapRefSize = (*in_cleaveMapRef).size();
+		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
+
+		newSequence.printCategorizedLines();
+
+		int someVal = 3;
+		std::cin >> someVal;
+
+
 	}
 }
 

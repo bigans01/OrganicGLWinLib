@@ -36,7 +36,7 @@ class TwoDLineSegment
 		bool isColinearToAnotherLine = false;	// set to true if this line segment is colinear to any other line in the host triangle it's compared to
 
 		void attemptIntersectionInsert(TwoDLineSegmentIntersectResult in_result, STriangleLine* in_triangleLineRef);
-		void attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr);
+		CategorizedLine attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr);
 		glm::vec3 determineCoplanarCategorizedLineEmptyNormal(glm::vec3 in_guestTriangleCentroid, glm::vec3 in_pointA, glm::vec3 in_pointB);
 	private:
 		std::vector<TwoDSPolyIntersectionRecord> intersectionRecords;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SPolyFracturer.h"
 
-SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef)
+SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option)
 {
 
 	//auto truestart = std::chrono::high_resolution_clock::now();
@@ -22,7 +22,10 @@ SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyM
 	morphTrackerRef = in_morphTrackerRef;
 	//generatePlanarNormalsForPoly();	// generate the planar normal for this poly before fracturing begins
 	rotationManager.setDebugFlag(polyRef->debugFlag);	// set the debug flag
-	runFracturing();					// rotate points to same Z coordinates
+	if (in_option == SPolyFracturerOptionEnum::ROTATE_TO_Z)
+	{
+		runFracturing();					// rotate points to same Z coordinates
+	}
 	generatePlanarNormalsForPoly();		// generate the planar normals
 	//printPointMetaData();				// show the points before we run the weave
 

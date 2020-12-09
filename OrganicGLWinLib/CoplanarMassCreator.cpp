@@ -3,6 +3,15 @@
 
 void CoplanarMassCreator::runMassManipulation()
 {
+
+	CategorizedLinePool linePool;
+	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
+
+
+
+
+	// ########################################### METHOD 1 
+
 	// first, find the total area of the tracked SPoly.
 	float totalTrackedArea = calculateSPolyArea(trackedSPolyRef);
 
@@ -24,24 +33,39 @@ void CoplanarMassCreator::runMassManipulation()
 	// 10.) Reset the copied SPoly's MassManipulationMode back to CREATION.
 	// 11.) Build the appropriate CleaveSequence, with the proper categorized lines.
 	// 12.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
-
-	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
+	/*
 	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
-		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second);		
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &linePool);		
 												//            For each STriangle in the SPoly, acquire it's area, and get the total.
 
 												// (Step 5: ) Get area.
-												// (Step 6: ) Subtract from totalTrackedArea.
-												// (Step 7: ) Move the resulting categorized lines into a permanent pool of lines.
+												// (Step 6: ) Subtract from totalTrackedAr											// (Step 7: ) Move the resulting categorized lines into a permanent pool of lines.
 	}
+	*/
 
 	// 9.) eliminate mirrored lines.
 	// 10.) Set back to CREATION
 	// 11.) Build appropriate CleaveSequence.
 	// 12.) Profit.
+
+
+	//   ########################################### METHOD 2
+	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
+	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
+	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
+	{
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &linePool);    // put the lines into the pool, if there are any
+		
+	}
+	trackedCopy.sequenceFactory.transferCategorizedLinesFromLinePool(&linePool);
+	trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;
+	trackedCopy.buildCleaveSequences();
+
+	SPolyMorphTracker tempTracker;
+	SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);
 
 }

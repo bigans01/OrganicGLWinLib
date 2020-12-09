@@ -534,6 +534,12 @@
     <ClInclude Include="TwoDSPolyIntersectionRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CategorizedLinePool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyFracturerOptionEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

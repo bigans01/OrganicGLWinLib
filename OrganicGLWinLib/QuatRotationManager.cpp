@@ -84,11 +84,13 @@ void QuatRotationManager::initializeAndRunForCyclingDirectionFinderV2(QuatRotati
 	rotationpointsRefVector = in_quatpointsRefVector;
 	triangleNormalRef = rotationpointsRefVector->getPointRefByIndex(3);	// the last point in the QuatRotationPoints should equal the empty normal.
 
+	std::cout << "!!! Finder V2, trianfleNormalRef: " << triangleNormalRef->x << ", " << triangleNormalRef->y << ", " << triangleNormalRef->z << std::endl;
+
 	// check if we need to rotate about the Y-axis to get to the same Z values for the line
 	if (triangleNormalRef->z != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
-		//std::cout << "ROTATE_AROUND_Y required." << std::endl;
+		std::cout << "ROTATE_AROUND_Y required." << std::endl;
 		rotationOrder.push_back(rotateType); //push into the vector
 	}
 
@@ -96,14 +98,16 @@ void QuatRotationManager::initializeAndRunForCyclingDirectionFinderV2(QuatRotati
 	if (triangleNormalRef->x != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
-		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		std::cout << "ROTATE_AROUND_X required." << std::endl;
 		rotationOrder.push_back(rotateType);
 	}
 
 	// if x and z are 0, but the y is negative -1.0f, we still need to get to y = 1.0f.
-	if (triangleNormalRef->y == -1.0f)
+	//if (triangleNormalRef->y == -1.0f)
+	if (triangleNormalRef->y < 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		std::cout << "ROTATE_AROUND_Z required." << std::endl;
 		rotationOrder.push_back(rotateType);
 	}
 
@@ -530,6 +534,8 @@ void QuatRotationManager::executeRotationsForCyclingDirectionFinderV2()
 {
 	auto vectorBegin = rotationOrder.begin();
 	auto vectorEnd = rotationOrder.end();
+
+	std::cout << "!! Executing rotations..." << std::endl;
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
 	{
 		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
@@ -553,6 +559,8 @@ void QuatRotationManager::executeRotationsForCyclingDirectionFinderV2()
 		}
 		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
 		{
+			//glm::vec3 tempVec = rotationpointsRefVector->getPointByIndex(3);
+			//std::cout << "!!! emptyNormal value, prior to rotateAroundZ: " << tempVec.x << ", " << tempVec.y << ", " << tempVec.z << std::endl;
 			rotateAroundZForPosYNormalAndPushIntoStack(rotationpointsRefVector->getPointByIndex(3));
 		}
 	}
@@ -1203,6 +1211,7 @@ void QuatRotationManager::rotateAroundXForPositiveYBorderLineAndPushIntoStack()
 {
 	glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(3);	// get a copy of the value of the 3rd primal point
 	float radiansToRotateBy = findRotationRadiansForZFracture(currentNormalValue);	// get the number of radians to rotate by
+	std::cout << "::> radiansToRotateBy " << radiansToRotateBy << std::endl;
 
 	//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
 	glm::vec3 rotateAroundX;
@@ -1254,6 +1263,7 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 {
 
 	// The overarching goal is to get to POS Y for this 3rd point (3rd point is the value that was passed in)
+	std::cout << ">>>>> vec3 value is: " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
 
 	float degreesToRotateOnX = 0.0f;
 	float fullRadian360 = 6.28319;	// 360 degrees = this many radians

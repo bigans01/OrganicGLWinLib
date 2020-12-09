@@ -14,6 +14,7 @@
 #include "QuatRotationPoints.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
+#include "CategorizedLinePool.h"
 
 class CleaveSequenceFactory
 {
@@ -22,7 +23,7 @@ class CleaveSequenceFactory
 		//void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines* in_borderLineArrayRef);
 		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode);
 		void printLinesInPool();
-
+		void transferCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 
 	private:
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
@@ -41,14 +42,17 @@ class CleaveSequenceFactory
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
 		void clipTwinCategorizedLinesofInterceptPointPrecise();
+		
 
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
 		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
 
 		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		void insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void invertAllEmptyNormals();
 		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
 		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, std::map<int, SPolyBorderLines>);
