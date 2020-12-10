@@ -66,6 +66,10 @@ void SPolySet::runPolyComparison()
 						if (polyA->groupID == 1)	
 						{
 							std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
+							//std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
+							//int someVal = 3;
+							//std::cin >> someVal;
+
 							coplanarTracker.insertCoplanarRelationship(x, polyA, currentIndex, polyB);
 						}
 					}

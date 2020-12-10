@@ -71,6 +71,16 @@ class SPolyHierarchyLocationMap
 			SPolyHierarchyLocation location(in_primalPolyID, in_pieceID);
 			locationMap[locationMap.size()] = location;
 		}
+
+		void printLocations()
+		{
+			auto locationsBegin = locationMap.begin();
+			auto locationsEnd = locationMap.end();
+			for (; locationsBegin != locationsEnd; locationsBegin++)
+			{
+				std::cout << "Primal poly ID: [" << locationsBegin->second.primalPolyID << "], piece ID: [" << locationsBegin->second.pieceID << "] " << std::endl;
+			}
+		}
 };
 
 #endif
