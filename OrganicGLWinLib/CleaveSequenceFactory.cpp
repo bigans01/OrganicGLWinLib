@@ -48,7 +48,7 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 }
 
-void CleaveSequenceFactory::transferCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef)
+void CleaveSequenceFactory::copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef)
 {
 	auto inPoolLinesBegin = in_categorizedLinePoolRef->linePool.begin();
 	auto inPoolLinesEnd = in_categorizedLinePoolRef->linePool.end();

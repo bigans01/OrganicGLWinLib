@@ -4,7 +4,7 @@
 void CoplanarMassCreator::runMassManipulation()
 {
 
-	CategorizedLinePool linePool;
+	CategorizedLinePool persistentLinePool;
 	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
 
 
@@ -21,7 +21,7 @@ void CoplanarMassCreator::runMassManipulation()
 	// 1.) Clear the COPY of the tracked SPoly that we are using (i.e., clear its CleaveSequences and BorderLineInterceptRecords)
 	// 2.) (Done in CoplanarCategorizedLineProducer) Get the categorized lines that each related SPoly produces in the tracked SPoly.
 	// 3.) (Done in CoplanarCategorizedLineProducer) Build a CleaveSequence in the tracked SPoly from these newly produced lines. (via SPoly::buildCleaveSequences())
-	// 4.) (Done in CoplanarCategorizedLineProducer) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. SPolyFracturer may need a new constructor/function to handle this.
+	// 4.) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. SPolyFracturer may need a new constructor/function to handle this.
 	//	   --OR-- needs a new class to handle the fracturing, such as SPolyCoplanarFracturer.
 	//     NOTE: the copied SPoly will need to be set as MassManipulationMode::DESTRUCTION, since we want to get the area of the triangles that are "cut" out of 
 	//     the tracked SPoly's area as a result of the related SPoly intersecting with it.
@@ -33,19 +33,52 @@ void CoplanarMassCreator::runMassManipulation()
 	// 10.) Reset the copied SPoly's MassManipulationMode back to CREATION.
 	// 11.) Build the appropriate CleaveSequence, with the proper categorized lines.
 	// 12.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
-	/*
+	
+	CategorizedLinePool currentIterationPool;
+	float remainingArea = totalTrackedArea;
+	float totalRelatedArea = 0.0f;
 	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
-		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &linePool);		
-												//            For each STriangle in the SPoly, acquire it's area, and get the total.
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
 
-												// (Step 5: ) Get area.
-												// (Step 6: ) Subtract from totalTrackedAr											// (Step 7: ) Move the resulting categorized lines into a permanent pool of lines.
+		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
+		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
+		trackedCopy.buildCleaveSequences();
+
+		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
+		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
+										
+
+		// (Step 5: ) Get area.
+		auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();
+		auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
+		for (; sPolySuperGroupBegin != sPolySuperGroupEnd; sPolySuperGroupBegin++)
+		{
+			auto sTrianglesBegin = sPolySuperGroupBegin->second.triangles.begin();
+			auto sTrianglesEnd = sPolySuperGroupBegin->second.triangles.end();
+			for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
+			{
+				std::cout << "!!! Acquiring total related area..." << std::endl;
+
+				totalRelatedArea += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
+					sTrianglesBegin->second.triangleLines[1].pointA,
+					sTrianglesBegin->second.triangleLines[2].pointA);
+			}
+		}										
+
+		// just for fanciness: output the remaining area that isn't occuped in the tracked SPoly.
+		remainingArea -= totalRelatedArea;		// (Step 6: ) Subtract from totalTrackedArea
+		std::cout << "Percentage of remaining area: " << remainingArea / totalTrackedArea << std::endl;
+
+		// (Step 7: ) Move the resulting pool of categorized lines (currentIterationPool) into a permanent pool of lines. (persistentLinePool); then,
+		// clear the currentIterationPool.
+		persistentLinePool.copyLinesFromOtherLinePool(&currentIterationPool);
+		currentIterationPool.clearPool();
 	}
-	*/
+	
 
 	// 9.) eliminate mirrored lines.
 	// 10.) Set back to CREATION
@@ -62,6 +95,7 @@ void CoplanarMassCreator::runMassManipulation()
 	// 6.) Acquire the total area that all of the STriangles produced by all of the related SPolys produce
 
 	// 1.)
+	/*
 	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// 
@@ -69,9 +103,10 @@ void CoplanarMassCreator::runMassManipulation()
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &linePool);    // put the lines into the pool, if there are any
 		
 	}
+	*/
 
 	// 2.) need to remove duplicate lines in the linePool, before doing cleave sequencing.
-
+	/*
 	trackedCopy.sequenceFactory.transferCategorizedLinesFromLinePool(&linePool);	// 3.) load into the sequence factory.
 	trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;		// 4.)
 	trackedCopy.buildCleaveSequences();												// ""
@@ -99,5 +134,5 @@ void CoplanarMassCreator::runMassManipulation()
 	// just for fanciness: output the remaining area that isn't occuped in the tracked SPoly.
 	float remainingArea = totalTrackedArea - totalRelatedArea;
 	std::cout << "Percentage of remaining area: " << remainingArea / totalTrackedArea << std::endl;
-
+	*/
 }

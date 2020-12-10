@@ -23,7 +23,7 @@ class CleaveSequenceFactory
 		//void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines* in_borderLineArrayRef);
 		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode);
 		void printLinesInPool();
-		void transferCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
+		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 
 	private:
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
