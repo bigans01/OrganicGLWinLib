@@ -54,18 +54,50 @@ void CoplanarMassCreator::runMassManipulation()
 
 
 	//   ########################################### METHOD 2
+	// 1.) Have the CoplanarCategorizedLineProducer produce any categorized lines, and load them into the line pool; do this for each SPoly.
+	// 2.) Clip/purge duplciate lines from the line pool.
+	// 3.) Load the "cleaned" line pool into the sequenceFactory's categorized lines.
+	// 4.) Set the MassManipulationMode on the trackedCopy to DESTRUCTION, and build the cleave the sequences.
+	// 5.) Run a SPolyFracturer, without rotation to Z.
+	// 6.) Acquire the total area that all of the STriangles produced by all of the related SPolys produce
+
+	// 1.)
 	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
-	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
+	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// 
 	{
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &linePool);    // put the lines into the pool, if there are any
 		
 	}
-	trackedCopy.sequenceFactory.transferCategorizedLinesFromLinePool(&linePool);
-	trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;
-	trackedCopy.buildCleaveSequences();
 
-	SPolyMorphTracker tempTracker;
-	SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);
+	// 2.) need to remove duplicate lines in the linePool, before doing cleave sequencing.
+
+	trackedCopy.sequenceFactory.transferCategorizedLinesFromLinePool(&linePool);	// 3.) load into the sequence factory.
+	trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;		// 4.)
+	trackedCopy.buildCleaveSequences();												// ""
+
+	SPolyMorphTracker tempTracker;	// not sure if we ever even need this? (need to revisit, 12/9/2020)
+	SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);		// 5.)
+	//fracturer.sPolySG.printSPolys();
+
+	// 6.) calculated the total area that all related SPolys occupy in the tracked SPoly
+	float totalRelatedArea = 0.0f;
+	auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();
+	auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
+	for (; sPolySuperGroupBegin != sPolySuperGroupEnd; sPolySuperGroupBegin++)
+	{
+		auto sTrianglesBegin = sPolySuperGroupBegin->second.triangles.begin();
+		auto sTrianglesEnd = sPolySuperGroupBegin->second.triangles.end();
+		for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
+		{
+			totalRelatedArea += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
+													sTrianglesBegin->second.triangleLines[1].pointA,
+													sTrianglesBegin->second.triangleLines[2].pointA);
+		}
+	}
+
+	// just for fanciness: output the remaining area that isn't occuped in the tracked SPoly.
+	float remainingArea = totalTrackedArea - totalRelatedArea;
+	std::cout << "Percentage of remaining area: " << remainingArea / totalTrackedArea << std::endl;
 
 }

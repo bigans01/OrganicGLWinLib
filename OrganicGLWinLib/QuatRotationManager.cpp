@@ -104,7 +104,8 @@ void QuatRotationManager::initializeAndRunForCyclingDirectionFinderV2(QuatRotati
 
 	// if x and z are 0, but the y is negative -1.0f, we still need to get to y = 1.0f.
 	//if (triangleNormalRef->y == -1.0f)
-	if (triangleNormalRef->y < 0.0f)
+	//if (triangleNormalRef->y < 0.0f)
+	if (triangleNormalRef->y != 1.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
 		std::cout << "ROTATE_AROUND_Z required." << std::endl;

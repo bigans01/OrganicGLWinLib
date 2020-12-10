@@ -172,6 +172,12 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 			//std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
 			direction = CyclingDirection::REVERSE;
 		}
+		else
+		{
+			std::cout << "!!! NO DIRECTION FOUND, halting. " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
+		}
 
 		//std::cout << ">>> Enter number to check next partial bound... " << std::endl;
 		//int someVal = 3;

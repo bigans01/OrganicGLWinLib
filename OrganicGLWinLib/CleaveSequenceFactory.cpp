@@ -220,6 +220,9 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 {
 	// go through each partial bound.
+
+	//std::cout << "!!! Calling determineCyclingDirectionsForCategorizedLines" << std::endl;
+
 	auto partialsBegin = partialboundMap.begin();
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
@@ -800,7 +803,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		}
 	}
 
-	if (aslicedCount > 0)
+	while (aslicedCount > 0)
 	{
 		std::cout << "STOP! It's hammer time. " << std::endl;
 
