@@ -83,10 +83,23 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 					std::cout << "!! The 2d point, A, lies within the triangle: " << convertedSegmentPointA.x << ", " << convertedSegmentPointA.y << ", " << convertedSegmentPointA.z << std::endl;
 					newLine.line.pointB = convertedSegmentPointA;
 				}
-				else
+				else if
+					(
+					(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedSegmentPointB,
+						in_hostSTrianglePtr->triangleLines[0].pointA,
+						in_hostSTrianglePtr->triangleLines[1].pointA,
+						in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+						)
 				{
 					std::cout << "!! The 2d point, B, lies within the triangle: " << convertedSegmentPointB.x << ", " << convertedSegmentPointB.y << ", " << convertedSegmentPointB.z << std::endl;
 					newLine.line.pointB = convertedSegmentPointB;
+				}
+				else
+				{
+					std::cout << "!! NOTICE: although this line hit a border line, neither segment's point is within the triangle. this is an invalid CategorizedLine." << std::endl;
+					int someVal = 3;
+					std::cin >> someVal;
+					containsCategorizedLine = false;
 				}
 				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
 				newLine.line.numberOfBorderLines = 1;
@@ -104,64 +117,77 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 		else if (intersectionRecords.size() == 2)
 		{
 			// 1 HIT_BORDER_LINE, 1 HIT_NONBORDERLINE
-			if (numberOfIntersectedBorderLines == 1)	// branch for one HIT_BORDER_LINE
-			{
 
-				std::cout << "!! Branch for a PARTIAL_BOUND categorized line entered. " << std::endl;
-				containsCategorizedLine = true;
-				//CategorizedLine newLine;
-				// one record should be HIT_BORDERLINE, one should be HIT_NONBORDERLINE
-				auto recordsBegin = intersectionRecords.begin();
-				auto recordsEnd = intersectionRecords.end();
-				for (; recordsBegin != recordsEnd; recordsBegin++)
+			// the two points shouldn't be the same, if the line is valid.
+			if (checkIf2dPointsMatch(intersectionRecords.begin()->intersectedPoint, intersectionRecords.rbegin()->intersectedPoint) == false)
+			{
+				if (numberOfIntersectedBorderLines == 1)	// branch for one HIT_BORDER_LINE
 				{
-					if (recordsBegin->intersectionType == TwoDSPolyIntersectionType::HIT_BORDERLINE)
+
+					std::cout << "!! Branch for a PARTIAL_BOUND categorized line entered. " << std::endl;
+					containsCategorizedLine = true;
+					//CategorizedLine newLine;
+					// one record should be HIT_BORDERLINE, one should be HIT_NONBORDERLINE
+					auto recordsBegin = intersectionRecords.begin();
+					auto recordsEnd = intersectionRecords.end();
+					for (; recordsBegin != recordsEnd; recordsBegin++)
 					{
-						newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
-						newLine.line.isPointAOnBorder = 1;
-						newLine.line.pointABorder = recordsBegin->intersectedBorderLineID;
+						if (recordsBegin->intersectionType == TwoDSPolyIntersectionType::HIT_BORDERLINE)
+						{
+							newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+							newLine.line.isPointAOnBorder = 1;
+							newLine.line.pointABorder = recordsBegin->intersectedBorderLineID;
+						}
+						else if (recordsBegin->intersectionType == TwoDSPolyIntersectionType::HIT_NONBORDERLINE)
+						{
+							newLine.line.pointB = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+						}
 					}
-					else if (recordsBegin->intersectionType == TwoDSPolyIntersectionType::HIT_NONBORDERLINE)
-					{
-						newLine.line.pointB = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
-					}
+					newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+					newLine.line.numberOfBorderLines = 1;
+					newLine.type = IntersectionType::PARTIAL_BOUND;
+
 				}
-				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
-				newLine.line.numberOfBorderLines = 1;
-				newLine.type = IntersectionType::PARTIAL_BOUND;
 
+
+				// 2 HIT_BORDER_LINE, -> A_SLICE
+				if (numberOfIntersectedBorderLines == 2)
+				{
+					// check that the border line points are not the same; if they are, this is an invalid CategorizedLine.
+
+					std::cout << "!! Branch for a A_SLICE categorized line entered. " << std::endl;
+					containsCategorizedLine = true;
+					//CategorizedLine newLine;
+					auto recordsBegin = intersectionRecords.begin();
+					newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+					newLine.line.isPointAOnBorder = 1;
+					newLine.line.pointABorder = recordsBegin->intersectedBorderLineID;
+
+					recordsBegin++;
+					newLine.line.pointB = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
+					newLine.line.isPointBOnBorder = 1;
+					newLine.line.pointBBorder = recordsBegin->intersectedBorderLineID;
+
+					newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
+					newLine.line.numberOfBorderLines = 2;
+					newLine.type = IntersectionType::A_SLICE;
+
+					std::cout << "!! Newly formed CategorizedLine stats are: " << std::endl;
+					std::cout << "Point A: " << newLine.line.pointA.x << ", " << newLine.line.pointA.y << ", " << newLine.line.pointA.z << std::endl;
+					std::cout << "isPointAOnBorder: " << newLine.line.isPointAOnBorder << std::endl;
+					std::cout << "pointABorder" << newLine.line.pointABorder << std::endl;
+					std::cout << "Point B: " << newLine.line.pointB.x << ", " << newLine.line.pointB.y << ", " << newLine.line.pointB.z << std::endl;
+					std::cout << "isPointBOnBorder: " << newLine.line.isPointBOnBorder << std::endl;
+					std::cout << "pointBBorder" << newLine.line.pointBBorder << std::endl;
+
+
+				}
 			}
-
-
-			// 2 HIT_BORDER_LINE, -> A_SLICE
-			if (numberOfIntersectedBorderLines == 2)
+			else
 			{
-				std::cout << "!! Branch for a A_SLICE categorized line entered. " << std::endl;
-				containsCategorizedLine = true;
-				//CategorizedLine newLine;
-				auto recordsBegin = intersectionRecords.begin();
-				newLine.line.pointA = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
-				newLine.line.isPointAOnBorder = 1;
-				newLine.line.pointABorder = recordsBegin->intersectedBorderLineID;
-
-				recordsBegin++;
-				newLine.line.pointB = OrganicGLWinUtils::convert2DToGlmVec3(recordsBegin->intersectedPoint);
-				newLine.line.isPointBOnBorder = 1;
-				newLine.line.pointBBorder = recordsBegin->intersectedBorderLineID;
-
-				newLine.emptyNormal = determineCoplanarCategorizedLineEmptyNormal(in_guestTriangleCentroid, newLine.line.pointA, newLine.line.pointB);
-				newLine.line.numberOfBorderLines = 2;
-				newLine.type = IntersectionType::A_SLICE;
-
-				std::cout << "!! Newly formed CategorizedLine stats are: " << std::endl;
-				std::cout << "Point A: " << newLine.line.pointA.x << ", " << newLine.line.pointA.y << ", " << newLine.line.pointA.z << std::endl;
-				std::cout << "isPointAOnBorder: " << newLine.line.isPointAOnBorder << std::endl;
-				std::cout << "pointABorder" << newLine.line.pointABorder << std::endl;
-				std::cout << "Point B: " << newLine.line.pointB.x << ", " << newLine.line.pointB.y << ", " << newLine.line.pointB.z << std::endl;
-				std::cout << "isPointBOnBorder: " << newLine.line.isPointBOnBorder << std::endl;
-				std::cout << "pointBBorder" << newLine.line.pointBBorder << std::endl;
-
-
+				std::cout << "!!! NOTICE: points match, halting. " << std::endl;
+				int someVal = 3;
+				std::cin >> someVal;
 			}
 		}
 
@@ -231,4 +257,20 @@ glm::vec3 TwoDLineSegment::determineCoplanarCategorizedLineEmptyNormal(glm::vec3
 
 
 	return calculatedEmptyNormal;
+}
+
+bool TwoDLineSegment::checkIf2dPointsMatch(TwoDPoint in_pointA, TwoDPoint in_pointB)
+{
+	bool matchFound = false;
+	if
+	(
+		(in_pointA.x == in_pointB.x)
+		&&
+		(in_pointA.y == in_pointB.y)
+	)
+	{
+		std::cout << "NOTICE: 2d points match!" << std::endl;
+		matchFound = true;
+	}
+	return matchFound;
 }

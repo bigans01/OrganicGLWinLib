@@ -7,7 +7,10 @@ void CoplanarMassCreator::runMassManipulation()
 	CategorizedLinePool persistentLinePool;
 	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
 
-
+	//std::cout << "!! Ref map size is: " << sPolyRefMap.refMap.size() << std::endl;
+	//std::cout << "!! Reached logic for CoplanarMassCreator; proceed? " << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 
 	// ########################################### METHOD 1 
@@ -31,8 +34,9 @@ void CoplanarMassCreator::runMassManipulation()
 	// 8.) End the current tick, and start over again. Until the loop is done.
 	// 9.) Cleanup the pool of permament lines, eliminating mirrored lines.
 	// 10.) Reset the copied SPoly's MassManipulationMode back to CREATION.
-	// 11.) Build the appropriate CleaveSequence, with the proper categorized lines.
-	// 12.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
+	// 11.) Copy the lines from the persistentLinePool, after they've been cleared of mirror lines, back into the trackedCopy's cleaveSequenceFactory.
+	// 12.) Build the appropriate CleaveSequence, with the proper categorized lines.
+	// 13.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
 	
 	CategorizedLinePool currentIterationPool;
 	float remainingArea = totalTrackedArea;
@@ -57,6 +61,8 @@ void CoplanarMassCreator::runMassManipulation()
 		auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
 		for (; sPolySuperGroupBegin != sPolySuperGroupEnd; sPolySuperGroupBegin++)
 		{
+			std::cout << "!! checking sTriangles for sPolyID: " << sPolySuperGroupBegin->first << std::endl;
+
 			auto sTrianglesBegin = sPolySuperGroupBegin->second.triangles.begin();
 			auto sTrianglesEnd = sPolySuperGroupBegin->second.triangles.end();
 			for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
@@ -67,6 +73,10 @@ void CoplanarMassCreator::runMassManipulation()
 					sTrianglesBegin->second.triangleLines[1].pointA,
 					sTrianglesBegin->second.triangleLines[2].pointA);
 			}
+
+			std::cout << "!! Iteration through STriangle complete, continue? " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
 		}										
 
 		// just for fanciness: output the remaining area that isn't occuped in the tracked SPoly.
@@ -78,12 +88,16 @@ void CoplanarMassCreator::runMassManipulation()
 		persistentLinePool.copyLinesFromOtherLinePool(&currentIterationPool);
 		currentIterationPool.clearPool();
 	}
-	
+	std::cout << "Total tracked area was: " << totalTrackedArea << std::endl;
+	trackedCopy.cleaveMap.clear();
 
 	// 9.) eliminate mirrored lines.
 	// 10.) Set back to CREATION
-	// 11.) Build appropriate CleaveSequence.
-	// 12.) Profit.
+	// 11.) Copy persisent lines into the trackedCopy.sequenceFactory.
+
+
+	// 12.) Build appropriate CleaveSequence.
+	// 13.) Profit.
 
 
 	//   ########################################### METHOD 2
