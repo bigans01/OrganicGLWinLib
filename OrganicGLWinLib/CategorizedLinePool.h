@@ -47,10 +47,23 @@ class CategorizedLinePool
 			auto otherLinePoolEnd = in_categorizedLinePoolRef->linePool.end();
 			for (; otherLinePoolBegin != otherLinePoolEnd; otherLinePoolBegin++)
 			{
-				linePool.push_back(*otherLinePoolBegin);
+				//linePool.push_back(*otherLinePoolBegin);
+				insertLineIntoPool(*otherLinePoolBegin);
 			}
 		};
 
+		void printLinesInPool()
+		{
+			int x = 0;
+			auto linePoolBegin = linePool.begin();
+			auto linePoolEnd = linePool.end();
+			for (; linePoolBegin != linePoolEnd; linePoolBegin++)
+			{
+				std::cout << "Line " << x << ", point A: " << linePoolBegin->line.pointA.x << ", " << linePoolBegin->line.pointA.y << ", " << linePoolBegin->line.pointA.z
+					<< "| point B: " << linePoolBegin->line.pointB.x << ", " << linePoolBegin->line.pointB.y << ", " << linePoolBegin->line.pointB.z
+					<< "| empty normal: " << linePoolBegin->emptyNormal.x << ", " << linePoolBegin->emptyNormal.y << ", " << linePoolBegin->emptyNormal.z << std::endl;
+			}
+		};
 	private:
 		bool checkIfLinePointsMatch(CategorizedLine in_lineA, CategorizedLine in_lineB)
 		{

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "QuatRotationManager.h"
+#include "OrganicGLWinUtils.h"
 
 void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatpointsRefVector)
 {
@@ -226,13 +227,16 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 		flipOnXAxis();
 	}
 
-	glm::vec3 comparedPointCurrentPosition = rotationpointsRefVector->getPointByIndex(2);
+	//glm::vec3 comparedPointCurrentPosition = rotationpointsRefVector->getPointByIndex(2);
+	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
+	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(rotationpointsRefVector->getPointByIndex(2));		
 	glm::vec3 centroidFacingNormal = rotationpointsRefVector->getPointByIndex(3);
 	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
 	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(
-		(rotationpointsRefVector->getPointByIndex(2).y > 0)
+		//(rotationpointsRefVector->getPointByIndex(2).y >= 0)
+		(comparedPointCurrentPosition.y >= 0)
 		&&
 		(rotationpointsRefVector->getPointByIndex(3).y > 0)
 	)

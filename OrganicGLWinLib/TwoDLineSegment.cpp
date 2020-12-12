@@ -183,7 +183,7 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 
 				}
 			}
-			else
+			else     // the points do Match, so the CategorizedLine is invalid.
 			{
 				std::cout << "!!! NOTICE: points match, halting. " << std::endl;
 				int someVal = 3;

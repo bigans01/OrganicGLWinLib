@@ -12,7 +12,9 @@
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
 #include <stack>
+//#include "OrganicGLWinUtils.h"
 
+class OrganicGLWinUtils;
 class QuatRotationManager
 {
 public:

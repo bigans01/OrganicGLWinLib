@@ -1242,7 +1242,8 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 		rotationPoints.pointsRefVector.push_back(&centroidFacingNormal);		// fetched by rotationManager, to check for flipping on Z-axis
 
 		QuatRotationManager rotationManager;
-		planeArrayCheckResult[x] = rotationManager.initializeAndRunForCheckingIfPointIswithinPlane(&rotationPoints);
+		planeArrayCheckResult[x] = rotationManager.initializeAndRunForCheckingIfPointIswithinPlane(&rotationPoints);	// the point to check will be rounded to nearest hundredths, 
+																														// during the quat rotation
 		
 	}
 
