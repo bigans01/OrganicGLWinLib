@@ -8,9 +8,15 @@ void CoplanarMassCreator::runMassManipulation()
 	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
 
 	//std::cout << "!! Ref map size is: " << sPolyRefMap.refMap.size() << std::endl;
-	//std::cout << "!! Reached logic for CoplanarMassCreator; proceed? " << std::endl;
-	//int someVal = 3;
-	//std::cin >> someVal;
+	std::cout << "!! Reached logic for CoplanarMassCreator; proceed? " << std::endl;
+
+	std::cout << "With translation/application of quaternion, the points of the first border line of tracked SPoly are: " << std::endl;
+	std::cout << trackedCopy.borderLines[0].pointA.x << ", " << trackedCopy.borderLines[0].pointA.y << ", " << trackedCopy.borderLines[0].pointA.z << " | "
+		<< trackedCopy.borderLines[0].pointB.x << ", " << trackedCopy.borderLines[0].pointB.y << ", " << trackedCopy.borderLines[0].pointB.z << std::endl;
+
+
+	int someVal = 3;
+	std::cin >> someVal;
 
 
 	// ########################################### METHOD 1 
@@ -45,6 +51,7 @@ void CoplanarMassCreator::runMassManipulation()
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
+		
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
 
 		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
@@ -52,31 +59,10 @@ void CoplanarMassCreator::runMassManipulation()
 		trackedCopy.buildCleaveSequences();
 
 		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
+
+		
 		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
 		
-
-
-
-		// ************ testing only
-		std::cout << "!!!!! point lies within triangle test: " << std::endl;
-		glm::vec3 liesWithin;
-		liesWithin.x = -.00f;
-		liesWithin.y = 2.80f;
-		for (int x = 0; x < 3; x++)
-		{
-			std::cout << "Compared against point: " << trackedCopy.triangles[0].triangleLines[x].pointA.x << ", " << trackedCopy.triangles[0].triangleLines[x].pointA.y << ", " << trackedCopy.triangles[0].triangleLines[x].pointA.z << std::endl;
-		}
-		bool isWithin = OrganicGLWinUtils::checkIfPointLiesWithinTriangle(liesWithin, trackedCopy.triangles[0].triangleLines[0].pointA, 
-																	  trackedCopy.triangles[0].triangleLines[1].pointA, 
-																	  trackedCopy.triangles[0].triangleLines[2].pointA);
-		if (isWithin == true)
-		{
-			std::cout << "!! Point lies within! " << std::endl;
-		}
-
-
-
-
 		// (Step 5: ) Get area.
 		auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();
 		auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
@@ -108,12 +94,15 @@ void CoplanarMassCreator::runMassManipulation()
 		// clear the currentIterationPool.
 		persistentLinePool.copyLinesFromOtherLinePool(&currentIterationPool);
 		currentIterationPool.clearPool();
+		
 	}
 	std::cout << "Total tracked area was: " << totalTrackedArea << std::endl;
 	persistentLinePool.printLinesInPool();
 	trackedCopy.cleaveMap.clear();
 
-
+	std::cout << "Enter key to continue. " << std::endl;
+	int testVal = 3;
+	std::cin >> testVal;
 
 	
 

@@ -62,6 +62,9 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		relatedSPolysBegin->second->printBorderLines();
 	}
 	
+	std::cout << "Pre-rotate print out complete; continue? " << std::endl;
+	int preRotate;
+	std::cin >> preRotate;
 
 	// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
 	//		if CREATION -> use CoplanarMassCreator

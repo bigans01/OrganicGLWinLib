@@ -42,6 +42,8 @@ class TwoDLineSegment
 		std::vector<TwoDSPolyIntersectionRecord> intersectionRecords;
 		int numberOfIntersectedBorderLines = 0;
 		int numberOfIntersectedNonBorderLines = 0;
+		int numberOfInterceptsBorderLinePointPrecise = 0;
+		int numberOfInterceptsNonBorderLinePointPrecise = 0;
 		void insertIntersectionRecord(TwoDSPolyIntersectionType in_intersectionType, bool in_isOnBorderLine, unsigned char in_intersectdBorderLineID, TwoDPoint in_intersectedPoint);
 		bool checkIf2dPointsMatch(TwoDPoint in_pointA, TwoDPoint in_pointB);
 };

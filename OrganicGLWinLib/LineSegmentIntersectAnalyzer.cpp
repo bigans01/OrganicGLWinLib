@@ -53,6 +53,20 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	*/
 
 	float rsCross = calculate2DCross(r, s);
+
+	std::cout << "Value of rsCross: " << rsCross << std::endl;
+	std::cout << "(pre-calc) Line Segment A scalar (variable t) is : " << t << std::endl;
+	std::cout << "(pre-calc) Line Segment B scalar (variable u) is : " << u << std::endl;
+
+	if (t == 1.0f)
+	{
+		std::cout << "::: NOTE: value of t is 1.0f! " << std::endl;
+	}
+	if (u == 1.0f)
+	{
+		std::cout << "::: NOTE: value of u is 1.0f! " << std::endl;
+	}
+
 	if (rsCross == 0.0f)	
 	{
 		// COLINEAR conditions
@@ -96,11 +110,62 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 		(u >= 0)
 	)
 	{
+		
+
+		
+	
+
+
 		// NONCOLINEAR_INTERSECT
-		analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
 		analyzedResult.intersectedPoint = round2DPointToHundredths(TwoDLineSegmentA.a + (r * t));
+		//analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
+
+		if
+			(
+
+				!
+				(
+				(analyzedResult.intersectedPoint.x == TwoDLineSegmentB.a.x)
+					&&
+					(analyzedResult.intersectedPoint.y == TwoDLineSegmentB.a.y)
+					)
+
+				&&
+
+				!
+				(
+				(analyzedResult.intersectedPoint.x == TwoDLineSegmentB.b.x)
+					&&
+					(analyzedResult.intersectedPoint.y == TwoDLineSegmentB.b.y)
+					)
+				)
+
+		{
+			analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
+			std::cout << "!! Intersected point doesn't match one of the endpoints of the line it intersects; intersect is therefore VALID. " << std::endl;
+		}
+		else
+		{
+			analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE;
+			std::cout << "(2) !!! Warning, analyzedResult.intersectedPoint matched one of the segment it intersected! Should therefore be NONCOLINEAR_INTERSECTS_POINT_PRECISE" << std::endl;
+		}
+
+
 		std::cout << "Lines intersect! " << std::endl;
 		std::cout << "!!! Intersection point is: " << analyzedResult.intersectedPoint.x << ", " << analyzedResult.intersectedPoint.y << std::endl;
+		/*
+		if
+		(
+			(analyzedResult.intersectedPoint.x == TwoDLineSegmentB.a.x)
+			&&
+			(analyzedResult.intersectedPoint.y == TwoDLineSegmentB.a.y)
+		)
+		{
+			std::cout << "! Warning, intersectedPoint is same as one of the two points on the line it intersects! " << std::endl;
+		}
+		*/
+		std::cout << "Points of intersected line are: " << TwoDLineSegmentB.a.x << ", " << TwoDLineSegmentB.a.y << " | " << TwoDLineSegmentB.b.x << ", " << TwoDLineSegmentB.b.y << std::endl;
+
 	}
 	else
 	{

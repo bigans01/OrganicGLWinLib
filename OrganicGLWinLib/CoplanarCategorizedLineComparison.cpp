@@ -113,6 +113,8 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 					(
 						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
 						||
+						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE)
+						||
 						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NO_INTERSECT)
 						||
 						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::PARALLEL)
@@ -146,6 +148,10 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				if (currentGuestTriangleSegment.containsCategorizedLine == true)
 				{
 					std::cout << "!!! Inserting categorized line into pool..." << std::endl;
+
+					int stopVal = 3;
+					std::cin >> stopVal;
+
 					categorizedLinePoolRef->insertLineIntoPool(attemptedCategorizedLine);
 				}
 			}
@@ -159,6 +165,10 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 			}
 		}
 		*/
+
+		std::cout << "!!_----> finished comparing to one STriangle in the tracked SPoly; enter number to continue. " << std::endl;
+		int continueVal = 3;
+		std::cin >> continueVal;
 	}
 
 

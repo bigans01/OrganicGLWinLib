@@ -35,6 +35,29 @@ void TwoDLineSegment::attemptIntersectionInsert(TwoDLineSegmentIntersectResult i
 	{
 		insertIntersectionRecord(TwoDSPolyIntersectionType::NO_HIT, false, 0, in_result.intersectedPoint);
 	}
+	else if
+	(
+		(in_result.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE)
+	)
+	{
+		//numberOfInterceptsBorderLinePointPrecise++;
+		bool wasHitOnBorderLine = false;
+		TwoDSPolyIntersectionType currentType = TwoDSPolyIntersectionType::PRECISE_HIT_NONBORDERLINE;
+		unsigned char borderLineID = 0;
+		if (in_hostTriangleLineRef->isBorderLine == 1)
+		{
+			numberOfInterceptsBorderLinePointPrecise++;
+			bool wasHitOnBorderLine = true;
+			currentType = TwoDSPolyIntersectionType::PRECISE_HIT_BORDERLINE;
+			borderLineID = in_hostTriangleLineRef->borderLineID;
+		}
+		else if (in_hostTriangleLineRef->isBorderLine == 0)
+		{
+			numberOfInterceptsNonBorderLinePointPrecise++;
+		}
+		insertIntersectionRecord(currentType, wasHitOnBorderLine, borderLineID, in_result.intersectedPoint);
+
+	}
 	// -if the guest segment hit a host segment that was NOT a border line, then TwoDPolyIntersectionType::HIT_NONBORDERLINE
 	// ...either way, register the HIT.
 }
@@ -51,6 +74,12 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 	// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
 	// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
 	// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
+
+	std::cout << "########### Attempting construction; stats are: " << std::endl;
+	std::cout << "intersected border line count: " << numberOfIntersectedBorderLines << std::endl;
+	std::cout << "intersected nonborder line count: " << numberOfIntersectedNonBorderLines << std::endl;
+	std::cout << "intersected border lines precise count: " << numberOfInterceptsBorderLinePointPrecise << std::endl;
+	std::cout << "intersected non border lines precise count: " << numberOfInterceptsNonBorderLinePointPrecise << std::endl;
 
 	CategorizedLine newLine;
 	if (isColinearToAnotherLine == false)
@@ -112,6 +141,13 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 				std::cout << "isPointBOnBorder: " << newLine.line.isPointBOnBorder << std::endl;
 				std::cout << "pointBBorder" << newLine.line.pointBBorder << std::endl;
 			}
+
+			// 1 HIT NON_BORDER_LINE
+			else if (numberOfIntersectedNonBorderLines == 1)
+			{
+				std::cout << "!! Branch for analyzing a single non border line record entered." << std::endl;
+			}
+
 		}
 
 		else if (intersectionRecords.size() == 2)
@@ -121,6 +157,8 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 			// the two points shouldn't be the same, if the line is valid.
 			if (checkIf2dPointsMatch(intersectionRecords.begin()->intersectedPoint, intersectionRecords.rbegin()->intersectedPoint) == false)
 			{
+				std::cout << "!! Passed 2d point match check..." << std::endl;
+
 				if (numberOfIntersectedBorderLines == 1)	// branch for one HIT_BORDER_LINE
 				{
 
@@ -151,7 +189,7 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 
 
 				// 2 HIT_BORDER_LINE, -> A_SLICE
-				if (numberOfIntersectedBorderLines == 2)
+				else if (numberOfIntersectedBorderLines == 2)
 				{
 					// check that the border line points are not the same; if they are, this is an invalid CategorizedLine.
 
@@ -182,10 +220,100 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 
 
 				}
+				else if (numberOfInterceptsBorderLinePointPrecise == 2)
+				{
+					std::cout << "!!! Logic for interceptsPointPrecise x 2 entered..." << std::endl;
+					glm::vec3 convertedPointA = OrganicGLWinUtils::convert2DToGlmVec3(a);
+					glm::vec3 convertedPointB = OrganicGLWinUtils::convert2DToGlmVec3(b);
+
+					std::cout << "Converted point A is: " << convertedPointA.x << ", " << convertedPointA.y << ", " << convertedPointA.z << ", " << std::endl;
+					std::cout << "Converted point B is: " << convertedPointB.x << ", " << convertedPointB.y << ", " << convertedPointB.z << ", " << std::endl;
+
+					if
+						(
+						(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPointA, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+							&&
+							(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPointB, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+							)
+					{
+						std::cout << "!! this segment is a INTERCEPTS_POINT_PRECISE that exists within the area of the compared-to STriangle. " << std::endl;
+						std::cout << "!! Intersection records size was: " << intersectionRecords.size() << std::endl;
+
+						containsCategorizedLine = true;
+					}
+					else
+					{
+						std::cout << "!! this segment doesn't lie within the compared-to STriangle; no CategorizedLine exists! " << std::endl;
+					}
+				}
 			}
-			else     // the points do Match, so the CategorizedLine is invalid.
+			else    // The points do Match, so the CategorizedLine is invalid. 
+					// Remember, if the numberOfInteceptsNonBorderLinePointPrecise == 1, then the categorized line we send back will be of the type,
+					// IntersectionType::INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR. We will then need to find the two border lines of this intercept later,
+					// and then convert the appropriate data into a categorized line of IntersectionType::INTERCEPTS_POINT_PRECISE, but only at the very end, when 
+					// duplicate CategorizedLines in the pool have been purged. Once purging is complete, loop through the list of lines and look for any that are
+					// IntersectionType::INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR, and determine the border lines required for INTERCEPTS_BORDER_LINE_PRECISE.
 			{
 				std::cout << "!!! NOTICE: points match, halting. " << std::endl;
+				if 
+				(	
+					(numberOfInterceptsBorderLinePointPrecise == 2)
+					||
+					(
+						(numberOfInterceptsBorderLinePointPrecise == 1)
+						&&
+						(numberOfInterceptsNonBorderLinePointPrecise == 1)
+					)
+				)
+				{
+					std::cout << "!!! >> point match, but with interceptPointsPrecise as having a count of 2. " << std::endl;
+					TwoDPoint pointToCheckIfExistsWithinRelatedArea;
+					auto recordsBegin = intersectionRecords.begin();
+
+					std::cout << "!! intersected point: " << recordsBegin->intersectedPoint.x << ", " << recordsBegin->intersectedPoint.y << std::endl;
+					std::cout << "!! a: " << a.x << ", " << a.y << std::endl;
+					std::cout << "!! b: " << b.x << ", " << b.y << std::endl;
+
+					bool matchedFlag = false;
+					if 
+					(
+						(recordsBegin->intersectedPoint.x == a.x)
+						&&
+						(recordsBegin->intersectedPoint.y == a.y)
+					)
+					{
+						std::cout << "Matched point is the equivalent of pointA in this segment; point to check whether or not it exists within the triangle will be pointB of the segment. " << std::endl;
+						pointToCheckIfExistsWithinRelatedArea = b;
+						matchedFlag = true;
+					}
+					else if
+					(
+						(recordsBegin->intersectedPoint.x == b.x)
+						&&
+						(recordsBegin->intersectedPoint.y == b.y)
+					)
+					{
+						std::cout << "Matched point is the equivalent of pointB in this segment; point to check whether or not it exists within the triangle will be pointB of the segment. " << std::endl;
+						pointToCheckIfExistsWithinRelatedArea = a;
+						matchedFlag = true;
+					}
+
+
+					glm::vec3 convertedPoint = OrganicGLWinUtils::convert2DToGlmVec3(pointToCheckIfExistsWithinRelatedArea);
+					if
+					(
+						(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPoint, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+						&&
+						(matchedFlag == true)
+					)
+					{
+						std::cout << "Point to check lies within this triangle; can return a categorized line." << std::endl;
+					}
+					else
+					{
+						std::cout << "Point to check DOES NOT lie within triangle." << std::endl;
+					}
+				}
 				int someVal = 3;
 				std::cin >> someVal;
 			}
@@ -193,6 +321,11 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 
 		else if (intersectionRecords.size() == 3)
 		{
+			std::cout << "!!! ### Branch for INTERCEPTS_POINT_PRECISE categorized line entered..." << std::endl;
+			//containsCategorizedLine = true;
+			
+			// remember: point A of an intercepts point precise should be on the border; point B should be somewhere within the triangle
+			// Step 1.) find point B.
 
 		}
 
@@ -202,11 +335,19 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 			(numberOfIntersectedBorderLines == 0)
 			&&
 			(numberOfIntersectedNonBorderLines == 0)
+			&&
+			(numberOfInterceptsBorderLinePointPrecise == 0)
+			&&
+			(numberOfInterceptsNonBorderLinePointPrecise == 0)
 		)
 		{
 			std::cout << "!! Branch for potential NON_BOUND entered. " << std::endl;
 			glm::vec3 convertedPointA = OrganicGLWinUtils::convert2DToGlmVec3(a);
 			glm::vec3 convertedPointB = OrganicGLWinUtils::convert2DToGlmVec3(b);
+
+			std::cout << "Converted point A is: " << convertedPointA.x << ", " << convertedPointA.y << ", " << convertedPointA.z << ", " << std::endl;
+			std::cout << "Converted point B is: " << convertedPointB.x << ", " << convertedPointB.y << ", " << convertedPointB.z << ", " << std::endl;
+			
 			if
 				(
 				(OrganicGLWinUtils::checkIfPointLiesWithinTriangle(convertedPointA, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
@@ -215,6 +356,8 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 					)
 			{
 				std::cout << "!! this segment is a NON_BOUND that exists within the area of the compared-to STriangle. " << std::endl;
+				std::cout << "!! Intersection records size was: " << intersectionRecords.size() << std::endl;
+
 				containsCategorizedLine = true;
 			}
 			else
@@ -222,6 +365,10 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 				std::cout << "!! this segment doesn't lie within the compared-to STriangle; no CategorizedLine exists! " << std::endl;
 			}
 		}
+	}
+	else
+	{
+		std::cout << "NOTICE: !! Line was detected as colinear to another line; no categorized line exists. " << std::endl;
 	}
 	return newLine;
 }

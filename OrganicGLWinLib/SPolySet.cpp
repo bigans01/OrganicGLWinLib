@@ -79,9 +79,11 @@ void SPolySet::runPolyComparison()
 							//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
 							//std::cout << "##### Current index is: " << currentIndex << std::endl;
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| --> Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
-							//std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+							std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
 							produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
-							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Passed 1 set of categorized lines. " << std::endl;
+							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Passed 1 set of categorized lines. (typical comparison)" << std::endl;
+							//int compare = 3;
+							//std::cin >> compare;
 					}
 				}
 			}
