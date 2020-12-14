@@ -297,7 +297,7 @@ glm::vec3 SPoly::rotateForPlanarVectorCalc(glm::vec3* in_pointA, glm::vec3* in_p
 		std::cout << "Centroid value: " << in_centroid->x << ", " << in_centroid->y << ", " << in_centroid->z << std::endl;
 	}
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(in_pointB->y, in_pointB->x);	// point A should be 0, so compare point B
 	float firstPassRotateRadians;
 
@@ -452,11 +452,11 @@ void SPoly::addCategorizedLine(CategorizedLine in_line)
 
 void SPoly::insertCalibratedLine(CategorizedLine in_line)
 {
-	int currentSize = categorizedLineMap.size();
+	int currentSize = int(categorizedLineMap.size());
 	if (currentSize > 0)			// if it isn't the first one, do this
 	{
 		// do this if the groupID is the same
-		CategorizedLine* previousLine = &categorizedLineMap[categorizedLineMap.size() - 1];
+		CategorizedLine* previousLine = &categorizedLineMap[int(categorizedLineMap.size()) - 1];
 		CategorizedLine candidateLine = in_line;	// the candidate line
 		if (previousLine->line.lineGroupID == candidateLine.line.lineGroupID)
 		{
@@ -484,20 +484,20 @@ void SPoly::insertCalibratedLine(CategorizedLine in_line)
 			}
 			*/
 
-			categorizedLineMap[categorizedLineMap.size()] = candidateLine;	// insert the newly formed line
+			categorizedLineMap[int(categorizedLineMap.size())] = candidateLine;	// insert the newly formed line
 		}
 		//categorizedLineMap[categorizedLineMap.size()] = in_line;
 		else if (previousLine->line.lineGroupID != candidateLine.line.lineGroupID)
 		{
 			// move the previous group, and THEN add a line with the new group ID
 			constructCleaveLine();
-			categorizedLineMap[categorizedLineMap.size()] = candidateLine;
+			categorizedLineMap[int(categorizedLineMap.size())] = candidateLine;
 		}
 
 	}
 	else if (currentSize == 0)	// if it is the first one, do this
 	{
-		categorizedLineMap[categorizedLineMap.size()] = in_line;	// insert the line
+		categorizedLineMap[int(categorizedLineMap.size())] = in_line;	// insert the line
 	}
 	//categorizedLineMap[categorizedLineMap.size()] = in_line;	// insert the line
 }
@@ -563,7 +563,7 @@ void SPoly::constructCleaveLine()
 {
 	std::cout << "Cleave is 'CONNECTED' type, continuing..." << std::endl;
 	organizeCurrentCleaveLines();
-	int numberOfLines = categorizedLineMap.size();
+	int numberOfLines = int(categorizedLineMap.size());
 
 	// take all the current categorized lines and form a new cleave line
 	for (int x = 0; x < numberOfLines; x++)
@@ -592,7 +592,7 @@ void SPoly::constructCleaveLine()
 
 void SPoly::organizeCurrentCleaveLines()
 {
-	int numberOfLines = categorizedLineMap.size();
+	int numberOfLines = int(categorizedLineMap.size());
 	if (numberOfLines > 1)		// re-organization should only happen when the number of lines is greater than 1
 	{
 		std::map<int, CategorizedLine> tempLineMap;		// will store the temp lines into the map
@@ -734,7 +734,7 @@ int SPoly::determineCleaveTypeAndRegisterCatLines(int in_cleaveIndexID)
 	CleaveSequence* cleaveSequenceRef = &cleaveMap[in_cleaveIndexID];
 
 	//std::cout << "!! 1: cleaveMap size after ref: " << cleaveMap.size() << std::endl;
-	int numberOfCategorizedLines = cleaveSequenceRef->cleavingLines.size();
+	int numberOfCategorizedLines = int(cleaveSequenceRef->cleavingLines.size());
 
 	// first, determine the type..CONNECTED or DISCONNECTED
 	int currentBorderLineCount = 0;

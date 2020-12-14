@@ -246,7 +246,7 @@ bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 TwoDPoint TwoDLineSegmentIntersectAnalyzer::round2DPointToHundredths(TwoDPoint in_point)
 {
 	TwoDPoint returnPoint = in_point;
-	returnPoint.x = floor(in_point.x * 100 + 0.5) / 100;
-	returnPoint.y = floor(in_point.y * 100 + 0.5) / 100;
+	returnPoint.x = float(floor(in_point.x * 100 + 0.5) / 100);
+	returnPoint.y = float(floor(in_point.y * 100 + 0.5) / 100);
 	return returnPoint;
 }

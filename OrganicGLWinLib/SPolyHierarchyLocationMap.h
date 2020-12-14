@@ -69,7 +69,7 @@ class SPolyHierarchyLocationMap
 		void insertHierarchyLocation(int in_primalPolyID, int in_pieceID)
 		{
 			SPolyHierarchyLocation location(in_primalPolyID, in_pieceID);
-			locationMap[locationMap.size()] = location;
+			locationMap[int(locationMap.size())] = location;
 		}
 
 		void printLocations()

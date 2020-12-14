@@ -12,7 +12,7 @@ class WeldedLinePool
 	public:
 		void insertLineIntoPool(WeldedLine in_weldedLineToInsert)
 		{
-			int currentIndex = pool.size();
+			int currentIndex = int(pool.size());
 			pool[currentIndex] = in_weldedLineToInsert;
 		}
 		void printLines()
@@ -28,7 +28,7 @@ class WeldedLinePool
 		}
 		int getPoolSize()
 		{
-			return pool.size();
+			return int(pool.size());
 		}
 
 		int getFirstElementID()
@@ -79,7 +79,7 @@ class WeldedLinePool
 			// are we at the beginning?
 			if (in_startingIndex == 0)
 			{
-				int numberOfRemainingLinesToIterate = pool.size() - 3;
+				int numberOfRemainingLinesToIterate = int(pool.size() - 3);
 				auto linesBegin = pool.begin();
 				incrementIterator(&linesBegin);	//linesBegin++;
 				incrementIterator(&linesBegin);	//linesBegin++;
@@ -121,7 +121,7 @@ class WeldedLinePool
 				(in_startingIndex != pool.rbegin()->first)
 			)
 			{
-				int numberOfRemainingLinesToIterate = pool.size() - 3;
+				int numberOfRemainingLinesToIterate = int(pool.size() - 3);
 				auto linesBegin = pool.find(in_startingIndex);
 				incrementIterator(&linesBegin);	//linesBegin++;
 				incrementIterator(&linesBegin);	//linesBegin++;

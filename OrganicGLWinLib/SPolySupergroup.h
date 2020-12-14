@@ -12,7 +12,7 @@ class SPolySupergroup
 		std::map<int, SPoly> sPolyMap;
 		void insertSPoly(SPoly in_sPoly)
 		{
-			sPolyMap[sPolyMap.size()] = in_sPoly;
+			sPolyMap[int(sPolyMap.size())] = in_sPoly;
 		}
 
 		void printSPolys()

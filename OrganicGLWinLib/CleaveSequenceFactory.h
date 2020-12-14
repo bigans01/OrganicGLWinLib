@@ -24,6 +24,8 @@ class CleaveSequenceFactory
 		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode);
 		void printLinesInPool();
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
+		void printLineCounts();
+		void clearLinePools();
 
 	private:
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
@@ -41,7 +43,7 @@ class CleaveSequenceFactory
 		void insertPartialBoundLine(CategorizedLine in_line);
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
-		void clipTwinCategorizedLinesofInterceptPointPrecise();
+		void clipTwinCategorizedLinesofInterceptPointPrecise();			// potenitally obsolete; this function clears out precise lines when the number is 2.
 		
 
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);

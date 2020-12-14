@@ -6,7 +6,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 	sPolyRef = in_sPolyRef;
 	originalPolyID = in_originalPolyID;
 	triangleSupergroup.setOriginalSPolyID(in_originalPolyID);
-	int cleaveMapSize = in_sPolyRef->cleaveMap.size();
+	int cleaveMapSize = int(in_sPolyRef->cleaveMap.size());
 	
 	// only perform the check if the size is >= 1; we don't need to do any work if there aren't any cleave sequences.
 	

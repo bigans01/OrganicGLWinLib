@@ -173,7 +173,12 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 	}
 
 	// before returning, check for any cases where there are INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR
+	categorizedLinePoolRef->solveUnsolvedInterceptPointsPrecise(&trackedSPolyRef->borderLines);
 
+	std::cout << "-----> printing lines, post solve: " << std::endl;
+	categorizedLinePoolRef->printLinesInPool();
+	int someValYeah = 7;
+	std::cin >> someValYeah;
 
 
 	/*

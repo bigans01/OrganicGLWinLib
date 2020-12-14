@@ -16,7 +16,7 @@ class WeldedTriangleContainer
 		};
 		void insertWeldedTriangle(WeldedTriangle in_weldedTriangle)
 		{
-			triangleMap[triangleMap.size()] = in_weldedTriangle;
+			triangleMap[int(triangleMap.size())] = in_weldedTriangle;
 		};
 };
 

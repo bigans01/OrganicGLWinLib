@@ -18,7 +18,7 @@ class WeldedTriangleSupergroup
 
 		void insertTriangleContainer(WeldedTriangleContainer in_weldedTriangleContainer)
 		{
-			triangleContainerMap[triangleContainerMap.size()] = std::move(in_weldedTriangleContainer);
+			triangleContainerMap[int(triangleContainerMap.size())] = std::move(in_weldedTriangleContainer);
 		};
 
 		void printPointsInSupergroup()

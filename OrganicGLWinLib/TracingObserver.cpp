@@ -49,7 +49,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 		}
 		else
 		{
-			currentObserverState == TracingObserverState::TERMINATED;
+			currentObserverState = TracingObserverState::TERMINATED;
 		}
 
 		//int someVal = 3;
@@ -79,7 +79,7 @@ void TracingObserver::buildNewObservation(WeldedLinePoolGuide in_poolGuide)
 			}
 			else
 			{
-				currentObserverState == TracingObserverState::TERMINATED;
+				currentObserverState = TracingObserverState::TERMINATED;
 			}
 
 			//std::cout << "!!!! Final observe detected. Enter number to continue. " << std::endl;

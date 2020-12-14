@@ -725,7 +725,6 @@ glm::vec3 SPolySet::cross(glm::vec3 in_A, glm::vec3 in_B)
 
 float SPolySet::dot(glm::vec3 in_A, glm::vec3 in_B)
 {
-	float returnVal;
 	float x_multiplied = in_A.x * in_B.x;
 	float y_multiplied = in_A.y * in_B.y;
 	float z_multiplied = in_A.z * in_B.z;
@@ -734,7 +733,6 @@ float SPolySet::dot(glm::vec3 in_A, glm::vec3 in_B)
 
 double SPolySet::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 {
-	double returnVal;
 	double x_multiplied = in_A.x * in_B.x;
 	double y_multiplied = in_A.y * in_B.y;
 	double z_multiplied = in_A.z * in_B.z;
@@ -1205,9 +1203,9 @@ glm::vec3 SPolySet::findSecondPointForLine(glm::vec3 in_beginPoint, glm::vec3 in
 glm::vec3 SPolySet::roundPointToHundredths(glm::vec3 in_point)
 {
 	glm::vec3 returnPoint;
-	returnPoint.x = floor(in_point.x * 100 + 0.5) / 100;
-	returnPoint.y = floor(in_point.y * 100 + 0.5) / 100;
-	returnPoint.z = floor(in_point.z * 100 + 0.5) / 100;
+	returnPoint.x = float(floor(in_point.x * 100 + 0.5) / 100);
+	returnPoint.y = float(floor(in_point.y * 100 + 0.5) / 100);
+	returnPoint.z = float(floor(in_point.z * 100 + 0.5) / 100);
 	return returnPoint;
 }
 
@@ -1231,7 +1229,7 @@ int SPolySet::checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB)
 float SPolySet::getRadiansForPosZViaY(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnY = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 
 	// get the atan2 result, and analyze it
@@ -1287,7 +1285,7 @@ float SPolySet::getRadiansForPosZViaY(glm::vec3 in_vec3)
 float SPolySet::getRadiansForPosYViaX(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);

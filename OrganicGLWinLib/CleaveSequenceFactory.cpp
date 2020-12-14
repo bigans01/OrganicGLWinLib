@@ -14,11 +14,12 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
-		//std::cout << "!!! Adding NON_BOUND line. " << std::endl;
+		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
 		insertNonboundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 	{
+		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
 		/*
 		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
 		std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
@@ -171,6 +172,9 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// set to MassManipulationMode::DESTRUCTION
 
 	//std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+	//std::cout << "number of nonbounds: " << nonboundCount << std::endl;
+	//std::cout << "number of partials: " << partialboundCount << std::endl;
+	//std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
@@ -181,6 +185,10 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
 	determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);
 
+	//std::cout << "(2) number of nonbounds: " << nonboundCount << std::endl;
+	//std::cout << "(2) number of partials: " << partialboundCount << std::endl;
+	//std::cout << "(2) number of precises: " << interceptsPointPreciseCount << std::endl;
+
 	// Typical case 1: only do this if there are partial bound lines or a-sliced lines, and exactly 0 intereceptPointPreciseCount; this is the typical situation.
 	if
 	(
@@ -189,7 +197,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount == 0)	
 	)
 	{
-		//std::cout << ">>> Handling typical scenario" << std::endl;
+		std::cout << ">>> Handling typical scenario" << std::endl;
 
 		handleScenarioTypical(in_cleaveMapRef);
 	}
@@ -202,13 +210,22 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 
-		//std::cout << ">>> Handling precise scenario" << std::endl;
+		std::cout << ">>> Handling precise scenario" << std::endl;
 
 		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
 	}
+	else if
+	(
+		(interceptsPointPreciseCount > 1)
+	)
+	{
+		std::cout << ">>> Handling multiple precise scenario" << std::endl;
+		int stopVal = 3;
+		std::cin >> stopVal;
+	}
 	else
 	{
-		//std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
+		std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
 		//std::cout << "!! Number of interceptsPointPrecise: " << interceptsPointPreciseCount << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
@@ -237,7 +254,7 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 
 	// check if there's a condition where there are exactly two categorized lines having the IntersectionType, INTERCEPTS_POINT_PRECISE, and 
 	// which belong to the same parent poly. If this condition is TRUE, these lines must be removed.
-	clipTwinCategorizedLinesofInterceptPointPrecise();
+	//clipTwinCategorizedLinesofInterceptPointPrecise();			// potentially obsolete function call
 
 	//int someVal8 = 7;
 	//std::cin >> someVal8;
@@ -714,6 +731,30 @@ void CleaveSequenceFactory::printLinesInPool()
 	}
 }
 
+void CleaveSequenceFactory::printLineCounts()
+{
+	std::cout << "--> Printing line counts in CleaveSequenceFactory: " << std::endl;
+	std::cout << "nonbounds: " << nonboundCount << std::endl;
+	std::cout << "partialBounds: " << partialboundCount << std::endl;
+	std::cout << "precise: " << interceptsPointPreciseCount << std::endl;
+	std::cout << "aslice: " << aslicedCount << std::endl;
+}
+
+void CleaveSequenceFactory::clearLinePools()
+{
+	nonboundMap.clear();
+	nonboundCount = 0;
+
+	partialboundMap.clear();
+	partialboundCount = 0;
+
+	interceptsPointPreciseMap.clear();
+	interceptsPointPreciseCount = 0;
+
+	aslicedMap.clear();
+	aslicedCount = 0;
+}
+
 void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
 		//std::cout << "## Partial count: " << partialboundCount << std::endl;
@@ -796,7 +837,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		// lastly, if the newSequence is marked as "complete" move it to the referenced sequence. Otherwise, discard it.
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
-			int cleaveMapRefSize = (*in_cleaveMapRef).size();
+			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
@@ -812,7 +853,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;
 		insertASliceLineForSequence(&newSequence, firstLineID);
-		int cleaveMapRefSize = (*in_cleaveMapRef).size();
+		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 
 		newSequence.printCategorizedLines();
@@ -828,10 +869,12 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 {
 	
 	//std::cout << "###::::: !!!! Running specical case for INTERCEPTS_POINT_PRECISE. " << std::endl;
-
 	//std::cout << "## Partial count: " << partialboundCount << std::endl;
 	//std::cout << "## Non-bound count: " << nonboundCount << std::endl;
 	//std::cout << "## Sliced count: " << aslicedCount << std::endl;
+	//std::cout << "## Intercepts precise count: " << interceptsPointPreciseCount << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
 
 	// first, work with the partailly bound searching like we would normally do, except for the fact that 
 	// when we are done, do not mark the CleaveSequenceStatus as being incomplete.
@@ -918,7 +961,7 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		// lastly, if the newSequence is marked as "complete" move it to the referenced sequence. Otherwise, discard it.
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
-			int cleaveMapRefSize = (*in_cleaveMapRef).size();
+			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;

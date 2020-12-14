@@ -41,7 +41,7 @@ class CleaveSequenceCandidateList
 		}
 		int getCandidateSetSize()
 		{
-			return candidateSet.size();
+			return int(candidateSet.size());
 		}
 		int getFirstAvailableCandidate()
 		{

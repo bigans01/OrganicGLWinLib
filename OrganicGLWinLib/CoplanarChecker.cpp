@@ -41,7 +41,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 
 		//std::cout << "++++++++++++ performing co planar analysis (2) " << std::endl;
 
-		int requiredCoplanarityCount = triangleBCandidates.availableCandidates.size();
+		int requiredCoplanarityCount = int(triangleBCandidates.availableCandidates.size());
 		int currentCoplanarityCount = 0;
 		for (; triangleBCandidateSetBegin != triangleBCandidateSetEnd; triangleBCandidateSetBegin++)
 		{

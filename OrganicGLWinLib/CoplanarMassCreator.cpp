@@ -14,6 +14,12 @@ void CoplanarMassCreator::runMassManipulation()
 	std::cout << trackedCopy.borderLines[0].pointA.x << ", " << trackedCopy.borderLines[0].pointA.y << ", " << trackedCopy.borderLines[0].pointA.z << " | "
 		<< trackedCopy.borderLines[0].pointB.x << ", " << trackedCopy.borderLines[0].pointB.y << ", " << trackedCopy.borderLines[0].pointB.z << std::endl;
 
+	std::cout << "!!! Clearing line pools in sequence factory: " << std::endl;
+	trackedCopy.sequenceFactory.clearLinePools();			// we don't need any already-existing lines from the copy.
+
+	std::cout << "!!! Line counts: " << std::endl;
+	trackedCopy.sequenceFactory.printLineCounts();
+
 
 	int someVal = 3;
 	std::cin >> someVal;
@@ -55,6 +61,9 @@ void CoplanarMassCreator::runMassManipulation()
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
 
 		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
+
+		std::cout << "!! Current iteration pool size: " << currentIterationPool.linePool.size() << std::endl;
+
 		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
 		trackedCopy.buildCleaveSequences();
 
