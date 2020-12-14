@@ -167,9 +167,13 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 		*/
 
 		std::cout << "!!_----> finished comparing to one STriangle in the tracked SPoly; enter number to continue. " << std::endl;
+		categorizedLinePoolRef->printLinesInPool();
 		int continueVal = 3;
 		std::cin >> continueVal;
 	}
+
+	// before returning, check for any cases where there are INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR
+
 
 
 	/*

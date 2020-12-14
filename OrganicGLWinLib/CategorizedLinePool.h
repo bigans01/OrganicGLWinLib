@@ -59,7 +59,29 @@ class CategorizedLinePool
 			auto linePoolEnd = linePool.end();
 			for (; linePoolBegin != linePoolEnd; linePoolBegin++)
 			{
-				std::cout << "Line " << x << ", point A: " << linePoolBegin->line.pointA.x << ", " << linePoolBegin->line.pointA.y << ", " << linePoolBegin->line.pointA.z
+				std::cout << "(";
+				if (linePoolBegin->type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+				{
+					std::cout << "INTERCEPTS_POINT_PRECISE)                   ";
+				}
+				else if (linePoolBegin->type == IntersectionType::INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR)
+				{
+					std::cout << "INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR) ";
+				}
+				else if (linePoolBegin->type == IntersectionType::A_SLICE)
+				{
+					std::cout << "A_SLICE)                                    ";
+				}
+				else if (linePoolBegin->type == IntersectionType::NON_BOUND)
+				{
+					std::cout << "NON_BOUND)                                  ";
+				}
+				else if (linePoolBegin->type == IntersectionType::PARTIAL_BOUND)
+				{
+					std::cout << "PARTIAL_BOUND)                              ";
+				}
+
+				std::cout << " Line " << x << ", point A: " << linePoolBegin->line.pointA.x << ", " << linePoolBegin->line.pointA.y << ", " << linePoolBegin->line.pointA.z
 					<< "| point B: " << linePoolBegin->line.pointB.x << ", " << linePoolBegin->line.pointB.y << ", " << linePoolBegin->line.pointB.z
 					<< "| empty normal: " << linePoolBegin->emptyNormal.x << ", " << linePoolBegin->emptyNormal.y << ", " << linePoolBegin->emptyNormal.z << std::endl;
 			}

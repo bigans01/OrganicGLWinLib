@@ -34,6 +34,7 @@ class TwoDLineSegment
 		TwoDPoint b;
 		bool containsCategorizedLine = false;	// set to true if/when a valid categorized line is determined.
 		bool isColinearToAnotherLine = false;	// set to true if this line segment is colinear to any other line in the host triangle it's compared to
+		bool containsIntercepts = false;		// set to true when there is at least one valid intercept, that isn't of the NO_HIT type.
 
 		void attemptIntersectionInsert(TwoDLineSegmentIntersectResult in_result, STriangleLine* in_triangleLineRef);
 		CategorizedLine attemptCategorizedLineConstruction(glm::vec3 in_guestTriangleCentroid, STriangle* in_hostSTrianglePtr);
@@ -46,6 +47,8 @@ class TwoDLineSegment
 		int numberOfInterceptsNonBorderLinePointPrecise = 0;
 		void insertIntersectionRecord(TwoDSPolyIntersectionType in_intersectionType, bool in_isOnBorderLine, unsigned char in_intersectdBorderLineID, TwoDPoint in_intersectedPoint);
 		bool checkIf2dPointsMatch(TwoDPoint in_pointA, TwoDPoint in_pointB);
+		CategorizedLine produceAppropriateInterceptsPreciseCategorizedLineFromThreeRecords(glm::vec3 in_guestTriangleCentroid);
+		CategorizedLine produceAppropriateInterceptsPreciseCategorizedLineFromTwoRecords(glm::vec3 in_newLinePointB, glm::vec3 in_guestTriangleCentroid);
 };
 
 #endif
