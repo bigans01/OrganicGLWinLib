@@ -340,8 +340,8 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 							std::cout << "Point to check DOES NOT lie within triangle." << std::endl;
 						}
 					}
-					int someVal = 3;
-					std::cin >> someVal;
+					//int someVal = 3;
+					//std::cin >> someVal;
 				}
 			}
 

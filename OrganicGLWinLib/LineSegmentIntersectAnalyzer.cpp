@@ -53,6 +53,14 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	*/
 
 	float rsCross = calculate2DCross(r, s);
+	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
+	{
+		std::cout << "!! Rounding cross, as requested by option. " << std::endl;
+		
+		int threeVal = 3;
+
+		rsCross = float(floor(rsCross * 1000 + 0.5) / 1000);
+	}
 
 	std::cout << "Value of rsCross: " << rsCross << std::endl;
 	std::cout << "(pre-calc) Line Segment A scalar (variable t) is : " << t << std::endl;
@@ -67,10 +75,12 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 		std::cout << "::: NOTE: value of u is 1.0f! " << std::endl;
 	}
 
-	if (rsCross == 0.0f)	
+	//if (rsCross == 0.0f)	
+	if (isFloatWithinColinearThreshold(rsCross) == true)
 	{
 		// COLINEAR conditions
-		if (calculate2DCross((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) == 0.0f)
+		//if (calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) == 0.0f)
+		if (isFloatWithinColinearThreshold(calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r)) == true)
 		{
 			if (checkForColinearOverlap() == true)		// COLINEAR_OVERLAP
 			{
@@ -86,7 +96,8 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 		}
 
 		// PARALLEL, NON-INTERSECTING
-		else if (calculate2DCross((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) != 0.0f)	// PARALLEL
+		//else if (calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) != 0.0f)	// PARALLEL
+		if (isFloatWithinColinearThreshold(calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r)) == false)
 		{
 			std::cout << "Lines are parallel, but don't intersect! " << std::endl;
 		}
@@ -94,7 +105,8 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	}
 	else if 
 	(
-		(rsCross != 0.0f)
+		//(rsCross != 0.0f)
+		(isFloatWithinColinearThreshold(rsCross) == false)
 		&&
 		
 		// t
@@ -176,6 +188,22 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	
 }
 
+bool TwoDLineSegmentIntersectAnalyzer::isFloatWithinColinearThreshold(float in_threshold)
+{
+	bool isWithin = false;
+	if
+	(
+		(in_threshold >= -.001f)
+		&&
+		(in_threshold <= .001f)
+	)
+	{
+		std::wcout << "!! Float is WITHIN threshold! " << std::endl;
+		isWithin = true;
+	}
+	return isWithin;
+}
+
 float TwoDLineSegmentIntersectAnalyzer::calculateTwoDLineSegmentIntersectScalar(float in_numerator, float in_denominator)
 {
 	float scalarValue = 0.0f;
@@ -197,7 +225,21 @@ float TwoDLineSegmentIntersectAnalyzer::calculate2DCross(TwoDPoint in_crossPoint
 {
 	float crossValue;
 	crossValue = (in_crossPointA.x * in_crossPointB.y) - (in_crossPointA.y * in_crossPointB.x);
+	std::cout << "!! Cross value is: " << crossValue << std::endl;
 	return crossValue;
+}
+
+float TwoDLineSegmentIntersectAnalyzer::calculate2DCrossWithOptionCheck(TwoDPoint in_crossPointA, TwoDPoint in_crossPointB)
+{
+	float crossValue;
+	crossValue = (in_crossPointA.x * in_crossPointB.y) - (in_crossPointA.y * in_crossPointB.x);
+	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
+	{
+		crossValue = float(floor(crossValue * 1000 + 0.5) / 1000);
+		std::cout << "! (Optioned) Cross value is (rounded to nearest hundredths) is : " << crossValue << std::endl;
+	}
+	return crossValue;
+
 }
 
 float TwoDLineSegmentIntersectAnalyzer::calculate2DDot(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB)
@@ -205,13 +247,26 @@ float TwoDLineSegmentIntersectAnalyzer::calculate2DDot(TwoDPoint in_dotPointA, T
 	return (in_dotPointA.x * in_dotPointB.x) + (in_dotPointA.y * in_dotPointB.y);
 }
 
+float TwoDLineSegmentIntersectAnalyzer::calculate2DDotWithOptionCheck(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB)
+{
+	float returnDot = (in_dotPointA.x * in_dotPointB.x) + (in_dotPointA.y * in_dotPointB.y);
+	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
+	{
+		returnDot = float(floor(returnDot * 1000 + 0.5) / 1000);
+		std::cout << "! (Optioned) dot product is (rounded to nearest thousandths) is: " << returnDot << std::endl;
+	}
+	return returnDot;
+
+}
+
 bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 {
 	bool returnValue = false;
-	float t0 = calculate2DDot((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) / calculate2DDot(r, r);
-	float t1 = calculate2DDot((TwoDLineSegmentB.a + s - TwoDLineSegmentA.a), r) / calculate2DDot(r, r);
-	float rsDot = calculate2DDot(s, r);
+	float t0 = calculate2DDotWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) / calculate2DDot(r, r);
+	float t1 = calculate2DDotWithOptionCheck((TwoDLineSegmentB.a + s - TwoDLineSegmentA.a), r) / calculate2DDot(r, r);
+	float rsDot = calculate2DDotWithOptionCheck(s, r);
 
+	std::cout << "!!!! Line segment A, point A is: " << TwoDLineSegmentA.a.x << ", " << TwoDLineSegmentA.a.y << std::endl;
 	std::cout << "Dot of s and r is: " << rsDot << std::endl;
 	std::cout << "#### t0 is: " << t0 << std::endl;
 	std::cout << "#### t1 is: " << t1 << std::endl;
@@ -222,7 +277,8 @@ bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 		(
 			(t0 <= 1)
 			&&
-			(t0 >= 0)
+			//(t0 >= 0)
+			(t1 >= 0)
 		)
 		{
 			returnValue = true;	// overlaps
@@ -234,7 +290,13 @@ bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 		(
 			(t1 <= 1)
 			&&
-			(t1 >= 0)
+			//(t1 >= 0)
+			(t0 >= 0)
+
+			// the line(s) should be aligned to the x axis; so check
+			//(TwoDLineSegmentB.a.x <= TwoDLineSegmentA.a.x)
+			//&&
+			//(TwoDLineSegmentB.b.x >= TwoDLineSegmentA.a.x)
 		)
 		{
 			returnValue = true;	// overlaps

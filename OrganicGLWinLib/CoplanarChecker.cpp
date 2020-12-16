@@ -42,11 +42,17 @@ void CoplanarChecker::performCoPlanarAnalysis()
 		//std::cout << "++++++++++++ performing co planar analysis (2) " << std::endl;
 
 		int requiredCoplanarityCount = int(triangleBCandidates.availableCandidates.size());
+		//std::cout << "!! Required coplanarity count is: " << requiredCoplanarityCount << std::endl;
+
 		int currentCoplanarityCount = 0;
 		for (; triangleBCandidateSetBegin != triangleBCandidateSetEnd; triangleBCandidateSetBegin++)
 		{
 			glm::vec3 comparisonOriginPointCopy = comparisonOriginPoint;
 			glm::vec3 currentComparedPointInTriangleB = triangleBCandidates.points[*triangleBCandidateSetBegin];
+
+			//std::cout << "######## Comparison origin point copy: " << comparisonOriginPointCopy.x << ", " << comparisonOriginPointCopy.y << ", " << comparisonOriginPointCopy.z << std::endl;
+			//std::cout << "######## Current compared point in Triangle b: " << currentComparedPointInTriangleB.x << ", " << currentComparedPointInTriangleB.y << ", " << currentComparedPointInTriangleB.z << std::endl;
+
 			if (pointCheck.requiresTranslation == 1)
 			{
 				glm::vec3 translationValue = pointCheck.getTranslationValue();
@@ -66,6 +72,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 			bool isComparisonCoplanar = rotationManager.initializeAndRunForCheckingCoplanarity(&rotationPoints);
 			if (isComparisonCoplanar == true)
 			{
+				//std::cout << "!! Comparison is coplanar. " << std::endl;
 				currentCoplanarityCount++;
 			}
 

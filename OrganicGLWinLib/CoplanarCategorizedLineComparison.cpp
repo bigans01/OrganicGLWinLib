@@ -27,7 +27,7 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 	// non-intersect test
 	//TwoDLineSegment TwoDLineSegmentA(0, 0, 2, 0);
 	//TwoDLineSegment TwoDLineSegmentB(3, 5, 5, 0);
-	TwoDLineSegmentIntersectAnalyzer analyzer(TwoDLineSegmentA, TwoDLineSegmentB);
+	TwoDLineSegmentIntersectAnalyzer analyzer(TwoDLineSegmentA, TwoDLineSegmentB, IntersectAnalyzerOption::NONE);
 
 
 
@@ -108,7 +108,7 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 					std::cout << ":::> Current host segment: " << currentHostTriangleTwoDLineSegmentA.x << ", " << currentHostTriangleTwoDLineSegmentA.y << " | "
 															   << currentHostTriangleTwoDLineSegmentB.x << ", " << currentHostTriangleTwoDLineSegmentB.y << std::endl;
 
-					TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment);	// run the comparator.
+					TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment, IntersectAnalyzerOption::NONE);	// run the comparator.
 					if // do this, as long as the resulting line comparison isn't classified as any of the COLINEAR tpyes (COLINEAR_OVERLAP, COLINEAR_NOOVERLAP)
 					(
 						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)

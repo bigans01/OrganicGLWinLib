@@ -66,7 +66,7 @@ void SPolySet::runPolyComparison()
 						if (polyA->groupID == 1)	
 						{
 							std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
-							//std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
+							std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
 							//int someVal = 3;
 							//std::cin >> someVal;
 
@@ -80,10 +80,20 @@ void SPolySet::runPolyComparison()
 							//std::cout << "##### Current index is: " << currentIndex << std::endl;
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| --> Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
 							std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+							int prePass = 3;
+							std::cin >> prePass;
+
 							produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Passed 1 set of categorized lines. (typical comparison)" << std::endl;
 							//int compare = 3;
 							//std::cin >> compare;
+
+							std::cout << "|||||||||| COMPLETED, Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+							std::cout << "||| Resulting lines in polyA's sequenceFactory are: " << std::endl;
+							polyA->sequenceFactory.printLineCounts();
+							polyA->sequenceFactory.printLinesInPool();
+
+							std::cin >> prePass;
 					}
 				}
 			}
@@ -165,7 +175,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// compare the host triangle lines, to the guest triangles.
 
 			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
-			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of A to triangle of B " << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
 			//std::cout << ">>> B triangle (Guest triangle) points are: " << std::endl;
 			//std::cout << "0: " << guestTrianglePtr->triangleLines[0].pointA.x << ", " << guestTrianglePtr->triangleLines[0].pointA.y << ", " << guestTrianglePtr->triangleLines[0].pointA.z << std::endl;
 			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
@@ -177,6 +187,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			{
 				// check if any of the host poly's lines intersected the guest poly...
 				// if they did, we need to add them to the IntersectionLine
+
+				// an intersection is only valid if both rays that the line uses to trace against the triangle actually intercept, not just one.
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);		
 				IntersectionLine potentialHostLine;		// the line that will store the intersections.
 				//potentialHostLine.intersectionFoundResult = intersectResult.wasIntersectFound;
@@ -209,10 +221,10 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 
 				if (intersectResult.wasIntersectFound == 2)		// the line was found as being within the triangle's plane
 				{
-					std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (host lines compared to guest triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
-					std::cout << "(Host lines going through Guest Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
-					std::cout << "(Host lines going through Guest Triangle) Line points: " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.z << " || "
-								<< in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.z << std::endl;
+					//std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (host lines compared to guest triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
+					//std::cout << "(Host lines going through Guest Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
+					//std::cout << "(Host lines going through Guest Triangle) Line points: " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointA.z << " || "
+								//<< in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.x << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.y << ", " << in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine].pointB.z << std::endl;
 				}
 
 				if (intersectResult.wasIntersectFound == 3)		// the line was found as being equal to a line in the triangle it was intersecting
@@ -231,7 +243,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			{
 				mergedHostLine = hostLineGroup.mergeLines();
 			}
-			
+			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
 			// compare the GUEST triangle lines, to the host triangles.
 
@@ -250,7 +263,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 						//std::cout << "(Guest lines going through Host Triangle) Intersecting line was a border line. It's ID is: " << intersectResult.borderLineID << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) Line points: " << guestTrianglePtr->triangleLines[z].pointA.x << ", " << guestTrianglePtr->triangleLines[z].pointA.y << ", " << guestTrianglePtr->triangleLines[z].pointA.z << " || "
-						//	<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
+							//<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//potentialLineBtoA.numberOfBorderLines = 1;
 					}
 					else
@@ -258,7 +271,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 						//std::cout << "(Guest lines going through Host Triangle) Intersecting line was NOT a border line. (B to A)" << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) The intersecting point is: " << intersectResult.intersectedPoint.x << ", " << intersectResult.intersectedPoint.y << ", " << intersectResult.intersectedPoint.z << std::endl;
 						//std::cout << "(Guest lines going through Host Triangle) Line points: " << guestTrianglePtr->triangleLines[z].pointA.x << ", " << guestTrianglePtr->triangleLines[z].pointA.y << ", " << guestTrianglePtr->triangleLines[z].pointA.z << " || "
-						//	<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
+							//<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//std::cout << "Intersecting line was NOT a border line. (B to A)" << std::endl;
 					}
 					potentialGuestLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
@@ -290,14 +303,31 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			IntersectionLine mergedGuestLine;
 			if (isGuestParallelToHostTriangle == false)
 			{
+				//std::cout << ">>>>>>>> GUEST LINE MERGE BEGIN " << std::endl;
 				mergedGuestLine = guestLineGroup.mergeLines();
+				//std::cout << ">>>>>>>> GUEST LINE MERGE ENd " << std::endl;
+				//std::cout << "::: mergedGuestLine stats: " << std::endl;
+				//std::cout << ":: pointA: " << mergedGuestLine.pointA.z << ", " << mergedGuestLine.pointA.y << ", " << mergedGuestLine.pointA.z << std::endl;
+				//std::cout << ":: pointB: " << mergedGuestLine.pointB.z << ", " << mergedGuestLine.pointB.y << ", " << mergedGuestLine.pointB.z << std::endl;
 			}
-			
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
 
 			// STEP 3
 			// compare the IntersectionLines to determine the type of interect (if any) that was generated;
 			// it is important to remember that, the "view" or "context" of the categorized line is at is viewed from the host triangle.
 			CategorizedLine currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_guestPolyPtr->groupID, in_guestPolyPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
+			/*
+			if (guestLineGroup.lineMap.size() == 3)
+			{
+				std::cout << "!!! Special check halt, printing out CategorizedLine points and performing tests: " << std::endl;
+				std::cout << "Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
+				std::cout << "Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+				int someVal = 3;
+				std::cin >> someVal;
+
+				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr);
+			}
+			*/
 
 			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
@@ -308,19 +338,50 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// add any CategorizedLine to polygonA's map that isn't NONE
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
+				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
+				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
+				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr);
 				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 
-				//std::cout << "___________________ Adding categorized line from this iteration: " << std::endl;
-				//std::cout << "Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
-				//std::cout << "Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
-				//int contVal = 3;
-				//std::cin >> contVal;
+				if (currentCategorizedLine.line.pointA == currentCategorizedLine.line.pointB)
+				{
+					std::cout << "!!! Warning, invalid CategorizedLine detected; points are same! " << std::endl;
+					std::cout << "point is: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
+					//std::cout << "___________________ Adding categorized line from this iteration: " << std::endl;
+					std::cout << "Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
+					std::cout << "Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
-				in_hostPolyPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
-				// new code for adding to LineSequenceFactory goes here
-				numberOfIntersections++;
+					if (tester.colinearDetected == true)
+					{
+						std::cout << "Colinear WAS DETECTED! " << std::endl;
+					}
+					else if (tester.colinearDetected == false)
+					{
+						std::cout << "Colinear WAS NOT DETECTED!!" << std::endl;
+					}
+
+					int contVal = 3;
+					std::cin >> contVal;
+				}
+				if (tester.colinearDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
+				{
+					in_hostPolyPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
+					// new code for adding to LineSequenceFactory goes here
+					numberOfIntersections++;
+				}
+				else if (tester.colinearDetected == true)
+				{
+					std::cout << "!!#########!!!!!!!!! Categorized line detected as colinear to a line in the host STriangle; will not be inserted. " << std::endl;
+
+					//int someVal = 3;
+					//std::cin >> someVal;
+				}
 			}
+
+			std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
+			int continueVal = 3;
+			std::cin >> continueVal;
 
 			hostLineGroup.reset();
 			guestLineGroup.reset();
@@ -342,18 +403,54 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	return numberOfIntersections;
 }
 
+IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line)
+{
+	
+	IntersectionResult returnResult;
 
-IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_triangleLine)
+	// do typical compare:
+	IntersectionResult resultA = checkIfRayIntersectsTriangle(in_triangle, in_line);
+
+	// do a compare where the in_line is swapped
+	STriangleLine swappedLine = in_line;
+	swappedLine.pointA = in_line.pointB;
+	swappedLine.pointB = in_line.pointA;
+
+	// do the swapped compare
+	IntersectionResult resultB = checkIfRayIntersectsTriangle(in_triangle, swappedLine);
+
+	std::cout << "!!!! Bi-dirrectional comparison results: " << std::endl;
+	std::cout << "ResultA, was found: " << resultA.wasIntersectFound << std::endl;
+	std::cout << "ResultB, was found: " << resultB.wasIntersectFound << std::endl;
+
+	if
+	(
+		(resultA.wasIntersectFound != 0)
+		&&
+		(resultB.wasIntersectFound != 0)
+	)
+	{
+		returnResult = resultA;
+	}
+	//
+	//else
+	//{
+	//}
+	return returnResult;
+}
+
+IntersectionResult SPolySet::checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_triangleLine)
 {
 	//int someVal = 0;
 	IntersectionResult returnResult;
 	glm::vec3 intersect_candidate;
 
-	//std::cout << "triangle, point 0: " << in_triangle.triangleLines[0].pointA.x << ", " << in_triangle.triangleLines[0].pointA.y << ", " << in_triangle.triangleLines[0].pointA.z << std::endl;
-	//std::cout << "triangle, point 1: " << in_triangle.triangleLines[1].pointA.x << ", " << in_triangle.triangleLines[1].pointA.y << ", " << in_triangle.triangleLines[1].pointA.z << std::endl;
-	//std::cout << "triangle, point 2: " << in_triangle.triangleLines[2].pointA.x << ", " << in_triangle.triangleLines[2].pointA.y << ", " << in_triangle.triangleLines[2].pointA.z << std::endl;
+	std::cout << "triangle, point 0: " << in_triangle.triangleLines[0].pointA.x << ", " << in_triangle.triangleLines[0].pointA.y << ", " << in_triangle.triangleLines[0].pointA.z << std::endl;
+	std::cout << "triangle, point 1: " << in_triangle.triangleLines[1].pointA.x << ", " << in_triangle.triangleLines[1].pointA.y << ", " << in_triangle.triangleLines[1].pointA.z << std::endl;
+	std::cout << "triangle, point 2: " << in_triangle.triangleLines[2].pointA.x << ", " << in_triangle.triangleLines[2].pointA.y << ", " << in_triangle.triangleLines[2].pointA.z << std::endl;
 
-	//std::cout << "Checking if this line intersects: pointA: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << " | pointB: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+	std::cout << "Checking if this line intersects: pointA: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << " | pointB: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
+	std::cout << "=========" << std::endl;
 
 	glm::vec3 point0 = in_triangle.triangleLines[0].pointA;
 	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
@@ -394,6 +491,7 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	// condition two, matchCount is 1
 	else if (matchCount == 1)
 	{
+		//std::cout << "!! Match count 1 hit.  " << std::endl;
 
 		if
 			(
@@ -550,8 +648,9 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 		// get and test parametric coords
 		float s, t;
 		s = (uv * wv - vv * wu) / D;
+		s = float(floor(s * 1000 + 0.5) / 1000);
 
-		//std::cout << "--> Value of s: " << s << std::endl;
+		std::cout << "--> Value of s: " << s << std::endl;
 		if (s < 0.0 || s > 1.0)         // I is outside S
 			//return 0;
 		{
@@ -559,12 +658,13 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 			returnResult.setResult(0);
 		}
 		t = (uv * wu - uu * wv) / D;
+		t = float(floor(t * 1000 + 0.5) / 1000);
 
-		//std::cout << "--> Value of t: " << t << std::endl;
+		std::cout << "--> Value of t: " << t << std::endl;
 		if (t < 0.0 || (s + t) > 1.0)  // I is outside T
 			//return 0;
 		{
-			//std::cout << "!! Note: I is outside T. " << std::endl;
+			std::cout << "!! Note: I is outside T. " << std::endl;
 			returnResult.setResult(0);
 		}
 		//return 1;
@@ -578,6 +678,11 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 		//std::cout << "Resulting intersect attempt value: " << returnResult.wasIntersectFound << std::endl;
 		//std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
 
+		//if (returnResult.wasIntersectFound != 0)
+		//{
+			//std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
+		//}
+
 		//if (tempDebug == 1)
 		//{
 			//std::cout << "### Intersected point for targeted debug point is: " << returnResult.intersectedPoint.x << ", " << returnResult.intersectedPoint.y << ", " << returnResult.intersectedPoint.z << std::endl;
@@ -588,7 +693,7 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangle(STriangle in_triangle
 	return returnResult;
 }
 
-IntersectionResult SPolySet::checkIfLineIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_triangleLine)
+IntersectionResult SPolySet::checkIfRayIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_triangleLine)
 {
 	//int someVal = 0;
 	IntersectionResult returnResult;
@@ -619,7 +724,7 @@ IntersectionResult SPolySet::checkIfLineIntersectsTriangleSpecial(STriangle in_t
 		//(in_triangleLine.pointB.z == 0.0f)
 	)
 	{
-		std::cout << "######## checkIfLineIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
+		std::cout << "######## checkIfRayIntersectsTriangle, targeted point found! ##################-----------------> " << std::endl;
 		std::cout << "Points of triangle line are: " << std::endl;
 		std::cout << "Point A: " << in_triangleLine.pointA.x << ", " << in_triangleLine.pointA.y << ", " << in_triangleLine.pointA.z << std::endl;
 		std::cout << "Point B: " << in_triangleLine.pointB.x << ", " << in_triangleLine.pointB.y << ", " << in_triangleLine.pointB.z << std::endl;
@@ -742,10 +847,10 @@ double SPolySet::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 bool SPolySet::checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB)
 {
 	//std::cout << ">>>>> checking for same point condition..." << std::endl;
-	//std::cout << "line A -> point A: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
-	//std::cout << "line A -> point B: " << in_lineA.pointB.x << ", " << in_lineA.pointB.y << ", " << in_lineA.pointB.z << std::endl;
-	//std::cout << "line B -> point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointB.z << std::endl;
-	//std::cout << "line B -> point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
+	std::cout << "line A -> point A: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
+	std::cout << "line A -> point B: " << in_lineA.pointB.x << ", " << in_lineA.pointB.y << ", " << in_lineA.pointB.z << std::endl;
+	std::cout << "line B -> point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointA.z << std::endl;
+	std::cout << "line B -> point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
 
 	bool wasDetected = false;
 
@@ -774,11 +879,17 @@ bool SPolySet::checkForSamePointCondition(IntersectionLine in_lineA, Intersectio
 CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_hostLine, IntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal)
 {
 	CategorizedLine returnLine;
+	returnLine.type = IntersectionType::NONE;
 	// Remember, in_hostLine is the IntersectionLine belonging to the polygon we are adding to (the result of tracing A's line's through the triangle of B).
 	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
-	//std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
+	std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
+	std::cout << "Line A, number of points: " << in_hostLine.numberOfPoints << std::endl;
+	std::cout << "Line B, number of points: " << in_guestLine.numberOfPoints << std::endl;
+
+	std::cout << "----Line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+	std::cout << "----Line B, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
 	//std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
 	//std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
 
@@ -794,9 +905,10 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 
 	// very first check: check for exact same point condition. If this is true, then ignore this determination, as there is a non-existent line.
 	bool conditionCheck = checkForSamePointCondition(in_hostLine, in_guestLine);
+	int totalNumberOfPoints = in_hostLine.numberOfPoints + in_guestLine.numberOfPoints;
 	if (conditionCheck == false)
 	{
-
+		std::cout << "!! Points are not the same; " << std::endl;
 		// ROOT CASE 1: Both lines are considered valid.
 		if
 		(
@@ -810,6 +922,14 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
 			)
 			{
+				std::cout << "SPECIAL CASE hit " << std::endl;
+				int special = 3;
+				std::cin >> special;
+
+				if (in_hostLine.numberOfPoints == 2)		// can only perform this special case if the host line has 2 points in it.
+				{
+					//std::cout << "!! Warning, number of points in host line isn't 2! " << std::endl;
+
 
 				/*
 				std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++ HOST-VALID, GUEST-INVALID, branch entered..." << std::endl;
@@ -837,13 +957,14 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 
 				std::cout << ":::: END TEST. " << std::endl;
 				*/
-				returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
-				returnLine.line.numberOfBorderLines = 1;
-				returnLine.line.isPointAOnBorder = 1;
-				returnLine.line.pointABorder = in_hostLine.pointABorder;
-				returnLine.line.pointA = in_hostLine.pointA;
-				returnLine.line.pointB = in_hostLine.pointB;
-				returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+					returnLine.line.numberOfBorderLines = 1;
+					returnLine.line.isPointAOnBorder = 1;
+					returnLine.line.pointABorder = in_hostLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.pointA;
+					returnLine.line.pointB = in_hostLine.pointB;
+					returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+				}
 			}
 
 
@@ -852,6 +973,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			//std::cout << "Line B, " << in_guestLine.numberOfBorderLines << std::endl;
 			else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
 			{
+				std::cout << "Number of borders lines = 2 hit " << std::endl;
 				returnLine.convertLineToSlice(in_hostLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
 			}
 
@@ -864,8 +986,11 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines >= 1)
 				&&
 				(in_hostLine.numberOfBorderLines == 0)
+				&&
+				(totalNumberOfPoints > 1)
 			)
 			{
+				std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
 				/*
 				std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
 				std::cout << "####### halting, temporary, to analyze lines..." << std::endl;
@@ -909,7 +1034,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_hostLine.numberOfBorderLines == 1)
 			)
 			{
-				//std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
+				std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
 
 				//std::cout << "TA p0: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
 				//std::cout << "TB p0: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
@@ -929,7 +1054,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 					(in_guestLine.numberOfBorderLines == 1)
 					)
 			{
-				//std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
+				std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
 				//std::cout << ":: Line A point count: " << in_hostLine.numberOfPoints << std::endl;
 				//std::cout << ":: Line B point count: " << in_guestLine.numberOfPoints << std::endl;
 				//std::cout << ":: Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
@@ -968,6 +1093,29 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 					returnLine.line.pointB = in_guestLine.pointB;
 					returnLine.line.intersectedSecondaryID = in_guestLine.intersectedSecondaryID;
 				}
+				else if
+				(
+					(in_guestLine.numberOfPoints == 1)
+					&&
+					(in_hostLine.numberOfPoints == 1)
+				)
+				{
+					std::cout << "CONDITION 1.4, entered 1/1 branch. " << std::endl;
+
+					std::cout << "Host line, isPointAOnBorder: " << in_hostLine.isPointAOnBorder << std::endl;
+					std::cout << "Host line, point A border: " << in_hostLine.pointABorder << std::endl;
+
+					std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+					std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+
+					returnLine.type = IntersectionType::PARTIAL_BOUND;
+					returnLine.line.numberOfBorderLines = 1;
+					returnLine.line.isPointAOnBorder = 1;
+					returnLine.line.pointABorder = in_hostLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.pointA;
+					returnLine.line.pointB = in_guestLine.pointA;
+
+				}
 				//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
@@ -976,15 +1124,17 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 
 			}
 
-			// CASE 1.5 PARTIAL_BOUND -- condition 2
+			// CASE 1.5 PARTIAL_BOUND -- condition 2; requires at least 2 points to work.
 			else if
 			(
 				(in_hostLine.numberOfBorderLines == 1)		// A hit's B, but it's only one border line
 				&&
 				(in_guestLine.numberOfBorderLines == 0)		// B "engulfs" A, but B has no border lines going through A
+				&&
+				(totalNumberOfPoints == 2)
 			)
 			{
-
+				std::cout << "CASE 1.5 PARTIAL_BOUND hit " << std::endl;
 
 				returnLine.type = IntersectionType::PARTIAL_BOUND;
 				returnLine.line.numberOfBorderLines = 1;
@@ -1074,7 +1224,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines == 1)
 			)
 			{
-				//std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
+				std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
 				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
 				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
@@ -1095,7 +1245,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				(in_guestLine.numberOfBorderLines == 0)
 			)
 			{
-				//std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
+				std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
 				glm::vec3 roundedA = in_hostLine.pointA;
 				glm::vec3 roundedB = in_guestLine.pointA;
 				if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
@@ -1117,7 +1267,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			)
 			{
 				// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
-				//std::cout << "CASE 1.8: No intercept detected. " << std::endl;
+				std::cout << "CASE 1.8: No intercept detected. " << std::endl;
 				//int someVal = 3;
 				//std::cin >> someVal;
 			}
@@ -1141,6 +1291,8 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			{
 				//std::cout << "~~~~ The guest line is INVALID. " << std::endl;
 			}
+
+			std::cout << "!!! Handling special case, where host line is INVALID: " << std::endl;
 
 			/*
 			std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
@@ -1167,11 +1319,15 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 			std::cout << "line A, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
 			*/
 
-			returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
-			returnLine.line.lineGroupID = in_groupID;
-			returnLine.emptyNormal = in_polyBEmptyNormal;
+			if (in_guestLine.numberOfPoints == 2)	// can only perform this special case if the guest line has 2 points in it.
+			{
+				returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
+				returnLine.line.lineGroupID = in_groupID;
+				returnLine.emptyNormal = in_polyBEmptyNormal;
+			}
 			//}
 
+			//std::cout << "Special case halt; " << std::endl;
 			//int someVal = 3;
 			//std::cin >> someVal;
 		}

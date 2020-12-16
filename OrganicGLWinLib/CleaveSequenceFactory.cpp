@@ -702,7 +702,9 @@ void CleaveSequenceFactory::printLinesInPool()
 		std::cout << ">>> --- Partial lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+								     << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
+				                     << " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
 	}
 
@@ -714,7 +716,23 @@ void CleaveSequenceFactory::printLinesInPool()
 		std::cout << ">>> --- Non-bound lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+									 << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
+									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
+		}
+	}
+
+	// print a_slice lines
+	if (aslicedCount > 0)
+	{
+		auto begin = aslicedMap.begin();
+		auto end = aslicedMap.end();
+		std::cout << ">>> --- Sliced lines: " << std::endl;
+		for (; begin != end; begin++)
+		{
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+									<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
+									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
 	}
 
@@ -726,7 +744,9 @@ void CleaveSequenceFactory::printLinesInPool()
 		for (; begin != end; begin++)
 		{
 			std::cout << ">>> --- Intercepts point precise lines: " << std::endl;
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z << std::endl;
+			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+									<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
+									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
 	}
 }

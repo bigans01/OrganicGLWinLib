@@ -14,6 +14,9 @@ void CoplanarMassCreator::runMassManipulation()
 	std::cout << trackedCopy.borderLines[0].pointA.x << ", " << trackedCopy.borderLines[0].pointA.y << ", " << trackedCopy.borderLines[0].pointA.z << " | "
 		<< trackedCopy.borderLines[0].pointB.x << ", " << trackedCopy.borderLines[0].pointB.y << ", " << trackedCopy.borderLines[0].pointB.z << std::endl;
 
+	std::cout << "!!! Printing lines, prior to clearing: " << std::endl;
+	trackedCopy.sequenceFactory.printLinesInPool();
+
 	std::cout << "!!! Clearing line pools in sequence factory: " << std::endl;
 	trackedCopy.sequenceFactory.clearLinePools();			// we don't need any already-existing lines from the copy.
 

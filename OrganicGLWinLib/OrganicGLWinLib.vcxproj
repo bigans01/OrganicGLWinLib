@@ -167,6 +167,7 @@
     <ClInclude Include="BorderLineIntersectRecordType.h" />
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
+    <ClInclude Include="CategorizedLineColinearTester.h" />
     <ClInclude Include="CategorizedLinePool.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
+    <ClInclude Include="IntersectAnalyzerOption.h" />
     <ClInclude Include="IntersectionLine.h" />
     <ClInclude Include="IntersectionLineGroup.h" />
     <ClInclude Include="IntersectionLineValidity.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerOptionEnum.h" />
     <ClInclude Include="TwoDLineSegmentIntersectResult.h" />
     <ClInclude Include="TwoDLineSegmentIntersectType.h" />
     <ClInclude Include="LineWelder.h" />
@@ -343,6 +346,7 @@
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
+    <ClCompile Include="CategorizedLineColinearTester.cpp" />
     <ClCompile Include="CleaveSequence.cpp" />
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />

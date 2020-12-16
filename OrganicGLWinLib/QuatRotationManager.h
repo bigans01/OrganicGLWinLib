@@ -74,12 +74,14 @@ public:
 	void rotateEmptyNormalToPosY(glm::vec3* in_normal);
 	void rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal);
 	void rotateAroundZToYZero();
+	void rotatePointAroundXToPosY(glm::vec3 in_point);
 
 	bool checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 in_otherPoint);
 
 	float findRotationRadiansForZFracture(glm::vec3 in_vec3);
 	float findRotationRadiansForGettingToPosYThroughZ(glm::vec3 in_vec3);
 	float findRotationRadainsForGettingToPosXThroughY(glm::vec3 in_vec3);
+	float findRotationRadainsForGettingToPosYThroughX(glm::vec3 in_vec3);
 
 	void flipOnXAxis();
 	float findRadiansForObservation();
