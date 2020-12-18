@@ -127,6 +127,129 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 	//std::cin >> someValAwYeah;
 }
 
+void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef)
+{
+	// invert nonbounds
+	auto nonBoundMapBegin = nonboundMap.begin();
+	auto nonBoundMapEnd = nonboundMap.end();
+	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
+	{
+		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
+		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
+		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
+		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.emptyNormal);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointA);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointB);
+	}
+
+	// invert partials
+	auto partialsBegin = partialboundMap.begin();
+	auto partialsEnd = partialboundMap.end();
+	for (; partialsBegin != partialsEnd; partialsBegin++)
+	{
+		//std::cout << "!! Inverting partial..." << std::endl;
+		std::cout << "!! Gathering partial refs..." << std::endl;
+		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
+		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
+		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
+		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
+		//partialsBegin->second.emptyNormal *= -1.0f;
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.emptyNormal);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointA);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointB);
+	}
+
+	// invert slices
+	auto slicesBegin = aslicedMap.begin();
+	auto slicesEnd = aslicedMap.end();
+	for (; slicesBegin != slicesEnd; slicesBegin++)
+	{
+		//std::cout << "!! Inverting slice..." << std::endl;
+		std::cout << "!! Gathering slice refs..." << std::endl;
+		//slicesBegin->second.emptyNormal *= -1.0f;
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointB);
+	}
+
+	// invert intercept_points_precise
+	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
+	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
+	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
+	{
+		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
+		std::cout << "!! Gathering intercepts_point_precise refs..." << std::endl;
+		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
+		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointB);
+	}
+}
+
+void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
+{
+	// invert nonbounds
+	auto nonBoundMapBegin = nonboundMap.begin();
+	auto nonBoundMapEnd = nonboundMap.end();
+	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
+	{
+		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
+		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
+		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
+		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
+		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.emptyNormal);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointA);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointB);
+	}
+
+	// invert partials
+	auto partialsBegin = partialboundMap.begin();
+	auto partialsEnd = partialboundMap.end();
+	for (; partialsBegin != partialsEnd; partialsBegin++)
+	{
+		//std::cout << "!! Inverting partial..." << std::endl;
+		std::cout << "!! Gathering partial refs..." << std::endl;
+		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
+		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
+		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
+		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
+		//partialsBegin->second.emptyNormal *= -1.0f;
+		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.emptyNormal);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointA);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointB);
+	}
+
+	// invert slices
+	auto slicesBegin = aslicedMap.begin();
+	auto slicesEnd = aslicedMap.end();
+	for (; slicesBegin != slicesEnd; slicesBegin++)
+	{
+		//std::cout << "!! Inverting slice..." << std::endl;
+		std::cout << "!! Gathering slice refs..." << std::endl;
+		//slicesBegin->second.emptyNormal *= -1.0f;
+		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointB);
+	}
+
+	// invert intercept_points_precise
+	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
+	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
+	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
+	{
+		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
+		std::cout << "!! Gathering intercepts_point_precise refs..." << std::endl;
+		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
+		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
+		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointB);
+	}
+}
 
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
@@ -171,10 +294,10 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
 
-	//std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
-	//std::cout << "number of nonbounds: " << nonboundCount << std::endl;
-	//std::cout << "number of partials: " << partialboundCount << std::endl;
-	//std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
+	std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+	std::cout << "number of nonbounds: " << nonboundCount << std::endl;
+	std::cout << "number of partials: " << partialboundCount << std::endl;
+	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{

@@ -14,11 +14,20 @@ void CoplanarMassCreator::runMassManipulation()
 	std::cout << trackedCopy.borderLines[0].pointA.x << ", " << trackedCopy.borderLines[0].pointA.y << ", " << trackedCopy.borderLines[0].pointA.z << " | "
 		<< trackedCopy.borderLines[0].pointB.x << ", " << trackedCopy.borderLines[0].pointB.y << ", " << trackedCopy.borderLines[0].pointB.z << std::endl;
 
-	std::cout << "!!! Printing lines, prior to clearing: " << std::endl;
+	// we must take a copy of the existing sequenceFactory, or "snapshot"; we will use the CleaveSequences in this "snapshot" to produce the resulting produced SPoly,
+	// if the tracked SPoly isn't entirely consumed. 
+	std::cout << "!!! Printing lines, prior to copy (and before clearing): " << std::endl;
 	trackedCopy.sequenceFactory.printLinesInPool();
+	CleaveSequenceFactory trackedFactoryCopy = trackedCopy.sequenceFactory;
+
+	std::cout << "!!!!!!!!!!!!!!!!!! TEST: checking lines in trackedFactoryCopy..." << std::endl;
+	trackedFactoryCopy.printLineCounts();
+	trackedFactoryCopy.printLinesInPool();
+	int test3 = 3;
+	std::cin >> test3;
 
 	std::cout << "!!! Clearing line pools in sequence factory: " << std::endl;
-	trackedCopy.sequenceFactory.clearLinePools();			// we don't need any already-existing lines from the copy.
+	trackedCopy.sequenceFactory.clearLinePools();		// clear the sequenceFactory in the tracked SPoly, after a copy of the sequence factory has been created.
 
 	std::cout << "!!! Line counts: " << std::endl;
 	trackedCopy.sequenceFactory.printLineCounts();
@@ -45,11 +54,11 @@ void CoplanarMassCreator::runMassManipulation()
 	//     the tracked SPoly's area as a result of the related SPoly intersecting with it.
 	// 5.) Acquire the total amount of area that the current related SPoly consumed on the copy of the tracked SPoly (trackedCopy)
 	// 6.) Subtract totalTrackedArea by the amount from the previous step
-	// 7.) Put the resulting CategorizedLines from this pass into a permanent pool of lines.
+	// 7.) Test whether or not the tracked SPoly is consumed by the current related SPoly we're comparing to
 	// 8.) End the current tick, and start over again. Until the loop is done.
 	// 9.) Reset the copied SPoly's MassManipulationMode back to CREATION.
-	// 10.) Copy the lines from the persistentLinePool, after they've been cleared of mirror lines, back into the trackedCopy's cleaveSequenceFactory.
-	// 11.) Build the appropriate CleaveSequence, with the proper categorized lines.
+	// 10.) Test whether or not the tracked SPoly was entirely consumed. If it was consumed, set the isConsumedflag to TRUE.
+	// 11.) If the tracked SPoly wasn't consumed, we will replace the trackedCopy's sequenceFactory with the copy we made (trackedFactoryCopy)
 	// 12.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
 	
 	CategorizedLinePool currentIterationPool;
@@ -102,14 +111,16 @@ void CoplanarMassCreator::runMassManipulation()
 		remainingArea -= totalRelatedArea;		// (Step 6: ) Subtract from totalTrackedArea
 		std::cout << "Percentage of remaining area: " << remainingArea / totalTrackedArea << std::endl;
 
-		// (Step 7: ) Move the resulting pool of categorized lines (currentIterationPool) into a permanent pool of lines. (persistentLinePool); then,
-		// clear the currentIterationPool.
-		persistentLinePool.copyLinesFromOtherLinePool(&currentIterationPool);
-		currentIterationPool.clearPool();
+		// (**MAY BE OBSOLETE**) Move the resulting pool of categorized lines (currentIterationPool) into a permanent pool of lines. (persistentLinePool); then,
+		//persistentLinePool.copyLinesFromOtherLinePool(&currentIterationPool);
+
+		// Step 7: test whether or not the tracked SPoly is consumed by the related SPoly, and put the result somewhere.
+
+		currentIterationPool.clearPool();		// clear the currentIterationPool.
 		
 	}
 	std::cout << "Total tracked area was: " << totalTrackedArea << std::endl;
-	persistentLinePool.printLinesInPool();
+	//persistentLinePool.printLinesInPool();
 	trackedCopy.cleaveMap.clear();
 
 	std::cout << "Enter key to continue. " << std::endl;
@@ -119,11 +130,26 @@ void CoplanarMassCreator::runMassManipulation()
 	
 
 	// 9.) Set back to CREATION
-	// 10.) Copy persisent lines into the trackedCopy.sequenceFactory.
+	trackedCopy.massManipulationSetting = MassManipulationMode::CREATION;
+
+	// 10.) Test whether or not the tracked SPoly was entirely consumed. If it was consumed, set the isConsumedflag to TRUE.
 
 
-	// 11.) Build appropriate CleaveSequence.
-	// 12.) Profit.
+	// 11.) If not consumed, reload the sequenceFactory in the tracked SPoly with the original copy, and run it through an 
+	//      SPolyFracturer. 
+
+	std::cout << "################## CoplanarMassCreator: running final tests before generation ###################### " << std::endl;
+
+	trackedCopy.sequenceFactory = trackedFactoryCopy;
+	trackedCopy.buildCleaveSequences();
+	SPolyMorphTracker finalTempTracker;
+	SPolyFracturer finalFracturer(0, &trackedCopy, &finalTempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);
+
+	std::cout << "################# Run of CoplanarMassCreator complete. Enter number to continue." << std::endl;
+	int someValNow = 6;
+	std::cin >> someValNow;
+
+
 
 
 	//   ########################################### METHOD 2

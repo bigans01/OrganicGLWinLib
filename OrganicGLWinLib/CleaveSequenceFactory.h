@@ -26,6 +26,8 @@ class CleaveSequenceFactory
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 		void printLineCounts();
 		void clearLinePools();
+		void loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef);
+		void loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	private:
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
@@ -44,6 +46,7 @@ class CleaveSequenceFactory
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
 		void clipTwinCategorizedLinesofInterceptPointPrecise();			// potenitally obsolete; this function clears out precise lines when the number is 2.
+		
 		
 
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);

@@ -21,11 +21,20 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 {
 	// step 1: rotate involved SPolys to the XY plane
 
+	// Printing lines in pool, prior to rotate to Z = 0;
+	std::cout << "!##################### ((1)) ! " << std::endl;
+	trackedSPolyRef->sequenceFactory.printLinesInPool();
+	std::cout << "!##################### ((2)) ! " << std::endl;
+	int someValWaits = 3;
+	std::cin >> someValWaits;
+
+
 
 	// 1.1: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
 	// 1.1.1: load points from the trackedSpolyRef
 	//trackedSPolyRef->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
-	trackedSPolyRef->loadPrimalsTrianglesAndBordersIntoQuatPoints(&coplanarPoints);
+	//trackedSPolyRef->loadPrimalsTrianglesAndBordersIntoQuatPoints(&coplanarPoints);
+	trackedSPolyRef->loadAllIntoQuatPoints(&coplanarPoints);		// don't use this, or rework it; (12/17/2020); doing this translates the normals (should NOT be done!!)
 
 	// 1.1.2: load points from the related SPolys
 	auto relatedSPolysBegin = relationshipMap.refMap.begin();
@@ -47,6 +56,14 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	{
 		std::cout << "!! prime point 0 requires no translation. " << std::endl;
 	}
+	trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
+																		// any translation occurs.
+
+
+
+
+
+
 
 	// 1.3 rotate points by the quaternion, to get to Z = 0, then round
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
@@ -54,6 +71,10 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
 	trackedSPolyRef->printBorderLines();
+	std::cout << "!#####################! " << std::endl;
+	trackedSPolyRef->sequenceFactory.printLinesInPool();
+	std::cout << "!#####################! " << std::endl;
+
 	relatedSPolysBegin = relationshipMap.refMap.begin();
 	relatedSPolysEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)

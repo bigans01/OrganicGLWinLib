@@ -8,10 +8,10 @@ SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyM
 
 	originalPolyID = in_originalPolyID;
 	polyRef = in_sPolyRef;
-	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
+	std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
 
 	//std::cout << "********************************************************* Printing cleave sequence values, prior to runFracturing " << std::endl;
-	//polyRef->printAllCleaveLines();
+	polyRef->printAllCleaveLines();
 	//int stopVal = 3;
 	//std::cin >> stopVal;
 
