@@ -63,11 +63,12 @@ void CoplanarMassCreator::runMassManipulation()
 	
 	CategorizedLinePool currentIterationPool;
 	float remainingArea = totalTrackedArea;
-	float totalRelatedArea = 0.0f;
+	float areaConsumedByCurrentSPoly = 0.0f;							// will need to be reset below, for every iteration.
 	auto relatedSPolyBegin = sPolyRefMap.refMap.begin();
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
+		areaConsumedByCurrentSPoly = 0.0f;				// must be reset for each SPoly
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
 		
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
@@ -84,7 +85,7 @@ void CoplanarMassCreator::runMassManipulation()
 		
 		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
 		
-		// (Step 5: ) Get area.
+		// (Step 5: ) Get area, from the fractured 
 		auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();
 		auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
 		for (; sPolySuperGroupBegin != sPolySuperGroupEnd; sPolySuperGroupBegin++)
@@ -97,7 +98,7 @@ void CoplanarMassCreator::runMassManipulation()
 			{
 				std::cout << "!!! Acquiring total related area..." << std::endl;
 
-				totalRelatedArea += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
+				areaConsumedByCurrentSPoly += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
 					sTrianglesBegin->second.triangleLines[1].pointA,
 					sTrianglesBegin->second.triangleLines[2].pointA);
 			}
@@ -108,7 +109,7 @@ void CoplanarMassCreator::runMassManipulation()
 		}										
 
 		// just for fanciness: output the remaining area that isn't occuped in the tracked SPoly.
-		remainingArea -= totalRelatedArea;		// (Step 6: ) Subtract from totalTrackedArea
+		remainingArea -= areaConsumedByCurrentSPoly;		// (Step 6: ) Subtract from totalTrackedArea
 		std::cout << "Percentage of remaining area: " << remainingArea / totalTrackedArea << std::endl;
 
 		// (**MAY BE OBSOLETE**) Move the resulting pool of categorized lines (currentIterationPool) into a permanent pool of lines. (persistentLinePool); then,

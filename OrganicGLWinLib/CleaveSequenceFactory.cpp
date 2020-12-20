@@ -335,7 +335,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 
 		std::cout << ">>> Handling precise scenario" << std::endl;
 
-		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
+		//handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
+		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
 	}
 	else if
 	(
@@ -343,6 +344,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	)
 	{
 		std::cout << ">>> Handling multiple precise scenario" << std::endl;
+		handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
 		int stopVal = 3;
 		std::cin >> stopVal;
 	}
@@ -415,6 +417,11 @@ void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequenc
 void CleaveSequenceFactory::insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASlice(in_lineIndex));
+}
+
+void CleaveSequenceFactory::insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
+{
+	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveInterceptPointPrecise(in_lineIndex));
 }
 
 void CleaveSequenceFactory::invertAllEmptyNormals()
@@ -502,7 +509,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLine
 	return searchResult;
 }
 
-CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, std::map<int, SPolyBorderLines>)
+CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch)
 {
 	CategorizedLineSearchResult searchResult;
 	if (interceptsPointPreciseCount > 0)
@@ -1008,7 +1015,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 	}
 }
 
-void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef)
+void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
 	
 	//std::cout << "###::::: !!!! Running specical case for INTERCEPTS_POINT_PRECISE. " << std::endl;
@@ -1082,7 +1089,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 			//newSequence.printCategorizedLines();
 
 			//std::cout << ">>>> Current last point to search for against the INTERCEPTS_POINT_PRECISE IS: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
-			CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch, in_borderLineArrayRef);
+			//CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch, in_borderLineArrayRef);
+			CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch);
 			//std::cout << ">>>> Found intercept point precise result... " << std::endl;
 			if (findInterceptPointPreciseResult.wasFound == true)
 			{
@@ -1118,4 +1126,66 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 	//int someVal = 3;
 	//std::cout << "Fix this shit, compiler. " << std::endl;
 	//std::cin >> someVal;
+}
+
+void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)
+{
+	glm::vec3 lastPointToSearch;
+	while (interceptsPointPreciseCount > 0)
+	{
+		// get the first intercepts point precise that will be the first line in the CleaveSequence
+		cleaveSequenceMapRef = in_cleaveMapRef;
+		auto preciseMapBegin = interceptsPointPreciseMap.begin();
+		int firstLineID = preciseMapBegin->first;							// store the ID of the first line (for removal later)
+		CleaveSequence newSequence;
+		insertFirstInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();
+
+		// search for any nonbound lines
+		bool continueSearch = true;
+		CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
+		{
+			newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
+			bool continueFlag = true;							// check for the next line, at least once.
+			while (continueFlag == true)	// loop until this is false.
+			{
+				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
+				CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				if (nextResult.wasFound == false)
+				{
+					continueFlag = false;	// end the loop.
+				}
+				else if (nextResult.wasFound == true)
+				{
+					newSequence.insertNonboundLine(nextResult.returnLine);
+				}
+			}
+		}
+
+		// search for final intercepts point precise, if it exists
+		lastPointToSearch = newSequence.fetchPointToSearch();
+		CategorizedLineSearchResult findInterceptPointPreciseResult = searchForInterceptPointPreciseCategorizedLine(lastPointToSearch);
+		if (findInterceptPointPreciseResult.wasFound == true)
+		{
+			//findInterceptPointPreciseResult.returnLine.line.swapToA();	// no swap required, handled by searchForInterceptPointPreciseCategorizedLine
+			newSequence.insertLastLine(findInterceptPointPreciseResult.returnLine);
+			newSequence.sequenceStatus = CleaveSequenceStatus::COMPLETE; // mark it as complete
+		}
+
+		// lastly, if the newSequence is marked as "complete" move it to the referenced sequence. Otherwise, discard it.
+		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
+		{
+			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
+			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
+			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+		}
+
+		newSequence.printCategorizedLines();
+
+		std::cout << "!! End of handle multiple precise loop tick. Continue? " << std::endl;
+		int endTest = 3;
+		std::cin >> endTest;
+	}
 }

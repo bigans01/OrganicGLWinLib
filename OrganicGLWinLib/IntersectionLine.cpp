@@ -69,6 +69,8 @@ void IntersectionLine::swapBorderToB()
 
 void IntersectionLine::swapToA()
 {
+	std::cout << ":::>>> Swapping to A...." << std::endl;
+
 	glm::vec3 tempPointA = pointA;				// save values of A, since it's being overwrriten
 	int tempPointAOnBorder = isPointAOnBorder;
 	int tempPointABorder = pointABorder;
