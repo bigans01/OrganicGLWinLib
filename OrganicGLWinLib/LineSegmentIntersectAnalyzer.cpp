@@ -193,9 +193,18 @@ bool TwoDLineSegmentIntersectAnalyzer::isFloatWithinColinearThreshold(float in_t
 	bool isWithin = false;
 	if
 	(
-		(in_threshold >= -.001f)
+		//(in_threshold >= -.001f)
+		//&&
+		//(in_threshold <= .001f)
+
+		
+		//(in_threshold >= -.007f)
+		//&&
+		//(in_threshold <= .007f)
+		
+		(in_threshold >= -.020f)
 		&&
-		(in_threshold <= .001f)
+		(in_threshold <= .020f)
 	)
 	{
 		std::wcout << "!! Float is WITHIN threshold! " << std::endl;

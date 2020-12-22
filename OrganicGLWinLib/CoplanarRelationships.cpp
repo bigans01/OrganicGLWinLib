@@ -23,6 +23,7 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 	// Printing lines in pool, prior to rotate to Z = 0;
 	std::cout << "!##################### ((1)) ! " << std::endl;
+	std::cout << "!################### Printing lines for the tracked SPoly with ID: " << trackedPolyID << std::endl;
 	trackedSPolyRef->sequenceFactory.printLinesInPool();
 	std::cout << "!##################### ((2)) ! " << std::endl;
 	int someValWaits = 3;

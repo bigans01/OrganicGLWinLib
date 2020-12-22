@@ -93,6 +93,8 @@ public:
 	void setDebugFlag(int in_debugFlagValue);
 	CleaveSequenceCandidateListMap buildCleaveSequenceCandidateListMap();		// builds and returns a populaated CleaveSequenceCandidateListMap (for use by LineWelder)
 	CleaveSequenceMetaTracker buildCleaveSequenceMetaTracker();
+
+	void clearInterceptRegistry();
 };
 
 #endif

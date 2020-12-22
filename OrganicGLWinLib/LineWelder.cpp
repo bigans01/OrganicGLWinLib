@@ -37,6 +37,7 @@ void LineWelder::startWelding()
 	permit.resetPermit();				   // must be reset before continuing.
 	// Step 1: get the first line, in the first cleave sequence, and determine how many border lines it has;
 	// in addition, set that beginning cleave sequence to be the SUPER.
+
 	int nextAvailableCandidate = candidateListMap.fetchNextAvailableCandidate();
 	auto cleaveBegin = sPolyRef->cleaveMap.find(nextAvailableCandidate);
 
@@ -136,6 +137,8 @@ void LineWelder::startWelding()
 	// check border line IDs.
 	//std::cout << "currentBorderLineID: " << currentBorderLineID << std::endl;
 	//std::cout << "endingBorderLineID: " << endingBorderLineID << std::endl;
+
+
 
 	//	Run in CONTINUE mode until we end up at the endingBorderLineID
 	runMode = LineWelderRunMode::CONTINUE;
@@ -251,6 +254,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	int nextBorderLineID = 0;	// will be set by conditions below...
 	if (intersectRecorderRef->records.size() > 1)	// only do this check if there are MULTIPLE CleaveSequences in a BorderLine
 	{
+		//std::cout << "---> Entered branch for record size > 1)" << std::endl;
 		NextCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, 
 																&sPolyRef->borderLines[in_currentBorderLineID], 
 																&sPolyRef->cleaveMap, foundDirection, 
@@ -263,6 +267,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																permit);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
+			//std::cout << "--> Next sequence was found! " << std::endl;
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
 			//std::cout << ":::::::: (Multiple Intersect Records) Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 			//std::cout << "||||||||| neighboring cleave sequence was found, stats are: " << std::endl;
@@ -270,15 +275,27 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			//std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
 			//std::cout << "| point:              " << discoveredSequence.cleaveSequenceTracingBeginPoint.x << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.y << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.z << std::endl;
 
+			//std::cout << "(1) --> Next sequence was found! " << std::endl;
+
 			CleaveSequenceMeta* fetchedCleaveSequenceMeta = metaTracker.fetchCleaveSequence(discoveredSequence.cleaveSequenceID);
+
+			//std::cout << "(2) --> Next sequence was found! " << std::endl;
+
 			currentHierarchyPositionOfLatestCleaveSequence = fetchedCleaveSequenceMeta->cleaveSequencePtr->hierarchyPosition;			// update the current hierarchy position to be the value of the neighboring CleaveSequence we just found.
+
+			//std::cout << "(3) --> Next sequence was found! " << std::endl;
+
 			fetchedCleaveSequenceMeta->determineCrawlDirectionFromPoint(discoveredSequence.cleaveSequenceTracingBeginPoint);			// for the cleave sequence we found, determine the the direction we'll go in.
+
+			//std::cout << "(4) --> Next sequence was found! " << std::endl;
+
 			int numberOfLinesToCrawl = fetchedCleaveSequenceMeta->numberOfRemainingLines;
 
-			
+			//std::cout << "!! Number of lines to crawl: " << numberOfLinesToCrawl << std::endl;
+
 			if (runMode == LineWelderRunMode::ENDING)
 			{
-				//std::cout << "Performing special check for ending mode... " << std::endl;
+				std::cout << "Performing special check for ending mode... " << std::endl;
 				// before continuing with the next cleave sequence, check to see if there is a distance between the leadingPoint and cleaveSequenceTracingBeginPoint
 				if (discoveredSequence.distance != 0.0f)
 				{
@@ -294,7 +311,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
 			{
-				//std::cout << "| Crawling line... " << std::endl;
+				std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
 				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 

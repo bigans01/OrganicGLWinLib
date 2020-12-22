@@ -16,9 +16,12 @@ void CoplanarMassCreator::runMassManipulation()
 
 	// we must take a copy of the existing sequenceFactory, or "snapshot"; we will use the CleaveSequences in this "snapshot" to produce the resulting produced SPoly,
 	// if the tracked SPoly isn't entirely consumed. 
+	// we must also take a copy of the border lines as well.
 	std::cout << "!!! Printing lines, prior to copy (and before clearing): " << std::endl;
 	trackedCopy.sequenceFactory.printLinesInPool();
 	CleaveSequenceFactory trackedFactoryCopy = trackedCopy.sequenceFactory;
+	std::map<int, SPolyBorderLines> borderLinesCopy = trackedCopy.borderLines;
+
 
 	std::cout << "!!!!!!!!!!!!!!!!!! TEST: checking lines in trackedFactoryCopy..." << std::endl;
 	trackedFactoryCopy.printLineCounts();
@@ -68,14 +71,46 @@ void CoplanarMassCreator::runMassManipulation()
 	auto relatedSPolyEnd = sPolyRefMap.refMap.end();
 	for (; relatedSPolyBegin != relatedSPolyEnd; relatedSPolyBegin++)	// (Step 8.)
 	{
+		std::cout << "################################################ Preparing to compare against related SPoly with ID: " << relatedSPolyBegin->first << std::endl;
+
+		std::cout << "****************  Printing registry counts... (1) " << std::endl;
+		//auto bordersBegin = (*relatedSPolyBegin->second).borderLines.begin();
+		//auto bordersEnd = (*relatedSPolyBegin->second).borderLines.end();
+
+		/*
+		auto bordersBegin = trackedCopy.borderLines.begin();
+		auto bordersEnd = trackedCopy.borderLines.end();
+		for (; bordersBegin != bordersEnd; bordersBegin++)
+		{
+			std::cout << "Border Line " << bordersBegin->first << " has " << bordersBegin->second.intersectRecorder.records.size() << "records. " << std::endl;
+		}
+		*/
+
+		int compareVal = 3;
+		std::cin >> compareVal;
+
 		areaConsumedByCurrentSPoly = 0.0f;				// must be reset for each SPoly
-		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences (just in case); the CleaveSequences must be cleared when comparing against each related SPoly.
+		trackedCopy.clearInterceptRegistry();			// the intercept registry for each SPolyBorderLine must be cleared before any work is done.
+
+		/*
+		std::cout << "!! Clearing SPoly registries... " << std::endl;
+		std::cout << "****************  Printing registry counts... (2) " << std::endl;
+		bordersBegin = trackedCopy.borderLines.begin();
+		bordersEnd = trackedCopy.borderLines.end();
+		for (; bordersBegin != bordersEnd; bordersBegin++)
+		{
+			std::cout << "Border Line " << bordersBegin->first << " has " << bordersBegin->second.intersectRecorder.records.size() << "records. " << std::endl;
+		}
+		*/
+
+		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences; the CleaveSequences must be cleared when comparing against each related SPoly.
 		
 		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
 
 		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
 
 		std::cout << "!! Current iteration pool size: " << currentIterationPool.linePool.size() << std::endl;
+		
 
 		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
 		trackedCopy.buildCleaveSequences();
@@ -142,6 +177,7 @@ void CoplanarMassCreator::runMassManipulation()
 	std::cout << "################## CoplanarMassCreator: running final tests before generation ###################### " << std::endl;
 
 	trackedCopy.sequenceFactory = trackedFactoryCopy;
+	trackedCopy.borderLines = borderLinesCopy;
 	trackedCopy.buildCleaveSequences();
 	SPolyMorphTracker finalTempTracker;
 	SPolyFracturer finalFracturer(0, &trackedCopy, &finalTempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);

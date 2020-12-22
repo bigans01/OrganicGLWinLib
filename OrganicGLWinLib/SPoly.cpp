@@ -975,3 +975,13 @@ CleaveSequenceMetaTracker SPoly::buildCleaveSequenceMetaTracker()
 	}
 	return returnTracker;
 }
+
+void SPoly::clearInterceptRegistry()
+{
+	auto borderLinesBegin = borderLines.begin();
+	auto borderLinesEnd = borderLines.end();
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		borderLinesBegin->second.intersectRecorder.records.clear();
+	}
+}

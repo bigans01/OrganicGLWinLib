@@ -100,61 +100,67 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				std::cout << ":::::::::::::> Current guest triangle segment: " << currentGuestTriangleTwoDLineSegmentA.x << ", " << currentGuestTriangleTwoDLineSegmentA.y << " | "
 																			   << currentGuestTriangleTwoDLineSegmentB.x << ", " << currentGuestTriangleTwoDLineSegmentB.y << std::endl;
 
-				for (int z = 0; z < 3; z++)	// for looping through hostTrianglePtr's lines
+				if (currentGuestTrianglePtr->triangleLines[y].isBorderLine == 1)
 				{
-					TwoDPoint currentHostTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointA);
-					TwoDPoint currentHostTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointB);
-					TwoDLineSegment currentHostTriangleSegment(currentHostTriangleTwoDLineSegmentA, currentHostTriangleTwoDLineSegmentB);
-					std::cout << ":::> Current host segment: " << currentHostTriangleTwoDLineSegmentA.x << ", " << currentHostTriangleTwoDLineSegmentA.y << " | "
-															   << currentHostTriangleTwoDLineSegmentB.x << ", " << currentHostTriangleTwoDLineSegmentB.y << std::endl;
-
-					TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment, IntersectAnalyzerOption::NONE);	// run the comparator.
-					if // do this, as long as the resulting line comparison isn't classified as any of the COLINEAR tpyes (COLINEAR_OVERLAP, COLINEAR_NOOVERLAP)
-					(
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
-						||
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE)
-						||
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NO_INTERSECT)
-						||
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::PARALLEL)
-					)
+					for (int z = 0; z < 3; z++)	// for looping through hostTrianglePtr's lines
 					{
-						// -if the guest segment hit a host segment that was a border line, then TwoDPolyIntersectionType::HIT_BORDERLINE
-						// -if the guest segment hit a host segment that was NOT a border line, then TwoDPolyIntersectionType::HIT_NONBORDERLINE
-						// ...either way, register the HIT.
-						currentGuestTriangleSegment.attemptIntersectionInsert(comparator.analyzedResult, &hostTrianglePtr->triangleLines[z]);
+						TwoDPoint currentHostTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointA);
+						TwoDPoint currentHostTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointB);
+						TwoDLineSegment currentHostTriangleSegment(currentHostTriangleTwoDLineSegmentA, currentHostTriangleTwoDLineSegmentB);
+						std::cout << ":::> Current host segment: " << currentHostTriangleTwoDLineSegmentA.x << ", " << currentHostTriangleTwoDLineSegmentA.y << " | "
+							<< currentHostTriangleTwoDLineSegmentB.x << ", " << currentHostTriangleTwoDLineSegmentB.y << std::endl;
+
+						//TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment, IntersectAnalyzerOption::NONE);	// run the comparator.
+						TwoDLineSegmentIntersectAnalyzer comparator(currentGuestTriangleSegment, currentHostTriangleSegment, IntersectAnalyzerOption::ROUND_CROSS);
+						if // do this, as long as the resulting line comparison isn't classified as any of the COLINEAR tpyes (COLINEAR_OVERLAP, COLINEAR_NOOVERLAP)
+							(
+							(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
+								||
+								(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE)
+								||
+								(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NO_INTERSECT)
+								||
+								(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::PARALLEL)
+								)
+						{
+							// -if the guest segment hit a host segment that was a border line, then TwoDPolyIntersectionType::HIT_BORDERLINE
+							// -if the guest segment hit a host segment that was NOT a border line, then TwoDPolyIntersectionType::HIT_NONBORDERLINE
+							// ...either way, register the HIT.
+							currentGuestTriangleSegment.attemptIntersectionInsert(comparator.analyzedResult, &hostTrianglePtr->triangleLines[z]);
+						}
+
+						if  // check whether or not the current guets line segment is colinear to any of the lines in the compared-to host triangle.
+							(
+							(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_NOOVERLAP)
+								||
+								(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_OVERLAP)
+								)
+						{
+							std::cout << "!!! NOTICE: this line is colinear to another line in the host triangle. No CategorizedLine should exist. " << std::endl;
+							currentGuestTriangleSegment.isColinearToAnotherLine = true;
+						}
+
+						// judge the currentGuestTriangleSegment; put the result into TwoDLineSegmentMetaTracker container.
 					}
 
-					if  // check whether or not the current guets line segment is colinear to any of the lines in the compared-to host triangle.
-					(
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_NOOVERLAP)
-						||
-						(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_OVERLAP)
-					)
+					// after the current related line has compared itself to all 3 lines of the current tracked STriangle, analyze the results.
+					// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
+					// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
+					// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
+					CategorizedLine attemptedCategorizedLine = currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
+					if (currentGuestTriangleSegment.containsCategorizedLine == true)
 					{
-						std::cout << "!!! NOTICE: this line is colinear to another line in the host triangle. No CategorizedLine should exist. " << std::endl;
-						currentGuestTriangleSegment.isColinearToAnotherLine = true;
+						std::cout << "!!! Inserting categorized line into pool..." << std::endl;
+
+						int stopVal = 3;
+						std::cin >> stopVal;
+
+						categorizedLinePoolRef->insertLineIntoPool(attemptedCategorizedLine);
 					}
-
-					// judge the currentGuestTriangleSegment; put the result into TwoDLineSegmentMetaTracker container.
 				}
 
-				// after the current related line has compared itself to all 3 lines of the current tracked STriangle, analyze the results.
-				// -if 1 HIT_BORDER_LINE and 1 HIT_NONBORDERLINE,												      -> PARTIAL_BOUND
-				// -if 1 HIT_BORDER_LINE, use the point that lies within the compared-to (tracked STriangle)		  -> PARTIAL_BOUND
-				// -if no hits, check if both points of the segment lie within the tracked STriangle; if they do then -> NON_BOUND
-				CategorizedLine attemptedCategorizedLine = currentGuestTriangleSegment.attemptCategorizedLineConstruction(currentGuestTriangleCentroid, hostTrianglePtr);
-				if (currentGuestTriangleSegment.containsCategorizedLine == true)
-				{
-					std::cout << "!!! Inserting categorized line into pool..." << std::endl;
-
-					int stopVal = 3;
-					std::cin >> stopVal;
-
-					categorizedLinePoolRef->insertLineIntoPool(attemptedCategorizedLine);
-				}
 			}
+			std::cout << "!!! End of comparison of tracked SPoly to guest STriangle having index: " << currentGuestTriangleIndex << std::endl;
 		}
 		/*
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
