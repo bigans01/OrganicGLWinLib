@@ -27,7 +27,7 @@ class CleaveSequenceFactory
 		void printLineCounts();
 		void clearLinePools();
 		void loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef);
-		void loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
+		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	private:
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.

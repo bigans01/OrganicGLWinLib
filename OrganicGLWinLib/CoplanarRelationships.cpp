@@ -57,7 +57,7 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	{
 		std::cout << "!! prime point 0 requires no translation. " << std::endl;
 	}
-	trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
+	int numberOfEmptyNormalsInserted = trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
 																		// any translation occurs.
 
 
@@ -111,7 +111,10 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	rotationManager.rotateToOriginalPosition();
 	coplanarPoints.roundAllPointsToHundredths();
 
-	// 2.3: before translating back, remove references to the empty normals of the newly produced categorized lines.
+	// 2.3: before translating back, remove references to the empty normals of the newly produced categorized lines;
+	//      we do this by removing point refs beginning from the end of QuatRotationManager::rotationPointsRefVector's pointsRefVector, equivalent to the number
+	//      of normals that were passed in (the number which was stored in numberOfEmptyNormalsInserted above).
+	rotationManager.eraseElementsFromEndOfPointsRefVector(numberOfEmptyNormalsInserted);
 
 	// 2.4: lastly, translate all involved SPolys back to their original position.
 	if (pointTranslator.requiresTranslation == 1)

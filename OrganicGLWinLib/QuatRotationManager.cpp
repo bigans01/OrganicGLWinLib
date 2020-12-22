@@ -1610,6 +1610,23 @@ void QuatRotationManager::rotateToOriginalPosition()
 	}
 }
 
+void QuatRotationManager::eraseElementsFromEndOfPointsRefVector(int in_numberOfElementsToErase)
+{
+	//for (int x = 0; x < in_numberOfElementsToErase; x++)
+	//{
+		//auto lastElement = rotationpointsRefVector->pointsRefVector.begin();
+		//rotationpointsRefVector->pointsRefVector.erase(lastElement);
+	//}
+
+	int vectorSize = rotationpointsRefVector->pointsRefVector.size();
+	int lastElement = vectorSize - 1;
+	for (int x = 0; x < in_numberOfElementsToErase; x++)
+	{
+		rotationpointsRefVector->pointsRefVector.erase(rotationpointsRefVector->pointsRefVector.begin() + lastElement);
+		lastElement--;
+	}
+}
+
 void QuatRotationManager::setDebugFlag(int in_debugFlag)
 {
 	debugFlag = in_debugFlag;

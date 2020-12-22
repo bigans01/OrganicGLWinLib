@@ -110,6 +110,8 @@ void SPolySet::runPolyComparison()
 	coplanarTracker.buildCoplanarCategorizedLines();
 	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
+
+
 	// Lastly: build the CleaveSequences
 	for (int x = 0; x < compCount2; x++)
 	{
@@ -123,6 +125,24 @@ void SPolySet::runPolyComparison()
 	}
 	//someval = 3;
 	//std::cin >> someval;
+
+	std::cout << "########################################################################## " << std::endl;
+	std::cout << "############### Printing cleave map counts ############################### " << std::endl;
+	std::cout << "########################################################################## " << std::endl;
+	for (int x = 0; x < compCount2; x++)
+	{
+		std::cout << "SPoly at index " << x << " has " << secondaryPolys[x].cleaveMap.size() << " CleaveSequences; it's mode is:  ";
+		if (secondaryPolys[x].massManipulationSetting == MassManipulationMode::CREATION)
+		{
+			std::cout << "CREATION " << std::endl;
+		}
+		else if (secondaryPolys[x].massManipulationSetting == MassManipulationMode::DESTRUCTION)
+		{
+			std::cout << "DESTRUCTION " << std::endl;
+		}
+	}
+	int cleaveMapCountStop = 3;
+	std::cin >> cleaveMapCountStop;
 }
 
 int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID)

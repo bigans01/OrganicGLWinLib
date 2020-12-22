@@ -189,8 +189,11 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	}
 }
 
-void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
+int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 {
+	// insertion count
+	int insertionCount = 0;
+
 	// invert nonbounds
 	auto nonBoundMapBegin = nonboundMap.begin();
 	auto nonBoundMapEnd = nonboundMap.end();
@@ -204,6 +207,7 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointA);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointB);
+		insertionCount++;
 	}
 
 	// invert partials
@@ -222,6 +226,7 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointA);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointB);
+		insertionCount++;
 	}
 
 	// invert slices
@@ -235,6 +240,7 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointB);
+		insertionCount++;
 	}
 
 	// invert intercept_points_precise
@@ -248,7 +254,10 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointB);
+		insertionCount++;
 	}
+
+	return insertionCount;
 }
 
 

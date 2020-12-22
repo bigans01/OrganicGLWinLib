@@ -763,9 +763,9 @@ void SPoly::loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 	sequenceFactory.loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(in_quatRotationPointsRef);
 }
 
-void SPoly::loadEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
+int SPoly::loadEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 {
-	sequenceFactory.loadCategorizedLineEmptyNormalsIntoQuatPoints(in_quatRotationPointsRef);
+	return sequenceFactory.loadCategorizedLineEmptyNormalsIntoQuatPoints(in_quatRotationPointsRef);
 }
 
 int SPoly::determineCleaveTypeAndRegisterCatLines(int in_cleaveIndexID)
