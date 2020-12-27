@@ -163,7 +163,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	//std::cout << "1: " << in_polyAPtr->triangles[0].triangleLines[1].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[1].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[1].pointB.z << std::endl;
 	//std::cout << "2: " << in_polyAPtr->triangles[0].triangleLines[2].pointA.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointA.z << " ||| " << in_polyAPtr->triangles[0].triangleLines[2].pointB.x << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.y << ", " << in_polyAPtr->triangles[0].triangleLines[2].pointB.z << std::endl;
 
-	STriangle* tempBTrianglePtr = &in_guestPolyPtr->triangles[1];
+	//STriangle* tempBTrianglePtr = &in_guestPolyPtr->triangles[1];
 	//std::cout << "2, point A: " << tempBTrianglePtr->triangleLines[2].pointA.x << ", " << tempBTrianglePtr->triangleLines[2].pointA.y << ", " << tempBTrianglePtr->triangleLines[2].pointA.z << std::endl;
 	//std::cout << "2, point B: " << tempBTrianglePtr->triangleLines[2].pointB.x << ", " << tempBTrianglePtr->triangleLines[2].pointB.y << ", " << tempBTrianglePtr->triangleLines[2].pointB.z << std::endl;
 
@@ -1526,6 +1526,17 @@ glm::quat SPolySet::createQuaternion(float radians, glm::vec3 in_angle)
 
 void SPolySet::performFracturing()
 {
+	/*
+	std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+	for (int x = 0; x < secondaryPolys.size(); x++)
+	{
+		std::cout << "~~~ SPoly at index " << x << " has " << secondaryPolys[x].triangles.size() << " STriangles in it. " << std::endl;
+	}
+	std::cout << "!! enter number to continue with performFracturing function call. " << std::endl;
+	int continueVal = 3;
+	std::cin >> continueVal;
+	*/
+
 	// determine what needs to be fractured, by cycling through all secondaryPolys.
 	 //std::cout << "|||||||||||||| ************* Beginning fracturing attempts for all polys ************** ||||||||||||||" << std::endl;
 	auto truestart = std::chrono::high_resolution_clock::now();
