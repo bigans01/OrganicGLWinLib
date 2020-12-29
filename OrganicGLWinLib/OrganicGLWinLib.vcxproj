@@ -168,6 +168,8 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineColinearTester.h" />
+    <ClInclude Include="CategorizedLineGroupMap.h" />
+    <ClInclude Include="CategorizedLineInsertionRecord.h" />
     <ClInclude Include="CategorizedLinePool.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
@@ -198,6 +200,7 @@
     <ClInclude Include="FoundCleaveSequence.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
+    <ClInclude Include="CategorizedLineGroup.h" />
     <ClInclude Include="ImGuiButton.h" />
     <ClInclude Include="ImGuiButtonClickResult.h" />
     <ClInclude Include="ImGuiButtonPanel.h" />

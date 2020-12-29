@@ -15,6 +15,7 @@
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
 #include "CategorizedLinePool.h"
+#include "CategorizedLineGroupMap.h"
 
 class CleaveSequenceFactory
 {
@@ -34,6 +35,7 @@ class CleaveSequenceFactory
 		std::map<int, CategorizedLine> partialboundMap;	// contains PARTIAL_BOUND categorized lines.
 		std::map<int, CategorizedLine> aslicedMap;	// contains A_SLICED categorized lines.
 		std::map<int, CategorizedLine> interceptsPointPreciseMap; // contains INTERCEPTS_POINT_PRECISE categorized lines.
+		CategorizedLineGroupMap groupMap;
 
 		int nonboundCount = 0;
 		int partialboundCount = 0;

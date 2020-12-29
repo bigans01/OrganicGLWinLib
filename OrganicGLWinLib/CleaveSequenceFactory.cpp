@@ -61,22 +61,30 @@ void CleaveSequenceFactory::copyCategorizedLinesFromLinePool(CategorizedLinePool
 
 void CleaveSequenceFactory::insertNonboundLine(CategorizedLine in_line)
 {
-	nonboundMap[nonboundCount++] = in_line;
+	nonboundMap[nonboundCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::NON_BOUND, nonboundCount);
+	nonboundCount++;
 }
 
 void CleaveSequenceFactory::insertPartialBoundLine(CategorizedLine in_line)
 {
-	partialboundMap[partialboundCount++] = in_line;
+	partialboundMap[partialboundCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::PARTIAL_BOUND, partialboundCount);
+	partialboundCount++;
 }
 
 void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
 {
-	aslicedMap[aslicedCount++] = in_line;
+	aslicedMap[aslicedCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE, aslicedCount);
+	aslicedCount++;
 }
 
 void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
 {
-	interceptsPointPreciseMap[interceptsPointPreciseCount++] = in_line;
+	interceptsPointPreciseMap[interceptsPointPreciseCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::INTERCEPTS_POINT_PRECISE, interceptsPointPreciseCount);
+	interceptsPointPreciseCount++;
 }
 
 void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
@@ -307,6 +315,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	std::cout << "number of nonbounds: " << nonboundCount << std::endl;
 	std::cout << "number of partials: " << partialboundCount << std::endl;
 	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
+
+	groupMap.printGroupLineCounts();
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
