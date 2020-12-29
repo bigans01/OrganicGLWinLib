@@ -16,6 +16,7 @@
 #include "QuatRotationManager.h"
 #include "CategorizedLinePool.h"
 #include "CategorizedLineGroupMap.h"
+#include "CategorizedLineMerger.h"
 
 class CleaveSequenceFactory
 {
@@ -31,6 +32,11 @@ class CleaveSequenceFactory
 		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	private:
+		friend class CategorizedLineMerger;
+		friend class CategorizedLinePartialBoundMerger;
+		friend class CategorizedLineASliceMerger;
+		friend class CategorizedLinePlaceboMerger;
+
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
 		std::map<int, CategorizedLine> partialboundMap;	// contains PARTIAL_BOUND categorized lines.
 		std::map<int, CategorizedLine> aslicedMap;	// contains A_SLICED categorized lines.

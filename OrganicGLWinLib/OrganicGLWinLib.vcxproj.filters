@@ -561,6 +561,24 @@
     <ClInclude Include="CategorizedLineGroupMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CategorizedLineMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineMergeType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineMergeMachineBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLinePartialBoundMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineASliceMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLinePlaceboMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -828,6 +846,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CategorizedLineColinearTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineMerger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLinePartialBoundMerger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineASliceMerger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLinePlaceboMerger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

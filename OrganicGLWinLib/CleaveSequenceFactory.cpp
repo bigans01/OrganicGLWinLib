@@ -323,6 +323,9 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		//std::cout << "!!!!!!! Destruction poly detected! " << std::endl;
 		invertAllEmptyNormals();
 	}
+
+	// perform merging.
+	CategorizedLineMerger merger(this);
 	
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
 	determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);

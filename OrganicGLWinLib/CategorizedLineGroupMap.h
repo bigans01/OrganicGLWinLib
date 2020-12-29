@@ -13,7 +13,7 @@ class CategorizedLineGroupMap
 		void insertGroupRecord(int in_parentSPolyID, IntersectionType in_intersectionType, int in_poolIndex)
 		{
 			groups[in_parentSPolyID].insertRecord(in_intersectionType, in_poolIndex);
-		};
+		}
 		void printGroupLineCounts()
 		{
 			auto groupsBegin = groups.begin();

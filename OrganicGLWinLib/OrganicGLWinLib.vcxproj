@@ -167,9 +167,15 @@
     <ClInclude Include="BorderLineIntersectRecordType.h" />
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
+    <ClInclude Include="CategorizedLineASliceMerger.h" />
     <ClInclude Include="CategorizedLineColinearTester.h" />
     <ClInclude Include="CategorizedLineGroupMap.h" />
     <ClInclude Include="CategorizedLineInsertionRecord.h" />
+    <ClInclude Include="CategorizedLineMergeMachineBase.h" />
+    <ClInclude Include="CategorizedLineMerger.h" />
+    <ClInclude Include="CategorizedLineMergeType.h" />
+    <ClInclude Include="CategorizedLinePartialBoundMerger.h" />
+    <ClInclude Include="CategorizedLinePlaceboMerger.h" />
     <ClInclude Include="CategorizedLinePool.h" />
     <ClInclude Include="CategorizedLineSearchResult.h" />
     <ClInclude Include="CleaveSequence.h" />
@@ -349,7 +355,11 @@
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
+    <ClCompile Include="CategorizedLineASliceMerger.cpp" />
     <ClCompile Include="CategorizedLineColinearTester.cpp" />
+    <ClCompile Include="CategorizedLineMerger.cpp" />
+    <ClCompile Include="CategorizedLinePartialBoundMerger.cpp" />
+    <ClCompile Include="CategorizedLinePlaceboMerger.cpp" />
     <ClCompile Include="CleaveSequence.cpp" />
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />

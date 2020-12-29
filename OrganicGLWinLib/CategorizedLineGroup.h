@@ -14,7 +14,7 @@ class CategorizedLineGroup
 		{
 			CategorizedLineInsertionRecord newRecord(in_intersectionType, in_categorizedLineIndex);
 			recordVector.push_back(newRecord);
-		};
+		}
 		std::vector<CategorizedLineInsertionRecord> recordVector;
 };
 
