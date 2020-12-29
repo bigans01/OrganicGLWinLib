@@ -8,12 +8,14 @@ CoplanarRelationships::CoplanarRelationships()
 }
 
 
-void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef)
+//void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef)
+void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef)
 {
 	trackedPolyID = in_trackedPolyID;
 	trackedSPolyRef = in_trackedSPolyRef;
 }
-void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly* in_relatedSPolyRef)
+//void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly* in_relatedSPolyRef)
+void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly in_relatedSPolyRef)
 {
 	relationshipMap.insertSPolyRef(in_relatedSPolyID, in_relatedSPolyRef);
 }
@@ -24,7 +26,8 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	// Printing lines in pool, prior to rotate to Z = 0;
 	std::cout << "!##################### ((1)) ! " << std::endl;
 	std::cout << "!################### Printing lines for the tracked SPoly with ID: " << trackedPolyID << std::endl;
-	trackedSPolyRef->sequenceFactory.printLinesInPool();
+	//trackedSPolyRef->sequenceFactory.printLinesInPool();
+	trackedSPolyRef.sequenceFactory.printLinesInPool();
 	std::cout << "!##################### ((2)) ! " << std::endl;
 	int someValWaits = 3;
 	std::cin >> someValWaits;
@@ -35,30 +38,35 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	// 1.1.1: load points from the trackedSpolyRef
 	//trackedSPolyRef->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
 	//trackedSPolyRef->loadPrimalsTrianglesAndBordersIntoQuatPoints(&coplanarPoints);
-	trackedSPolyRef->loadAllIntoQuatPoints(&coplanarPoints);		// don't use this, or rework it; (12/17/2020); doing this translates the normals (should NOT be done!!)
+	//trackedSPolyRef->loadAllIntoQuatPoints(&coplanarPoints);		// don't use this, or rework it; (12/17/2020); doing this translates the normals (should NOT be done!!)
+	trackedSPolyRef.loadAllIntoQuatPoints(&coplanarPoints);
 
 	// 1.1.2: load points from the related SPolys
 	auto relatedSPolysBegin = relationshipMap.refMap.begin();
 	auto relatedSPolysEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
 	{
-		relatedSPolysBegin->second->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
+		//relatedSPolysBegin->second->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
+		relatedSPolysBegin->second.loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
 	}
 
 	// 1.2: translate the first point of the first triangle in the first SPoly to 0.
-	pointTranslator.performCheck(trackedSPolyRef->borderLines[0].pointA);
+	//pointTranslator.performCheck(trackedSPolyRef->borderLines[0].pointA);
+	pointTranslator.performCheck(trackedSPolyRef.borderLines[0].pointA);
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
 		std::cout << "!! prime point 0 requires translation!! " << std::endl;
-		std::cout << "It's value is: " << trackedSPolyRef->borderLines[0].pointA.x << ", " << trackedSPolyRef->borderLines[0].pointA.y << ", " << trackedSPolyRef->borderLines[0].pointA.z << std::endl;
+		//std::cout << "It's value is: " << trackedSPolyRef->borderLines[0].pointA.x << ", " << trackedSPolyRef->borderLines[0].pointA.y << ", " << trackedSPolyRef->borderLines[0].pointA.z << std::endl;
+		std::cout << "It's value is: " << trackedSPolyRef.borderLines[0].pointA.x << ", " << trackedSPolyRef.borderLines[0].pointA.y << ", " << trackedSPolyRef.borderLines[0].pointA.z << std::endl;
 		coplanarPoints.applyTranslation(pointTranslator.getTranslationValue());
 	}
 	else
 	{
 		std::cout << "!! prime point 0 requires no translation. " << std::endl;
 	}
-	int numberOfEmptyNormalsInserted = trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
+	//int numberOfEmptyNormalsInserted = trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
 																		// any translation occurs.
+	int numberOfEmptyNormalsInserted = trackedSPolyRef.loadEmptyNormalsIntoQuatPoints(&coplanarPoints);
 
 
 
@@ -71,9 +79,11 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	coplanarPoints.roundAllPointsToHundredths();
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
-	trackedSPolyRef->printBorderLines();
+	//trackedSPolyRef->printBorderLines();
+	trackedSPolyRef.printBorderLines();
 	std::cout << "!#####################! " << std::endl;
-	trackedSPolyRef->sequenceFactory.printLinesInPool();
+	//trackedSPolyRef->sequenceFactory.printLinesInPool();
+	trackedSPolyRef.sequenceFactory.printLinesInPool();
 	std::cout << "!#####################! " << std::endl;
 
 	relatedSPolysBegin = relationshipMap.refMap.begin();
@@ -81,7 +91,8 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
 	{
 		std::cout << "-->printing lines for related SPoly " << std::endl;
-		relatedSPolysBegin->second->printBorderLines();
+		//relatedSPolysBegin->second->printBorderLines();
+		relatedSPolysBegin->second.printBorderLines();
 	}
 	
 	std::cout << "Pre-rotate print out complete; continue? " << std::endl;
@@ -99,10 +110,12 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	// All of this data should be insreted at the end of the coplanarPoints.
 
 	// 2.1: set the manipulator, run as CREATION or DESTRUCTION after initializing.
-	if (trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
+	//if (trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
+	if (trackedSPolyRef.massManipulationSetting == MassManipulationMode::CREATION)
 	{
 		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
 		manipulator.reset(new CoplanarMassCreator());
+		//manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
 		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
 		manipulator->runMassManipulation();
 	}
@@ -125,12 +138,14 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 	std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
-	trackedSPolyRef->printBorderLines();
+	//trackedSPolyRef->printBorderLines();
+	trackedSPolyRef.printBorderLines();
 	relatedSPolysBegin = relationshipMap.refMap.begin();
 	relatedSPolysEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
 	{
 		std::cout << "-->printing lines for related SPoly " << std::endl;
-		relatedSPolysBegin->second->printBorderLines();
+		//relatedSPolysBegin->second->printBorderLines();
+		relatedSPolysBegin->second.printBorderLines();
 	}
 }

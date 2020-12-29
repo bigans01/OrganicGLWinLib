@@ -316,7 +316,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	std::cout << "number of partials: " << partialboundCount << std::endl;
 	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
 
-	groupMap.printGroupLineCounts();
+	
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
 	{
@@ -327,6 +327,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// perform merging, but only if the CleaveSequenceMergeMode is MERGE.
 	if (in_cleaveSequenceMergeMode == CleaveSequenceMergeMode::MERGE)
 	{
+		std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
+		groupMap.printGroupLineCounts();
 		CategorizedLineMerger merger(this);
 	}
 	

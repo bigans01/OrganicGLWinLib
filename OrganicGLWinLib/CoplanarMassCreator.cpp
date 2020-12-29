@@ -5,7 +5,8 @@ void CoplanarMassCreator::runMassManipulation()
 {
 
 	CategorizedLinePool persistentLinePool;
-	SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
+	//SPoly trackedCopy = *trackedSPolyRef;	// make a copy of the original SPoly.
+	SPoly trackedCopy = trackedSPolyRef;	// make a copy of the original SPoly.
 
 	//std::cout << "!! Ref map size is: " << sPolyRefMap.refMap.size() << std::endl;
 	std::cout << "!! Reached logic for CoplanarMassCreator; proceed? " << std::endl;
@@ -43,7 +44,8 @@ void CoplanarMassCreator::runMassManipulation()
 	// ########################################### METHOD 1 
 
 	// first, find the total area of the tracked SPoly.
-	float totalTrackedArea = calculateSPolyArea(trackedSPolyRef);
+	//float totalTrackedArea = calculateSPolyArea(trackedSPolyRef);
+	float totalTrackedArea = calculateSPolyArea(&trackedSPolyRef);
 
 	// second, we need to find how each related SPoly intersects (if they do) with the tracked SPoly, in order to calculate the area that each related SPoly
 	// "consumes" of the tracked SPoly.
@@ -105,7 +107,8 @@ void CoplanarMassCreator::runMassManipulation()
 
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences; the CleaveSequences must be cleared when comparing against each related SPoly.
 		
-		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
+		//CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, &relatedSPolyBegin->second, &currentIterationPool);
 
 		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
 

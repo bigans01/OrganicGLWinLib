@@ -12,11 +12,13 @@
 class CoplanarMassManipulator
 {
 	public:
-		void initialize(SPoly* in_trackedSPolyRef, SPolyRefMap in_sPolyRefMap, QuatRotationPoints* in_coplanarPointsRef);
+		//void initialize(SPoly* in_trackedSPolyRef, SPolyRefMap in_sPolyRefMap, QuatRotationPoints* in_coplanarPointsRef);
+		void initialize(SPoly in_trackedSPolyRef, SPolyRefMap in_sPolyRefMap, QuatRotationPoints* in_coplanarPointsRef);
 		virtual void runMassManipulation() = 0;
 	
 	// private:
-		SPoly* trackedSPolyRef = nullptr;
+		//SPoly* trackedSPolyRef = nullptr;
+		SPoly trackedSPolyRef;
 		SPolyRefMap sPolyRefMap;
 		QuatRotationPoints* coplanarPointsRef = nullptr;
 
