@@ -184,6 +184,7 @@
     <ClInclude Include="CleaveSequenceCrawlDirection.h" />
     <ClInclude Include="CleaveSequenceFactory.h" />
     <ClInclude Include="CleaveSequenceIntersectFinder.h" />
+    <ClInclude Include="CleaveSequenceMergeMode.h" />
     <ClInclude Include="CleaveSequenceMeta.h" />
     <ClInclude Include="CleaveSequenceMetaTracker.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />

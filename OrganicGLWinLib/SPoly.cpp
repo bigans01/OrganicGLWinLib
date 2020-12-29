@@ -552,11 +552,11 @@ void SPoly::moveLastCleave()
 	}
 }
 
-void SPoly::buildCleaveSequences()
+void SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 
-	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting);
+	sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
 }
 
 void SPoly::constructCleaveLine()

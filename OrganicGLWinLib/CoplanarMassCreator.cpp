@@ -61,8 +61,8 @@ void CoplanarMassCreator::runMassManipulation()
 	// 8.) End the current tick, and start over again. Until the loop is done.
 	// 9.) Reset the copied SPoly's MassManipulationMode back to CREATION.
 	// 10.) Test whether or not the tracked SPoly was entirely consumed. If it was consumed, set the isConsumedflag to TRUE.
-	// 11.) If the tracked SPoly wasn't consumed, we will replace the trackedCopy's sequenceFactory with the copy we made (trackedFactoryCopy)
-	// 12.) Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result.
+	// 11.)( **OBSOLETE STEP**)  If the tracked SPoly wasn't consumed, we will replace the trackedCopy's sequenceFactory with the copy we made (trackedFactoryCopy) (**OBSOLETE STEP**)
+	// 12.) (**OBSOLETE STEP**)  Run the SPolyFracturer (or the new class mentioned in step 4) to produce the correct result. (**OBSOLETE STEP**)
 	
 	CategorizedLinePool currentIterationPool;
 	float remainingArea = totalTrackedArea;
@@ -113,7 +113,7 @@ void CoplanarMassCreator::runMassManipulation()
 		
 
 		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
-		trackedCopy.buildCleaveSequences();
+		trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::NO_MERGE);		// merging cannot be done on coplanar comparisons.
 
 		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
 
@@ -152,6 +152,7 @@ void CoplanarMassCreator::runMassManipulation()
 
 		// Step 7: test whether or not the tracked SPoly is consumed by the related SPoly, and put the result somewhere.
 
+
 		currentIterationPool.clearPool();		// clear the currentIterationPool.
 		
 	}
@@ -172,20 +173,21 @@ void CoplanarMassCreator::runMassManipulation()
 
 
 	// 11.) If not consumed, reload the sequenceFactory in the tracked SPoly with the original copy, and run it through an 
-	//      SPolyFracturer. 
+	//      SPolyFracturer. (**OBSOLETE STEP**)
 
+	/*
 	std::cout << "################## CoplanarMassCreator: running final tests before generation ###################### " << std::endl;
 
 	trackedCopy.sequenceFactory = trackedFactoryCopy;
 	trackedCopy.borderLines = borderLinesCopy;
-	trackedCopy.buildCleaveSequences();
+	trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::MERGE);	// merging is allowed, as long as we are doing it on non-coplanar comparisons; since we just copied the original non-coplanar sequenceFactory back, we should be O.K.
 	SPolyMorphTracker finalTempTracker;
 	SPolyFracturer finalFracturer(0, &trackedCopy, &finalTempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);
 
 	std::cout << "################# Run of CoplanarMassCreator complete. Enter number to continue." << std::endl;
 	int someValNow = 6;
 	std::cin >> someValNow;
-
+	*/
 
 
 

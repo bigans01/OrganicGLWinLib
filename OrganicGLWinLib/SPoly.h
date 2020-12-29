@@ -21,6 +21,7 @@
 #include "CleaveSequenceMetaTracker.h"
 #include "CyclingDirection.h"
 #include "QuatRotationPoints.h"
+#include "CleaveSequenceMergeMode.h"
 
 class SPoly
 {
@@ -53,7 +54,7 @@ public:
 	void setEmptyNormal(float in_x, float in_y, float in_z);
 	void determinePrimalPoints();
 	void determineBorderLines();
-	void buildCleaveSequences();
+	void buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 	void setMRP(glm::vec3 in_mrp);
 	void calculateEmptyNormal();
 	void determinePlanarVectors();

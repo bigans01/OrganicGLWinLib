@@ -306,7 +306,7 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int i
 	return returnLine;
 }
 
-void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode)
+void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
@@ -324,8 +324,11 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		invertAllEmptyNormals();
 	}
 
-	// perform merging.
-	CategorizedLineMerger merger(this);
+	// perform merging, but only if the CleaveSequenceMergeMode is MERGE.
+	if (in_cleaveSequenceMergeMode == CleaveSequenceMergeMode::MERGE)
+	{
+		CategorizedLineMerger merger(this);
+	}
 	
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
 	determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);

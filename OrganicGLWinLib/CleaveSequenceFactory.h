@@ -17,13 +17,14 @@
 #include "CategorizedLinePool.h"
 #include "CategorizedLineGroupMap.h"
 #include "CategorizedLineMerger.h"
+#include "CleaveSequenceMergeMode.h"
 
 class CleaveSequenceFactory
 {
 	public:
 		void addCategorizedLine(CategorizedLine in_categorizedLine);
 		//void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines* in_borderLineArrayRef);
-		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode);
+		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 		void printLinesInPool();
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 		void printLineCounts();

@@ -117,7 +117,7 @@ void SPolySet::runPolyComparison()
 	{
 		//secondaryPolys[x].sequenceFactory.printLinesInPool();
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
-		secondaryPolys[x].buildCleaveSequences();
+		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		//secondaryPolys[x].printAllCleaveLines();
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		//int someVal = 3;
