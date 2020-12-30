@@ -9,7 +9,6 @@ class CleaveSequenceFactory;
 class CategorizedLinePartialBoundMerger : public CategorizedLineMergeMachineBase
 {
 	public:
-		void extractCategorizedLines();
 		void runMerging();
 };
 

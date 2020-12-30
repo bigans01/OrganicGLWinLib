@@ -171,6 +171,7 @@
     <ClInclude Include="CategorizedLineColinearTester.h" />
     <ClInclude Include="CategorizedLineGroupMap.h" />
     <ClInclude Include="CategorizedLineInsertionRecord.h" />
+    <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h" />
     <ClInclude Include="CategorizedLineMergeMachineBase.h" />
     <ClInclude Include="CategorizedLineMerger.h" />
     <ClInclude Include="CategorizedLineMergeType.h" />
@@ -358,6 +359,8 @@
     <ClCompile Include="CategorizedLine.cpp" />
     <ClCompile Include="CategorizedLineASliceMerger.cpp" />
     <ClCompile Include="CategorizedLineColinearTester.cpp" />
+    <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp" />
+    <ClCompile Include="CategorizedLineMergeMachineBase.cpp" />
     <ClCompile Include="CategorizedLineMerger.cpp" />
     <ClCompile Include="CategorizedLinePartialBoundMerger.cpp" />
     <ClCompile Include="CategorizedLinePlaceboMerger.cpp" />

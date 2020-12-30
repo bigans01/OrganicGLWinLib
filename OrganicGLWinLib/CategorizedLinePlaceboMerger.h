@@ -9,7 +9,6 @@ class CleaveSequenceFactory;
 class CategorizedLinePlaceboMerger : public CategorizedLineMergeMachineBase
 {
 	public:
-		void extractCategorizedLines();
 		void runMerging();
 };
 

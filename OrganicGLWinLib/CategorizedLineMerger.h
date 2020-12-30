@@ -9,6 +9,7 @@
 #include "CategorizedLinePartialBoundMerger.h"
 #include "CategorizedLineASliceMerger.h"
 #include "CategorizedLinePlaceboMerger.h"
+#include "CategorizedLineInterceptsPointPreciseMerger.h"
 #include <map>
 #include <mutex>
 
@@ -19,14 +20,14 @@ class CategorizedLineMerger
 		CategorizedLineMerger(CleaveSequenceFactory* in_cleaveSequenceFactoryRef) :
 			cleaveSequenceFactoryRef(in_cleaveSequenceFactoryRef)
 		{
-			runMerging();
+			buildAndLoadCategorizedLinesIntoMachines();
 		};
 
 	private:
-		//std::map<int, CategorizedLineMergeMachineBase> machineMap;
 		std::map<int, std::unique_ptr<CategorizedLineMergeMachineBase>> machineMap;
 
-		void runMerging();
+		void buildAndLoadCategorizedLinesIntoMachines();
+		void runMergingForEachMachine();
 		CategorizedLineMergeType determineMergeTypeForGroup(CategorizedLineGroup* in_categorizedLineGroupRef);
 		CleaveSequenceFactory* cleaveSequenceFactoryRef = nullptr;
 

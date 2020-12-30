@@ -582,6 +582,9 @@
     <ClInclude Include="CleaveSequenceMergeMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -861,6 +864,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CategorizedLinePlaceboMerger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineMergeMachineBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,7 +9,6 @@ class CleaveSequenceFactory;
 class CategorizedLineASliceMerger : public CategorizedLineMergeMachineBase
 {
 	public:
-		void extractCategorizedLines();
 		void runMerging();
 };
 

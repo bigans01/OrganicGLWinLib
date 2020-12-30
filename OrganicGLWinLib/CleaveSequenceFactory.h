@@ -23,7 +23,6 @@ class CleaveSequenceFactory
 {
 	public:
 		void addCategorizedLine(CategorizedLine in_categorizedLine);
-		//void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, SPolyBorderLines* in_borderLineArrayRef);
 		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 		void printLinesInPool();
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
@@ -34,6 +33,7 @@ class CleaveSequenceFactory
 
 	private:
 		friend class CategorizedLineMerger;
+		friend class CategorizedLineMergeMachineBase;
 		friend class CategorizedLinePartialBoundMerger;
 		friend class CategorizedLineASliceMerger;
 		friend class CategorizedLinePlaceboMerger;
