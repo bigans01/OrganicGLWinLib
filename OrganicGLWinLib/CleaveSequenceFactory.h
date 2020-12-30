@@ -18,6 +18,8 @@
 #include "CategorizedLineGroupMap.h"
 #include "CategorizedLineMerger.h"
 #include "CleaveSequenceMergeMode.h"
+#include <vector>
+#include "CategorizedLineGroupLocation.h"
 
 class CleaveSequenceFactory
 {
@@ -30,6 +32,7 @@ class CleaveSequenceFactory
 		void clearLinePools();
 		void loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef);
 		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
+		bool doesFactoryContainLines();
 
 	private:
 		friend class CategorizedLineMerger;
@@ -60,10 +63,19 @@ class CleaveSequenceFactory
 
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
+		// normal fetch functions.
 		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
+
+		// fetch functions, that include a record push.
+		CategorizedLine fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
+		CategorizedLine fetchAndRemovePartialBoundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
+		CategorizedLine fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
+		CategorizedLine fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
+
+
 
 		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);

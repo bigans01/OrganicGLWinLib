@@ -20,7 +20,10 @@ class CategorizedLineMerger
 		CategorizedLineMerger(CleaveSequenceFactory* in_cleaveSequenceFactoryRef) :
 			cleaveSequenceFactoryRef(in_cleaveSequenceFactoryRef)
 		{
-			buildAndLoadCategorizedLinesIntoMachines();
+			buildAndLoadCategorizedLinesIntoMachines();		// build the machines, extract the categorized lines into them, and 
+															// remove the records from the corresponding CategorizedLineGroups.
+															// There should be 0 categorized lines in the CleaveSequenceFactory after this function is done.
+			runMergingForEachMachine();
 		};
 
 	private:

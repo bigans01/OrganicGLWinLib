@@ -5,8 +5,9 @@
 
 #include "CategorizedLine.h"
 #include "CategorizedLineGroup.h"
-//#include "CleaveSequenceFactory.h"
 #include <map>
+#include <vector>
+#include "CategorizedLineGroupLocation.h"
 
 class CleaveSequenceFactory;
 class CategorizedLineMergeMachineBase

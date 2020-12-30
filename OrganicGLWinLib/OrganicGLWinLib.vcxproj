@@ -169,6 +169,7 @@
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineASliceMerger.h" />
     <ClInclude Include="CategorizedLineColinearTester.h" />
+    <ClInclude Include="CategorizedLineGroupLocation.h" />
     <ClInclude Include="CategorizedLineGroupMap.h" />
     <ClInclude Include="CategorizedLineInsertionRecord.h" />
     <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h" />

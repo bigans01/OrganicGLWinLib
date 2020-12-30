@@ -87,6 +87,107 @@ void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line
 	interceptsPointPreciseCount++;
 }
 
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
+{
+	CategorizedLine returnLine = nonboundMap[in_fetchIndex];
+	//groupMap.removeGroupRecord(returnLine.parentPoly, IntersectionType::NON_BOUND, in_fetchIndex);
+	nonboundMap.erase(in_fetchIndex);
+	nonboundCount--;		// decrement the number of nonbound lines
+	std::cout << "!! Extraction of NON_BOUND complete.." << std::endl;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
+{
+	CategorizedLine returnLine = nonboundMap[in_fetchIndex];
+	CategorizedLineGroupLocation location = groupMap.fetchGroupRecordLocation(returnLine.parentPoly, IntersectionType::NON_BOUND, in_fetchIndex);
+	in_categorizedLineGroupLocationVectorRef->push_back(location);
+	nonboundMap.erase(in_fetchIndex);
+	nonboundCount--;		// decrement the number of nonbound lines
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIndex)
+{
+	CategorizedLine returnLine = partialboundMap[in_fetchIndex];
+
+	//std::cout << "************** Fetching and removing partial bound line, with points: " << std::endl;
+	//std::cout << "### point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
+	//std::cout << "### point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
+	//groupMap.removeGroupRecord(returnLine.parentPoly, IntersectionType::PARTIAL_BOUND, in_fetchIndex);
+	partialboundMap.erase(in_fetchIndex);
+	partialboundCount--; // decrement the number of partial lines
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBoundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
+{
+	CategorizedLine returnLine = partialboundMap[in_fetchIndex];
+	CategorizedLineGroupLocation location = groupMap.fetchGroupRecordLocation(returnLine.parentPoly, IntersectionType::PARTIAL_BOUND, in_fetchIndex);
+	in_categorizedLineGroupLocationVectorRef->push_back(location);
+	partialboundMap.erase(in_fetchIndex);
+	partialboundCount--; // decrement the number of partial lines
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
+{
+	CategorizedLine returnLine = aslicedMap[in_fetchIndex];
+	//groupMap.removeGroupRecord(returnLine.parentPoly, IntersectionType::A_SLICE, in_fetchIndex);
+	aslicedMap.erase(in_fetchIndex);
+	aslicedCount--;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
+{
+	CategorizedLine returnLine = aslicedMap[in_fetchIndex];
+	CategorizedLineGroupLocation location = groupMap.fetchGroupRecordLocation(returnLine.parentPoly, IntersectionType::A_SLICE, in_fetchIndex);
+	in_categorizedLineGroupLocationVectorRef->push_back(location);
+	aslicedMap.erase(in_fetchIndex);
+	aslicedCount--;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int in_fetchIndex)
+{
+	CategorizedLine returnLine = interceptsPointPreciseMap[in_fetchIndex];
+	//groupMap.removeGroupRecord(returnLine.parentPoly, IntersectionType::INTERCEPTS_POINT_PRECISE, in_fetchIndex);
+	interceptsPointPreciseMap.erase(in_fetchIndex);
+	interceptsPointPreciseCount--;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
+{
+	CategorizedLine returnLine = interceptsPointPreciseMap[in_fetchIndex];
+	CategorizedLineGroupLocation location = groupMap.fetchGroupRecordLocation(returnLine.parentPoly, IntersectionType::INTERCEPTS_POINT_PRECISE, in_fetchIndex);
+	in_categorizedLineGroupLocationVectorRef->push_back(location);
+	interceptsPointPreciseMap.erase(in_fetchIndex);
+	interceptsPointPreciseCount--;
+	return returnLine;
+}
+
+
+bool CleaveSequenceFactory::doesFactoryContainLines()
+{
+	bool result = false;
+	if
+	(
+		(nonboundCount > 0)
+		||
+		(partialboundCount > 0)
+		||
+		(aslicedCount > 0)
+		||
+		(interceptsPointPreciseCount > 0)
+	)
+	{
+		result = true;
+	}
+	return result;
+}
+
 void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 {
 	std::map<int, int> twinCounterMap;
@@ -269,42 +370,6 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 }
 
 
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
-{
-	CategorizedLine returnLine = nonboundMap[in_fetchIndex];
-	nonboundMap.erase(in_fetchIndex);
-	nonboundCount--;		// decrement the number of nonbound lines
-	return returnLine;
-}
-
-CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIndex)
-{
-	CategorizedLine returnLine = partialboundMap[in_fetchIndex];
-
-	//std::cout << "************** Fetching and removing partial bound line, with points: " << std::endl;
-	//std::cout << "### point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
-	//std::cout << "### point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
-
-	partialboundMap.erase(in_fetchIndex);
-	partialboundCount--; // decrement the number of partial lines
-	return returnLine;
-}
-
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
-{
-	CategorizedLine returnLine = aslicedMap[in_fetchIndex];
-	aslicedMap.erase(in_fetchIndex);
-	aslicedCount--;
-	return returnLine;
-}
-
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int in_fetchIndex)
-{
-	CategorizedLine returnLine = interceptsPointPreciseMap[in_fetchIndex];
-	interceptsPointPreciseMap.erase(in_fetchIndex);
-	interceptsPointPreciseCount--;
-	return returnLine;
-}
 
 void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {

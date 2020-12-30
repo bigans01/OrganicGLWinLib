@@ -6,6 +6,7 @@
 #include <map>
 #include "IntersectionType.h"
 #include "CategorizedLineGroup.h"
+#include "CategorizedLineGroupLocation.h"
 
 class CategorizedLineGroupMap
 {
@@ -14,6 +15,17 @@ class CategorizedLineGroupMap
 		{
 			groups[in_parentSPolyID].insertRecord(in_intersectionType, in_poolIndex);
 		}
+		void removeGroupRecord(int in_parentSPolyID, IntersectionType in_intersectionType, int in_poolIndex)
+		{
+			groups[in_parentSPolyID].removeRecord(in_intersectionType, in_poolIndex);
+			std::cout << "!! Removal complete; continuing... " << std::endl;
+		}
+		CategorizedLineGroupLocation fetchGroupRecordLocation(int in_parentSPolyID, IntersectionType in_intersectionType, int in_poolIndex)
+		{
+			CategorizedLineGroupLocation returnLocation(in_parentSPolyID, in_intersectionType, in_poolIndex);
+			return returnLocation;
+		}
+
 		void printGroupLineCounts()
 		{
 			auto groupsBegin = groups.begin();
