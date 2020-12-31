@@ -27,7 +27,10 @@ class CleaveSequenceMeta
 																							// before the crawling begins.
 		int acquireNextBorderLineID();		// fetched when we're on the last line in the CleaveSequence
 		void determineCrawlDirectionFromPoint(glm::vec3 in_pointToDetermineFrom);
-		CategorizedLine fetchNextCategorizedLineInSequence();
+		CategorizedLine fetchNextCategorizedLineInSequence();				// fetches the next line in a sequence, and swaps the lines if the sequence 
+																			// has a value of CleaveSequenceCrawlDirection::REVERSE (if we are REVERSE, we are starting from the end of the 
+																			// sequence and going backward, so we'll need to swap the lines as we get them.)
+																			
 		CategorizedLine fetchFirstCategorizedLineForWelder();
 		bool checkIfCleaveSequenceHasRunallCategorizedLines();
 };

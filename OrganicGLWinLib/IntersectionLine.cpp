@@ -164,25 +164,28 @@ glm::vec3 IntersectionLine::getNonBorderPointFromSingularBorderLineCount()
 
 glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirection in_direction)
 {
+	/*
 	glm::vec3 returnVec;
 	if (in_direction == CyclingDirection::FORWARD)
 	{
-		//std::cout << ">>> Fetchin point for CyclingDirection::FORWARD" << std::endl;
+		std::cout << ">>> Fetchin point for CyclingDirection::FORWARD" << std::endl;
 		glm::vec3 returnPoint;
 		if (wasSwapped == true)
 		{
-			returnPoint = pointA;
+			//returnPoint = pointA;
+			returnPoint = pointB;
 		}
 		else
 		{
 			returnPoint = pointB;
+			//returnPoint = pointA;
 		}
 
 		return returnPoint;
 	}
 	else if (in_direction == CyclingDirection::REVERSE)
 	{
-		//std::cout << ">>> Fetchin point for CyclingDirection::REVERSE" << std::endl;
+		std::cout << ">>> Fetchin point for CyclingDirection::REVERSE" << std::endl;
 
 		glm::vec3 returnPoint;
 		if (wasSwapped == true)
@@ -191,9 +194,12 @@ glm::vec3 IntersectionLine::fetchNextPointBasedOnCyclingDirection(CyclingDirecti
 		}
 		else
 		{
-			returnPoint = pointA;
+			//returnPoint = pointA;
+			returnPoint = pointB;
 		}
 
 		return returnPoint;
 	}
+	*/
+	return pointB;
 }

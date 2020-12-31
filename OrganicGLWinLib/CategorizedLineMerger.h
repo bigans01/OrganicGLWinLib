@@ -24,6 +24,7 @@ class CategorizedLineMerger
 															// remove the records from the corresponding CategorizedLineGroups.
 															// There should be 0 categorized lines in the CleaveSequenceFactory after this function is done.
 			runMergingForEachMachine();
+			sendMergedLinesToCleaveSequenceFactory();
 		};
 
 	private:
@@ -31,6 +32,7 @@ class CategorizedLineMerger
 
 		void buildAndLoadCategorizedLinesIntoMachines();
 		void runMergingForEachMachine();
+		void sendMergedLinesToCleaveSequenceFactory();
 		CategorizedLineMergeType determineMergeTypeForGroup(CategorizedLineGroup* in_categorizedLineGroupRef);
 		CleaveSequenceFactory* cleaveSequenceFactoryRef = nullptr;
 

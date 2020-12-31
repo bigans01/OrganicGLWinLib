@@ -393,8 +393,23 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	if (in_cleaveSequenceMergeMode == CleaveSequenceMergeMode::MERGE)
 	{
 		std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
+		auto borderLinesBegin = in_borderLineArrayRef.begin();
+		auto borderLinesEnd = in_borderLineArrayRef.end();
+		for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+		{
+			std::cout << "Border Line at index " << borderLinesBegin->first << " has " << borderLinesBegin->second.intersectRecorder.records.size() << " records. " << std::endl;
+		}
+
 		groupMap.printGroupLineCounts();
 		CategorizedLineMerger merger(this);
+
+		std::cout << "::::::::::::::::::::::::: Post-MERGE stats " << std::endl;
+		std::cout << "number of nonbounds: " << nonboundCount << std::endl;
+		std::cout << "number of partials: " << partialboundCount << std::endl;
+		std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
+		std::cout << "number of a slices: " << aslicedCount << std::endl;
+		int nextPhaseInt = 3;
+		std::cin >> nextPhaseInt;
 	}
 	
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
@@ -1205,10 +1220,31 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
 			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
-			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+			std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
 		}
+	}
+
+	if (aslicedCount > 0)
+	{
+		std::cout << "!!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
+
+		std::cout << "STOP! It's hammer time. " << std::endl;
+
+		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
+		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
+		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
+		CleaveSequence newSequence;
+		insertASliceLineForSequence(&newSequence, firstLineID);
+		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
+		std::cout << "Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
+		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
+
+		newSequence.printCategorizedLines();
+
+		int noticeVal = 3;
+		std::cin >> noticeVal;
 	}
 	
 	//std::cout << "Remaining partial bound count: " << partialboundCount << std::endl;

@@ -46,6 +46,18 @@ void LineWelder::startWelding()
 	auto startingCategorizedLine = cleaveBegin->second.cleavingLines.rbegin();
 	auto endingCategorizedLine = cleaveBegin->second.cleavingLines.begin();
 
+	/*
+	auto borderLinesBegin = sPolyRef->borderLines.begin();
+	auto borderLinesEnd = sPolyRef->borderLines.end();
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		std::cout << "~~~~~~~ Border Line at index " << borderLinesBegin->first << " has " << borderLinesBegin->second.intersectRecorder.records.size() << " records. " << std::endl;
+	}
+	std::cout << "Finished printing intersectRecorder sizes. " << std::endl;
+	int finishedVal = 3;
+	std::cin >> finishedVal;
+	*/
+
 	std::cout << ":::::::: Values of rbegin categorized line are: " << std::endl;
 	std::cout << "Point A: " << startingCategorizedLine->second.line.pointA.x << ", " << startingCategorizedLine->second.line.pointA.y << ", " << startingCategorizedLine->second.line.pointA.z << std::endl;
 	std::cout << "Point B: " << startingCategorizedLine->second.line.pointB.x << ", " << startingCategorizedLine->second.line.pointB.y << ", " << startingCategorizedLine->second.line.pointB.z << std::endl;
@@ -84,6 +96,8 @@ void LineWelder::startWelding()
 		//std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 			//												<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 		//std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
+		//std::cout << "(Border Lines = 1) currentBorderLineID: " << currentBorderLineID << std::endl;
+		//std::cout << "(Border Lines = 1) endingBorderLineID: " << endingBorderLineID << std::endl;
 	}
 	else if (startingCategorizedLine->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
 																			// get the borders from the pointA and pointB of this line.
@@ -236,7 +250,7 @@ void LineWelder::getCleaveSequenceMetaTracker()
 
 void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
 {
-	//std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+	std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
 	// pass in these parameters:
 	// -the border line that the finder needs to run on
@@ -312,13 +326,14 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
 			{
 				std::cout << "| Crawling line... " << std::endl;
-				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
+				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();	// fetch the next line, swapping the points of it if in REVERSE.
 				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 
 				//std::cout << "| Current line, point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				//std::cout << "| Current line, point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
-				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
+				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);	// fetch point B of the current line  
+																															// (this function needs to be updated, since the foundDirection parameter is obsolete. 12/31/2020)
 				//std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
 				// for the last iteration in this loop, get the next border line ID from the final categorized line in the sequence,
@@ -395,14 +410,16 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
 			{
 				//std::cout << "| Crawling line... " << std::endl;
-				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();
+				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();		// fetch the next line, swapping the points of it if in REVERSE.
+
 				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 
 				//std::cout << ":::: Next categorized line point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				//std::cout << ":::: Next categorized line point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
-
-				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);
+					
+				currentLeadingPoint = currentCategorizedLine.line.fetchNextPointBasedOnCyclingDirection(foundDirection);		// fetch point B of the current line  
+																																// (this function needs to be updated, since the foundDirection parameter is obsolete. 12/31/2020)
 				//std::cout << "| Current leading point, as a result of crawling, is: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 
 				// for the last iteration in this loop, get the next border line ID from the final categorized line in the sequence,
@@ -425,12 +442,12 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		}
 		else if (nextCleaveSequenceFinder.wasSequenceFound() == false)
 		{
-			std::cout << "!!! The single intercept record was already consumed!!! Will insert new line... " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
+			//std::cout << "!!! The single intercept record was already consumed!!! Will insert new line... " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
 			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
-			std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
-			std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
+			//std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
+			//std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 		}
 		currentBorderLineID = nextBorderLineID;
 	}

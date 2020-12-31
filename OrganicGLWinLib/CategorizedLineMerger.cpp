@@ -5,6 +5,10 @@
 
 void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 {
+	// print out the counts of intercepts in each border line of the SPoly
+	//auto sPolyBordeLinesBegin = cleaveSequenceFactoryRef->sPolyRef
+
+
 	// cycle through the CleaveSequenceFactory's CategorizedLineGroupMap, to generate the appropriate machine for each group, and then extract
 	// the categorized lines for each machine.
 	auto factoryGroupMapBegin = cleaveSequenceFactoryRef->groupMap.groups.begin();
@@ -83,10 +87,21 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 		}
 	}
 
+	int totalLineCount = partialBoundCount + interceptsPointPreciseCount + aSliceCount + nonBoundCount;
+
+	// CASE 1: NO_MERGE_REQUIRED machine.
+	if 
+	(
+		(totalLineCount == 1)
+	)
+	{
+		returnType = CategorizedLineMergeType::NO_MERGE_REQUIRED;
+		std::cout << "! Result is NO_MERGE_REQUIRED. " << std::endl;
+	}
 	// determine the appropriate machine type, based off the counts.
 
-	// CASE 1: PARTIAL_BOUND machine
-	if
+	// CASE 2: PARTIAL_BOUND machine
+	else if
 	(
 		(partialBoundCount == 1)
 		&&
@@ -99,7 +114,7 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 		std::cout << "! Result is MERGE_TO_PARTIAL_BOUND. " << std::endl;
 	}
 
-	// CASE 2: A_SLICE machine
+	// CASE 3: A_SLICE machine
 	else if
 	(
 		(partialBoundCount == 2)
@@ -111,7 +126,7 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 		std::cout << "! Result is MERGE_TO_A_SLICE. " << std::endl;
 	}
 
-	// CASE 3: INTERCEPTS_POINT_PRECISE machine
+	// CASE 4: INTERCEPTS_POINT_PRECISE machine
 	else if
 	(
 		(interceptsPointPreciseCount == 1)
@@ -126,5 +141,50 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 
 void CategorizedLineMerger::runMergingForEachMachine()
 {
+	auto machineMapBegin = machineMap.begin();
+	auto machineMapEnd = machineMap.end();
+	for (; machineMapBegin != machineMapEnd; machineMapBegin++)
+	{
+		machineMapBegin->second->runMerging();
+	}
+}
 
+void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
+{
+	auto machineMapBegin = machineMap.begin();
+	auto machineMapEnd = machineMap.end();
+	for (; machineMapBegin != machineMapEnd; machineMapBegin++)
+	{
+		CategorizedLine currentLine = machineMapBegin->second->fetchProducedLine();
+		std::cout << "!! Current Line stats: " << std::endl;
+		std::cout << "point A: " << currentLine.line.pointA.x << ", " << currentLine.line.pointA.y << ", " << currentLine.line.pointA.z << std::endl;
+		std::cout << "point B: " << currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
+		std::cout << "Empty normal: " << currentLine.emptyNormal.x << ", " << currentLine.emptyNormal.y << ", " << currentLine.emptyNormal.z << std::endl;
+
+		// put the line back into the factory, via the appropriate functon call:
+		if (currentLine.type == IntersectionType::PARTIAL_BOUND)
+		{
+			std::cout << ">> Inserting this PARTIAL_BOUND line back into the CleaveSequenceFactory." << std::endl;
+			cleaveSequenceFactoryRef->insertPartialBoundLine(currentLine);
+		}
+		else if (currentLine.type == IntersectionType::NON_BOUND)
+		{
+			std::cout << ">> Inserting this NON_BOUND line back into the CleaveSequenceFactory." << std::endl;
+			cleaveSequenceFactoryRef->insertNonboundLine(currentLine);
+		}
+		else if (currentLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+		{
+			std::cout << ">> Inserting this INTERCEPTS_POINT_PRECISE line back into the CleaveSequenceFactory." << std::endl;
+			cleaveSequenceFactoryRef->insertInterceptsPointPrecise(currentLine);
+		}
+		else if (currentLine.type == IntersectionType::A_SLICE)
+		{
+			std::cout << ">> Inserting this A_SLICE line back into the CleaveSequenceFactory." << std::endl;
+			cleaveSequenceFactoryRef->insertAslicedLine(currentLine);
+		}
+	}
+	
+	std::cout << "!!! Finished call of sendMergedLinesToCleaveSequenceFactory. " << std::endl;
+	int finishVal = 3;
+	std::cin >> finishVal;
 }

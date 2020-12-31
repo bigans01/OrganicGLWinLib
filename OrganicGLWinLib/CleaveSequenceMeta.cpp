@@ -62,9 +62,12 @@ CategorizedLine CleaveSequenceMeta::fetchNextCategorizedLineInSequence()
 		}
 		returnLine = categorizedLinesBegin->second;
 
-		// swap to A, since we're going into a reverse crawl direction. 
+		// swap to A, since we're going into a reverse crawl direction.
 		returnLine.line.swapToA();
+		
 
+		//std::cout << "Return line, point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
+		//std::cout << "Return line, point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
 	}
 	currentLineIndex++;
 	numberOfRemainingLines--;

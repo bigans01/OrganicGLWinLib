@@ -90,6 +90,13 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 			std::cout << "!! Cycling through cleaveSequence..." << std::endl;
 			std::cout << "!! number of border lines is: " << sequenceBegin->second.line.numberOfBorderLines << std::endl;
 
+			/*
+			if (sequenceBegin->second.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
+			{
+				std::cout << "!!! NOTICE: this is an INTERCEPTS_POINT_PRECISE. " << std::endl;
+			}
+			*/
+
 			if (sequenceBegin->second.line.numberOfBorderLines == 1)		// it's a PARTIAL_BOUND; if it contains one interception, load the data into appropriate border line's BorderLineIntersectRecorder
 			{
 				int borderLineId = sequenceBegin->second.line.getBorderLineIDFromSingularBorderLineCount();		// get the appropriate border line to insert data into.

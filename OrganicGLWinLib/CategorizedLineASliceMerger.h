@@ -4,6 +4,7 @@
 #define CATEGORIZEDLINEASLICEMERGER_H
 
 #include "CategorizedLineMergeMachineBase.h"
+#include <iostream>
 
 class CleaveSequenceFactory;
 class CategorizedLineASliceMerger : public CategorizedLineMergeMachineBase

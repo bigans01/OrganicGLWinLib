@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include "CategorizedLineGroupLocation.h"
+#include "CategorizedLineSearchResult.h"
 
 class CleaveSequenceFactory;
 class CategorizedLineMergeMachineBase
@@ -25,10 +26,16 @@ class CategorizedLineMergeMachineBase
 		std::map<int, CategorizedLine> mergableNonboundMap;
 		std::map<int, CategorizedLine> mergableInterceptsPointPreciseMap;
 		std::map<int, CategorizedLine> mergableASliceMap;
-		int mergablePartialBoundsIndex = 0;
-		int mergableNonboundIndex = 0;
-		int mergableInterceptsPointPreciseIndex = 0;
-		int mergableASliceIndex = 0;
+		int mergablePartialBoundsCount = 0;
+		int mergableNonboundCount = 0;
+		int mergableInterceptsPointPreciseCount = 0;
+		int mergableASliceCount = 0;
+
+		CategorizedLine fetchAndRemovePartialBoundMergeCandidate(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveASliceMergeCandidate(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveNonboundMergeCandidate(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveInterceptsPointPreciseMergeCandidate(int in_fetchIndex);
+		CategorizedLineSearchResult checkForNextNonboundMergeCandidate(glm::vec3 in_pointToSearch);
 
 		CategorizedLine mergedLineResult;	// the final product of the merging
 

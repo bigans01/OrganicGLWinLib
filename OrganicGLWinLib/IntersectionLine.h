@@ -46,7 +46,7 @@ public:
 	glm::vec3 getBorderPointFromSingularBorderLineCount();
 	glm::vec3 getNonBorderPointFromSingularBorderLineCount();
 
-	glm::vec3 fetchNextPointBasedOnCyclingDirection(CyclingDirection in_direction);
+	glm::vec3 fetchNextPointBasedOnCyclingDirection(CyclingDirection in_direction);		// in reality, this is just getting point B; this function's definition/declaration needs to be changed (12/31/2020)
 };
 
 #endif
