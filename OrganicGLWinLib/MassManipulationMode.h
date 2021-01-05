@@ -6,7 +6,8 @@
 enum class MassManipulationMode
 {
 	CREATION,
-	DESTRUCTION
+	DESTRUCTION,
+	NOVAL
 };
 
 #endif

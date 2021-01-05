@@ -22,6 +22,8 @@
 #include "CoplanarRelationshipTracker.h"
 #include "SPolySuperGroupManager.h"
 #include "CategorizedLineColinearTester.h"
+#include "MassZoneMaster.h"	// the final frontier. Good luck! (1/4/2021)
+#include "MassZoneType.h"
 
 class SPolySet
 {
@@ -32,6 +34,10 @@ public:
 	//std::map<int, std::vector<SPoly>> polyFracturingResults;	// stores the results of each poly fracture attempt.
 	SPolySupergroupManager polyFracturingResults;
 	CoplanarRelationshipTracker coplanarTracker;
+
+	//MassZone oldZone;	// for group 0 
+	//MassZone newZone;	// for group 1
+	MassZoneMaster zoneMaster;
 
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();

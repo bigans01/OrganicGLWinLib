@@ -588,6 +588,24 @@
     <ClInclude Include="CategorizedLineGroupLocation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MeshMatterMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassComparisonResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassSubZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneMaster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -873,6 +891,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshMatterMeta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneMaster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

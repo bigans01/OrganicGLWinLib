@@ -228,6 +228,12 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
+    <ClInclude Include="MassComparisonResult.h" />
+    <ClInclude Include="MassSubZone.h" />
+    <ClInclude Include="MassZone.h" />
+    <ClInclude Include="MassZoneMaster.h" />
+    <ClInclude Include="MassZoneType.h" />
+    <ClInclude Include="MeshMatterMeta.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
@@ -399,6 +405,9 @@
     <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
+    <ClCompile Include="MassZone.cpp" />
+    <ClCompile Include="MassZoneMaster.cpp" />
+    <ClCompile Include="MeshMatterMeta.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />

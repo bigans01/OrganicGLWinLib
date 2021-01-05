@@ -102,7 +102,20 @@ void SPolySet::runPolyComparison()
 
 		//std::cout << "|||| Finished for this SPoly ->" << x << std::endl;
 		//coplanarTracker.buildCategorizedLinesForCoplanarRelationship(x);
+
+		// Use the MassZoneMaster to insert into either the old zone or new zone; each group that a MassZone represents must have all of the original SPolys of that group, at this point in time.
+		if (secondaryPolys[x].groupID == 0)
+		{
+			zoneMaster.registerSPolyToMassZone(x, secondaryPolys[x], MassZoneType::OLD_ZONE);
+		}
+		else if (secondaryPolys[x].groupID == 1)
+		{
+			zoneMaster.registerSPolyToMassZone(x, secondaryPolys[x], MassZoneType::NEW_ZONE);
+		}
+		
 	}
+
+	// build the MassZoneShells here
 
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
@@ -111,20 +124,42 @@ void SPolySet::runPolyComparison()
 	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 
-
 	// Lastly: build the CleaveSequences
 	for (int x = 0; x < compCount2; x++)
 	{
 		//secondaryPolys[x].sequenceFactory.printLinesInPool();
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
+
+		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
+		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
+		{
+			zoneMaster.disqualifyMeshMatterMeta(x);
+		}
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
+
+
 		//secondaryPolys[x].printAllCleaveLines();
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
-	//someval = 3;
-	//std::cin >> someval;
+
+	/*
+	for (int x = 0; x < compCount2; x++)
+	{
+		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
+		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
+		{
+			zoneMaster.disqualifyMeshMatterMeta(x);
+		}
+	}
+	*/
+
+	std::cout << "########################################################################## " << std::endl;
+	std::cout << ".............> printing MassZoneMaster stats: " << std::endl;
+	zoneMaster.printQualifiedMeshMatterMetas();
+	int massZoneInput = 3;
+	std::cin >> massZoneInput;
 
 	std::cout << "########################################################################## " << std::endl;
 	std::cout << "############### Printing cleave map counts ############################### " << std::endl;
