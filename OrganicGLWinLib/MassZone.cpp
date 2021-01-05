@@ -95,15 +95,16 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	upper_NE.x += distanceBetweenPoints;
 	upper_NE.y += distanceBetweenPoints;
 
-	// POS_X boundary (north) creation/insertion
+	// POS_Z boundary (north) creation/insertion
 	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE); 
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, northBoundary);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, northBoundary);
 
-	// NEG_X boundary (south) creation/insertion
+	// NEG_Z boundary (south) creation/insertion
 	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, southBoundary);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, southBoundary);
 
-	// POS_Z boundary (
+	// POS_X boundary (east)
+
 
 }
 
