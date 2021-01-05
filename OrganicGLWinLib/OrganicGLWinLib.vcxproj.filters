@@ -606,6 +606,21 @@
     <ClInclude Include="MassZoneMaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundaryState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundaryOrientation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

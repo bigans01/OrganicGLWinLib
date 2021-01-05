@@ -37,8 +37,11 @@ void SPolySet::configurePolysWithoutNormalCalcs()
 	}
 }
 
-void SPolySet::runPolyComparison()
+void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 {
+	// build the zone boundaries for the MassZones
+	zoneMaster.createMassZoneBoxBoundaries(in_massZoneBoxType);
+
 	int compCount2 = numberOfPolys;
 
 	// First pass: check for non-planar categorized lines to produce, but load any non-planar relationships we find into the
@@ -115,7 +118,14 @@ void SPolySet::runPolyComparison()
 		
 	}
 
-	// build the MassZoneShells here
+	// Build the non-SPoly based MassSubZones, for each MassZone, once all SPolys have been copied into the appropriate MassZone. The combination of temporal or artificial subzones, plus the actual "material" sPolys, should form a "MassZoneShell."
+	// 
+	// To do this:
+	// 1.) run the SPolys in each MassZone (use sPolyToSubZoneMap to find the key to use to find the appropriate SPoly in the appropriate MassSubZone, i.e.): 
+	//			1-A:): for each entry in sPolySubZoneMap (member of MassZone class), the value of the key-value pair (we will call this the "fetcher key") represents the key in the subZoneMap that holds the corresponding SPoly to reference. 
+	//			       Find the value for the "fetcher key", and use this to find correpsonding MassSubZone. This corresponding MassSubZone contains an SPoly that isn't "temporal", meaning that it actually has permanence and isn't temporary.
+	//          1-B:): take the border lines of the SPoly we found from the "fetcher key" and see how they interact with any of the MassZoneBoxBoundaries in the MassZoneBox of the MassZone.
+	zoneMaster.createMassZoneShells();
 
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
@@ -1741,7 +1751,7 @@ void SPolySet::runTest1()		// runs use case 1
 	addPoly(polyB);
 	configurePolys();           // PHASE 1 (determine border lines, find empty normals)
 
-	runPolyComparison();		// PHASE 2 (generate cleave lines)
+	runPolyComparison(MassZoneBoxType::BLOCK);		// PHASE 2 (generate cleave lines)
 
 	performFracturing();			// PHASE 3 run weave for new triangles thqat will be fractured
 
@@ -1838,7 +1848,7 @@ void SPolySet::runTest2()
 	addPoly(polyC);
 	configurePolys();
 
-	runPolyComparison();		// PHASE 1 (generate cleave lines) -- (see email, 8/20/19)
+	runPolyComparison(MassZoneBoxType::BLOCK);		// PHASE 1 (generate cleave lines) -- (see email, 8/20/19)
 	performFracturing();			// PHASE 3 run weave for new triangles
 
 	reset();
@@ -1919,7 +1929,7 @@ void SPolySet::runTest3()
 	addPoly(polyB);
 	configurePolys();
 
-	runPolyComparison();		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
+	runPolyComparison(MassZoneBoxType::BLOCK);		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
 	performFracturing();			// PHASE 3 run weave for new triangles
 
 	reset();
@@ -2067,7 +2077,7 @@ void SPolySet::runTest4()
 
 	configurePolys();
 
-	runPolyComparison();		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
+	runPolyComparison(MassZoneBoxType::BLOCK);		// PHASE 1 (generate cleave lines) (see email, 8/20/2019)rc
 	performFracturing();			// PHASE 3 run weave for new triangles
 
 	reset();

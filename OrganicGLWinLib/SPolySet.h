@@ -42,7 +42,7 @@ public:
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
-	void runPolyComparison();
+	void runPolyComparison(MassZoneBoxType in_massZoneBoxType);
 	//void insertPolyFracturingResults(int in_originalSPolyID, std::vector<SPoly>* in_producedSPolyVectorRef);
 	void insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup);
 	void insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly);

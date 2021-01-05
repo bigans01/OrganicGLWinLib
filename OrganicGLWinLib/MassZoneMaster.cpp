@@ -6,11 +6,11 @@ void MassZoneMaster::registerSPolyToMassZone(int in_sPolyID, SPoly in_sPoly, Mas
 	sPolyZoneTypeMap[in_sPolyID] = in_massZoneType;
 	if (in_massZoneType == MassZoneType::OLD_ZONE)
 	{
-		oldZone.insertMassSubZone(in_sPolyID, in_sPoly);
+		oldZone.insertSPolyMassSubZone(in_sPolyID, in_sPoly);
 	}
 	else if (in_massZoneType == MassZoneType::NEW_ZONE)
 	{
-		newZone.insertMassSubZone(in_sPolyID, in_sPoly);
+		newZone.insertSPolyMassSubZone(in_sPolyID, in_sPoly);
 	}
 }
 
@@ -41,4 +41,16 @@ void MassZoneMaster::printQualifiedMeshMatterMetas()
 	std::cout << "Printing NEW zone qualifieds: " << std::endl;
 	std::cout << "New zone size: " << newZone.subZoneMap.size() << std::endl;
 	newZone.printMeshMatterMeta();
+}
+
+void MassZoneMaster::createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxType)
+{
+	oldZone.createMassZoneBoxBoundary(in_massZoneBoxType);
+	newZone.createMassZoneBoxBoundary(in_massZoneBoxType);
+}
+
+void MassZoneMaster::createMassZoneShells()
+{
+	oldZone.createMassZoneShell();
+	newZone.createMassZoneShell();
 }

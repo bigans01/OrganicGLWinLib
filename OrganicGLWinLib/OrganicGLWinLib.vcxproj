@@ -231,6 +231,11 @@
     <ClInclude Include="MassComparisonResult.h" />
     <ClInclude Include="MassSubZone.h" />
     <ClInclude Include="MassZone.h" />
+    <ClInclude Include="MassZoneBox.h" />
+    <ClInclude Include="MassZoneBoxBoundary.h" />
+    <ClInclude Include="MassZoneBoxBoundaryOrientation.h" />
+    <ClInclude Include="MassZoneBoxBoundaryState.h" />
+    <ClInclude Include="MassZoneBoxType.h" />
     <ClInclude Include="MassZoneMaster.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />

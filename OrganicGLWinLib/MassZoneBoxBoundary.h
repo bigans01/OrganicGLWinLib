@@ -1,0 +1,33 @@
+#pragma once
+
+#ifndef MASSZONEBOXBOUNDARY_H
+#define MASSZONEBOXBOUNDARY_H
+
+#include <map>
+#include "MassZoneBoxBoundaryState.h"
+#include <glm/glm.hpp>
+
+class MassZoneBoxBoundary
+{
+	public:
+		MassZoneBoxBoundary() {};
+		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4)
+		{
+			insertCornerPoint(in_corner1);
+			insertCornerPoint(in_corner2);
+			insertCornerPoint(in_corner3);
+			insertCornerPoint(in_corner4);
+		};
+		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
+		std::map<int, glm::vec3> cornerPointMap;
+
+	
+	private:
+		void insertCornerPoint(glm::vec3 in_cornerPoint)
+		{
+			int cornerPointMapIndex = cornerPointMap.size();
+			cornerPointMap[cornerPointMapIndex] = in_cornerPoint;
+		}
+};
+
+#endif
