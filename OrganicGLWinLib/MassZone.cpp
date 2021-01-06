@@ -87,25 +87,39 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	upper_SW.z += distanceBetweenPoints;
 
 	// upper_SE
-	upper_SW.x += distanceBetweenPoints;
-	upper_SW.y += distanceBetweenPoints;
-	upper_SW.z += distanceBetweenPoints;
+	upper_SE.x += distanceBetweenPoints;
+	upper_SE.y += distanceBetweenPoints;
+	upper_SE.z += distanceBetweenPoints;
 
 	// upper_NE
 	upper_NE.x += distanceBetweenPoints;
 	upper_NE.y += distanceBetweenPoints;
 
-	// POS_Z boundary (north) creation/insertion
+	// NEG_Z boundary (north) creation/insertion
 	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE); 
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, northBoundary);
-
-	// NEG_Z boundary (south) creation/insertion
-	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, southBoundary);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary);
 
 	// POS_X boundary (east)
+	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, eastBoundary);
 
+	// POS_Z boundary (south) creation/insertion
+	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, southBoundary);
 
+	// NEG_X boundary (west) creation/insertion
+	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, westBoundary);
+
+	// POS_Y boundary (above) creation/insertion
+	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Y, aboveBoundary);
+
+	// NEG_Y boundary (below) creation/insertion
+	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary);
+
+	zoneBox.printBoundaries();
 }
 
 void MassZone::createMassZoneShell()
