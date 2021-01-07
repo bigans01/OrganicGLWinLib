@@ -7,6 +7,8 @@
 #include "MassZoneBoxBoundaryState.h"
 #include <glm/glm.hpp>
 #include <iostream>
+#include "SPoly.h"
+#include "STriangle.h"
 
 class MassZoneBoxBoundary
 {
@@ -18,6 +20,7 @@ class MassZoneBoxBoundary
 			insertCornerPoint(in_corner2);
 			insertCornerPoint(in_corner3);
 			insertCornerPoint(in_corner4);
+			buildBoundarySPoly();
 		};
 		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
 		std::map<int, glm::vec3> cornerPointMap;
@@ -41,6 +44,15 @@ class MassZoneBoxBoundary
 			int cornerPointMapIndex = cornerPointMap.size();
 			cornerPointMap[cornerPointMapIndex] = in_cornerPoint;
 		}
+		void buildBoundarySPoly()
+		{
+			STriangle triangleA(cornerPointMap[0], cornerPointMap[1], cornerPointMap[2]);
+			STriangle triangleB(cornerPointMap[0], cornerPointMap[2], cornerPointMap[3]);
+			boundarySPoly.addTriangle(triangleA);
+			boundarySPoly.addTriangle(triangleB);
+		}
+		SPoly boundarySPoly;
+		glm::vec3 emptyNormal;
 };
 
 #endif

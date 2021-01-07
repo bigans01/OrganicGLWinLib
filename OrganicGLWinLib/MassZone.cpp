@@ -95,6 +95,8 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	upper_NE.x += distanceBetweenPoints;
 	upper_NE.y += distanceBetweenPoints;
 
+	// create the boundaries, set their empty normal values (just in case)
+
 	// NEG_Z boundary (north) creation/insertion
 	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE); 
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary);
@@ -124,5 +126,13 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 
 void MassZone::createMassZoneShell()
 {
-
+	// Step 1: compare all subZones that are from an SPoly, to all the MassZoneBoxBoundaries, to determine the CategorizedLines that will
+	//         be generated in each MassZoneBoxBoundary's SPoly.
+	auto subZoneMapBegin = subZoneMap.begin();
+	auto subZoneMapEnd = subZoneMap.end();
+	for (; subZoneMapBegin != subZoneMapEnd; subZoneMapBegin++)
+	{
+		// each SPoly-based subZone must be run against all 6 boundaries in the zoneBox.
+		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
+	}
 }

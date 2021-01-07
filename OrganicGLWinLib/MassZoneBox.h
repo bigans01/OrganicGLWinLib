@@ -7,6 +7,7 @@
 #include "MassZoneBoxBoundaryOrientation.h"
 #include "MassZoneBoxBoundary.h"
 #include <iostream>
+#include "MassSubZone.h"
 
 class MassZoneBox
 {
@@ -54,6 +55,16 @@ class MassZoneBox
 			std::cout << "Finished printing MassZoneBoxBoundaries. " << std::endl;
 			int finishedPrintVal = 3;
 			std::cin >> finishedPrintVal;
+		}
+
+		void runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZoneRef)
+		{
+			auto boxBoundariesBegin = boxBoundaries.begin();
+			auto boxBoundariesEnd= boxBoundaries.end();
+			for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
+			{
+
+			}
 		}
 };
 
