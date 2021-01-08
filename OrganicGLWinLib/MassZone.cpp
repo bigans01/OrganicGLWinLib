@@ -3,7 +3,9 @@
 
 void MassZone::insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy)
 {
-	//subZoneMap[in_sPolyID].sPolyCopy = in_sPolyCopy;
+	// the SPoly-based sub zone should be from an SPoly that's fully fleshed out;
+	// i.e, the SPoly has its primal points, border lines, and appropriate empty normal in place.
+
 	int currentSubZoneIndex = subZoneMap.size();
 	subZoneMap[currentSubZoneIndex].sPolyCopy = in_sPolyCopy;
 	insertMeshMatterMeta(in_sPolyID, &subZoneMap[currentSubZoneIndex].sPolyCopy, subZoneMap[currentSubZoneIndex].sPolyCopy.massManipulationSetting);
@@ -95,30 +97,42 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	upper_NE.x += distanceBetweenPoints;
 	upper_NE.y += distanceBetweenPoints;
 
-	// create the boundaries, set their empty normal values (just in case)
+	// create the boundaries, set their empty normal values (required later if there is a needed sub-zone field)
 
 	// NEG_Z boundary (north) creation/insertion
-	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE); 
+	glm::vec3 northEmptyNormal;
+	northEmptyNormal.z = -1.0f;
+	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal); 
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary);
 
 	// POS_X boundary (east)
-	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE);
+	glm::vec3 eastEmptyNormal;
+	eastEmptyNormal.x = 1.0f;
+	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE, eastEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, eastBoundary);
 
 	// POS_Z boundary (south) creation/insertion
-	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW);
+	glm::vec3 southEmptyNormal;
+	southEmptyNormal.z = 1.0f;
+	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW, southEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, southBoundary);
 
 	// NEG_X boundary (west) creation/insertion
-	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW);
+	glm::vec3 westEmptyNormal;
+	westEmptyNormal.x = -1.0f;
+	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW, westEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, westBoundary);
 
 	// POS_Y boundary (above) creation/insertion
-	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW);
+	glm::vec3 aboveEmptyNormal;
+	aboveEmptyNormal.y = 1.0f;
+	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW, aboveEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Y, aboveBoundary);
 
 	// NEG_Y boundary (below) creation/insertion
-	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW);
+	glm::vec3 belowEmptyNormal;
+	belowEmptyNormal.y = -1.0f;
+	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary);
 
 	zoneBox.printBoundaries();
