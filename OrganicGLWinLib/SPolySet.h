@@ -54,7 +54,7 @@ public:
 	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
 	float dot(glm::vec3 in_A, glm::vec3 in_B);
 	double doubledot(glm::vec3 in_A, glm::vec3 in_B);
-	CategorizedLine determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_lineA, IntersectionLine in_lineB, int in_groupID, glm::vec3 in_polyBEmptyNormal);
+	CategorizedLine determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_hostLine, IntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal);
 	bool checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB);		// checks whether or not the points in two IntersectionLines are all equal, which will
 																								// result in a non-existent intersection, meaning a CategorizedLine can't possibly exist.
 	glm::vec3 findSecondPointForLine(glm::vec3 in_beginPoint, glm::vec3 in_candidate1, glm::vec3 in_candidate2);

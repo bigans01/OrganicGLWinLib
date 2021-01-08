@@ -234,6 +234,7 @@
     <ClInclude Include="MassZoneBox.h" />
     <ClInclude Include="MassZoneBoxBoundary.h" />
     <ClInclude Include="MassZoneBoxBoundaryOrientation.h" />
+    <ClInclude Include="MassZoneBoxBoundarySPolySet.h" />
     <ClInclude Include="MassZoneBoxBoundaryState.h" />
     <ClInclude Include="MassZoneBoxType.h" />
     <ClInclude Include="MassZoneMaster.h" />
@@ -411,6 +412,7 @@
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="MassZone.cpp" />
+    <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />
     <ClCompile Include="MassZoneMaster.cpp" />
     <ClCompile Include="MeshMatterMeta.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />

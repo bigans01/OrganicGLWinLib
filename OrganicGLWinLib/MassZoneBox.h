@@ -63,7 +63,7 @@ class MassZoneBox
 			auto boxBoundariesEnd= boxBoundaries.end();
 			for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
 			{
-
+				boxBoundariesBegin->second.compareSPolyBasedSubZoneSPolyToBoundarySPolySet(&in_massSubZoneRef->sPolyCopy);
 			}
 		}
 };

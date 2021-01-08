@@ -5,6 +5,7 @@
 
 #include <map>
 #include "MassZoneBoxBoundaryState.h"
+#include "MassZoneBoxBoundarySPolySet.h"
 #include <glm/glm.hpp>
 #include <iostream>
 #include "SPoly.h"
@@ -22,6 +23,7 @@ class MassZoneBoxBoundary
 			insertCornerPoint(in_corner4);
 			emptyNormal = in_emptyNormal;
 			buildBoundarySPoly();
+			setBoundarySPolyInPolySet();
 		};
 		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
 		std::map<int, glm::vec3> cornerPointMap;
@@ -39,7 +41,10 @@ class MassZoneBoxBoundary
 
 			std::cout << "Empty Normal: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
 		}
-
+		void compareSPolyBasedSubZoneSPolyToBoundarySPolySet(SPoly* in_sPolyRef)
+		{
+			//boundaryPolySet.compareSPolySubZoneSPolyToBoundarySPoly(in_sPolyRef);
+		}
 	
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
@@ -63,7 +68,12 @@ class MassZoneBoxBoundary
 			boundarySPoly.determinePrimalPoints();
 			boundarySPoly.determineBorderLines();
 		}
+		void setBoundarySPolyInPolySet()
+		{	
+			boundaryPolySet.setBoundarySPolyRef(&boundarySPoly);
+		}
 		SPoly boundarySPoly;
+		MassZoneBoxBoundarySPolySet boundaryPolySet;
 		glm::vec3 emptyNormal;
 };
 
