@@ -24,6 +24,7 @@
 #include "CategorizedLineColinearTester.h"
 #include "MassZoneMaster.h"	// the final frontier. Good luck! (1/4/2021)
 #include "MassZoneType.h"
+#include "DebugOption.h"
 
 class SPolySet
 {
@@ -31,13 +32,30 @@ public:
 	std::map<int, SPoly> secondaryPolys;	// holds up to 16 secondary polys
 	SPolyMorphTracker polyMorphTracker;
 	int numberOfPolys = 0;		// the number of polys
-	//std::map<int, std::vector<SPoly>> polyFracturingResults;	// stores the results of each poly fracture attempt.
 	SPolySupergroupManager polyFracturingResults;
 	CoplanarRelationshipTracker coplanarTracker;
-
-	//MassZone oldZone;	// for group 0 
-	//MassZone newZone;	// for group 1
 	MassZoneMaster zoneMaster;
+
+	
+	// ************************** Template function for enabling debugging on the SPolySet **********************************
+	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptions(FirstOption && firstOption, RemainingOptions && ...optionParams)
+	{
+		setOption(std::forward<FirstOption>(firstOption));
+		setDebugOptions(std::forward<RemainingOptions>(optionParams)...);
+	}
+	void setDebugOptions() {};
+	void setOption(DebugOption in_option)
+	{
+		if (in_option == DebugOption::SPOLYSET_TYPICAL)
+		{
+			std::cout << "!!! Will set TYPICAL operations to debug mode. " << std::endl;
+		}
+		else if (in_option == DebugOption::SPOLYSET_BOUNDARIES)
+		{
+			std::cout << "!!! Will set BOUNDARY operations to debug mode. " << std::endl;
+		}
+	}
+	
 
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();

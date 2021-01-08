@@ -100,6 +100,7 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	// create the boundaries, set their empty normal values (required later if there is a needed sub-zone field)
 
 	// NEG_Z boundary (north) creation/insertion
+	
 	glm::vec3 northEmptyNormal;
 	northEmptyNormal.z = -1.0f;
 	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal); 
@@ -136,6 +137,7 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary);
 
 	zoneBox.printBoundaries();
+	
 }
 
 void MassZone::createMassZoneShell()
