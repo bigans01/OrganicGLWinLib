@@ -11,6 +11,19 @@ void SPolySet::addPoly(SPoly in_sPoly)
 	numberOfPolys++;
 }
 
+void SPolySet::setOption(DebugOption in_option)
+{
+	if (in_option == DebugOption::SPOLYSET_TYPICAL)
+	{
+		comparisonLogger.setDebugLevel(PolyDebugLevel::DEBUG);
+		std::cout << "!!! Will set TYPICAL operations to debug mode. " << std::endl;
+	}
+	else if (in_option == DebugOption::SPOLYSET_BOUNDARIES)
+	{
+		std::cout << "!!! Will set BOUNDARY operations to debug mode. " << std::endl;
+	}
+}
+
 void SPolySet::reset()
 {
 	numberOfPolys = 0;
@@ -82,21 +95,40 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 							//std::cout << "############## Comparing poly ID " << x << " to poly ID " << currentIndex << std::endl;
 							//std::cout << "##### Current index is: " << currentIndex << std::endl;
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| --> Generating next set of categorized lines... (" << generationCounter++ << ") " << std::endl;
-							std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+							/*
 							int prePass = 3;
-							std::cin >> prePass;
+							if (comparisonLogger.isLoggingSet() == true)
+							{
+								std::cout << "|||||||||| Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+								std::cin >> prePass;
+							}
+							*/
+
+							comparisonLogger.log("|||||||||| Comparing 'host' spoly with index ", x, " to 'guest' poly with index ", currentIndex, "\n");
+							comparisonLogger.waitForDebugInput();
 
 							produceCategorizedLinesForHostPoly(polyA, x, polyB, currentIndex);		// PHASE 1
 							//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||| Passed 1 set of categorized lines. (typical comparison)" << std::endl;
 							//int compare = 3;
 							//std::cin >> compare;
-
-							std::cout << "|||||||||| COMPLETED, Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
-							std::cout << "||| Resulting lines in polyA's sequenceFactory are: " << std::endl;
-							polyA->sequenceFactory.printLineCounts();
-							polyA->sequenceFactory.printLinesInPool();
-
-							std::cin >> prePass;
+							/*
+							if (comparisonLogger.isLoggingSet() == true)
+							{
+								std::cout << "|||||||||| COMPLETED, Comparing 'host' spoly with index " << x << " to 'guest' poly with index " << currentIndex << std::endl;
+								std::cout << "||| Resulting lines in polyA's sequenceFactory are: " << std::endl;
+								polyA->sequenceFactory.printLineCounts();
+								polyA->sequenceFactory.printLinesInPool();
+								std::cin >> prePass;
+							}
+							*/
+							comparisonLogger.log("|||||||||| COMPLETED, Comparing 'host' spoly with index ", x, " to 'guest' poly with index ", currentIndex, "\n");
+							comparisonLogger.log("||| Resulting lines in PolyA's sequenceFactory are: ", "\n");
+							if (comparisonLogger.isLoggingSet() == true)
+							{
+								polyA->sequenceFactory.printLineCounts();
+								polyA->sequenceFactory.printLinesInPool();
+							}
+							comparisonLogger.waitForDebugInput();
 					}
 				}
 			}
@@ -442,9 +474,13 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				}
 			}
 
-			std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
-			int continueVal = 3;
-			std::cin >> continueVal;
+
+			if (comparisonLogger.isLoggingSet() == true)
+			{
+				std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
+				int continueVal = 3;
+				std::cin >> continueVal;
+			}
 
 			hostLineGroup.reset();
 			guestLineGroup.reset();

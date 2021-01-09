@@ -25,6 +25,7 @@
 #include "MassZoneMaster.h"	// the final frontier. Good luck! (1/4/2021)
 #include "MassZoneType.h"
 #include "DebugOption.h"
+#include "PolyLogger.h"
 
 class SPolySet
 {
@@ -36,27 +37,29 @@ public:
 	CoplanarRelationshipTracker coplanarTracker;
 	MassZoneMaster zoneMaster;
 
+	PolyLogger comparisonLogger;
+	PolyLogger massZoneLogger;
+
 	
 	// ************************** Template function for enabling debugging on the SPolySet **********************************
 	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptions(FirstOption && firstOption, RemainingOptions && ...optionParams)
 	{
-		setOption(std::forward<FirstOption>(firstOption));
-		setDebugOptions(std::forward<RemainingOptions>(optionParams)...);
+		// needs work; but if statement is done to avoid user error of parameters not passed in as DebugOption.
+		if constexpr
+		(
+			(std::is_same<FirstOption, DebugOption>::value)
+		)
+		{
+			setOption(std::forward<FirstOption>(firstOption));
+			setDebugOptions(std::forward<RemainingOptions>(optionParams)...);
+		}
+		else
+		{
+			std::cout << "Invalid debug option passed in. " << std::endl;
+		}
 	}
 	void setDebugOptions() {};
-	void setOption(DebugOption in_option)
-	{
-		if (in_option == DebugOption::SPOLYSET_TYPICAL)
-		{
-			std::cout << "!!! Will set TYPICAL operations to debug mode. " << std::endl;
-		}
-		else if (in_option == DebugOption::SPOLYSET_BOUNDARIES)
-		{
-			std::cout << "!!! Will set BOUNDARY operations to debug mode. " << std::endl;
-		}
-	}
-	
-
+	void setOption(DebugOption in_option);
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
