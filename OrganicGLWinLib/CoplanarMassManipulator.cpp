@@ -7,6 +7,7 @@ void CoplanarMassManipulator::initialize(SPoly in_trackedSPolyRef, SPolyRefMap i
 	trackedSPolyRef = in_trackedSPolyRef;
 	sPolyRefMap = in_sPolyRefMap;
 	coplanarPointsRef = in_coplanarPointsRef;
+	massManipulatorLogLevel = in_polyDebugLevel;
 	massManipulatorLogger.setDebugLevel(in_polyDebugLevel);
 }
 

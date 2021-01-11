@@ -12,9 +12,12 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	TwoDPoint preCrossNumerator;
 	preCrossNumerator = TwoDLineSegmentB.a;
 	preCrossNumerator -= TwoDLineSegmentA.a;
-	std::cout << "PrecrossNumerator is: " << preCrossNumerator.x << ", " << preCrossNumerator.y << std::endl;
-	std::cout << "r is: " << r.x << ", " << r.y << std::endl;
-	std::cout << "s is: " << s.x << ", " << s.y << std::endl;
+	//std::cout << "PrecrossNumerator is: " << preCrossNumerator.x << ", " << preCrossNumerator.y << std::endl;
+	//std::cout << "r is: " << r.x << ", " << r.y << std::endl;
+	//std::cout << "s is: " << s.x << ", " << s.y << std::endl;
+	twoDLineSegmentIntersectLogger.log("PrecrossNumerator is: ", preCrossNumerator.x, ", ", preCrossNumerator.y, "\n");
+	twoDLineSegmentIntersectLogger.log("r is: ", r.x, ", ", r.y, "\n");
+	twoDLineSegmentIntersectLogger.log("s is: ", s.x, ", ", s.y, "\n");
 
 	// *************** Segment A, solve for t (scalar value for Segment A)
 	// subtract point A of TwoDLineSegment A, from point A of TwoDLineSegment B; get the cross
@@ -24,7 +27,8 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	//std::cout << "crossNumeratorA is: " << crossNumeratorA << std::endl;
 	//std::cout << "crossDenominatorA is: " << crossDenominatorA << std::endl;
 	float t = calculateTwoDLineSegmentIntersectScalar(crossNumeratorA, crossDenominatorA);
-	std::cout << "Line Segment A scalar (variable t) is : " << t << std::endl;
+	//std::cout << "Line Segment A scalar (variable t) is : " << t << std::endl;
+	twoDLineSegmentIntersectLogger.log("Line Segment A scalar (variable t) is : ", t, "\n");
 
 	// *************** Segment B, solve for u (scalar value for Segment B)
 	// following the referenced equation:  u = (q - p) x r / (r x s); note x = cross.
@@ -33,7 +37,8 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	float crossNumeratorB = calculate2DCross(preCrossNumerator, r);
 	float crossDenominatorB = calculate2DCross(r, s);
 	float u = calculateTwoDLineSegmentIntersectScalar(crossNumeratorB, crossDenominatorB);
-	std::cout << "Line Segment B scalar (variable u) is : " << u << std::endl;
+	//std::cout << "Line Segment B scalar (variable u) is : " << u << std::endl;
+	twoDLineSegmentIntersectLogger.log("Line Segment B scalar (variable u) is : ", u, "\n");
 
 	/*
 	// test the point values 
@@ -55,24 +60,33 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 	float rsCross = calculate2DCross(r, s);
 	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
 	{
-		std::cout << "!! Rounding cross, as requested by option. " << std::endl;
+
+		//std::cout << "!! Rounding cross, as requested by option. " << std::endl;
+		twoDLineSegmentIntersectLogger.log("!! Rounding cross, as requested by option. ", "\n");
 		
 		int threeVal = 3;
 
 		rsCross = float(floor(rsCross * 1000 + 0.5) / 1000);
 	}
 
-	std::cout << "Value of rsCross: " << rsCross << std::endl;
-	std::cout << "(pre-calc) Line Segment A scalar (variable t) is : " << t << std::endl;
-	std::cout << "(pre-calc) Line Segment B scalar (variable u) is : " << u << std::endl;
+	//std::cout << "Value of rsCross: " << rsCross << std::endl;
+	//std::cout << "(pre-calc) Line Segment A scalar (variable t) is : " << t << std::endl;
+	//std::cout << "(pre-calc) Line Segment B scalar (variable u) is : " << u << std::endl;
+
+	twoDLineSegmentIntersectLogger.log("Value of rsCross: ", rsCross, "\n");
+	twoDLineSegmentIntersectLogger.log("(pre-calc) Line Segment A scalar (variable t) is : ", t, "\n");
+	twoDLineSegmentIntersectLogger.log("(pre-calc) Line Segment B scalar (variable u) is : ", u, "\n");
+
 
 	if (t == 1.0f)
 	{
-		std::cout << "::: NOTE: value of t is 1.0f! " << std::endl;
+		//std::cout << "::: NOTE: value of t is 1.0f! " << std::endl;
+		twoDLineSegmentIntersectLogger.log("::: NOTE: value of t is 1.0f! ", "\n");
 	}
 	if (u == 1.0f)
 	{
-		std::cout << "::: NOTE: value of u is 1.0f! " << std::endl;
+		//std::cout << "::: NOTE: value of u is 1.0f! " << std::endl;
+		twoDLineSegmentIntersectLogger.log("::: NOTE: value of u is 1.0f! ", "\n");
 	}
 
 	//if (rsCross == 0.0f)	
@@ -84,12 +98,14 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 		{
 			if (checkForColinearOverlap() == true)		// COLINEAR_OVERLAP
 			{
-				std::cout << "Lines are colinear overlap! " << std::endl;
+				//std::cout << "Lines are colinear overlap! " << std::endl;
+				twoDLineSegmentIntersectLogger.log("Lines are colinear overlap! ", "\n");
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::COLINEAR_OVERLAP;
 			}
 			else   // COLINEAR_NOOVERLAP
 			{
-				std::cout << "Lines are colinear, and don't overlap! " << std::endl;
+				//std::cout << "Lines are colinear, and don't overlap! " << std::endl;
+				twoDLineSegmentIntersectLogger.log("Lines are colinear, and don't overlap! ", "\n");
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::COLINEAR_NOOVERLAP;
 			}
 			
@@ -99,7 +115,8 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 		//else if (calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r) != 0.0f)	// PARALLEL
 		if (isFloatWithinColinearThreshold(calculate2DCrossWithOptionCheck((TwoDLineSegmentB.a - TwoDLineSegmentA.a), r)) == false)
 		{
-			std::cout << "Lines are parallel, but don't intersect! " << std::endl;
+			//std::cout << "Lines are parallel, but don't intersect! " << std::endl;
+			twoDLineSegmentIntersectLogger.log("Lines are parallel, but don't intersect!", "\n");
 		}
 		
 	}
@@ -154,17 +171,22 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 
 		{
 			analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
-			std::cout << "!! Intersected point doesn't match one of the endpoints of the line it intersects; intersect is therefore VALID. " << std::endl;
+			//std::cout << "!! Intersected point doesn't match one of the endpoints of the line it intersects; intersect is therefore VALID. " << std::endl;
+			twoDLineSegmentIntersectLogger.log("!! Intersected point doesn't match one of the endpoints of the line it intersects; intersect is therefore VALID. ", "\n");
 		}
 		else
 		{
 			analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECTS_POINT_PRECISE;
-			std::cout << "(2) !!! Warning, analyzedResult.intersectedPoint matched one of the segment it intersected! Should therefore be NONCOLINEAR_INTERSECTS_POINT_PRECISE" << std::endl;
+			//std::cout << "(2) !!! Warning, analyzedResult.intersectedPoint matched one of the segment it intersected! Should therefore be NONCOLINEAR_INTERSECTS_POINT_PRECISE" << std::endl;
+			twoDLineSegmentIntersectLogger.log("(2) !!! Warning, analyzedResult.intersectedPoint matched one of the segment it intersected! Should therefore be NONCOLINEAR_INTERSECTS_POINT_PRECISE", "\n");
 		}
 
 
-		std::cout << "Lines intersect! " << std::endl;
-		std::cout << "!!! Intersection point is: " << analyzedResult.intersectedPoint.x << ", " << analyzedResult.intersectedPoint.y << std::endl;
+		//std::cout << "Lines intersect! " << std::endl;
+		//std::cout << "!!! Intersection point is: " << analyzedResult.intersectedPoint.x << ", " << analyzedResult.intersectedPoint.y << std::endl;
+		twoDLineSegmentIntersectLogger.log("Lines intersect! ", "\n");
+		twoDLineSegmentIntersectLogger.log("!!! Intersection point is: ", analyzedResult.intersectedPoint.x, ", ", analyzedResult.intersectedPoint.y, "\n");
+
 		/*
 		if
 		(
@@ -176,13 +198,16 @@ void TwoDLineSegmentIntersectAnalyzer::performAnalysis()
 			std::cout << "! Warning, intersectedPoint is same as one of the two points on the line it intersects! " << std::endl;
 		}
 		*/
-		std::cout << "Points of intersected line are: " << TwoDLineSegmentB.a.x << ", " << TwoDLineSegmentB.a.y << " | " << TwoDLineSegmentB.b.x << ", " << TwoDLineSegmentB.b.y << std::endl;
+
+		//std::cout << "Points of intersected line are: " << TwoDLineSegmentB.a.x << ", " << TwoDLineSegmentB.a.y << " | " << TwoDLineSegmentB.b.x << ", " << TwoDLineSegmentB.b.y << std::endl;
+		twoDLineSegmentIntersectLogger.log("Points of intersected line are: ", TwoDLineSegmentB.a.x, ", ", TwoDLineSegmentB.a.y, " | ", TwoDLineSegmentB.b.x, ", ", TwoDLineSegmentB.b.y, "\n");
 
 	}
 	else
 	{
 		// NO_INTERSECT
-		std::cout << "Lines don't intersect! " << std::endl;
+		//std::cout << "Lines don't intersect! " << std::endl;
+		twoDLineSegmentIntersectLogger.log("Lines don't intersect! ", "\n");
 	}
 
 	
@@ -207,7 +232,8 @@ bool TwoDLineSegmentIntersectAnalyzer::isFloatWithinColinearThreshold(float in_t
 		(in_threshold <= .020f)
 	)
 	{
-		std::wcout << "!! Float is WITHIN threshold! " << std::endl;
+		//std::cout << "!! Float is WITHIN threshold! " << std::endl;
+		twoDLineSegmentIntersectLogger.log("!! Float is WITHIN threshold! ", "\n");
 		isWithin = true;
 	}
 	return isWithin;
@@ -234,7 +260,8 @@ float TwoDLineSegmentIntersectAnalyzer::calculate2DCross(TwoDPoint in_crossPoint
 {
 	float crossValue;
 	crossValue = (in_crossPointA.x * in_crossPointB.y) - (in_crossPointA.y * in_crossPointB.x);
-	std::cout << "!! Cross value is: " << crossValue << std::endl;
+	//std::cout << "!! Cross value is: " << crossValue << std::endl;
+	twoDLineSegmentIntersectLogger.log("!! Cross value is: ", crossValue, "\n");
 	return crossValue;
 }
 
@@ -245,7 +272,8 @@ float TwoDLineSegmentIntersectAnalyzer::calculate2DCrossWithOptionCheck(TwoDPoin
 	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
 	{
 		crossValue = float(floor(crossValue * 1000 + 0.5) / 1000);
-		std::cout << "! (Optioned) Cross value is (rounded to nearest hundredths) is : " << crossValue << std::endl;
+		//std::cout << "! (Optioned) Cross value is (rounded to nearest hundredths) is : " << crossValue << std::endl;
+		twoDLineSegmentIntersectLogger.log("! (Optioned) Cross value is (rounded to nearest hundredths) is : ", crossValue, "\n");
 	}
 	return crossValue;
 
@@ -262,7 +290,8 @@ float TwoDLineSegmentIntersectAnalyzer::calculate2DDotWithOptionCheck(TwoDPoint 
 	if (analyzerOption == IntersectAnalyzerOption::ROUND_CROSS)
 	{
 		returnDot = float(floor(returnDot * 1000 + 0.5) / 1000);
-		std::cout << "! (Optioned) dot product is (rounded to nearest thousandths) is: " << returnDot << std::endl;
+		//std::cout << "! (Optioned) dot product is (rounded to nearest thousandths) is: " << returnDot << std::endl;
+		twoDLineSegmentIntersectLogger.log("! (Optioned) dot product is (rounded to nearest thousandths) is: ", returnDot);
 	}
 	return returnDot;
 
@@ -275,10 +304,15 @@ bool TwoDLineSegmentIntersectAnalyzer::checkForColinearOverlap()
 	float t1 = calculate2DDotWithOptionCheck((TwoDLineSegmentB.a + s - TwoDLineSegmentA.a), r) / calculate2DDot(r, r);
 	float rsDot = calculate2DDotWithOptionCheck(s, r);
 
-	std::cout << "!!!! Line segment A, point A is: " << TwoDLineSegmentA.a.x << ", " << TwoDLineSegmentA.a.y << std::endl;
-	std::cout << "Dot of s and r is: " << rsDot << std::endl;
-	std::cout << "#### t0 is: " << t0 << std::endl;
-	std::cout << "#### t1 is: " << t1 << std::endl;
+	//std::cout << "!!!! Line segment A, point A is: " << TwoDLineSegmentA.a.x << ", " << TwoDLineSegmentA.a.y << std::endl;
+	//std::cout << "Dot of s and r is: " << rsDot << std::endl;
+	//std::cout << "#### t0 is: " << t0 << std::endl;
+	//std::cout << "#### t1 is: " << t1 << std::endl;
+	twoDLineSegmentIntersectLogger.log("!!!! Line segment A, point A is: ", TwoDLineSegmentA.a.x, ", ", TwoDLineSegmentA.a.y, "\n");
+	twoDLineSegmentIntersectLogger.log("Dot of s and r is: ", rsDot, "\n");
+	twoDLineSegmentIntersectLogger.log("#### t0 is: ", t0, "\n");
+	twoDLineSegmentIntersectLogger.log("#### t1 is: ", t1, "\n");
+
 
 	if (rsDot > 0)	// lines go in same direction
 	{

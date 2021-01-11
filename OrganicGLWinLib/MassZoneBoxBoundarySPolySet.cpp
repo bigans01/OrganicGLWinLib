@@ -207,7 +207,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			{
 				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
 				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
-				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr);
+				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, boxBoundaryLogger.getLogLevel());
 				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 

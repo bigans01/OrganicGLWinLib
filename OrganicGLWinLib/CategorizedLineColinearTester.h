@@ -13,14 +13,18 @@
 #include "TwoDLineSegment.h"
 #include "TwoDLineSegmentIntersectAnalyzer.h"
 #include "TwoDPoint.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CategorizedLineColinearTester
 {
 	public:
-		CategorizedLineColinearTester(CategorizedLine in_candidateLine, STriangle in_hostSTriangle) :
+		CategorizedLineColinearTester(CategorizedLine in_candidateLine, STriangle in_hostSTriangle, PolyDebugLevel in_polyDebugLevel) :
 			candidateLine(in_candidateLine),
-			hostSTriangle(in_hostSTriangle)
+			hostSTriangle(in_hostSTriangle),
+			colinearTesterLogLevel(in_polyDebugLevel)
 		{
+			colinearTesterLogger.setDebugLevel(in_polyDebugLevel);
 			runColinearTests();
 		};
 		bool colinearDetected = false;
@@ -31,6 +35,8 @@ class CategorizedLineColinearTester
 		QuatRotationPoints coplanarPoints;
 		PointTranslationCheck pointTranslator;
 		void runColinearTests();
+		PolyLogger colinearTesterLogger;
+		PolyDebugLevel colinearTesterLogLevel = PolyDebugLevel::NONE;
 };
 
 #endif

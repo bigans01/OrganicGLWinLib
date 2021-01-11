@@ -108,7 +108,7 @@ void CoplanarMassCreator::runMassManipulation()
 		trackedCopy.cleaveMap.clear();			// (Step 1: ) clear it's CleaveSequences; the CleaveSequences must be cleared when comparing against each related SPoly.
 		
 		//CoplanarCategorizedLineProducer lineProducer(&trackedCopy, relatedSPolyBegin->second, &currentIterationPool);		
-		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, &relatedSPolyBegin->second, &currentIterationPool);
+		CoplanarCategorizedLineProducer lineProducer(&trackedCopy, &relatedSPolyBegin->second, &currentIterationPool, massManipulatorLogLevel);
 
 		trackedCopy.sequenceFactory.copyCategorizedLinesFromLinePool(&currentIterationPool);
 

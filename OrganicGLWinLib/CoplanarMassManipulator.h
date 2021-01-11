@@ -24,6 +24,7 @@ class CoplanarMassManipulator
 		SPolyRefMap sPolyRefMap;
 		QuatRotationPoints* coplanarPointsRef = nullptr;
 		PolyLogger massManipulatorLogger;
+		PolyDebugLevel massManipulatorLogLevel = PolyDebugLevel::NONE;
 
 		float calculateSPolyArea(SPoly* in_sPolyRef);
 		float calculateTriangleArea(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);

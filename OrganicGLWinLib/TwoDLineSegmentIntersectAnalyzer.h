@@ -9,15 +9,19 @@
 #include <iostream>
 #include "TwoDLineSegmentJudge.h"
 #include "IntersectAnalyzerOption.h"
+#include "PolyDebugLevel.h"
+#include "PolyLogger.h"
 
 class TwoDLineSegmentIntersectAnalyzer
 {
 	public:
-		TwoDLineSegmentIntersectAnalyzer(TwoDLineSegment in_TwoDLineSegmentA, TwoDLineSegment in_TwoDLineSegmentB, IntersectAnalyzerOption in_option) :
+		TwoDLineSegmentIntersectAnalyzer(TwoDLineSegment in_TwoDLineSegmentA, TwoDLineSegment in_TwoDLineSegmentB, IntersectAnalyzerOption in_option, PolyDebugLevel in_polyDebugLevel) :
 			TwoDLineSegmentA(in_TwoDLineSegmentA),
 			TwoDLineSegmentB(in_TwoDLineSegmentB),
-			analyzerOption(in_option)
+			analyzerOption(in_option),
+			twoDLineSegmentIntersectLogLevel(in_polyDebugLevel)
 		{
+			twoDLineSegmentIntersectLogger.setDebugLevel(in_polyDebugLevel);
 			performAnalysis();
 		};
 		TwoDLineSegment TwoDLineSegmentA;
@@ -35,6 +39,8 @@ class TwoDLineSegmentIntersectAnalyzer
 		float calculate2DDotWithOptionCheck(TwoDPoint in_dotPointA, TwoDPoint in_dotPointB);
 		float calculateTwoDLineSegmentIntersectScalar(float in_numerator, float in_denominator);
 		bool isFloatWithinColinearThreshold(float in_threshold);
+		PolyLogger twoDLineSegmentIntersectLogger;
+		PolyDebugLevel twoDLineSegmentIntersectLogLevel = PolyDebugLevel::NONE;
 };
 
 #endif

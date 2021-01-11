@@ -438,7 +438,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			{
 				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
 				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
-				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr);
+				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, comparisonLogger.getLogLevel());
 				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 
@@ -963,10 +963,14 @@ double SPolySet::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 bool SPolySet::checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB)
 {
 	//std::cout << ">>>>> checking for same point condition..." << std::endl;
-	std::cout << "line A -> point A: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
-	std::cout << "line A -> point B: " << in_lineA.pointB.x << ", " << in_lineA.pointB.y << ", " << in_lineA.pointB.z << std::endl;
-	std::cout << "line B -> point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointA.z << std::endl;
-	std::cout << "line B -> point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
+	//std::cout << "line A -> point A: " << in_lineA.pointA.x << ", " << in_lineA.pointA.y << ", " << in_lineA.pointA.z << std::endl;
+	//std::cout << "line A -> point B: " << in_lineA.pointB.x << ", " << in_lineA.pointB.y << ", " << in_lineA.pointB.z << std::endl;
+	//std::cout << "line B -> point A: " << in_lineB.pointA.x << ", " << in_lineB.pointA.y << ", " << in_lineB.pointA.z << std::endl;
+	//std::cout << "line B -> point B: " << in_lineB.pointB.x << ", " << in_lineB.pointB.y << ", " << in_lineB.pointB.z << std::endl;
+	comparisonLogger.log("line A -> point A: ", in_lineA.pointA.x, ", ", in_lineA.pointA.y, ", ", in_lineA.pointA.z, "\n");
+	comparisonLogger.log("line A -> point B: ", in_lineA.pointB.x, ", ", in_lineA.pointB.y, ", ", in_lineA.pointB.z, "\n");
+	comparisonLogger.log("line B -> point A: ", in_lineB.pointA.x, ", ", in_lineB.pointA.y, ", ", in_lineB.pointA.z, "\n");
+	comparisonLogger.log("line B -> point B: ", in_lineB.pointB.x, ", ", in_lineB.pointB.y, ", ", in_lineB.pointB.z, "\n");
 
 	bool wasDetected = false;
 
