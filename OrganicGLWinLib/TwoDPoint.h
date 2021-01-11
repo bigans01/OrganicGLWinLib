@@ -46,7 +46,7 @@ class TwoDPoint
 			returnPoint.x -= in_twoDPointB.x;
 			returnPoint.y -= in_twoDPointB.y;
 
-			std::cout << "~~~~~ Return value is: " << returnPoint.x << ", " << returnPoint.y << std::endl;
+			//std::cout << "~~~~~ Return value is: " << returnPoint.x << ", " << returnPoint.y << std::endl;
 			return returnPoint;
 		}
 

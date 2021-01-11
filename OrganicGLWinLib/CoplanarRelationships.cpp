@@ -19,6 +19,14 @@ void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly in_r
 {
 	relationshipMap.insertSPolyRef(in_relatedSPolyID, in_relatedSPolyRef);
 }
+
+void CoplanarRelationships::setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	relationshipsDebugLevel = in_polyDebugLevel;
+	relationshipsLogger.setDebugLevel(in_polyDebugLevel);
+}
+
+
 void CoplanarRelationships::rotateToXYPlaneAndCompare()
 {
 	// step 1: rotate involved SPolys to the XY plane
@@ -116,7 +124,7 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
 		manipulator.reset(new CoplanarMassCreator());
 		//manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
-		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
+		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints, relationshipsDebugLevel);
 		manipulator->runMassManipulation();
 	}
 

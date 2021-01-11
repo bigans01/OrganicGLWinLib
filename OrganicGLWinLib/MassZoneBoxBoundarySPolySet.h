@@ -9,6 +9,7 @@
 #include "IntersectionResult.h"
 #include "IntersectionLine.h"
 #include "CategorizedLineColinearTester.h"
+#include "PolyLogger.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -18,6 +19,7 @@ class MassZoneBoxBoundarySPolySet
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
 	private:
+		PolyLogger boxBoundaryLogger;
 		SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 		int currentComparableSPolyIndex = 1;	// this index should always start at 1.
 		IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);

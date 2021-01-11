@@ -11,6 +11,8 @@
 #include "CoplanarMassManipulator.h"
 #include "CoplanarMassCreator.h"
 #include <mutex>
+#include "PolyDebugLevel.h"
+#include "PolyLogger.h"
 
 class CoplanarRelationships
 {
@@ -45,6 +47,11 @@ class CoplanarRelationships
 		//void insertRelationship(int in_sPolyIndex, SPoly* in_sPolyRef);
 		void insertRelationship(int in_sPolyIndex, SPoly in_sPolyRef);
 		void rotateToXYPlaneAndCompare();
+		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
+	private:
+		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
+		PolyLogger relationshipsLogger;
+
 };
 
 #endif

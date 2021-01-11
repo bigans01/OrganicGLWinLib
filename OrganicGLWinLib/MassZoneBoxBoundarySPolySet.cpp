@@ -28,8 +28,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 		//std::cout << "::::::::::::::::::::::::::::::::::: ----------------------------------+++++++++>>>>>>>>>>> Running host poly Triangle comparison: " << std::endl;
 
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
-		IntersectionLineGroup hostLineGroup;						// the line group for poly A.
-		IntersectionLineGroup guestLineGroup;						// the line group for poly B.
+		IntersectionLineGroup hostLineGroup(boxBoundaryLogger.getLogLevel());						// the line group for poly A.
+		IntersectionLineGroup guestLineGroup(boxBoundaryLogger.getLogLevel());						// the line group for poly B.
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
 		{
 			// for each pair (that is, A's current STriangle to B's current STriangle in the iterations), we must:
@@ -271,7 +271,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
-	std::cout << ">>>>>>>>>>>>> Calling determine categorized line..." << std::endl;
+	std::cout << ">>>>>>>>>>>>> (MassZoneBoxBoundarySPolySet) Calling determine categorized line..." << std::endl;
 	std::cout << "Line A, number of points: " << in_hostLine.numberOfPoints << std::endl;
 	std::cout << "Line B, number of points: " << in_guestLine.numberOfPoints << std::endl;
 

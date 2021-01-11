@@ -5,10 +5,13 @@ void CoplanarRelationshipTracker::insertCoplanarRelationship(int in_trackedSPoly
 {
 	
 	auto checkIfRelationshipForTrackedPolyExists = relationshipContainer.find(in_trackedSPolyID);
-	if (checkIfRelationshipForTrackedPolyExists == relationshipContainer.end())	// it doesn't exist, so we'll have to insert a fresh relationship.
+	if (checkIfRelationshipForTrackedPolyExists == relationshipContainer.end())	// it doesn't exist, so we'll have to insert a fresh relationship;
+																				// we must set the tracked poly data (via setTrackedPolyData),
+																				// and the logger debug level for the relationship (via setLoggerDebugLevel)
 	{
 		//relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, in_trackedSPolyRef);
 		relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, *in_trackedSPolyRef);
+		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
 	}
 	//relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, in_relatedSPolyRef);
 	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
@@ -31,4 +34,10 @@ void CoplanarRelationshipTracker::buildCoplanarCategorizedLines()
 		relationshipsBegin->second.rotateToXYPlaneAndCompare();
 	}
 	
+}
+
+void CoplanarRelationshipTracker::setDebugLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	relationshipTrackerLogger.setDebugLevel(in_polyDebugLevel);
+	relationshipTrackerDebugLevel = in_polyDebugLevel;
 }
