@@ -497,7 +497,7 @@ void CategorizedLine::convertLineToSlice(IntersectionLine in_slicingLine)
 {
 	type = IntersectionType::A_SLICE;
 	line.numberOfBorderLines = 2;
-	std::cout << "Converting line to slice..." << std::endl;
+	//std::cout << "Converting line to slice..." << std::endl;
 	line.isPointAOnBorder = 1;
 	line.pointA = in_slicingLine.pointA;
 	line.pointABorder = in_slicingLine.pointABorder;

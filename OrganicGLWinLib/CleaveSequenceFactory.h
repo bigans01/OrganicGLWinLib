@@ -20,6 +20,8 @@
 #include "CleaveSequenceMergeMode.h"
 #include <vector>
 #include "CategorizedLineGroupLocation.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CleaveSequenceFactory
 {
@@ -33,6 +35,7 @@ class CleaveSequenceFactory
 		void loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef);
 		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 		bool doesFactoryContainLines();
+		void setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel);
 
 	private:
 		friend class CategorizedLineMerger;
@@ -41,6 +44,7 @@ class CleaveSequenceFactory
 		friend class CategorizedLineASliceMerger;
 		friend class CategorizedLinePlaceboMerger;
 
+		PolyLogger cleaveSequenceFactoryLogger;
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
 		std::map<int, CategorizedLine> partialboundMap;	// contains PARTIAL_BOUND categorized lines.
 		std::map<int, CategorizedLine> aslicedMap;	// contains A_SLICED categorized lines.

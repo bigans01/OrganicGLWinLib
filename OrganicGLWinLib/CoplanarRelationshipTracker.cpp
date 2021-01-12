@@ -16,11 +16,11 @@ void CoplanarRelationshipTracker::insertCoplanarRelationship(int in_trackedSPoly
 	//relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, in_relatedSPolyRef);
 	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
 
-	std::cout << "!! Verifying pointers are OK: " << std::endl;
+	//std::cout << "!! Verifying pointers are OK: " << std::endl;
 	//std::cout << "-> tracked SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].trackedSPolyRef->numberOfBorderLines << std::endl;
-	std::cout << "-> tracked SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].trackedSPolyRef.numberOfBorderLines << std::endl;
+	//std::cout << "-> tracked SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].trackedSPolyRef.numberOfBorderLines << std::endl;
 	//std::cout << "-> related SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].relationshipMap.refMap[in_relatedSPolyID]->numberOfBorderLines << std::endl;
-	std::cout << "-> related SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].relationshipMap.refMap[in_relatedSPolyID].numberOfBorderLines << std::endl;
+	//std::cout << "-> related SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].relationshipMap.refMap[in_relatedSPolyID].numberOfBorderLines << std::endl;
 	
 }
 void CoplanarRelationshipTracker::buildCoplanarCategorizedLines()
@@ -30,7 +30,7 @@ void CoplanarRelationshipTracker::buildCoplanarCategorizedLines()
 	auto relationshipsEnd = relationshipContainer.end();
 	for (; relationshipsBegin != relationshipsEnd; relationshipsBegin++)
 	{
-		std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
+		//std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
 		relationshipsBegin->second.rotateToXYPlaneAndCompare();
 	}
 	

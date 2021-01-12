@@ -28,6 +28,11 @@ void QuatRotationManager::initializeAndRunForEmptyNormal(QuatRotationPoints* in_
 	rotateToOriginalPosition();
 }
 
+void QuatRotationManager::setDebugLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	quatRotationManagerLogger.setDebugLevel(in_polyDebugLevel);
+}
+
 
 
 void QuatRotationManager::initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector)
@@ -329,7 +334,8 @@ bool QuatRotationManager::executeRotationsForCheckingCoplanarity()
 	}
 	else if (rotationpointsRefVector->getPointByIndex(1).y == 0)
 	{
-		std::cout << "!!! Notice: point is directly on 0, logic needed. " << std::endl;
+		//std::cout << "!!! Notice: point is directly on 0, logic needed. " << std::endl;
+		quatRotationManagerLogger.log("!!! Notice: point is directly on 0, logic needed. ", "\n");
 		//float potentialRadiansToRotateBy = findRotationRadainsForGettingToPosYThroughX(rotationpointsRefVector->getPointByIndex(1));
 		//std::cout << "!! Potential radians to rotate by would be: " << potentialRadiansToRotateBy << std::endl;
 
@@ -372,9 +378,11 @@ bool QuatRotationManager::checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 i
 		firstPassRotateRadians = fullRadian360 + atan2result;
 	}
 
-	std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
+	quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
 	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
 	if (firstPassRotateRadians == 1.5708f)
 	{
 		wasRightAngleFound = true;
@@ -559,7 +567,8 @@ void QuatRotationManager::executeRotationsForCyclingDirectionFinderV2()
 	auto vectorBegin = rotationOrder.begin();
 	auto vectorEnd = rotationOrder.end();
 
-	std::cout << "!! Executing rotations..." << std::endl;
+	//std::cout << "!! Executing rotations..." << std::endl;
+	quatRotationManagerLogger.log("!! Executing rotations...", "\n");
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
 	{
 		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
@@ -1287,7 +1296,8 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 {
 
 	// The overarching goal is to get to POS Y for this 3rd point (3rd point is the value that was passed in)
-	std::cout << ">>>>> vec3 value is: " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
+	//std::cout << ">>>>> vec3 value is: " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
+	quatRotationManagerLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
 
 	float degreesToRotateOnX = 0.0f;
 	float fullRadian360 = 6.28319;	// 360 degrees = this many radians

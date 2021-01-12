@@ -13,6 +13,8 @@
 #include <vector>
 #include <stack>
 //#include "OrganicGLWinUtils.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class OrganicGLWinUtils;
 class QuatRotationManager
@@ -27,6 +29,8 @@ public:
 	glm::vec3* triangleNormalRef;					// a reference to the vec3 that is the calculate normal for a triangle
 	std::vector<QuatRotationType> rotationOrder;	// stores the types of rotations that need to be executed
 	std::stack<QuatRotationRecord> rotationRecords;
+
+	void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
 
 	void initializeAndRunForEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForZFracture(QuatRotationPoints* in_quatpointsRefVector);
@@ -98,6 +102,8 @@ public:
 	float roundRadiansForRightAngleCheck(float in_angleInRadians);
 
 	float radianValue;				// may be optionally used by some functions.
+private:
+	PolyLogger quatRotationManagerLogger;
 };
 
 #endif

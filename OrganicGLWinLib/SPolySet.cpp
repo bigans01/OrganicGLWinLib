@@ -92,8 +92,10 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 						// if they are coplanar AND polyA is a group 1 poly, do this
 						if (polyA->groupID == 1)	
 						{
-							std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
-							std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
+							//std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
+							//std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
+							comparisonLogger.log("!!!! Inserting record into coplanar relationships... ", "\n");
+							comparisonLogger.log("!!!! Tracked Poly ID: ", x, ", Related PolyID: ", currentIndex, "\n");
 							//int someVal = 3;
 							//std::cin >> someVal;
 
@@ -391,7 +393,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
 				if (intersectResult.wasIntersectFound == 2)		// the line was found as being within the triangle's plane
 				{
-					std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
+					//std::cout << "!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle); setting isHostParallelToGuestTriangle to TRUE." << std::endl;
+					comparisonLogger.log("!! ++++ NOTICE: ray lies in triangle plane! (guest lines compared to host triangle); setting isHostParallelToGuestTriangle to TRUE.", "\n");
 				}
 
 

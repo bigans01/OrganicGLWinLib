@@ -9,17 +9,21 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::PARTIAL_BOUND)
 	{
-		std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
+		//std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
+		cleaveSequenceFactoryLogger.log("!!! Adding PARTIAL_BOUND line. ", "\n");
 		insertPartialBoundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
-		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
+		//std::cout << "!!! Adding NON_BOUND line. " << std::endl;
+		cleaveSequenceFactoryLogger.log("!!! Adding NON_BOUND line. ", "\n");
 		insertNonboundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 	{
-		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
+		//std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
+		cleaveSequenceFactoryLogger.log("!!!! Adding INTERCEPTS_POINT_PRECISE line", "\n");
+
 		/*
 		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
 		std::cout << ":::: BEGIN ******************** Cycling direction and Border determination; border will be on point A********************************" << std::endl;
@@ -93,7 +97,8 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 	//groupMap.removeGroupRecord(returnLine.parentPoly, IntersectionType::NON_BOUND, in_fetchIndex);
 	nonboundMap.erase(in_fetchIndex);
 	nonboundCount--;		// decrement the number of nonbound lines
-	std::cout << "!! Extraction of NON_BOUND complete.." << std::endl;
+	//std::cout << "!! Extraction of NON_BOUND complete.." << std::endl;
+	cleaveSequenceFactoryLogger.log("!! Extraction of NON_BOUND complete..", "\n");
 	return returnLine;
 }
 
@@ -188,6 +193,11 @@ bool CleaveSequenceFactory::doesFactoryContainLines()
 	return result;
 }
 
+void CleaveSequenceFactory::setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	cleaveSequenceFactoryLogger.setDebugLevel(in_polyDebugLevel);
+}
+
 void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 {
 	std::map<int, int> twinCounterMap;
@@ -217,7 +227,8 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 		auto wasFoundInSet = removalSet.find(removalRunBegin->second.parentPoly);
 		if (wasFoundInSet != removalSet.end())
 		{
-			std::cout << "!!! Found a twin to remove..." << std::endl;
+			//std::cout << "!!! Found a twin to remove..." << std::endl;
+			cleaveSequenceFactoryLogger.log("!!! Found a twin to remove...", "\n");
 			mappedValuesToRemove.push_back(removalRunBegin->first);
 		}
 	}
@@ -939,7 +950,8 @@ void CleaveSequenceFactory::printLinesInPool()
 		std::cout << ">>> --- Partial lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "  
+									 << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
 								     << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
 				                     << " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
@@ -953,7 +965,8 @@ void CleaveSequenceFactory::printLinesInPool()
 		std::cout << ">>> --- Non-bound lines: " << std::endl;
 		for (begin; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "
+									 << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
 									 << " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
 									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
@@ -967,7 +980,8 @@ void CleaveSequenceFactory::printLinesInPool()
 		std::cout << ">>> --- Sliced lines: " << std::endl;
 		for (; begin != end; begin++)
 		{
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "
+				                       << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
 									<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
 									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}
@@ -981,7 +995,8 @@ void CleaveSequenceFactory::printLinesInPool()
 		for (; begin != end; begin++)
 		{
 			std::cout << ">>> --- Intercepts point precise lines: " << std::endl;
-			std::cout << begin->first << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
+			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "
+									  << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
 									<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
 									<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
 		}

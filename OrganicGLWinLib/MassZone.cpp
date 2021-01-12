@@ -11,7 +11,7 @@ void MassZone::insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy)
 	// the SPoly-based sub zone should be from an SPoly that's fully fleshed out;
 	// i.e, the SPoly has its primal points, border lines, and appropriate empty normal in place.
 
-	int currentSubZoneIndex = subZoneMap.size();
+	int currentSubZoneIndex = int(subZoneMap.size());
 	subZoneMap[currentSubZoneIndex].sPolyCopy = in_sPolyCopy;
 	insertMeshMatterMeta(in_sPolyID, &subZoneMap[currentSubZoneIndex].sPolyCopy, subZoneMap[currentSubZoneIndex].sPolyCopy.massManipulationSetting);
 	insertSPolyToSubZoneMapEntry(in_sPolyID, currentSubZoneIndex);
@@ -182,4 +182,7 @@ void MassZone::createMassZoneShell()
 		std::cout << ">> Comparing SPoly based subZone,  with the SPoly having ID: " << subZoneToSPolyMap[subZoneMapBegin->first] << std::endl;
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
 	}
+
+	// Step 2: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, and produce the 
+	//         CleaveSequences.
 }

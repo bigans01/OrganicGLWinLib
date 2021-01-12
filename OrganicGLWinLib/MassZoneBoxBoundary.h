@@ -50,7 +50,7 @@ class MassZoneBoxBoundary
 		int getBoundarySPolyBorderLineCounts()
 		{
 			//return boundarySPoly.borderLines.size();
-			return boundaryPolySet.boundarySPolyRef->borderLines.size();
+			return int(boundaryPolySet.boundarySPolyRef->borderLines.size());	
 		}
 		void setBoundarySPolyInPolySet()			// must be called AFTER inserting into a map.
 		{
@@ -60,7 +60,7 @@ class MassZoneBoxBoundary
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
 		{
-			int cornerPointMapIndex = cornerPointMap.size();
+			int cornerPointMapIndex = int(cornerPointMap.size());
 			cornerPointMap[cornerPointMapIndex] = in_cornerPoint;
 		}
 		void buildBoundarySPoly()
