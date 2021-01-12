@@ -8,6 +8,8 @@
 #include "MassZone.h"
 #include <map>
 #include "SPoly.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class MassZoneMaster
 {
@@ -16,7 +18,9 @@ class MassZoneMaster
 		void disqualifyMeshMatterMeta(int in_sPolyID);
 		void printQualifiedMeshMatterMetas();
 		void createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxType);
+		void setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel);
 		void createMassZoneShells();
+		void printMassZoneBorderLineCounts();
 	private:
 		std::map<int, MassZoneType> sPolyZoneTypeMap;
 		MassZone oldZone;

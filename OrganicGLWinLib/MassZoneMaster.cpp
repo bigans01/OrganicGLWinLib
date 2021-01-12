@@ -49,8 +49,22 @@ void MassZoneMaster::createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxT
 	newZone.createMassZoneBoxBoundary(in_massZoneBoxType);
 }
 
+void MassZoneMaster::setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel)
+{
+	oldZone.setMassZoneLogLevel(in_polyDebugLevel);
+	newZone.setMassZoneLogLevel(in_polyDebugLevel);
+}
+
 void MassZoneMaster::createMassZoneShells()
 {
+	std::cout << " >>>>>>>>>>>>>>> Creating old zone mass shell..." << std::endl;
 	oldZone.createMassZoneShell();
+	std::cout << " >>>>>>>>>>>>>>> Creating new zone mass shell..." << std::endl;
 	newZone.createMassZoneShell();
+}
+
+void MassZoneMaster::printMassZoneBorderLineCounts()
+{
+	oldZone.zoneBox.printBoundaryLineCounts();
+	newZone.zoneBox.printBoundaryLineCounts();
 }

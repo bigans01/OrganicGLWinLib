@@ -10,20 +10,22 @@
 #include <iostream>
 #include "SPoly.h"
 #include "STriangle.h"
+#include "PolyDebugLevel.h"
 
 class MassZoneBoxBoundary
 {
 	public:
 		MassZoneBoxBoundary() {};
-		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal)
+		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal, PolyDebugLevel in_polyDebugLevel)
 		{
 			insertCornerPoint(in_corner1);
 			insertCornerPoint(in_corner2);
 			insertCornerPoint(in_corner3);
 			insertCornerPoint(in_corner4);
+			massZoneBoxBoundaryLogLevel = in_polyDebugLevel;
 			emptyNormal = in_emptyNormal;
 			buildBoundarySPoly();
-			setBoundarySPolyInPolySet();
+			//setBoundarySPolyInPolySet();
 		};
 		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
 		std::map<int, glm::vec3> cornerPointMap;
@@ -43,9 +45,18 @@ class MassZoneBoxBoundary
 		}
 		void compareSPolyBasedSubZoneSPolyToBoundarySPolySet(SPoly* in_sPolyRef)
 		{
-			//boundaryPolySet.compareSPolySubZoneSPolyToBoundarySPoly(in_sPolyRef);
+			boundaryPolySet.compareSPolySubZoneSPolyToBoundarySPoly(in_sPolyRef);
 		}
-	
+		int getBoundarySPolyBorderLineCounts()
+		{
+			//return boundarySPoly.borderLines.size();
+			return boundaryPolySet.boundarySPolyRef->borderLines.size();
+		}
+		void setBoundarySPolyInPolySet()			// must be called AFTER inserting into a map.
+		{
+			boundaryPolySet.setBoundarySPolyRef(&boundarySPoly);
+			boundaryPolySet.setLogLevel(massZoneBoxBoundaryLogLevel);
+		}
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
 		{
@@ -67,13 +78,14 @@ class MassZoneBoxBoundary
 			// since nothing else will do this.
 			boundarySPoly.determinePrimalPoints();
 			boundarySPoly.determineBorderLines();
+			//boundarySPoly.printBorderLines();
+			//std::cout << "Number of border lines in this boundary: " << boundarySPoly.borderLines.size() << std::endl;
+			
 		}
-		void setBoundarySPolyInPolySet()
-		{	
-			boundaryPolySet.setBoundarySPolyRef(&boundarySPoly);
-		}
+
 		SPoly boundarySPoly;
 		MassZoneBoxBoundarySPolySet boundaryPolySet;
+		PolyDebugLevel massZoneBoxBoundaryLogLevel = PolyDebugLevel::NONE;
 		glm::vec3 emptyNormal;
 };
 

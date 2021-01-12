@@ -3,11 +3,28 @@
 
 void CoplanarChecker::performCoPlanarAnalysis()
 {
+	coplanarCheckerLogger.log("++++++++++++ performing co planar analysis (0) ", "\n");
+	coplanarCheckerLogger.waitForDebugInput();
+	if (coplanarCheckerLogger.isLoggingSet() == true)
+	{
+		std::cout << "polyAPtr, number of border lines: " << polyAPtr->borderLines.size() << std::endl;
+		std::cout << "######## DEBUG, printing polyA border lines: " << std::endl;
+		polyAPtr->printBorderLines();
+		std::cout << "######## DEBUG, printing polyB border lines: " << std::endl;
+		polyBPtr->printBorderLines();
+		std::cout << "************** printing of lines complete. " << std::endl;
+		coplanarCheckerLogger.waitForDebugInput();
+	}
+
+
 	// load the coplanar comparison points for each STriangle we've gotten from each SPoly.
 	STriangle* triangleARef = &polyAPtr->triangles[0];
 	STriangle* triangleBRef = &polyBPtr->triangles[0];
 	CoplanarComparisonCoandidatePoints triangleACandidates(triangleARef);
 	CoplanarComparisonCoandidatePoints triangleBCandidates(triangleBRef);
+
+	coplanarCheckerLogger.log("++++++++++++ performing co planar analysis (1) ", "\n");
+	coplanarCheckerLogger.waitForDebugInput();
 
 	// compare candidates of A to candidates of B; if there's a match, remove the matched points from their respective positions in each candidate set.
 	for (int x = 0; x < 3; x++)
@@ -23,6 +40,8 @@ void CoplanarChecker::performCoPlanarAnalysis()
 	}
 
 	//std::cout << "++++++++++++ performing co planar analysis (1) " << std::endl;
+	coplanarCheckerLogger.log("++++++++++++ performing co planar analysis (2) ", "\n");
+	coplanarCheckerLogger.waitForDebugInput();
 
 	// get the appropriate points
 	if

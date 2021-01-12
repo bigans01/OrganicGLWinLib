@@ -8,11 +8,45 @@
 void MassZoneBoxBoundarySPolySet::setBoundarySPolyRef(SPoly* in_sPolyRef)
 {
 	boundarySPolyRef = in_sPolyRef;
+
+	//std::cout << ">>> Inserted BoundarySPolyRef; which has " << boundarySPolyRef->borderLines.size() << " Lines. " << std::endl;
+	//int stopVal = 3;
+	//std::cin >> stopVal;
+}
+
+void MassZoneBoxBoundarySPolySet::setLogLevel(PolyDebugLevel in_sPolyDebugLevel)
+{
+	boxBoundarySPolySetLogLevel = in_sPolyDebugLevel;
+	boxBoundarySPolySetLogger.setDebugLevel(in_sPolyDebugLevel);
 }
 
 void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef)
 {
+	SPoly* polyA = boundarySPolyRef;
 
+
+	std::cout << "!!! Size of triangles: " << polyA->triangles.size() << std::endl;
+	std::cout << "!!! Size of border lines: " << polyA->borderLines.size() << std::endl;
+	std::cout << "!!! Size of border lines, direct: " << boundarySPolyRef->borderLines.size() << std::endl;
+
+	//SPoly dumbPoly;
+	//std::cout << "!!! Dumb poly size of border lines: " << dumbPoly.borderLines.size() << std::endl;
+
+
+	SPoly* polyB = in_sPolyRef;
+	std::cout << ">>> Entering before coplanarity checker. " << std::endl;
+	CoplanarChecker checker(polyA, polyB, boxBoundarySPolySetLogger.getLogLevel());
+	std::cout << ">>> Passed coplanarity checker. " << std::endl;
+	if (checker.coplanarityDetected == false)	// can only compare to a guest sPoly that is non-coplanar to the boundary SPoly.
+	{
+		std::cout << " >>> Performing comparison. " << std::endl;
+		insertCategorizedLinesFromNonboundarySPoly(in_sPolyRef);
+	}
+
+	polyA->sequenceFactory.printLineCounts();
+	polyA->sequenceFactory.printLinesInPool();
+	int waitVal;
+	std::cin >> waitVal;
 }
 
 void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPoly* in_guestPolyPtr)
@@ -28,8 +62,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 		//std::cout << "::::::::::::::::::::::::::::::::::: ----------------------------------+++++++++>>>>>>>>>>> Running host poly Triangle comparison: " << std::endl;
 
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
-		IntersectionLineGroup hostLineGroup(boxBoundaryLogger.getLogLevel());						// the line group for poly A.
-		IntersectionLineGroup guestLineGroup(boxBoundaryLogger.getLogLevel());						// the line group for poly B.
+		IntersectionLineGroup hostLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly A.
+		IntersectionLineGroup guestLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly B.
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
 		{
 			// for each pair (that is, A's current STriangle to B's current STriangle in the iterations), we must:
@@ -207,7 +241,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			{
 				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
 				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
-				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, boxBoundaryLogger.getLogLevel());
+				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, boxBoundarySPolySetLogger.getLogLevel());
 				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 

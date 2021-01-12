@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "MassZone.h"
 
+void MassZone::setMassZoneLogLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	massZoneLogLevel = in_polyDebugLevel;
+}
+
 void MassZone::insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy)
 {
 	// the SPoly-based sub zone should be from an SPoly that's fully fleshed out;
@@ -10,11 +15,17 @@ void MassZone::insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy)
 	subZoneMap[currentSubZoneIndex].sPolyCopy = in_sPolyCopy;
 	insertMeshMatterMeta(in_sPolyID, &subZoneMap[currentSubZoneIndex].sPolyCopy, subZoneMap[currentSubZoneIndex].sPolyCopy.massManipulationSetting);
 	insertSPolyToSubZoneMapEntry(in_sPolyID, currentSubZoneIndex);
+	insertSubZoneToSPolyMapEntry(in_sPolyID, currentSubZoneIndex);
 }
 
 void MassZone::insertSPolyToSubZoneMapEntry(int in_sPolyID, int in_subZoneID)
 {
 	sPolyToSubZoneMap[in_sPolyID] = in_subZoneID;
+}
+
+void MassZone::insertSubZoneToSPolyMapEntry(int in_sPolyID, int in_subZoneID)
+{
+	subZoneToSPolyMap[in_subZoneID] = in_sPolyID;
 }
 
 void MassZone::insertMeshMatterMeta(int in_sPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode)
@@ -103,40 +114,47 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	
 	glm::vec3 northEmptyNormal;
 	northEmptyNormal.z = -1.0f;
-	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal); 
+	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal, massZoneLogLevel); 
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary);
 
 	// POS_X boundary (east)
 	glm::vec3 eastEmptyNormal;
 	eastEmptyNormal.x = 1.0f;
-	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE, eastEmptyNormal);
+	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE, eastEmptyNormal, massZoneLogLevel);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, eastBoundary);
 
 	// POS_Z boundary (south) creation/insertion
 	glm::vec3 southEmptyNormal;
 	southEmptyNormal.z = 1.0f;
-	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW, southEmptyNormal);
+	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW, southEmptyNormal, massZoneLogLevel);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, southBoundary);
 
 	// NEG_X boundary (west) creation/insertion
 	glm::vec3 westEmptyNormal;
 	westEmptyNormal.x = -1.0f;
-	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW, westEmptyNormal);
+	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW, westEmptyNormal, massZoneLogLevel);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, westBoundary);
 
 	// POS_Y boundary (above) creation/insertion
 	glm::vec3 aboveEmptyNormal;
 	aboveEmptyNormal.y = 1.0f;
-	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW, aboveEmptyNormal);
+	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW, aboveEmptyNormal, massZoneLogLevel);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Y, aboveBoundary);
 
 	// NEG_Y boundary (below) creation/insertion
 	glm::vec3 belowEmptyNormal;
 	belowEmptyNormal.y = -1.0f;
-	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal);
+	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal, massZoneLogLevel);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary);
 
 	zoneBox.printBoundaries();
+
+	//std::cout << "############### CHECKING #######################" << std::endl;
+	//zoneBox.printBoundaryLineCounts();
+	//std::cout << "############### DOUBLE CHECKING #######################" << std::endl;
+	//zoneBox.printBoundaryLineCounts();
+	int checkVal = 3;
+	std::cin >> checkVal;
 	
 }
 
@@ -144,11 +162,24 @@ void MassZone::createMassZoneShell()
 {
 	// Step 1: compare all subZones that are from an SPoly, to all the MassZoneBoxBoundaries, to determine the CategorizedLines that will
 	//         be generated in each MassZoneBoxBoundary's SPoly.
+
+	/*
+	auto subZoneMapBeginPre = subZoneMap.begin();
+	auto subZoneMapEndPre = subZoneMap.end();
+	for (; subZoneMapBeginPre != subZoneMapEndPre; subZoneMapBeginPre++)
+	{
+		//std::cout << "!! Number of triangles in this subzone: " << subZoneMapBeginPre->second.sPolyCopy.triangles.size() << std::endl;
+		//std::cout << "!! Number of border lines in this subzone: " << subZoneMapBeginPre->second.sPolyCopy.borderLines.size() << std::endl;
+	}
+	*/
+
+	
 	auto subZoneMapBegin = subZoneMap.begin();
 	auto subZoneMapEnd = subZoneMap.end();
 	for (; subZoneMapBegin != subZoneMapEnd; subZoneMapBegin++)
 	{
 		// each SPoly-based subZone must be run against all 6 boundaries in the zoneBox.
+		std::cout << ">> Comparing SPoly based subZone,  with the SPoly having ID: " << subZoneToSPolyMap[subZoneMapBegin->first] << std::endl;
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
 	}
 }

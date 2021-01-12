@@ -53,7 +53,15 @@ void SPolySet::configurePolysWithoutNormalCalcs()
 void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 {
 	// build the zone boundaries for the MassZones
+	zoneMaster.setMassZoneLogLevels(PolyDebugLevel::DEBUG);			// hard-coded for testing, for the time being. (1/11/2021)
 	zoneMaster.createMassZoneBoxBoundaries(in_massZoneBoxType);
+
+
+	//zoneMaster.printMassZoneBorderLineCounts();
+	
+	std::cout << "!!! Finished printing immediate values of border line counts. " << std::endl;
+	int waitVal = 3;
+	std::cin >> waitVal;
 
 	// set the debug level for the coplanar tracker
 	coplanarTracker.setDebugLevel(comparisonLogger.getLogLevel());
@@ -76,7 +84,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 				{
 
 					// determine if we need to do the special case, where polyA and polyB are coplanar.
-					CoplanarChecker checker(polyA, polyB);
+					CoplanarChecker checker(polyA, polyB, comparisonLogger.getLogLevel());
 
 					// if they are coplanar, check polyA to see if it's group 1. If it is, set into the coplanar comparsion list.
 					if (checker.coplanarityDetected == true)	
@@ -140,6 +148,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 		//std::cout << "|||| Finished for this SPoly ->" << x << std::endl;
 		//coplanarTracker.buildCategorizedLinesForCoplanarRelationship(x);
+		//zoneMaster.printMassZoneBorderLineCounts();
 
 		// Use the MassZoneMaster to insert into either the old zone or new zone; each group that a MassZone represents must have all of the original SPolys of that group, at this point in time.
 		if (secondaryPolys[x].groupID == 0)
@@ -150,8 +159,11 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.registerSPolyToMassZone(x, secondaryPolys[x], MassZoneType::NEW_ZONE);
 		}
+
+		//zoneMaster.printMassZoneBorderLineCounts();
 		
 	}
+
 
 	// Build the non-SPoly based MassSubZones, for each MassZone, once all SPolys have been copied into the appropriate MassZone. The combination of temporal or artificial subzones, plus the actual "material" sPolys, should form a "MassZoneShell."
 	// 

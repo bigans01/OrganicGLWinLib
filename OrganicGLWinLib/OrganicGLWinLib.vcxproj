@@ -412,6 +412,7 @@
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="MassZone.cpp" />
+    <ClCompile Include="MassZoneBox.cpp" />
     <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />
     <ClCompile Include="MassZoneMaster.cpp" />
     <ClCompile Include="MeshMatterMeta.cpp" />
