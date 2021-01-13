@@ -57,6 +57,11 @@ class MassZoneBoxBoundary
 			boundaryPolySet.setBoundarySPolyRef(&boundarySPoly);
 			boundaryPolySet.setLogLevel(massZoneBoxBoundaryLogLevel);
 		}
+		void printBoundarySPolyCategorizedLines()
+		{
+			boundarySPoly.sequenceFactory.printLinesInPool();
+		}
+
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
 		{

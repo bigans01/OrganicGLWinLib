@@ -16,6 +16,7 @@ class MassZoneBox
 		void insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary);
 		void printBoundaryLineCounts();
 		void printBoundaries();
+		void printCategorizedLinesInBoundaries();
 		void runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZoneRef);
 };
 

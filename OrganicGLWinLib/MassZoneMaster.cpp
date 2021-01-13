@@ -61,6 +61,10 @@ void MassZoneMaster::createMassZoneShells()
 	oldZone.createMassZoneShell();
 	std::cout << " >>>>>>>>>>>>>>> Creating new zone mass shell..." << std::endl;
 	newZone.createMassZoneShell();
+
+	std::cout << "!!! Run of production of zone mass shells complete; continue? " << std::endl;
+	int massZoneStopVal = 3;
+	std::cin >> massZoneStopVal;
 }
 
 void MassZoneMaster::printMassZoneBorderLineCounts()

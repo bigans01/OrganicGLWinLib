@@ -183,6 +183,14 @@ void MassZone::createMassZoneShell()
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
 	}
 
-	// Step 2: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, and produce the 
+	// Step 2: print the lines in each boundary (for testing only)
+	zoneBox.printCategorizedLinesInBoundaries();
+
+	std::cout << "############### Done printing categorized lines in boundaries...." << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
+
+
+	// Step 3: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, and produce the 
 	//         CleaveSequences.
 }

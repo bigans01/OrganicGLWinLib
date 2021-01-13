@@ -118,3 +118,38 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 		boxBoundariesBegin->second.compareSPolyBasedSubZoneSPolyToBoundarySPolySet(&in_massSubZoneRef->sPolyCopy);
 	}
 }
+
+void MassZoneBox::printCategorizedLinesInBoundaries()
+{
+	std::cout << "################################# Printing categorized lines in each boundary: " << std::endl;
+	auto boxBoundariesBegin = boxBoundaries.begin();
+	auto boxBoundariesEnd = boxBoundaries.end();
+	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
+	{
+		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		{
+			std::cout << ">>>>>>> Categorized lines for NEG_Z: " << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		{
+			std::cout << ">>>>>>> Categorized lines for POS_X: " << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		{
+			std::cout << ">>>>>>> Categorized lines for POS_Z: " << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		{
+			std::cout << ">>>>>>> Categorized lines for NEG_X: " << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		{
+			std::cout << ">>>>>>> Categorized lines for POS_Y: " << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		{
+			std::cout << ">>>>>>> Categorized lines for NEG_Y: " << std::endl;
+		}
+		boxBoundariesBegin->second.printBoundarySPolyCategorizedLines();
+	}
+}

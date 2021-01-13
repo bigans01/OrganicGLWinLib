@@ -135,17 +135,21 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 			returnLine.numberOfPoints = 2;
 
 			//returnLine.
-			//std::cout << "!!! Merged 2 lines into a SLICE! " << std::endl;
+			/*
+			std::cout << "!!! Merged 2 lines into a SLICE! " << std::endl;
 
-			//std::cout << "+++++ Line 0: " << std::endl;
-			//std::cout << "point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
-			//std::cout << "point B: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
+			std::cout << "+++++ Line 0: " << std::endl;
+			std::cout << "point A: " << lineMap[0].pointA.x << ", " << lineMap[0].pointA.y << ", " << lineMap[0].pointA.z << std::endl;
+			std::cout << "point B: " << lineMap[0].pointB.x << ", " << lineMap[0].pointB.y << ", " << lineMap[0].pointB.z << std::endl;
 
-			//std::cout << "+++++ Line 1: " << std::endl;
-			//std::cout << "point A: " << lineMap[1].pointA.x << ", " << lineMap[1].pointA.y << ", " << lineMap[1].pointA.z << std::endl;
-			//std::cout << "point B: " << lineMap[1].pointB.x << ", " << lineMap[1].pointB.y << ", " << lineMap[1].pointB.z << std::endl;
+			std::cout << "+++++ Line 1: " << std::endl;
+			std::cout << "point A: " << lineMap[1].pointA.x << ", " << lineMap[1].pointA.y << ", " << lineMap[1].pointA.z << std::endl;
+			std::cout << "point B: " << lineMap[1].pointB.x << ", " << lineMap[1].pointB.y << ", " << lineMap[1].pointB.z << std::endl;
 
-			//std::cout << "CASE 1 HIT. " << std::endl;
+			std::cout << "CASE 1 HIT. " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
+			*/
 		}
 
 		// CASE 2: check for "PARTIAL_BOUND" types

@@ -43,10 +43,14 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 		insertCategorizedLinesFromNonboundarySPoly(in_sPolyRef);
 	}
 
-	polyA->sequenceFactory.printLineCounts();
-	polyA->sequenceFactory.printLinesInPool();
-	int waitVal;
-	std::cin >> waitVal;
+	if (boxBoundarySPolySetLogger.isLoggingSet() == true)
+	{
+		polyA->sequenceFactory.printLineCounts();
+		polyA->sequenceFactory.printLinesInPool();
+		boxBoundarySPolySetLogger.waitForDebugInput();
+	}
+	//int waitVal;
+	//std::cin >> waitVal;
 }
 
 void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPoly* in_guestPolyPtr)
@@ -280,9 +284,12 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				}
 			}
 
-			std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
-			int continueVal = 3;
-			std::cin >> continueVal;
+			//std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
+			//int continueVal = 3;
+			//std::cin >> continueVal;
+
+			boxBoundarySPolySetLogger.log("######>>>>>>> Comparison complete, enter number to continue to next comparison. ", "\n");
+			boxBoundarySPolySetLogger.waitForDebugInput();
 
 			hostLineGroup.reset();
 			guestLineGroup.reset();
@@ -326,6 +333,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 
 	// very first check: check for exact same point condition. If this is true, then ignore this determination, as there is a non-existent line.
 	bool conditionCheck = checkForSamePointCondition(in_hostLine, in_guestLine);
+	bool conditionMatch = false;
 	int totalNumberOfPoints = in_hostLine.numberOfPoints + in_guestLine.numberOfPoints;
 	if (conditionCheck == false)
 	{
@@ -343,9 +351,9 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
 					)
 			{
-				std::cout << "SPECIAL CASE hit " << std::endl;
-				int special = 3;
-				std::cin >> special;
+				//std::cout << "(MassZoneBoxBoundarySPolySet) SPECIAL CASE hit " << std::endl;
+				boxBoundarySPolySetLogger.log("(MassZoneBoxBoundarySPolySet) SPECIAL CASE hit ", "\n");
+
 
 				if (in_hostLine.numberOfPoints == 2)		// can only perform this special case if the host line has 2 points in it.
 				{
@@ -379,6 +387,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				std::cout << ":::: END TEST. " << std::endl;
 				*/
 					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
+					conditionMatch = true;
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
 					returnLine.line.pointABorder = in_hostLine.pointABorder;
@@ -395,6 +404,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
 			{
 				std::cout << "Number of borders lines = 2 hit " << std::endl;
+				conditionMatch = true;
 				returnLine.convertLineToSlice(in_hostLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
 			}
 
@@ -444,6 +454,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				//std::cin >> someVal;
 
 				//returnLine.convertLineToNonbound(in_guestLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
+				conditionMatch = true;
 				returnLine.convertLineToNonbound(newLine);	// convert to NONBOUND, by sending in the engulfed line (which is in_guestLine)
 			}
 
@@ -465,6 +476,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 
 				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
 				//std::cout << "Second point is: " << newSecondPoint.x << ", " << newSecondPoint.y << ", " << newSecondPoint.z << std::endl;
+				conditionMatch = true;
 				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);	// convert to PARTIAL_BOUND
 			}
 			// CASE 1.4: PARTIAL_BOUND -- condition 1
@@ -496,6 +508,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				*/
 				if (in_hostLine.numberOfPoints == 2)	// one of these should be 2
 				{
+					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
@@ -506,6 +519,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				}
 				else if (in_guestLine.numberOfPoints == 2)
 				{
+					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
@@ -529,12 +543,15 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 					std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
 					std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
 
+					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
 					returnLine.line.pointABorder = in_hostLine.pointABorder;
 					returnLine.line.pointA = in_hostLine.pointA;
 					returnLine.line.pointB = in_guestLine.pointA;
+
+					
 
 				}
 				//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
@@ -556,7 +573,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 					)
 			{
 				std::cout << "CASE 1.5 PARTIAL_BOUND hit " << std::endl;
-
+				conditionMatch = true;
 				returnLine.type = IntersectionType::PARTIAL_BOUND;
 				returnLine.line.numberOfBorderLines = 1;
 				/*
@@ -648,6 +665,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
 				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
+				conditionMatch = true;
 				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
 			}
 
@@ -671,6 +689,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				glm::vec3 roundedB = in_guestLine.pointA;
 				if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
 				{
+					conditionMatch = true;
 					returnLine.convertLinesToNonbound(in_hostLine, in_guestLine);
 				}
 				else
@@ -742,6 +761,7 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 
 			if (in_guestLine.numberOfPoints == 2)	// can only perform this special case if the guest line has 2 points in it.
 			{
+				conditionMatch = true;
 				returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
 				returnLine.line.lineGroupID = in_groupID;
 				returnLine.emptyNormal = in_polyBEmptyNormal;
@@ -753,6 +773,26 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			//std::cin >> someVal;
 		}
 	}
+
+	if
+	(
+		(conditionMatch == true)
+		&&
+		(returnLine.line.pointA == returnLine.line.pointB)
+		&&
+		(totalNumberOfPoints >= 2)
+	)
+	{
+		returnLine.type = IntersectionType::A_SLICE_SEGMENT_ENDPOINT;
+		std::cout << "########################### Debug condition met; " << std::endl;
+		std::cout << "return line -> point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
+		std::cout << "return line -> point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
+		std::cout << "Is host Line point A on border: " << in_hostLine.isPointAOnBorder << std::endl;
+		std::cout << "Host line border ID: " << in_hostLine.pointABorder << std::endl;
+		int debugVal = 3;
+		std::cin >> debugVal;
+	}
+
 	return returnLine;
 }
 

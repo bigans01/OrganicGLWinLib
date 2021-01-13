@@ -47,6 +47,11 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 		//int someadd = 3;
 		//std::cin >> someadd;
 	}
+	else if (in_categorizedLine.type == IntersectionType::A_SLICE_SEGMENT_ENDPOINT)
+	{
+		cleaveSequenceFactoryLogger.log("!!!! Adding A_SLICE_SEGMENT_ENDPOINT line", "\n");
+		insertAslicedSegmentEndpointLine(in_categorizedLine);
+	}
 	else
 	{
 		//std::cout << "!!!! WARNING, other line type discovered..." << std::endl;
@@ -82,6 +87,13 @@ void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
 	aslicedMap[aslicedCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE, aslicedCount);
 	aslicedCount++;
+}
+
+void CleaveSequenceFactory::insertAslicedSegmentEndpointLine(CategorizedLine in_line)
+{
+	aslicedSegmentEndpointMap[aslicedSegmentEndpointCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE_SEGMENT_ENDPOINT, aslicedSegmentEndpointCount);
+	aslicedSegmentEndpointCount++;
 }
 
 void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
@@ -391,7 +403,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	std::cout << "number of nonbounds: " << nonboundCount << std::endl;
 	std::cout << "number of partials: " << partialboundCount << std::endl;
 	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
-
+	std::cout << "number of a slices: " << aslicedCount << std::endl;
+	std::cout << "number of a slice segment endpoints: " << aslicedSegmentEndpointCount << std::endl;
 	
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
@@ -987,14 +1000,30 @@ void CleaveSequenceFactory::printLinesInPool()
 		}
 	}
 
+	// print A_SLICE_SEGMENT_ENDPOINT lines
+	if (aslicedSegmentEndpointCount > 0)
+	{
+		auto begin = aslicedSegmentEndpointMap.begin();
+		auto end = aslicedSegmentEndpointMap.end();
+		std::cout << ">>> --- A_SLICED_SEGMENT_ENDPOINT lines: " << std::endl;
+		for (; begin != end; begin++)
+		{
+			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "
+				<< ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z
+				<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z
+				<< " | empty normal: " << begin->second.emptyNormal.x << ", " << begin->second.emptyNormal.y << ", " << begin->second.emptyNormal.z << ", " << std::endl;
+		}
+	}
+
 	// intercepts point precise count
 	if (interceptsPointPreciseCount > 0)
 	{
 		auto begin = interceptsPointPreciseMap.begin();
 		auto end = interceptsPointPreciseMap.end();
+		std::cout << ">>> --- Intercepts point precise lines: " << std::endl;
 		for (; begin != end; begin++)
 		{
-			std::cout << ">>> --- Intercepts point precise lines: " << std::endl;
+			
 			std::cout << begin->first << ": parent SPoly: " << begin->second.parentPoly << " | "
 									  << ": point A: " << begin->second.line.pointA.x << ", " << begin->second.line.pointA.y << ", " << begin->second.line.pointA.z 
 									<< " | point B: " << begin->second.line.pointB.x << ", " << begin->second.line.pointB.y << ", " << begin->second.line.pointB.z 
@@ -1010,6 +1039,7 @@ void CleaveSequenceFactory::printLineCounts()
 	std::cout << "partialBounds: " << partialboundCount << std::endl;
 	std::cout << "precise: " << interceptsPointPreciseCount << std::endl;
 	std::cout << "aslice: " << aslicedCount << std::endl;
+	std::cout << "asliceSegmentEndPoint: " << aslicedSegmentEndpointCount << std::endl;
 }
 
 void CleaveSequenceFactory::clearLinePools()
