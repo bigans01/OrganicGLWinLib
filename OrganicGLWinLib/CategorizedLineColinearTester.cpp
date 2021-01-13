@@ -73,12 +73,17 @@ void CategorizedLineColinearTester::runColinearTests()
 
 
 		TwoDLineSegmentIntersectAnalyzer comparator(categorizedLineSegment, segmentArray[x], IntersectAnalyzerOption::ROUND_CROSS, colinearTesterLogLevel);
-		if (comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_OVERLAP)
+		if 
+		(
+			(comparator.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR_OVERLAP)
+			&&
+			(hostSTriangle.triangleLines[x].isBorderLine == 1)	// we only care about COLINEAR_OVERLAPs if the line we are analyzing is a border line.
+		)
 		{
 
 			//std::cout << "!!! Warning: COLINEAR_OVERLAP detected! " << std::endl;
 			colinearTesterLogger.log("!!! Warning: COLINEAR_OVERLAP detected! ", "\n");
-			colinearDetected = true;
+			colinearToBorderLineDetected = true;
 		}
 	}
 

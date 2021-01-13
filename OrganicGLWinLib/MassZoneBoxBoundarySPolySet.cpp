@@ -243,10 +243,9 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			// add any CategorizedLine to polygonA's map that isn't NONE
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
-				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
-				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
+				// we must test whether or not the generated categorized line is colinear to another border line in the host triangle. If it is
+				// colinear, it is invalid. (see the bool flag, tester.colinearToBorderLineDetected)
 				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, boxBoundarySPolySetLogger.getLogLevel());
-				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 
 				if (currentCategorizedLine.line.pointA == currentCategorizedLine.line.pointB)
@@ -257,11 +256,11 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 					std::cout << "Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 					std::cout << "Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
-					if (tester.colinearDetected == true)
+					if (tester.colinearToBorderLineDetected == true)
 					{
 						std::cout << "Colinear WAS DETECTED! " << std::endl;
 					}
-					else if (tester.colinearDetected == false)
+					else if (tester.colinearToBorderLineDetected == false)
 					{
 						std::cout << "Colinear WAS NOT DETECTED!!" << std::endl;
 					}
@@ -269,13 +268,13 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 					int contVal = 3;
 					std::cin >> contVal;
 				}
-				if (tester.colinearDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
+				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
 					// new code for adding to LineSequenceFactory goes here
 					//numberOfIntersections++;
 				}
-				else if (tester.colinearDetected == true)
+				else if (tester.colinearToBorderLineDetected == true)
 				{
 					std::cout << "!!#########!!!!!!!!! Categorized line detected as colinear to a line in the host STriangle; will not be inserted. " << std::endl;
 
@@ -771,6 +770,8 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			//std::cout << "Special case halt; " << std::endl;
 			//int someVal = 3;
 			//std::cin >> someVal;
+
+
 		}
 	}
 

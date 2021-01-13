@@ -57,7 +57,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 
 	if (lineMap.size() == 3)	// three lines requires special logic checks.
 	{
-		IntersectionLine lineArray[2];
+		IntersectionLine lineArray[3];	// there should only be 3 lines possible to work with.
 		int lineArrayIndex = 0;
 		glm::vec3 acquiredPointA;
 		glm::vec3 acquiredPointB;
@@ -67,9 +67,9 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		for (; linesBegin != linesEnd; linesBegin++)
 		{
 			//std::cout << "Line " << linesBegin->first << ", point A: " << linesBegin->second.pointA.x << ", " << linesBegin->second.pointA.y << ", " << linesBegin->second.pointA.z
-				//<< " | point B: " << linesBegin->second.pointB.x << ", " << linesBegin->second.pointB.y << ", " << linesBegin->second.pointB.z 
-				//<< " | is A border: " << linesBegin->second.isPointAOnBorder 
-				//<< " | A border valeu: " << linesBegin->second.pointABorder << std::endl;
+			//	<< " | point B: " << linesBegin->second.pointB.x << ", " << linesBegin->second.pointB.y << ", " << linesBegin->second.pointB.z 
+			//	<< " | is A border: " << linesBegin->second.isPointAOnBorder 
+			//	<< " | A border valeu: " << linesBegin->second.pointABorder << std::endl;
 			lineGroupLogger.log("Line ", linesBegin->first, ", point A: ", linesBegin->second.pointA.x, ", ", linesBegin->second.pointA.y, ", ", linesBegin->second.pointA.z,
 				" | point B: ", linesBegin->second.pointB.x, ", ", linesBegin->second.pointB.y, ", ", linesBegin->second.pointB.z,
 				" | is A border: ", linesBegin->second.isPointAOnBorder,
@@ -90,6 +90,7 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 			}
 		}
 
+		returnLine.numberOfBorderLines = 1;			// when there are 2 lines in the map that are border lines, set this to 1. When there are 3, set this to 2.
 		returnLine.numberOfPoints = 2;
 		returnLine.pointA = acquiredPointA;
 		//returnLine.isPointAOnBorder = 1;
@@ -99,17 +100,22 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 		//returnLine.isPointBOnBorder = 1;
 		//returnLine.pointBBorder = lineArray[1].pointABorder;
 
-		//std::cout << "#### Return line stats ---> " << std::endl;
-		//std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
-		//std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
-		//std::cout << "Triple line branch complete, continue? " << std::endl;
-		//int someVal = 3;
-		//std::cin >> someVal;
+		/*
+		std::cout << "#### Return line stats ---> " << std::endl;
+		std::cout << returnLine.pointA.x << ", " << returnLine.pointA.y << ", " << returnLine.pointA.z << std::endl;
+		std::cout << returnLine.pointB.x << ", " << returnLine.pointB.y << ", " << returnLine.pointB.z << std::endl;
+		std::cout << "#### Triple line branch complete, continue? " << std::endl;
+		std::cout << "#### Return line Number of border lines: --> " << returnLine.numberOfBorderLines << std::endl;
+		int someVal = 3;
+		std::cin >> someVal;
+		*/
 
 		lineGroupLogger.log("#### Return line stats ---> ", "\n");
 		lineGroupLogger.log(returnLine.pointA.x, ", ", returnLine.pointA.y, ", ", returnLine.pointA.z, "\n");
 		lineGroupLogger.log(returnLine.pointB.x, ", ", returnLine.pointB.y, ", ", returnLine.pointB.z, "\n");
 		lineGroupLogger.waitForDebugInput();
+
+		
 		
 	}
 	else   // as long as there aren't 3 lines in the map, do this.
@@ -265,6 +271,9 @@ IntersectionLine IntersectionLineGroup::mergeLines()
 			//std::cout << "#### Line is INVALID" << std::endl;
 		}
 	}
+
+
+	//std::cout << "#### (2) Return line Number of border lines: --> " << returnLine.numberOfBorderLines << std::endl;
 	return returnLine;
 }
 

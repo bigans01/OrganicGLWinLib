@@ -27,7 +27,7 @@ class CategorizedLineColinearTester
 			colinearTesterLogger.setDebugLevel(in_polyDebugLevel);
 			runColinearTests();
 		};
-		bool colinearDetected = false;
+		bool colinearToBorderLineDetected = false;
 	private:
 		CategorizedLine candidateLine;
 		STriangle hostSTriangle;

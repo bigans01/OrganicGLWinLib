@@ -386,6 +386,10 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 							//<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
 						//std::cout << "Intersecting line was NOT a border line. (B to A)" << std::endl;
 					}
+
+					//std::cout << "(Guest lines going through Host Triangle) Line points: " << guestTrianglePtr->triangleLines[z].pointA.x << ", " << guestTrianglePtr->triangleLines[z].pointA.y << ", " << guestTrianglePtr->triangleLines[z].pointA.z << " || "
+						//	<< guestTrianglePtr->triangleLines[z].pointB.x << ", " << guestTrianglePtr->triangleLines[z].pointB.y << ", " << guestTrianglePtr->triangleLines[z].pointB.z << std::endl;
+
 					potentialGuestLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
 					potentialGuestLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					guestLineGroup.addIntersectionLine(potentialGuestLine);			// only add a line to the group if the line intersection wtih poly B
@@ -451,10 +455,9 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// add any CategorizedLine to polygonA's map that isn't NONE
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
-				// we must test whether or not the generated categorized line is colinear to another line in the host triangle. If it is
-				// colinear, it is invalid. (see the bool flag, tester.colinearDetected)
+				// we must test whether or not the generated categorized line is colinear to another border line in the host triangle. If it is
+				// colinear, it is invalid. (see the bool flag, tester.colinearToBorderLineDetected)
 				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr, comparisonLogger.getLogLevel());
-				//in_polyAPtr->addCategorizedLine(currentCategorizedLine);	// add the new line
 				currentCategorizedLine.parentPoly = in_guestPolyID;
 
 				if (currentCategorizedLine.line.pointA == currentCategorizedLine.line.pointB)
@@ -465,11 +468,11 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					std::cout << "Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 					std::cout << "Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
-					if (tester.colinearDetected == true)
+					if (tester.colinearToBorderLineDetected == true)
 					{
 						std::cout << "Colinear WAS DETECTED! " << std::endl;
 					}
-					else if (tester.colinearDetected == false)
+					else if (tester.colinearToBorderLineDetected == false)
 					{
 						std::cout << "Colinear WAS NOT DETECTED!!" << std::endl;
 					}
@@ -477,16 +480,15 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					int contVal = 3;
 					std::cin >> contVal;
 				}
-				if (tester.colinearDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
+				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(currentCategorizedLine);
 					// new code for adding to LineSequenceFactory goes here
 					numberOfIntersections++;
 				}
-				else if (tester.colinearDetected == true)
+				else if (tester.colinearToBorderLineDetected == true)
 				{
 					std::cout << "!!#########!!!!!!!!! Categorized line detected as colinear to a line in the host STriangle; will not be inserted. " << std::endl;
-
 					//int someVal = 3;
 					//std::cin >> someVal;
 				}
@@ -1019,16 +1021,18 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
-	//std::cout << ">>>>>>>>>>>>> (SPolySet) Calling determine categorized line..." << std::endl;
-	//std::cout << "Line A, number of points: " << in_hostLine.numberOfPoints << std::endl;
-	//std::cout << "Line B, number of points: " << in_guestLine.numberOfPoints << std::endl;
-	//std::cout << "----Line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
-	//std::cout << "----Line B, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
-	//std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-	//std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+	/*
+	std::cout << ">>>>>>>>>>>>> (SPolySet) Calling determine categorized line..." << std::endl;
+	std::cout << "Line A, number of points: " << in_hostLine.numberOfPoints << std::endl;
+	std::cout << "Line B, number of points: " << in_guestLine.numberOfPoints << std::endl;
+	std::cout << "----Line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+	std::cout << "----Line B, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+	std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
+	std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
 
-	//std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-	//std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+	std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+	std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+	*/
 
 	comparisonLogger.log(">>>>>>>>>>>>> (SPolySet) Calling determine categorized line...", "\n");
 	comparisonLogger.log("Line A, number of points: ", in_hostLine.numberOfPoints, "\n");
@@ -1458,7 +1462,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				//std::cout << "~~~~ The guest line is INVALID. " << std::endl;
 			}
 
-			//std::cout << "!!! Handling special case, where host line is INVALID: " << std::endl;
+			std::cout << "!!! Handling special case, where host line is INVALID: " << std::endl;
 			comparisonLogger.log("!!! Handling special case, where host line is INVALID: ", "\n");
 
 			/*
@@ -1493,6 +1497,10 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Int
 				returnLine.line.lineGroupID = in_groupID;
 				returnLine.emptyNormal = in_polyBEmptyNormal;
 			}
+
+
+
+			
 			//}
 
 			//std::cout << "Special case halt; " << std::endl;
