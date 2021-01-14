@@ -12,6 +12,7 @@
 #include "PolyLogger.h"
 #include "CoplanarChecker.h"
 #include "PolyDebugLevel.h"
+#include "FusedIntersectionLine.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -31,7 +32,7 @@ class MassZoneBoxBoundarySPolySet
 		IntersectionResult checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_triangleLine);
 		glm::vec3 roundPointToHundredths(glm::vec3 in_point);
 		double doubledot(glm::vec3 in_A, glm::vec3 in_B);
-		CategorizedLine determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_hostLine, IntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal);
+		CategorizedLine determineCategorizedLineThroughHostTriangleContext(FusedIntersectionLine in_hostLine, FusedIntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal);
 		bool checkForSamePointCondition(IntersectionLine in_lineA, IntersectionLine in_lineB);
 		glm::vec3 findSecondPointForLine(glm::vec3 in_beginPoint, glm::vec3 in_candidate1, glm::vec3 in_candidate2);
 		int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);

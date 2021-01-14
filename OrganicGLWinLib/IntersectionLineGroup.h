@@ -8,6 +8,7 @@
 #include <iostream>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "FusedIntersectionLine.h"
 
 class IntersectionLineGroup
 {
@@ -17,7 +18,7 @@ public:
 	std::map<int, IntersectionLine> lineMap;
 
 	void addIntersectionLine(IntersectionLine in_intersectionLine);
-	IntersectionLine mergeLines();
+	FusedIntersectionLine mergeLines();
 	bool performInvalidCheck();					// may not be worth using; flag for removal.
 	int findNumberOfBorderLineIntercepts();
 	void reset();								// reset the line group, so it has appropriate values in next iteration

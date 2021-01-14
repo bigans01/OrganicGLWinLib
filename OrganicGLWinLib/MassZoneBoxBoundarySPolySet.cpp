@@ -118,7 +118,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 					}
 					//std::cout << "(1) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					potentialHostLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
-					potentialHostLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
+					//potentialHostLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					//std::cout << "!!! Points are: " << potentialLineAtoB.pointA.x << ", " << potentialLineAtoB.pointA.y << ", " << potentialLineAtoB.pointA.z << " |  " << potentialLineAtoB.pointB.x << ", " << potentialLineAtoB.pointB.y << ", " << potentialLineAtoB.pointB.z << std::endl;
 					//std::cout << "(2) ## lines is now: " << potentialLineAtoB.numberOfBorderLines << std::endl;
 					hostLineGroup.addIntersectionLine(potentialHostLine);			// only add a line to the group if the line intersection wtih poly B
@@ -143,7 +143,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			//IntersectionLine mergedHostLine = hostLineGroup.mergeLines();
 			// merge the found intersections for the candidate line, then make that result = potentialLineAtoB; only do this if none of the IntersectionLines were
 			// found as having their points equal to a line's points in the guest triangle.
-			IntersectionLine mergedHostLine;
+			FusedIntersectionLine mergedHostLine;
 			if (isHostParallelToGuestTriangle == false)
 			{
 				mergedHostLine = hostLineGroup.mergeLines();
@@ -180,7 +180,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 						//std::cout << "Intersecting line was NOT a border line. (B to A)" << std::endl;
 					}
 					potentialGuestLine.addIntersectionResult(intersectResult);		// add the result to the intersect line
-					potentialGuestLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
+					//potentialGuestLine.intersectedSecondaryID = in_guestPolyID;			// store the ID of the secondary that was intersected; this should always be B
 					guestLineGroup.addIntersectionLine(potentialGuestLine);			// only add a line to the group if the line intersection wtih poly B
 				}
 				// for when the intersection line is found as being parallel to the the triangle it attempted to intersect.
@@ -205,7 +205,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 			// merge the found intersections for the candidate line, then make that result = potentialLineBtoA; only do this if none of the IntersectionLines were
 			// found as having their points equal to a line's points in the host triangle.
-			IntersectionLine mergedGuestLine;
+			FusedIntersectionLine mergedGuestLine;
 			if (isGuestParallelToHostTriangle == false)
 			{
 				//std::cout << ">>>>>>>> GUEST LINE MERGE BEGIN " << std::endl;
@@ -303,7 +303,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 	currentComparableSPolyIndex++;	// this must be incremented, to set the appropriate index for the next SPoly (if there are any to compare against)
 }
 
-CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHostTriangleContext(IntersectionLine in_hostLine, IntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal)
+CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHostTriangleContext(FusedIntersectionLine in_hostLine, FusedIntersectionLine in_guestLine, int in_groupID, glm::vec3 in_polyBEmptyNormal)
 {
 	CategorizedLine returnLine;
 	returnLine.type = IntersectionType::NONE;
@@ -312,49 +312,49 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
 	std::cout << ">>>>>>>>>>>>> (MassZoneBoxBoundarySPolySet) Calling determine categorized line..." << std::endl;
-	std::cout << "Line A, number of points: " << in_hostLine.numberOfPoints << std::endl;
-	std::cout << "Line B, number of points: " << in_guestLine.numberOfPoints << std::endl;
+	std::cout << "Line A, number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+	std::cout << "Line B, number of points: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
 
-	std::cout << "----Line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
-	std::cout << "----Line B, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
-	//std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-	//std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
+	std::cout << "----Line A, number of border lines: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
+	std::cout << "----Line B, number of border lines: " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
+	//std::cout << "line A, point A: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+	//std::cout << "line A, point B: " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
 
-	//std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-	//std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+	//std::cout << "line B, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
+	//std::cout << "line B, point B: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
 
 
 	//std::cout << "## !! Silly test: " << std::endl;
 	//int someVal7 = 3;
-	//in_hostLine.lineGroupID = 7;
-	//std::cout << "## Host line group ID is now: " << in_hostLine.lineGroupID << std::endl;
+	//in_hostLine.deprecatedLine.lineGroupID = 7;
+	//std::cout << "## Host line group ID is now: " << in_hostLine.deprecatedLine.lineGroupID << std::endl;
 	//std::cin >> someVal7;
 
 	// very first check: check for exact same point condition. If this is true, then ignore this determination, as there is a non-existent line.
-	bool conditionCheck = checkForSamePointCondition(in_hostLine, in_guestLine);
+	bool conditionCheck = checkForSamePointCondition(in_hostLine.deprecatedLine, in_guestLine.deprecatedLine);
 	bool conditionMatch = false;
-	int totalNumberOfPoints = in_hostLine.numberOfPoints + in_guestLine.numberOfPoints;
+	int totalNumberOfPoints = in_hostLine.deprecatedLine.numberOfPoints + in_guestLine.deprecatedLine.numberOfPoints;
 	if (conditionCheck == false)
 	{
 		std::cout << "!! Points are not the same; " << std::endl;
 		// ROOT CASE 1: Both lines are considered valid.
 		if
 			(
-			(in_hostLine.lineValidity == IntersectionLineValidity::VALID)
+			(in_hostLine.deprecatedLine.lineValidity == IntersectionLineValidity::VALID)
 				)
 		{
 
 			// SPECIAL CASE: the guest line is invalid, but the host is not. The host line is a partial bound.
 			if
 				(
-				(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+				(in_guestLine.deprecatedLine.lineValidity == IntersectionLineValidity::INVALID)
 					)
 			{
 				//std::cout << "(MassZoneBoxBoundarySPolySet) SPECIAL CASE hit " << std::endl;
 				boxBoundarySPolySetLogger.log("(MassZoneBoxBoundarySPolySet) SPECIAL CASE hit ", "\n");
 
 
-				if (in_hostLine.numberOfPoints == 2)		// can only perform this special case if the host line has 2 points in it.
+				if (in_hostLine.deprecatedLine.numberOfPoints == 2)		// can only perform this special case if the host line has 2 points in it.
 				{
 					//std::cout << "!! Warning, number of points in host line isn't 2! " << std::endl;
 
@@ -365,23 +365,23 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 
 
 				std::cout << "++++++Host line stats: " << std::endl;
-				std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
-				std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+				std::cout << "Number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Number of border lines: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
 
 				std::cout << "++++++Guest line stats: " << std::endl;
-				std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
-				std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+				std::cout << "Number of points: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Number of border lines: " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
 
-				std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-				std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-				std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
-				std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
+				std::cout << "line A, point A: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+				std::cout << "line A, point B: " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+				std::cout << "line A, point A border: is on border? ->" << in_hostLine.deprecatedLine.isPointAOnBorder << "; " << in_hostLine.deprecatedLine.pointABorder << std::endl;
+				std::cout << "line A, point B border: is on border? ->" << in_hostLine.deprecatedLine.isPointBOnBorder << "; " << in_hostLine.deprecatedLine.pointBBorder << std::endl;
 
 
-				std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-				std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-				std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
-				std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
+				std::cout << "line B, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
+				std::cout << "line B, point B: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
+				std::cout << "line B, point A border: is on border? ->" << in_guestLine.deprecatedLine.isPointAOnBorder << "; " << in_guestLine.deprecatedLine.pointABorder << std::endl;
+				std::cout << "line B, point B border: is on border? ->" << in_guestLine.deprecatedLine.isPointBOnBorder << "; " << in_guestLine.deprecatedLine.pointBBorder << std::endl;
 
 				std::cout << ":::: END TEST. " << std::endl;
 				*/
@@ -389,22 +389,22 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 					conditionMatch = true;
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
-					returnLine.line.pointABorder = in_hostLine.pointABorder;
-					returnLine.line.pointA = in_hostLine.pointA;
-					returnLine.line.pointB = in_hostLine.pointB;
-					returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+					returnLine.line.pointABorder = in_hostLine.deprecatedLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.deprecatedLine.pointA;
+					returnLine.line.pointB = in_hostLine.deprecatedLine.pointB;
+					//returnLine.line.intersectedSecondaryID = in_hostLine.deprecatedLine.intersectedSecondaryID;
 				}
 			}
 
 
 			// CASE 1.1: The host is SLICED (A_SLICE); the host triangle line has two border lines in it
-			//std::cout << "Line A, " << in_hostLine.numberOfBorderLines << std::endl;
-			//std::cout << "Line B, " << in_guestLine.numberOfBorderLines << std::endl;
-			else if (in_hostLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
+			//std::cout << "Line A, " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
+			//std::cout << "Line B, " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
+			else if (in_hostLine.deprecatedLine.numberOfBorderLines == 2)			// This means: polygon A had two border lines going through polygon B. That means it is SLICED.
 			{
 				std::cout << "Number of borders lines = 2 hit " << std::endl;
 				conditionMatch = true;
-				returnLine.convertLineToSlice(in_hostLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
+				returnLine.convertLineToSlice(in_hostLine.deprecatedLine);		// convert to A_SLICE, by sending in the slicing line, in_hostLine
 			}
 
 			// CASE 1.2: the guest triangle is SLICED -- but the triangle being sliced only contains one border line. The host "engulfs" B, in one of two ways; 
@@ -413,9 +413,9 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			//          
 			else if
 				(
-				(in_guestLine.numberOfBorderLines >= 1)
+				(in_guestLine.deprecatedLine.numberOfBorderLines >= 1)
 					&&
-					(in_hostLine.numberOfBorderLines == 0)
+					(in_hostLine.deprecatedLine.numberOfBorderLines == 0)
 					&&
 					(totalNumberOfPoints > 1)
 					)
@@ -425,27 +425,27 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				std::cout << "CASE 1.2: Triangle A has engulfed triangle B; this is a NON_BOUND" << std::endl;
 				std::cout << "####### halting, temporary, to analyze lines..." << std::endl;
 
-				std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-				std::cout << "Host line, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-				std::cout << "Host A, number of points: " << in_hostLine.numberOfPoints << std::endl;
-				std::cout << "Host A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+				std::cout << "Host line, point A: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+				std::cout << "Host line, point B: " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+				std::cout << "Host A, number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Host A, number of border lines: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
 
-				std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-				std::cout << "Guest line, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-				std::cout << "Guest line, number of points: " << in_guestLine.numberOfPoints << std::endl;
-				std::cout << "Guest line, number of border lines: " << in_guestLine.numberOfPoints << std::endl;
+				std::cout << "Guest line, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
+				std::cout << "Guest line, point B: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
+				std::cout << "Guest line, number of points: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Guest line, number of border lines: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
 				*/
 
 				IntersectionLine newLine;
-				if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
+				if ((in_guestLine.deprecatedLine.numberOfPoints == 1) && (in_hostLine.deprecatedLine.numberOfPoints == 1))
 				{
-					newLine = in_guestLine;
-					newLine.pointB = in_hostLine.pointA;
+					newLine = in_guestLine.deprecatedLine;
+					newLine.pointB = in_hostLine.deprecatedLine.pointA;
 					newLine.numberOfPoints = 2;
 				}
-				else if (in_guestLine.numberOfPoints == 2)
+				else if (in_guestLine.deprecatedLine.numberOfPoints == 2)
 				{
-					newLine = in_guestLine;
+					newLine = in_guestLine.deprecatedLine;
 				}
 
 
@@ -460,100 +460,100 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			// CASE 1.3: PARTIAL_BOUND -- condition 1
 			else if
 				(
-				(in_guestLine.numberOfBorderLines == 2)
+				(in_guestLine.deprecatedLine.numberOfBorderLines == 2)
 					&&
-					(in_hostLine.numberOfBorderLines == 1)
+					(in_hostLine.deprecatedLine.numberOfBorderLines == 1)
 					)
 			{
 				std::cout << "CASE 1.3: Triangle A has one border line hit by B; this is a PARTIAL_BOUND" << std::endl;
 
-				//std::cout << "TA p0: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-				//std::cout << "TB p0: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-				//std::cout << "TB p1: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-				//std::cout << "Line A stats: point A border = " << in_hostLine.isPointAOnBorder << " | point B border = " << in_hostLine.isPointBOnBorder << std::endl;
-				//std::cout << "Line B stats: point A border = " << in_guestLine.isPointAOnBorder << " | point B border = " << in_guestLine.isPointBOnBorder << std::endl;
+				//std::cout << "TA p0: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+				//std::cout << "TB p0: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
+				//std::cout << "TB p1: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
+				//std::cout << "Line A stats: point A border = " << in_hostLine.deprecatedLine.isPointAOnBorder << " | point B border = " << in_hostLine.deprecatedLine.isPointBOnBorder << std::endl;
+				//std::cout << "Line B stats: point A border = " << in_guestLine.deprecatedLine.isPointAOnBorder << " | point B border = " << in_guestLine.deprecatedLine.isPointBOnBorder << std::endl;
 
-				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointB);
 				//std::cout << "Second point is: " << newSecondPoint.x << ", " << newSecondPoint.y << ", " << newSecondPoint.z << std::endl;
 				conditionMatch = true;
-				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);	// convert to PARTIAL_BOUND
+				returnLine.convertLineToPartialBound(in_hostLine.deprecatedLine, in_guestLine.deprecatedLine, newSecondPoint);	// convert to PARTIAL_BOUND
 			}
 			// CASE 1.4: PARTIAL_BOUND -- condition 1
 			else if
 				(
-				(in_hostLine.numberOfBorderLines == 1)
+				(in_hostLine.deprecatedLine.numberOfBorderLines == 1)
 					&&
-					(in_guestLine.numberOfBorderLines == 1)
+					(in_guestLine.deprecatedLine.numberOfBorderLines == 1)
 					)
 			{
 				std::cout << "PARTIAL_BOUND via condition 1.4 detected. " << std::endl;
-				//std::cout << ":: Line A point count: " << in_hostLine.numberOfPoints << std::endl;
-				//std::cout << ":: Line B point count: " << in_guestLine.numberOfPoints << std::endl;
-				//std::cout << ":: Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-				//std::cout << ":: Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				//std::cout << ":: Line A point count: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+				//std::cout << ":: Line B point count: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
+				//std::cout << ":: Line A is: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << " | " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+				//std::cout << ":: Line B is: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << " | " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
 				/*
 				std::cout << "PARTIAL_BOUND via condition 3.2 detected. " << std::endl;
-				std::cout << "Line A point count: " << in_hostLine.numberOfPoints << std::endl;
-				std::cout << "Line B point count: " << in_guestLine.numberOfPoints << std::endl;
-				std::cout << "Line A is: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-				std::cout << "Line B is: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				std::cout << "Line A point count: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Line B point count: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
+				std::cout << "Line A is: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << " | " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+				std::cout << "Line B is: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << " | " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
 				std::cout << "-----Borders: " << std::endl;
 				std::cout << "Line A: " << std::endl;
-				std::cout << "Point A: " << in_hostLine.pointABorder << std::endl;
-				std::cout << "Point B: " << in_hostLine.pointBBorder << std::endl;
+				std::cout << "Point A: " << in_hostLine.deprecatedLine.pointABorder << std::endl;
+				std::cout << "Point B: " << in_hostLine.deprecatedLine.pointBBorder << std::endl;
 				std::cout << "Line B: " << std::endl;
-				std::cout << "Point A: " << in_guestLine.pointABorder << std::endl;
-				std::cout << "Point B: " << in_guestLine.pointBBorder << std::endl;
+				std::cout << "Point A: " << in_guestLine.deprecatedLine.pointABorder << std::endl;
+				std::cout << "Point B: " << in_guestLine.deprecatedLine.pointBBorder << std::endl;
 				*/
-				if (in_hostLine.numberOfPoints == 2)	// one of these should be 2
+				if (in_hostLine.deprecatedLine.numberOfPoints == 2)	// one of these should be 2
 				{
 					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
-					returnLine.line.pointABorder = in_hostLine.pointABorder;
-					returnLine.line.pointA = in_hostLine.pointA;
-					returnLine.line.pointB = in_hostLine.pointB;
-					returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+					returnLine.line.pointABorder = in_hostLine.deprecatedLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.deprecatedLine.pointA;
+					returnLine.line.pointB = in_hostLine.deprecatedLine.pointB;
+					//returnLine.line.intersectedSecondaryID = in_hostLine.deprecatedLine.intersectedSecondaryID;
 				}
-				else if (in_guestLine.numberOfPoints == 2)
+				else if (in_guestLine.deprecatedLine.numberOfPoints == 2)
 				{
 					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;		// TWIN always has exactly one point on a border line, and a non-bound point.
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
-					returnLine.line.pointABorder = in_hostLine.pointABorder;
-					returnLine.line.pointA = in_guestLine.pointA;
-					returnLine.line.pointB = in_guestLine.pointB;
-					returnLine.line.intersectedSecondaryID = in_guestLine.intersectedSecondaryID;
+					returnLine.line.pointABorder = in_hostLine.deprecatedLine.pointABorder;
+					returnLine.line.pointA = in_guestLine.deprecatedLine.pointA;
+					returnLine.line.pointB = in_guestLine.deprecatedLine.pointB;
+					//returnLine.line.intersectedSecondaryID = in_guestLine.deprecatedLine.intersectedSecondaryID;
 				}
 				else if
 					(
-					(in_guestLine.numberOfPoints == 1)
+					(in_guestLine.deprecatedLine.numberOfPoints == 1)
 						&&
-						(in_hostLine.numberOfPoints == 1)
+						(in_hostLine.deprecatedLine.numberOfPoints == 1)
 						)
 				{
 					std::cout << "CONDITION 1.4, entered 1/1 branch. " << std::endl;
 
-					std::cout << "Host line, isPointAOnBorder: " << in_hostLine.isPointAOnBorder << std::endl;
-					std::cout << "Host line, point A border: " << in_hostLine.pointABorder << std::endl;
+					std::cout << "Host line, isPointAOnBorder: " << in_hostLine.deprecatedLine.isPointAOnBorder << std::endl;
+					std::cout << "Host line, point A border: " << in_hostLine.deprecatedLine.pointABorder << std::endl;
 
-					std::cout << "Host line, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-					std::cout << "Guest line, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
+					std::cout << "Host line, point A: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+					std::cout << "Guest line, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
 
 					conditionMatch = true;
 					returnLine.type = IntersectionType::PARTIAL_BOUND;
 					returnLine.line.numberOfBorderLines = 1;
 					returnLine.line.isPointAOnBorder = 1;
-					returnLine.line.pointABorder = in_hostLine.pointABorder;
-					returnLine.line.pointA = in_hostLine.pointA;
-					returnLine.line.pointB = in_guestLine.pointA;
+					returnLine.line.pointABorder = in_hostLine.deprecatedLine.pointABorder;
+					returnLine.line.pointA = in_hostLine.deprecatedLine.pointA;
+					returnLine.line.pointB = in_guestLine.deprecatedLine.pointA;
 
 					
 
 				}
-				//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				//glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointB);
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
 				//std::cout << "CASE 3.2: " << std::endl;
@@ -564,9 +564,9 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			// CASE 1.5 PARTIAL_BOUND -- condition 2; requires at least 2 points to work.
 			else if
 				(
-				(in_hostLine.numberOfBorderLines == 1)		// A hit's B, but it's only one border line
+				(in_hostLine.deprecatedLine.numberOfBorderLines == 1)		// A hit's B, but it's only one border line
 					&&
-					(in_guestLine.numberOfBorderLines == 0)		// B "engulfs" A, but B has no border lines going through A
+					(in_guestLine.deprecatedLine.numberOfBorderLines == 0)		// B "engulfs" A, but B has no border lines going through A
 					&&
 					(totalNumberOfPoints == 2)
 					)
@@ -576,11 +576,11 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				returnLine.type = IntersectionType::PARTIAL_BOUND;
 				returnLine.line.numberOfBorderLines = 1;
 				/*
-				if (in_hostLine.isPointAOnBorder == 1)
+				if (in_hostLine.deprecatedLine.isPointAOnBorder == 1)
 				{
 					returnLine.line.isPointAOnBorder = 1;
 				}
-				else if (in_hostLine.isPointBOnBorder == 1)
+				else if (in_hostLine.deprecatedLine.isPointBOnBorder == 1)
 				{
 					returnLine.line.isPointBOnBorder = 1;
 				}
@@ -598,26 +598,26 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 
 
 				// CASE 1.5.1: >>>>
-				if ((in_guestLine.numberOfPoints == 1) && (in_hostLine.numberOfPoints == 1))
+				if ((in_guestLine.deprecatedLine.numberOfPoints == 1) && (in_hostLine.deprecatedLine.numberOfPoints == 1))
 				{
 
 
 					//std::cout << "1.5.1, newLine case 1 triggered..." << std::endl;
-					//std::cout << "Guest line border line count: " << in_guestLine.numberOfBorderLines << std::endl;
-					//std::cout << "Host line border line count: " << in_hostLine.numberOfBorderLines << std::endl;
+					//std::cout << "Guest line border line count: " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
+					//std::cout << "Host line border line count: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
 
-					newLine = in_hostLine;
+					newLine = in_hostLine.deprecatedLine;
 
 					// remember, in this case, the host line is on a border, so we must store the border line data from that;
 					// (this should always come from point A, when there is one border line)
 					newLine.isPointAOnBorder = 1;
-					newLine.pointABorder = in_hostLine.pointABorder;
-					newLine.pointB = in_guestLine.pointA;
+					newLine.pointABorder = in_hostLine.deprecatedLine.pointABorder;
+					newLine.pointB = in_guestLine.deprecatedLine.pointA;
 
 					newLine.numberOfPoints = 2;
 				}
 				/*
-				else if (in_guestLine.numberOfPoints == 2)
+				else if (in_guestLine.deprecatedLine.numberOfPoints == 2)
 				{
 					std::cout << "3.3, newLine case 2 triggered..." << std::endl;
 					newLine = in_guestLine;
@@ -625,22 +625,22 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 				*/
 
 				// CASE 1.5.2: >>>>
-				else if (in_hostLine.numberOfPoints == 2)
+				else if (in_hostLine.deprecatedLine.numberOfPoints == 2)
 				{
 					//std::cout << "1.5.2, newLine case2 triggered..." << std::endl;
-					newLine = in_hostLine;
+					newLine = in_hostLine.deprecatedLine;
 				}
 
 				returnLine.line = newLine;
 
-				//returnLine.line.pointA = in_hostLine.pointA;
-				//returnLine.line.pointB = in_hostLine.pointB;
-				//returnLine.line.intersectedSecondaryID = in_hostLine.intersectedSecondaryID;
+				//returnLine.line.pointA = in_hostLine.deprecatedLine.pointA;
+				//returnLine.line.pointB = in_hostLine.deprecatedLine.pointB;
+				//returnLine.line.intersectedSecondaryID = in_hostLine.deprecatedLine.intersectedSecondaryID;
 
 				//std::cout << "CASE 1.5: A hits B with one border line, but B doesn't hit A with any border lines" << std::endl;
-				//std::cout << "(A) Number of points: " << in_hostLine.numberOfPoints << std::endl;
-				//std::cout << "(A) Host Line Points are: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << " | " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-				//std::cout << "(A) Guest Line Points are: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << " | " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
+				//std::cout << "(A) Number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+				//std::cout << "(A) Host Line Points are: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << " | " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+				//std::cout << "(A) Guest Line Points are: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << " | " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
 
 
 				//int someVal = 3;
@@ -650,46 +650,46 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			// CASE 1.6: A has one line, B has one line; this is a TWIN (partial bound?)
 			else if
 				(
-				(in_hostLine.numberOfPoints == 1)	// check the number of point intercepts (not lines)
+				(in_hostLine.deprecatedLine.numberOfPoints == 1)	// check the number of point intercepts (not lines)
 					&&
-					(in_hostLine.numberOfBorderLines == 1)
+					(in_hostLine.deprecatedLine.numberOfBorderLines == 1)
 
 					&&
 
-					(in_guestLine.numberOfPoints == 1)	// " "
+					(in_guestLine.deprecatedLine.numberOfPoints == 1)	// " "
 					&&
-					(in_guestLine.numberOfBorderLines == 1)
+					(in_guestLine.deprecatedLine.numberOfBorderLines == 1)
 					)
 			{
 				std::cout << "CASE 1.6: twin-style PARTIAL_BOUND detected. " << std::endl;
-				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.pointA, in_guestLine.pointA, in_guestLine.pointB);
+				glm::vec3 newSecondPoint = findSecondPointForLine(in_hostLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointA, in_guestLine.deprecatedLine.pointB);
 				//returnLine.convertLineToPartialBound(in_hostLine, in_guestLine);		// convert to TWIN
 				conditionMatch = true;
-				returnLine.convertLineToPartialBound(in_hostLine, in_guestLine, newSecondPoint);
+				returnLine.convertLineToPartialBound(in_hostLine.deprecatedLine, in_guestLine.deprecatedLine, newSecondPoint);
 			}
 
 			// CASE 1.7: NON-BOUND line is formed
 
 			else if
 				(
-				(in_hostLine.numberOfPoints == 1)
+				(in_hostLine.deprecatedLine.numberOfPoints == 1)
 					&&
-					(in_hostLine.numberOfBorderLines == 0)
+					(in_hostLine.deprecatedLine.numberOfBorderLines == 0)
 
 					&&
 
-					(in_guestLine.numberOfPoints == 1)
+					(in_guestLine.deprecatedLine.numberOfPoints == 1)
 					&&
-					(in_guestLine.numberOfBorderLines == 0)
+					(in_guestLine.deprecatedLine.numberOfBorderLines == 0)
 					)
 			{
 				std::cout << "CASE 1.7: NON-BOUND case 2 hit " << std::endl;
-				glm::vec3 roundedA = in_hostLine.pointA;
-				glm::vec3 roundedB = in_guestLine.pointA;
+				glm::vec3 roundedA = in_hostLine.deprecatedLine.pointA;
+				glm::vec3 roundedB = in_guestLine.deprecatedLine.pointA;
 				if (checkIfPointsMatch(roundedA, roundedB) == 0)		// it can only be a valid line if the two points that make up the line do not match
 				{
 					conditionMatch = true;
-					returnLine.convertLinesToNonbound(in_hostLine, in_guestLine);
+					returnLine.convertLinesToNonbound(in_hostLine.deprecatedLine, in_guestLine.deprecatedLine);
 				}
 				else
 				{
@@ -700,9 +700,9 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			// CASE 1.8: there is no intercept between them.
 			else if
 				(
-				(in_hostLine.numberOfPoints == 0)
+				(in_hostLine.deprecatedLine.numberOfPoints == 0)
 					&&
-					(in_guestLine.numberOfPoints == 0)
+					(in_guestLine.deprecatedLine.numberOfPoints == 0)
 					)
 			{
 				// do nothing here; default value of CategorizedLine.type is IntersectionType::NONE
@@ -717,16 +717,16 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 		// ROOT CASE 2: At least one line is considered INVALID. (OR)
 		else if
 			(
-			(in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
+			(in_hostLine.deprecatedLine.lineValidity == IntersectionLineValidity::INVALID)
 				//||		
-				//(in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+				//(in_guestLine.deprecatedLine.lineValidity == IntersectionLineValidity::INVALID)
 				)
 		{
-			if (in_hostLine.lineValidity == IntersectionLineValidity::INVALID)
+			if (in_hostLine.deprecatedLine.lineValidity == IntersectionLineValidity::INVALID)
 			{
 				//std::cout << "~~~~ The host line is INVALID. " << std::endl;
 			}
-			if (in_guestLine.lineValidity == IntersectionLineValidity::INVALID)
+			if (in_guestLine.deprecatedLine.lineValidity == IntersectionLineValidity::INVALID)
 			{
 				//std::cout << "~~~~ The guest line is INVALID. " << std::endl;
 			}
@@ -737,31 +737,31 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 			std::cout << "!!! Handling special case, where at least one line is INVALID: " << std::endl;
 
 			std::cout << "++++++Host line stats: " << std::endl;
-			std::cout << "Number of points: " << in_hostLine.numberOfPoints << std::endl;
-			std::cout << "Number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+			std::cout << "Number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
+			std::cout << "Number of border lines: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
 
 			std::cout << "++++++Guest line stats: " << std::endl;
-			std::cout << "Number of points: " << in_guestLine.numberOfPoints << std::endl;
-			std::cout << "Number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+			std::cout << "Number of points: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
+			std::cout << "Number of border lines: " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
 
-			std::cout << "line A, point A: " << in_hostLine.pointA.x << ", " << in_hostLine.pointA.y << ", " << in_hostLine.pointA.z << std::endl;
-			std::cout << "line A, point B: " << in_hostLine.pointB.x << ", " << in_hostLine.pointB.y << ", " << in_hostLine.pointB.z << std::endl;
-			std::cout << "line A, point A border: is on border? ->" << in_hostLine.isPointAOnBorder << "; " << in_hostLine.pointABorder << std::endl;
-			std::cout << "line A, point B border: is on border? ->" << in_hostLine.isPointBOnBorder << "; " << in_hostLine.pointBBorder << std::endl;
-			std::cout << "line A, number of border lines: " << in_hostLine.numberOfBorderLines << std::endl;
+			std::cout << "line A, point A: " << in_hostLine.deprecatedLine.pointA.x << ", " << in_hostLine.deprecatedLine.pointA.y << ", " << in_hostLine.deprecatedLine.pointA.z << std::endl;
+			std::cout << "line A, point B: " << in_hostLine.deprecatedLine.pointB.x << ", " << in_hostLine.deprecatedLine.pointB.y << ", " << in_hostLine.deprecatedLine.pointB.z << std::endl;
+			std::cout << "line A, point A border: is on border? ->" << in_hostLine.deprecatedLine.isPointAOnBorder << "; " << in_hostLine.deprecatedLine.pointABorder << std::endl;
+			std::cout << "line A, point B border: is on border? ->" << in_hostLine.deprecatedLine.isPointBOnBorder << "; " << in_hostLine.deprecatedLine.pointBBorder << std::endl;
+			std::cout << "line A, number of border lines: " << in_hostLine.deprecatedLine.numberOfBorderLines << std::endl;
 
 
-			std::cout << "line B, point A: " << in_guestLine.pointA.x << ", " << in_guestLine.pointA.y << ", " << in_guestLine.pointA.z << std::endl;
-			std::cout << "line B, point B: " << in_guestLine.pointB.x << ", " << in_guestLine.pointB.y << ", " << in_guestLine.pointB.z << std::endl;
-			std::cout << "line B, point A border: is on border? ->" << in_guestLine.isPointAOnBorder << "; " << in_guestLine.pointABorder << std::endl;
-			std::cout << "line B, point B border: is on border? ->" << in_guestLine.isPointBOnBorder << "; " << in_guestLine.pointBBorder << std::endl;
-			std::cout << "line A, number of border lines: " << in_guestLine.numberOfBorderLines << std::endl;
+			std::cout << "line B, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
+			std::cout << "line B, point B: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
+			std::cout << "line B, point A border: is on border? ->" << in_guestLine.deprecatedLine.isPointAOnBorder << "; " << in_guestLine.deprecatedLine.pointABorder << std::endl;
+			std::cout << "line B, point B border: is on border? ->" << in_guestLine.deprecatedLine.isPointBOnBorder << "; " << in_guestLine.deprecatedLine.pointBBorder << std::endl;
+			std::cout << "line A, number of border lines: " << in_guestLine.deprecatedLine.numberOfBorderLines << std::endl;
 			*/
 
-			if (in_guestLine.numberOfPoints == 2)	// can only perform this special case if the guest line has 2 points in it.
+			if (in_guestLine.deprecatedLine.numberOfPoints == 2)	// can only perform this special case if the guest line has 2 points in it.
 			{
 				conditionMatch = true;
-				returnLine.convertLinesToInterceptsPointPrecise(in_hostLine, in_guestLine);
+				returnLine.convertLinesToInterceptsPointPrecise(in_hostLine.deprecatedLine, in_guestLine.deprecatedLine);
 				returnLine.line.lineGroupID = in_groupID;
 				returnLine.emptyNormal = in_polyBEmptyNormal;
 			}
@@ -788,8 +788,8 @@ CategorizedLine MassZoneBoxBoundarySPolySet::determineCategorizedLineThroughHost
 		std::cout << "########################### Debug condition met; " << std::endl;
 		std::cout << "return line -> point A: " << returnLine.line.pointA.x << ", " << returnLine.line.pointA.y << ", " << returnLine.line.pointA.z << std::endl;
 		std::cout << "return line -> point B: " << returnLine.line.pointB.x << ", " << returnLine.line.pointB.y << ", " << returnLine.line.pointB.z << std::endl;
-		std::cout << "Is host Line point A on border: " << in_hostLine.isPointAOnBorder << std::endl;
-		std::cout << "Host line border ID: " << in_hostLine.pointABorder << std::endl;
+		std::cout << "Is host Line point A on border: " << in_hostLine.deprecatedLine.isPointAOnBorder << std::endl;
+		std::cout << "Host line border ID: " << in_hostLine.deprecatedLine.pointABorder << std::endl;
 		int debugVal = 3;
 		std::cin >> debugVal;
 	}

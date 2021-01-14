@@ -907,8 +907,8 @@ void SPoly::printAllCleaveLines()
 				if (currentLinesBegin->second.type == IntersectionType::A_SLICE)
 				{
 					std::cout << "!!! This line is a SLICE " << std::endl;
-					std::cout << "Point A border: " << currentLinesBegin->second.line.pointABorder << " (Secondary ID: " << currentLinesBegin->second.line.intersectedSecondaryID << ") " << std::endl;
-					std::cout << "Point B border: " << currentLinesBegin->second.line.pointBBorder << " (Secondary ID: " << currentLinesBegin->second.line.intersectedSecondaryID << ") " << std::endl;
+					std::cout << "Point A border: " << currentLinesBegin->second.line.pointABorder << std::endl;
+					std::cout << "Point B border: " << currentLinesBegin->second.line.pointBBorder << std::endl;
 				}
 
 				if (currentLinesBegin->second.type == IntersectionType::PARTIAL_BOUND)
@@ -916,11 +916,11 @@ void SPoly::printAllCleaveLines()
 					std::cout << "!!! This line is a PARTIAL_BOUND " << std::endl;
 					if (currentLinesBegin->second.line.isPointAOnBorder == 1)
 					{
-						std::cout << "Point A border: " << currentLinesBegin->second.line.pointABorder << " (Secondary ID: " << currentLinesBegin->second.line.intersectedSecondaryID << ") " << std::endl;
+						std::cout << "Point A border: " << currentLinesBegin->second.line.pointABorder << " (Secondary ID: ) " << std::endl;
 					}
 					if (currentLinesBegin->second.line.isPointBOnBorder == 1)
 					{
-						std::cout << "Point B border: " << currentLinesBegin->second.line.pointBBorder << " (Secondary ID: " << currentLinesBegin->second.line.intersectedSecondaryID << ") " << std::endl;
+						std::cout << "Point B border: " << currentLinesBegin->second.line.pointBBorder << " (Secondary ID: ) " << std::endl;
 					}
 				}
 			}

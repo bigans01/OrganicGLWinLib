@@ -9,7 +9,7 @@ void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, Inter
 	line.isPointAOnBorder = 1;											// point A should always be the point on a border in a PARTIAL_BOUND type (need to verify, 8/2/2019)
 	line.pointA = in_lineA.pointA;										// set point A
 	line.pointB = in_newPointForLineA;									// set point B, set in the previous function
-	line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;		// set the secondary ID, which is the value of the polygon that caused the intersection
+	//line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;		// set the secondary ID, which is the value of the polygon that caused the intersection
 }
 
 void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, IntersectionLine in_lineB)
@@ -19,7 +19,7 @@ void CategorizedLine::convertLineToPartialBound(IntersectionLine in_lineA, Inter
 	line.isPointAOnBorder = 1;
 	line.pointA = in_lineA.pointA;
 	line.pointB = in_lineB.pointA;
-	line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;
+	//line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;
 }
 
 void CategorizedLine::convertLineToNonbound(IntersectionLine in_engulfedLine)
@@ -35,7 +35,7 @@ void CategorizedLine::convertLineToNonbound(IntersectionLine in_engulfedLine)
 	//std::cout << ">> Engulfed, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 	//std::cout << ">> Engulfed, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 
-	line.intersectedSecondaryID = in_engulfedLine.intersectedSecondaryID;
+	//line.intersectedSecondaryID = in_engulfedLine.intersectedSecondaryID;
 }
 
 void CategorizedLine::convertLinesToNonbound(IntersectionLine in_lineA, IntersectionLine in_lineB)
@@ -44,7 +44,7 @@ void CategorizedLine::convertLinesToNonbound(IntersectionLine in_lineA, Intersec
 	line.numberOfBorderLines = 0;
 	line.pointA = in_lineA.pointA;
 	line.pointB = in_lineB.pointA;
-	line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;
+	//line.intersectedSecondaryID = in_lineA.intersectedSecondaryID;
 }
 
 void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB)
@@ -504,7 +504,7 @@ void CategorizedLine::convertLineToSlice(IntersectionLine in_slicingLine)
 	line.isPointBOnBorder = 1;
 	line.pointB = in_slicingLine.pointB;
 	line.pointBBorder = in_slicingLine.pointBBorder;
-	line.intersectedSecondaryID = in_slicingLine.intersectedSecondaryID;
+	//line.intersectedSecondaryID = in_slicingLine.intersectedSecondaryID;
 }
 
 IRPointType CategorizedLine::checkIfPointIsInLine(glm::vec3 in_point)

@@ -22,7 +22,7 @@ public:
 	int numberOfBorderLines = 0;	// the number of border lines this line "touches"
 	int numberOfPoints = 0;
 	int lineGroupID = 0;			// the group ID this line belongs to
-	int intersectedSecondaryID = 0;	// what is the ID of the secondary that the interception occurred on?
+	//int intersectedSecondaryID = 0;	// what is the ID of the secondary that the interception occurred on?
 
 	glm::vec3 pointA;
 	short isPointAOnBorder = 0;
