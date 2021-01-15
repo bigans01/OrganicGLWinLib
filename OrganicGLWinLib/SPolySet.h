@@ -27,6 +27,7 @@
 #include "DebugOption.h"
 #include "PolyLogger.h"
 #include "FusedIntersectionLine.h"
+#include "FusionCandidate.h"
 
 class SPolySet
 {
@@ -73,6 +74,8 @@ public:
 	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
 	IntersectionResult checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
 	IntersectionResult checkIfRayIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_line);
+	IntersectionResult determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line);
+	FusionCandidate buildFusionCandidate(STriangle in_triangle, STriangleLine in_line);
 	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
 	float dot(glm::vec3 in_A, glm::vec3 in_B);
 	double doubledot(glm::vec3 in_A, glm::vec3 in_B);

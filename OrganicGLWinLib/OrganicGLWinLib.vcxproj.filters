@@ -627,6 +627,15 @@
     <ClInclude Include="FusedIntersectionLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusionAnalysisResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionCandidate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -927,6 +936,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MassZoneBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FusionAnalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

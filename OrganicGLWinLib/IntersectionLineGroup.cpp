@@ -6,6 +6,11 @@ IntersectionLineGroup::IntersectionLineGroup(PolyDebugLevel in_polyDebugLevel)
 	lineGroupLogger.setDebugLevel(in_polyDebugLevel);
 }
 
+void IntersectionLineGroup::setFusionAnalyzerSPolyRef(SPoly* in_sPolyRef)
+{
+	returnLine.completedAnalysis.setSPolyRef(in_sPolyRef);
+}
+
 void IntersectionLineGroup::addIntersectionLine(IntersectionLine in_intersectionLine)
 {
 	lineMap[numberOfIntersectionLines++] = in_intersectionLine;
@@ -37,7 +42,8 @@ bool IntersectionLineGroup::performInvalidCheck()
 
 FusedIntersectionLine IntersectionLineGroup::mergeLines()
 {
-	FusedIntersectionLine returnLine;
+	//FusedIntersectionLine returnLine;
+	returnLine.completedAnalysis.setMapRefAndRunAnalysis(&lineMap);
 	int totalNumberOfLines = lineMap.size();										// get the total number of lines
 	int totalNumberOfBorderLineIntercepts = findNumberOfBorderLineIntercepts();		// get the total number of intercepts
 
@@ -295,8 +301,17 @@ int IntersectionLineGroup::findNumberOfBorderLineIntercepts()
 	return numberOfIntercepts;
 }
 
+void IntersectionLineGroup::insertFusionCandidateIntoAnalyzer(FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult)
+{
+	returnLine.completedAnalysis.insertFusionCandidate(in_fusionCandidate, in_intersectResult);
+}
+
 void IntersectionLineGroup::reset()
 {
+	//FusedIntersectionLine newLineReplacement;
+	//returnLine = newLineReplacement;
+	IntersectionLine blankIntersectionLine;
+	returnLine.deprecatedLine = blankIntersectionLine;
 	numberOfIntersectionLines = 0;		// reset the number of intersection lines
 	lineMap.clear();					// clear the map
 }
