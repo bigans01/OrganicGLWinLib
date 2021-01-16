@@ -636,6 +636,24 @@
     <ClInclude Include="FusionCandidate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusionAnalysisPrimaryClassification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisPointsClassification.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisCoplanarLineType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSubData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -939,6 +957,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FusionAnalysis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPointContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -195,10 +195,171 @@ void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRo
 	//rotationpointsRefVector->printPoints();
 }
 
+void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormalWithRotateToZ(QuatRotationPoints* in_quatpointsRefVector)
+{
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);
+	pointCRef = in_quatpointsRefVector->getPointRefByIndex(2);
+
+	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane. (NOPE!)
+	if (pointBRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+	if (pointBRef->z != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		rotationOrder.push_back(rotateType);
+	}
+
+	/*
+	// otherwise, if it's already on Y = 0, do this:
+	if (pointBRef->y == 0.0f)
+	{
+		glm::vec3 centroid = in_quatpointsRefVector->getPointByIndex(2);
+		glm::vec3* centroidRef = in_quatpointsRefVector->getPointRefByIndex(2);
+		glm::vec3 emptyNormal;
+
+		if (centroid.y < 0)	// it's going negative y
+		{
+			emptyNormal.y = -1;
+		}
+		if (centroid.y > 0)
+		{
+			emptyNormal.y = 1;
+		}
+
+		*centroidRef = emptyNormal;
+	}
+	*/
+
+	//executeRotationsForFindingBorderLineEmptyNormal();
+	executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ();
+
+	// now, check if the centroid point is at positive y.
+	if (pointCRef->y == 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
+		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(2);	// get a copy of the value of the 3rd primal point
+		float radiansToRotateBy = findRotationRadiansForZFracture(currentNormalValue);	// get the number of radians to rotate by
+		std::cout << "::> radiansToRotateBy " << radiansToRotateBy << std::endl;
+
+		//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
+		glm::vec3 rotateAroundX;
+		rotateAroundX.x = 1.0f;
+		QuatRotationRecord s1record(radiansToRotateBy, rotateAroundX);
+
+		glm::quat fractureQuat = s1record.returnOriginalRotation();
+		rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
+		rotationRecords.push(s1record);
+	}
+
+
+	// check if the 3rd point (the centroid of the triangle is positive Y or negative Y; it's Y should never be 0, if we did things correctly (the triangle would be invalid).
+	glm::vec3 determinedEmptyNormal;
+	glm::vec3 currentCentroid = rotationpointsRefVector->getPointByIndex(2);
+	if (currentCentroid.y > 0)
+	{
+		determinedEmptyNormal.y = 1;
+	}
+	else if (currentCentroid.y < 0)
+	{
+		determinedEmptyNormal.y = -1;
+	}
+
+	glm::vec3* centroidRef = rotationpointsRefVector->getPointRefByIndex(2);
+	*centroidRef = determinedEmptyNormal;
+
+
+	//std::cout << "::::::::: NEW 3:::::::::: " << std::endl;
+	//rotationpointsRefVector->printPoints();
+
+
+
+	rotateToOriginalPosition();
+}
+
 bool QuatRotationManager::initializeAndRunForCheckingIfPointIswithinPlane(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;
 	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);
+
+	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
+	if (pointBRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+
+	// if the centroid-facing normal is on -y, flip it on the X axis
+	return executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
+}
+
+bool QuatRotationManager::initializeAndRunForCheckingIfPointIswithinPlaneWithRotateToZ(QuatRotationPoints* in_quatpointsRefVector)
+{
+
+	rotationpointsRefVector = in_quatpointsRefVector;
+	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);
+	pointCRef = in_quatpointsRefVector->getPointRefByIndex(3);
+
+	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane. (NOPE!)
+	if (pointBRef->y != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
+		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		rotationOrder.push_back(rotateType);
+	}
+	if (pointBRef->z != 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
+		rotationOrder.push_back(rotateType);
+	}
+
+	/*
+	// otherwise, if it's already on Y = 0, do this:
+	if (pointBRef->y == 0.0f)
+	{
+		glm::vec3 centroid = in_quatpointsRefVector->getPointByIndex(2);
+		glm::vec3* centroidRef = in_quatpointsRefVector->getPointRefByIndex(2);
+		glm::vec3 emptyNormal;
+
+		if (centroid.y < 0)	// it's going negative y
+		{
+			emptyNormal.y = -1;
+		}
+		if (centroid.y > 0)
+		{
+			emptyNormal.y = 1;
+		}
+
+		*centroidRef = emptyNormal;
+	}
+	*/
+
+	//executeRotationsForFindingBorderLineEmptyNormal();
+	executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ();
+
+	// now, check if the centroid point is at positive y; if it isn't, we must rotate to positive y.
+	if (pointCRef->y <= 0.0f)
+	{
+		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
+		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(2);	// get a copy of the value of the 3rd primal point
+		float radiansToRotateBy = findRotationRadiansForZFracture(currentNormalValue);	// get the number of radians to rotate by
+		std::cout << "(**NEW**) ::> radiansToRotateBy " << radiansToRotateBy << std::endl;
+
+		//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
+		glm::vec3 rotateAroundX;
+		rotateAroundX.x = 1.0f;
+		QuatRotationRecord s1record(radiansToRotateBy, rotateAroundX);
+
+		glm::quat fractureQuat = s1record.returnOriginalRotation();
+		rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
+		rotationRecords.push(s1record);
+	}
+
 
 	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
 	if (pointBRef->y != 0.0f)
@@ -237,7 +398,7 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(rotationpointsRefVector->getPointByIndex(2));		
 	glm::vec3 centroidFacingNormal = rotationpointsRefVector->getPointByIndex(3);
 	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
-	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
+	std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(
 		//(rotationpointsRefVector->getPointByIndex(2).y >= 0)
@@ -631,6 +792,23 @@ void QuatRotationManager::executeRotationsForFindingBorderLineEmptyNormal()
 
 }
 
+void QuatRotationManager::executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ()
+{
+	auto vectorBegin = rotationOrder.begin();
+	auto vectorEnd = rotationOrder.end();
+	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
+		{
+			rotateAroundZToYZero();
+		}
+		else if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Y)
+		{
+			rotateAroundYToPosXAndPushIntoStack();
+		}
+	}
+}
+
 glm::vec3 QuatRotationManager::initializeAndRunForPlanarSlide(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;
@@ -933,6 +1111,38 @@ void QuatRotationManager::rotateAroundYAndPushIntoStack()
 	rotationRecords.push(s1record);						// push into the stack
 
 	//std::cout << "Printing points after Y-axis bound rotation: " << std::endl;
+	//rotationpointsRefVector->printPoints();
+	//return firstPassRotateRadians;
+}
+
+void QuatRotationManager::rotateAroundYToPosXAndPushIntoStack()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
+	float firstPassRotateRadians = 0.0f;
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	glm::vec3 rotationAroundY;
+	rotationAroundY.y = 1.0f;
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundY);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+	rotationRecords.push(s1record);						// push into the stack
+
+
+	//std::cout << "(*********** NEW *************) Printing points after Y-axis bound rotation: " << std::endl;
 	//rotationpointsRefVector->printPoints();
 	//return firstPassRotateRadians;
 }

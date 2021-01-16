@@ -300,9 +300,9 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 	}
 	
-	std::cout << "::::::::::::::::::: MassZoneBoxBonudarySPolySet: done comparison. " << std::endl;
-	int stopVal = 3;
-	std::cin >> stopVal;
+	//std::cout << "::::::::::::::::::: MassZoneBoxBonudarySPolySet: done comparison. " << std::endl;
+	//int stopVal = 3;
+	//std::cin >> stopVal;
 	currentComparableSPolyIndex++;	// this must be incremented, to set the appropriate index for the next SPoly (if there are any to compare against)
 }
 

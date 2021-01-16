@@ -1186,6 +1186,13 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 
 	glm::vec3 centroid = findTriangleCentroid(lines[0].segment.pointA, lines[1].segment.pointA, lines[2].segment.pointA);
 
+	//std::cout << ">>>>>>>> point to check is: " << in_pointToCheck.x << ", " << in_pointToCheck.y << ", " << in_pointToCheck.z << std::endl;
+	//std::cout << ">> point 0 is: " << line1.segment.pointA.x << ", " << line1.segment.pointA.y << ", " << line1.segment.pointA.z << std::endl;
+	//std::cout << ">> point 1 is: " << line2.segment.pointA.x << ", " << line2.segment.pointA.y << ", " << line2.segment.pointA.z << std::endl;
+	//std::cout << ">> point 2 is: " << line3.segment.pointA.x << ", " << line3.segment.pointA.y << ", " << line3.segment.pointA.z << std::endl;
+	//std::cout << ">> centroid is: " << centroid.x << ", " << centroid.y << ", " << centroid.z << std::endl;
+	
+
 	// find the centroid-facing normal for each TriangleLineSpec
 	for (int x = 0; x < 3; x++)
 	{
@@ -1204,6 +1211,10 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 			centroidPointCopy += translationValue;
 		}
 
+		//std::cout << ">>>>>: point A Copy, post translate: " << pointACopy.x << ", " << pointACopy.y << ", " << pointACopy.z << std::endl;
+		//std::cout << ">>>>>: point B Copy, post translate: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << std::endl;
+		//std::cout << ">>>>>: centroid copy, post translate: " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
+
 		QuatRotationPoints rotationPoints;
 		rotationPoints.pointsRefVector.push_back(&pointACopy);
 		rotationPoints.pointsRefVector.push_back(&pointBCopy);
@@ -1211,6 +1222,8 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 
 		QuatRotationManager rotationManager;
 		rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);
+
+		//std::cout << ">>>>>: centroid copy, post translate (2): " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
 
 		lines[x].centroidFacingNormal = centroidPointCopy;
 	}
@@ -1223,6 +1236,8 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 		glm::vec3 pointBCopy = lines[x].segment.pointB;
 		glm::vec3 pointToCheck = in_pointToCheck;
 		glm::vec3 centroidFacingNormal = lines[x].centroidFacingNormal;
+
+		//std::cout << ">>> pushing back this value for centroid facing normal: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 
 		// first, check for point translation; only translate pointA/B, and the point to check against.
 		PointTranslationCheck pointCheck;
@@ -1252,13 +1267,142 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck
 	{
 		if (planeArrayCheckResult[x] == true)
 		{
+			//std::cout << "!!! found as being within plane! " << std::endl;
+
 			withinPlaneCount++;
 		}
 	}
 
 	if (withinPlaneCount == 3)
 	{
-		std::cout << "OrganicGLWinUtils::checkIfPointLiesWithinTriangle --> Point is WITHIN triangle. " << std::endl;
+		//std::cout << "OrganicGLWinUtils::checkIfPointLiesWithinTriangle --> Point is WITHIN triangle. " << std::endl;
+		isWithinTriangle = true;
+	}
+
+	return isWithinTriangle;
+}
+
+bool OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(glm::vec3 in_pointToCheck, glm::vec3 in_trianglePoint0, glm::vec3 in_trianglePoint1, glm::vec3 in_trianglePoint2)
+{
+	bool isWithinTriangle = false;
+	bool planeArrayCheckResult[3];
+	struct TriangleLineSpec
+	{
+		ThreeDLineSegment segment;
+		glm::vec3 centroidFacingNormal;
+	};
+
+	ThreeDLineSegment threeDline1(in_trianglePoint0, in_trianglePoint1);
+	TriangleLineSpec line1;
+	line1.segment = threeDline1;
+
+	ThreeDLineSegment threeDline2(in_trianglePoint1, in_trianglePoint2);
+	TriangleLineSpec line2;
+	line2.segment = threeDline2;
+
+	ThreeDLineSegment threeDline3(in_trianglePoint2, in_trianglePoint0);
+	TriangleLineSpec line3;
+	line3.segment = threeDline3;
+
+	TriangleLineSpec lines[3];
+	lines[0] = line1;
+	lines[1] = line2;
+	lines[2] = line3;
+
+	glm::vec3 centroid = findTriangleCentroid(lines[0].segment.pointA, lines[1].segment.pointA, lines[2].segment.pointA);
+
+	//std::cout << "(With Rotating to Z) >>>>>>>> point to check is: " << in_pointToCheck.x << ", " << in_pointToCheck.y << ", " << in_pointToCheck.z << std::endl;
+	//std::cout << "(With Rotating to Z) >> point 0 is: " << line1.segment.pointA.x << ", " << line1.segment.pointA.y << ", " << line1.segment.pointA.z << std::endl;
+	//std::cout << "(With Rotating to Z) >> point 1 is: " << line2.segment.pointA.x << ", " << line2.segment.pointA.y << ", " << line2.segment.pointA.z << std::endl;
+	//std::cout << "(With Rotating to Z) >> point 2 is: " << line3.segment.pointA.x << ", " << line3.segment.pointA.y << ", " << line3.segment.pointA.z << std::endl;
+	//std::cout << "(With Rotating to Z) >> centroid is: " << centroid.x << ", " << centroid.y << ", " << centroid.z << std::endl;
+
+
+	// find the centroid-facing normal for each TriangleLineSpec
+	for (int x = 0; x < 3; x++)
+	{
+		glm::vec3 pointACopy = lines[x].segment.pointA;
+		glm::vec3 pointBCopy = lines[x].segment.pointB;
+		glm::vec3 centroidPointCopy = centroid;
+
+		// first, check for point translation
+		PointTranslationCheck pointCheck;
+		pointCheck.performCheck(pointACopy);
+		if (pointCheck.requiresTranslation == 1)
+		{
+			glm::vec3 translationValue = pointCheck.getTranslationValue();
+			pointACopy += translationValue;
+			pointBCopy += translationValue;
+			centroidPointCopy += translationValue;
+		}
+
+		//std::cout << ">>>>>: point A Copy, post translate: " << pointACopy.x << ", " << pointACopy.y << ", " << pointACopy.z << std::endl;
+		//std::cout << ">>>>>: point B Copy, post translate: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << std::endl;
+		//std::cout << ">>>>>: centroid copy, post translate: " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
+
+		QuatRotationPoints rotationPoints;
+		rotationPoints.pointsRefVector.push_back(&pointACopy);
+		rotationPoints.pointsRefVector.push_back(&pointBCopy);
+		rotationPoints.pointsRefVector.push_back(&centroidPointCopy);
+
+		QuatRotationManager rotationManager;
+		//rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);
+		rotationManager.initializeAndRunForFindingBorderLineEmptyNormalWithRotateToZ(&rotationPoints);
+
+
+		//std::cout << ">>>>>: centroid copy, post translate (2): " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
+
+		lines[x].centroidFacingNormal = centroidPointCopy;
+	}
+
+
+	for (int x = 0; x < 3; x++)
+	{
+
+		glm::vec3 pointACopy = lines[x].segment.pointA;
+		glm::vec3 pointBCopy = lines[x].segment.pointB;
+		glm::vec3 pointToCheck = in_pointToCheck;
+		glm::vec3 centroidFacingNormal = lines[x].centroidFacingNormal;
+
+		//std::cout << ">>> pushing back this value for centroid facing normal: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
+
+		// first, check for point translation; only translate pointA/B, and the point to check against.
+		PointTranslationCheck pointCheck;
+		pointCheck.performCheck(pointACopy);
+		if (pointCheck.requiresTranslation == 1)
+		{
+			glm::vec3 translationValue = pointCheck.getTranslationValue();
+			pointACopy += translationValue;
+			pointBCopy += translationValue;
+			pointToCheck += translationValue;
+		}
+
+		QuatRotationPoints rotationPoints;
+		rotationPoints.pointsRefVector.push_back(&pointACopy);
+		rotationPoints.pointsRefVector.push_back(&pointBCopy);
+		rotationPoints.pointsRefVector.push_back(&pointToCheck);
+		rotationPoints.pointsRefVector.push_back(&centroidFacingNormal);		// fetched by rotationManager, to check for flipping on Z-axis
+
+		QuatRotationManager rotationManager;
+		planeArrayCheckResult[x] = rotationManager.initializeAndRunForCheckingIfPointIswithinPlaneWithRotateToZ(&rotationPoints);	// the point to check will be rounded to nearest hundredths, 
+																														// during the quat rotation
+
+	}
+
+	int withinPlaneCount = 0;
+	for (int x = 0; x < 3; x++)
+	{
+		if (planeArrayCheckResult[x] == true)
+		{
+			//std::cout << "!!! found as being within plane! " << std::endl;
+
+			withinPlaneCount++;
+		}
+	}
+
+	if (withinPlaneCount == 3)
+	{
+		//std::cout << "OrganicGLWinUtils::checkIfPointLiesWithinTriangle --> Point is WITHIN triangle. " << std::endl;
 		isWithinTriangle = true;
 	}
 

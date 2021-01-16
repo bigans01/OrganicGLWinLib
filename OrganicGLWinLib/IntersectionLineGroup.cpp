@@ -301,9 +301,9 @@ int IntersectionLineGroup::findNumberOfBorderLineIntercepts()
 	return numberOfIntercepts;
 }
 
-void IntersectionLineGroup::insertFusionCandidateIntoAnalyzer(FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult)
+void IntersectionLineGroup::insertFusionCandidateIntoAnalyzer(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult)
 {
-	returnLine.completedAnalysis.insertFusionCandidate(in_fusionCandidate, in_intersectResult);
+	returnLine.completedAnalysis.insertFusionCandidate(in_lineIndex, in_fusionCandidate, in_intersectResult);
 }
 
 void IntersectionLineGroup::reset()
@@ -314,6 +314,7 @@ void IntersectionLineGroup::reset()
 	returnLine.deprecatedLine = blankIntersectionLine;
 	numberOfIntersectionLines = 0;		// reset the number of intersection lines
 	lineMap.clear();					// clear the map
+	returnLine.completedAnalysis.clearCandidateData();
 }
 
 IntersectionLine* IntersectionLineGroup::findSingleBorderLine()

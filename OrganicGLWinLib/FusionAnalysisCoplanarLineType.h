@@ -1,0 +1,13 @@
+#pragma once
+
+#ifndef FUSIONANALYSISCOPLANARLINETYPE_H
+#define FUSIONANALYSISCOPLANARLINETYPE_H
+
+enum class FusionAnalysisCoplanarLineType
+{
+	COPLANAR_NONBORDERLINE,
+	COPLANAR_BORDERLINE,
+	NONE
+};
+
+#endif

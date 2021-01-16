@@ -26,10 +26,11 @@ public:
 	void reset();								// reset the line group, so it has appropriate values in next iteration
 	IntersectionLine* findSingleBorderLine();
 	IntersectionLine* findSingleNonBorderLine();
-	void insertFusionCandidateIntoAnalyzer(FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult);
+	void insertFusionCandidateIntoAnalyzer(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult);
+	FusedIntersectionLine returnLine;
 private:
 	PolyLogger lineGroupLogger;
-	FusedIntersectionLine returnLine;
+	//FusedIntersectionLine returnLine;
 };
 
 #endif

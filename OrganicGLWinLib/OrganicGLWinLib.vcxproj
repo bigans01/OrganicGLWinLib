@@ -208,7 +208,13 @@
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="FoundCleaveSequence.h" />
     <ClInclude Include="FusedIntersectionLine.h" />
+    <ClInclude Include="FusedPoint.h" />
+    <ClInclude Include="FusedPointContainer.h" />
+    <ClInclude Include="FusedPointSubData.h" />
     <ClInclude Include="FusionAnalysis.h" />
+    <ClInclude Include="FusionAnalysisCoplanarLineType.h" />
+    <ClInclude Include="FusionAnalysisPointsClassification.h" />
+    <ClInclude Include="FusionAnalysisPrimaryClassification.h" />
     <ClInclude Include="FusionAnalysisResult.h" />
     <ClInclude Include="FusionCandidate.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
@@ -397,6 +403,8 @@
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
     <ClCompile Include="DeferredLightingComputeGearT1.cpp" />
     <ClCompile Include="EmptyNormalFinder.cpp" />
+    <ClCompile Include="FusedPoint.cpp" />
+    <ClCompile Include="FusedPointContainer.cpp" />
     <ClCompile Include="FusionAnalysis.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />

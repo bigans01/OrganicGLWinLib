@@ -44,7 +44,9 @@ public:
 	void initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
+	void initializeAndRunForFindingBorderLineEmptyNormalWithRotateToZ(QuatRotationPoints* in_quatpointsRefVector);
 	bool initializeAndRunForCheckingIfPointIswithinPlane(QuatRotationPoints* in_quatpointsRefVector);
+	bool initializeAndRunForCheckingIfPointIswithinPlaneWithRotateToZ(QuatRotationPoints* in_quatpointsRefVector);
 	float initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector);
 	bool initializeAndRunForCheckingCoplanarity(QuatRotationPoints* in_quatpointsRefVector);
 
@@ -59,6 +61,8 @@ public:
 	void executeRotationsForFindingBorderLine();
 	void executeRotationsForFindingCoplanarCategorizedLineEmptyNormal();
 	void executeRotationsForFindingBorderLineEmptyNormal();
+	void executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ();
+
 	float executeRotationsForFindingObserverRadians();
 	bool executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
 	bool executeRotationsForCheckingCoplanarity();
@@ -78,6 +82,7 @@ public:
 	void rotateEmptyNormalToPosY(glm::vec3* in_normal);
 	void rotateAroundZForPosYNormalAndPushIntoStack(glm::vec3 in_normal);
 	void rotateAroundZToYZero();
+	void rotateAroundYToPosXAndPushIntoStack();
 	void rotatePointAroundXToPosY(glm::vec3 in_point);
 
 	bool checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 in_otherPoint);

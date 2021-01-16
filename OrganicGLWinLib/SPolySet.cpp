@@ -322,7 +322,30 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					std::cin >> someVal;
 					areAnyHostTriangleLinesCoplanarToGuestPlane = true;
 				}
-				hostLineGroup.insertFusionCandidateIntoAnalyzer(fusedCandidate, intersectResult);
+
+				if (fusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
+				{
+					/*
+					if
+					(
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.x == 0)
+						&&
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.y == 0)
+						&&
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.z == 0)
+						)
+					{
+						std::cout << "!!! WARNING: potentially bad candidate point! " << std::endl;
+						std::cout << "Fused candidate intersection value: " << fusedCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+						std::cout << "Normal intersection result value: " << intersectResult.wasIntersectFound << std::endl;
+						int someVal = 3;
+						std::cin >> someVal;
+					}
+					*/
+					//std::cout << "|| Fused candidate intersection value: " << fusedCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+					//std::cout << "|| Normal intersection result value: " << intersectResult.wasIntersectFound << std::endl;
+					hostLineGroup.insertFusionCandidateIntoAnalyzer(currentHostTriangleLine, fusedCandidate, intersectResult);
+				}
 
 				IntersectionLine potentialHostLine;		// the line that will store the intersections.
 				//potentialHostLine.intersectionFoundResult = intersectResult.wasIntersectFound;
@@ -379,6 +402,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			{
 				mergedHostLine = hostLineGroup.mergeLines();
 			}
+			hostLineGroup.returnLine.completedAnalysis.determineClassifications();
 			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
@@ -472,6 +496,14 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			if (areAnyHostTriangleLinesCoplanarToGuestPlane == false)
 			{
 				currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_guestPolyPtr->groupID, in_guestPolyPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
+			}
+			else if (areAnyHostTriangleLinesCoplanarToGuestPlane == true)
+			{
+				std::cout << "!!!! Detected border line that lied within the plane of the guest triangle...printing Fusion classification data: " << std::endl;
+				hostLineGroup.returnLine.completedAnalysis.printClassifications();
+
+				int fusionOut = 3;
+				std::cin >> fusionOut;
 			}
 			/*
 			if (guestLineGroup.lineMap.size() == 3)
@@ -1236,6 +1268,20 @@ IntersectionResult SPolySet::determineRayRelationShipToTriangle(STriangle in_tri
 			{
 				std::cout << "::> Line is lies within triangle. " << std::endl;
 				//comparisonLogger.log("::> Line is lies within triangle. ", "\n");
+
+				// it lies within, but must be tested to ensure that it actually exists within the triangle...
+				bool withinFlag = false;
+				withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
+				std::cout << "::>>> Checking if Point B lies within triangle " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+				if (withinFlag == true)
+				{
+					std::cout << "::>>> (This point lies WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+				}
+				else if (withinFlag == false)
+				{
+					std::cout << "::>>> (This point DOES NOT LIE WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+				}
+
 				returnResult.setResult(2);
 			}
 			//else return 0;              // ray disjoint from plane
