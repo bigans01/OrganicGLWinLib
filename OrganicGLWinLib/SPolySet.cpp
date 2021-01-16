@@ -1272,7 +1272,14 @@ IntersectionResult SPolySet::determineRayRelationShipToTriangle(STriangle in_tri
 				// it lies within, but must be tested to ensure that it actually exists within the triangle...
 				bool withinFlag = false;
 				withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
+				std::cout << "||||||||| Triangle planar check; triangle points are: " << std::endl;
+				std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+				std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+				std::cout << "triangle, point 2: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+				
+
 				std::cout << "::>>> Checking if Point B lies within triangle " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+				
 				if (withinFlag == true)
 				{
 					std::cout << "::>>> (This point lies WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
@@ -1281,6 +1288,10 @@ IntersectionResult SPolySet::determineRayRelationShipToTriangle(STriangle in_tri
 				{
 					std::cout << "::>>> (This point DOES NOT LIE WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
 				}
+
+				//std::cout << "## Finished checking if point lies within triangle...(determineRayRelationShipToTriangle)" << std::endl;
+				//int comparisonVal = 3;
+				//std::cin >> comparisonVal;
 
 				returnResult.setResult(2);
 			}

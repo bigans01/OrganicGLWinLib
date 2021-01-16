@@ -176,6 +176,7 @@
     <ClInclude Include="CategorizedLineMergeMachineBase.h" />
     <ClInclude Include="CategorizedLineMerger.h" />
     <ClInclude Include="CategorizedLineMergeType.h" />
+    <ClInclude Include="CategorizedLineOptionals.h" />
     <ClInclude Include="CategorizedLinePartialBoundMerger.h" />
     <ClInclude Include="CategorizedLinePlaceboMerger.h" />
     <ClInclude Include="CategorizedLinePool.h" />

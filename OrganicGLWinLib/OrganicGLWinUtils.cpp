@@ -1364,7 +1364,7 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(glm::vec3 in
 		glm::vec3 pointToCheck = in_pointToCheck;
 		glm::vec3 centroidFacingNormal = lines[x].centroidFacingNormal;
 
-		//std::cout << ">>> pushing back this value for centroid facing normal: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
+		std::cout << ">>> pushing back this value for centroid facing normal: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 
 		// first, check for point translation; only translate pointA/B, and the point to check against.
 		PointTranslationCheck pointCheck;
@@ -1394,7 +1394,7 @@ bool OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(glm::vec3 in
 	{
 		if (planeArrayCheckResult[x] == true)
 		{
-			//std::cout << "!!! found as being within plane! " << std::endl;
+			std::cout << "!!! found as being within plane! " << std::endl;
 
 			withinPlaneCount++;
 		}

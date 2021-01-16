@@ -492,6 +492,11 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	*/
 }
 
+void CategorizedLine::testFunction()
+{
+	std::cout << "!! Test!! " << std::endl;
+}
+
 
 void CategorizedLine::convertLineToSlice(IntersectionLine in_slicingLine)
 {

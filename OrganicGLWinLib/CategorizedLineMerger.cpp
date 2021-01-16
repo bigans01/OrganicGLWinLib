@@ -156,6 +156,8 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 	for (; machineMapBegin != machineMapEnd; machineMapBegin++)
 	{
 		CategorizedLine currentLine = machineMapBegin->second->fetchProducedLine();
+		int superDumbVal = 3;
+
 		std::cout << "!! Current Line stats: " << std::endl;
 		std::cout << "point A: " << currentLine.line.pointA.x << ", " << currentLine.line.pointA.y << ", " << currentLine.line.pointA.z << std::endl;
 		std::cout << "point B: " << currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
@@ -182,7 +184,11 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 			std::cout << ">> Inserting this A_SLICE line back into the CleaveSequenceFactory." << std::endl;
 			cleaveSequenceFactoryRef->insertAslicedLine(currentLine);
 		}
+
+		//currentLine.testFunction();
 	}
+
+	
 	
 	std::cout << "!!! Finished call of sendMergedLinesToCleaveSequenceFactory. " << std::endl;
 	int finishVal = 3;

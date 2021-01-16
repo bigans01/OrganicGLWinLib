@@ -339,14 +339,26 @@ bool QuatRotationManager::initializeAndRunForCheckingIfPointIswithinPlaneWithRot
 	}
 	*/
 
+	std::cout << "#######> Pre-rotate point values: " << std::endl;
+	rotationpointsRefVector->printPoints();
+
 	//executeRotationsForFindingBorderLineEmptyNormal();
 	executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ();
 
-	// now, check if the centroid point is at positive y; if it isn't, we must rotate to positive y.
+	std::cout << "#######> Post-rotate point values: " << std::endl;
+	rotationpointsRefVector->printPoints();
+
+	std::cout << "Point C ref, y value is: " << pointCRef->y << std::endl;
 	if (pointCRef->y <= 0.0f)
 	{
+		std::cout << "Point C ref is <= 0!!! " << std::endl;
+	}
+
+	// now, check if the centroid-facing normal point is at positive y; if it isn't, we must rotate to positive y.
+	if (pointCRef->y != 1.0f)
+	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
-		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(2);	// get a copy of the value of the 3rd primal point
+		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(3);	// get a copy of the value of the centroid-facing normal
 		float radiansToRotateBy = findRotationRadiansForZFracture(currentNormalValue);	// get the number of radians to rotate by
 		std::cout << "(**NEW**) ::> radiansToRotateBy " << radiansToRotateBy << std::endl;
 
@@ -361,13 +373,15 @@ bool QuatRotationManager::initializeAndRunForCheckingIfPointIswithinPlaneWithRot
 	}
 
 
+	/*
 	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
 	if (pointBRef->y != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
-		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
+		std::cout << "(**NEW**) ROTATE_AROUND_Z required." << std::endl;
 		rotationOrder.push_back(rotateType);
 	}
+	*/
 
 	// if the centroid-facing normal is on -y, flip it on the X axis
 	return executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
@@ -397,7 +411,7 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
 	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(rotationpointsRefVector->getPointByIndex(2));		
 	glm::vec3 centroidFacingNormal = rotationpointsRefVector->getPointByIndex(3);
-	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
+	std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
 	std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(
@@ -407,7 +421,7 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 		(rotationpointsRefVector->getPointByIndex(3).y > 0)
 	)
 	{
-		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
+		std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
 		isWithinPlane = true;
 	}
 	else
