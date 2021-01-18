@@ -301,9 +301,9 @@ int IntersectionLineGroup::findNumberOfBorderLineIntercepts()
 	return numberOfIntercepts;
 }
 
-void IntersectionLineGroup::insertFusionCandidateIntoAnalyzer(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult)
+void IntersectionLineGroup::insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult)
 {
-	returnLine.completedAnalysis.insertFusionCandidate(in_lineIndex, in_fusionCandidate, in_intersectResult);
+	returnLine.completedAnalysis.insertFusionCandidate(in_fusionCandidateOrigin, in_lineIndex, in_fusionCandidate, in_intersectResult);
 }
 
 void IntersectionLineGroup::reset()

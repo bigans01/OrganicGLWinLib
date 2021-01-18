@@ -29,6 +29,7 @@
 #include "FusedIntersectionLine.h"
 #include "FusionCandidate.h"
 #include "FusionCandidateProducer.h"
+#include "FusionCandidateOrigin.h"
 
 class SPolySet
 {

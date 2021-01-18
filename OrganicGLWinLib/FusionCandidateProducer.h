@@ -8,6 +8,9 @@
 #include "STriangleLine.h"
 #include <iostream>
 #include "OrganicGLWinUtils.h"
+#include "RayIntersectionResult.h"
+#include "QuatRotationPoints.h"
+#include "QMBoolPointWithinTriangle.h"
 
 
 class FusionCandidateProducer
@@ -15,10 +18,10 @@ class FusionCandidateProducer
 	public:
 		FusionCandidate produceCandidate(STriangle in_sTriangle, STriangleLine in_sTriangleLine);
 	private:
-		IntersectionResult determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line);
+		RayIntersectionResult determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line);
 		glm::vec3 roundPointToHundredths(glm::vec3 in_point);
 		double doubledot(glm::vec3 in_A, glm::vec3 in_B);
-
+		bool isPointEqualToTrianglePoint(glm::vec3 in_point, STriangle* in_triangleRef);
 };
 
 #endif

@@ -11,6 +11,7 @@
 #include "FusedIntersectionLine.h"
 #include "IntersectionResult.h"
 #include "SPoly.h"
+#include "FusionCandidateOrigin.h"
 
 class IntersectionLineGroup
 {
@@ -26,7 +27,7 @@ public:
 	void reset();								// reset the line group, so it has appropriate values in next iteration
 	IntersectionLine* findSingleBorderLine();
 	IntersectionLine* findSingleNonBorderLine();
-	void insertFusionCandidateIntoAnalyzer(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult);
+	void insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult);
 	FusedIntersectionLine returnLine;
 private:
 	PolyLogger lineGroupLogger;

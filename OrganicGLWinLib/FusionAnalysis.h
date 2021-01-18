@@ -14,13 +14,14 @@
 #include <iostream>
 #include "FusedPointContainer.h"
 #include "FusedPointSubData.h"
+#include "FusionCandidateOrigin.h"
 
 class SPoly;
 class FusionAnalysis
 {
 	public:
 		void setMapRefAndRunAnalysis(std::map<int, IntersectionLine>* in_intersectionResultMapRef);
-		void insertFusionCandidate(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult);
+		void insertFusionCandidate(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult);
 		void setSPolyRef(SPoly* in_sPolyRef);
 		void determineClassifications();
 		void clearCandidateData();

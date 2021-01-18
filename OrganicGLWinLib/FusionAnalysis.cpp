@@ -11,7 +11,7 @@ void FusionAnalysis::setMapRefAndRunAnalysis(std::map<int, IntersectionLine>* in
 	}
 }
 
-void FusionAnalysis::insertFusionCandidate(int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult)
+void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult)
 {
 	numberOfProcessedFusionCandidates++;
 	std::cout << "~~~~~~~~~~~~~~ Fusion candidate, point: " << in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x << ", "
@@ -47,11 +47,11 @@ void FusionAnalysis::insertFusionCandidate(int in_lineIndex, FusionCandidate in_
 		(in_fusionCandidate.candidateIntersectionResult.wasIntersectFound == 1)	// a typical intercept
 	)
 	{
-		FusedPointSubData newSubData(in_lineIndex, in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, in_fusionCandidate.candidateIntersectionResult.borderLineID);
+		FusedPointSubData newSubData(in_fusionCandidateOrigin, in_lineIndex, in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, in_fusionCandidate.candidateIntersectionResult.borderLineID);
 		fusedPoints.insertSubDataForPoint(in_intersectionResult.intersectedPoint, newSubData);
-		std::cout << ">>>>>>> inserted sub data for point... " << std::endl;
-		int waitVal = 3;
-		std::cin >> waitVal;
+		//std::cout << ">>>>>>> inserted sub data for point... " << std::endl;
+		//int waitVal = 3;
+		//std::cin >> waitVal;
 	}
 	std::cout << "####### number of processed fusion candidates is now: " << numberOfProcessedFusionCandidates << std::endl;
 }

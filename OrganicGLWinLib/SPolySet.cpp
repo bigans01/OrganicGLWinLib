@@ -346,7 +346,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					*/
 					std::cout << "|| Fused candidate intersection value: " << hostFusedCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
 					//std::cout << "|| Normal intersection result value: " << intersectResult.wasIntersectFound << std::endl;
-					hostLineGroup.insertFusionCandidateIntoAnalyzer(currentHostTriangleLine, hostFusedCandidate, intersectResult);
+					hostLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::HOST, currentHostTriangleLine, hostFusedCandidate, intersectResult);
 				}
 
 				IntersectionLine potentialHostLine;		// the line that will store the intersections.
@@ -421,7 +421,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				FusionCandidate guestFusedCandidate = guestCandidateProducer.produceCandidate(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);
 				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
-					guestLineGroup.insertFusionCandidateIntoAnalyzer(z, guestFusedCandidate, intersectResult);
+					guestLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::GUEST, z, guestFusedCandidate, intersectResult);
 				}
 				IntersectionLine potentialGuestLine;		// the line that will store the intersections.
 				//potentialGuestLine.intersectionFoundResult = intersectResult.wasIntersectFound;

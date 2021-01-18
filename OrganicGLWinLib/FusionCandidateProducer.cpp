@@ -7,7 +7,7 @@ FusionCandidate FusionCandidateProducer::produceCandidate(STriangle in_sTriangle
 {
 	FusionCandidate candidateResult;
 	// do typical compare:
-	IntersectionResult resultA = determineRayRelationShipToTriangle(in_sTriangle, in_sTriangleLine);
+	RayIntersectionResult resultA = determineRayRelationShipToTriangle(in_sTriangle, in_sTriangleLine);
 
 	// do a compare where the in_line is swapped
 	STriangleLine swappedLine = in_sTriangleLine;
@@ -15,7 +15,9 @@ FusionCandidate FusionCandidateProducer::produceCandidate(STriangle in_sTriangle
 	swappedLine.pointB = in_sTriangleLine.pointA;
 
 	// do the swapped compare
-	IntersectionResult resultB = determineRayRelationShipToTriangle(in_sTriangle, swappedLine);
+	RayIntersectionResult resultB = determineRayRelationShipToTriangle(in_sTriangle, swappedLine);
+
+	/*
 	if
 		(
 		(resultA.wasIntersectFound != 0)
@@ -39,6 +41,103 @@ FusionCandidate FusionCandidateProducer::produceCandidate(STriangle in_sTriangle
 		}
 
 	}
+	*/
+
+	// branch 1: if the ray lies within the triangle plane, the liesWithinPlane flag would be set on the first result.
+	if (resultA.liesWithinTrianglePlane == true)
+	{
+		// Must meet one of the following conditions to return as "2":
+		// 1. A is true, B is not
+		// 2. B is true, A is not
+		// 3. Both are true
+		// 
+		// A value of both being == false means that although on the same plane, it actually doesn't exist in the triangle.
+		if
+		(
+			(
+				(resultA.liesWithinTriangleZone == true)
+				&&
+				(resultB.liesWithinTriangleZone == false)
+			)
+
+			||
+
+			(
+				(resultA.liesWithinTriangleZone == false)
+				&&
+				(resultB.liesWithinTriangleZone == true)
+			)
+
+			||
+
+			(
+				(resultA.liesWithinTriangleZone == true)
+				&&
+				(resultB.liesWithinTriangleZone == true)
+			)
+		)
+		{
+			if (resultA.wasIntersectOnBorderLine == 1)
+			{
+				candidateResult.wasCandidateBorderLineAndWithinPlane = true;
+			}
+			candidateResult.candidateIntersectionResult.borderLineID = resultA.borderLineID;
+			candidateResult.candidateIntersectionResult.intersectedPoint = resultA.intersectedPoint;
+			candidateResult.candidateIntersectionResult.wasIntersectFound = 2;		// remember, a value of 2 indicates it was within the triangle's plane, and at least 1 point is within the triangle's plane.
+			candidateResult.candidateIntersectionResult.wasIntersectOnBorderLine = resultA.wasIntersectOnBorderLine;
+		}
+		
+	}
+
+	// branch 2: one of the points of the line is equal to a point in the triangle.
+	else if
+	(
+		(resultA.matchesPointExact == true)
+		||
+		(resultB.matchesPointExact == true)
+	)
+	{
+		if (resultA.matchesPointExact == true)
+		{
+			candidateResult.candidateIntersectionResult.borderLineID = resultA.borderLineID;
+			candidateResult.candidateIntersectionResult.wasIntersectOnBorderLine = resultA.wasIntersectOnBorderLine;
+			candidateResult.candidateIntersectionResult.intersectedPoint = resultA.intersectedPoint;
+		}
+		else if (resultB.matchesPointExact == true)
+		{
+
+			candidateResult.candidateIntersectionResult.borderLineID = resultB.borderLineID;
+			candidateResult.candidateIntersectionResult.wasIntersectOnBorderLine = resultB.wasIntersectOnBorderLine;
+			candidateResult.candidateIntersectionResult.intersectedPoint = resultB.intersectedPoint;
+		}
+		candidateResult.candidateIntersectionResult.wasIntersectFound = 1;
+	}
+
+	// branch 3: otherwise, it's not either of the previous 2, so it must be a typical comparison.
+	else if (resultA.liesWithinTrianglePlane == false)
+	{
+		if
+		(
+			(resultA.wasIntersectFound != 0)
+			&&
+			(resultB.wasIntersectFound != 0)
+		)
+		{
+			candidateResult.candidateIntersectionResult.borderLineID = resultA.borderLineID;
+			candidateResult.candidateIntersectionResult.intersectedPoint = resultA.intersectedPoint;
+			candidateResult.candidateIntersectionResult.wasIntersectFound = resultA.wasIntersectFound;
+			candidateResult.candidateIntersectionResult.wasIntersectOnBorderLine = resultA.wasIntersectOnBorderLine;
+			if
+			(
+				(resultA.wasIntersectOnBorderLine == 1)
+				&&
+				(resultA.wasIntersectFound == 3)
+			)
+			{
+				candidateResult.wasCandidateBorderLineAndWithinPlane = true;
+			}
+		}
+	}
 
 	return candidateResult;
 }
@@ -60,10 +159,25 @@ double FusionCandidateProducer::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 	return x_multiplied + y_multiplied + z_multiplied;
 }
 
-IntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line)
+bool FusionCandidateProducer::isPointEqualToTrianglePoint(glm::vec3 in_point, STriangle* in_triangleRef)
+{
+	bool result = false;
+	for (int x = 0; x < 3; x++)
+	{
+		if (in_point == in_triangleRef->triangleLines[x].pointA)
+		{
+			//std::cout << "!!:##### Notice: although the ray isn't coplanar to the triangle (result of 2), one point was found as being equal to a point in the compared-to triangle. Flagging as 1. " << std::endl;
+			result = true;
+			break;
+		}
+	}
+	return result;
+}
+
+RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line)
 {
 	//int someVal = 0;
-	IntersectionResult returnResult;
+	RayIntersectionResult returnResult;
 	glm::vec3 intersect_candidate;
 
 	std::cout << "(Fusion) triangle, point 0: " << in_triangle.triangleLines[0].pointA.x << ", " << in_triangle.triangleLines[0].pointA.y << ", " << in_triangle.triangleLines[0].pointA.z << std::endl;
@@ -262,9 +376,23 @@ IntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangle(S
 				std::cout << "::> Line is lies within triangle. " << std::endl;
 				//comparisonLogger.log("::> Line is lies within triangle. ", "\n");
 
-				// it lies within, but must be tested to ensure that it actually exists within the triangle...
+				// we must set the flag indicating the line lies within the triangle's plane.
+				returnResult.liesWithinTrianglePlane = true;
+
+				// ...and a flag used to store the result of whether it not it lies within the triangle's plane's
 				bool withinFlag = false;
-				withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
+
+
+				//withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
+
+				QuatRotationPoints points;	// first point = point to check, remaining 3 = points of triangle (see header file for QMBoolPointWithinTriangle)
+				points.pointsRefVector.push_back(&in_line.pointB);
+				points.pointsRefVector.push_back(&point0);
+				points.pointsRefVector.push_back(&point1);
+				points.pointsRefVector.push_back(&point2);
+				QMBoolPointWithinTriangle pointSolver;
+				withinFlag = pointSolver.solve(&points);
+
 				std::cout << "||||||||| Triangle planar check; triangle points are: " << std::endl;
 				std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
 				std::cout << "triangle, point 1: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
@@ -273,24 +401,47 @@ IntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangle(S
 
 				std::cout << "::>>> Checking if Point B lies within triangle " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
 
-				if (withinFlag == true)
+				// since we know it's coplanar, the point lies within the triangle if either of the two is met:
+				// 1.) it lies within the triangle (withinFlag would be true)
+				// 2.) point B of the ray is equal to exactly one point in the triangle
+				if
+				(
+					(withinFlag == true)	
+					||
+					(isPointEqualToTrianglePoint(in_line.pointB, &in_triangle) == true)
+				)
 				{
 					std::cout << "::>>> (This point lies WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+					returnResult.liesWithinTriangleZone = true;
+					returnResult.setResult(2);
 				}
 				else if (withinFlag == false)
 				{
 					std::cout << "::>>> (This point DOES NOT LIE WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
+					returnResult.setResult(0);
 				}
 
 				//std::cout << "## Finished checking if point lies within triangle...(determineRayRelationShipToTriangle)" << std::endl;
 				//int comparisonVal = 3;
 				//std::cin >> comparisonVal;
 
-				returnResult.setResult(2);
+				//returnResult.setResult(2);
 			}
 			//else return 0;              // ray disjoint from plane
 			else returnResult.setResult(0);
 		}
+
+		// check whether or not point B of the line matches a point
+		for (int x = 0; x < 3; x++)
+		{
+			if (in_line.pointB == in_triangle.triangleLines[x].pointA)
+			{
+				std::cout << "!!:##### Notice: although the ray isn't coplanar to the triangle (result of 2), one point was found as being equal to a point in the compared-to triangle. Flagging as 1. " << std::endl;
+				returnResult.matchesPointExact = true;
+				returnResult.setResult(1);
+			}
+		}
+
 
 		float r = a / b;
 		if (r < 0.0)

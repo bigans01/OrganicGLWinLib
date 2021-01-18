@@ -218,6 +218,7 @@
     <ClInclude Include="FusionAnalysisPrimaryClassification.h" />
     <ClInclude Include="FusionAnalysisResult.h" />
     <ClInclude Include="FusionCandidate.h" />
+    <ClInclude Include="FusionCandidateOrigin.h" />
     <ClInclude Include="FusionCandidateProducer.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
@@ -252,6 +253,9 @@
     <ClInclude Include="MassZoneMaster.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
+    <ClInclude Include="QMBase.h" />
+    <ClInclude Include="QMBoolPointWithinTriangle.h" />
+    <ClInclude Include="RayIntersectionResult.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
@@ -436,9 +440,12 @@
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
+    <ClCompile Include="QMBase.cpp" />
+    <ClCompile Include="QMBoolPointWithinTriangle.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />
     <ClCompile Include="QuatRotationPoints.cpp" />
     <ClCompile Include="QuatRotationRecord.cpp" />
+    <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
     <ClCompile Include="SliceFinder.cpp" />

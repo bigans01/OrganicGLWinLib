@@ -660,6 +660,18 @@
     <ClInclude Include="FusionCandidateProducer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RayIntersectionResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionCandidateOrigin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolPointWithinTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -972,6 +984,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FusionCandidateProducer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayIntersectionResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolPointWithinTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,6 +18,15 @@ void FusedPoint::printData()
 	auto subDataEnd = subDataVector.end();
 	for (; subDataBegin != subDataEnd; subDataBegin++)
 	{
+		std::cout << "| Origin: ";
+		if (subDataBegin->origin == FusionCandidateOrigin::HOST)
+		{
+			std::cout << " HOST ";
+		}
+		else if (subDataBegin->origin == FusionCandidateOrigin::GUEST)
+		{
+			std::cout << " GUEST ";
+		}
 		std::cout << "| Line index: " << subDataBegin->triangleLineIndex << " | is border line: " << subDataBegin->isBorderLine << " | border line value: " << subDataBegin->borderLineValue << std::endl;
 	}
 }
