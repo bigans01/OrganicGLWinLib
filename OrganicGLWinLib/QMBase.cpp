@@ -11,3 +11,38 @@ glm::vec3 QMBase::findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1,
 	//std::cout << "Centroid y: " << foundCentroid.y << std::endl;
 	return foundCentroid;
 }
+
+glm::quat QMBase::createQuaternion(float radians, glm::vec3 in_angle)
+{
+	glm::quat returnQuat;
+
+	// a = angle of rotation, in radians
+	// R = [cos(a/2), sin(a/2)*x, sin(a/2)*y, sin(a/2)*z] quaternion formula
+	// 90 degrees = 1.5708 radians
+	returnQuat = glm::quat(cos(radians / 2), sin(radians / 2)*in_angle.x, sin(radians / 2)*in_angle.y, sin(radians / 2)*in_angle.z);
+	return returnQuat;
+}
+
+void QMBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+{
+	while (!(*in_quatRotationRecordStackRef).empty())
+	{
+		QuatRotationRecord currentRecord = (*in_quatRotationRecordStackRef).top();
+		//std::cout << "################# Reversing values... " << std::endl;
+		glm::quat reverseQuat = currentRecord.returnReverseRotation();
+		in_quatRotationPointsRef->applyQuaternion(reverseQuat);
+		//rotationpointsRefVector->printPoints();
+
+		(*in_quatRotationRecordStackRef).pop();
+	}
+}
+
+void QMBase::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
+{
+	glm::vec3 rotationAroundX;
+	rotationAroundX.x = -1.0f;
+	float rotateRadians = 6.28319 / 2;
+	QuatRotationRecord s1record(rotateRadians, rotationAroundX);
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	in_quatRotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
+}
