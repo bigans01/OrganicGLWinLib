@@ -218,6 +218,7 @@
     <ClInclude Include="FusionAnalysisPrimaryClassification.h" />
     <ClInclude Include="FusionAnalysisResult.h" />
     <ClInclude Include="FusionCandidate.h" />
+    <ClInclude Include="FusionCandidateProducer.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="CategorizedLineGroup.h" />
@@ -407,6 +408,7 @@
     <ClCompile Include="FusedPoint.cpp" />
     <ClCompile Include="FusedPointContainer.cpp" />
     <ClCompile Include="FusionAnalysis.cpp" />
+    <ClCompile Include="FusionCandidateProducer.cpp" />
     <ClCompile Include="Gear.cpp" />
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
     <ClCompile Include="GLUniformRegistry.cpp" />

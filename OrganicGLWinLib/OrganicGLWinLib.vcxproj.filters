@@ -657,6 +657,9 @@
     <ClInclude Include="CategorizedLineOptionals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusionCandidateProducer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -966,6 +969,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FusedPointContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FusionCandidateProducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

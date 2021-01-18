@@ -25,6 +25,7 @@ class FusionAnalysis
 		void determineClassifications();
 		void clearCandidateData();
 		void printClassifications();
+		int getNumberOfProcessedFusionCandidates();
 		FusionAnalysisResult checkResult();
 	private:
 		int numberOfProcessedFusionCandidates = 0;

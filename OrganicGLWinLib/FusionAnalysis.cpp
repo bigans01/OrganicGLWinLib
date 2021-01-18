@@ -146,3 +146,8 @@ void FusionAnalysis::printClassifications()
 
 	fusedPoints.printFusedPoints();
 }
+
+int FusionAnalysis::getNumberOfProcessedFusionCandidates()
+{
+	return numberOfProcessedFusionCandidates;
+}
