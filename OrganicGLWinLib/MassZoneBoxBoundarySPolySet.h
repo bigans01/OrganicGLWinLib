@@ -13,6 +13,7 @@
 #include "CoplanarChecker.h"
 #include "PolyDebugLevel.h"
 #include "FusedIntersectionLine.h"
+#include "FusionCandidateProducer.h"
 
 
 class MassZoneBoxBoundarySPolySet

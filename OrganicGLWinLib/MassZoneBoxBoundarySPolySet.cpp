@@ -37,6 +37,11 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 	std::cout << ">>> Entering before coplanarity checker. " << std::endl;
 	CoplanarChecker checker(polyA, polyB, boxBoundarySPolySetLogger.getLogLevel());
 	std::cout << ">>> Passed coplanarity checker. " << std::endl;
+
+	//int waitVal;
+	//std::cin >> waitVal;
+
+
 	if (checker.coplanarityDetected == false)	// can only compare to a guest sPoly that is non-coplanar to the boundary SPoly.
 	{
 		std::cout << " >>> Performing comparison. " << std::endl;
@@ -68,6 +73,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
 		IntersectionLineGroup hostLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly A.
 		IntersectionLineGroup guestLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly B.
+		hostLineGroup.setFusionAnalyzerSPolyRef(in_hostPolyPtr);
+		guestLineGroup.setFusionAnalyzerSPolyRef(in_guestPolyPtr);
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
 		{
 			// for each pair (that is, A's current STriangle to B's current STriangle in the iterations), we must:
@@ -86,7 +93,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
 			//std::cout << "2: " << guestTrianglePtr->triangleLines[2].pointA.x << ", " << guestTrianglePtr->triangleLines[2].pointA.y << ", " << guestTrianglePtr->triangleLines[2].pointA.z << std::endl;
 			//std::cout << "2 (B): " << guestTrianglePtr->triangleLines[2].pointB.x << ", " << guestTrianglePtr->triangleLines[2].pointB.y << ", " << guestTrianglePtr->triangleLines[2].pointB.z << std::endl;
-
+			bool areAnyHostTriangleLinesCoplanarToGuestPlane = false;
 			bool isHostParallelToGuestTriangle = false;
 			for (int currentHostTriangleLine = 0; currentHostTriangleLine < 3; currentHostTriangleLine++)		// run the lines of A (the host) through triangle B (the guest)
 			{
@@ -95,6 +102,33 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 				// an intersection is only valid if both rays that the line uses to trace against the triangle actually intercept, not just one.
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);
+
+				FusionCandidateProducer hostCandidateProducer;
+				FusionCandidate hostFusedCandidate = hostCandidateProducer.produceCandidate(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);
+				if (hostFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
+				{
+					/*
+					if
+					(
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.x == 0)
+						&&
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.y == 0)
+						&&
+						(fusedCandidate.candidateIntersectionResult.intersectedPoint.z == 0)
+						)
+					{
+						std::cout << "!!! WARNING: potentially bad candidate point! " << std::endl;
+						std::cout << "Fused candidate intersection value: " << fusedCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+						std::cout << "Normal intersection result value: " << intersectResult.wasIntersectFound << std::endl;
+						int someVal = 3;
+						std::cin >> someVal;
+					}
+					*/
+					std::cout << "|| Fused candidate intersection value: " << hostFusedCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+					//std::cout << "|| Normal intersection result value: " << intersectResult.wasIntersectFound << std::endl;
+					hostLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::HOST, currentHostTriangleLine, hostFusedCandidate, intersectResult);
+				}
+
 				IntersectionLine potentialHostLine;		// the line that will store the intersections.
 				//potentialHostLine.intersectionFoundResult = intersectResult.wasIntersectFound;
 				if (intersectResult.wasIntersectFound == 1)			// a typical intersection scenario; the line intersected the triangle.
@@ -148,16 +182,26 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			{
 				mergedHostLine = hostLineGroup.mergeLines();
 			}
+			hostLineGroup.returnLine.completedAnalysis.determineClassifications();
 			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+			//int midVal = 3;
+			//std::cin >> midVal;
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
 			// compare the GUEST triangle lines, to the host triangles.
 
 			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
+			bool areAnyGuestTriangleLinesCoplanarToHostPlane = false;
 			bool isGuestParallelToHostTriangle = false;
 			for (int z = 0; z < 3; z++)		// run the lines of B (the guest) through triangle A (the host)
 			{
 				IntersectionResult intersectResult = checkIfLineIntersectsTriangle(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);				// check if poly B's line intersected A...if they did, we need to add them to the IntersectionLine
+				FusionCandidateProducer guestCandidateProducer;
+				FusionCandidate guestFusedCandidate = guestCandidateProducer.produceCandidate(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);
+				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
+				{
+					guestLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::GUEST, z, guestFusedCandidate, intersectResult);
+				}
 				IntersectionLine potentialGuestLine;		// the line that will store the intersections.
 				//potentialGuestLine.intersectionFoundResult = intersectResult.wasIntersectFound;
 				if (intersectResult.wasIntersectFound == 1)
@@ -215,7 +259,10 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				//std::cout << ":: pointA: " << mergedGuestLine.pointA.z << ", " << mergedGuestLine.pointA.y << ", " << mergedGuestLine.pointA.z << std::endl;
 				//std::cout << ":: pointB: " << mergedGuestLine.pointB.z << ", " << mergedGuestLine.pointB.y << ", " << mergedGuestLine.pointB.z << std::endl;
 			}
+			guestLineGroup.returnLine.completedAnalysis.determineClassifications();
 			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
+			//int endVal = 3;
+			//std::cin >> endVal;
 
 			// STEP 3
 			// compare the IntersectionLines to determine the type of interect (if any) that was generated;
@@ -237,6 +284,18 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				//std::cout << "!!! Warning, line detected as NONE " << std::endl;
+			}
+
+			if (currentCategorizedLine.type == IntersectionType::A_SLICE_SEGMENT_ENDPOINT)
+			{
+				std::cout << "!!!! Detected A_SLICE_SEGMENT_ENDPOINT, halting for output:  " << std::endl;
+				std::cout << "!!! >>>>>>>>>>>>>>>>>>> Host FusionAnalysis: " << std::endl;
+				hostLineGroup.returnLine.completedAnalysis.printClassifications();
+				std::cout << "!!! >>>>>>>>>>>>>>>>>>> Guest FusionAnalysis: " << std::endl;
+				guestLineGroup.returnLine.completedAnalysis.printClassifications();
+
+				int fusionOut = 3;
+				std::cin >> fusionOut;
 			}
 
 			// STEP 4
@@ -1117,7 +1176,7 @@ IntersectionResult MassZoneBoxBoundarySPolySet::checkIfRayIntersectsTriangle(STr
 		s = float(floor(s * 1000 + 0.5) / 1000);
 
 		std::cout << "--> Value of s: " << s << std::endl;
-		if (s < 0.0 || s > 1.0)         // I is outside S
+		if (s < 0.0 || s > 1.001f)         // I is outside S
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside S. " << std::endl;
@@ -1127,7 +1186,7 @@ IntersectionResult MassZoneBoxBoundarySPolySet::checkIfRayIntersectsTriangle(STr
 		t = float(floor(t * 1000 + 0.5) / 1000);
 
 		std::cout << "--> Value of t: " << t << std::endl;
-		if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+		if (t < 0.0 || (s + t) > 1.001f)  // I is outside T
 			//return 0;
 		{
 			std::cout << "!! Note: I is outside T. " << std::endl;

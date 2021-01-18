@@ -467,22 +467,28 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		// get and test parametric coords
 		float s, t;
 		s = (uv * wv - vv * wu) / D;
+		//std::cout << "--> S, pre-round: " << s << std::endl;
+
 		s = float(floor(s * 1000 + 0.5) / 1000);
 
 		//std::cout << "--> Value of s: " << s << std::endl;
+		//std::cout << "--> S, post-round: " << s << std::endl;
 		//comparisonLogger.log("--> Value of s: ", s, "\n");
-		if (s < 0.0 || s > 1.0)         // I is outside S
+		if (s < 0.0 || s > 1.001f)         // I is outside S
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside S. " << std::endl;
 			returnResult.setResult(0);
 		}
 		t = (uv * wu - uu * wv) / D;
+		//std::cout << "--> T, pre-round: " << t << std::endl;
+
 		t = float(floor(t * 1000 + 0.5) / 1000);
+		//std::cout << "--> T, post-round: " << t << std::endl;
 
 		//std::cout << "--> Value of t: " << t << std::endl;
 		//comparisonLogger.log("--> Value of t: ", t, "\n");
-		if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+		if (t < 0.0 || (s + t) > 1.001f)  // I is outside T
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside T. " << std::endl;

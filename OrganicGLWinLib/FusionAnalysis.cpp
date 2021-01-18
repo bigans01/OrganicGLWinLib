@@ -48,7 +48,8 @@ void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandid
 	)
 	{
 		FusedPointSubData newSubData(in_fusionCandidateOrigin, in_lineIndex, in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, in_fusionCandidate.candidateIntersectionResult.borderLineID);
-		fusedPoints.insertSubDataForPoint(in_intersectionResult.intersectedPoint, newSubData);
+		//fusedPoints.insertSubDataForPoint(in_intersectionResult.intersectedPoint, newSubData);
+		fusedPoints.insertSubDataForPoint(in_fusionCandidate.candidateIntersectionResult.intersectedPoint, newSubData);
 		//std::cout << ">>>>>>> inserted sub data for point... " << std::endl;
 		//int waitVal = 3;
 		//std::cin >> waitVal;

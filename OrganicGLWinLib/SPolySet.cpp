@@ -892,7 +892,7 @@ IntersectionResult SPolySet::checkIfRayIntersectsTriangle(STriangle in_triangle,
 
 		//std::cout << "--> Value of s: " << s << std::endl;
 		comparisonLogger.log("--> Value of s: ", s, "\n");
-		if (s < 0.0 || s > 1.0)         // I is outside S
+		if (s < 0.0 || s > 1.001f)         // I is outside S
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside S. " << std::endl;
@@ -903,7 +903,7 @@ IntersectionResult SPolySet::checkIfRayIntersectsTriangle(STriangle in_triangle,
 
 		//std::cout << "--> Value of t: " << t << std::endl;
 		comparisonLogger.log("--> Value of t: ", t, "\n");
-		if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+		if (t < 0.0 || (s + t) > 1.001f)  // I is outside T
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside T. " << std::endl;
