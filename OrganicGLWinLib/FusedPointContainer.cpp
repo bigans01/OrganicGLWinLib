@@ -30,6 +30,23 @@ void FusedPointContainer::insertSubDataForPoint(glm::vec3 in_point, FusedPointSu
 	}
 }
 
+FusedPointMeta FusedPointContainer::retrieveFusedPointMeta(glm::vec3 in_pointToRetrieve, FusionCandidateOrigin in_originToMarkAs)
+{
+	FusedPointMeta returnMeta;
+	auto pointFinderBegin = fusedPointMap.begin();
+	auto pointFinderEnd = fusedPointMap.end();
+	for (; pointFinderBegin != pointFinderEnd; pointFinderBegin++)
+	{
+		if (pointFinderBegin->second.point == in_pointToRetrieve)
+		{
+			returnMeta = pointFinderBegin->second.getMetaForPoint(in_pointToRetrieve);
+		}
+	}
+	returnMeta.origin = in_originToMarkAs;
+	returnMeta.point = in_pointToRetrieve;
+	return returnMeta;
+}
+
 void FusedPointContainer::clearFusedPoints()
 {
 	fusedPointMap.clear();
@@ -42,5 +59,22 @@ void FusedPointContainer::printFusedPoints()
 	for (; fusedPrintBegin != fusedPrintEnd; fusedPrintBegin++)
 	{
 		fusedPrintBegin->second.printData();
+	}
+}
+
+void FusedPointContainer::loadPointsIntoOtherContainer(FusedPointContainer* in_otherFusedPointContainer)
+{
+	auto currentContainerBegin = fusedPointMap.begin();
+	auto currentContainerEnd = fusedPointMap.end();
+	for (; currentContainerBegin != currentContainerEnd; currentContainerBegin++)
+	{
+		glm::vec3 currentPoint = currentContainerBegin->second.point;
+		//FusedPointSubData currentSubData = currentContainerBegin->second.
+		auto subDataVectorBegin = currentContainerBegin->second.subDataVector.begin();
+		auto subDataVectorEnd = currentContainerBegin->second.subDataVector.end();
+		for (; subDataVectorBegin != subDataVectorEnd; subDataVectorBegin++)
+		{
+			in_otherFusedPointContainer->insertSubDataForPoint(currentPoint, *subDataVectorBegin);
+		}
 	}
 }

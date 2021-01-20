@@ -35,3 +35,44 @@ void FusedPoint::insertFusedPointSubData(FusedPointSubData in_fusedPointSubData)
 {
 	subDataVector.push_back(in_fusedPointSubData);
 }
+
+FusedPointMeta FusedPoint::getMetaForPoint(glm::vec3 in_pointToGetMetaFor)
+{
+	FusedPointMeta returnMeta;
+	auto subDataBegin = subDataVector.begin();
+	auto subDataEnd = subDataVector.end();
+	for (; subDataBegin != subDataEnd; subDataBegin++)
+	{
+		returnMeta.numberOfSubdataEntries++;
+		if (subDataBegin->isBorderLine == 1)
+		{
+			returnMeta.highestLineType = FusedPointSubdataLineType::BORDER;
+		}
+	}
+
+	// determine the summary type
+	if (returnMeta.numberOfSubdataEntries == 1)
+	{
+		if (returnMeta.highestLineType == FusedPointSubdataLineType::BORDER)
+		{
+			returnMeta.summary = FusedPointSummary::TYPICAL_BORDERLINE;
+		}
+		else if (returnMeta.highestLineType == FusedPointSubdataLineType::NONBORDER)
+		{
+			returnMeta.summary = FusedPointSummary::TYPICAL_NONBORDERLINE;
+		}
+	}
+	else if (returnMeta.numberOfSubdataEntries == 2)
+	{
+		if (returnMeta.highestLineType == FusedPointSubdataLineType::BORDER)
+		{
+			returnMeta.summary = FusedPointSummary::PRECISE_BORDERLINE;
+		}
+		else if (returnMeta.highestLineType == FusedPointSubdataLineType::NONBORDER)
+		{
+			returnMeta.summary = FusedPointSummary::PRECISE_NONBORDERLINE;
+		}
+	}
+
+	return returnMeta;
+}

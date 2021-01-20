@@ -672,6 +672,27 @@
     <ClInclude Include="QMBoolPointWithinTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FusedPointReactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointMeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSubdataLineType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointMetaPair.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSummary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineReactorBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HostLineReactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -993,6 +1014,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPointReactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HostLineReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

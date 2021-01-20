@@ -500,8 +500,9 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// if (FusionAnalysisResult == TRIPLE_NO_PARALLEL) {}
 			// else if (FusionAnalysisResult == TRIPLE_NONBOUND_PARALLEL) {}
 			// else if (areAnyHostTriangleLinesCoplanarToGuestPlane == false) {}
-
 			
+			
+			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
 			//CategorizedLine currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_guestPolyPtr->groupID, in_guestPolyPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
 			CategorizedLine currentCategorizedLine;
 			if (areAnyHostTriangleLinesCoplanarToGuestPlane == false)
@@ -532,6 +533,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			}
 			*/
 
+			//FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
 			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				//std::cout << "!!! Warning, line detected as NONE " << std::endl;
@@ -594,7 +596,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					//std::cin >> someVal;
 				}
 			}
-
+			//FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
 
 			if (comparisonLogger.isLoggingSet() == true)
 			{

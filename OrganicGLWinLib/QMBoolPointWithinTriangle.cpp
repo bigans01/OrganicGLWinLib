@@ -141,11 +141,13 @@ void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(Quat
 	rotateLineToZPlane(pointBRef, &rotationRecords, in_quatRotationPoints, &rotationOrder);
 
 	// now, check if the centroid point is at positive y; if at's 0 rotate to positive y.
-	if (pointCRef->y == 0.0f)
-	{
+	//if (pointCRef->y == 0.0f)
+	//{
+
+		// rotate around X to positive y.
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
-		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(2);	// get a copy of the value of the 3rd primal point
-		float radiansToRotateBy = getRadiansForRotateToPosYViaX(currentNormalValue);	// get the number of radians to rotate by
+		glm::vec3 currentCentroidValue = *rotationpointsRefVector->getPointRefByIndex(2);	// get a copy of the value of the 3rd primal point
+		float radiansToRotateBy = getRadiansForRotateToPosYViaX(currentCentroidValue);	// get the number of radians to rotate by
 		//std::cout << "::> radiansToRotateBy " << radiansToRotateBy << std::endl;
 
 		//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
@@ -156,7 +158,7 @@ void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(Quat
 		glm::quat fractureQuat = s1record.returnOriginalRotation();
 		rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
 		rotationRecords.push(s1record);
-	}
+	//}
 
 	// check if the 3rd point (the centroid of the triangle is positive Y or negative Y; it's Y should never be 0, if we did things correctly (the triangle would be invalid).
 	glm::vec3 determinedEmptyNormal;

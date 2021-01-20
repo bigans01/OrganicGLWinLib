@@ -30,6 +30,7 @@
 #include "FusionCandidate.h"
 #include "FusionCandidateProducer.h"
 #include "FusionCandidateOrigin.h"
+#include "FusedPointReactor.h"
 
 class SPolySet
 {

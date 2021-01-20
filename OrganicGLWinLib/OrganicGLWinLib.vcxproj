@@ -211,7 +211,12 @@
     <ClInclude Include="FusedIntersectionLine.h" />
     <ClInclude Include="FusedPoint.h" />
     <ClInclude Include="FusedPointContainer.h" />
+    <ClInclude Include="FusedPointMeta.h" />
+    <ClInclude Include="FusedPointMetaPair.h" />
+    <ClInclude Include="FusedPointReactor.h" />
     <ClInclude Include="FusedPointSubData.h" />
+    <ClInclude Include="FusedPointSubdataLineType.h" />
+    <ClInclude Include="FusedPointSummary.h" />
     <ClInclude Include="FusionAnalysis.h" />
     <ClInclude Include="FusionAnalysisCoplanarLineType.h" />
     <ClInclude Include="FusionAnalysisPointsClassification.h" />
@@ -223,6 +228,7 @@
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="CategorizedLineGroup.h" />
+    <ClInclude Include="HostLineReactor.h" />
     <ClInclude Include="ImGuiButton.h" />
     <ClInclude Include="ImGuiButtonClickResult.h" />
     <ClInclude Include="ImGuiButtonPanel.h" />
@@ -241,6 +247,7 @@
     <ClInclude Include="IRGroup.h" />
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
+    <ClInclude Include="LineReactorBase.h" />
     <ClInclude Include="MassComparisonResult.h" />
     <ClInclude Include="MassSubZone.h" />
     <ClInclude Include="MassZone.h" />
@@ -411,6 +418,7 @@
     <ClCompile Include="EmptyNormalFinder.cpp" />
     <ClCompile Include="FusedPoint.cpp" />
     <ClCompile Include="FusedPointContainer.cpp" />
+    <ClCompile Include="FusedPointReactor.cpp" />
     <ClCompile Include="FusionAnalysis.cpp" />
     <ClCompile Include="FusionCandidateProducer.cpp" />
     <ClCompile Include="Gear.cpp" />
@@ -418,6 +426,7 @@
     <ClCompile Include="GLUniformRegistry.cpp" />
     <ClCompile Include="GLUniformRequest.cpp" />
     <ClCompile Include="HighlighterGearT1.cpp" />
+    <ClCompile Include="HostLineReactor.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
