@@ -87,7 +87,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			// compare the host triangle lines, to the guest triangles.
 
 			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
+			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
 			//std::cout << ">>> B triangle (Guest triangle) points are: " << std::endl;
 			//std::cout << "0: " << guestTrianglePtr->triangleLines[0].pointA.x << ", " << guestTrianglePtr->triangleLines[0].pointA.y << ", " << guestTrianglePtr->triangleLines[0].pointA.z << std::endl;
 			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
@@ -183,14 +183,14 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				mergedHostLine = hostLineGroup.mergeLines();
 			}
 			hostLineGroup.returnLine.completedAnalysis.determineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
 			//int midVal = 3;
 			//std::cin >> midVal;
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
 			// compare the GUEST triangle lines, to the host triangles.
 
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
+			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
 			bool areAnyGuestTriangleLinesCoplanarToHostPlane = false;
 			bool isGuestParallelToHostTriangle = false;
 			for (int z = 0; z < 3; z++)		// run the lines of B (the guest) through triangle A (the host)
@@ -260,7 +260,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				//std::cout << ":: pointB: " << mergedGuestLine.pointB.z << ", " << mergedGuestLine.pointB.y << ", " << mergedGuestLine.pointB.z << std::endl;
 			}
 			guestLineGroup.returnLine.completedAnalysis.determineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
+			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
 			//int endVal = 3;
 			//std::cin >> endVal;
 

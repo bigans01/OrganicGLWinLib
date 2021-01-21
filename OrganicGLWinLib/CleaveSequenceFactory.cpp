@@ -5,23 +5,24 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 {
 	if (in_categorizedLine.type == IntersectionType::A_SLICE)
 	{
+		std::cout << "!!! Adding A_SLICE line. " << std::endl;
 		insertAslicedLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::PARTIAL_BOUND)
 	{
-		//std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
+		std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
 		cleaveSequenceFactoryLogger.log("!!! Adding PARTIAL_BOUND line. ", "\n");
 		insertPartialBoundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
-		//std::cout << "!!! Adding NON_BOUND line. " << std::endl;
+		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
 		cleaveSequenceFactoryLogger.log("!!! Adding NON_BOUND line. ", "\n");
 		insertNonboundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 	{
-		//std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
+		std::cout << "!!!! Adding INTERCEPTS_POINT_PRECISE line" << std::endl;
 		cleaveSequenceFactoryLogger.log("!!!! Adding INTERCEPTS_POINT_PRECISE line", "\n");
 
 		/*

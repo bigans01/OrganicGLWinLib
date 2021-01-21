@@ -47,6 +47,40 @@ FusedPointMeta FusedPointContainer::retrieveFusedPointMeta(glm::vec3 in_pointToR
 	return returnMeta;
 }
 
+FusedPointMeta FusedPointContainer::retrieveOtherFusedPointMeta(glm::vec3 in_pointToNotRetrieve, FusionCandidateOrigin in_originToMarkAs)
+{
+	FusedPointMeta returnMeta;
+	glm::vec3 fetchedPointToRetrieve;
+	auto pointFinderBegin = fusedPointMap.begin();
+	auto pointFinderEnd = fusedPointMap.end();
+	for (; pointFinderBegin != pointFinderEnd; pointFinderBegin++)
+	{
+		if (pointFinderBegin->second.point != in_pointToNotRetrieve)	// remember, we're trying to find the other point that isn't equal to the one we passe din 
+		{
+			fetchedPointToRetrieve = pointFinderBegin->second.point;	// store the "other" point we found
+			returnMeta = pointFinderBegin->second.getMetaForPoint(fetchedPointToRetrieve);
+		}
+	}
+	returnMeta.origin = in_originToMarkAs;
+	returnMeta.point = fetchedPointToRetrieve;
+	return returnMeta;
+}
+
+std::vector<FusedPointSubData>* FusedPointContainer::fetchSubDataVectorForPoint(glm::vec3 in_pointToRetrieveFor)
+{
+	std::vector<FusedPointSubData>* returnRef = nullptr;
+	auto pointFinderBegin = fusedPointMap.begin();
+	auto pointFinderEnd = fusedPointMap.end();
+	for (; pointFinderBegin != pointFinderEnd; pointFinderBegin++)
+	{
+		if (pointFinderBegin->second.point == in_pointToRetrieveFor)
+		{
+			returnRef = pointFinderBegin->second.getSubDataVectorRef();
+		}
+	}
+	return returnRef;
+}
+
 void FusedPointContainer::clearFusedPoints()
 {
 	fusedPointMap.clear();

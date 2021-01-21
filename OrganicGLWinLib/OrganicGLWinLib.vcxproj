@@ -264,6 +264,7 @@
     <ClInclude Include="QMBoolPointWithinTriangle.h" />
     <ClInclude Include="RayIntersectionResult.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
+    <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />

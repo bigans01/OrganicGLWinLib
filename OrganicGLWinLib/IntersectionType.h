@@ -13,6 +13,7 @@ enum class IntersectionType
 	NON_BOUND,			// polygon A has none of its border lines go through B; but at least one of polygon B's border lines goes through A.
 	INTERCEPTS_POINT_PRECISE,	// polygon A has two of it's border lines go through (not parallel) to the SAME line in polygon B; in othe words, a point belonging to 
 								// polygon A that is shared between two border lines is on a single border line in poly B.
+	A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, // exists in a situation where there is an intercepts point precise, but the other point is also a border line point.
 	INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR,		// exists in the situation where a Coplanar comparison has a point that sits between a border line and non-border line.
 	NONE				// no intercept found.
 };

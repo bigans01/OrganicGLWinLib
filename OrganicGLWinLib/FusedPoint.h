@@ -18,6 +18,7 @@ class FusedPoint
 		void insertFusedPointSubData(FusedPointSubData in_fusedPointSubData);
 		void printData();
 		FusedPointMeta getMetaForPoint(glm::vec3 in_pointToGetMetaFor);
+		std::vector<FusedPointSubData>* getSubDataVectorRef();
 	private:
 		std::vector<FusedPointSubData> subDataVector;
 };

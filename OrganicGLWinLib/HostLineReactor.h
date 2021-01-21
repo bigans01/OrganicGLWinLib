@@ -7,6 +7,8 @@
 #include "FusionAnalysis.h"
 #include "FusedPointMetaPair.h"
 #include <iostream>
+#include <vector>
+#include "FusedPointSubData.h"
 
 class HostLineReactor : public LineReactorBase
 {
@@ -23,6 +25,8 @@ class HostLineReactor : public LineReactorBase
 		FusionAnalysis* guestFusionAnalysisRef = nullptr;
 		FusedPointMetaPair* fusedPointMetaRef = nullptr;
 		void runAnalysis();
+
+		void buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);
 };
 
 #endif

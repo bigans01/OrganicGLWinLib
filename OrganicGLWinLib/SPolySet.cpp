@@ -501,7 +501,13 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// else if (FusionAnalysisResult == TRIPLE_NONBOUND_PARALLEL) {}
 			// else if (areAnyHostTriangleLinesCoplanarToGuestPlane == false) {}
 			
-			
+			/*
+			std::cout << "!!! >>>>>>>>>>>>>>>>>>> Host FusionAnalysis: " << std::endl;
+			hostLineGroup.returnLine.completedAnalysis.printClassifications();
+			std::cout << "!!! >>>>>>>>>>>>>>>>>>> Guest FusionAnalysis: " << std::endl;
+			guestLineGroup.returnLine.completedAnalysis.printClassifications();
+			*/
+
 			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
 			//CategorizedLine currentCategorizedLine = determineCategorizedLineThroughHostTriangleContext(mergedHostLine, mergedGuestLine, in_guestPolyPtr->groupID, in_guestPolyPtr->polyEmptyNormal);	// find out what type of line this is; assign the appropriate groupID to the line
 			CategorizedLine currentCategorizedLine;
@@ -565,8 +571,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 						std::cout << "Colinear WAS NOT DETECTED!!" << std::endl;
 					}
 
-					int contVal = 3;
-					std::cin >> contVal;
+					//int contVal = 3;
+					//std::cin >> contVal;
 				}
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
@@ -586,6 +592,9 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 						std::cin >> printVal;
 					}
 
+					std::cout << "!!! Added categorized line...continue? " << std::endl;
+					int someVal = 3;
+					std::cin >> someVal;
 
 					numberOfIntersections++;
 				}
@@ -1132,7 +1141,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Fus
 	// the CategorizedLine type returned should be calculated from polygon A's "view"; meaning, for example, that if A (which is what we are adding to) slices B completely, and A doesn't have any of it's border lines touched in 
 	// the process, the line is NON_BOUND (meaning the categorized line exists only in the area of A, and not any border lines)
 
-	/*
+	
 	std::cout << ">>>>>>>>>>>>> (SPolySet) Calling determine categorized line..." << std::endl;
 	std::cout << "Line A, number of points: " << in_hostLine.deprecatedLine.numberOfPoints << std::endl;
 	std::cout << "Line B, number of points: " << in_guestLine.deprecatedLine.numberOfPoints << std::endl;
@@ -1143,7 +1152,7 @@ CategorizedLine SPolySet::determineCategorizedLineThroughHostTriangleContext(Fus
 
 	std::cout << "line B, point A: " << in_guestLine.deprecatedLine.pointA.x << ", " << in_guestLine.deprecatedLine.pointA.y << ", " << in_guestLine.deprecatedLine.pointA.z << std::endl;
 	std::cout << "line B, point B: " << in_guestLine.deprecatedLine.pointB.x << ", " << in_guestLine.deprecatedLine.pointB.y << ", " << in_guestLine.deprecatedLine.pointB.z << std::endl;
-	*/
+	
 
 	comparisonLogger.log(">>>>>>>>>>>>> (SPolySet) Calling determine categorized line...", "\n");
 	comparisonLogger.log("Line A, number of points: ", in_hostLine.deprecatedLine.numberOfPoints, "\n");

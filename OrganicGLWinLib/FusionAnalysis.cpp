@@ -19,6 +19,7 @@ void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandid
 		<< in_fusionCandidate.candidateIntersectionResult.intersectedPoint.z << std::endl;
 
 	std::cout << "~~~~~ Is border line: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine << std::endl;
+	std::cout << "~~~~~ wasIntersectFound: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
 
 
 	// first, check if it's parallel.

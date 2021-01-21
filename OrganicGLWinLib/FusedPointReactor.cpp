@@ -36,7 +36,7 @@ void FusedPointReactor::runValidityTests()
 void FusedPointReactor::runPointCountTest()
 {
 	int hostFusionPointCount = hostFusionAnalysisRef->getNumberOfProcessedFusionCandidates();
-	int guestFusionPointCount = hostFusionAnalysisRef->getNumberOfProcessedFusionCandidates();
+	int guestFusionPointCount = guestFusionAnalysisRef->getNumberOfProcessedFusionCandidates();
 	int totalPoints = hostFusionPointCount + guestFusionPointCount;
 	if (totalPoints < 2)		// if there aren't at least 2 points between both sets, we know for certain that there is no way a line can be produced.
 								// So set the valid result flag to FALSE.
@@ -76,6 +76,7 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 	// CASE 1: we can determine what we need from the host group alone (no reliance on guest group needed)
 	if (hostFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 2)
 	{
+		std::cout << "(Reactor) Running logic for CASE 1: (Host) " << std::endl;
 		FusedPointMetaPair hostPair;
 		auto hostFusionPointsBegin = hostFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
 		auto hostFusionPointsEnd = hostFusionAnalysisRef->fusedPoints.fusedPointMap.end();
@@ -92,12 +93,28 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 	// CASE 2: the host group only has one point; because the validity tests passed at this point, the guest group will have at least 1 point always.
 	else if (hostFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 1)
 	{
+		std::cout << "(Reactor) Running logic for CASE 2: (Shared) " << std::endl;
+		FusedPointMetaPair hostPair;
+
+		// get the first point from the host group
+		auto hostFusionPointsBegin = hostFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
+		glm::vec3 currentPointToSearch = hostFusionPointsBegin->second.point;
+		FusedPointMeta hostPointMeta = hostFusionAnalysisRef->fusedPoints.retrieveFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::HOST);
+		hostPair.insertFusedPointMeta(hostPointMeta);
+
+		// get the other point from the guest group
+		auto guestFusionPointsBegin = guestFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
+		FusedPointMeta guestPointMeta = guestFusionAnalysisRef->fusedPoints.retrieveOtherFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::GUEST);
+		hostPair.insertFusedPointMeta(guestPointMeta);
+
+		hostPair.printSummaries();
+		
 
 	}
 
 	// CASE 3: the host STriangle "engulfed" the guest STriangle; the host STriangle has no points, but the guest will always have 2.
 	else if (guestFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 2)
 	{
-
+		std::cout << "(Reactor) Running logic for CASE 2: (Guest) " << std::endl;
 	}
 }

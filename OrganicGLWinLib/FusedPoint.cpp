@@ -41,27 +41,36 @@ FusedPointMeta FusedPoint::getMetaForPoint(glm::vec3 in_pointToGetMetaFor)
 	FusedPointMeta returnMeta;
 	auto subDataBegin = subDataVector.begin();
 	auto subDataEnd = subDataVector.end();
+	int borderCount = 0;		// represents the number of border lines
+	int nonBorderCount = 0;		// represents the number of non-border lines
 	for (; subDataBegin != subDataEnd; subDataBegin++)
 	{
 		returnMeta.numberOfSubdataEntries++;
 		if (subDataBegin->isBorderLine == 1)
 		{
+			borderCount++;
 			returnMeta.highestLineType = FusedPointSubdataLineType::BORDER;
+		}
+		else if (subDataBegin->isBorderLine == 0)
+		{
+			nonBorderCount++;
 		}
 	}
 
 	// determine the summary type
-	if (returnMeta.numberOfSubdataEntries == 1)
+
+	if 
+	(
+		(returnMeta.numberOfSubdataEntries == 2)
+		&&
+		(borderCount == 1)
+		&&
+		(nonBorderCount == 1)
+	)
 	{
-		if (returnMeta.highestLineType == FusedPointSubdataLineType::BORDER)
-		{
-			returnMeta.summary = FusedPointSummary::TYPICAL_BORDERLINE;
-		}
-		else if (returnMeta.highestLineType == FusedPointSubdataLineType::NONBORDER)
-		{
-			returnMeta.summary = FusedPointSummary::TYPICAL_NONBORDERLINE;
-		}
+		returnMeta.summary = FusedPointSummary::PRECISE_MIXED;
 	}
+	
 	else if (returnMeta.numberOfSubdataEntries == 2)
 	{
 		if (returnMeta.highestLineType == FusedPointSubdataLineType::BORDER)
@@ -74,5 +83,22 @@ FusedPointMeta FusedPoint::getMetaForPoint(glm::vec3 in_pointToGetMetaFor)
 		}
 	}
 
+	else if (returnMeta.numberOfSubdataEntries == 1)
+	{
+		 if (returnMeta.highestLineType == FusedPointSubdataLineType::BORDER)
+		 {
+			 returnMeta.summary = FusedPointSummary::TYPICAL_BORDERLINE;
+		 }
+		 else if (returnMeta.highestLineType == FusedPointSubdataLineType::NONBORDER)
+		 {
+			 returnMeta.summary = FusedPointSummary::TYPICAL_NONBORDERLINE;
+		 }
+	}
+
 	return returnMeta;
+}
+
+std::vector<FusedPointSubData>* FusedPoint::getSubDataVectorRef()
+{
+	return &subDataVector;
 }
