@@ -263,6 +263,7 @@
     <ClInclude Include="QMBase.h" />
     <ClInclude Include="QMBoolPointWithinTriangle.h" />
     <ClInclude Include="RayIntersectionResult.h" />
+    <ClInclude Include="SharedLineReactor.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
@@ -457,6 +458,7 @@
     <ClCompile Include="QuatRotationRecord.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
+    <ClCompile Include="SharedLineReactor.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
     <ClCompile Include="SliceFinder.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />

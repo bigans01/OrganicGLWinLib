@@ -6,6 +6,7 @@
 #include <map>
 #include "FusedPointMeta.h"
 #include "SummaryScanResult.h"
+#include "FusionCandidateOrigin.h"
 
 class FusedPointMetaPair
 {
@@ -43,6 +44,30 @@ class FusedPointMetaPair
 			}
 			return returnResult;
 		}
+
+		SummaryScanResult searchForSummaryInSpecifiedOrigin(FusedPointSummary in_fusedPointSummary, FusionCandidateOrigin in_originToMatch)
+		{
+			SummaryScanResult returnResult;
+			auto metaPairMapBegin = metaPairMap.begin();
+			auto metaPairMapEnd = metaPairMap.end();
+			for (; metaPairMapBegin != metaPairMapEnd; metaPairMapBegin++)
+			{
+				if 
+				(
+					(metaPairMapBegin->second.summary == in_fusedPointSummary)	// it was found
+					&&
+					(metaPairMapBegin->second.origin == in_originToMatch)
+				)
+				{
+					returnResult.wasFound = true;
+					returnResult.foundIndex = metaPairMapBegin->first;
+					returnResult.foundPoint = metaPairMapBegin->second.point;
+					returnResult.pointSummary = in_fusedPointSummary;
+				}
+			}
+			return returnResult;
+		}
+
 		SummaryScanResult searchForOtherSummary(glm::vec3 in_fusedPointNotToMatch)
 		{
 			SummaryScanResult returnResult;

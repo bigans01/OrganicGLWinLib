@@ -696,6 +696,9 @@
     <ClInclude Include="SummaryScanResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SharedLineReactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1023,6 +1026,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HostLineReactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedLineReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

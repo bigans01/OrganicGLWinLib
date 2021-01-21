@@ -9,6 +9,7 @@
 #include "FusedPointMetaPair.h"
 #include "FusedPointMeta.h"
 #include "HostLineReactor.h"
+#include "SharedLineReactor.h"
 
 class FusedPointReactor
 {

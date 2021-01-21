@@ -108,7 +108,7 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 		hostPair.insertFusedPointMeta(guestPointMeta);
 
 		hostPair.printSummaries();
-		
+		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair);
 
 	}
 

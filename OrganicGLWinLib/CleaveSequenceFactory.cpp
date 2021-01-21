@@ -5,17 +5,35 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 {
 	if (in_categorizedLine.type == IntersectionType::A_SLICE)
 	{
+		std::cout << "~~~~~~A SLICE stats are: " << std::endl;
+		std::cout << "point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+		std::cout << "isPointAOnBorder: " << in_categorizedLine.line.isPointAOnBorder << std::endl;
+		std::cout << "pointABorder: " << in_categorizedLine.line.pointABorder << std::endl;
+		std::cout << "point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
+		std::cout << "isPointBOnBorder: " << in_categorizedLine.line.isPointBOnBorder << std::endl;
+		std::cout << "pointBBorder: " << in_categorizedLine.line.pointBBorder << std::endl;
+		std::cout << "empty normal: " << in_categorizedLine.emptyNormal.x << ", " << in_categorizedLine.emptyNormal.y << ", " << in_categorizedLine.emptyNormal.z << std::endl;
+
 		std::cout << "!!! Adding A_SLICE line. " << std::endl;
 		insertAslicedLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::PARTIAL_BOUND)
 	{
+		std::cout << "~~~~~~PARTIAL_BOUND stats are: " << std::endl;
+		std::cout << "point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+		std::cout << "point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
+		std::cout << "point A is on border: " << in_categorizedLine.line.isPointAOnBorder << std::endl;
+		std::cout << "point A border: " << in_categorizedLine.line.pointABorder << std::endl;
+
 		std::cout << "!!! Adding PARTIAL_BOUND line. " << std::endl;
 		cleaveSequenceFactoryLogger.log("!!! Adding PARTIAL_BOUND line. ", "\n");
 		insertPartialBoundLine(in_categorizedLine);
 	}
 	else if (in_categorizedLine.type == IntersectionType::NON_BOUND)
 	{
+		std::cout << "~~~~~~NON_BOUND stats are: " << std::endl;
+		std::cout << "point A: " << in_categorizedLine.line.pointA.x << ", " << in_categorizedLine.line.pointA.y << ", " << in_categorizedLine.line.pointA.z << std::endl;
+		std::cout << "point B: " << in_categorizedLine.line.pointB.x << ", " << in_categorizedLine.line.pointB.y << ", " << in_categorizedLine.line.pointB.z << std::endl;
 		std::cout << "!!! Adding NON_BOUND line. " << std::endl;
 		cleaveSequenceFactoryLogger.log("!!! Adding NON_BOUND line. ", "\n");
 		insertNonboundLine(in_categorizedLine);
