@@ -699,6 +699,12 @@
     <ClInclude Include="SharedLineReactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GuestLineReactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointReactorResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1029,6 +1035,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SharedLineReactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GuestLineReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

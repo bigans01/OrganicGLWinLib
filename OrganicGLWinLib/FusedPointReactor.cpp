@@ -88,27 +88,29 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 		}
 		hostPair.printSummaries();
 		HostLineReactor hostReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair);
+		producedLine = hostReactor.resultantLine;
 	}
 
 	// CASE 2: the host group only has one point; because the validity tests passed at this point, the guest group will have at least 1 point always.
 	else if (hostFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 1)
 	{
 		std::cout << "(Reactor) Running logic for CASE 2: (Shared) " << std::endl;
-		FusedPointMetaPair hostPair;
+		FusedPointMetaPair sharedPair;
 
 		// get the first point from the host group
 		auto hostFusionPointsBegin = hostFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
 		glm::vec3 currentPointToSearch = hostFusionPointsBegin->second.point;
 		FusedPointMeta hostPointMeta = hostFusionAnalysisRef->fusedPoints.retrieveFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::HOST);
-		hostPair.insertFusedPointMeta(hostPointMeta);
+		sharedPair.insertFusedPointMeta(hostPointMeta);
 
 		// get the other point from the guest group
 		auto guestFusionPointsBegin = guestFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
 		FusedPointMeta guestPointMeta = guestFusionAnalysisRef->fusedPoints.retrieveOtherFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::GUEST);
-		hostPair.insertFusedPointMeta(guestPointMeta);
+		sharedPair.insertFusedPointMeta(guestPointMeta);
 
-		hostPair.printSummaries();
-		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair);
+		sharedPair.printSummaries();
+		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &sharedPair);
+		producedLine = sharedReactor.resultantLine;
 
 	}
 
@@ -116,5 +118,24 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 	else if (guestFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 2)
 	{
 		std::cout << "(Reactor) Running logic for CASE 2: (Guest) " << std::endl;
+		FusedPointMetaPair guestPair;
+		auto guestFusionPointsBegin = guestFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
+		auto guestFusionPointsEnd = guestFusionAnalysisRef->fusedPoints.fusedPointMap.end();
+		for (; guestFusionPointsBegin != guestFusionPointsEnd; guestFusionPointsBegin++)
+		{
+			glm::vec3 currentPointToSearch = guestFusionPointsBegin->second.point;
+			FusedPointMeta currentPointMeta = guestFusionAnalysisRef->fusedPoints.retrieveFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::HOST);
+			guestPair.insertFusedPointMeta(currentPointMeta);
+		}
+		GuestLineReactor guestReactor(guestFusionAnalysisRef, &guestPair);
+		producedLine = guestReactor.resultantLine;
 	}
+}
+
+FusedPointReactorResult FusedPointReactor::getReactorResult()
+{
+	FusedPointReactorResult result;
+	result.wasLineProduced = fusionContinuationFlag;
+	result.resultingLine = producedLine;
+	return result;
 }

@@ -48,7 +48,40 @@ void SharedLineReactor::runAnalysis()
 
 void SharedLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
+	std::cout << "(SharedLineReactor): building INTERCEPTS_POINT_PRECISE..." << std::endl;
+	// remember, always set point A as the "one on the border"
+	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
+	FusedPointSubData subDataArray[2];
+	auto subDataRefBegin = subDataRef->begin();
+	auto subDataRefEnd = subDataRef->end();
+	int beginIndex = 0;
+	for (; subDataRefBegin != subDataRefEnd; subDataRefBegin++)
+	{
+		subDataArray[beginIndex++] = *subDataRefBegin;
+	}
 
+	// testing, print out the contents of the sub data
+	for (int x = 0; x < 2; x++)
+	{
+		std::cout << "Sub data at index " << x;
+		std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
+		std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+	}
+
+	resultantLine.type = IntersectionType::INTERCEPTS_POINT_PRECISE;
+	resultantLine.line.pointA = in_buildStartPoint;							// point A is the precise point
+	resultantLine.line.pointB = in_otherPoint;								// point B is the other point
+	resultantLine.line.pointABorder = subDataArray[0].borderLineValue;		// load border line values
+	resultantLine.line.pointBBorder = subDataArray[1].borderLineValue;		// "" 
+	resultantLine.line.numberOfBorderLines = 1;
+	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
+
+	std::cout << "(SharedLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: " << std::endl;
+	std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	std::cout << "(SharedLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	std::cout << "(SharedLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
+	std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
 }
 
 void SharedLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)

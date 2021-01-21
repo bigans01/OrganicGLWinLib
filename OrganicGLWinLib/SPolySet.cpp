@@ -194,8 +194,10 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
+		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
-
+		int buildVal = 3;
+		std::cin >> buildVal;
 
 		//secondaryPolys[x].printAllCleaveLines();
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
@@ -540,13 +542,20 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			*/
 
 			//FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
-			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
-			{
-				//std::cout << "!!! Warning, line detected as NONE " << std::endl;
+
+			
+			FusedPointReactorResult reactionResult = reactor.getReactorResult();
+			reactionResult.resultingLine.parentPoly = in_guestPolyID;
+			if (reactionResult.wasLineProduced == true)
+			{		
+				in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
+				numberOfIntersections++;
 			}
+			
 
 			// STEP 4
 			// add any CategorizedLine to polygonA's map that isn't NONE
+			/*
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				// we must test whether or not the generated categorized line is colinear to another border line in the host triangle. If it is
@@ -605,7 +614,9 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 					//std::cin >> someVal;
 				}
 			}
+			*/
 			//FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
+			
 
 			if (comparisonLogger.isLoggingSet() == true)
 			{

@@ -424,6 +424,10 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
 	std::cout << "number of a slices: " << aslicedCount << std::endl;
 	std::cout << "number of a slice segment endpoints: " << aslicedSegmentEndpointCount << std::endl;
+
+	std::cout << ">>>> enter any number to continue..." << std::endl;
+	int numberStop = 3;
+	std::cin >> numberStop;
 	
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)

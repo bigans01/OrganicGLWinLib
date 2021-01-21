@@ -214,6 +214,7 @@
     <ClInclude Include="FusedPointMeta.h" />
     <ClInclude Include="FusedPointMetaPair.h" />
     <ClInclude Include="FusedPointReactor.h" />
+    <ClInclude Include="FusedPointReactorResult.h" />
     <ClInclude Include="FusedPointSubData.h" />
     <ClInclude Include="FusedPointSubdataLineType.h" />
     <ClInclude Include="FusedPointSummary.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="CategorizedLineGroup.h" />
+    <ClInclude Include="GuestLineReactor.h" />
     <ClInclude Include="HostLineReactor.h" />
     <ClInclude Include="ImGuiButton.h" />
     <ClInclude Include="ImGuiButtonClickResult.h" />
@@ -427,6 +429,7 @@
     <ClCompile Include="GLMultiDrawArrayJob.cpp" />
     <ClCompile Include="GLUniformRegistry.cpp" />
     <ClCompile Include="GLUniformRequest.cpp" />
+    <ClCompile Include="GuestLineReactor.cpp" />
     <ClCompile Include="HighlighterGearT1.cpp" />
     <ClCompile Include="HostLineReactor.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />

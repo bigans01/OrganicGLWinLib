@@ -10,6 +10,9 @@
 #include "FusedPointMeta.h"
 #include "HostLineReactor.h"
 #include "SharedLineReactor.h"
+#include "GuestLineReactor.h"
+#include "CategorizedLine.h"
+#include "FusedPointReactorResult.h"
 
 class FusedPointReactor
 {
@@ -22,6 +25,7 @@ class FusedPointReactor
 		};
 		FusionAnalysis* hostFusionAnalysisRef = nullptr;
 		FusionAnalysis* guestFusionAnalysisRef = nullptr;
+		FusedPointReactorResult getReactorResult();
 	private:
 		FusedPointContainer reactorPointContainer;
 		bool fusionContinuationFlag = true;		// default is true, until it is flagged as false through various cases.
@@ -32,6 +36,8 @@ class FusedPointReactor
 		void runCategorizedLineBaseTypeAnalysis();
 
 		void igniteReaction();
+		CategorizedLine producedLine;
+
 };
 
 #endif

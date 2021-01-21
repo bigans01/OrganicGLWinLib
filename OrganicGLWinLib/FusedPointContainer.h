@@ -14,6 +14,7 @@ class FusedPointContainer
 {
 	public:
 		friend class FusedPointReactor;
+		friend class GuestLineReactor;
 		void insertSubDataForPoint(glm::vec3 in_point, FusedPointSubData in_fusedPointSubData);
 		void clearFusedPoints();
 		void printFusedPoints();

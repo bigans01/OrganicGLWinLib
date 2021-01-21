@@ -23,7 +23,7 @@ class FusionAnalysis
 		friend class FusedPointReactor;
 		friend class HostLineReactor;
 		friend class SharedLineReactor;
-		friend class GuestReactor;
+		friend class GuestLineReactor;
 		void setMapRefAndRunAnalysis(std::map<int, IntersectionLine>* in_intersectionResultMapRef);
 		void insertFusionCandidate(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult);
 		void setSPolyRef(SPoly* in_sPolyRef);
