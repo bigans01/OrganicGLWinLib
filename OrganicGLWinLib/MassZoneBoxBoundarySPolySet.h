@@ -14,6 +14,8 @@
 #include "PolyDebugLevel.h"
 #include "FusedIntersectionLine.h"
 #include "FusionCandidateProducer.h"
+#include "FusionCandidateOrigin.h"
+#include "FusedPointReactor.h"
 
 
 class MassZoneBoxBoundarySPolySet

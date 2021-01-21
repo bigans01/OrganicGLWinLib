@@ -280,7 +280,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				CategorizedLineColinearTester tester(currentCategorizedLine, *hostTrianglePtr);
 			}
 			*/
-
+			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis);
 			if (currentCategorizedLine.type == IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				//std::cout << "!!! Warning, line detected as NONE " << std::endl;
@@ -298,8 +298,23 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				std::cin >> fusionOut;
 			}
 
+			
+			FusedPointReactorResult reactionResult = reactor.getReactorResult();
+			reactionResult.resultingLine.parentPoly = in_guestPolyID;
+			if (reactionResult.wasLineProduced == true)
+			{
+				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, boxBoundarySPolySetLogger.getLogLevel());
+				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
+				{
+					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
+				}
+				//numberOfIntersections++;
+			}
+			
+
 			// STEP 4
 			// add any CategorizedLine to polygonA's map that isn't NONE
+			/*
 			if (currentCategorizedLine.type != IntersectionType::NONE)	// only add the line to polygon A's map if it was a valid intersection.
 			{
 				// we must test whether or not the generated categorized line is colinear to another border line in the host triangle. If it is
@@ -341,7 +356,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 					//std::cin >> someVal;
 				}
 			}
-
+			*/
 			//std::cout << "######>>>>>>> Comparison complete, enter number to continue to next comparison. " << std::endl;
 			//int continueVal = 3;
 			//std::cin >> continueVal;

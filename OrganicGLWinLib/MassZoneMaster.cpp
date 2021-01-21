@@ -59,8 +59,15 @@ void MassZoneMaster::createMassZoneShells()
 {
 	std::cout << " >>>>>>>>>>>>>>> Creating old zone mass shell..." << std::endl;
 	oldZone.createMassZoneShell();
+	std::cout << ">>>>> Finished work with old zone mass shell... " << std::endl;
+	int oldZoneWork = 3;
+	std::cin >> oldZoneWork;
+
 	std::cout << " >>>>>>>>>>>>>>> Creating new zone mass shell..." << std::endl;
 	newZone.createMassZoneShell();
+	std::cout << ">>>>> Finished work with new zone mass shell... " << std::endl;
+	int newZoneWork = 3;
+	std::cin >> newZoneWork;
 
 	std::cout << "!!! Run of production of zone mass shells complete; continue? " << std::endl;
 	int massZoneStopVal = 3;

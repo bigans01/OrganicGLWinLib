@@ -194,10 +194,10 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
-		int buildVal = 3;
-		std::cin >> buildVal;
+		//int buildVal = 3;
+		//std::cin >> buildVal;
 
 		//secondaryPolys[x].printAllCleaveLines();
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
@@ -547,9 +547,13 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			FusedPointReactorResult reactionResult = reactor.getReactorResult();
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
-			{		
-				in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
-				numberOfIntersections++;
+			{	
+				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, comparisonLogger.getLogLevel());
+				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
+				{
+					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
+					numberOfIntersections++;
+				}
 			}
 			
 
