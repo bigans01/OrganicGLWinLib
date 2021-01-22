@@ -153,7 +153,7 @@ glm::vec3 CleaveSequence::fetchPointToSearch()
 	return currentPointToSearch;
 }
 
-DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateFor)
+DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID)
 {
 	DistanceToPoint returnDistanceToPoint;
 	float currentShortest = 100000.0f;
@@ -194,9 +194,16 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 	else if (cleavingLines.size() >= 1)
 	{
 		// remember, if there are two or more cleaving lines, the first and last should contain border points.
-	// remember, if there are two or more cleaving lines, the first and last should contain border points.
+	
+		std::cout << "!!! Size of cleave map is greater than one; executing this branch...." << std::endl;
+		std::cout << "!!! Point to calculate for is: " << in_pointToCalculateFor.x << ", " << in_pointToCalculateFor.y << ", " << in_pointToCalculateFor.z << std::endl;
+		std::cout << "!!! Border Line ID to match for: " << in_borderLineID << std::endl;
+
 		auto firstLine = cleavingLines.begin();
 		auto lastLine = cleavingLines.rbegin();
+
+		std::cout << "First Line; isAOnBorder: " << firstLine->second.line.isPointAOnBorder << ", " << firstLine->second.line.pointABorder << std::endl;
+		std::cout << "Last Line; isAOnBorder: " << lastLine->second.line.isPointBOnBorder << ", " << lastLine->second.line.pointBBorder << std::endl;
 
 		glm::vec3 pointA = firstLine->second.line.getBorderPointFromSingularBorderLineCount();
 		glm::vec3 pointB = lastLine->second.line.getBorderPointFromSingularBorderLineCount();
@@ -204,13 +211,13 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);		// see line 168 for URL (above)
 																				
-
+		/*
 		// is the chosen min for A?
 		if (selectedMin == distOriginToA)
 		{
@@ -232,6 +239,64 @@ DistanceToPoint CleaveSequence::fetchClosestPoint(glm::vec3 in_pointToCalculateF
 		{
 			//std::cout << "!!! Warning, EQUAL distance found...needs handling..." << std::endl;
 		}
+		*/
+
+		// ****************************** NEW CODE (1/22/2021)
+		auto newFirstLine = cleavingLines.begin();
+		auto newLastLine = cleavingLines.rbegin();
+
+		BorderLineData firstLineData = newFirstLine->second.line.getBorderLineDataForSingularBorderLineCount();
+		BorderLineData lastLineData = newLastLine->second.line.getBorderLineDataForSingularBorderLineCount();
+
+		std::vector<BorderLineData> dataVector;
+		if (firstLineData.borderLineID == in_borderLineID)
+		{
+			std::cout << "!!! Point A (first line) inserted into data vector. " << std::endl;
+			dataVector.push_back(firstLineData);
+		}
+		if (lastLineData.borderLineID == in_borderLineID)
+		{
+			std::cout << "!!! Point B (last line) inserted into data vector. " << std::endl;
+			dataVector.push_back(lastLineData);
+		}
+
+		// now, check the vector size.
+		if (dataVector.size() == 1)
+		{
+			auto dataVectorBegin = dataVector.begin();
+			returnDistanceToPoint.distance = glm::distance(in_pointToCalculateFor, dataVectorBegin->point);
+			returnDistanceToPoint.point = dataVectorBegin->point;
+		}
+		else if (dataVector.size() == 2)
+		{
+			auto dataVectorBegin = dataVector.begin();
+			auto dataVectorEnd = dataVector.rbegin();
+
+			glm::vec3 pointA = dataVectorBegin->point;
+			glm::vec3 pointB = dataVectorEnd->point;
+
+			float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
+			float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
+
+			float selectedMin = std::min(distOriginToA, distOriginToB);		// see line 168 for URL (above)
+
+			// is the chosen min for A?
+			if (selectedMin == distOriginToA)
+			{
+				//std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				returnDistanceToPoint.distance = selectedMin;
+				returnDistanceToPoint.point = pointA;
+			}
+
+			// is the chosen min for B?
+			else if (selectedMin == distOriginToB)
+			{
+				//std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				returnDistanceToPoint.distance = selectedMin;
+				returnDistanceToPoint.point = pointB;
+			}
+		}
+
 
 	}
 	//std::cout << "+++++++++++++++ (Typical) Fetch closest point halt. " << std::endl;

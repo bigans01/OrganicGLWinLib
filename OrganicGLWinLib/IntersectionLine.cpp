@@ -108,6 +108,24 @@ BorderLineIDPair IntersectionLine::getBorderLineIDPair()
 	return pair;
 }
 
+BorderLineData IntersectionLine::getBorderLineDataForSingularBorderLineCount()
+{
+	BorderLineData returnData;
+	if (isPointAOnBorder == 1)
+	{
+		returnData.point = pointA;
+		returnData.borderLineID = pointABorder;
+	}
+	else if (isPointBOnBorder == 1)
+	{
+		//std::cout << "!!! Point B is on border! " << std::endl;
+		returnData.point = pointB;
+		returnData.borderLineID = pointBBorder;
+		//std::cout << "!!! Result will be: " << result << std::endl;
+	}
+	return returnData;
+}
+
 BorderLinePointPair IntersectionLine::getBorderLinePointPair()
 {
 	// remember, point A in pointPair should always be the point that hits the border line.

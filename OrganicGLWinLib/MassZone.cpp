@@ -193,4 +193,38 @@ void MassZone::createMassZoneShell()
 
 	// Step 3: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, and produce the 
 	//         CleaveSequences.
+	auto boxBoundariesBegin = zoneBox.boxBoundaries.begin();
+	auto boxBoundariesEnd = zoneBox.boxBoundaries.end();
+	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
+	{
+		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
+		}
+		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		{
+			std::cout << "Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
+		}
+
+		boxBoundariesBegin->second.generateSPolysFromPolySet();
+		std::cout << "Finished producing boundary SPoly...continue? " << std::endl;
+		int prodSucceeded = 3;
+		std::cin >> prodSucceeded;
+	}
 }

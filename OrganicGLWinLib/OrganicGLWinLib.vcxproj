@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="BorderLineCycle.h" />
     <ClInclude Include="BorderLineCycler.h" />
+    <ClInclude Include="BorderLineData.h" />
     <ClInclude Include="BorderLineIDPair.h" />
     <ClInclude Include="BorderLineIntersectRecord.h" />
     <ClInclude Include="BorderLineIntersectRecorder.h" />

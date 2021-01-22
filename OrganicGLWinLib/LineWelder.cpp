@@ -369,6 +369,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	else if (intersectRecorderRef->records.size() == 1)		// only do this if there is ONE CleaveSequence in the current border line.
 	{
 		std::cout << "::: Note: border Line with ID: " << currentBorderLineID << " has only 1 intercept record. " << std::endl;
+		std::cout << "::: Value of in_currentBorderLineID: " << in_currentBorderLineID << std::endl;
 		NextCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, 
 																&sPolyRef->borderLines[in_currentBorderLineID], 
 																&sPolyRef->cleaveMap, 

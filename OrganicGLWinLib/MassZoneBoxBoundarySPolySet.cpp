@@ -152,6 +152,18 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 	currentComparableSPolyIndex++;	// this must be incremented, to set the appropriate index for the next SPoly (if there are any to compare against)
 }
 
+void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
+{
+	boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
+	if (boundarySPolyRef->cleaveMap.size() != 0)
+	{
+		std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
+		SPolyMorphTracker morphTracker;
+		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z);
+
+	}
+}
+
 int MassZoneBoxBoundarySPolySet::checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB)
 {
 	int matchFound = 0;

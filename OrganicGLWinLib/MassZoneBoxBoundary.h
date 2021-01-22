@@ -62,6 +62,11 @@ class MassZoneBoxBoundary
 			boundarySPoly.sequenceFactory.printLinesInPool();
 		}
 
+		void generateSPolysFromPolySet()
+		{
+			boundaryPolySet.buildBoundarySPolyFromFactory();
+		}
+
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
 		{

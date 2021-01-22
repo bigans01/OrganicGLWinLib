@@ -10,6 +10,7 @@
 #include <iostream>
 #include "IntersectionLineValidity.h"
 #include "CyclingDirection.h"
+#include "BorderLineData.h"
 
 class IntersectionLine
 {
@@ -41,7 +42,7 @@ public:
 	int getBorderLineIDFromSingularBorderLineCount();
 	BorderLineIDPair getBorderLineIDPair();
 	BorderLinePointPair getBorderLinePointPair();
-	
+	BorderLineData getBorderLineDataForSingularBorderLineCount();
 
 	glm::vec3 getBorderPointFromSingularBorderLineCount();
 	glm::vec3 getNonBorderPointFromSingularBorderLineCount();

@@ -16,6 +16,8 @@
 #include "FusionCandidateProducer.h"
 #include "FusionCandidateOrigin.h"
 #include "FusedPointReactor.h"
+#include "SPolyFracturer.h"
+#include "SPolyMorphTracker.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -25,6 +27,7 @@ class MassZoneBoxBoundarySPolySet
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
+		void buildBoundarySPolyFromFactory();
 		SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 	private:
 		PolyLogger boxBoundarySPolySetLogger; 

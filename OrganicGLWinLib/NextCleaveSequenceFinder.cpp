@@ -136,11 +136,16 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		DistanceToPoint shortestPointStats;
 		if (checkToPerformSpecialPointFetch() == true)
 		{
+			std::cout << ">>>> Fetching point via self compare..." << std::endl;
+			std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
 			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointSelfCompare(sequenceFinderStartPoint);
 		}
 		else
 		{
-			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPoint(sequenceFinderStartPoint);
+			std::cout << ">>>> Fetching point via closest point..." << std::endl;
+			std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
+			std::cout << ">>>> Starting point ID: " << startingBorderLineID << std::endl;
+			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointOnBorderLineID(sequenceFinderStartPoint, startingBorderLineID);
 		}
 
 
