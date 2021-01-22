@@ -10,15 +10,17 @@
 #include <vector>
 #include "FusedPointSubData.h"
 #include "SPoly.h"
+#include "PolyDebugLevel.h"
 
 class HostLineReactor : public LineReactorBase
 {
 	public:
-		HostLineReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef) :
+		HostLineReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef, PolyDebugLevel in_polyDebugLevel) :
 			hostFusionAnalysisRef(in_hostFusionAnalysisRef),
 			guestFusionAnalysisRef(in_guestFusionAnalysisRef),
 			fusedPointMetaRef(in_fusedPointMetaPairRef)
 		{
+			reactorBaseLogger.setDebugLevel(in_polyDebugLevel);
 			runAnalysis();
 		};
 	private:

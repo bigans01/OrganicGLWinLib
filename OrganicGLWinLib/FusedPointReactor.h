@@ -13,14 +13,18 @@
 #include "GuestLineReactor.h"
 #include "CategorizedLine.h"
 #include "FusedPointReactorResult.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class FusedPointReactor
 {
 	public:
-		FusedPointReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef) :
+		FusedPointReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef, PolyDebugLevel in_polyDebugLevel) :
 			hostFusionAnalysisRef(in_hostFusionAnalysisRef),
-			guestFusionAnalysisRef(in_guestFusionAnalysisRef)
+			guestFusionAnalysisRef(in_guestFusionAnalysisRef),
+			fusedPointReactorDebugLevel(in_polyDebugLevel)
 		{
+			fusedPointReactorLogger.setDebugLevel(in_polyDebugLevel);
 			igniteReaction();
 		};
 		FusionAnalysis* hostFusionAnalysisRef = nullptr;
@@ -37,6 +41,8 @@ class FusedPointReactor
 
 		void igniteReaction();
 		CategorizedLine producedLine;
+		PolyLogger fusedPointReactorLogger;
+		PolyDebugLevel fusedPointReactorDebugLevel;
 
 };
 

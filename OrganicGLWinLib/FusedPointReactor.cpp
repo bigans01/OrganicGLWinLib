@@ -20,11 +20,13 @@ void FusedPointReactor::runValidityTests()
 	if (hostFusionAnalysisRef->coplanarType == FusionAnalysisCoplanarLineType::COPLANAR_BORDERLINE) 
 	{
 		fusionContinuationFlag = false;
-		std::cout << "(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) FAILED. " << std::endl;
+		//std::cout << "(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) FAILED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) FAILED. ", "\n");
 	}
 	else
 	{
-		std::cout << "(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) PASSED. " << std::endl;
+		//std::cout << "(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) PASSED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 1 (check to ensure host FusionAnalysis isn't set to COPLANAR_BORDERLINE) PASSED. ", "\n");
 		runPointCountTest();				// run test 2.
 		if (fusionContinuationFlag == true)
 		{
@@ -42,11 +44,13 @@ void FusedPointReactor::runPointCountTest()
 								// So set the valid result flag to FALSE.
 	{
 		fusionContinuationFlag = false;
-		std::cout << "(Reactor): Test 2 (runPointCountTest) FAILED. " << std::endl;
+		//std::cout << "(Reactor): Test 2 (runPointCountTest) FAILED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 2 (runPointCountTest) FAILED. ", "\n");
 	}
 	else
 	{
-		std::cout << "(Reactor): Test 2 (runPointCountTest) PASSED. " << std::endl;
+		//std::cout << "(Reactor): Test 2 (runPointCountTest) PASSED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 2 (runPointCountTest) PASSED. ", "\n");
 	}
 }
 
@@ -58,11 +62,13 @@ void FusedPointReactor::runPointAcquisitionAndPointUniquenessTest()
 	if (reactorPointContainer.fusedPointMap.size() == 1)	// if there's only one point in the resulting container, flag it.
 	{
 		fusionContinuationFlag = false;
-		std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. " << std::endl;
+		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. ", "\n");
 	}
 	else
 	{
-		std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. " << std::endl;
+		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. " << std::endl;
+		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. ", "\n");
 	}
 }
 
@@ -76,7 +82,8 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 	// CASE 1: we can determine what we need from the host group alone (no reliance on guest group needed)
 	if (hostFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 2)
 	{
-		std::cout << "(Reactor) Running logic for CASE 1: (Host) " << std::endl;
+		//std::cout << "(Reactor) Running logic for CASE 1: (Host) " << std::endl;
+		fusedPointReactorLogger.log("(Reactor) Running logic for CASE 1: (Host) ", "\n");
 		FusedPointMetaPair hostPair;
 		auto hostFusionPointsBegin = hostFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
 		auto hostFusionPointsEnd = hostFusionAnalysisRef->fusedPoints.fusedPointMap.end();
@@ -87,14 +94,15 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 			hostPair.insertFusedPointMeta(currentPointMeta);
 		}
 		hostPair.printSummaries();
-		HostLineReactor hostReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair);
+		HostLineReactor hostReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair, fusedPointReactorDebugLevel);
 		producedLine = hostReactor.resultantLine;
 	}
 
 	// CASE 2: the host group only has one point; because the validity tests passed at this point, the guest group will have at least 1 point always.
 	else if (hostFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 1)
 	{
-		std::cout << "(Reactor) Running logic for CASE 2: (Shared) " << std::endl;
+		//std::cout << "(Reactor) Running logic for CASE 2: (Shared) " << std::endl;
+		fusedPointReactorLogger.log("(Reactor) Running logic for CASE 2: (Shared) ", "\n");
 		FusedPointMetaPair sharedPair;
 
 		// get the first point from the host group
@@ -109,7 +117,7 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 		sharedPair.insertFusedPointMeta(guestPointMeta);
 
 		sharedPair.printSummaries();
-		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &sharedPair);
+		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &sharedPair, fusedPointReactorDebugLevel);
 		producedLine = sharedReactor.resultantLine;
 
 	}
@@ -117,7 +125,8 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 	// CASE 3: the host STriangle "engulfed" the guest STriangle; the host STriangle has no points, but the guest will always have 2.
 	else if (guestFusionAnalysisRef->fusedPoints.fusedPointMap.size() == 2)
 	{
-		std::cout << "(Reactor) Running logic for CASE 2: (Guest) " << std::endl;
+		//std::cout << "(Reactor) Running logic for CASE 2: (Guest) " << std::endl;
+		fusedPointReactorLogger.log("(Reactor) Running logic for CASE 2: (Guest) ", "\n");
 		FusedPointMetaPair guestPair;
 		auto guestFusionPointsBegin = guestFusionAnalysisRef->fusedPoints.fusedPointMap.begin();
 		auto guestFusionPointsEnd = guestFusionAnalysisRef->fusedPoints.fusedPointMap.end();
@@ -127,7 +136,7 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 			FusedPointMeta currentPointMeta = guestFusionAnalysisRef->fusedPoints.retrieveFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::HOST);
 			guestPair.insertFusedPointMeta(currentPointMeta);
 		}
-		GuestLineReactor guestReactor(guestFusionAnalysisRef, &guestPair);
+		GuestLineReactor guestReactor(guestFusionAnalysisRef, &guestPair, fusedPointReactorDebugLevel);
 		producedLine = guestReactor.resultantLine;
 	}
 }

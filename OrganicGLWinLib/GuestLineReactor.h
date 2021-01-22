@@ -14,10 +14,11 @@
 class GuestLineReactor : public LineReactorBase
 {
 	public:
-		GuestLineReactor(FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef) :
+		GuestLineReactor(FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef, PolyDebugLevel in_polyDebugLevel) :
 			guestFusionAnalysisRef(in_guestFusionAnalysisRef),
 			fusedPointMetaRef(in_fusedPointMetaPairRef)
 		{
+			reactorBaseLogger.setDebugLevel(in_polyDebugLevel);
 			buildNonBorderLine();
 		};
 	private:

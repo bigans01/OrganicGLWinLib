@@ -11,15 +11,21 @@ void FusionAnalysis::setMapRefAndRunAnalysis(std::map<int, IntersectionLine>* in
 	}
 }
 
-void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectionResult)
+void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate)
 {
 	numberOfProcessedFusionCandidates++;
-	std::cout << "~~~~~~~~~~~~~~ Fusion candidate, point: " << in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x << ", "
-		<< in_fusionCandidate.candidateIntersectionResult.intersectedPoint.y << ", "
-		<< in_fusionCandidate.candidateIntersectionResult.intersectedPoint.z << std::endl;
+	//std::cout << "~~~~~~~~~~~~~~ Fusion candidate, point: " << in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x << ", "
+		//<< in_fusionCandidate.candidateIntersectionResult.intersectedPoint.y << ", "
+		//<< in_fusionCandidate.candidateIntersectionResult.intersectedPoint.z << std::endl;
 
-	std::cout << "~~~~~ Is border line: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine << std::endl;
-	std::cout << "~~~~~ wasIntersectFound: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+	//std::cout << "~~~~~ Is border line: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine << std::endl;
+	//std::cout << "~~~~~ wasIntersectFound: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
+
+	fusionAnalysisLogger.log("~~~~~~~~~~~~~~ Fusion candidate, point: ", in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x, ", ",
+		in_fusionCandidate.candidateIntersectionResult.intersectedPoint.y, ", ",
+		in_fusionCandidate.candidateIntersectionResult.intersectedPoint.z, "\n");
+	fusionAnalysisLogger.log("~~~~~ Is border line: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, "\n");
+	fusionAnalysisLogger.log("~~~~~ wasIntersectFound: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectFound, "\n");
 
 
 	// first, check if it's parallel.
@@ -55,7 +61,9 @@ void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandid
 		//int waitVal = 3;
 		//std::cin >> waitVal;
 	}
-	std::cout << "####### number of processed fusion candidates is now: " << numberOfProcessedFusionCandidates << std::endl;
+
+	//std::cout << "####### number of processed fusion candidates is now: " << numberOfProcessedFusionCandidates << std::endl;
+	fusionAnalysisLogger.log("####### number of processed fusion candidates is now: ", numberOfProcessedFusionCandidates, "\n");
 }
 
 void FusionAnalysis::setSPolyRef(SPoly* in_sPolyRef)
@@ -97,7 +105,9 @@ void FusionAnalysis::clearCandidateData()
 	primaryClass = FusionAnalysisPrimaryClassification::NONE;
 	fusedPoints.clearFusedPoints();
 
-	std::cout << "############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
+	//std::cout << "############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
+	fusionAnalysisLogger.log("############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>", "\n");
+
 }
 
 void FusionAnalysis::printClassifications()

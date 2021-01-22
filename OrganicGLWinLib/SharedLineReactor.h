@@ -14,11 +14,12 @@
 class SharedLineReactor : public LineReactorBase
 {
 	public:
-		SharedLineReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef) :
+		SharedLineReactor(FusionAnalysis* in_hostFusionAnalysisRef, FusionAnalysis* in_guestFusionAnalysisRef, FusedPointMetaPair* in_fusedPointMetaPairRef, PolyDebugLevel in_polyDebugLevel) :
 			hostFusionAnalysisRef(in_hostFusionAnalysisRef),
 			guestFusionAnalysisRef(in_guestFusionAnalysisRef),
 			fusedPointMetaRef(in_fusedPointMetaPairRef)
 		{
+			reactorBaseLogger.setDebugLevel(in_polyDebugLevel);
 			runAnalysis();
 		};
 	private:

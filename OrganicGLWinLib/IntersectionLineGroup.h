@@ -21,13 +21,12 @@ public:
 	std::map<int, IntersectionLine> lineMap;
 	void setFusionAnalyzerSPolyRef(SPoly* in_sPolyRef);
 	void addIntersectionLine(IntersectionLine in_intersectionLine);
-	FusedIntersectionLine mergeLines();
-	bool performInvalidCheck();					// may not be worth using; flag for removal.
+	void runFusionAnalysisAndDetermineClassifications();
 	int findNumberOfBorderLineIntercepts();
 	void reset();								// reset the line group, so it has appropriate values in next iteration
 	IntersectionLine* findSingleBorderLine();
 	IntersectionLine* findSingleNonBorderLine();
-	void insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate, IntersectionResult in_intersectResult);
+	void insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin in_fusionCandidateOrigin, int in_lineIndex, FusionCandidate in_fusionCandidate);
 	FusedIntersectionLine returnLine;
 private:
 	PolyLogger lineGroupLogger;
