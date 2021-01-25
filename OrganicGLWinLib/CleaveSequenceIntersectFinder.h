@@ -12,17 +12,22 @@
 #include "WeldedTriangleGroupBuilder.h"
 #include <vector>
 #include "WeldedTriangleSupergroup.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CleaveSequenceIntersectFinder
 {
 public:
-	CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef);
+	CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef, PolyDebugLevel in_polyDebugLevel);
 	int originalPolyID = 0;
 	SPoly* sPolyRef;
 	void loadInterceptRecords();		// read all CleaveSequences, put the metadata about the borderlines they intercept into the borderlines.
 	void printCurrentLineValuesInCleaveSequences();
 	WeldedLinePool linePool;
 	WeldedTriangleSupergroup triangleSupergroup;
+private:
+	PolyLogger intersectFinderLogger;
+	PolyDebugLevel intersectFinderLoggerDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif

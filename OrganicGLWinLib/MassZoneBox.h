@@ -8,12 +8,13 @@
 #include "MassZoneBoxBoundary.h"
 #include <iostream>
 #include "MassSubZone.h"
+#include "SPolyDOSet.h"
 
 class MassZoneBox
 {
 	public:
 		std::map<MassZoneBoxBoundaryOrientation, MassZoneBoxBoundary> boxBoundaries;
-		void insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary);
+		void insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet);
 		void printBoundaryLineCounts();
 		void printBoundaries();
 		void printCategorizedLinesInBoundaries();

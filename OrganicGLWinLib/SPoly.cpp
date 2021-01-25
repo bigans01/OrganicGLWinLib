@@ -987,3 +987,26 @@ void SPoly::clearInterceptRegistry()
 		borderLinesBegin->second.intersectRecorder.records.clear();
 	}
 }
+
+void SPoly::applyDebugOptions(SPolyDOSet in_sPolyDOSet)
+{
+	auto setBegin = in_sPolyDOSet.debugOptions.begin();
+	auto setEnd = in_sPolyDOSet.debugOptions.end();
+	for (; setBegin != setEnd; setBegin++)
+	{
+		if (*setBegin == SPolyDO::MAIN)
+		{
+			std::cout << "!!! ..> debug option for SPolyDO::MAIN encountered, continue? " << std::endl;
+			int someVal = 3;
+			std::cin >> someVal;
+		}
+		else if (*setBegin == SPolyDO::FACTORY)
+		{
+			sequenceFactory.setFactoryDebugLevel(PolyDebugLevel::DEBUG);
+		}
+		else if (*setBegin == SPolyDO::FACTORY_MERGER)
+		{
+			sequenceFactory.setMergerDebugLevel(PolyDebugLevel::DEBUG);
+		}
+	}
+}

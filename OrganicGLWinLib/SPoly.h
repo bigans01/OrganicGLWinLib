@@ -22,6 +22,7 @@
 #include "CyclingDirection.h"
 #include "QuatRotationPoints.h"
 #include "CleaveSequenceMergeMode.h"
+#include "SPolyDOSet.h"
 
 class SPoly
 {
@@ -96,6 +97,7 @@ public:
 	CleaveSequenceMetaTracker buildCleaveSequenceMetaTracker();
 
 	void clearInterceptRegistry();
+	void applyDebugOptions(SPolyDOSet in_sPolyDOSet);
 };
 
 #endif

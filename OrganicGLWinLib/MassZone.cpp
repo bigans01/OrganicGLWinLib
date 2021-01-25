@@ -114,38 +114,38 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	
 	glm::vec3 northEmptyNormal;
 	northEmptyNormal.z = -1.0f;
-	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal, massZoneLogLevel); 
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary);
+	MassZoneBoxBoundary northBoundary(lower_NW, upper_NW, upper_NE, lower_NE, northEmptyNormal); 
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Z, northBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::NEG_Z]));
 
 	// POS_X boundary (east)
 	glm::vec3 eastEmptyNormal;
 	eastEmptyNormal.x = 1.0f;
-	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE, eastEmptyNormal, massZoneLogLevel);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, eastBoundary);
+	MassZoneBoxBoundary eastBoundary(lower_NE, upper_NE, upper_SE, lower_SE, eastEmptyNormal);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_X, eastBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::POS_X]));
 
 	// POS_Z boundary (south) creation/insertion
 	glm::vec3 southEmptyNormal;
 	southEmptyNormal.z = 1.0f;
-	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW, southEmptyNormal, massZoneLogLevel);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, southBoundary);
+	MassZoneBoxBoundary southBoundary(lower_SE, upper_SE, upper_SW, lower_SW, southEmptyNormal);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Z, southBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::POS_Z]));
 
 	// NEG_X boundary (west) creation/insertion
 	glm::vec3 westEmptyNormal;
 	westEmptyNormal.x = -1.0f;
-	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW, westEmptyNormal, massZoneLogLevel);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, westBoundary);
+	MassZoneBoxBoundary westBoundary(lower_SW, upper_SW, upper_NW, lower_NW, westEmptyNormal);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_X, westBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::NEG_X]));
 
 	// POS_Y boundary (above) creation/insertion
 	glm::vec3 aboveEmptyNormal;
 	aboveEmptyNormal.y = 1.0f;
-	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW, aboveEmptyNormal, massZoneLogLevel);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Y, aboveBoundary);
+	MassZoneBoxBoundary aboveBoundary(upper_NW, upper_NE, upper_SE, upper_SW, aboveEmptyNormal);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::POS_Y, aboveBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::POS_Y]));
 
 	// NEG_Y boundary (below) creation/insertion
 	glm::vec3 belowEmptyNormal;
 	belowEmptyNormal.y = -1.0f;
-	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal, massZoneLogLevel);
-	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary);
+	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal);
+	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::NEG_Y]));
 
 	zoneBox.printBoundaries();
 
@@ -156,6 +156,11 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	int checkVal = 3;
 	std::cin >> checkVal;
 	
+}
+
+void MassZone::insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO)
+{
+	boundaryDebugOptions[in_massZoneBoxBoundaryOrientation].insert(in_sPolyDO);
 }
 
 void MassZone::createMassZoneShell()

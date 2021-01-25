@@ -10,6 +10,9 @@
 #include <map>
 #include <glm/glm.hpp>
 #include "PolyDebugLevel.h"
+#include "SPolyDOSet.h"
+#include "MassZoneBoxBoundaryOrientation.h"
+
 
 
 class MassZone
@@ -26,6 +29,8 @@ public:
 	void createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType);
 	void createMassZoneShell();
 	std::map<int, MassSubZone> subZoneMap;
+	std::map<MassZoneBoxBoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
+	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);
 private:
 	PolyDebugLevel massZoneLogLevel = PolyDebugLevel::NONE;
 	std::map<int, int> sPolyToSubZoneMap;

@@ -12,14 +12,18 @@
 #include "CategorizedLineInterceptsPointPreciseMerger.h"
 #include <map>
 #include <mutex>
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CleaveSequenceFactory;
 class CategorizedLineMerger
 {
 	public:
-		CategorizedLineMerger(CleaveSequenceFactory* in_cleaveSequenceFactoryRef) :
-			cleaveSequenceFactoryRef(in_cleaveSequenceFactoryRef)
+		CategorizedLineMerger(CleaveSequenceFactory* in_cleaveSequenceFactoryRef, PolyDebugLevel in_polyDebugLevel) :
+			cleaveSequenceFactoryRef(in_cleaveSequenceFactoryRef),
+			mergerDebugLevel(in_polyDebugLevel)
 		{
+			mergerLogger.setDebugLevel(in_polyDebugLevel);
 			buildAndLoadCategorizedLinesIntoMachines();		// build the machines, extract the categorized lines into them, and 
 															// remove the records from the corresponding CategorizedLineGroups.
 															// There should be 0 categorized lines in the CleaveSequenceFactory after this function is done.
@@ -35,6 +39,8 @@ class CategorizedLineMerger
 		void sendMergedLinesToCleaveSequenceFactory();
 		CategorizedLineMergeType determineMergeTypeForGroup(CategorizedLineGroup* in_categorizedLineGroupRef);
 		CleaveSequenceFactory* cleaveSequenceFactoryRef = nullptr;
+		PolyLogger mergerLogger;
+		PolyDebugLevel mergerDebugLevel = PolyDebugLevel::NONE;
 
 };
 

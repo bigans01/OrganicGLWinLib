@@ -10,6 +10,7 @@
 #include "SPoly.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "DebugOption.h"
 
 class MassZoneMaster
 {
@@ -21,6 +22,7 @@ class MassZoneMaster
 		void setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel);
 		void createMassZoneShells();
 		void printMassZoneBorderLineCounts();
+		void handleDebugOption(DebugOption in_debugOption);
 	private:
 		std::map<int, MassZoneType> sPolyZoneTypeMap;
 		MassZone oldZone;

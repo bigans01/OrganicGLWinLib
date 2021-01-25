@@ -2,10 +2,11 @@
 #include "CategorizedLineMergeMachineBase.h"
 #include "CleaveSequenceFactory.h"
 
-void CategorizedLineMergeMachineBase::initialize(CleaveSequenceFactory* in_cleaveSequenceFactoryRef, CategorizedLineGroup* in_categorizedLineGroupRef)
+void CategorizedLineMergeMachineBase::initialize(CleaveSequenceFactory* in_cleaveSequenceFactoryRef, CategorizedLineGroup* in_categorizedLineGroupRef, PolyDebugLevel in_polyDebugLevel)
 {
 	cleaveSequenceFactoryRef = in_cleaveSequenceFactoryRef;
 	categorizedLineGroupRef = in_categorizedLineGroupRef;
+	mergeMachineLogger.setDebugLevel(in_polyDebugLevel);
 }
 
 void CategorizedLineMergeMachineBase::extractCategorizedLines()

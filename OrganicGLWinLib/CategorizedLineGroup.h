@@ -19,7 +19,7 @@ class CategorizedLineGroup
 
 		void removeRecord(IntersectionType in_intersectionType, int in_categorizedLineIndex)
 		{
-			std::cout << "!!! record vector size: " << recordVector.size() << std::endl;
+			//std::cout << "!!! record vector size: " << recordVector.size() << std::endl;
 		
 			int recordIndex = 0;
 			int targetIndexToRemove = 0;
@@ -35,17 +35,17 @@ class CategorizedLineGroup
 					(recordVectorBegin->categorizedLineIndex == in_categorizedLineIndex)
 				)
 				{
-					std::cout << "!!! Found index to remove" << std::endl;
-					std::cout << "!! Index value is: " << recordIndex;
+					//std::cout << "!!! Found index to remove" << std::endl;
+					//std::cout << "!! Index value is: " << recordIndex;
 					targetIndexToRemove = recordIndex;
 					wasTargetFound = true;
 				}
 				recordIndex++;
 			}
 
-			std::cout << "!!! Prior to erase. " << std::endl;
-			int preVal = 3;
-			std::cin >> preVal;
+			//std::cout << "!!! Prior to erase. " << std::endl;
+			//int preVal = 3;
+			//std::cin >> preVal;
 
 
 			if (wasTargetFound == true)
@@ -53,9 +53,9 @@ class CategorizedLineGroup
 				recordVector.erase(recordVector.begin() + targetIndexToRemove);
 			}
 
-			std::cout << "!!! End of record removal function. " << std::endl;
-			int someVal = 3;
-			std::cin >> someVal;
+			//std::cout << "!!! End of record removal function. " << std::endl;
+			//int someVal = 3;
+			//std::cin >> someVal;
 		}
 		std::vector<CategorizedLineInsertionRecord> recordVector;
 };

@@ -36,6 +36,7 @@ class CleaveSequenceFactory
 		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 		bool doesFactoryContainLines();
 		void setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel);
+		void setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel);
 
 	private:
 		friend class CategorizedLineMerger;
@@ -45,6 +46,8 @@ class CleaveSequenceFactory
 		friend class CategorizedLinePlaceboMerger;
 
 		PolyLogger cleaveSequenceFactoryLogger;
+		PolyDebugLevel mergerDebugLevel = PolyDebugLevel::NONE;
+
 		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
 		std::map<int, CategorizedLine> partialboundMap;	// contains PARTIAL_BOUND categorized lines.
 		std::map<int, CategorizedLine> aslicedMap;	// contains A_SLICED categorized lines.

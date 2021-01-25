@@ -65,7 +65,7 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 	}
 	else if (in_categorizedLine.type == IntersectionType::A_SLICE_SEGMENT_ENDPOINT)
 	{
-		cleaveSequenceFactoryLogger.log("!!!! Adding A_SLICE_SEGMENT_ENDPOINT line", "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!!! Adding A_SLICE_SEGMENT_ENDPOINT line", "\n");
 		insertAslicedSegmentEndpointLine(in_categorizedLine);
 	}
 	else
@@ -126,7 +126,7 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 	nonboundMap.erase(in_fetchIndex);
 	nonboundCount--;		// decrement the number of nonbound lines
 	//std::cout << "!! Extraction of NON_BOUND complete.." << std::endl;
-	cleaveSequenceFactoryLogger.log("!! Extraction of NON_BOUND complete..", "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Extraction of NON_BOUND complete..", "\n");
 	return returnLine;
 }
 
@@ -226,6 +226,11 @@ void CleaveSequenceFactory::setFactoryDebugLevel(PolyDebugLevel in_polyDebugLeve
 	cleaveSequenceFactoryLogger.setDebugLevel(in_polyDebugLevel);
 }
 
+void CleaveSequenceFactory::setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel)
+{
+	mergerDebugLevel = in_polyDebugLevel;
+}
+
 void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 {
 	std::map<int, int> twinCounterMap;
@@ -256,7 +261,7 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 		if (wasFoundInSet != removalSet.end())
 		{
 			//std::cout << "!!! Found a twin to remove..." << std::endl;
-			cleaveSequenceFactoryLogger.log("!!! Found a twin to remove...", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!! Found a twin to remove...", "\n");
 			mappedValuesToRemove.push_back(removalRunBegin->first);
 		}
 	}
@@ -282,7 +287,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
-		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
 		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
@@ -298,8 +303,8 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
 		//std::cout << "!! Inverting partial..." << std::endl;
-		std::cout << "!! Gathering partial refs..." << std::endl;
-		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
 		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
@@ -316,7 +321,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
 		//std::cout << "!! Inverting slice..." << std::endl;
-		std::cout << "!! Gathering slice refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
 		//slicesBegin->second.emptyNormal *= -1.0f;
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
 		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
@@ -329,7 +334,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
 		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
-		std::cout << "!! Gathering intercepts_point_precise refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
 		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
 		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
@@ -347,7 +352,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
-		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
 		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
@@ -364,8 +369,8 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
 		//std::cout << "!! Inverting partial..." << std::endl;
-		std::cout << "!! Gathering partial refs..." << std::endl;
-		std::cout << "!! Gathering nonbound refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
 		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
@@ -383,7 +388,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
 		//std::cout << "!! Inverting slice..." << std::endl;
-		std::cout << "!! Gathering slice refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
 		//slicesBegin->second.emptyNormal *= -1.0f;
 		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
@@ -397,7 +402,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
 		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
-		std::cout << "!! Gathering intercepts_point_precise refs..." << std::endl;
+		std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
 		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
@@ -415,16 +420,24 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
 
-	std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
-	std::cout << "number of nonbounds: " << nonboundCount << std::endl;
-	std::cout << "number of partials: " << partialboundCount << std::endl;
-	std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
-	std::cout << "number of a slices: " << aslicedCount << std::endl;
-	std::cout << "number of a slice segment endpoints: " << aslicedSegmentEndpointCount << std::endl;
+	//std::cout << "================================================>>>>>> calling constructAndExportCleaveSequences() " << std::endl;
+	//std::cout << "number of nonbounds: " << nonboundCount << std::endl;
+	//std::cout << "number of partials: " << partialboundCount << std::endl;
+	//std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
+	//std::cout << "number of a slices: " << aslicedCount << std::endl;
+	//std::cout << "number of a slice segment endpoints: " << aslicedSegmentEndpointCount << std::endl;
+	//std::cout << ">>>> enter any number to continue..." << std::endl;
+	//int numberStop = 3;
+	//std::cin >> numberStop;
 
-	std::cout << ">>>> enter any number to continue..." << std::endl;
-	int numberStop = 3;
-	std::cin >> numberStop;
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ================================================>>>>>> calling constructAndExportCleaveSequences() ", "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of nonbounds: ", nonboundCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of partials: ", partialboundCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of precises: ", interceptsPointPreciseCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slices: ", aslicedCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slice segment endpoints: ", aslicedSegmentEndpointCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> enter any number to continue...", "\n");
+	cleaveSequenceFactoryLogger.waitForDebugInput();
 	
 
 	if (in_massManipulationMode == MassManipulationMode::DESTRUCTION)
@@ -436,24 +449,39 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// perform merging, but only if the CleaveSequenceMergeMode is MERGE.
 	if (in_cleaveSequenceMergeMode == CleaveSequenceMergeMode::MERGE)
 	{
-		std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
+		//std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Pre-MERGE stats ", "\n");
 		auto borderLinesBegin = in_borderLineArrayRef.begin();
 		auto borderLinesEnd = in_borderLineArrayRef.end();
 		for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
 		{
-			std::cout << "Border Line at index " << borderLinesBegin->first << " has " << borderLinesBegin->second.intersectRecorder.records.size() << " records. " << std::endl;
+			//std::cout << "Border Line at index " << borderLinesBegin->first << " has " << borderLinesBegin->second.intersectRecorder.records.size() << " records. " << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line at index ", borderLinesBegin->first, " has ", borderLinesBegin->second.intersectRecorder.records.size(), " records. ", "\n");
 		}
 
-		groupMap.printGroupLineCounts();
-		CategorizedLineMerger merger(this);
+		if (cleaveSequenceFactoryLogger.isLoggingSet() == true)
+		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) starting printing contents of the CategorizedLineGroupMap...", "\n");
+			groupMap.printGroupLineCounts();
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) finished printing contents of the CategorizedLineGroupMap...", "\n");
+		}
+		CategorizedLineMerger merger(this, mergerDebugLevel);
 
-		std::cout << "::::::::::::::::::::::::: Post-MERGE stats " << std::endl;
-		std::cout << "number of nonbounds: " << nonboundCount << std::endl;
-		std::cout << "number of partials: " << partialboundCount << std::endl;
-		std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
-		std::cout << "number of a slices: " << aslicedCount << std::endl;
-		int nextPhaseInt = 3;
-		std::cin >> nextPhaseInt;
+		//std::cout << "::::::::::::::::::::::::: Post-MERGE stats " << std::endl;
+		//std::cout << "number of nonbounds: " << nonboundCount << std::endl;
+		//std::cout << "number of partials: " << partialboundCount << std::endl;
+		//std::cout << "number of precises: " << interceptsPointPreciseCount << std::endl;
+		//std::cout << "number of a slices: " << aslicedCount << std::endl;
+		//int nextPhaseInt = 3;
+		//std::cin >> nextPhaseInt;
+
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Post-MERGE stats ", "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of nonbounds: ", nonboundCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of partials: ", partialboundCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of precises: ", interceptsPointPreciseCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slices: ", aslicedCount, "\n");
+		cleaveSequenceFactoryLogger.waitForDebugInput();
+
 	}
 	
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
@@ -471,7 +499,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount == 0)	
 	)
 	{
-		std::cout << ">>> Handling typical scenario" << std::endl;
+		//std::cout << ">>> Handling typical scenario" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling typical scenario", "\n");
 
 		handleScenarioTypical(in_cleaveMapRef);
 	}
@@ -484,7 +513,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 
-		std::cout << ">>> Handling precise scenario" << std::endl;
+		//std::cout << ">>> Handling precise scenario" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling precise scenario", "\n");
 
 		//handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef, in_borderLineArrayRef);
 		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
@@ -494,14 +524,16 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		(interceptsPointPreciseCount > 1)
 	)
 	{
-		std::cout << ">>> Handling multiple precise scenario" << std::endl;
+		//std::cout << ">>> Handling multiple precise scenario" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling multiple precise scenario", "\n");
 		handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
-		int stopVal = 3;
-		std::cin >> stopVal;
+		//int stopVal = 3;
+		//std::cin >> stopVal;
+		cleaveSequenceFactoryLogger.waitForDebugInput();
 	}
 	else
 	{
-		std::cout << "!!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
+		std::cout << "(CleaveSequenceFactory) !!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
 		//std::cout << "!! Number of interceptsPointPrecise: " << interceptsPointPreciseCount << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
@@ -582,7 +614,8 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
-		std::cout << "!! Inverting nonbound..." << std::endl;
+		//std::cout << "!! Inverting nonbound..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inverting nonbound...", "\n");
 		nonBoundMapBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -591,7 +624,8 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
-		std::cout << "!! Inverting partial..." << std::endl;
+		//std::cout << "!! Inverting partial..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inverting partial...", "\n");
 		partialsBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -600,7 +634,8 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto slicesEnd = aslicedMap.end();
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
-		std::cout << "!! Inverting slice..." << std::endl;
+		//std::cout << "!! Inverting slice..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inverting slice...", "\n");
 		slicesBegin->second.emptyNormal *= -1.0f;
 	}
 
@@ -609,7 +644,8 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
-		std::cout << "!! Inverting intercept_points_precise..." << std::endl;
+		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inverting intercept_points_precise...", "\n");
 		interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 	}
 }
@@ -635,7 +671,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLine
 				break;
 			}
 
-			std::cout << "One iteration passed through partial bounds..." << std::endl;
+			std::cout << "(CleaveSequenceFactory) One iteration passed through partial bounds..." << std::endl;
 		}
 
 		// if it was found, do this stuff (should be able to ignore invalid iterators this way)
@@ -673,11 +709,11 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 		IRPointType pointCheckResult = IRPointType::NEITHER;	// starts out as NEITHER
 		for (interceptPointPreciseBegin; interceptPointPreciseBegin != interceptPointPreciseEnd; interceptPointPreciseBegin++)
 		{
-			std::cout << "!! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
+			std::cout << "(CleaveSequenceFactory) !! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
 
-			std::cout << "!! Line points are: " << std::endl;
-			std::cout << "Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
-			std::cout << "Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
+			std::cout << "(CleaveSequenceFactory) !! Line points are: " << std::endl;
+			std::cout << "(CleaveSequenceFactory) Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
+			std::cout << "(CleaveSequenceFactory) Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
 
 			
 			pointCheckResult = interceptPointPreciseBegin->second.checkIfPointIsInLine(in_pointToSearch);
@@ -788,7 +824,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	glm::vec3 pointToTranslateAgainst;
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
-		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+		std::cout << "(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
@@ -801,7 +837,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
-		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+		std::cout << "(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. " << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
@@ -878,7 +914,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineACopy.pointA == selectedPoint)
 	)
 	{
-		std::cout << "Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
 		
 		forwardID = in_borderLineAID;
 		reverseID = in_borderLineBID;
@@ -888,7 +924,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineACopy.pointB == selectedPoint)
 	)
 	{
-		std::cout << "Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
 
 		forwardID = in_borderLineAID;
 		reverseID = in_borderLineBID;
@@ -898,7 +934,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineBCopy.pointA == selectedPoint)
 	)
 	{
-		std::cout << "Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
 
 		forwardID = in_borderLineBID;
 		reverseID = in_borderLineAID;
@@ -908,15 +944,15 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineBCopy.pointB == selectedPoint)
 	)
 	{
-		std::cout << "Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
 
 		forwardID = in_borderLineBID;
 		reverseID = in_borderLineAID;
 	}
 	
 
-	std::cout << "Forward ID: " << forwardID << std::endl;
-	std::cout << "Reverse ID: " << reverseID << std::endl;
+	std::cout << "(CleaveSequenceFactory) Forward ID: " << forwardID << std::endl;
+	std::cout << "(CleaveSequenceFactory) Reverse ID: " << reverseID << std::endl;
 
 	return returnMap;
 }
@@ -1054,12 +1090,12 @@ void CleaveSequenceFactory::printLinesInPool()
 
 void CleaveSequenceFactory::printLineCounts()
 {
-	std::cout << "--> Printing line counts in CleaveSequenceFactory: " << std::endl;
-	std::cout << "nonbounds: " << nonboundCount << std::endl;
-	std::cout << "partialBounds: " << partialboundCount << std::endl;
-	std::cout << "precise: " << interceptsPointPreciseCount << std::endl;
-	std::cout << "aslice: " << aslicedCount << std::endl;
-	std::cout << "asliceSegmentEndPoint: " << aslicedSegmentEndpointCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) --> Printing line counts in CleaveSequenceFactory: " << std::endl;
+	std::cout << "(CleaveSequenceFactory) nonbounds: " << nonboundCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) partialBounds: " << partialboundCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) precise: " << interceptsPointPreciseCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) aslice: " << aslicedCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) asliceSegmentEndPoint: " << aslicedSegmentEndpointCount << std::endl;
 }
 
 void CleaveSequenceFactory::clearLinePools()
@@ -1088,9 +1124,9 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 	auto slicedEnd = aslicedMap.end();
 	for (; slicedBegin != slicedEnd; slicedBegin++)
 	{
-		std::cout << "++++++++++ Printing SLICED CategorizedLines: " << std::endl;
-		std::cout << "Point A: " << slicedBegin->second.line.pointA.x << ", " << slicedBegin->second.line.pointA.y << ", " << slicedBegin->second.line.pointA.z << std::endl;
-		std::cout << "Point B: " << slicedBegin->second.line.pointB.x << ", " << slicedBegin->second.line.pointB.y << ", " << slicedBegin->second.line.pointB.z << std::endl;
+		std::cout << "(CleaveSequenceFactory) ++++++++++ Printing SLICED CategorizedLines: " << std::endl;
+		std::cout << "(CleaveSequenceFactory) Point A: " << slicedBegin->second.line.pointA.x << ", " << slicedBegin->second.line.pointA.y << ", " << slicedBegin->second.line.pointA.z << std::endl;
+		std::cout << "(CleaveSequenceFactory) Point B: " << slicedBegin->second.line.pointB.x << ", " << slicedBegin->second.line.pointB.y << ", " << slicedBegin->second.line.pointB.z << std::endl;
 	}
 
 	while (partialboundCount > 0)	// do this until all partial_bound lines have been accounted for. 
@@ -1146,8 +1182,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			//std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
 			newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
-			std::cout << "Warning, CleaveSequence is INCOMPLETE. " << std::endl;
-			std::cout << "Lines are: " << std::endl;
+			std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+			std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
 			newSequence.printCategorizedLines();
 
 			int someVal = 3;
@@ -1168,7 +1204,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 	while (aslicedCount > 0)
 	{
-		std::cout << "STOP! It's hammer time. " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
 
 		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
@@ -1285,17 +1321,17 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
 			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-			std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			std::cout << "(CleaveSequenceFactory)  !! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
-			std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+			std::cout << "(CleaveSequenceFactory)  Map size is now: " << cleaveMapRefSize << std::endl;
 		}
 	}
 
 	if (aslicedCount > 0)
 	{
-		std::cout << "!!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
 
-		std::cout << "STOP! It's hammer time. " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
 
 		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
@@ -1303,7 +1339,7 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		CleaveSequence newSequence;
 		insertASliceLineForSequence(&newSequence, firstLineID);
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-		std::cout << "Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
+		std::cout << "(CleaveSequenceFactory)  Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 
 		newSequence.printCategorizedLines();
@@ -1377,7 +1413,7 @@ void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::ma
 
 		newSequence.printCategorizedLines();
 
-		std::cout << "!! End of handle multiple precise loop tick. Continue? " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  !! End of handle multiple precise loop tick. Continue? " << std::endl;
 		int endTest = 3;
 		std::cin >> endTest;
 	}

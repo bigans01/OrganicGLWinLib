@@ -1,17 +1,25 @@
 #include "stdafx.h"
 #include "SPolyFracturer.h"
 
-SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option)
+SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel)
 {
+	// set the debug level
+	fracturerLoggerDebugLevel = in_polyDebugLevel;
+	fracturerLogger.setDebugLevel(in_polyDebugLevel);
 
 	//auto truestart = std::chrono::high_resolution_clock::now();
 
 	originalPolyID = in_originalPolyID;
 	polyRef = in_sPolyRef;
-	std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
-
+	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
+	//fracturerLogger.log("(SPolyFracturer) |||| Starting print out of PRE-ROTATE Prime Points: " << std::endl;
 	//std::cout << "********************************************************* Printing cleave sequence values, prior to runFracturing " << std::endl;
-	polyRef->printAllCleaveLines();
+	if (fracturerLogger.isLoggingSet() == true)
+	{
+		fracturerLogger.log("(SPolyFracturer) |||| Starting print out of PRE-ROTATE Prime Points: ", "\n");
+		polyRef->printAllCleaveLines();
+		fracturerLogger.log("(SPolyFracturer) |||| Ended print out of PRE-ROTATE Prime Points: ", "\n");
+	}
 	//int stopVal = 3;
 	//std::cin >> stopVal;
 
@@ -44,7 +52,7 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 
 void SPolyFracturer::checkForCleaveIntersections()
 {
-	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
+	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef, fracturerLoggerDebugLevel);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
 	quatPoints.clearPoints();															// clear out the quat points, so that we may insert the below.
 
 	/*
@@ -97,10 +105,19 @@ void SPolyFracturer::checkForCleaveIntersections()
 	//sPolySG.printSPolys();
 
 
-	quatPoints.printPoints();
-	std::cout << "####################### Poly fracturing complete..... " << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	//quatPoints.printPoints();
+	//std::cout << "####################### Poly fracturing complete..... " << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
+
+	if (fracturerLogger.isLoggingSet() == true)
+	{
+		fracturerLogger.log("(SPolyFracturer) >>>> Started printing of resulting quatPoints.....  ", "\n");
+		quatPoints.printPoints();
+		fracturerLogger.log("(SPolyFracturer) >>>> Ended printing of resulting quatPoints.....  ", "\n");
+		fracturerLogger.log("(SPolyFracturer) ####################### Poly fracturing complete.....  ", "\n");
+		fracturerLogger.waitForDebugInput();
+	}
 }
 
 void SPolyFracturer::runFracturing()

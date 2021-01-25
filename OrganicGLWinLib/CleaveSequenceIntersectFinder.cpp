@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "CleaveSequenceIntersectFinder.h"
 
-CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef)
+CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef, PolyDebugLevel in_polyDebugLevel)
 {
+	intersectFinderLoggerDebugLevel = in_polyDebugLevel;
+	intersectFinderLogger.setDebugLevel(in_polyDebugLevel);
+
 	sPolyRef = in_sPolyRef;
 	originalPolyID = in_originalPolyID;
 	triangleSupergroup.setOriginalSPolyID(in_originalPolyID);
@@ -22,11 +25,19 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 
 		auto truestart = std::chrono::high_resolution_clock::now();
 		loadInterceptRecords();		// load the data about the CleaveSequence's categorized lines, and the border lines they intercept, into the appropriate border line's BorderLineInterceptRecorders.
-		printCurrentLineValuesInCleaveSequences();
-		
-		std::cout << "## Finished printing current cleave sequence line values..." << std::endl;
-		int sillyVal7 = 3;
-		std::cin >> sillyVal7;
+
+
+		//printCurrentLineValuesInCleaveSequences();
+		//std::cout << "## Finished printing current cleave sequence line values..." << std::endl;
+		//int sillyVal7 = 3;
+		//std::cin >> sillyVal7;
+		if (intersectFinderLogger.isLoggingSet() == true)
+		{
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> starting printCurrentLineValuesInCleaveSequences()", "\n");
+			printCurrentLineValuesInCleaveSequences();
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> finished printCurrentLineValuesInCleaveSequences()", "\n");
+			intersectFinderLogger.waitForDebugInput();
+		}
 
 		auto trueend = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> trueelapsed2 = trueend - truestart;
@@ -92,8 +103,11 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 		auto sequenceEnd = cleaveBegin->second.cleavingLines.end();			// ""
 		for (sequenceBegin; sequenceBegin != sequenceEnd; sequenceBegin++)	// cycle through each CategorizedLine in each CleaveSequence
 		{
-			std::cout << "!! Cycling through cleaveSequence..." << std::endl;
-			std::cout << "!! number of border lines is: " << sequenceBegin->second.line.numberOfBorderLines << std::endl;
+			//std::cout << "!! Cycling through cleaveSequence..." << std::endl;
+			//std::cout << "!! number of border lines is: " << sequenceBegin->second.line.numberOfBorderLines << std::endl;
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) !! Cycling through cleaveSequence...", "\n");
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) !!number of border lines is : ", "\n");
+
 
 			/*
 			if (sequenceBegin->second.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
@@ -109,11 +123,14 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 				borderLineRef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);		// first argument: the ID of the cleave sequence
 																																		// second argument: the ID of the categorized line we're inserting from the sequence
 																																		// third argument: a reference to the categorized line itself
-				std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
+				//std::cout << "## BorderLine updated, BorderLineID: " << borderLineId << " SequenceID: " << cleaveBegin->first << " | CategorizedLineID: " << sequenceBegin->first << std::endl;
+				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) ## BorderLine updated, BorderLineID: ", borderLineId, " SequenceID: ", cleaveBegin->first, " | CategorizedLineID: ", sequenceBegin->first, "\n");
 			}	
 			else if (sequenceBegin->second.line.numberOfBorderLines == 2)		// it's an A_SLICE
 			{
-				std::cout << "## Number of border lines is 2!" << std::endl;
+				//std::cout << "## Number of border lines is 2!" << std::endl;
+				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) ## Number of border lines is 2! ", "\n");
+
 				int borderLineAId = sequenceBegin->second.line.pointABorder;
 				SPolyBorderLines* borderLineARef = &sPolyRef->borderLines[borderLineAId];
 				borderLineARef->intersectRecorder.insertNewRecord(cleaveBegin->first, sequenceBegin->first, &sequenceBegin->second);

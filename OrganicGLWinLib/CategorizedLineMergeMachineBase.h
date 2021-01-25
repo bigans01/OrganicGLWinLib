@@ -9,12 +9,14 @@
 #include <vector>
 #include "CategorizedLineGroupLocation.h"
 #include "CategorizedLineSearchResult.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CleaveSequenceFactory;
 class CategorizedLineMergeMachineBase
 {
 	public:
-		void initialize(CleaveSequenceFactory* in_cleaveSequenceFactoryRef, CategorizedLineGroup* in_categorizedLineGroupRef);
+		void initialize(CleaveSequenceFactory* in_cleaveSequenceFactoryRef, CategorizedLineGroup* in_categorizedLineGroupRef, PolyDebugLevel in_polyDebugLevel);
 		void extractCategorizedLines();
 		virtual void runMerging() = 0;		// defined by children;
 		CategorizedLine fetchProducedLine();
@@ -39,7 +41,7 @@ class CategorizedLineMergeMachineBase
 
 		CategorizedLine mergedLineResult;	// the final product of the merging
 
-
+		PolyLogger mergeMachineLogger;
 };
 
 #endif

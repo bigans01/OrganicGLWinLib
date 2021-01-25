@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "MassZoneBox.h"
 
-void MassZoneBox::insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary)
+void MassZoneBox::insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet)
 {
 	boxBoundaries[in_massZoneBoxBoundaryOrientation] = in_massZoneBoxBoundary;
 	boxBoundaries[in_massZoneBoxBoundaryOrientation].setBoundarySPolyInPolySet();	// must be called, or program will crash. The boundary SPoly ref should only be set
 																					// after the MassZoneBoxBoundary has been copied into the map, since it will correctly point to that newly
 																					// allocated memory.
+	boxBoundaries[in_massZoneBoxBoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
 	std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
 };
 

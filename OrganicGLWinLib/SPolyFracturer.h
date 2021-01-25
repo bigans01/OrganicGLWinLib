@@ -14,6 +14,8 @@
 #include <vector>
 #include "SPolySupergroup.h"
 #include "SPolyFracturerOptionEnum.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class SPolyFracturer
 {
@@ -27,13 +29,16 @@ public:
 	//std::vector<SPoly> producedPolys;			// SPolySupergroup would go here
 	SPolySupergroup sPolySG;
 
-	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option);
+	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel);
 	void runFracturing();	// run the fracturing process
 	void applyTranslationToAllPoints(glm::vec3 in_translationOffset);	// applies a point translation to all points (but not the normals)
 	void populatePointsForQuaternions();	// populates the point ref vector in rotationPoints with all cleave line points, normals, and border lines; all of these will need to be transformed by the quaternion(s)
 	void generatePlanarNormalsForPoly();		// calls calculatePlanarNormal in the SPoly
 	void checkForCleaveIntersections();
 	void printPointMetaData();
+private:
+	PolyLogger fracturerLogger;
+	PolyDebugLevel fracturerLoggerDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif

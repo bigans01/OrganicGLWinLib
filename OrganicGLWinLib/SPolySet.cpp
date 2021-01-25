@@ -13,6 +13,8 @@ void SPolySet::addPoly(SPoly in_sPoly)
 
 void SPolySet::setOption(DebugOption in_option)
 {
+
+	// "Main" level debug options
 	if (in_option == DebugOption::SPOLYSET_TYPICAL)
 	{
 		comparisonLogger.setDebugLevel(PolyDebugLevel::DEBUG);
@@ -22,6 +24,34 @@ void SPolySet::setOption(DebugOption in_option)
 	{
 		std::cout << "!!! Will set BOUNDARY operations to debug mode. " << std::endl;
 	}
+	else if (in_option == DebugOption::SPOLYSET_ALL_SPOLY_MAIN)
+	{
+		std::cout << "!!! Will set option for all main-level SPolys: MAIN" << std::endl;
+		debugOptionsAllSPolys.insert(SPolyDO::MAIN);
+	}
+	else if (in_option == DebugOption::SPOLYSET_ALL_SPOLY_FACTORY)
+	{
+		std::cout << "!!! Will set option for all main-level SPolys: FACTORY" << std::endl;
+		debugOptionsAllSPolys.insert(SPolyDO::FACTORY);
+	}
+	else if (in_option == DebugOption::SPOLYSET_ALL_SPOLY_FACTORY_MERGER)
+	{
+		std::cout << "!!! Will set option for all main-level SPolys: FACTORY_MERGER" << std::endl;
+		debugOptionsAllSPolys.insert(SPolyDO::FACTORY_MERGER);
+	}
+	else if (in_option == DebugOption::SPOLYSET_ALL_FRACTURER)
+	{
+		std::cout << "!!! Will set option for all main-level SPolys: FACTORY_FRACTURER" << std::endl;
+		//debugOptionsAllSPolys.insert(SPolyDO::FACTORY_FRACTURER);
+		mainFracturerDebugLevel = PolyDebugLevel::DEBUG;
+	}
+
+	// All other options; for MassZoneMaster.
+	else
+	{
+		zoneMaster.handleDebugOption(in_option);
+	}
+
 }
 
 void SPolySet::reset()
@@ -1000,7 +1030,7 @@ void SPolySet::performFracturing()
 			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
-			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z);
+			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, mainFracturerDebugLevel);
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();

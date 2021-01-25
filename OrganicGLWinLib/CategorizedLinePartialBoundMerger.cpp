@@ -4,7 +4,8 @@
 
 void CategorizedLinePartialBoundMerger::runMerging()
 {
-	std::cout << "Running merge for PARTIAL_BOUND. " << std::endl;
+	//std::cout << "Running merge for PARTIAL_BOUND. " << std::endl;
+	mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) Running merge for PARTIAL_BOUND. ", "\n");
 
 
 	// get the first PARTIAL_BOUND line.
@@ -18,12 +19,15 @@ void CategorizedLinePartialBoundMerger::runMerging()
 	CategorizedLine mostRecentNonBound;
 	while (mergableNonboundCount > 0)
 	{
-		std::cout << "!! Searching for point: " << pointToSearch.x << ", " << pointToSearch.y << ", " << pointToSearch.z << std::endl;
+		//std::cout << "!! Searching for point: " << pointToSearch.x << ", " << pointToSearch.y << ", " << pointToSearch.z << std::endl;
+		mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) !! Searching for point: ", pointToSearch.x, ", ", pointToSearch.y, ", ", pointToSearch.z, "\n");
 		CategorizedLineSearchResult result = checkForNextNonboundMergeCandidate(pointToSearch);
 		if (result.wasFound == true)
 		{
-			std::cout << "!! Point A of the found non-bound is: " << result.returnLine.line.pointA.x << ", " << result.returnLine.line.pointA.y << ", " << result.returnLine.line.pointA.z << std::endl;
-			std::cout << "!! Point B of the found non-bound is: " << result.returnLine.line.pointB.x << ", " << result.returnLine.line.pointB.y << ", " << result.returnLine.line.pointB.z << std::endl;
+			//std::cout << "!! Point A of the found non-bound is: " << result.returnLine.line.pointA.x << ", " << result.returnLine.line.pointA.y << ", " << result.returnLine.line.pointA.z << std::endl;
+			//std::cout << "!! Point B of the found non-bound is: " << result.returnLine.line.pointB.x << ", " << result.returnLine.line.pointB.y << ", " << result.returnLine.line.pointB.z << std::endl;
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) !! Point A of the found non-bound is: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z, "\n");
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) !! Point B of the found non-bound is: ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
 			pointToSearch = result.returnLine.line.pointB;
 		}
 	}
@@ -45,7 +49,8 @@ void CategorizedLinePartialBoundMerger::runMerging()
 	mergedLineResult.line.numberOfBorderLines = 1;
 
 
-	int mergeFlag = 0;
-	std::cin >> mergeFlag;
+	//int mergeFlag = 0;
+	//std::cin >> mergeFlag;
+	mergeMachineLogger.waitForDebugInput();
 
 }

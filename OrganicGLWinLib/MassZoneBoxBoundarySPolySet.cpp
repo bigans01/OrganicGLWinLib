@@ -159,7 +159,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	{
 		std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 		SPolyMorphTracker morphTracker;
-		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z);
+		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
 
 	}
 }

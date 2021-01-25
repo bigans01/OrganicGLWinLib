@@ -121,7 +121,7 @@ void CoplanarMassCreator::runMassManipulation()
 		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
 
 		
-		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
+		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, massManipulatorLogLevel);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
 		
 		// (Step 5: ) Get area, from the fractured 
 		auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();

@@ -31,6 +31,7 @@
 #include "FusionCandidateProducer.h"
 #include "FusionCandidateOrigin.h"
 #include "FusedPointReactor.h"
+#include "SPolyDOSet.h"
 
 class SPolySet
 {
@@ -45,7 +46,10 @@ public:
 	PolyLogger comparisonLogger;
 	PolyLogger massZoneLogger;
 
-	
+	PolyDebugLevel mainFracturerDebugLevel = PolyDebugLevel::NONE;
+
+	SPolyDOSet debugOptionsAllSPolys;
+
 	// ************************** Template function for enabling debugging on the SPolySet **********************************
 	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptions(FirstOption && firstOption, RemainingOptions && ...optionParams)
 	{

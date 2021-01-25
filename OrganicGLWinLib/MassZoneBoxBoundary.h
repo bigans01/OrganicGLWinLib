@@ -11,18 +11,18 @@
 #include "SPoly.h"
 #include "STriangle.h"
 #include "PolyDebugLevel.h"
+#include "SPolyDOSet.h"
 
 class MassZoneBoxBoundary
 {
 	public:
 		MassZoneBoxBoundary() {};
-		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal, PolyDebugLevel in_polyDebugLevel)
+		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal)
 		{
 			insertCornerPoint(in_corner1);
 			insertCornerPoint(in_corner2);
 			insertCornerPoint(in_corner3);
 			insertCornerPoint(in_corner4);
-			massZoneBoxBoundaryLogLevel = in_polyDebugLevel;
 			emptyNormal = in_emptyNormal;
 			buildBoundarySPoly();
 			//setBoundarySPolyInPolySet();
@@ -65,6 +65,15 @@ class MassZoneBoxBoundary
 		void generateSPolysFromPolySet()
 		{
 			boundaryPolySet.buildBoundarySPolyFromFactory();
+		}
+		void setDebugOptionsInSPoly(SPolyDOSet in_sPolyDOSet)
+		{
+			auto fracturerFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::FRACTURER);
+			if (fracturerFinder != in_sPolyDOSet.debugOptions.end())
+			{
+				boundaryPolySet.fracturerDebugLevel = PolyDebugLevel::DEBUG;
+			}
+			boundarySPoly.applyDebugOptions(in_sPolyDOSet);
 		}
 
 	private:
