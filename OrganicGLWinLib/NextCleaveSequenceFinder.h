@@ -18,6 +18,8 @@
 #include "LineWelderRunMode.h"
 #include "WeldedLinePool.h"
 #include "SelfComparePermit.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class NextCleaveSequenceFinder
 {
@@ -33,7 +35,8 @@ class NextCleaveSequenceFinder
 										glm::vec3 in_sequenceFinderStartPoint,
 										LineWelderRunMode in_lineWelderRunMode,
 										WeldedLinePool* in_weldedLinePoolRef,
-										SelfComparePermit in_passedPermit) : 
+										SelfComparePermit in_passedPermit,
+										PolyDebugLevel in_polyDebugLevel) : 
 			startingBorderLineID(in_startingborderLineID),
 			borderLineRef(in_borderLineRef), 
 			cleaveMapRef(in_cleaveMapRef),
@@ -44,8 +47,10 @@ class NextCleaveSequenceFinder
 			sequenceFinderStartPoint(in_sequenceFinderStartPoint),
 			finderRunMode(in_lineWelderRunMode),
 			weldedLinePoolRef(in_weldedLinePoolRef),
-			passedPermit(in_passedPermit)
+			passedPermit(in_passedPermit),
+			nextCleaveSequenceFinderLoggerDebugLevel(in_polyDebugLevel)
 		{
+			nextCleaveSequenceFinderLogger.setDebugLevel(in_polyDebugLevel);
 			buildNeighboringCleaveSequenceMap();
 		};
 		bool wasSequenceFound();
@@ -76,6 +81,9 @@ class NextCleaveSequenceFinder
 
 		void buildNeighboringCleaveSequenceMap();
 		void findAndSortNeighboringCleaveSequences();
+
+		PolyLogger nextCleaveSequenceFinderLogger;
+		PolyDebugLevel nextCleaveSequenceFinderLoggerDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif

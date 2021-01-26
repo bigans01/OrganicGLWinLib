@@ -236,8 +236,8 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
 	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(rotationpointsRefVector->getPointByIndex(2));		
 	glm::vec3 centroidFacingNormal = rotationpointsRefVector->getPointByIndex(3);
-	std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
-	std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
+	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
+	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(
 		//(rotationpointsRefVector->getPointByIndex(2).y >= 0)
@@ -246,7 +246,7 @@ bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithin
 		(rotationpointsRefVector->getPointByIndex(3).y > 0)
 	)
 	{
-		std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
+		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
 		isWithinPlane = true;
 	}
 	else

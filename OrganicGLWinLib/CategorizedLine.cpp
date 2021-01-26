@@ -185,21 +185,21 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 	}
 	else if (type == IntersectionType::A_SLICE)
 	{
-		std::cout << "!! A_SLICE branch entered..." << std::endl;
+		//std::cout << "!! A_SLICE branch entered..." << std::endl;
 
 
 		int categorizedLineBorderID = line.pointBBorder;	// doesn't matter which one we use, let's just use A
 		glm::vec3 borderPoint = line.pointB;
 		glm::vec3 emptyNormalCopy = emptyNormal;		// get a copy of the normal, don't modify the original.
-		std::cout << "!! Empty normal is: " << emptyNormalCopy.x << ", " << emptyNormalCopy.y << ", " << emptyNormalCopy.z << std::endl;
+		//std::cout << "!! Empty normal is: " << emptyNormalCopy.x << ", " << emptyNormalCopy.y << ", " << emptyNormalCopy.z << std::endl;
 
 	
 		QuatRotationPoints rotationPoints;
 		SPolyBorderLines borderLineCopy = in_borderLineArrayRef[categorizedLineBorderID];
 
-		std::cout << "!! Border line point A: " << borderLineCopy.pointA.x << ", " << borderLineCopy.pointA.y << ", " << borderLineCopy.pointA.z << std::endl;
-		std::cout << "!! Border line point B: " << borderLineCopy.pointB.x << ", " << borderLineCopy.pointB.y << ", " << borderLineCopy.pointB.z << std::endl;
-		std::cout << "!! Border point: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
+		//std::cout << "!! Border line point A: " << borderLineCopy.pointA.x << ", " << borderLineCopy.pointA.y << ", " << borderLineCopy.pointA.z << std::endl;
+		//std::cout << "!! Border line point B: " << borderLineCopy.pointB.x << ", " << borderLineCopy.pointB.y << ", " << borderLineCopy.pointB.z << std::endl;
+		//std::cout << "!! Border point: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
 
 		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderPoint);
@@ -223,10 +223,10 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
 		glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
 
-		std::cout << "!-> Candidate one is: " << candidateOne.x << ", " << candidateOne.y << ", " << candidateOne.z << std::endl;
-		std::cout << "!-> Candidate two is: " << candidateTwo.x << ", " << candidateTwo.y << ", " << candidateTwo.z << std::endl;
+		//std::cout << "!-> Candidate one is: " << candidateOne.x << ", " << candidateOne.y << ", " << candidateOne.z << std::endl;
+		//std::cout << "!-> Candidate two is: " << candidateTwo.x << ", " << candidateTwo.y << ", " << candidateTwo.z << std::endl;
 
-		std::cout << "!! (Post run) Empty normal is: " << emptyNormalCopy.x << ", " << emptyNormalCopy.y << ", " << emptyNormalCopy.z << std::endl;
+		//std::cout << "!! (Post run) Empty normal is: " << emptyNormalCopy.x << ", " << emptyNormalCopy.y << ", " << emptyNormalCopy.z << std::endl;
 
 		glm::vec3 selectedPoint;
 		if (candidateOne.y > 0)
@@ -238,18 +238,18 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 			selectedPoint = candidateTwo;
 		}
 
-		std::cout << "Select point is: " << selectedPoint.x << ", " << selectedPoint.y << ", " << selectedPoint.z << std::endl;
+		//std::cout << "Select point is: " << selectedPoint.x << ", " << selectedPoint.y << ", " << selectedPoint.z << std::endl;
 
 		// if the selected point, is B of the border line, we go forward.
 		if (borderLineCopy.pointB == selectedPoint)
 		{
-			std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
+			//std::cout << "::: Direction is FORWARD, heading towards point B: " << in_borderLineArrayRef[categorizedLineBorderID].pointB.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointB.z << std::endl;
 			direction = CyclingDirection::FORWARD;
 		}
 		else if (borderLineCopy.pointA == selectedPoint)
 		{
 
-			std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
+			//std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
 			direction = CyclingDirection::REVERSE;
 		}
 

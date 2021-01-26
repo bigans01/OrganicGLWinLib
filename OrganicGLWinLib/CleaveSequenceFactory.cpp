@@ -287,7 +287,8 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
-		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering nonbound refs...", "\n");
 		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
@@ -303,8 +304,8 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
 		//std::cout << "!! Inverting partial..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering partial refs...", "\n");
 		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
@@ -321,7 +322,8 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
 		//std::cout << "!! Inverting slice..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering slice refs...", "\n");
 		//slicesBegin->second.emptyNormal *= -1.0f;
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
 		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
@@ -334,7 +336,8 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
 		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs...", "\n");
 		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
 		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
@@ -352,7 +355,8 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
 	{
-		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring NON_BOUND normal references...", "\n");
 		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
@@ -369,8 +373,8 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
 		//std::cout << "!! Inverting partial..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering nonbound refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering partial refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring PARTIAL_BOUND normal references...", "\n");
 		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
@@ -388,7 +392,8 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; slicesBegin != slicesEnd; slicesBegin++)
 	{
 		//std::cout << "!! Inverting slice..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring A_SLICE normal references...", "\n");
 		//slicesBegin->second.emptyNormal *= -1.0f;
 		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
@@ -402,7 +407,8 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
 	{
 		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
-		std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
+		//std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring INTERCEPTS_POINT_PRECISE normal references...", "\n");
 		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
 		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
 		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
@@ -671,7 +677,8 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLine
 				break;
 			}
 
-			std::cout << "(CleaveSequenceFactory) One iteration passed through partial bounds..." << std::endl;
+			//std::cout << "(CleaveSequenceFactory) One iteration passed through partial bounds..." << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) One iteration passed through partial bounds...", "\n");
 		}
 
 		// if it was found, do this stuff (should be able to ignore invalid iterators this way)
@@ -709,11 +716,15 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 		IRPointType pointCheckResult = IRPointType::NEITHER;	// starts out as NEITHER
 		for (interceptPointPreciseBegin; interceptPointPreciseBegin != interceptPointPreciseEnd; interceptPointPreciseBegin++)
 		{
-			std::cout << "(CleaveSequenceFactory) !! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
+			//std::cout << "(CleaveSequenceFactory) !! Iterating through INTERCEPT_POINT_PRECISE map..." << std::endl;
+			//std::cout << "(CleaveSequenceFactory) !! Line points are: " << std::endl;
+			//std::cout << "(CleaveSequenceFactory) Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
+			//std::cout << "(CleaveSequenceFactory) Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
 
-			std::cout << "(CleaveSequenceFactory) !! Line points are: " << std::endl;
-			std::cout << "(CleaveSequenceFactory) Point A: " << interceptPointPreciseBegin->second.line.pointA.x << ", " << interceptPointPreciseBegin->second.line.pointA.y << ", " << interceptPointPreciseBegin->second.line.pointA.z << std::endl;
-			std::cout << "(CleaveSequenceFactory) Point B: " << interceptPointPreciseBegin->second.line.pointB.x << ", " << interceptPointPreciseBegin->second.line.pointB.y << ", " << interceptPointPreciseBegin->second.line.pointB.z << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Iterating through INTERCEPT_POINT_PRECISE map...", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Line points are: ", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point A: ", interceptPointPreciseBegin->second.line.pointA.x, ", ", interceptPointPreciseBegin->second.line.pointA.y, ", ", interceptPointPreciseBegin->second.line.pointA.z, "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point B: ", interceptPointPreciseBegin->second.line.pointB.x, ", ", interceptPointPreciseBegin->second.line.pointB.y, ", ", interceptPointPreciseBegin->second.line.pointB.z, "\n");
 
 			
 			pointCheckResult = interceptPointPreciseBegin->second.checkIfPointIsInLine(in_pointToSearch);
@@ -824,7 +835,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	glm::vec3 pointToTranslateAgainst;
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
-		std::cout << "(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. " << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. " << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. ", "\n");
 
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
@@ -837,7 +849,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
-		std::cout << "(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. " << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. " << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. ", "\n");
 
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
 		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
@@ -914,7 +927,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineACopy.pointA == selectedPoint)
 	)
 	{
-		std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)", "\n");
 		
 		forwardID = in_borderLineAID;
 		reverseID = in_borderLineBID;
@@ -924,7 +938,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineACopy.pointB == selectedPoint)
 	)
 	{
-		std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)", "\n");
 
 		forwardID = in_borderLineAID;
 		reverseID = in_borderLineBID;
@@ -934,7 +949,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineBCopy.pointA == selectedPoint)
 	)
 	{
-		std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)", "\n");
 
 		forwardID = in_borderLineBID;
 		reverseID = in_borderLineAID;
@@ -944,15 +960,18 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 		(borderLineBCopy.pointB == selectedPoint)
 	)
 	{
-		std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)", "\n");
 
 		forwardID = in_borderLineBID;
 		reverseID = in_borderLineAID;
 	}
 	
 
-	std::cout << "(CleaveSequenceFactory) Forward ID: " << forwardID << std::endl;
-	std::cout << "(CleaveSequenceFactory) Reverse ID: " << reverseID << std::endl;
+	//std::cout << "(CleaveSequenceFactory) Forward ID: " << forwardID << std::endl;
+	//std::cout << "(CleaveSequenceFactory) Reverse ID: " << reverseID << std::endl;
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Forward ID: ", forwardID, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Reverse ID: ", reverseID, "\n");
 
 	return returnMap;
 }
@@ -1124,9 +1143,13 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 	auto slicedEnd = aslicedMap.end();
 	for (; slicedBegin != slicedEnd; slicedBegin++)
 	{
-		std::cout << "(CleaveSequenceFactory) ++++++++++ Printing SLICED CategorizedLines: " << std::endl;
-		std::cout << "(CleaveSequenceFactory) Point A: " << slicedBegin->second.line.pointA.x << ", " << slicedBegin->second.line.pointA.y << ", " << slicedBegin->second.line.pointA.z << std::endl;
-		std::cout << "(CleaveSequenceFactory) Point B: " << slicedBegin->second.line.pointB.x << ", " << slicedBegin->second.line.pointB.y << ", " << slicedBegin->second.line.pointB.z << std::endl;
+		//std::cout << "(CleaveSequenceFactory) ++++++++++ Printing SLICED CategorizedLines: " << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Point A: " << slicedBegin->second.line.pointA.x << ", " << slicedBegin->second.line.pointA.y << ", " << slicedBegin->second.line.pointA.z << std::endl;
+		//std::cout << "(CleaveSequenceFactory) Point B: " << slicedBegin->second.line.pointB.x << ", " << slicedBegin->second.line.pointB.y << ", " << slicedBegin->second.line.pointB.z << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Printing SLICED CategorizedLines: ", "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point A: ", slicedBegin->second.line.pointA.x, ", ", slicedBegin->second.line.pointA.y, ", ", slicedBegin->second.line.pointA.z, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point B: ", slicedBegin->second.line.pointB.x, ", ", slicedBegin->second.line.pointB.y, ", ", slicedBegin->second.line.pointB.z, "\n");
+
 	}
 
 	while (partialboundCount > 0)	// do this until all partial_bound lines have been accounted for. 
@@ -1204,7 +1227,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 	while (aslicedCount > 0)
 	{
-		std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time. ", "\n");
 
 		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
@@ -1214,10 +1238,17 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 
-		newSequence.printCategorizedLines();
+		//newSequence.printCategorizedLines();
+		//int someVal = 3;
+		//std::cin >> someVal;
 
-		int someVal = 3;
-		std::cin >> someVal;
+		if (cleaveSequenceFactoryLogger.isLoggingSet() == true)
+		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> started printing out of produced A_SLICE categorized lines.", "\n");
+			newSequence.printCategorizedLines();
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> finished printing out of produced A_SLICE categorized lines.", "\n");
+			cleaveSequenceFactoryLogger.waitForDebugInput();
+		}
 
 
 	}

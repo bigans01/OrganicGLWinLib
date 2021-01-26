@@ -66,7 +66,7 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 		cleaveSequenceFactoryRef->groupMap.printGroupLineCounts();
 		mergerLogger.log("(CategorizedLineMerger) >>>> finished printing group line counts in referenced CleaveSequenceFactory...", "\n");
 	}
-	std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+	//std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
 	mergerLogger.log("(CategorizedLineMerger) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", "\n");
 	mergerLogger.waitForDebugInput();
 

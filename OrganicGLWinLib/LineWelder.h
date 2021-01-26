@@ -16,12 +16,17 @@
 #include "LineWelderRunMode.h"
 #include "WeldedLinePool.h"
 #include "SelfComparePermit.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class LineWelder
 {
 public:
-	LineWelder(SPoly* in_sPolyRef) : sPolyRef(in_sPolyRef) 
+	LineWelder(SPoly* in_sPolyRef, PolyDebugLevel in_polyDebugLevel) : 
+		sPolyRef(in_sPolyRef),
+		lineWelderLoggerDebugLevel(in_polyDebugLevel)
 	{
+		lineWelderLogger.setDebugLevel(in_polyDebugLevel);
 		currentManipulationMode = sPolyRef->massManipulationSetting;	// set the manipulation mode.
 		getCleaveSequenceCandidateListMap();	// create the candidates map for each border line, by calling on the SPoly to do it
 		getCleaveSequenceMetaTracker();			// builds the meta tracker, so that we may pass it to the NextCleaveSequenceFinder
@@ -53,6 +58,9 @@ private:
 	void findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID);
 	void insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal);
 	void updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
+
+	PolyLogger lineWelderLogger;
+	PolyDebugLevel lineWelderLoggerDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif

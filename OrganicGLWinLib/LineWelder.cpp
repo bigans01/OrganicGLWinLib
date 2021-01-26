@@ -58,15 +58,25 @@ void LineWelder::startWelding()
 	std::cin >> finishedVal;
 	*/
 
-	std::cout << ":::::::: Values of rbegin categorized line are: " << std::endl;
-	std::cout << "Point A: " << startingCategorizedLine->second.line.pointA.x << ", " << startingCategorizedLine->second.line.pointA.y << ", " << startingCategorizedLine->second.line.pointA.z << std::endl;
-	std::cout << "Point B: " << startingCategorizedLine->second.line.pointB.x << ", " << startingCategorizedLine->second.line.pointB.y << ", " << startingCategorizedLine->second.line.pointB.z << std::endl;
-	std::cout << "Empty normal: " << startingCategorizedLine->second.emptyNormal.x << ", " << startingCategorizedLine->second.emptyNormal.y << ", " << startingCategorizedLine->second.emptyNormal.z << std::endl;
+	//std::cout << ":::::::: Values of rbegin categorized line are: " << std::endl;
+	//std::cout << "Point A: " << startingCategorizedLine->second.line.pointA.x << ", " << startingCategorizedLine->second.line.pointA.y << ", " << startingCategorizedLine->second.line.pointA.z << std::endl;
+	//std::cout << "Point B: " << startingCategorizedLine->second.line.pointB.x << ", " << startingCategorizedLine->second.line.pointB.y << ", " << startingCategorizedLine->second.line.pointB.z << std::endl;
+	//std::cout << "Empty normal: " << startingCategorizedLine->second.emptyNormal.x << ", " << startingCategorizedLine->second.emptyNormal.y << ", " << startingCategorizedLine->second.emptyNormal.z << std::endl;
 
-	std::cout << ":::::::: Values of begin categorized line are: " << std::endl;
-	std::cout << "Point A: " << endingCategorizedLine->second.line.pointA.x << ", " << endingCategorizedLine->second.line.pointA.y << ", " << endingCategorizedLine->second.line.pointA.z << std::endl;
-	std::cout << "Point B: " << endingCategorizedLine->second.line.pointB.x << ", " << endingCategorizedLine->second.line.pointB.y << ", " << endingCategorizedLine->second.line.pointB.z << std::endl;
-	std::cout << "Empty normal: " << endingCategorizedLine->second.emptyNormal.x << ", " << endingCategorizedLine->second.emptyNormal.y << ", " << endingCategorizedLine->second.emptyNormal.z << std::endl;
+	//std::cout << ":::::::: Values of begin categorized line are: " << std::endl;
+	//std::cout << "Point A: " << endingCategorizedLine->second.line.pointA.x << ", " << endingCategorizedLine->second.line.pointA.y << ", " << endingCategorizedLine->second.line.pointA.z << std::endl;
+	//std::cout << "Point B: " << endingCategorizedLine->second.line.pointB.x << ", " << endingCategorizedLine->second.line.pointB.y << ", " << endingCategorizedLine->second.line.pointB.z << std::endl;
+	//std::cout << "Empty normal: " << endingCategorizedLine->second.emptyNormal.x << ", " << endingCategorizedLine->second.emptyNormal.y << ", " << endingCategorizedLine->second.emptyNormal.z << std::endl;
+
+	lineWelderLogger.log("(LineWelder) :::::::: Values of rbegin categorized line are: ", "\n");
+	lineWelderLogger.log("(LineWelder) Point A: ", startingCategorizedLine->second.line.pointA.x, ", ", startingCategorizedLine->second.line.pointA.y, ", ", startingCategorizedLine->second.line.pointA.z, "\n");
+	lineWelderLogger.log("(LineWelder) Point B: ", startingCategorizedLine->second.line.pointB.x, ", ", startingCategorizedLine->second.line.pointB.y, ", ", startingCategorizedLine->second.line.pointB.z, "\n");
+	lineWelderLogger.log("(LineWelder) Empty normal: ", startingCategorizedLine->second.emptyNormal.x, ", ", startingCategorizedLine->second.emptyNormal.y, ", ", startingCategorizedLine->second.emptyNormal.z, "\n");
+
+	lineWelderLogger.log("(LineWelder) :::::::: Values of begin categorized line are: ", "\n");
+	lineWelderLogger.log("(LineWelder) Point A: ", endingCategorizedLine->second.line.pointA.x, ", ", endingCategorizedLine->second.line.pointA.y, ", ", endingCategorizedLine->second.line.pointA.z, "\n");
+	lineWelderLogger.log("(LineWelder) Point B: ", endingCategorizedLine->second.line.pointB.x, ", ", endingCategorizedLine->second.line.pointB.y, ", ", endingCategorizedLine->second.line.pointB.z, "\n");
+	lineWelderLogger.log("(LineWelder) Empty normal: ", endingCategorizedLine->second.emptyNormal.x, ", ", endingCategorizedLine->second.emptyNormal.y, ", ", endingCategorizedLine->second.emptyNormal.z, "\n");
 
 	bool slicedFlag = false;
 
@@ -85,7 +95,9 @@ void LineWelder::startWelding()
 	if (startingCategorizedLine->second.line.numberOfBorderLines == 1)		// if there are multiple CategorizedLines in the cleave sequence, the first line in the sequence
 																	// will have exactly one border line. The end of the sequence will have another border line.
 	{
-		std::cout << "::: Branch hit for one border line... " << std::endl;
+		//std::cout << "::: Branch hit for one border line... " << std::endl;
+		lineWelderLogger.log("(LineWelder) ::: Branch hit for one border line... ", "\n");
+
 		//pointPair = startingCategorizedLine->second.line.getBorderLinePointPair();
 		currentLeadingPoint = startingCategorizedLine->second.line.getBorderPointFromSingularBorderLineCount();
 		currentBorderLineID = startingCategorizedLine->second.line.getBorderLineIDFromSingularBorderLineCount();		
@@ -103,7 +115,9 @@ void LineWelder::startWelding()
 																			// get the borders from the pointA and pointB of this line.
 	{
 		slicedFlag = true;
-		std::cout << "::: Branch hit for two border lines... " << std::endl;
+
+		//std::cout << "::: Branch hit for two border lines... " << std::endl;
+		lineWelderLogger.log("::: Branch hit for two border lines... ", "\n");
 
 
 		BorderLineIDPair retrievedPair = startingCategorizedLine->second.line.getBorderLineIDPair();
@@ -114,17 +128,27 @@ void LineWelder::startWelding()
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		
 		currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
 
-		std::cout << "::: First categorized line Aoint A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
-			<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
+		//std::cout << "::: First categorized line, Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
+			//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
 
 
-		std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
-		std::cout << "currentBorderLineID: " << currentBorderLineID << std::endl;
-		std::cout << "endingBorderLineID: " << endingBorderLineID << std::endl;
+		//std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
+		//std::cout << "currentBorderLineID: " << currentBorderLineID << std::endl;
+		//std::cout << "endingBorderLineID: " << endingBorderLineID << std::endl;
+
+		//int someVal = 3;
+		//std::cin >> someVal;
+
+		lineWelderLogger.log("(LineWelder) ::: First categorized line, Point A: ", currentCategorizedLine.line.pointA.x, ", ", currentCategorizedLine.line.pointA.y, ", ", currentCategorizedLine.line.pointA.z,
+			" | Point B: ", currentCategorizedLine.line.pointB.x, ", ", currentCategorizedLine.line.pointB.y, ", ", currentCategorizedLine.line.pointB.z, "\n");
+		lineWelderLogger.log("(LineWelder) ::: First categorized line empty normal : ", currentCategorizedLine.emptyNormal.x, ", ", currentCategorizedLine.emptyNormal.y, ", ", currentCategorizedLine.emptyNormal.z, "\n");
+		lineWelderLogger.log("(LineWelder) currentBorderLineID: ", currentBorderLineID, "\n");
+		lineWelderLogger.log("(LineWelder) endingBorderLineID: ", endingBorderLineID, "\n");
+		lineWelderLogger.log("(LineWelder) enter number to continue...", "\n");
+		lineWelderLogger.waitForDebugInput();
 
 
-		int someVal = 3;
-		std::cin >> someVal;
+
 	}
 
 	// insert the very first line of the welding pool.
@@ -231,9 +255,12 @@ void LineWelder::startWelding()
 	candidateListMap.printCandidateLists();
 	candidateListMap.updateRemainingCandidateCount();
 
-	std::cout << "### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. " << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	//std::cout << "### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. " << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
+
+	lineWelderLogger.log("(LineWelder) ### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. ", "\n");
+	lineWelderLogger.waitForDebugInput();
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
 }
 
@@ -250,7 +277,9 @@ void LineWelder::getCleaveSequenceMetaTracker()
 
 void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
 {
-	std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+	//std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
+	lineWelderLogger.log("(LineWelder) ----------------------------------> Welding leading point for this line is: ", in_leadingPoint.x, ", ", in_leadingPoint.y, ", ", in_leadingPoint.z, "\n");
+
 	// find any neighboring cleave lines that exist on the same border line, if they exist. If they do exist, fetch the next
 	// pass in these parameters:
 	// -the border line that the finder needs to run on
@@ -278,7 +307,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																in_leadingPoint, 
 																runMode, 
 																&weldedLines,
-																permit);
+																permit,
+																lineWelderLoggerDebugLevel);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			//std::cout << "--> Next sequence was found! " << std::endl;
@@ -309,7 +339,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 
 			if (runMode == LineWelderRunMode::ENDING)
 			{
-				std::cout << "Performing special check for ending mode... " << std::endl;
+				//std::cout << "Performing special check for ending mode... " << std::endl;
+				lineWelderLogger.log("(LineWelder) Performing special check for ending mode...", "\n");
 				// before continuing with the next cleave sequence, check to see if there is a distance between the leadingPoint and cleaveSequenceTracingBeginPoint
 				if (discoveredSequence.distance != 0.0f)
 				{
@@ -325,7 +356,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
 			{
-				std::cout << "| Crawling line... " << std::endl;
+				//std::cout << "| Crawling line... " << std::endl;
+				lineWelderLogger.log("(LineWelder) | Crawling line...", "\n");
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();	// fetch the next line, swapping the points of it if in REVERSE.
 				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
 
@@ -359,6 +391,18 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			//std::cout << "!!! No neighbors found, from the leading point: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+			if (lineWelderLogger.isLoggingSet() == true)
+			{
+				lineWelderLogger.log("(LineWelder) found next border line ID; original ID was ", currentBorderLineID, "; new ID is ", nextBorderLineID, "; direction was ");
+				if (foundDirection == CyclingDirection::FORWARD)
+				{
+					lineWelderLogger.log("FORWARD", "\n");
+				}
+				else if (foundDirection == CyclingDirection::REVERSE)
+				{
+					lineWelderLogger.log("REVERSE", "\n");
+				}
+			}
 			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 			//std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
@@ -368,8 +412,12 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	}
 	else if (intersectRecorderRef->records.size() == 1)		// only do this if there is ONE CleaveSequence in the current border line.
 	{
-		std::cout << "::: Note: border Line with ID: " << currentBorderLineID << " has only 1 intercept record. " << std::endl;
-		std::cout << "::: Value of in_currentBorderLineID: " << in_currentBorderLineID << std::endl;
+		//std::cout << "::: Note: border Line with ID: " << currentBorderLineID << " has only 1 intercept record. " << std::endl;
+		//std::cout << "::: Value of in_currentBorderLineID: " << in_currentBorderLineID << std::endl;
+
+		lineWelderLogger.log("(LineWelder) ::: Note: border Line with ID: ", currentBorderLineID, " has only 1 intercept record. ", "\n");
+		lineWelderLogger.log("(LineWelder) ::: Value of in_currentBorderLineID : ", in_currentBorderLineID, "\n");
+
 		NextCleaveSequenceFinder nextCleaveSequenceFinder(in_currentBorderLineID, 
 																&sPolyRef->borderLines[in_currentBorderLineID], 
 																&sPolyRef->cleaveMap, 
@@ -380,7 +428,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																in_leadingPoint, 
 																runMode, 
 																&weldedLines, 
-																permit);
+																permit,
+			lineWelderLoggerDebugLevel);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
@@ -445,6 +494,18 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 		{
 			//std::cout << "!!! The single intercept record was already consumed!!! Will insert new line... " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;
 			nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+			if (lineWelderLogger.isLoggingSet() == true)
+			{
+				lineWelderLogger.log("(LineWelder) found next border line ID; original ID was ", currentBorderLineID, "; new ID is ", nextBorderLineID, "; direction was ");
+				if (foundDirection == CyclingDirection::FORWARD)
+				{
+					lineWelderLogger.log("FORWARD", "\n");
+				}
+				else if (foundDirection == CyclingDirection::REVERSE)
+				{
+					lineWelderLogger.log("REVERSE", "\n");
+				}
+			}
 			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 			//std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
@@ -459,6 +520,18 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	else if (intersectRecorderRef->records.size() == 0)		// only do this if there are ZERO CleaveSequences in the current border line.
 	{
 		int nextBorderLineID = sPolyRef->getNextBorderLineID(currentBorderLineID, foundDirection);
+		if (lineWelderLogger.isLoggingSet() == true)
+		{
+			lineWelderLogger.log("(LineWelder) found next border line ID; original ID was ", currentBorderLineID, "; new ID is ", nextBorderLineID, "; direction was ");
+			if (foundDirection == CyclingDirection::FORWARD)
+			{
+				lineWelderLogger.log("FORWARD", "\n");
+			}
+			else if (foundDirection == CyclingDirection::REVERSE)
+			{
+				lineWelderLogger.log("REVERSE", "\n");
+			}
+		}
 		//std::cout << ":: This border line has no records; producing line and proceeding to next border line with ID: " << nextBorderLineID << std::endl;
 
 		updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
@@ -473,7 +546,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 	// update the permit action flag to false.
 	permit.first_permit_action = false;
 
-	std::cout << "#########_> completed iteration of findRemainingWeldingLines" << std::endl;
+	//std::cout << "#########_> completed iteration of findRemainingWeldingLines" << std::endl;
+	lineWelderLogger.log("(LineWelder) #########_> completed iteration of findRemainingWeldingLines", "\n");
 	//int someVal = 3;
 	//std::cin >> someVal;
 }

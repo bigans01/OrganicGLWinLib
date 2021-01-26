@@ -79,7 +79,8 @@ void NextCleaveSequenceFinder::checkForperformingFirstPermitAction()
 		(passedPermit.permType == PermitType::TYPICAL)
 	)
 	{	
-		std::cout << ">>> Permit is typical; no self-compare permitted on first welding." << std::endl;
+		//std::cout << ">>> Permit is typical; no self-compare permitted on first welding." << std::endl;
+		nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>> Permit is typical; no self-compare permitted on first welding.", "\n");
 		foundSet.erase(passedPermit.cleaveSequenceID);
 	}
 }
@@ -136,15 +137,21 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 		DistanceToPoint shortestPointStats;
 		if (checkToPerformSpecialPointFetch() == true)
 		{
-			std::cout << ">>>> Fetching point via self compare..." << std::endl;
-			std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
+			//std::cout << ">>>> Fetching point via self compare..." << std::endl;
+			//std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
+			nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>>> Fetching point via self compare...", "\n");
+			nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>>> Point is : ", sequenceFinderStartPoint.x, ", ", sequenceFinderStartPoint.y, ", ", sequenceFinderStartPoint.z, "\n");
 			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointSelfCompare(sequenceFinderStartPoint);
 		}
 		else
 		{
-			std::cout << ">>>> Fetching point via closest point..." << std::endl;
-			std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
-			std::cout << ">>>> Starting point ID: " << startingBorderLineID << std::endl;
+			//std::cout << ">>>> Fetching point via closest point..." << std::endl;
+			//std::cout << ">>>> Point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
+			//std::cout << ">>>> Starting point ID: " << startingBorderLineID << std::endl;
+			nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>>> Fetching point via closest point...", "\n");
+			nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>>> Point is: ", sequenceFinderStartPoint.x, ", ", sequenceFinderStartPoint.y, ", ", sequenceFinderStartPoint.z, "\n");
+			nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >>>> Starting point ID:  ", startingBorderLineID, "\n");
+
 			shortestPointStats = (*cleaveMapRef)[*foundSetBegin].fetchClosestPointOnBorderLineID(sequenceFinderStartPoint, startingBorderLineID);
 		}
 
@@ -152,7 +159,8 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 
 
 		distanceToPointMap[*foundSetBegin] = shortestPointStats;																// Step 2
-		std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
+		//std::cout << ">> Inserted DistancePoint at index " << *foundSetBegin << ": distance-> " << shortestPointStats.distance << " | point-> " << shortestPointStats.point.x << ", " << shortestPointStats.point.y << ", " << shortestPointStats.point.z << std::endl;
+		nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) >> InsertedDistancePoint at index ", *foundSetBegin, ": distance-> ", shortestPointStats.distance, " | point-> ", shortestPointStats.point.x, ", ", shortestPointStats.point.y, ", ", shortestPointStats.point.z, "\n");
 	}
 
 	std::map<int, DistanceToPoint> originalCopy = distanceToPointMap;	// create a copy of the map, so that when we find the nearest CleaveSequence by its ID, 

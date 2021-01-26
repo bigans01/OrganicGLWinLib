@@ -54,7 +54,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 		*/
 
 		// weld the lines; put the results into the line pool. Then, put it into the welded triangle builder.
-		LineWelder welder(in_sPolyRef);		
+		LineWelder welder(in_sPolyRef, intersectFinderLoggerDebugLevel);
 		while (welder.getRemainingCandidateCount() > 0)
 		{
 			welder.startWelding();							// perform one welding run

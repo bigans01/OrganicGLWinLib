@@ -54,6 +54,57 @@ void SPolySet::setOption(DebugOption in_option)
 
 }
 
+void SPolySet::setSpecificSPolyOption(int in_sPolyID, DebugOption in_option)
+{
+	std::cout << "!!! Successful call of setSpecificSPolyOption, for SPolyID: " << in_sPolyID << std::endl;
+	if (in_option == DebugOption::SPECIFIC_SPOLY_MAIN)
+	{
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::MAIN);
+	}
+	else if (in_option == DebugOption::SPECIFIC_SPOLY_FACTORY)
+	{
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::FACTORY);
+	}
+	else if (in_option == DebugOption::SPECIFIC_SPOLY_FACTORY_MERGER)
+	{
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::FACTORY_MERGER);
+	}
+	else if (in_option == DebugOption::SPECIFIC_FRACTURER_EXECUTION)
+	{
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::FRACTURER);
+	}
+}
+
+PolyDebugLevel SPolySet::checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;		// value to return if the specific value isn't found
+	auto specificSPolyIter = specificSPolyOptionMap.find(in_sPolyID);
+	if (specificSPolyIter != specificSPolyOptionMap.end())	// an entry was found, but must be checked to see if it contains the value we need.
+	{
+		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(SPolyDO::FRACTURER);
+		if (specificOptionFinder != specificSPolyIter->second.debugOptions.end())	// the option we needed was found.
+		{
+			returnLevel = PolyDebugLevel::DEBUG;
+		}
+	}
+	return returnLevel;
+}
+
+void SPolySet::applyDebugOptionsToSpecificSPolys()
+{
+	auto polysBegin = secondaryPolys.begin();
+	auto polysEnd = secondaryPolys.end();
+	for (; polysBegin != polysEnd; polysBegin++)
+	{
+		auto optionsFinder = specificSPolyOptionMap.find(polysBegin->first);
+		if (optionsFinder != specificSPolyOptionMap.end())	// it was found
+		{
+			std::cout << "(SPolySet) !! Found options for SPoly with ID " << polysBegin->first << std::endl;
+			polysBegin->second.applyDebugOptions(specificSPolyOptionMap[polysBegin->first]);
+		}
+	}
+}
+
 void SPolySet::reset()
 {
 	numberOfPolys = 0;
@@ -82,6 +133,9 @@ void SPolySet::configurePolysWithoutNormalCalcs()
 
 void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 {
+	// apply any debug options to existing SPolys.
+	applyDebugOptionsToSpecificSPolys();
+
 	// build the zone boundaries for the MassZones
 	//zoneMaster.setMassZoneLogLevels(PolyDebugLevel::DEBUG);			// hard-coded for testing, for the time being. (1/11/2021)
 	zoneMaster.createMassZoneBoxBoundaries(in_massZoneBoxType);
@@ -1030,7 +1084,7 @@ void SPolySet::performFracturing()
 			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
-			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, mainFracturerDebugLevel);
+			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();

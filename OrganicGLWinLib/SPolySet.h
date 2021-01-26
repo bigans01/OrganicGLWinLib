@@ -36,21 +36,8 @@
 class SPolySet
 {
 public:
-	std::map<int, SPoly> secondaryPolys;	// holds up to 16 secondary polys
-	SPolyMorphTracker polyMorphTracker;
-	int numberOfPolys = 0;		// the number of polys
-	SPolySupergroupManager polyFracturingResults;
-	CoplanarRelationshipTracker coplanarTracker;
-	MassZoneMaster zoneMaster;
-
-	PolyLogger comparisonLogger;
-	PolyLogger massZoneLogger;
-
-	PolyDebugLevel mainFracturerDebugLevel = PolyDebugLevel::NONE;
-
-	SPolyDOSet debugOptionsAllSPolys;
-
-	// ************************** Template function for enabling debugging on the SPolySet **********************************
+	SPolySupergroupManager polyFracturingResults;	// publicly available, can be used for various things.
+	// ************************** Recursive template function for enabling debugging on the SPolySet **********************************
 	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptions(FirstOption && firstOption, RemainingOptions && ...optionParams)
 	{
 		// needs work; but if statement is done to avoid user error of parameters not passed in as DebugOption.
@@ -64,38 +51,78 @@ public:
 		}
 		else
 		{
-			std::cout << "Invalid debug option passed in. " << std::endl;
+			std::cout << "(SPolySet) Invalid debug option passed in. " << std::endl;
 		}
 	}
 	void setDebugOptions() {};
-	void setOption(DebugOption in_option);
+
+	// ************************** Recursive template function for enabling debug options on a specific SPoly **********************************
+	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptionsForSpecificSPoly(int in_sPolyID, FirstOption && firstOption, RemainingOptions && ...optionParams)
+	{
+		if constexpr
+		(
+			(std::is_same<FirstOption, DebugOption>::value)
+		)
+		{
+			setSpecificSPolyOption(in_sPolyID, std::forward<FirstOption>(firstOption));
+			setDebugOptionsForSpecificSPoly(in_sPolyID, std::forward<RemainingOptions>(optionParams)...);
+		}
+		else
+		{
+			std::cout << "(SPolySet) Invalid debug option passed in. " << std::endl;
+		}
+	}
+	void setDebugOptionsForSpecificSPoly(int in_sPolyID) {};
+
+	// generic functions for public interface
 	void addPoly(SPoly in_sPoly);
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
 	void runPolyComparison(MassZoneBoxType in_massZoneBoxType);
-	void insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup);
-	void insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly);
-
-	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
-	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
-	IntersectionResult checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
-	IntersectionResult checkIfRayIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_line);
-	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
-	float dot(glm::vec3 in_A, glm::vec3 in_B);
-	double doubledot(glm::vec3 in_A, glm::vec3 in_B);
-	glm::vec3 roundPointToHundredths(glm::vec3 in_point);
-	int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);
-	void reset();	// reset the values of the poly set
-	float getRadiansForPosZViaY(glm::vec3 in_vec3);
-	float getRadiansForPosYViaX(glm::vec3 in_vec3);
-	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
 	void performFracturing();	// perform the slicing on any polygon that meets the valid condition of needing to be sliced.
+	void reset();	// reset the values of the poly set
 
+	// hard-codable testing functions; currently unused, but available
 	void runTest1();		// runs use case 1 
 	void runTest2();		// Summary: contains 2 groups (IDs 1 and 2) that go through a set of polys.
 	void runTest3();		// Summary: test for DISCONNECTED cleave type
 	void runTest4();
 
+private:
+	CoplanarRelationshipTracker coplanarTracker;					// stores any coplanar relationships that exist between two or more polys
+	MassZoneMaster zoneMaster;										// manages control of the old and new MassZones
+	PolyLogger comparisonLogger;									// debug output for comparison operations
+	PolyDebugLevel mainFracturerDebugLevel = PolyDebugLevel::NONE;	// debug level that is used if no specific SPoly fracturer debug options are set; i.e, setting this to Debug puts
+																	// all calls of SPolyFracturer in SPolySet to DEBUG mode.
+	SPolyDOSet debugOptionsAllSPolys;								// a set of debug options that would be applied to all SPolys; 
+	std::map<int, SPolyDOSet> specificSPolyOptionMap;				// a map containing SPolyDOSets for specific SPolys having certain IDs
+	std::map<int, SPoly> secondaryPolys;							// stores instances of SPoly that have been added to the SPolySet, via addPoly.
+	SPolyMorphTracker polyMorphTracker;				// NOTE: potentially unused; needs review.
+	int numberOfPolys = 0;							// the number of polys
+
+
+	void applyDebugOptionsToSpecificSPolys();
+	void insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup);
+	void insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly);
+	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
+
+	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
+	IntersectionResult checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
+	IntersectionResult checkIfRayIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_line);
+
+	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
+	float dot(glm::vec3 in_A, glm::vec3 in_B);
+	double doubledot(glm::vec3 in_A, glm::vec3 in_B);
+	glm::vec3 roundPointToHundredths(glm::vec3 in_point);
+	int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);
+	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
+
+	float getRadiansForPosZViaY(glm::vec3 in_vec3);
+	float getRadiansForPosYViaX(glm::vec3 in_vec3);
+
+	void setOption(DebugOption in_option);
+	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);
+	PolyDebugLevel checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID);
 };
 
 #endif

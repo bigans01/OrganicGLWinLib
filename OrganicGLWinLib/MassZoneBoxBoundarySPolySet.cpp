@@ -25,18 +25,18 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 	SPoly* polyA = boundarySPolyRef;
 
 
-	std::cout << "!!! Size of triangles: " << polyA->triangles.size() << std::endl;
-	std::cout << "!!! Size of border lines: " << polyA->borderLines.size() << std::endl;
-	std::cout << "!!! Size of border lines, direct: " << boundarySPolyRef->borderLines.size() << std::endl;
+	//std::cout << "!!! Size of triangles: " << polyA->triangles.size() << std::endl;
+	//std::cout << "!!! Size of border lines: " << polyA->borderLines.size() << std::endl;
+	//std::cout << "!!! Size of border lines, direct: " << boundarySPolyRef->borderLines.size() << std::endl;
 
 	//SPoly dumbPoly;
 	//std::cout << "!!! Dumb poly size of border lines: " << dumbPoly.borderLines.size() << std::endl;
 
 
 	SPoly* polyB = in_sPolyRef;
-	std::cout << ">>> Entering before coplanarity checker. " << std::endl;
+	//std::cout << ">>> Entering before coplanarity checker. " << std::endl;
 	CoplanarChecker checker(polyA, polyB, boxBoundarySPolySetLogger.getLogLevel());
-	std::cout << ">>> Passed coplanarity checker. " << std::endl;
+	//std::cout << ">>> Passed coplanarity checker. " << std::endl;
 
 	//int waitVal;
 	//std::cin >> waitVal;
@@ -44,7 +44,7 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 
 	if (checker.coplanarityDetected == false)	// can only compare to a guest sPoly that is non-coplanar to the boundary SPoly.
 	{
-		std::cout << " >>> Performing comparison. " << std::endl;
+		//std::cout << " >>> Performing comparison. " << std::endl;
 		insertCategorizedLinesFromNonboundarySPoly(in_sPolyRef);
 	}
 
@@ -86,7 +86,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			// compare the host triangle lines, to the guest triangles. |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
-			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
 			//std::cout << ">>> B triangle (Guest triangle) points are: " << std::endl;
 			//std::cout << "0: " << guestTrianglePtr->triangleLines[0].pointA.x << ", " << guestTrianglePtr->triangleLines[0].pointA.y << ", " << guestTrianglePtr->triangleLines[0].pointA.z << std::endl;
 			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
@@ -102,12 +102,12 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				}
 			}
 			hostLineGroup.runFusionAnalysisAndDetermineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
 	
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
 			// compare the GUEST triangle lines, to the host triangles. ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
 			for (int z = 0; z < 3; z++)		// run the lines of B (the guest) through triangle A (the host)
 			{
 				FusionCandidateProducer guestCandidateProducer(boxBoundarySPolySetLogger.getLogLevel());
@@ -118,7 +118,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				}
 			}
 			guestLineGroup.runFusionAnalysisAndDetermineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
 
 			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis, boxBoundarySPolySetLogger.getLogLevel());
 			FusedPointReactorResult reactionResult = reactor.getReactorResult();
@@ -157,7 +157,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
 	if (boundarySPolyRef->cleaveMap.size() != 0)
 	{
-		std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
+		//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 		SPolyMorphTracker morphTracker;
 		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
 
@@ -196,9 +196,9 @@ IntersectionResult MassZoneBoxBoundarySPolySet::checkIfLineIntersectsTriangle(ST
 	// do the swapped compare
 	IntersectionResult resultB = checkIfRayIntersectsTriangle(in_triangle, swappedLine);
 
-	std::cout << "!!!! Bi-dirrectional comparison results: " << std::endl;
-	std::cout << "ResultA, was found: " << resultA.wasIntersectFound << std::endl;
-	std::cout << "ResultB, was found: " << resultB.wasIntersectFound << std::endl;
+	//std::cout << "!!!! Bi-dirrectional comparison results: " << std::endl;
+	//std::cout << "ResultA, was found: " << resultA.wasIntersectFound << std::endl;
+	//std::cout << "ResultB, was found: " << resultB.wasIntersectFound << std::endl;
 
 	if
 		(
