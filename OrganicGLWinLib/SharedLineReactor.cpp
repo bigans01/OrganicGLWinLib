@@ -3,7 +3,8 @@
 
 void SharedLineReactor::runAnalysis()
 {
-	std::cout << "(SharedLineReactor): running analysis..." << std::endl;
+	//std::cout << "(SharedLineReactor): running analysis..." << std::endl;
+	reactorBaseLogger.log("(SharedLineReactor): running analysis...", "\n");
 	// Search for the following, in the appropriate order:
 	//
 	// Search 1: PRECISE_BORDERLINE or PRECISE_MIXED, in the HOST origin point
@@ -16,7 +17,8 @@ void SharedLineReactor::runAnalysis()
 	{
 		glm::vec3 precisePoint = fusedPointMetaRef->searchForSummaryInSpecifiedOrigin(FusedPointSummary::PRECISE_BORDERLINE, FusionCandidateOrigin::HOST).foundPoint;
 		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(precisePoint);
-		std::cout << "(SharedLineReactor) Search 1-> PRECISE found in host (PRECISE_BORDERLINE or PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE." << std::endl;
+		//std::cout << "(SharedLineReactor) Search 1-> PRECISE found in host (PRECISE_BORDERLINE or PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE." << std::endl;
+		reactorBaseLogger.log("(SharedLineReactor) Search 1-> PRECISE found in host (PRECISE_BORDERLINE or PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE.", "\n");
 		buildInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 	}
 
@@ -32,7 +34,8 @@ void SharedLineReactor::runAnalysis()
 		// It also means, we don't care about the type of the other point (Which belongs to the guest); we only need it's point.
 		glm::vec3 borderPoint = fusedPointMetaRef->searchForSummaryInSpecifiedOrigin(FusedPointSummary::TYPICAL_BORDERLINE, FusionCandidateOrigin::HOST).foundPoint;
 		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(borderPoint);
-		std::cout << "(SharedLineReactor) Search 2-> TYPICAL_BORDERLINE found in host; processing for PARTIAL_BOUND " << std::endl;
+		//std::cout << "(SharedLineReactor) Search 2-> TYPICAL_BORDERLINE found in host; processing for PARTIAL_BOUND " << std::endl;
+		reactorBaseLogger.log("(SharedLineReactor) Search 2-> TYPICAL_BORDERLINE found in host; processing for PARTIAL_BOUND ", "\n");
 		buildPartialBound(borderPoint, otherSummary.foundPoint);
 	}
 
@@ -41,14 +44,17 @@ void SharedLineReactor::runAnalysis()
 	{
 		glm::vec3 nonBorderPoint = fusedPointMetaRef->searchForSummaryInSpecifiedOrigin(FusedPointSummary::TYPICAL_NONBORDERLINE, FusionCandidateOrigin::HOST).foundPoint;
 		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(nonBorderPoint);
-		std::cout << "(SharedLineReactor) Search 3-> TYPICAL_NONBORDERLINE found in host; processing for NON_BOUND " << std::endl;
+		//std::cout << "(SharedLineReactor) Search 3-> TYPICAL_NONBORDERLINE found in host; processing for NON_BOUND " << std::endl;
+		reactorBaseLogger.log("(SharedLineReactor) Search 3-> TYPICAL_NONBORDERLINE found in host; processing for NON_BOUND ", "\n");
 		buildNonBound(nonBorderPoint, otherSummary.foundPoint);
 	}
 }
 
 void SharedLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
-	std::cout << "(SharedLineReactor): building INTERCEPTS_POINT_PRECISE..." << std::endl;
+	//std::cout << "(SharedLineReactor): building INTERCEPTS_POINT_PRECISE..." << std::endl;
+	reactorBaseLogger.log("(SharedLineReactor): building INTERCEPTS_POINT_PRECISE...", "\n");
+
 	// remember, always set point A as the "one on the border"
 	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
 	FusedPointSubData subDataArray[2];
@@ -63,9 +69,12 @@ void SharedLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint
 	// testing, print out the contents of the sub data
 	for (int x = 0; x < 2; x++)
 	{
-		std::cout << "Sub data at index " << x;
-		std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
-		std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+		//std::cout << "Sub data at index " << x;
+		//std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
+		//std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+
+		reactorBaseLogger.log("(SharedLineReactor) Sub data at index ", x, "\n");
+		reactorBaseLogger.log("(SharedLineReactor) : isBorderLine: ", subDataArray[x].isBorderLine, ": borderLineID: ", subDataArray[x].borderLineValue, "\n");
 	}
 
 	resultantLine.type = IntersectionType::INTERCEPTS_POINT_PRECISE;
@@ -76,18 +85,27 @@ void SharedLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint
 	resultantLine.line.numberOfBorderLines = 1;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(SharedLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: " << std::endl;
-	std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(SharedLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
-	std::cout << "(SharedLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
-	std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(SharedLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: " << std::endl;
+	//std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(SharedLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	//std::cout << "(SharedLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
+	//std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+
+	reactorBaseLogger.log("(SharedLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: ", "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): pointBBorder: ", resultantLine.line.pointBBorder, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }
 
 void SharedLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
 	// remember, point A of partial bound is the point that lies  on the border.
-	std::cout << "(SharedLineReactor): building PARTIAL_BOUND..." << std::endl;
+	//std::cout << "(SharedLineReactor): building PARTIAL_BOUND..." << std::endl;
+	reactorBaseLogger.log("(SharedLineReactor): building PARTIAL_BOUND...", "\n");
+
 	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
 	auto subDataRefBegin = subDataRef->begin();
 	FusedPointSubData singleSubData = *subDataRefBegin;
@@ -100,22 +118,35 @@ void SharedLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec
 	resultantLine.line.numberOfBorderLines = 1;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(SharedLineReactor): finished producing PARTIAL_BOUND, stats are: " << std::endl;
-	std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(SharedLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
-	std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(SharedLineReactor): finished producing PARTIAL_BOUND, stats are: " << std::endl;
+	//std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(SharedLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	//std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+
+	reactorBaseLogger.log("(SharedLineReactor): finished producing PARTIAL_BOUND, stats are: ", "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }
 
 void SharedLineReactor::buildNonBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
+	reactorBaseLogger.log("(SharedLineReactor): building NON_BOUND...", "\n");
+
 	resultantLine.type = IntersectionType::NON_BOUND;
 	resultantLine.line.pointA = in_buildStartPoint;
 	resultantLine.line.pointB = in_otherPoint;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(SharedLineReactor): finished producing NON_BOUND, stats are: " << std::endl;
-	std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(SharedLineReactor): finished producing NON_BOUND, stats are: " << std::endl;
+	//std::cout << "(SharedLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(SharedLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(SharedLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+
+	reactorBaseLogger.log("(SharedLineReactor): finished producing NON_BOUND, stats are: ", "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(SharedLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }

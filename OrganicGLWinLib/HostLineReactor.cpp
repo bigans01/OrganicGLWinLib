@@ -3,7 +3,8 @@
 
 void HostLineReactor::runAnalysis()
 {
-	std::cout << "(HostLineReactor): running analysis..." << std::endl;
+	//std::cout << "(HostLineReactor): running analysis..." << std::endl;
+	reactorBaseLogger.log("(HostLineReactor): running analysis...", "\n");
 
 	// Search for the following, in the appropriate order:
 	//
@@ -15,12 +16,14 @@ void HostLineReactor::runAnalysis()
 		if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_NONBORDERLINE)	// we have a PRECISE_BORDERLINE point, followed by the other point being nonbound; 
 																				// this must be a PARTIAL_BOUND.
 		{
-			std::cout << "(HostLineReactor) Search 2-> TYPICAL_NONBORDERLINE found; processing for INTERCEPTS_POINT_PRECISE." << std::endl;
+			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_NONBORDERLINE found; processing for INTERCEPTS_POINT_PRECISE." << std::endl;
+			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_NONBORDERLINE found; processing for INTERCEPTS_POINT_PRECISE.", "\n");
 			buildInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 		}
 		else if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_BORDERLINE)
 		{
-			std::cout << "(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
+			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
+			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE.", "\n");
 		}
 	}
 
@@ -43,12 +46,14 @@ void HostLineReactor::runAnalysis()
 		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(borderPoint);
 		if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_BORDERLINE) // the first point is a TYPICAL_BORDERLINE, and so is this one; it's a SLICE.
 		{
-			std::cout << "(HostLineReactor) Search 3 -> TYPICAL_BORDERLINE found; processing for A_SLICE. " << std::endl;
+			//std::cout << "(HostLineReactor) Search 3 -> TYPICAL_BORDERLINE found; processing for A_SLICE. " << std::endl;
+			reactorBaseLogger.log("(HostLineReactor) Search 3 -> TYPICAL_BORDERLINE found; processing for A_SLICE. ", "\n");
 			buildASlice(borderPoint, otherSummary.foundPoint);
 		}
 		else if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_NONBORDERLINE) // the first point is a TYPICAL_BORDERLINE, but this one is TYPICAL_NONBORDERLINE; it's a PARTIAL_BOUND.
 		{
-			std::cout << "(HostLineReactor) Search 3 -> TYPICAL_NONBORDERLINE found; processing for PARTIAL_BOUND. " << std::endl;
+			//std::cout << "(HostLineReactor) Search 3 -> TYPICAL_NONBORDERLINE found; processing for PARTIAL_BOUND. " << std::endl;
+			reactorBaseLogger.log("(HostLineReactor) Search 3 -> TYPICAL_NONBORDERLINE found; processing for PARTIAL_BOUND. ", "\n");
 			buildPartialBound(borderPoint, otherSummary.foundPoint);
 		}
 	}
@@ -62,7 +67,9 @@ void HostLineReactor::runAnalysis()
 
 void HostLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
-	std::cout << "(HostLineReactor): building INTERCEPTS_POINT_PRECISE..." << std::endl;
+	//std::cout << "(HostLineReactor): building INTERCEPTS_POINT_PRECISE..." << std::endl;
+	reactorBaseLogger.log("(HostLineReactor): building INTERCEPTS_POINT_PRECISE...", "\n");
+
 	// remember, always set point A as the "one on the border"
 	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
 	FusedPointSubData subDataArray[2];
@@ -77,9 +84,12 @@ void HostLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, 
 	// testing, print out the contents of the sub data
 	for (int x = 0; x < 2; x++)
 	{
-		std::cout << "Sub data at index " << x;
-		std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
-		std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+		//std::cout << "Sub data at index " << x;
+		//std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
+		//std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+		reactorBaseLogger.log("(HostLineReactor) Sub data at index ", x, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : isBorderLine: ", subDataArray[x].isBorderLine, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : borderLineID: ", subDataArray[x].borderLineValue, "\n");
 	}
 
 	resultantLine.type = IntersectionType::INTERCEPTS_POINT_PRECISE;
@@ -90,17 +100,26 @@ void HostLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, 
 	resultantLine.line.numberOfBorderLines = 1;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(HostLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: " << std::endl;
-	std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
-	std::cout << "(HostLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
-	std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(HostLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: " << std::endl;
+	//std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	//std::cout << "(HostLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
+	//std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+
+	reactorBaseLogger.log("(HostLineReactor): finished producing INTERCEPT_POINTS_PRECISE, stats are: ", "\n");
+	reactorBaseLogger.log("(HostLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor): pointBBorder: ", resultantLine.line.pointBBorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor) : empty normal : ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }
 
 void HostLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
-	std::cout << "(HostLineReactor): building PARTIAL_BOUND..." << std::endl;
+	//std::cout << "(HostLineReactor): building PARTIAL_BOUND..." << std::endl;
+	reactorBaseLogger.log("(HostLineReactor): building PARTIAL_BOUND...", "\n");
+
 	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
 	auto subDataRefBegin = subDataRef->begin();
 	FusedPointSubData singleSubData = *subDataRefBegin;
@@ -113,12 +132,17 @@ void HostLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 
 	resultantLine.line.numberOfBorderLines = 1;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(HostLineReactor): finished producing PARTIAL_BOUND, stats are: " << std::endl;
-	std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
-	std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(HostLineReactor): finished producing PARTIAL_BOUND, stats are: " << std::endl;
+	//std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	//std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
 
+	reactorBaseLogger.log("(HostLineReactor): finished producing PARTIAL_BOUND, stats are: ", "\n");
+	reactorBaseLogger.log("(HostLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor) : empty normal : ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }
 
 void HostLineReactor::buildASlice(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
@@ -143,13 +167,22 @@ void HostLineReactor::buildASlice(glm::vec3 in_buildStartPoint, glm::vec3 in_oth
 	resultantLine.line.numberOfBorderLines = 2;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 
-	std::cout << "(HostLineReactor): finished producing A_SLICE, stats are: " << std::endl;
-	std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
-	std::cout << "(HostLineReactor): isPointAOnBorder: " << resultantLine.line.isPointAOnBorder << std::endl;
-	std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
-	std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
-	std::cout << "(HostLineReactor): isPointBOnBorder: " << resultantLine.line.isPointBOnBorder << std::endl;
-	std::cout << "(HostLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
-	std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+	//std::cout << "(HostLineReactor): finished producing A_SLICE, stats are: " << std::endl;
+	//std::cout << "(HostLineReactor): point A: " << resultantLine.line.pointA.x << ", " << resultantLine.line.pointA.y << ", " << resultantLine.line.pointA.z << std::endl;
+	//std::cout << "(HostLineReactor): isPointAOnBorder: " << resultantLine.line.isPointAOnBorder << std::endl;
+	//std::cout << "(HostLineReactor): pointABorder: " << resultantLine.line.pointABorder << std::endl;
+	//std::cout << "(HostLineReactor): point B: " << resultantLine.line.pointB.x << ", " << resultantLine.line.pointB.y << ", " << resultantLine.line.pointB.z << std::endl;
+	//std::cout << "(HostLineReactor): isPointBOnBorder: " << resultantLine.line.isPointBOnBorder << std::endl;
+	//std::cout << "(HostLineReactor): pointBBorder: " << resultantLine.line.pointBBorder << std::endl;
+	//std::cout << "(HostLineReactor): empty normal: " << resultantLine.emptyNormal.x << ", " << resultantLine.emptyNormal.y << ", " << resultantLine.emptyNormal.z << std::endl;
+
+	reactorBaseLogger.log("(HostLineReactor): finished producing A_SLICE, stats are: ", "\n");
+	reactorBaseLogger.log("(HostLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): isPointAOnBorder: ", resultantLine.line.isPointAOnBorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(HostLineReactor): isPointBOnBorder: ", resultantLine.line.isPointBOnBorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor): pointBBorder: ", resultantLine.line.pointBBorder, "\n");
+	reactorBaseLogger.log("(HostLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 
 }

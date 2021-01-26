@@ -93,7 +93,12 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 			FusedPointMeta currentPointMeta = hostFusionAnalysisRef->fusedPoints.retrieveFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::HOST);
 			hostPair.insertFusedPointMeta(currentPointMeta);
 		}
-		hostPair.printSummaries();
+		if (fusedPointReactorLogger.isLoggingSet() == true)
+		{
+			fusedPointReactorLogger.log("(Reactor) >>>> starting call of printSummaries() in hostPair", "\n");
+			hostPair.printSummaries();
+			fusedPointReactorLogger.log("(Reactor) >>>> finished call of printSummaries() in hostPair", "\n");
+		}
 		HostLineReactor hostReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &hostPair, fusedPointReactorDebugLevel);
 		producedLine = hostReactor.resultantLine;
 	}
@@ -116,7 +121,12 @@ void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()
 		FusedPointMeta guestPointMeta = guestFusionAnalysisRef->fusedPoints.retrieveOtherFusedPointMeta(currentPointToSearch, FusionCandidateOrigin::GUEST);
 		sharedPair.insertFusedPointMeta(guestPointMeta);
 
-		sharedPair.printSummaries();
+		if (fusedPointReactorLogger.isLoggingSet() == true)
+		{
+			fusedPointReactorLogger.log("(Reactor) >>>> starting call of printSummaries() in sharedPair", "\n");
+			sharedPair.printSummaries();
+			fusedPointReactorLogger.log("(Reactor) >>>> finished call of printSummaries() in sharedPair", "\n");
+		}
 		SharedLineReactor sharedReactor(hostFusionAnalysisRef, guestFusionAnalysisRef, &sharedPair, fusedPointReactorDebugLevel);
 		producedLine = sharedReactor.resultantLine;
 

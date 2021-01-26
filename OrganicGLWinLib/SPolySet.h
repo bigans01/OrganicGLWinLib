@@ -123,6 +123,7 @@ private:
 	void setOption(DebugOption in_option);
 	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);
 	PolyDebugLevel checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID);
+	PolyDebugLevel checkIfSpecificSPolyCategorizedLineDebugIsSet(int in_sPolyID);
 };
 
 #endif

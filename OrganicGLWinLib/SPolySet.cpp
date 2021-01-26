@@ -73,6 +73,10 @@ void SPolySet::setSpecificSPolyOption(int in_sPolyID, DebugOption in_option)
 	{
 		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::FRACTURER);
 	}
+	else if (in_option == DebugOption::SPECIFIC_SPOLY_CATEGORIZED_LINES)
+	{
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::CATEGORIZED_LINES);
+	}
 }
 
 PolyDebugLevel SPolySet::checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID)
@@ -82,6 +86,21 @@ PolyDebugLevel SPolySet::checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID
 	if (specificSPolyIter != specificSPolyOptionMap.end())	// an entry was found, but must be checked to see if it contains the value we need.
 	{
 		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(SPolyDO::FRACTURER);
+		if (specificOptionFinder != specificSPolyIter->second.debugOptions.end())	// the option we needed was found.
+		{
+			returnLevel = PolyDebugLevel::DEBUG;
+		}
+	}
+	return returnLevel;
+}
+
+PolyDebugLevel SPolySet::checkIfSpecificSPolyCategorizedLineDebugIsSet(int in_sPolyID)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;		// value to return if the specific value isn't found
+	auto specificSPolyIter = specificSPolyOptionMap.find(in_sPolyID);
+	if (specificSPolyIter != specificSPolyOptionMap.end())	// an entry was found, but must be checked to see if it contains the value we need.
+	{
+		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(SPolyDO::CATEGORIZED_LINES);
 		if (specificOptionFinder != specificSPolyIter->second.debugOptions.end())	// the option we needed was found.
 		{
 			returnLevel = PolyDebugLevel::DEBUG;
@@ -353,14 +372,18 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	// perform a co-planar test here; if the two poly's arent' coplanar, proceed with normal operations.
 
 	//std::cout << "+++++++++ host poly Triangles: " << hostPolyTriangleCount << std::endl;
+	PolyDebugLevel categorizedLineDebugLevel = checkIfSpecificSPolyCategorizedLineDebugIsSet(in_hostPolyAID);
+	PolyLogger currentComparisonLogger;
+	currentComparisonLogger.setDebugLevel(categorizedLineDebugLevel);
+	currentComparisonLogger.log("(SPolySet): CategorizedLine debug option found for SPoly having ID ", in_hostPolyAID, "; comparing against SPoly with ID ", in_guestPolyID, ".", "\n");
 	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
 
 		//std::cout << "::::::::::::::::::::::::::::::::::: ----------------------------------+++++++++>>>>>>>>>>> Running host poly Triangle comparison: " << std::endl;
 
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
-		IntersectionLineGroup hostLineGroup(comparisonLogger.getLogLevel());						// the line group for poly A.
-		IntersectionLineGroup guestLineGroup(comparisonLogger.getLogLevel());						// the line group for poly B.
+		IntersectionLineGroup hostLineGroup(currentComparisonLogger.getLogLevel());						// the line group for poly A.
+		IntersectionLineGroup guestLineGroup(currentComparisonLogger.getLogLevel());						// the line group for poly B.
 		hostLineGroup.setFusionAnalyzerSPolyRef(in_hostPolyPtr);
 		guestLineGroup.setFusionAnalyzerSPolyRef(in_guestPolyPtr);
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
@@ -374,7 +397,9 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// compare the host triangle lines, to the guest triangles. |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
+			currentComparisonLogger.log("(SPolySet) [Comparison: ", in_hostPolyAID, " > ", in_guestPolyID, "] ::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> BEGIN Comparing lines of the host to the guest triangle ", "\n");
+
 			//std::cout << ">>> B triangle (Guest triangle) points are: " << std::endl;
 			//std::cout << "0: " << guestTrianglePtr->triangleLines[0].pointA.x << ", " << guestTrianglePtr->triangleLines[0].pointA.y << ", " << guestTrianglePtr->triangleLines[0].pointA.z << std::endl;
 			//std::cout << "1: " << guestTrianglePtr->triangleLines[1].pointA.x << ", " << guestTrianglePtr->triangleLines[1].pointA.y << ", " << guestTrianglePtr->triangleLines[1].pointA.z << std::endl;
@@ -382,7 +407,8 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			//std::cout << "2 (B): " << guestTrianglePtr->triangleLines[2].pointB.x << ", " << guestTrianglePtr->triangleLines[2].pointB.y << ", " << guestTrianglePtr->triangleLines[2].pointB.z << std::endl;
 			for (int currentHostTriangleLine = 0; currentHostTriangleLine < 3; currentHostTriangleLine++)		// run the lines of A (the host) through triangle B (the guest)
 			{
-				FusionCandidateProducer hostCandidateProducer(comparisonLogger.getLogLevel());					// initialize with debug level 
+				//FusionCandidateProducer hostCandidateProducer(currentComparisonLogger.getLogLevel());					// initialize with debug level 
+				FusionCandidateProducer hostCandidateProducer(PolyDebugLevel::NONE);					// initialize with debug level 
 				FusionCandidate hostFusedCandidate = hostCandidateProducer.produceCandidate(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);
 				if (hostFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
@@ -390,15 +416,18 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				}		
 			}
 			hostLineGroup.runFusionAnalysisAndDetermineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle " << std::endl;
+			currentComparisonLogger.log("(SPolySet) [Comparison: ", in_hostPolyAID, " > ", in_guestPolyID, "] ::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the host to the guest triangle ", "\n");
 
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 2
 			// compare the GUEST triangle lines, to the host triangles. ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
+			currentComparisonLogger.log("(SPolySet) [Comparison: ", in_hostPolyAID, " > ", in_guestPolyID, "] ::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> BEGIN Comparing lines of the guest to the host triangle ", "\n");
 			for (int z = 0; z < 3; z++)																			// run the lines of B (the guest) through triangle A (the host)
 			{
-				FusionCandidateProducer guestCandidateProducer(comparisonLogger.getLogLevel());					// initialize with debug level 
+				//FusionCandidateProducer guestCandidateProducer(currentComparisonLogger.getLogLevel());					// initialize with debug level 
+				FusionCandidateProducer guestCandidateProducer(PolyDebugLevel::NONE);					// initialize with debug level 
 				FusionCandidate guestFusedCandidate = guestCandidateProducer.produceCandidate(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);
 				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
@@ -407,15 +436,16 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 				
 			}
 			guestLineGroup.runFusionAnalysisAndDetermineClassifications();
-			std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
+			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
+			currentComparisonLogger.log("(SPolySet) [Comparison: ", in_hostPolyAID, " > ", in_guestPolyID, "] ::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle ", "\n");
 
 			// >>>>>>>>>>>>>>>>>>>>> STEP 3: Execute FusedPointReactor
-			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis, comparisonLogger.getLogLevel());
+			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis, currentComparisonLogger.getLogLevel());
 			FusedPointReactorResult reactionResult = reactor.getReactorResult();
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
 			{	
-				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, comparisonLogger.getLogLevel());
+				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, currentComparisonLogger.getLogLevel());
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
@@ -440,6 +470,14 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	//in_polyAPtr->moveLastCleave();		// move any remaining lines into a cleave, if they exist
 	//std::cout << "Current poly cleave size: " << in_polyAPtr->cleaveMap.size() << std::endl;
 	//in_polyAPtr->printAllCleaveLines();
+	//if (categorizedLineDebugLevel == PolyDebugLevel::DEBUG)
+	//{
+		//std::cout << "(SPolySet): (ENDED) CategorizedLine debug option found for SPoly having ID " << in_hostPolyAID << "; comparing against SPoly with ID " << in_guestPolyID << "." << std::endl;
+		//int someVal = 3;
+		//std::cin >> someVal;
+	//}
+	currentComparisonLogger.log("(SPolySet): (ENDED)  CategorizedLine debug option found for SPoly having ID ", in_hostPolyAID, "; comparing against SPoly with ID ", in_guestPolyID, ".", "\n");
+	currentComparisonLogger.waitForDebugInput();
 
 	//std::cout << "########################## End intersection check. " << std::endl;
 	
