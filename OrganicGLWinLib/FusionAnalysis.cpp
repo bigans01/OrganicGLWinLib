@@ -21,11 +21,11 @@ void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandid
 	//std::cout << "~~~~~ Is border line: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine << std::endl;
 	//std::cout << "~~~~~ wasIntersectFound: " << in_fusionCandidate.candidateIntersectionResult.wasIntersectFound << std::endl;
 
-	fusionAnalysisLogger.log("~~~~~~~~~~~~~~ Fusion candidate, point: ", in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x, ", ",
+	fusionAnalysisLogger.log("(FusionAnalysis) ~~~~~~~~~~~~~~ Fusion candidate, point: ", in_fusionCandidate.candidateIntersectionResult.intersectedPoint.x, ", ",
 		in_fusionCandidate.candidateIntersectionResult.intersectedPoint.y, ", ",
 		in_fusionCandidate.candidateIntersectionResult.intersectedPoint.z, "\n");
-	fusionAnalysisLogger.log("~~~~~ Is border line: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, "\n");
-	fusionAnalysisLogger.log("~~~~~ wasIntersectFound: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectFound, "\n");
+	fusionAnalysisLogger.log("(FusionAnalysis) ~~~~~ Is border line: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectOnBorderLine, "\n");
+	fusionAnalysisLogger.log("(FusionAnalysis) ~~~~~ wasIntersectFound: ", in_fusionCandidate.candidateIntersectionResult.wasIntersectFound, "\n");
 
 
 	// first, check if it's parallel.
@@ -63,7 +63,7 @@ void FusionAnalysis::insertFusionCandidate(FusionCandidateOrigin in_fusionCandid
 	}
 
 	//std::cout << "####### number of processed fusion candidates is now: " << numberOfProcessedFusionCandidates << std::endl;
-	fusionAnalysisLogger.log("####### number of processed fusion candidates is now: ", numberOfProcessedFusionCandidates, "\n");
+	fusionAnalysisLogger.log("(FusionAnalysis) ####### number of processed fusion candidates is now: ", numberOfProcessedFusionCandidates, "\n");
 }
 
 void FusionAnalysis::setSPolyRef(SPoly* in_sPolyRef)
@@ -106,7 +106,7 @@ void FusionAnalysis::clearCandidateData()
 	fusedPoints.clearFusedPoints();
 
 	//std::cout << "############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
-	fusionAnalysisLogger.log("############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>", "\n");
+	//fusionAnalysisLogger.log("############################## ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> cleared candidate data. ############################ ->>>>>>>>>>>>>>>>>>>>>>>>>", "\n");
 
 }
 

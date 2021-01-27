@@ -59,12 +59,18 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 		{
 			welder.startWelding();							// perform one welding run
 			linePool = welder.retrieveLinePool();			
-			linePool.printLines();
 
-			std::cout << "!!! Finished printing lines, continue? " << std::endl;
-			int finishedPrintLines = 3;
-			std::cin >> finishedPrintLines;
-
+			if (intersectFinderLogger.isLoggingSet() == true)
+			{
+				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> starting print of lines in the WeldedLinePool.", "\n");
+				linePool.printLines();
+				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> finished print of lines in the WeldedLinePool.", "\n");
+				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> enter number to continue", "\n");
+				intersectFinderLogger.waitForDebugInput();
+				//std::cout << "!!! Finished printing lines, continue? " << std::endl;
+				//int finishedPrintLines = 3;
+				//std::cin >> finishedPrintLines;
+			}
 			WeldedTriangleGroupBuilder groupBuilder;
 			groupBuilder.setWeldedLinePool(linePool);
 			groupBuilder.runTracingObservers();
@@ -86,7 +92,13 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 			//std::cin >> someVal;
 		}
 
-		triangleSupergroup.printPointsInSupergroup();
+		if (intersectFinderLogger.isLoggingSet() == true)
+		{
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> starting print of lines in the WeldedTriangleSuperGroup, before rotating back to original position.", "\n");
+			triangleSupergroup.printPointsInSupergroup();
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> finished print of lines in the WeldedTriangleSuperGroup.", "\n");
+		}
+
 	}
 	
 }

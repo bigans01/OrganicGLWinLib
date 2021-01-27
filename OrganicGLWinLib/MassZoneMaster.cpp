@@ -90,6 +90,8 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY_MERGER); break; }
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINES) : { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
         // POS_X options (East)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::MAIN); break; }

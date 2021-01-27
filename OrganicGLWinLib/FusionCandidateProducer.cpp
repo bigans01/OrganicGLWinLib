@@ -362,7 +362,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 				points.pointsRefVector.push_back(&point1);
 				points.pointsRefVector.push_back(&point2);
 				QMBoolPointWithinTriangle pointSolver;
-				withinFlag = pointSolver.solve(&points);
+				withinFlag = pointSolver.solve(&points, candidateProductionLogger.getLogLevel());
 
 				//std::cout << "||||||||| Triangle planar check; triangle points are: " << std::endl;
 				//std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;

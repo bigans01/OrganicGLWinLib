@@ -252,7 +252,13 @@ void LineWelder::startWelding()
 	}
 	*/
 	
-	candidateListMap.printCandidateLists();
+	if (lineWelderLogger.isLoggingSet() == true)
+	{
+		lineWelderLogger.log("(LineWelder) >>>> starting printing out candidate lists in candidateListMap.", "\n");
+		candidateListMap.printCandidateLists();
+		lineWelderLogger.log("(LineWelder) >>>> finished printing out candidate lists in candidateListMap.", "\n");
+	}
+
 	candidateListMap.updateRemainingCandidateCount();
 
 	//std::cout << "### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. " << std::endl;

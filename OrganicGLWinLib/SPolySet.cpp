@@ -77,30 +77,19 @@ void SPolySet::setSpecificSPolyOption(int in_sPolyID, DebugOption in_option)
 	{
 		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::CATEGORIZED_LINES);
 	}
-}
-
-PolyDebugLevel SPolySet::checkIfSpecificSPolyFracturingDebugIsSet(int in_sPolyID)
-{
-	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;		// value to return if the specific value isn't found
-	auto specificSPolyIter = specificSPolyOptionMap.find(in_sPolyID);
-	if (specificSPolyIter != specificSPolyOptionMap.end())	// an entry was found, but must be checked to see if it contains the value we need.
+	else if (in_option == DebugOption::SPECIFIC_SPOLY_CATEGORIZED_LINE_COPLANAR_TESTS)
 	{
-		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(SPolyDO::FRACTURER);
-		if (specificOptionFinder != specificSPolyIter->second.debugOptions.end())	// the option we needed was found.
-		{
-			returnLevel = PolyDebugLevel::DEBUG;
-		}
+		specificSPolyOptionMap[in_sPolyID].insert(SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS);
 	}
-	return returnLevel;
 }
 
-PolyDebugLevel SPolySet::checkIfSpecificSPolyCategorizedLineDebugIsSet(int in_sPolyID)
+PolyDebugLevel SPolySet::checkForSPolyOptionInSpecificSPoly(int in_sPolyID, SPolyDO in_sPolyDO)
 {
-	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;		// value to return if the specific value isn't found
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
 	auto specificSPolyIter = specificSPolyOptionMap.find(in_sPolyID);
 	if (specificSPolyIter != specificSPolyOptionMap.end())	// an entry was found, but must be checked to see if it contains the value we need.
 	{
-		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(SPolyDO::CATEGORIZED_LINES);
+		auto specificOptionFinder = specificSPolyIter->second.debugOptions.find(in_sPolyDO);
 		if (specificOptionFinder != specificSPolyIter->second.debugOptions.end())	// the option we needed was found.
 		{
 			returnLevel = PolyDebugLevel::DEBUG;
@@ -372,10 +361,17 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	// perform a co-planar test here; if the two poly's arent' coplanar, proceed with normal operations.
 
 	//std::cout << "+++++++++ host poly Triangles: " << hostPolyTriangleCount << std::endl;
-	PolyDebugLevel categorizedLineDebugLevel = checkIfSpecificSPolyCategorizedLineDebugIsSet(in_hostPolyAID);
+
+	// acquire the debug level for CategorizedLines.
+	//PolyDebugLevel categorizedLineDebugLevel = checkIfSpecificSPolyCategorizedLineDebugIsSet(in_hostPolyAID);
+	PolyDebugLevel categorizedLineDebugLevel = checkForSPolyOptionInSpecificSPoly(in_hostPolyAID, SPolyDO::CATEGORIZED_LINES);
 	PolyLogger currentComparisonLogger;
 	currentComparisonLogger.setDebugLevel(categorizedLineDebugLevel);
 	currentComparisonLogger.log("(SPolySet): CategorizedLine debug option found for SPoly having ID ", in_hostPolyAID, "; comparing against SPoly with ID ", in_guestPolyID, ".", "\n");
+
+	// acquire the debug level for CategorizedLine coplanar tests.
+	PolyDebugLevel coplanarTestDebugLevel = checkForSPolyOptionInSpecificSPoly(in_hostPolyAID, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS);
+
 	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
 
@@ -445,7 +441,7 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
 			{	
-				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, currentComparisonLogger.getLogLevel());
+				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, coplanarTestDebugLevel);
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
@@ -1122,7 +1118,8 @@ void SPolySet::performFracturing()
 			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
-			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));
+			//SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));
+			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkForSPolyOptionInSpecificSPoly(x, SPolyDO::FRACTURER));
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();

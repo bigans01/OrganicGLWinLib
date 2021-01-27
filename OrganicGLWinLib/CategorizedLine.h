@@ -15,6 +15,9 @@
 #include <map>
 #include <mutex>
 #include "CategorizedLineOptionals.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
+#include "QMVoidFindCyclingDirection.h"
 
 
 class SPolyBorderLines;
@@ -70,8 +73,13 @@ public:
 	void convertLinesToNonbound(IntersectionLine in_lineA, IntersectionLine in_lineB);
 	void convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB);
 
-	void determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef);
-	void generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal);
+	void determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel);
+	void generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, 
+													      int in_borderLineAID, 
+														  SPolyBorderLines in_borderLineB, 
+		                                                  int in_borderLineBID, 
+		                                                  glm::vec3 in_categorizedLineNormal,
+														  PolyDebugLevel in_polyDebugLevel);
 
 	void testFunction();
 

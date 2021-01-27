@@ -34,6 +34,8 @@ class MassZoneBoxBoundarySPolySet
 		PolyLogger boxBoundarySPolySetLogger; 
 		PolyDebugLevel boxBoundarySPolySetLogLevel = PolyDebugLevel::NONE;
 		PolyDebugLevel fracturerDebugLevel = PolyDebugLevel::NONE;
+		PolyDebugLevel categorizedLineDebugLevel = PolyDebugLevel::NONE;
+		PolyDebugLevel categorizedLineCoplanarTestsDebugLevel = PolyDebugLevel::NONE;
 		//SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 		int currentComparableSPolyIndex = 1;	// this index should always start at 1.
 		IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);

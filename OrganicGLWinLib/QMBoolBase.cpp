@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "QMBase.h"
+#include "QMBoolBase.h"
 
-glm::vec3 QMBase::findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
+glm::vec3 QMBoolBase::findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
 {
 	glm::vec3 foundCentroid;
 	foundCentroid.x = (in_point0.x + in_point1.x + in_point2.x) / 3;
@@ -12,7 +12,7 @@ glm::vec3 QMBase::findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1,
 	return foundCentroid;
 }
 
-glm::quat QMBase::createQuaternion(float radians, glm::vec3 in_angle)
+glm::quat QMBoolBase::createQuaternion(float radians, glm::vec3 in_angle)
 {
 	glm::quat returnQuat;
 
@@ -23,7 +23,7 @@ glm::quat QMBase::createQuaternion(float radians, glm::vec3 in_angle)
 	return returnQuat;
 }
 
-void QMBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMBoolBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	while (!(*in_quatRotationRecordStackRef).empty())
 	{
@@ -37,7 +37,7 @@ void QMBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_q
 	}
 }
 
-void QMBase::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
+void QMBoolBase::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
 {
 	glm::vec3 rotationAroundX;
 	rotationAroundX.x = -1.0f;

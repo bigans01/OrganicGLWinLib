@@ -12,6 +12,8 @@
 #include "LineWelderHierarchyPosition.h"
 #include "CleaveSequenceCrawlDirection.h"
 #include "BorderLineData.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CategorizedLine;
 class CleaveSequence
@@ -34,8 +36,8 @@ public:
 	CategorizedLine* getCategorizedLineRef(int in_categorizedLineID);
 	CleaveSequenceMeta getCleaveSequenceMeta();
 	glm::vec3 fetchPointToSearch();
-	DistanceToPoint fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID);
-	DistanceToPoint fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor);
+	DistanceToPoint fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID, PolyDebugLevel in_polyDebugLevel);
+	DistanceToPoint fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor, PolyDebugLevel in_polyDebugLevel);
 };
 
 #endif

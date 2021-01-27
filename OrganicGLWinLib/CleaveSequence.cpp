@@ -153,8 +153,12 @@ glm::vec3 CleaveSequence::fetchPointToSearch()
 	return currentPointToSearch;
 }
 
-DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID)
+DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID, PolyDebugLevel in_polyDebugLevel)
 {
+	PolyLogger tempLogger;
+	tempLogger.setDebugLevel(in_polyDebugLevel);
+	tempLogger.log("(CleaveSequence)  ---Fetching closest point, typical---", "\n");
+
 	DistanceToPoint returnDistanceToPoint;
 	float currentShortest = 100000.0f;
 	if (cleavingLines.size() == 1)
@@ -195,15 +199,23 @@ DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_poi
 	{
 		// remember, if there are two or more cleaving lines, the first and last should contain border points.
 	
-		std::cout << "!!! Size of cleave map is greater than one; executing this branch...." << std::endl;
-		std::cout << "!!! Point to calculate for is: " << in_pointToCalculateFor.x << ", " << in_pointToCalculateFor.y << ", " << in_pointToCalculateFor.z << std::endl;
-		std::cout << "!!! Border Line ID to match for: " << in_borderLineID << std::endl;
+		//std::cout << "!!! Size of cleave map is greater than one; executing this branch...." << std::endl;
+		//std::cout << "!!! Point to calculate for is: " << in_pointToCalculateFor.x << ", " << in_pointToCalculateFor.y << ", " << in_pointToCalculateFor.z << std::endl;
+		//std::cout << "!!! Border Line ID to match for: " << in_borderLineID << std::endl;
+
+		//tempLogger.log("(CleaveSequence)  ---Fetching closest point, typical---", "\n");
+		tempLogger.log("(CleaveSequence) !!! Size of cleave map is greater than one; executing this branch....", "\n");
+		tempLogger.log("(CleaveSequence) !!! Point to calculate for is: ", in_pointToCalculateFor.x, ", ", in_pointToCalculateFor.y, ", ", in_pointToCalculateFor.z, "\n");
+		tempLogger.log("(CleaveSequence) !!! Border Line ID to match for: ", in_borderLineID, "\n");
 
 		auto firstLine = cleavingLines.begin();
 		auto lastLine = cleavingLines.rbegin();
 
-		std::cout << "First Line; isAOnBorder: " << firstLine->second.line.isPointAOnBorder << ", " << firstLine->second.line.pointABorder << std::endl;
-		std::cout << "Last Line; isAOnBorder: " << lastLine->second.line.isPointBOnBorder << ", " << lastLine->second.line.pointBBorder << std::endl;
+		//std::cout << "First Line; isAOnBorder: " << firstLine->second.line.isPointAOnBorder << ", " << firstLine->second.line.pointABorder << std::endl;
+		//std::cout << "Last Line; isBOnBorder: " << lastLine->second.line.isPointBOnBorder << ", " << lastLine->second.line.pointBBorder << std::endl;
+
+		tempLogger.log("(CleaveSequence) First Line; isAOnBorder: ", firstLine->second.line.isPointAOnBorder, ", ", firstLine->second.line.pointABorder, "\n");
+		tempLogger.log("(CleaveSequence) Last line; isBOnBorder: ", lastLine->second.line.isPointBOnBorder, ", ", lastLine->second.line.pointBBorder, "\n");
 
 		glm::vec3 pointA = firstLine->second.line.getBorderPointFromSingularBorderLineCount();
 		glm::vec3 pointB = lastLine->second.line.getBorderPointFromSingularBorderLineCount();
@@ -211,8 +223,11 @@ DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_poi
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+
+		tempLogger.log("(CleaveSequence) Point A: ", pointA.x, ", ", pointA.y, ", ", pointA.z, " | Distance: ", distOriginToA, "\n");
+		tempLogger.log("(CleaveSequence) Point B: ", pointB.x, ", ", pointB.y, ", ", pointB.z, " | Distance: ", distOriginToB, "\n");
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);		// see line 168 for URL (above)
@@ -251,12 +266,14 @@ DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_poi
 		std::vector<BorderLineData> dataVector;
 		if (firstLineData.borderLineID == in_borderLineID)
 		{
-			std::cout << "!!! Point A (first line) inserted into data vector. " << std::endl;
+			//std::cout << "!!! Point A (first line) inserted into data vector. " << std::endl;
+			tempLogger.log("(CleaveSequence) !!! Point A (first line) inserted into data vector. ", "\n");
 			dataVector.push_back(firstLineData);
 		}
 		if (lastLineData.borderLineID == in_borderLineID)
 		{
-			std::cout << "!!! Point B (last line) inserted into data vector. " << std::endl;
+			//std::cout << "!!! Point B (last line) inserted into data vector. " << std::endl;
+			tempLogger.log("(CleaveSequence) !!! Point B (last line) inserted into data vector. ", "\n");
 			dataVector.push_back(lastLineData);
 		}
 
@@ -306,8 +323,12 @@ DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_poi
 	return returnDistanceToPoint;
 }
 
-DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor)
+DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor, PolyDebugLevel in_polyDebugLevel)
 {
+	PolyLogger tempLogger;
+	tempLogger.setDebugLevel(in_polyDebugLevel);
+	tempLogger.log("(CleaveSequence)  ---Fetching closest point, self-compare---", "\n");
+
 	DistanceToPoint returnDistanceToPoint;
 	float currentShortest = 100000.0f;
 	if (cleavingLines.size() == 1)
@@ -355,8 +376,10 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 		float distOriginToA = glm::distance(in_pointToCalculateFor, pointA);
 		float distOriginToB = glm::distance(in_pointToCalculateFor, pointB);
 
-		std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
-		std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << " | Distance: " << distOriginToA << std::endl;
+		//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << " | Distance: " << distOriginToB << std::endl;
+		tempLogger.log("(CleaveSequence) Point A: ", pointA.x, ", ", pointA.y, ",  ", pointA.z, " | Distance: ", distOriginToA, "\n");
+		tempLogger.log("(CleaveSequence) Point B: ", pointB.x, ", ", pointB.y, ",  ", pointB.z, " | Distance: ", distOriginToB, "\n");
 
 
 		float selectedMin = std::min(distOriginToA, distOriginToB);			// see line 168 for URL (above)
@@ -369,16 +392,20 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 			(distOriginToB == 0.0f)
 		)
 		{
-			std::cout << "++++++++ fetchClosestPoint, distance logic check branch 1 entered..." << std::endl;
+			//std::cout << "++++++++ fetchClosestPoint, distance logic check branch 1 entered..." << std::endl;
+			tempLogger.log("(CleaveSequence) ++++++++ fetchClosestPoint, distance logic check branch 1 entered...", "\n");
+
 			if (distOriginToA != 0.0f)
 			{
-				std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				//std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				tempLogger.log("(CleaveSequence) (MULTI_LINE) Closest point is A", "\n");
 				returnDistanceToPoint.distance = distOriginToA;
 				returnDistanceToPoint.point = pointA;
 			}
 			else
 			{
-				std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				//std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				tempLogger.log("(CleaveSequence) (MULTI_LINE) Closest point is B", "\n");
 				returnDistanceToPoint.distance = distOriginToB;
 				returnDistanceToPoint.point = pointB;
 			}
@@ -396,7 +423,8 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 					//(distOriginToA != 0.0f)
 					)
 			{
-				std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				//std::cout << "(MULTI_LINE) Closest point is A" << std::endl;
+				tempLogger.log("(CleaveSequence) (MULTI_LINE) Closest point is A", "\n");
 				returnDistanceToPoint.distance = selectedMin;
 				returnDistanceToPoint.point = pointA;
 			}
@@ -409,7 +437,8 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 					//(distOriginToB != 0.0f)
 					)
 			{
-				std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				//std::cout << "(MULTI_LINE) Closest point is B" << std::endl;
+				tempLogger.log("(CleaveSequence) (MULTI_LINE) Closest point is B", "\n");
 				returnDistanceToPoint.distance = selectedMin;
 				returnDistanceToPoint.point = pointB;
 			}
@@ -422,9 +451,12 @@ DistanceToPoint CleaveSequence::fetchClosestPointSelfCompare(glm::vec3 in_pointT
 		}
 	}
 
-	std::cout << "+++++++++++++++ (Self-compare) Fetch closest point halt. " << std::endl;
-	int someVal = 5;
-	std::cin >> someVal;
+	//std::cout << "+++++++++++++++ (Self-compare) Fetch closest point halt. " << std::endl;
+	//int someVal = 5;
+	//std::cin >> someVal;
+
+	tempLogger.log("(CleaveSequence) +++++++++++++++ (Self-compare) Fetch closest point halt; waiting for numerical input. ", "\n");
+	tempLogger.waitForDebugInput();
 
 	return returnDistanceToPoint;
 }

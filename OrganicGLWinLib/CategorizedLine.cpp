@@ -94,7 +94,7 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 	// do for in_lineB? maybe.
 }
 
-void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
+void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel)
 //void CategorizedLine::determineCyclingDirection(SPolyBorderLines in_borderLineArrayRef)
 {
 	//std::cout << "Determining cycling direction for this line; the line's parent SPoly is: " << parentPoly << std::endl;
@@ -135,9 +135,11 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		// now, add the normal at the end.
 		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
 
-		QuatRotationManager rotationManager;
+		//QuatRotationManager rotationManager;
 		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
-		rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+		//rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+		QMVoidFindCyclingDirection directionFinder;
+		directionFinder.solve(&rotationPoints, in_polyDebugLevel);
 
 		// determine which point it is that is positive y (check the first and third points.)
 		glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
@@ -215,9 +217,11 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		// now, add the normal at the end.
 		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
 
-		QuatRotationManager rotationManager;
+		//QuatRotationManager rotationManager;
 		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
-		rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+		//rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+		QMVoidFindCyclingDirection directionFinder;
+		directionFinder.solve(&rotationPoints, in_polyDebugLevel);
 
 		// determine which point it is that is positive y (check the first and third points.)
 		glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
@@ -266,12 +270,17 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		SPolyBorderLines borderLineB = in_borderLineArrayRef[line.pointBBorder];
 
 		// will set the direction of the line...
-		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal);
+		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal, in_polyDebugLevel);
 	}
 	
 }
 
-void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal)
+void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, 
+	                                                                   int in_borderLineAID, 
+	                                                                   SPolyBorderLines in_borderLineB, 
+	                                                                   int in_borderLineBID, 
+	                                                                   glm::vec3 in_categorizedLineNormal,
+	                                                                   PolyDebugLevel in_polyDebugLevel)
 {
 	SPolyBorderLines borderLineACopy = in_borderLineA;
 	SPolyBorderLines borderLineBCopy = in_borderLineB;
@@ -343,9 +352,11 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	//std::cout << ":::: Printing points: " << std::endl;
 	//rotationPoints.printPoints();
 
-	QuatRotationManager rotationManager;
+	//QuatRotationManager rotationManager;
 	//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
-	rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+	//rotationManager.initializeAndRunForCyclingDirectionFinderV2(&rotationPoints);
+	QMVoidFindCyclingDirection directionFinder;
+	directionFinder.solve(&rotationPoints, in_polyDebugLevel);
 
 	//std::cout << ">>>> Rotation manager initialized (3)...." << std::endl;
 

@@ -3,16 +3,16 @@
 #ifndef QMBOOLPOINTWITHINTRIANGLE_H
 #define QMBOOLPOINTWITHINTRIANGLE_H
 
-#include "QMBase.h"
+#include "QMBoolBase.h"
 #include "ThreeDLineSegment.h"
 #include <stack>
 #include "QuatRotationType.h"
 #include "OrganicGLWinUtils.h"
 
-class QMBoolPointWithinTriangle : public QMBase
+class QMBoolPointWithinTriangle : public QMBoolBase
 {
 	public:
-		bool solve(QuatRotationPoints* in_quatRotationPointsRef);
+		bool solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);
 	private:
 		void runExecutionsForFindingCentroidFacingNormal(QuatRotationPoints* in_quatRotationPoints);	// generates the centroid-facing normals for the triangle that we will run the test against
 		bool runTriangleLinePlanarityTestForPoint(QuatRotationPoints* in_quatRotationPoints);           // takes the centroid-facing normals to see if a point passes the planarity test

@@ -263,8 +263,10 @@
     <ClInclude Include="MassZoneMaster.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
-    <ClInclude Include="QMBase.h" />
+    <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolPointWithinTriangle.h" />
+    <ClInclude Include="QMVoidBase.h" />
+    <ClInclude Include="QMVoidFindCyclingDirection.h" />
     <ClInclude Include="RayIntersectionResult.h" />
     <ClInclude Include="SharedLineReactor.h" />
     <ClInclude Include="SPolyDO.h" />
@@ -457,8 +459,10 @@
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
-    <ClCompile Include="QMBase.cpp" />
+    <ClCompile Include="QMBoolBase.cpp" />
     <ClCompile Include="QMBoolPointWithinTriangle.cpp" />
+    <ClCompile Include="QMVoidBase.cpp" />
+    <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />
     <ClCompile Include="QuatRotationPoints.cpp" />
     <ClCompile Include="QuatRotationRecord.cpp" />

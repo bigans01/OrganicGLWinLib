@@ -1,8 +1,12 @@
 #include "stdafx.h"
 #include "QMBoolPointWithinTriangle.h"
 
-bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsRef)
+bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
+	// set debug level
+	qmBoolBaseLogger.setDebugLevel(in_polyDebugLevel);
+	qmBoolBaseLoggerDebugLevel = in_polyDebugLevel;
+
 	bool returnValue = false;
 	bool planeArrayCheckResult[3];
 	struct TriangleLineSpec

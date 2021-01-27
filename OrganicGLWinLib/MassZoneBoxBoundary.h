@@ -68,11 +68,27 @@ class MassZoneBoxBoundary
 		}
 		void setDebugOptionsInSPoly(SPolyDOSet in_sPolyDOSet)
 		{
+			// check for the FRACTURER option.
 			auto fracturerFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::FRACTURER);
 			if (fracturerFinder != in_sPolyDOSet.debugOptions.end())
 			{
 				boundaryPolySet.fracturerDebugLevel = PolyDebugLevel::DEBUG;
 			}
+
+			// check for the CATEGORIZED_LINES option.
+			auto categorizedLinesFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::CATEGORIZED_LINES);
+			if (categorizedLinesFinder != in_sPolyDOSet.debugOptions.end())
+			{
+				boundaryPolySet.categorizedLineDebugLevel = PolyDebugLevel::DEBUG;
+			}
+
+			// check for the CATEGORIZED_LINE_COPLANAR_TESTS option.
+			auto coplanarTestFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS);
+			if (coplanarTestFinder != in_sPolyDOSet.debugOptions.end())
+			{
+				boundaryPolySet.categorizedLineCoplanarTestsDebugLevel = PolyDebugLevel::DEBUG;
+			}
+
 			boundarySPoly.applyDebugOptions(in_sPolyDOSet);
 		}
 

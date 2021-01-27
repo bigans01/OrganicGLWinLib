@@ -65,14 +65,20 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 	int hostPolyTriangleCount = in_hostPolyPtr->numberOfTriangles;
 	int guestPolyTriangleCount = in_guestPolyPtr->numberOfTriangles;
 
+	// acquire the debug level for CategorizedLines.
+	PolyLogger currentComparisonLogger;
+	currentComparisonLogger.setDebugLevel(categorizedLineDebugLevel);
+	currentComparisonLogger.log("(MassZoneBoxBoundarySPolySet) Categorized line debug option found.", "\n");
+
+
 	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
 
 		//std::cout << "::::::::::::::::::::::::::::::::::: ----------------------------------+++++++++>>>>>>>>>>> Running host poly Triangle comparison: " << std::endl;
 
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
-		IntersectionLineGroup hostLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly A.
-		IntersectionLineGroup guestLineGroup(boxBoundarySPolySetLogger.getLogLevel());						// the line group for poly B.
+		IntersectionLineGroup hostLineGroup(currentComparisonLogger.getLogLevel());						// the line group for poly A.
+		IntersectionLineGroup guestLineGroup(currentComparisonLogger.getLogLevel());						// the line group for poly B.
 		hostLineGroup.setFusionAnalyzerSPolyRef(in_hostPolyPtr);
 		guestLineGroup.setFusionAnalyzerSPolyRef(in_guestPolyPtr);
 		for (int y = 0; y < guestPolyTriangleCount; y++)					// .. to each of poly B's tertiaries...
@@ -94,7 +100,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			//std::cout << "2 (B): " << guestTrianglePtr->triangleLines[2].pointB.x << ", " << guestTrianglePtr->triangleLines[2].pointB.y << ", " << guestTrianglePtr->triangleLines[2].pointB.z << std::endl;
 			for (int currentHostTriangleLine = 0; currentHostTriangleLine < 3; currentHostTriangleLine++)		// run the lines of A (the host) through triangle B (the guest)
 			{
-				FusionCandidateProducer hostCandidateProducer(boxBoundarySPolySetLogger.getLogLevel());
+				//FusionCandidateProducer hostCandidateProducer(currentComparisonLogger.getLogLevel());
+				FusionCandidateProducer hostCandidateProducer(PolyDebugLevel::NONE);
 				FusionCandidate hostFusedCandidate = hostCandidateProducer.produceCandidate(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);
 				if (hostFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
@@ -110,7 +117,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the guest to the host triangle" << std::endl;
 			for (int z = 0; z < 3; z++)		// run the lines of B (the guest) through triangle A (the host)
 			{
-				FusionCandidateProducer guestCandidateProducer(boxBoundarySPolySetLogger.getLogLevel());
+				//FusionCandidateProducer guestCandidateProducer(currentComparisonLogger.getLogLevel());
+				FusionCandidateProducer guestCandidateProducer(PolyDebugLevel::NONE);
 				FusionCandidate guestFusedCandidate = guestCandidateProducer.produceCandidate(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);
 				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
@@ -120,12 +128,12 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			guestLineGroup.runFusionAnalysisAndDetermineClassifications();
 			//std::cout << "::::::::::::::::::::::::::::::::::: (MassZoneBoxBoundarySPolyset) >>>>>>>>>>>>>>>>>>>>>>>>>>> ENDED Comparing lines of the guest to the host triangle" << std::endl;
 
-			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis, boxBoundarySPolySetLogger.getLogLevel());
+			FusedPointReactor reactor(&hostLineGroup.returnLine.completedAnalysis, &guestLineGroup.returnLine.completedAnalysis, currentComparisonLogger.getLogLevel());
 			FusedPointReactorResult reactionResult = reactor.getReactorResult();
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
 			{
-				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, boxBoundarySPolySetLogger.getLogLevel());
+				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, categorizedLineCoplanarTestsDebugLevel);
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
@@ -133,8 +141,8 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				//numberOfIntersections++;
 			}
 			
-			boxBoundarySPolySetLogger.log("######>>>>>>> (MassZoneBoxBoundarySPolyset) Comparison complete, enter number to continue to next comparison. ", "\n");
-			boxBoundarySPolySetLogger.waitForDebugInput();
+			currentComparisonLogger.log("######>>>>>>> (MassZoneBoxBoundarySPolyset) Comparison complete, enter number to continue to next comparison. ", "\n");
+			currentComparisonLogger.waitForDebugInput();
 
 			hostLineGroup.reset();
 			guestLineGroup.reset();

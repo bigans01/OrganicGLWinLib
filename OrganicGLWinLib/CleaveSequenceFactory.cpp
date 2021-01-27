@@ -559,7 +559,7 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	for (; partialsBegin != partialsEnd; partialsBegin++)
 	{
 		//std::cout << ">>>>>>> Determining partial cycling direction..." << std::endl;
-		partialsBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+		partialsBegin->second.determineCyclingDirection(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 	}
 
 	// go through each intersects_point_precise
@@ -578,7 +578,7 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	for (; pointsPreciseBegin != pointsPreciseEnd; pointsPreciseBegin++)
 	{
 		//std::cout << ">>>>>>> Determining points precise cycling direction..." << std::endl;
-		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+		pointsPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 	}
 
 
@@ -586,7 +586,7 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	auto aslicedEnd = aslicedMap.end();
 	for (; aslicedBegin != aslicedEnd; aslicedBegin++)
 	{
-		aslicedBegin->second.determineCyclingDirection(in_borderLineArrayRef);
+		aslicedBegin->second.determineCyclingDirection(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 	}
 
 	//std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;

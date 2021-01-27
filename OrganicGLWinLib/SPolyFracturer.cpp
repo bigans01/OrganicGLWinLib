@@ -112,9 +112,10 @@ void SPolyFracturer::checkForCleaveIntersections()
 
 	if (fracturerLogger.isLoggingSet() == true)
 	{
-		fracturerLogger.log("(SPolyFracturer) >>>> Started printing of resulting quatPoints.....  ", "\n");
-		quatPoints.printPoints();
-		fracturerLogger.log("(SPolyFracturer) >>>> Ended printing of resulting quatPoints.....  ", "\n");
+		fracturerLogger.log("(SPolyFracturer) >>>> Started printing of resulting sPolySG SPoly values.....  ", "\n");
+		//quatPoints.printPoints();
+		sPolySG.printSPolys();
+		fracturerLogger.log("(SPolyFracturer) >>>> Ended printing of resulting sPolySG SPoly values.....  ", "\n");
 		fracturerLogger.log("(SPolyFracturer) ####################### Poly fracturing complete.....  ", "\n");
 		fracturerLogger.waitForDebugInput();
 	}
