@@ -147,7 +147,7 @@ void HostLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 
 
 void HostLineReactor::buildASlice(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
 {
-	std::cout << "(HostLineReactor): building A_SLICE..." << std::endl;
+	reactorBaseLogger.log("(HostLineReactor): building A_SLICE...", "\n");
 	std::vector<FusedPointSubData>* startPointsubDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
 	std::vector<FusedPointSubData>* otherPointSubDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_otherPoint);
 

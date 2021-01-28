@@ -57,21 +57,21 @@ void MassZoneMaster::setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel)
 
 void MassZoneMaster::createMassZoneShells()
 {
-	std::cout << " >>>>>>>>>>>>>>> Creating old zone mass shell..." << std::endl;
+	//std::cout << " >>>>>>>>>>>>>>> Creating old zone mass shell..." << std::endl;
 	oldZone.createMassZoneShell();
-	std::cout << ">>>>> Finished work with old zone mass shell... " << std::endl;
-	int oldZoneWork = 3;
-	std::cin >> oldZoneWork;
+	//std::cout << ">>>>> Finished work with old zone mass shell... " << std::endl;
+	//int oldZoneWork = 3;
+	//std::cin >> oldZoneWork;
 
-	std::cout << " >>>>>>>>>>>>>>> Creating new zone mass shell..." << std::endl;
+	//std::cout << " >>>>>>>>>>>>>>> Creating new zone mass shell..." << std::endl;
 	newZone.createMassZoneShell();
-	std::cout << ">>>>> Finished work with new zone mass shell... " << std::endl;
-	int newZoneWork = 3;
-	std::cin >> newZoneWork;
+	//std::cout << ">>>>> Finished work with new zone mass shell... " << std::endl;
+	//int newZoneWork = 3;
+	//std::cin >> newZoneWork;
 
-	std::cout << "!!! Run of production of zone mass shells complete; continue? " << std::endl;
-	int massZoneStopVal = 3;
-	std::cin >> massZoneStopVal;
+	//std::cout << "!!! Run of production of zone mass shells complete; continue? " << std::endl;
+	//int massZoneStopVal = 3;
+	//std::cin >> massZoneStopVal;
 }
 
 void MassZoneMaster::printMassZoneBorderLineCounts()
@@ -85,6 +85,11 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 	switch (in_debugOption)
 	{
 		////////////////// For oldZone
+
+		// Generic options
+		case (DebugOption::MASSZONEMASTER_OLDZONE_PRINT_BOUNDARY_CATEGORIZED_LINES): { oldZone.printBoundaryLinesLogLevel = PolyDebugLevel::DEBUG; break; };
+		case (DebugOption::MASSZONEMASTER_OLDZONE_HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION): {oldZone.boundarySPolyConstructionLogLevel = PolyDebugLevel::DEBUG; break; };
+
 		// NEG_Z options (North)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
@@ -122,6 +127,8 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FACTORY); break; }
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FACTORY_MERGER); break; }
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FRACTURER); break; }
+
+		////////////////// For newZone																	 
 
 	}
 }

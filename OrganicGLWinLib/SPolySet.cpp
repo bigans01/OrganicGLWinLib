@@ -266,7 +266,12 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	//			1-A:): for each entry in sPolySubZoneMap (member of MassZone class), the value of the key-value pair (we will call this the "fetcher key") represents the key in the subZoneMap that holds the corresponding SPoly to reference. 
 	//			       Find the value for the "fetcher key", and use this to find correpsonding MassSubZone. This corresponding MassSubZone contains an SPoly that isn't "temporal", meaning that it actually has permanence and isn't temporary.
 	//          1-B:): take the border lines of the SPoly we found from the "fetcher key" and see how they interact with any of the MassZoneBoxBoundaries in the MassZoneBox of the MassZone.
+	auto massZoneShellStart = std::chrono::high_resolution_clock::now();
 	zoneMaster.createMassZoneShells();
+	auto massZoneShellEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> massZoneShellElapsed = massZoneShellEnd - massZoneShellStart;
+	std::cout << "#-> Mass Zone Shell time  > " << massZoneShellElapsed.count() << std::endl;
+
 
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.

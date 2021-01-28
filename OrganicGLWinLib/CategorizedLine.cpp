@@ -257,8 +257,8 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 			direction = CyclingDirection::REVERSE;
 		}
 
-		int someVal = 3;
-		std::cin >> someVal;
+		//int someVal = 3;
+		//std::cin >> someVal;
 	}
 
 	// logic for intercepts_point_precise
