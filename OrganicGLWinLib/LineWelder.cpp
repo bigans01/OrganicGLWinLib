@@ -259,7 +259,9 @@ void LineWelder::startWelding()
 		lineWelderLogger.log("(LineWelder) >>>> finished printing out candidate lists in candidateListMap.", "\n");
 	}
 
-	candidateListMap.updateRemainingCandidateCount();
+	candidateListMap.updateRemainingCandidateCount();		// when the LineWelder has completed the run, update the line counts in each CleaveSequenceCandidateList in the candidateListMap, 
+															// (so that we know when to finish, once we get to a count of 0.)
+															
 
 	//std::cout << "### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. " << std::endl;
 	//int someVal = 3;

@@ -1352,17 +1352,20 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
 			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-			std::cout << "(CleaveSequenceFactory)  !! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			//std::cout << "(CleaveSequenceFactory)  !! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inserting new cleave sequence at index: ", cleaveMapRefSize, "\n");
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
-			std::cout << "(CleaveSequenceFactory)  Map size is now: " << cleaveMapRefSize << std::endl;
+			//std::cout << "(CleaveSequenceFactory)  Map size is now: " << cleaveMapRefSize << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  Map size is now: ", cleaveMapRefSize, "\n");
 		}
 	}
 
 	if (aslicedCount > 0)
 	{
-		std::cout << "(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
-
-		std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+		//std::cout << "(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
+		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? ", "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time. ", "\n");
 
 		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 		auto aslicedMapBegin = aslicedMap.begin();					// get the first line in the a_slice map
@@ -1370,13 +1373,21 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		CleaveSequence newSequence;
 		insertASliceLineForSequence(&newSequence, firstLineID);
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-		std::cout << "(CleaveSequenceFactory)  Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
+
+		//std::cout << "(CleaveSequenceFactory)  Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  Index for new cleaveSequence is: ", cleaveMapRefSize, "\n");
+
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 
-		newSequence.printCategorizedLines();
+		if (cleaveSequenceFactoryLogger.isLoggingSet() == true)
+		{
+			newSequence.printCategorizedLines();
+		}
 
-		int noticeVal = 3;
-		std::cin >> noticeVal;
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Enter any number to continue... ", "\n");
+		cleaveSequenceFactoryLogger.waitForDebugInput();
+		//int noticeVal = 3;
+		//std::cin >> noticeVal;
 	}
 	
 	//std::cout << "Remaining partial bound count: " << partialboundCount << std::endl;

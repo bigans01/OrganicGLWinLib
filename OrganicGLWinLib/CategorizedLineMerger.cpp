@@ -186,34 +186,53 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 		//std::cout << "point B: " << currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
 		//std::cout << "Empty normal: " << currentLine.emptyNormal.x << ", " << currentLine.emptyNormal.y << ", " << currentLine.emptyNormal.z << std::endl;
 
-		mergerLogger.log("(CategorizedLineMerger) !! Current Line stats: ", "\n");
-		mergerLogger.log("(CategorizedLineMerger) point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z, "\n");
-		mergerLogger.log("(CategorizedLineMerger) point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z, "\n");
-		mergerLogger.log("(CategorizedLineMerger) Empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z, "\n");
+		//mergerLogger.log("(CategorizedLineMerger) !! Current Line stats: ", "\n");
+		//mergerLogger.log("(CategorizedLineMerger) point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z, "\n");
+		//mergerLogger.log("(CategorizedLineMerger) point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z, "\n");
+		//mergerLogger.log("(CategorizedLineMerger) Empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z, "\n");
+
+		mergerLogger.log("(CategorizedLineMerger) Inserting ");
 
 		// put the line back into the factory, via the appropriate functon call:
 		if (currentLine.type == IntersectionType::PARTIAL_BOUND)
 		{
 			//std::cout << ">> Inserting this PARTIAL_BOUND line back into the CleaveSequenceFactory." << std::endl;
-			mergerLogger.log("(CategorizedLineMerger) >> Inserting this PARTIAL_BOUND line back into the CleaveSequenceFactory.", "\n");
+			//mergerLogger.log("(CategorizedLineMerger) >> Inserting this PARTIAL_BOUND line back into the CleaveSequenceFactory.", "\n");
+			mergerLogger.log(" PARTIAL_BOUND, data -> point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z,
+													" | point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z,
+													" | empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z,
+													" | point A border: ", currentLine.line.pointABorder, "\n");
 			cleaveSequenceFactoryRef->insertPartialBoundLine(currentLine);
 		}
 		else if (currentLine.type == IntersectionType::NON_BOUND)
 		{
 			//std::cout << ">> Inserting this NON_BOUND line back into the CleaveSequenceFactory." << std::endl;
-			mergerLogger.log("(CategorizedLineMerger) >> Inserting this NON_BOUND line back into the CleaveSequenceFactory.", "\n");
+			//mergerLogger.log("(CategorizedLineMerger) >> Inserting this NON_BOUND line back into the CleaveSequenceFactory.", "\n");
+			mergerLogger.log(" NON_BOUND, data: -> point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z,
+													" | point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z,
+													" | empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z, "\n");
 			cleaveSequenceFactoryRef->insertNonboundLine(currentLine);
 		}
 		else if (currentLine.type == IntersectionType::INTERCEPTS_POINT_PRECISE)
 		{
 			//std::cout << ">> Inserting this INTERCEPTS_POINT_PRECISE line back into the CleaveSequenceFactory." << std::endl;
-			mergerLogger.log("(CategorizedLineMerger) >> Inserting this INTERCEPTS_POINT_PRECISE line back into the CleaveSequenceFactory.", "\n");
+			//mergerLogger.log("(CategorizedLineMerger) >> Inserting this INTERCEPTS_POINT_PRECISE line back into the CleaveSequenceFactory.", "\n");
+			mergerLogger.log(" INTERCEPTS_POINT_PRECISE, data: -> point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z,
+													" | point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z,
+													" | empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z,
+													" | border option A: ", currentLine.line.pointABorder,
+													" | border option B: ", currentLine.line.pointBBorder, "\n");
 			cleaveSequenceFactoryRef->insertInterceptsPointPrecise(currentLine);
 		}
 		else if (currentLine.type == IntersectionType::A_SLICE)
 		{
 			//std::cout << ">> Inserting this A_SLICE line back into the CleaveSequenceFactory." << std::endl;
-			mergerLogger.log("(CategorizedLineMerger) >> Inserting this A_SLICE line back into the CleaveSequenceFactory.", "\n");
+			//mergerLogger.log("(CategorizedLineMerger) >> Inserting this A_SLICE line back into the CleaveSequenceFactory.", "\n");
+			mergerLogger.log(" A_SLICE, data:  -> point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z,
+													" | point B: ", currentLine.line.pointB.x, ", ", currentLine.line.pointB.y, ", ", currentLine.line.pointB.z,
+													" | empty normal: ", currentLine.emptyNormal.x, ", ", currentLine.emptyNormal.y, ", ", currentLine.emptyNormal.z,
+													" | point A border: ", currentLine.line.pointABorder, 
+													" | point B border: ", currentLine.line.pointBBorder, "\n");
 			cleaveSequenceFactoryRef->insertAslicedLine(currentLine);
 		}
 

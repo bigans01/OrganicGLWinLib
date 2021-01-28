@@ -12,6 +12,8 @@
 #include "WeldedTriangleProducer.h"
 #include "WeldedTriangleProductionResult.h"
 #include "WeldedTriangleContainer.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class TracingObserver
 {
@@ -19,6 +21,7 @@ class TracingObserver
 		void setWeldedLinePoolRef(WeldedLinePool* in_weldedLinePoolRef);
 		void setWeldedTriangleContainerVectorRef(std::vector<WeldedTriangleContainer>* in_weldedTriangleVectorRef);
 		void buildNewObservation(WeldedLinePoolGuide in_poolGuide);
+		void setObservationLogLevel(PolyDebugLevel in_polyDebugLevel);
 		//void buildNewObservation(WeldedLine in_lineOfSight, WeldedLine in_observationEndLine);
 		TracingObserverState getCurrentObserverState();
 		WeldedTriangleContainer currentContainer;
@@ -35,7 +38,10 @@ class TracingObserver
 		bool isLineOfSightMaintained = true;
 		void determineObservationRadians();
 		void determineObservationState();
-		bool checkIfLineOfSightIsMaintained();	// compares the current lineOfSight to comparable lines, to see if they intersect.
+		bool insertWeldedTriangleIfLineOfSightIsMaintained();	// compares the current lineOfSight to comparable lines, to see if they intersect.
+
+		PolyLogger tracingObserverLogger;
+		PolyDebugLevel tracingObserverLoggerDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif

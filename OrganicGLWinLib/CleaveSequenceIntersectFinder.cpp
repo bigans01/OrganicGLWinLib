@@ -53,13 +53,17 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 		std::cout << "Point B: " << sPolyRef->borderLines[1].pointB.x << ", " << sPolyRef->borderLines[1].pointB.y << ", " << sPolyRef->borderLines[1].pointB.z << std::endl;
 		*/
 
-		// weld the lines; put the results into the line pool. Then, put it into the welded triangle builder.
+		// The LineWelder needs a reference to the SPoly, in order to build it's instance of the CleaveSequenceCandidateListMap.
+		// This map contains CleaveSequenceCandidateLists, which contain categorized lines that may be "consumed" during the welding process.
+		// The welder should finish, only when all CleaveSequenceCandidateLists have had their categorized lines consumed. When the LineWelder has completed its run,
+		// it calls the updateRemainingCandidateCount() in the candidateListMap, to check how many lines remain overall. When the overall remaining number is 0,
+		// the value returned by getRemainingCandidateCount() is 0, indicating that there are no more lines to process, and the LineWelder is then "done."
 		LineWelder welder(in_sPolyRef, intersectFinderLoggerDebugLevel);
 		while (welder.getRemainingCandidateCount() > 0)
 		{
-			welder.startWelding();							// perform one welding run
-			linePool = welder.retrieveLinePool();			
-
+			welder.startWelding();							// perform one welding run; this will update the total number of remaining CategorizedLines contained
+															// within the CleaveSequenceCandidateListMap when it is done. 
+			linePool = welder.retrieveLinePool();			// retrieve the linePool that was produced by the LineWelder, during this loop run.
 			if (intersectFinderLogger.isLoggingSet() == true)
 			{
 				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> starting print of lines in the WeldedLinePool.", "\n");
@@ -67,15 +71,10 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> finished print of lines in the WeldedLinePool.", "\n");
 				intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> enter number to continue", "\n");
 				intersectFinderLogger.waitForDebugInput();
-				//std::cout << "!!! Finished printing lines, continue? " << std::endl;
-				//int finishedPrintLines = 3;
-				//std::cin >> finishedPrintLines;
 			}
-			WeldedTriangleGroupBuilder groupBuilder;
+			WeldedTriangleGroupBuilder groupBuilder(intersectFinderLoggerDebugLevel);
 			groupBuilder.setWeldedLinePool(linePool);
 			groupBuilder.runTracingObservers();
-			//weldedTriangles = std::move(groupBuilder.weldedTriangleVector);
-			//triangleSupergroup.insertTriangleContainer(std::move(groupBuilder.weldedTriangleVector));
 
 			auto containerVectorBegin = groupBuilder.weldedTriangleContainerVector.begin();
 			auto containerVectorEnd = groupBuilder.weldedTriangleContainerVector.end();
@@ -83,10 +82,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 			{
 				triangleSupergroup.insertTriangleContainer(std::move(*containerVectorBegin));
 			}
-
-
 			welder.clearLinePool();
-
 			//std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
 			//int someVal = 5;
 			//std::cin >> someVal;

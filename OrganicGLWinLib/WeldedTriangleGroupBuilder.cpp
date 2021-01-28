@@ -10,6 +10,7 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 {
 	tracer.setWeldedLinePoolRef(&linePool);
 	tracer.setWeldedTriangleContainerVectorRef(&weldedTriangleContainerVector);
+	tracer.setObservationLogLevel(weldedTriangleGroupBuilderLoggerLogLevel);
 	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool; the initial value should always be 0
 
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
@@ -18,7 +19,8 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 
 	// un-comment below block when ready to test.
 
-	std::cout << "getPoolSize, pre check: " << linePool.getPoolSize() << std::endl;
+	//std::cout << "getPoolSize, pre check: " << linePool.getPoolSize() << std::endl;
+	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) Size of line pool, prior to observation building loop: ", linePool.getPoolSize(), "\n");
 	
 	if (linePool.getPoolSize() > 3)
 	{
@@ -29,7 +31,8 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 			acquireWeldedLinesForWindowAndBuildObservation();
 		}
 
-		std::cout << "getPoolSize, post check: " << linePool.getPoolSize() << std::endl;
+		//std::cout << "getPoolSize, post check: " << linePool.getPoolSize() << std::endl;
+		weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) Size of line pool, after one observation loop tick: ", linePool.getPoolSize(), "\n");
 
 		//std::cout << "getPoolSize, pre check 2" << std::endl;
 
@@ -74,23 +77,23 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 	WeldedLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
 	tracer.buildNewObservation(poolGuide);		// build it, let it run
 
-	std::cout << "Fetch (1) " << std::endl;
-	std::cout << "weldedTriangleContainerVector size is: " << weldedTriangleContainerVector.size() << std::endl;
+	//std::cout << "weldedTriangleContainerVector size is: " << weldedTriangleContainerVector.size() << std::endl;
+	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) weldedTriangleContainerVector size is: ", weldedTriangleContainerVector.size(), "\n");
 	
 	auto lastContainer = weldedTriangleContainerVector.rbegin();
 	auto lastTriangleInLastContainer = lastContainer->triangleMap.rbegin();
 	auto tracerContainer = tracer.currentContainer.triangleMap.begin();	// since there's only one triangle that will be produced, just get a pointer to it.
 
 	// we will compare the points of the last line in the most recent triangle, to the first line in the newest triangle we are about to add.
-
-	std::cout << "Fetch (2) " << std::endl;
-
 	WeldedLine* mostRecentTriangleWeldedLineRef = lastTriangleInLastContainer->second.fetchTriangleLineRef(2);	
 	WeldedLine* lastTriangleWeldedLineRef = tracerContainer->second.fetchTriangleLineRef(0);
 
-	std::cout << "*** Prior to welded line printout " << std::endl;
-	std::cout << "Most recent welded line, point A: " << mostRecentTriangleWeldedLineRef->pointA.x << ", " << mostRecentTriangleWeldedLineRef->pointA.y << ", " << mostRecentTriangleWeldedLineRef->pointA.z << std::endl;
-	std::cout << "Last triangle welded line, point A: " << lastTriangleWeldedLineRef->pointA.x << ", " << lastTriangleWeldedLineRef->pointA.y << ", " << lastTriangleWeldedLineRef->pointA.z << std::endl;
+	//std::cout << "*** Prior to welded line printout " << std::endl;
+
+	//std::cout << "Most recent welded line, point A: " << mostRecentTriangleWeldedLineRef->pointA.x << ", " << mostRecentTriangleWeldedLineRef->pointA.y << ", " << mostRecentTriangleWeldedLineRef->pointA.z << std::endl;
+	//std::cout << "Last triangle welded line, point A: " << lastTriangleWeldedLineRef->pointA.x << ", " << lastTriangleWeldedLineRef->pointA.y << ", " << lastTriangleWeldedLineRef->pointA.z << std::endl;
+	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) Most recent welded line, point A: ", mostRecentTriangleWeldedLineRef->pointA.x, ", ", mostRecentTriangleWeldedLineRef->pointA.y, ", ", mostRecentTriangleWeldedLineRef->pointA.z, "\n");
+	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) Last triangle welded line, point A: ", lastTriangleWeldedLineRef->pointA.x, ", ", lastTriangleWeldedLineRef->pointA.y, ", ", lastTriangleWeldedLineRef->pointA.z, "\n");
 
 	bool isAligned = false;
 	while (isAligned == false)
@@ -111,12 +114,14 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 			tracerContainer->second.shiftLines();
 		}
 
-		std::cout << "!! Looping alignment while..." << std::endl;
+		//std::cout << "!! Looping alignment while..." << std::endl;
+		weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) !! Looping alignment while...", "\n");
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
 
-	std::cout << "!!! handleFinalObservation, while loop complete..." << std::endl;
+	//std::cout << "!!! handleFinalObservation, while loop complete..." << std::endl;
+	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) !!! handleFinalObservation, while loop complete...", "\n");
 
 	// before we insert the last triangle, we must make sure it is aligned to the rule of the triangle fan (should be done from the previous loop)
 	lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
