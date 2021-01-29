@@ -162,6 +162,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 	// First pass: check for non-planar categorized lines to produce, but load any non-planar relationships we find into the
 	// coplanarTracker.
+	auto comparisonIterationsBegin = std::chrono::high_resolution_clock::now();
 	for (int x = 0; x < compCount2; x++)
 	{
 		int currentIndex = 0;						// index begins at 0, increments every tick of the y loop that follows.
@@ -257,7 +258,9 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//zoneMaster.printMassZoneBorderLineCounts();
 		
 	}
-
+	auto comparisonIterationsEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> comparisonIterationsElapsed = comparisonIterationsEnd - comparisonIterationsBegin;
+	std::cout << "#-> Comparisons time  > " << comparisonIterationsElapsed.count() << std::endl;
 
 	// Build the non-SPoly based MassSubZones, for each MassZone, once all SPolys have been copied into the appropriate MassZone. The combination of temporal or artificial subzones, plus the actual "material" sPolys, should form a "MassZoneShell."
 	// 

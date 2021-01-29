@@ -162,10 +162,21 @@ void MassZone::insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZ
 	boundaryDebugOptions[in_massZoneBoxBoundaryOrientation].insert(in_sPolyDO);
 }
 
-void MassZone::createMassZoneShell()
+void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
+	// build the log output prefix 
+	std::string prefixString;
+	if (in_massZoneType == MassZoneType::OLD_ZONE)
+	{
+		prefixString = "(MassZone) (OLD_ZONE) ";
+	}
+	else if (in_massZoneType == MassZoneType::NEW_ZONE)
+	{
+		prefixString = "(MassZone) (NEW_ZONE) ";
+	}
+
 	// Step 1: compare all subZones that are from an SPoly, to all the MassZoneBoxBoundaries, to determine the CategorizedLines that will
-	//         be generated in each MassZoneBoxBoundary's SPoly.
+	//         be generated in each MassZoneBoxBoundary's SPoly
 
 	/*
 	auto subZoneMapBeginPre = subZoneMap.begin();
@@ -192,10 +203,10 @@ void MassZone::createMassZoneShell()
 	tempCategorizedLineLogger.setDebugLevel(printBoundaryLinesLogLevel);
 	if (tempCategorizedLineLogger.isLoggingSet() == true)
 	{
-		tempCategorizedLineLogger.log("(MassZone) >>>> starting printing of categorized lines in zoneBox boundaries...", "\n");
+		tempCategorizedLineLogger.log(prefixString, ">>>> starting printing of categorized lines in zoneBox boundaries...", "\n");
 		zoneBox.printCategorizedLinesInBoundaries();
-		tempCategorizedLineLogger.log("(MassZone) >>>> finished printing of categorized lines in zoneBox boundaries...", "\n");
-		tempCategorizedLineLogger.log("(MassZone) Enter number to continue...", "\n");
+		tempCategorizedLineLogger.log(prefixString, ">>>> finished printing of categorized lines in zoneBox boundaries...", "\n");
+		tempCategorizedLineLogger.log(prefixString, "Enter number to continue...", "\n");
 		//std::cout << "############### Done printing categorized lines in boundaries...." << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
@@ -203,8 +214,9 @@ void MassZone::createMassZoneShell()
 	}
 
 
-	// Step 3: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, and produce the 
-	//         CleaveSequences.
+	// Step 3: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, run the 
+	// SPolyFracturer for each MassZoneBoxBoundarySPolySet, to generate any SPolys.
+	
 	PolyLogger tempSPolyBoundaryProductionLogger;
 	tempSPolyBoundaryProductionLogger.setDebugLevel(boundarySPolyConstructionLogLevel);
 	auto boxBoundariesBegin = zoneBox.boxBoundaries.begin();
@@ -214,32 +226,32 @@ void MassZone::createMassZoneShell()
 		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for NEG_Z...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_Z...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for POS_X...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_X...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for POS_Z...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_Z...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for NEG_X...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_X...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for POS_Y...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_Y...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
 		{
 			//std::cout << "Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
-			tempSPolyBoundaryProductionLogger.log("(MassZone) Attempting boundary artificial SPoly construction for NEG_Y...", "\n");
+			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_Y...", "\n");
 		}
 
 		boxBoundariesBegin->second.generateSPolysFromPolySet();
@@ -247,7 +259,55 @@ void MassZone::createMassZoneShell()
 		//std::cout << "Finished producing boundary SPoly...continue? " << std::endl;
 		//int prodSucceeded = 3;
 		//std::cin >> prodSucceeded;
-		tempSPolyBoundaryProductionLogger.log("(MassZone) Finished producing boundary SPoly...enter number to continue. ", "\n");
+		tempSPolyBoundaryProductionLogger.log(prefixString, "Finished producing boundary SPoly...enter number to continue. ", "\n");
 		tempSPolyBoundaryProductionLogger.waitForDebugInput();
+	}
+
+	// Step 4: put all super groups which actually contain data,
+	PolyLogger tempBoundarySuperGroupLogger;
+	tempBoundarySuperGroupLogger.setDebugLevel(pointClippingLogLevel);
+	auto boundarySPolyGroupsBegin = zoneBox.boxBoundaries.begin();
+	auto boundarySPolyGroupsEnd = zoneBox.boxBoundaries.end();
+	for (; boundarySPolyGroupsBegin != boundarySPolyGroupsEnd; boundarySPolyGroupsBegin++)
+	{
+		if (boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.isSupergroupEmpty() == false)
+		{
+			if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_Z contains SPolys, processing...", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_X contains SPolys, processing......", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_Z contains SPolys, processing......", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_X contains SPolys, processing......", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_Y contains SPolys, processing......", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+			{
+				//std::cout << "Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
+				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_Y contains SPolys, processing......", "\n");
+				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
+			}
+		}
 	}
 }

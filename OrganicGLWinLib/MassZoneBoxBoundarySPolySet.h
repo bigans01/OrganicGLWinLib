@@ -23,6 +23,7 @@
 class MassZoneBoxBoundarySPolySet
 {
 	public:
+		friend class MassZone;
 		friend class MassZoneBoxBoundary;
 		void setBoundarySPolyRef(SPoly* in_sPolyRef);
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
@@ -43,6 +44,7 @@ class MassZoneBoxBoundarySPolySet
 		glm::vec3 roundPointToHundredths(glm::vec3 in_point);
 		double doubledot(glm::vec3 in_A, glm::vec3 in_B);
 		int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);
+		SPolySupergroup boundarySPolySG;
 		
 };
 

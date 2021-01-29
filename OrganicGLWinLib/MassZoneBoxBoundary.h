@@ -16,6 +16,7 @@
 class MassZoneBoxBoundary
 {
 	public:
+		friend class MassZone;
 		MassZoneBoxBoundary() {};
 		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal)
 		{

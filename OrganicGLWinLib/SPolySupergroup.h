@@ -22,6 +22,7 @@ class SPolySupergroup
 			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
 			{
 				std::cout << ">>> SPoly: " << sPolysBegin->first << std::endl;
+				std::cout << ">> Empty Normal: " << sPolysBegin->second.polyEmptyNormal.x << ", " << sPolysBegin->second.polyEmptyNormal.y << ", " << sPolysBegin->second.polyEmptyNormal.z << std::endl;
 				auto sTrianglesBegin = sPolysBegin->second.triangles.begin();
 				auto sTrianglesEnd = sPolysBegin->second.triangles.end();
 				for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
@@ -36,6 +37,10 @@ class SPolySupergroup
 					}
 				}
 			}
+		}
+		bool isSupergroupEmpty()
+		{
+			return sPolyMap.empty();
 		}
 };
 
