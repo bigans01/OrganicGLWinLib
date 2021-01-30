@@ -261,6 +261,7 @@
     <ClInclude Include="MassZoneBoxBoundaryState.h" />
     <ClInclude Include="MassZoneBoxType.h" />
     <ClInclude Include="MassZoneMaster.h" />
+    <ClInclude Include="MassZonePointClipper.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
     <ClInclude Include="QMBoolBase.h" />
@@ -454,6 +455,7 @@
     <ClCompile Include="MassZoneBox.cpp" />
     <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />
     <ClCompile Include="MassZoneMaster.cpp" />
+    <ClCompile Include="MassZonePointClipper.cpp" />
     <ClCompile Include="MeshMatterMeta.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />

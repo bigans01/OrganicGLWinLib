@@ -32,6 +32,8 @@ class MassZoneBoxBoundarySPolySet
 		void buildBoundarySPolyFromFactory();
 		SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 	private:
+		glm::vec3 boundaryEmptyNormal;		// the empty normal applied to any SPolys that are generated as a result of fracturing.
+
 		PolyLogger boxBoundarySPolySetLogger; 
 		PolyDebugLevel boxBoundarySPolySetLogLevel = PolyDebugLevel::NONE;
 		PolyDebugLevel fracturerDebugLevel = PolyDebugLevel::NONE;

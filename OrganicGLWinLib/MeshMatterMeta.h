@@ -20,7 +20,7 @@ class MeshMatterMeta
 		MassManipulationMode comparedToManipulationMode = MassManipulationMode::NOVAL;
 		MassComparisonResult comparisonResult = MassComparisonResult::NOVAL;
 		bool determineSPolyExistenceVerdict();
-		bool shouldSPolyRemain = false;		
+		bool shouldSPolyRemain = true;		// assume that the SPoly will remain (innocent until proven guilty; guilty being contained entirely with a MassZone's produced shell)
 };
 
 #endif

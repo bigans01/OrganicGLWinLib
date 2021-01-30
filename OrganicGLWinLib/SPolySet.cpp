@@ -147,6 +147,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	// build the zone boundaries for the MassZones
 	//zoneMaster.setMassZoneLogLevels(PolyDebugLevel::DEBUG);			// hard-coded for testing, for the time being. (1/11/2021)
 	zoneMaster.createMassZoneBoxBoundaries(in_massZoneBoxType);
+	zoneMaster.setZoneClipperReferences();
 
 
 	//zoneMaster.printMassZoneBorderLineCounts();
@@ -275,6 +276,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	std::chrono::duration<double> massZoneShellElapsed = massZoneShellEnd - massZoneShellStart;
 	std::cout << "#-> Mass Zone Shell time  > " << massZoneShellElapsed.count() << std::endl;
 
+	
 
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
@@ -304,6 +306,10 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
+
+	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
+	zoneMaster.runPointClippers();
+
 
 	/*
 	for (int x = 0; x < compCount2; x++)

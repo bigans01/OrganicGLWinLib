@@ -162,6 +162,11 @@ void MassZone::insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZ
 	boundaryDebugOptions[in_massZoneBoxBoundaryOrientation].insert(in_sPolyDO);
 }
 
+void MassZone::runClipper()
+{
+	clipper.run();
+}
+
 void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
 	// build the log output prefix 
@@ -176,7 +181,7 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 	}
 
 	// Step 1: compare all subZones that are from an SPoly, to all the MassZoneBoxBoundaries, to determine the CategorizedLines that will
-	//         be generated in each MassZoneBoxBoundary's SPoly
+	//         be generated in each MassZoneBoxBoundary's SPoly. We will also load the SPoly from each zone into the clipper here.
 
 	/*
 	auto subZoneMapBeginPre = subZoneMap.begin();
@@ -196,6 +201,8 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		// each SPoly-based subZone must be run against all 6 boundaries in the zoneBox.
 		//std::cout << ">> Comparing SPoly based subZone,  with the SPoly having ID: " << subZoneToSPolyMap[subZoneMapBegin->first] << std::endl;
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
+		clipper.insertSPolyRefIntoClippingShell(&subZoneMapBegin->second.sPolyCopy);
+		std::cout << "!!! Inserted SPoly ref into clipper. " << std::endl;
 	}
 
 	// Step 2: print the lines in each boundary (for testing only)
@@ -263,7 +270,7 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		tempSPolyBoundaryProductionLogger.waitForDebugInput();
 	}
 
-	// Step 4: put all super groups which actually contain data,
+	// Step 4: put all super groups which actually contain data, into their own sub zone.
 	PolyLogger tempBoundarySuperGroupLogger;
 	tempBoundarySuperGroupLogger.setDebugLevel(pointClippingLogLevel);
 	auto boundarySPolyGroupsBegin = zoneBox.boxBoundaries.begin();
@@ -276,38 +283,42 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_Z contains SPolys, processing...", "\n");
-				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
 			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_X contains SPolys, processing......", "\n");
-				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
 			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_Z contains SPolys, processing......", "\n");
-				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
 			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_X contains SPolys, processing......", "\n");
-				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
 			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in POS_Y contains SPolys, processing......", "\n");
-				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
 			else if (boundarySPolyGroupsBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
 			{
 				//std::cout << "Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
 				tempBoundarySuperGroupLogger.log(prefixString, "SPolySG in NEG_Y contains SPolys, processing......", "\n");
+			}
+
+			// optional logging output to print SPoly data
+			if (tempBoundarySuperGroupLogger.isLoggingSet() == true)
+			{
 				boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG.printSPolys();
 			}
+
+			// load the clipper with the selected super group's SPolys.
+			clipper.insertSPolySuperGroupRefsIntoClippingShell(&boundarySPolyGroupsBegin->second.boundaryPolySet.boundarySPolySG);
+			tempBoundarySuperGroupLogger.log(prefixString, "Size of clipper SPoly map:", clipper.clippingShellMap.size(), "\n");
 		}
 	}
 }

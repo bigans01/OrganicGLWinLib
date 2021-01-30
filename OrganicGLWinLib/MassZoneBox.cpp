@@ -8,6 +8,7 @@ void MassZoneBox::insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBo
 																					// after the MassZoneBoxBoundary has been copied into the map, since it will correctly point to that newly
 																					// allocated memory.
 	boxBoundaries[in_massZoneBoxBoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
+	boxBoundaries[in_massZoneBoxBoundaryOrientation].setSPolySetEmptyNormal();		// sets the empty normal for the MassZoneBoxBoundarySPolySet
 	std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
 };
 

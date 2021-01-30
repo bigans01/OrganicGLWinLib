@@ -92,6 +92,10 @@ class MassZoneBoxBoundary
 
 			boundarySPoly.applyDebugOptions(in_sPolyDOSet);
 		}
+		void setSPolySetEmptyNormal()
+		{
+			boundaryPolySet.boundaryEmptyNormal = emptyNormal;
+		}
 
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)

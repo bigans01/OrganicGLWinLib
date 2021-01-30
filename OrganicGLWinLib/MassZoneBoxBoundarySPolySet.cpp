@@ -170,6 +170,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
 		//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
 		boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
+		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 	}
 }
 

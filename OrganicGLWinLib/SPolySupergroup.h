@@ -42,6 +42,15 @@ class SPolySupergroup
 		{
 			return sPolyMap.empty();
 		}
+		void setEmptyNormalInAllSPolys(glm::vec3 in_emptyNormalValue)
+		{
+			auto sPolysBegin = sPolyMap.begin();
+			auto sPolysEnd = sPolyMap.end();
+			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+			{
+				sPolysBegin->second.polyEmptyNormal = in_emptyNormalValue;
+			}
+		}
 };
 
 #endif

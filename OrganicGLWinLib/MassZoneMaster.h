@@ -19,10 +19,12 @@ class MassZoneMaster
 		void disqualifyMeshMatterMeta(int in_sPolyID);
 		void printQualifiedMeshMatterMetas();
 		void createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxType);
+		void setZoneClipperReferences();
 		void setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel);
 		void createMassZoneShells();
 		void printMassZoneBorderLineCounts();
 		void handleDebugOption(DebugOption in_debugOption);
+		void runPointClippers();
 	private:
 		std::map<int, MassZoneType> sPolyZoneTypeMap;
 		MassZone oldZone;

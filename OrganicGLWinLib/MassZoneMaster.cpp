@@ -49,6 +49,18 @@ void MassZoneMaster::createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxT
 	newZone.createMassZoneBoxBoundary(in_massZoneBoxType);
 }
 
+void MassZoneMaster::setZoneClipperReferences()
+{
+	oldZone.clipper.setOtherZoneMeshMatterMetaMapRef(&newZone.meshMatterMetaMap);	// old zone gets new zone's mesh matter meta
+	newZone.clipper.setOtherZoneMeshMatterMetaMapRef(&oldZone.meshMatterMetaMap);
+}
+
+void MassZoneMaster::runPointClippers()
+{
+	oldZone.runClipper();
+	newZone.runClipper();
+}
+
 void MassZoneMaster::setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel)
 {
 	oldZone.setMassZoneLogLevel(in_polyDebugLevel);
