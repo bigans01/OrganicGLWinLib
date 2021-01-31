@@ -14,6 +14,7 @@ class PointToMassRelationship
 			: point(in_relationshipPoint) {};
 	private:
 		friend class PointToMassRelationshipMap;
+		friend class MassZonePointClipper;
 		glm::vec3 point;
 		PointToMassRelationshipType relationshipStatus = PointToMassRelationshipType::NOVAL;
 };

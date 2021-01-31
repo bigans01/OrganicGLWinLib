@@ -732,6 +732,18 @@
     <ClInclude Include="PointToMassRelationshipMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PointToSPolyRelationshipTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSPolyRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSTriangleRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

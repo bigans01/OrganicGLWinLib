@@ -17,6 +17,7 @@ class PointToMassRelationshipMap
 			relationshipMap[relationshipMapSize] = newRelationship;
 		}
 	private:
+		friend class MassZonePointClipper;
 		std::map<int, PointToMassRelationship> relationshipMap;
 };
 

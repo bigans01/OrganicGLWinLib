@@ -10,6 +10,7 @@
 #include "PolyDebugLevel.h"
 #include "MeshMatterMeta.h"
 #include "PointToMassRelationshipMap.h"
+#include "PointToSPolyRelationshipTrackerContainer.h"
 
 class MassZonePointClipper
 {

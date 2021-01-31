@@ -267,6 +267,10 @@
     <ClInclude Include="PointToMassRelationshipMap.h" />
     <ClInclude Include="PointToMassRelationship.h" />
     <ClInclude Include="PointToMassRelationshipType.h" />
+    <ClInclude Include="PointToSPolyRelationship.h" />
+    <ClInclude Include="PointToSPolyRelationshipTracker.h" />
+    <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h" />
+    <ClInclude Include="PointToSTriangleRelationship.h" />
     <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolPointWithinTriangle.h" />
     <ClInclude Include="QMVoidBase.h" />

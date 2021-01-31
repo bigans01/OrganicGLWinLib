@@ -41,5 +41,37 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 {
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
+	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;
+
+	// Phase 1: run all points of the SPoly (which will be in the currentRelationshipMap) through all SPolys in the clippingShellMap, to see which
+	// fields we must compare the points to.
+	auto currentPointToAnalyzeBegin = currentRelationshipMap.relationshipMap.begin();
+	auto currentPointToAnalyzeEnd = currentRelationshipMap.relationshipMap.end();
+	for (; currentPointToAnalyzeBegin != currentPointToAnalyzeEnd; currentPointToAnalyzeBegin++)
+	{
+		glm::vec3 pointToCompareFor = currentPointToAnalyzeBegin->second.point;
+		auto clippingShellMapBegin = clippingShellMap.begin();
+		auto clippingShellMapEnd = clippingShellMap.end();
+		for (; clippingShellMapBegin != clippingShellMapEnd; clippingShellMapBegin++)
+		{
+			SPoly* currentClippingShellSPolyRef = clippingShellMapBegin->second;	// get a ref to the shell SPoly.
+			int numberOfSTriangles = currentClippingShellSPolyRef->triangles.size();
+			for (int x = 0; x < numberOfSTriangles; x++)
+			{
+				STriangle* currentSTriangleRef = &currentClippingShellSPolyRef->triangles[x];
+
+				// only insert new relationship tracker data when the pointToCompareFor is found as being with the STriangle's planarBoundedZone (??? may need a better name for that!)
+				// ...
+				// use a new QMBool machine to do this, get the bool result, insert if true.
+				// ...
+
+				//relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef);
+			}
+		}
+	}
+
+	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is, 
+	// we're done -- because the clipper can't handle cases where the currentMeshMatterSPoly is coplanar to one of the PBZs (planarBoundedZone) that is for a
+	// STriangle that's part of an SPoly we're comparing to.
 
 }
