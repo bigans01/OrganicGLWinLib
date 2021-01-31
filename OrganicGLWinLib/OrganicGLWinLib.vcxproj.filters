@@ -723,6 +723,15 @@
     <ClInclude Include="MassZonePointClipper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PointToMassRelationshipType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationshipMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

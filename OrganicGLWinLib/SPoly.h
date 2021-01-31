@@ -23,6 +23,7 @@
 #include "QuatRotationPoints.h"
 #include "CleaveSequenceMergeMode.h"
 #include "SPolyDOSet.h"
+#include "PointToMassRelationshipMap.h"
 
 class SPoly
 {
@@ -98,6 +99,8 @@ public:
 
 	void clearInterceptRegistry();
 	void applyDebugOptions(SPolyDOSet in_sPolyDOSet);
+
+	PointToMassRelationshipMap generatePointToMassRelationshipMap();
 };
 
 #endif

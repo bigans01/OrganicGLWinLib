@@ -1010,3 +1010,16 @@ void SPoly::applyDebugOptions(SPolyDOSet in_sPolyDOSet)
 		}
 	}
 }
+
+PointToMassRelationshipMap SPoly::generatePointToMassRelationshipMap()
+{
+	PointToMassRelationshipMap returnMap;
+	auto borderLinesBegin = borderLines.begin();
+	auto borderLinesEnd = borderLines.end();
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		glm::vec3 pointToInsert = borderLinesBegin->second.pointA;
+		returnMap.insertNewPoint(pointToInsert);
+	}
+	return returnMap;
+}

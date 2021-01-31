@@ -28,4 +28,18 @@ void MassZonePointClipper::run()
 {
 	std::cout << "!! Size of clipping shell map: " << clippingShellMap.size() << std::endl;
 	std::cout << "!! Size of other zone's mesh matter map: " << otherZoneMeshMatterMetaMapRef->size() << std::endl;
+
+	auto otherMeshMatterMapBegin = otherZoneMeshMatterMetaMapRef->begin();
+	auto otherMeshMatterMapEnd = otherZoneMeshMatterMetaMapRef->end();
+	for (; otherMeshMatterMapBegin != otherMeshMatterMapEnd; otherMeshMatterMapBegin++)
+	{
+		compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second);
+	}
+}
+
+void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef)
+{
+	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
+	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
+
 }

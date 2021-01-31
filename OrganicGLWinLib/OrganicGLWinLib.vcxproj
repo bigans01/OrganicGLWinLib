@@ -264,6 +264,9 @@
     <ClInclude Include="MassZonePointClipper.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
+    <ClInclude Include="PointToMassRelationshipMap.h" />
+    <ClInclude Include="PointToMassRelationship.h" />
+    <ClInclude Include="PointToMassRelationshipType.h" />
     <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolPointWithinTriangle.h" />
     <ClInclude Include="QMVoidBase.h" />
