@@ -10,7 +10,7 @@
 #include "OrganicGLWinUtils.h"
 #include "RayIntersectionResult.h"
 #include "QuatRotationPoints.h"
-#include "QMBoolPointWithinTriangle.h"
+#include "QMBoolPointWithinTrianglePBZ.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef QMBOOLPOINTWITHINTRIANGLE_H
-#define QMBOOLPOINTWITHINTRIANGLE_H
+#ifndef QMBoolPointWithinTrianglePBZ_H
+#define QMBoolPointWithinTrianglePBZ_H
 
 #include "QMBoolBase.h"
 #include "ThreeDLineSegment.h"
@@ -9,7 +9,7 @@
 #include "QuatRotationType.h"
 #include "OrganicGLWinUtils.h"
 
-class QMBoolPointWithinTriangle : public QMBoolBase
+class QMBoolPointWithinTrianglePBZ : public QMBoolBase
 {
 	public:
 		bool solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);

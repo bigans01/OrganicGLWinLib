@@ -33,6 +33,14 @@ void QMBoolBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* 
 		in_quatRotationPointsRef->applyQuaternion(reverseQuat);
 		//rotationpointsRefVector->printPoints();
 
+		if (qmBoolBaseLogger.isLoggingSet() == true)
+		{
+			qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> starting printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########) ", "\n");
+			in_quatRotationPointsRef->printPoints();
+			qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> finished printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########)", "\n");
+		}
+
+
 		(*in_quatRotationRecordStackRef).pop();
 	}
 }

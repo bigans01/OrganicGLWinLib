@@ -36,6 +36,23 @@ class PointToSPolyRelationshipTrackerContainer
 				relationshipTrackerContainer[containerSize].insertPointToSPolyRelationship(in_sPolyID, in_sTriangleID, in_sTriangleRef);
 			}
 		}
+		void printRelationshipTrackerData()
+		{
+			auto relationshipTrackerContainerBegin = relationshipTrackerContainer.begin();
+			auto relationshipTrackerContainerEnd = relationshipTrackerContainer.end();
+			for (; relationshipTrackerContainerBegin != relationshipTrackerContainerEnd; relationshipTrackerContainerBegin++)
+			{
+				glm::vec3 currentPoint = relationshipTrackerContainerBegin->second.point;
+				std::cout << "Tracked Data for point: " << currentPoint.x << ", " << currentPoint.y << ", " << currentPoint.z << std::endl;
+				auto shellSPolyBegin = relationshipTrackerContainerBegin->second.relationships.begin();
+				auto shellSPolyEnd = relationshipTrackerContainerBegin->second.relationships.end();
+				for (; shellSPolyBegin != shellSPolyEnd; shellSPolyBegin++)
+				{
+					std::cout << "SPoly " << shellSPolyBegin->first << std::endl;
+					shellSPolyBegin->second.printSTriangleIndicesAndData();
+				}
+			}
+		}
 	private:
 		std::map<int, PointToSPolyRelationshipTracker> relationshipTrackerContainer;
 

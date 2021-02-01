@@ -59,19 +59,60 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			for (int x = 0; x < numberOfSTriangles; x++)
 			{
 				STriangle* currentSTriangleRef = &currentClippingShellSPolyRef->triangles[x];
-
 				// only insert new relationship tracker data when the pointToCompareFor is found as being with the STriangle's planarBoundedZone (??? may need a better name for that!)
 				// ...
 				// use a new QMBool machine to do this, get the bool result, insert if true.
+				
+				if (checkIfPointIsWithinPBZ(pointToCompareFor, *currentSTriangleRef) == true)
+				{
+					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef);
+				}
+				
 				// ...
-
-				//relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef);
 			}
 		}
 	}
 
-	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is, 
-	// we're done -- because the clipper can't handle cases where the currentMeshMatterSPoly is coplanar to one of the PBZs (planarBoundedZone) that is for a
-	// STriangle that's part of an SPoly we're comparing to.
+	// for printing out the contents of the trackerContainer (debug only)
+	relationshipTrackerContainer.printRelationshipTrackerData();
+	std::cout << "!!! Finished printing relationshipTrackerContainer contents. Enter number to continue. " << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 
+	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is,
+	// go back and erase any PointToSPolyRelationship involving that SPoly, as they are incomparable; the other SPolys which are not coplanar may still be compared.
+
+}
+
+bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy)
+{
+	bool isWithinPBZ = false;
+
+	glm::vec3 pointToCheckCopy = in_pointToCheck;
+	STriangle sTriangleCopy = in_sTriangleCopy;
+
+	QuatRotationPoints points;
+	points.pointsRefVector.push_back(&pointToCheckCopy);
+	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[0].pointA);
+	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[1].pointA);
+	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[2].pointA);
+	QMBoolPointWithinTrianglePBZ pointSolver;
+	isWithinPBZ = pointSolver.solve(&points, PolyDebugLevel::NONE);
+
+	/*
+	if (isWithinPBZ == true)
+	{
+		std::cout << "!!! Point " << in_pointToCheck.x << ", " << in_pointToCheck.y << ", " << in_pointToCheck.z << " is within PBZ; " << std::endl;
+		std::cout << "Triangle PBZ points are: " << std::endl;
+		for (int x = 0; x < 3; x++)
+		{
+			std::cout << x << ": " << in_sTriangleCopy.triangleLines[x].pointA.x << ", " << in_sTriangleCopy.triangleLines[x].pointA.y << ", " << in_sTriangleCopy.triangleLines[x].pointA.z << std::endl;
+		}
+		std::cout <<  "Enter number to continue..." << std::endl;
+		int someVal = 3;
+		std::cin >> someVal;
+	}
+	*/
+
+	return isWithinPBZ;
 }

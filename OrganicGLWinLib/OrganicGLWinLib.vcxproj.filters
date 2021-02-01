@@ -666,9 +666,6 @@
     <ClInclude Include="FusionCandidateOrigin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QMBoolPointWithinTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FusedPointReactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -742,6 +739,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolPointWithinTrianglePBZ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1061,9 +1061,6 @@
     <ClCompile Include="RayIntersectionResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QMBoolPointWithinTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FusedPointReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1086,6 +1083,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MassZonePointClipper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

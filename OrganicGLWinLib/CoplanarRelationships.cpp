@@ -82,8 +82,16 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 
 
-	// 1.3 rotate points by the quaternion, to get to Z = 0, then round
+	// 1.3 rotate points by the quaternion, to get to Z = 0, then round points
+
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
+
+	//std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
+	//trackedSPolyRef.printBorderLines();
+	//std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): done printing lines for tracked SPoly. " << std::endl;
+	//int someVal = 3;
+	//std::cin >> someVal;
+
 	coplanarPoints.roundAllPointsToHundredths();
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;
@@ -123,12 +131,16 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	{
 		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
 		manipulator.reset(new CoplanarMassCreator());
-		//manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints);
 		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints, relationshipsDebugLevel);
 		manipulator->runMassManipulation();
 	}
 
+
+	// ********************************************** the below steps are deprecated until further notice, as there appears to be no point in rotating the coplanarPoints back to
+	// the original positions, since all we're really doing is checking for SPolys that are entirely consumed.
+
 	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation, and then round back.
+	/*
 	rotationManager.rotateToOriginalPosition();
 	coplanarPoints.roundAllPointsToHundredths();
 
@@ -156,4 +168,5 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		//relatedSPolysBegin->second->printBorderLines();
 		relatedSPolysBegin->second.printBorderLines();
 	}
+	*/
 }

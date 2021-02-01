@@ -11,6 +11,8 @@
 #include "MeshMatterMeta.h"
 #include "PointToMassRelationshipMap.h"
 #include "PointToSPolyRelationshipTrackerContainer.h"
+#include "QuatRotationPoints.h"
+#include "QMBoolPointWithinTrianglePBZ.h"
 
 class MassZonePointClipper
 {
@@ -27,6 +29,7 @@ class MassZonePointClipper
 		void setOtherZoneMeshMatterMetaMapRef(std::map<int, MeshMatterMeta>* in_otherZoneMeshMatterMetaMapRef);
 		void run();
 		void compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef);
+		bool checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy);
 };
 
 #endif

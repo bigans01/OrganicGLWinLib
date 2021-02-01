@@ -272,7 +272,7 @@
     <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h" />
     <ClInclude Include="PointToSTriangleRelationship.h" />
     <ClInclude Include="QMBoolBase.h" />
-    <ClInclude Include="QMBoolPointWithinTriangle.h" />
+    <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVoidBase.h" />
     <ClInclude Include="QMVoidFindCyclingDirection.h" />
     <ClInclude Include="RayIntersectionResult.h" />
@@ -469,7 +469,7 @@
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
-    <ClCompile Include="QMBoolPointWithinTriangle.cpp" />
+    <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />

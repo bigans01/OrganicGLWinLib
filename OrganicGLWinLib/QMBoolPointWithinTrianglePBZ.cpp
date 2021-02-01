@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "QMBoolPointWithinTriangle.h"
+#include "QMBoolPointWithinTrianglePBZ.h"
 
-bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
 	// set debug level
 	qmBoolBaseLogger.setDebugLevel(in_polyDebugLevel);
@@ -60,6 +60,11 @@ bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsR
 		//std::cout << ">>>>>: point B Copy, post translate: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << std::endl;
 		//std::cout << ">>>>>: centroid copy, post translate: " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
 
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) ================== post-translate stats, for line ", x, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>>>>: point A Copy, post translate: ", pointACopy.x, ", ", pointACopy.y, ", ", pointACopy.z, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>>>>: point B Copy, post translate: ", pointBCopy.x, ", ", pointBCopy.y, ", ", pointBCopy.z, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>>>>: centroid Copy, post translate: ", centroidPointCopy.x, ", ", centroidPointCopy.y, ", ", centroidPointCopy.z, "\n");
+
 		QuatRotationPoints rotationPoints;
 		rotationPoints.pointsRefVector.push_back(&pointACopy);
 		rotationPoints.pointsRefVector.push_back(&pointBCopy);
@@ -70,6 +75,7 @@ bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsR
 		//std::cout << ">>>>>: centroid copy, post translate (2): " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
 
 		lines[x].centroidFacingNormal = centroidPointCopy;
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>>>>: centroid facing normal, post translate: ", centroidPointCopy.x, ", ", centroidPointCopy.y, ", ", centroidPointCopy.z, "\n");
 	}
 
 	// now that the normals have been determined, used them for the planarity tests.
@@ -95,6 +101,12 @@ bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsR
 		}
 
 		QuatRotationPoints rotationPoints;
+
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) pointACopy value is: ", pointACopy.x, ", ", pointACopy.y, ", ", pointACopy.z, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) pointBCopy value is: ", pointBCopy.x, ", ", pointBCopy.y, ", ", pointBCopy.z, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) pointToCheck value is: ", pointToCheck.x, ", ", pointToCheck.y, ", ", pointToCheck.z, "\n");
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) centroidFacingNormal value is: ", centroidFacingNormal.x, ", ", centroidFacingNormal.y, ", ", centroidFacingNormal.z, "\n");
+
 		rotationPoints.pointsRefVector.push_back(&pointACopy);
 		rotationPoints.pointsRefVector.push_back(&pointBCopy);
 		rotationPoints.pointsRefVector.push_back(&pointToCheck);
@@ -109,6 +121,7 @@ bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsR
 		if (planeArrayCheckResult[x] == true)
 		{
 			//std::cout << "!!! found as being within plane! " << std::endl;
+			qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) !!! found as being within plane! ", "\n");
 			withinPlaneCount++;
 		}
 	}
@@ -121,7 +134,7 @@ bool QMBoolPointWithinTriangle::solve(QuatRotationPoints* in_quatRotationPointsR
 	return returnValue;
 }
 
-void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(QuatRotationPoints* in_quatRotationPoints)
+void QMBoolPointWithinTrianglePBZ::runExecutionsForFindingCentroidFacingNormal(QuatRotationPoints* in_quatRotationPoints)
 {
 	QuatRotationPoints* rotationpointsRefVector = in_quatRotationPoints;
 	glm::vec3* pointBRef = rotationpointsRefVector->getPointRefByIndex(1);
@@ -144,9 +157,12 @@ void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(Quat
 
 	rotateLineToZPlane(pointBRef, &rotationRecords, in_quatRotationPoints, &rotationOrder);
 
-	// now, check if the centroid point is at positive y; if at's 0 rotate to positive y.
+	// At this point in time, the line should exist entirely on the ZY plane (X will be near/almost 0.0f)
+	// The centroid must be in a position where it is also within the ZY plane. If it is X= 0, that's fine; otherwise,
+	// rotate to positive Y.
 	//if (pointCRef->y == 0.0f)
-	//{
+	if (pointCRef->x != 0.0f)		// when rotated towards positive or negative y, the x value should be 0.
+	{
 
 		// rotate around X to positive y.
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
@@ -162,17 +178,20 @@ void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(Quat
 		glm::quat fractureQuat = s1record.returnOriginalRotation();
 		rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
 		rotationRecords.push(s1record);
-	//}
+	}
 
 	// check if the 3rd point (the centroid of the triangle is positive Y or negative Y; it's Y should never be 0, if we did things correctly (the triangle would be invalid).
+
 	glm::vec3 determinedEmptyNormal;
 	glm::vec3 currentCentroid = rotationpointsRefVector->getPointByIndex(2);
 	if (currentCentroid.y > 0)
 	{
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) Centroid is greater than Y! ", "\n");
 		determinedEmptyNormal.y = 1;
 	}
 	else if (currentCentroid.y < 0)
 	{
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) Centroid is less than Y! ", "\n");
 		determinedEmptyNormal.y = -1;
 	}
 
@@ -182,7 +201,7 @@ void QMBoolPointWithinTriangle::runExecutionsForFindingCentroidFacingNormal(Quat
 	rotatePointsToOriginalPosition(&rotationRecords, rotationpointsRefVector);
 }
 
-bool QMBoolPointWithinTriangle::runTriangleLinePlanarityTestForPoint(QuatRotationPoints* in_quatRotationPoints)
+bool QMBoolPointWithinTrianglePBZ::runTriangleLinePlanarityTestForPoint(QuatRotationPoints* in_quatRotationPoints)
 {
 	QuatRotationPoints* rotationpointsRefVector = in_quatRotationPoints;
 	glm::vec3* pointBRef = rotationpointsRefVector->getPointRefByIndex(1);
@@ -239,8 +258,12 @@ bool QMBoolPointWithinTriangle::runTriangleLinePlanarityTestForPoint(QuatRotatio
 	}
 	*/
 
-	// now, check if the centroid-facing normal point is at positive y; if it isn't, we must rotate to positive y.
-	if (pointCRef->y != 1.0f)
+
+	// At this point in time, the line should exist entirely on the ZY plane (X will be near/almost 0.0f)
+	// The centroid must be in a position where it is also within the ZY plane. If it is X= 0, that's fine; otherwise,
+	// rotate to positive Y.
+	//if (pointCRef->y != 1.0f)
+	if (pointCRef->x != 0.0f)		// when rotated towards positive or negative y, the x value should be 0.
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
 		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(3);	// get a copy of the value of the centroid-facing normal
@@ -272,7 +295,7 @@ bool QMBoolPointWithinTriangle::runTriangleLinePlanarityTestForPoint(QuatRotatio
 	return runRotationsAndPlanarityTest(pointCRef, &rotationRecords, rotationpointsRefVector, &rotationOrder);
 }
 
-void QMBoolPointWithinTriangle::rotateLineToZPlane(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
+void QMBoolPointWithinTrianglePBZ::rotateLineToZPlane(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
 {
 	auto vectorBegin = (*in_rotationOrderVectorRef).begin();
 	auto vectorEnd = (*in_rotationOrderVectorRef).end();
@@ -290,7 +313,7 @@ void QMBoolPointWithinTriangle::rotateLineToZPlane(glm::vec3* in_pointToRotateFo
 	}
 }
 
-void QMBoolPointWithinTriangle::rotateLineAroundZToYZero(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMBoolPointWithinTrianglePBZ::rotateLineAroundZToYZero(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;
@@ -322,7 +345,7 @@ void QMBoolPointWithinTriangle::rotateLineAroundZToYZero(glm::vec3* in_pointToRo
 	//std::cout << ":::: Radian value is: " << radianValue << std::endl;
 }
 
-void QMBoolPointWithinTriangle::rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMBoolPointWithinTrianglePBZ::rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;
@@ -346,7 +369,7 @@ void QMBoolPointWithinTriangle::rotateLineAroundYToPosXAndPushIntoStack(glm::vec
 	in_quatRotationRecordStackRef->push(s1record);						// push into the stack
 }
 
-float QMBoolPointWithinTriangle::getRadiansForRotateToPosYViaX(glm::vec3 in_vec3)
+float QMBoolPointWithinTrianglePBZ::getRadiansForRotateToPosYViaX(glm::vec3 in_vec3)
 {
 
 	// The overarching goal is to get to POS Y for this 3rd point (3rd point is the value that was passed in)
@@ -426,9 +449,21 @@ float QMBoolPointWithinTriangle::getRadiansForRotateToPosYViaX(glm::vec3 in_vec3
 	return degreesToRotateOnX;
 }
 
-bool QMBoolPointWithinTriangle::runRotationsAndPlanarityTest(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
+bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
 {
+	/*
+	if (qmBoolBaseLogger.isLoggingSet() == true)
+	{
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> (****PLANARITY TEST****) starting printing of quat points( ** 2) ", "\n");
+		in_quatRotationPointsRef->printPoints();
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> (****PLANARITY TEST****) finished printing of quat points( ** 2)", "\n");
+	}
+	*/
+
 	bool isWithinPlane = false;
+
+	// unsure what this code block is for, but it's not doing anything good right now. Remove later, if further tests pass without this being used.
+	/*
 	auto vectorBegin = (*in_rotationOrderVectorRef).begin();
 	auto vectorEnd = (*in_rotationOrderVectorRef).end();
 	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
@@ -438,11 +473,13 @@ bool QMBoolPointWithinTriangle::runRotationsAndPlanarityTest(glm::vec3* in_point
 			rotateLineAroundZToYZero(in_pointToRotateFor, in_quatRotationRecordStackRef, in_quatRotationPointsRef);
 		}
 	}
+	*/
 
 	// check if the normal of the lineOfSightCopy is negative y; flip it on X axis if so.
 	if (in_quatRotationPointsRef->getPointByIndex(3).y < 0)
 	{
 		//std::cout << "!!! Note: Flip on x axis required... " << std::endl;
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> (****PLANARITY TEST****) Flip on X-axis required! ", "\n");
 		flipOnXAxis(in_quatRotationPointsRef);
 	}
 
@@ -461,6 +498,7 @@ bool QMBoolPointWithinTriangle::runRotationsAndPlanarityTest(glm::vec3* in_point
 	)
 	{
 		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
+		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> (****PLANARITY TEST****) Found as being WITHIN plane! ", "\n");
 		isWithinPlane = true;
 	}
 	else
