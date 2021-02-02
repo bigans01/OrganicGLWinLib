@@ -30,7 +30,7 @@ void MassZone::insertSubZoneToSPolyMapEntry(int in_sPolyID, int in_subZoneID)
 
 void MassZone::insertMeshMatterMeta(int in_sPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode)
 {
-	MeshMatterMeta newMeta(in_massSPolyRef, in_originMassManipulationMode);
+	MeshMatterMeta newMeta(in_sPolyID, in_massSPolyRef, in_originMassManipulationMode);
 	meshMatterMetaMap[in_sPolyID] = newMeta;
 }
 

@@ -40,6 +40,8 @@ void MassZonePointClipper::run()
 void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef)
 {
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
+	std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
 	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;
 
@@ -73,15 +75,42 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		}
 	}
 
+
+	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is,
+	// we are done. The reasons for this are as follows:
+	// 
+	// 1.) If the currentMeshMatterSPoly exists, it means it didn't have any CleaveSequences to process. However, it also means that there is a chance that it 
+	//     could be coplanar to at least one compared-to SPoly that exists in the relationshipTrackerContainer.
+	// 2.) If #1 holds true, in that this SPoly is coplanar to a compared-to SPoly in the relationshipTrackerContainer, then it means that the MassZonePointClipper
+	//     must disregard this comparison of the currentMeshMatterSPoly to those in the relatonshipTrackerContainer.
+	//
+	// The reasoning for disregarding when #2 is met, is due to the fact that the MassZonePointClipper's logic isn't designed to work with a SPoly that is coplanar
+	// to any of the SPolys in the relationshipTrackerContainer. 
+	bool foundAsBeingCoplanar = false;
+	OperableIntSet sPolysToCompareAgainst = relationshipTrackerContainer.produceRelatedSPolyList();
+	auto compareAgainstBegin = sPolysToCompareAgainst.intSet.begin();
+	auto compareAgainstEnd = sPolysToCompareAgainst.intSet.end();
+	for (; compareAgainstBegin != compareAgainstEnd; compareAgainstBegin++)
+	{
+		int comparedToIndex = *compareAgainstBegin;
+		auto foundSPolyIterator = clippingShellMap.find(comparedToIndex);
+		CoplanarChecker checker(currentMeshMatterSPoly, foundSPolyIterator->second, PolyDebugLevel::NONE);
+		if (checker.coplanarityDetected == true)
+		{
+			foundAsBeingCoplanar = true;
+			std::cout << "!!!! Notice, coplanarity detected for mesh matter SPoly with ID: " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+			break;
+		}
+	}
+
 	// for printing out the contents of the trackerContainer (debug only)
-	relationshipTrackerContainer.printRelationshipTrackerData();
+	if (foundAsBeingCoplanar == false)
+	{
+		relationshipTrackerContainer.printRelationshipTrackerData();
+	}
 	std::cout << "!!! Finished printing relationshipTrackerContainer contents. Enter number to continue. " << std::endl;
 	int someVal = 3;
 	std::cin >> someVal;
-
-	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is,
-	// go back and erase any PointToSPolyRelationship involving that SPoly, as they are incomparable; the other SPolys which are not coplanar may still be compared.
-
 }
 
 bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy)

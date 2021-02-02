@@ -5,6 +5,7 @@
 
 #include "STriangle.h"
 #include "PointToSTriangleRelationship.h"
+#include <iostream>
 #include <map>
 
 class PointToSPolyRelationship

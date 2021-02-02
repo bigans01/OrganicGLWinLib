@@ -13,6 +13,8 @@
 #include "PointToSPolyRelationshipTrackerContainer.h"
 #include "QuatRotationPoints.h"
 #include "QMBoolPointWithinTrianglePBZ.h"
+#include "OperableIntSet.h"
+#include "CoplanarChecker.h"
 
 class MassZonePointClipper
 {

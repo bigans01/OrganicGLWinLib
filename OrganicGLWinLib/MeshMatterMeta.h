@@ -11,10 +11,13 @@ class MeshMatterMeta
 {
 	public:
 		MeshMatterMeta() {};
-		MeshMatterMeta(SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode) :
+		MeshMatterMeta(int in_referencedSPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode) :
+			referencedSPolyID(in_referencedSPolyID),
 			massSPolyRef(in_massSPolyRef),
 			originManipulationMode(in_originMassManipulationMode)
 		{};
+
+		int referencedSPolyID = 0;			// the ID (index) of the referenced SPoly, as it exists within the superceding SPolySet
 		SPoly* massSPolyRef = nullptr;
 		MassManipulationMode originManipulationMode = MassManipulationMode::NOVAL;
 		MassManipulationMode comparedToManipulationMode = MassManipulationMode::NOVAL;

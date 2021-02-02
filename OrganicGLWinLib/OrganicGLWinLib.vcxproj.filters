@@ -1088,5 +1088,8 @@
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
