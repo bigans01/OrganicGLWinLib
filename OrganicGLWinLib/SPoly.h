@@ -24,6 +24,7 @@
 #include "CleaveSequenceMergeMode.h"
 #include "SPolyDOSet.h"
 #include "PointToMassRelationshipMap.h"
+#include "BorderLineLinkContainer.h"
 
 class SPoly
 {
@@ -101,6 +102,7 @@ public:
 	void applyDebugOptions(SPolyDOSet in_sPolyDOSet);
 
 	PointToMassRelationshipMap generatePointToMassRelationshipMap();
+	BorderLineLinkContainer buildBuildBorderLineLinkContainer();
 };
 
 #endif

@@ -57,3 +57,35 @@ OperableIntSet PointToSPolyRelationshipTrackerContainer::produceRelatedSPolyList
 	}
 	return returnSet;
 }
+
+bool PointToSPolyRelationshipTrackerContainer::checkForAnyPointsWithSingleSPoly()
+{
+	bool singleFound = false;
+	auto relationshipTrackerContainerBegin = relationshipTrackerContainer.begin();
+	auto relationshipTrackerContainerEnd = relationshipTrackerContainer.end();
+	for (; relationshipTrackerContainerBegin != relationshipTrackerContainerEnd; relationshipTrackerContainerBegin++)
+	{
+		if (relationshipTrackerContainerBegin->second.relationships.size() == 1)
+		{
+			singleFound = true;
+			break;
+		}
+	}
+	return singleFound;
+}
+
+PointToSPolyRelationshipTracker* PointToSPolyRelationshipTrackerContainer::fetchSpecificSPolyRelationshipTrackerByPoint(glm::vec3 in_pointToFind)
+{
+	PointToSPolyRelationshipTracker* returnRef = nullptr;
+	auto relationshipTrackerContainerBegin = relationshipTrackerContainer.begin();
+	auto relationshipTrackerContainerEnd = relationshipTrackerContainer.end();
+	for (; relationshipTrackerContainerBegin != relationshipTrackerContainerEnd; relationshipTrackerContainerBegin++)
+	{
+		if (relationshipTrackerContainerBegin->second.point == in_pointToFind)
+		{
+			std::cout << "!! Point found. " << std::endl;
+			returnRef = &relationshipTrackerContainerBegin->second;
+		}
+	}
+	return returnRef;
+}

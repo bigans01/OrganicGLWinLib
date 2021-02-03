@@ -76,7 +76,9 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	}
 
 
-	// Phase 2: check if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is,
+	// Phase 2: Three checks. 
+	
+	// CHECK 2.1: if the currentMeshMatterSPoly is coplanar to any of the SPolys that are registered in the relationshipTrackerContainer; if it is,
 	// we are done. The reasons for this are as follows:
 	// 
 	// 1.) If the currentMeshMatterSPoly exists, it means it didn't have any CleaveSequences to process. However, it also means that there is a chance that it 
@@ -86,6 +88,16 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	//
 	// The reasoning for disregarding when #2 is met, is due to the fact that the MassZonePointClipper's logic isn't designed to work with a SPoly that is coplanar
 	// to any of the SPolys in the relationshipTrackerContainer. 
+	// 
+	// CHECK 2.2: check to see if the number of points contained within the relationshipTrackerContainer is equal to the number of points in the SPoly. If the number 
+	// within the container is less than the number in the SPoly, we are done. The reason for this is that it means at least one point was found as not
+	// being within any of the PBZs of the shell; this guarantees that it is impossible for the currentMeshMatterSPoly to be clipped, since it isn't entirely
+	// contained within the shell.
+	//
+	// CHECK 2.3: For points within the relationshipTrackerContainer, all points must exist within the PBZ of at least 2 SPolys. We are done if we detect any points
+	// as only being within one SPoly.
+	
+	// CHECK 2.1
 	bool foundAsBeingCoplanar = false;
 	OperableIntSet sPolysToCompareAgainst = relationshipTrackerContainer.produceRelatedSPolyList();
 	auto compareAgainstBegin = sPolysToCompareAgainst.intSet.begin();
@@ -103,14 +115,140 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		}
 	}
 
-	// for printing out the contents of the trackerContainer (debug only)
-	if (foundAsBeingCoplanar == false)
+	// CHECK 2.2
+	bool areAllPointsWithinShell = false;		// if all points of the SPoly are somewhere in the combined PBZ of the shell, this will get set to true.
+	if (relationshipTrackerContainer.relationshipTrackerContainer.size() == currentMeshMatterSPoly->borderLines.size())
 	{
-		relationshipTrackerContainer.printRelationshipTrackerData();
+		areAllPointsWithinShell = true;
+	}
+
+	// for printing out the contents of the trackerContainer (debug only)
+	if 
+    (	
+		(foundAsBeingCoplanar == false)
+		&&
+		(areAllPointsWithinShell == true)
+	)
+	{
+		// CHECK 2.3
+		if (relationshipTrackerContainer.checkForAnyPointsWithSingleSPoly() == false)
+		{
+
+			relationshipTrackerContainer.printRelationshipTrackerData();
+			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
+			std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
+			runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer);
+		}
+		else
+		{
+			std::cout << "!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing." << std::endl;
+		}
 	}
 	std::cout << "!!! Finished printing relationshipTrackerContainer contents. Enter number to continue. " << std::endl;
 	int someVal = 3;
 	std::cin >> someVal;
+}
+
+bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef)
+{
+	bool isPurgable = false;		// set this to true if all tests pass.
+
+	// first pass: check for any points which are coplanar to an SPoly that is within the shell
+	auto linksBegin = in_borderLineLinkContainerRef->linkMap.begin();
+	auto linksEnd = in_borderLineLinkContainerRef->linkMap.end();
+	for (; linksBegin != linksEnd; linksBegin++)
+	{
+		PointToSPolyRelationshipTracker* trackerRef = in_trackerContainerRef->fetchSpecificSPolyRelationshipTrackerByPoint(linksBegin->second.linkPoint);
+		auto trackerSPolysBegin = trackerRef->relationships.begin();
+		auto trackerSPolysEnd = trackerRef->relationships.end();
+		for (; trackerSPolysBegin != trackerSPolysEnd; trackerSPolysBegin++)
+		{
+			auto currentSPolySTriangleBegin = trackerSPolysBegin->second.sTriangleRelationshipMap.begin();
+			auto currentSPolySTriangleEnd = trackerSPolysBegin->second.sTriangleRelationshipMap.end();
+			for (; currentSPolySTriangleBegin != currentSPolySTriangleEnd; currentSPolySTriangleBegin++)
+			{
+				// round the points of the triangle to compare to, for both th first and second border line refs.
+				STriangle* currentTriangleToCompareTo = currentSPolySTriangleBegin->second.sTriangleRef;
+				STriangle triangleCopy = *currentTriangleToCompareTo;
+				for (int x = 0; x < 3; x++)
+				{
+					triangleCopy.triangleLines[x].pointA = OrganicGLWinUtils::roundVec3ToHundredths(triangleCopy.triangleLines[x].pointA);
+					triangleCopy.triangleLines[x].pointB = OrganicGLWinUtils::roundVec3ToHundredths(triangleCopy.triangleLines[x].pointA);
+				}
+
+
+				// *********************************************************First border line 
+				SPolyBorderLines* firstBorderLineInLinkRef = linksBegin->second.linkedBorderLines[0];
+				STriangleLine tempLine;
+				tempLine.pointA = firstBorderLineInLinkRef->pointA;
+				tempLine.pointB = firstBorderLineInLinkRef->pointB;
+				
+				std::cout << "!!!>>>> (First line) Comparing line with points (" << tempLine.pointA.x << ", " << tempLine.pointA.y << ", " << tempLine.pointA.z << " | "
+																	<< tempLine.pointB.x << ", " << tempLine.pointB.y << ", " << tempLine.pointB.z << ") " << std::endl;
+				std::cout << "!!!>>>> To triangle with (rounded) points: " << std::endl;
+				for (int x = 0; x < 3; x++)
+				{
+					//std::cout << "[" << x << "]: " << currentTriangleToCompareTo->triangleLines[x].pointA.x << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.y << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.z << std::endl;
+					std::cout << "[" << x << "]: " << triangleCopy.triangleLines[x].pointA.x << ", " << triangleCopy.triangleLines[x].pointA.y << ", " << triangleCopy.triangleLines[x].pointA.z << std::endl;
+				}
+				
+
+				FusionCandidateProducer shellProducerFirst(PolyDebugLevel::NONE);
+				//FusionCandidate shellCandidate = shellProducer.produceCandidate(*currentTriangleToCompareTo, tempLine);		// send a copy of the STriangle
+				FusionCandidate shellCandidateFirst = shellProducerFirst.produceCandidate(triangleCopy, tempLine);		// send a copy of the STriangle
+				if
+				(
+					(shellCandidateFirst.candidateIntersectionResult.wasIntersectFound == 1)
+					//&&
+					//(OrganicGLWinUtils::roundVec3ToHundredths(shellCandidate.candidateIntersectionResult.intersectedPoint) == tempLine.pointB)
+					//(shellCandidate.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
+				)
+				{
+					std::cout << "(First Line) (( NOTICE )): point " << tempLine.pointB.x << ", " << tempLine.pointB.y << ", " << tempLine.pointB.z << std::endl;
+					std::cout << "----> intersection value was: " << shellCandidateFirst.candidateIntersectionResult.wasIntersectFound << std::endl;
+					std::cout << "----> actual intersected point was: " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.x << ", " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.y << ", " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.z << std::endl;
+
+					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLine.pointB, BorderLineLinkPointState::COPLANAR);
+				}
+
+				// *********************************************************First border line 
+				SPolyBorderLines* secondBorderLineInLinkRef = linksBegin->second.linkedBorderLines[1];
+				STriangleLine tempLineB;
+				tempLineB.pointA = secondBorderLineInLinkRef->pointA;
+				tempLineB.pointB = secondBorderLineInLinkRef->pointB;
+
+				std::cout << "!!!>>>> (Second line) Comparing line with points (" << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << " | "
+					<< tempLineB.pointB.x << ", " << tempLineB.pointB.y << ", " << tempLineB.pointB.z << ") " << std::endl;
+				FusionCandidateProducer shellProducerSecond(PolyDebugLevel::NONE);
+				FusionCandidate shellCandidateSecond = shellProducerSecond.produceCandidate(triangleCopy, tempLineB);
+				if
+				(
+					//(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound != 0)
+					//&&
+					//(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound != 3)
+					(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound == 1)
+						//(OrganicGLWinUtils::roundVec3ToHundredths(shellCandidate.candidateIntersectionResult.intersectedPoint) == tempLine.pointB)
+						//(shellCandidate.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
+				)
+				{
+					std::cout << "(Second Line) (( NOTICE )): point " << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << std::endl;
+					std::cout << "----> intersection value was: " << shellCandidateSecond.candidateIntersectionResult.wasIntersectFound << std::endl;
+					std::cout << "----> actual intersected point was: " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.x << ", " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.y << ", " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.z << std::endl;
+
+					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLineB.pointA, BorderLineLinkPointState::COPLANAR);
+				}
+
+			}
+		}
+	}
+	if (in_borderLineLinkContainerRef->checkIfAllLinksPointsAreCoplanar() == true)
+	{
+		std::cout << "!!! (( FLAGGED AS PURGABLE -> ) This SPoly has all it's point set to COPLANAR; the SPoly is now purgable; this function will now halt and return TRUE." << std::endl;
+	}
+
+	std::cout << "!! Finished passes for this SPoly. " << std::endl;
+
+	return isPurgable;
 }
 
 bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy)

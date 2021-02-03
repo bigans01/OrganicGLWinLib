@@ -15,6 +15,9 @@
 #include "QMBoolPointWithinTrianglePBZ.h"
 #include "OperableIntSet.h"
 #include "CoplanarChecker.h"
+#include "BorderLineLinkContainer.h"
+#include "FusionCandidateProducer.h"
+#include "FusionCandidate.h"
 
 class MassZonePointClipper
 {
@@ -32,6 +35,7 @@ class MassZonePointClipper
 		void run();
 		void compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef);
 		bool checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy);
+		bool runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef);
 };
 
 #endif

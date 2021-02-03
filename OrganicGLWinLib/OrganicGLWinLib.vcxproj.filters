@@ -744,6 +744,15 @@
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BorderLineLink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineLinkContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineLinkPointState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

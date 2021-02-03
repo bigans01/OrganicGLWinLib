@@ -1023,3 +1023,32 @@ PointToMassRelationshipMap SPoly::generatePointToMassRelationshipMap()
 	}
 	return returnMap;
 }
+
+BorderLineLinkContainer SPoly::buildBuildBorderLineLinkContainer()
+{
+	BorderLineLinkContainer returnContainer;
+	glm::vec3 pointToCreateLinkFor;
+	auto borderLinesBegin = borderLines.begin();
+	auto borderLinesEnd = borderLines.end();
+	int lastIndex = borderLines.rbegin()->first;		// get the map value of the last border line
+	int firstIndex = borderLines.begin()->first;
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		glm::vec3 pointToInsert = borderLinesBegin->second.pointA;
+		if (borderLinesBegin->first == firstIndex)	// we're on the first line; the first link would be the last line in the map, second link would be the first line.
+		{
+			SPolyBorderLines* linkARef = &borderLines.find(lastIndex)->second;
+			SPolyBorderLines* linkBRef = &borderLines.find(firstIndex)->second;
+			BorderLineLink newLink(pointToInsert, linkARef, linkBRef);
+			returnContainer.insertBorderLineLink(newLink);
+		}
+		else // all other lines, that aren't the first line, simply get the line behind it (whatever occurred previously), as the first link.
+		{
+			SPolyBorderLines* linkARef = &borderLines.find(borderLinesBegin->first - 1)->second;
+			SPolyBorderLines* linkBRef = &borderLines.find(borderLinesBegin->first)->second;
+			BorderLineLink newLink(pointToInsert, linkARef, linkBRef);
+			returnContainer.insertBorderLineLink(newLink);
+		}
+	}
+	return returnContainer; 
+}

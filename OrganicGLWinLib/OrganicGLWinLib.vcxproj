@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BorderLineLink.h" />
     <ClInclude Include="BorderLineCycle.h" />
     <ClInclude Include="BorderLineCycler.h" />
     <ClInclude Include="BorderLineData.h" />
@@ -166,6 +167,8 @@
     <ClInclude Include="BorderLineIntersectRecord.h" />
     <ClInclude Include="BorderLineIntersectRecorder.h" />
     <ClInclude Include="BorderLineIntersectRecordType.h" />
+    <ClInclude Include="BorderLineLinkContainer.h" />
+    <ClInclude Include="BorderLineLinkPointState.h" />
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineASliceMerger.h" />

@@ -33,6 +33,7 @@ class PointToSPolyRelationship
 			}
 		}
 	private:
+		friend class MassZonePointClipper;
 		std::map<int, PointToSTriangleRelationship> sTriangleRelationshipMap;
 };
 
