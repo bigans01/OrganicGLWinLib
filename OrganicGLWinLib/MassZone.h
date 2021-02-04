@@ -19,7 +19,7 @@
 
 class MassZone
 {
-public:
+private:
 	friend class MassZoneMaster;
 	friend class SPolySet;
 	MassZoneBox zoneBox;
@@ -36,7 +36,6 @@ public:
 	std::map<MassZoneBoxBoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
 	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);
 	void runClipper();
-private:
 	PolyDebugLevel massZoneLogLevel = PolyDebugLevel::NONE;
 	PolyDebugLevel printBoundaryLinesLogLevel = PolyDebugLevel::NONE;			// used for printing categorized lines in all SPolys of a MassZoneBox. (set via debug option, PRINT_BOUNDARY_CATEGORIZED_LINES)
 	PolyDebugLevel boundarySPolyConstructionLogLevel = PolyDebugLevel::NONE;	// used for halting and waiting for input, between the construction of boundary SPolys. (set via debug option, HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION)
@@ -45,7 +44,6 @@ private:
 	std::map<int, int> sPolyToSubZoneMap;
 	std::map<int, int> subZoneToSPolyMap;
 	std::map<int, MeshMatterMeta> meshMatterMetaMap;
-
 };
 
 #endif

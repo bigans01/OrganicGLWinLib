@@ -7,7 +7,8 @@ void MassZonePointClipper::insertSPolySuperGroupRefsIntoClippingShell(SPolySuper
 	auto superGroupSPolysEnd = in_sPolySuperGroupRef->sPolyMap.end();
 	for (; superGroupSPolysBegin != superGroupSPolysEnd; superGroupSPolysBegin++)
 	{
-		std::cout << ":: Inserted SPoly from super group into clipper. " << std::endl;
+		//std::cout << ":: Inserted SPoly from super group into clipper. " << std::endl;
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," :: Inserted SPoly from super group into clipper. ", "\n");
 		int currentMapSize = clippingShellMap.size();
 		clippingShellMap[currentMapSize] = &superGroupSPolysBegin->second;
 	}
@@ -26,16 +27,20 @@ void MassZonePointClipper::setOtherZoneMeshMatterMetaMapRef(std::map<int, MeshMa
 
 void MassZonePointClipper::run()
 {
-	std::cout << "!! Size of clipping shell map: " << clippingShellMap.size() << std::endl;
-	std::cout << "!! Size of other zone's mesh matter map: " << otherZoneMeshMatterMetaMapRef->size() << std::endl;
+	//std::cout << "!! Size of clipping shell map: " << int(clippingShellMap.size()) << std::endl;
+	//std::cout << "!! Size of other zone's mesh matter map: " << int(otherZoneMeshMatterMetaMapRef->size()) << std::endl;
 
+	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !! Size of clipping shell map: ", int(clippingShellMap.size()), "\n");
+	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !! Size of other zone's mesh matter map: ", int(otherZoneMeshMatterMetaMapRef->size()), "\n");
+	
 	auto otherMeshMatterMapBegin = otherZoneMeshMatterMetaMapRef->begin();
 	auto otherMeshMatterMapEnd = otherZoneMeshMatterMetaMapRef->end();
 	for (; otherMeshMatterMapBegin != otherMeshMatterMapEnd; otherMeshMatterMapBegin++)
 	{
 		if (compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second) == true)	// if it was determined that it needs to be purged, put it into sPolysToPurgeSet.
 		{
-			std::cout << "!!! Flagging SPoly with ID " << otherMeshMatterMapBegin->second.referencedSPolyID << " as purgable." << std::endl;
+			//std::cout << "!!! Flagging SPoly with ID " << otherMeshMatterMapBegin->second.referencedSPolyID << " as purgable." << std::endl;
+			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! Flagging SPoly with ID ", otherMeshMatterMapBegin->second.referencedSPolyID, " as purgable.", "\n");
 			sPolysToPurge.insert(otherMeshMatterMapBegin->second.referencedSPolyID);
 		}
 	}
@@ -45,7 +50,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 {
 	bool willBePurged = false;
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
-	std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+	//std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," |||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
 
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
 	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;
@@ -115,7 +121,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		if (checker.coplanarityDetected == true)
 		{
 			foundAsBeingCoplanar = true;
-			std::cout << "!!!! Notice, coplanarity detected for mesh matter SPoly with ID: " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+			//std::cout << "!!!! Notice, coplanarity detected for mesh matter SPoly with ID: " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!!! Notice, coplanarity detected for mesh matter SPoly with ID: ", in_meshMatterMetaRef->referencedSPolyID, "\n");
 			break;
 		}
 	}
@@ -141,22 +148,35 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 
 			relationshipTrackerContainer.printRelationshipTrackerData();
 			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
-			std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
+			//std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
+			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! Finished building BorderLineLinkContainer.", "\n");
 			if (runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer) == true)
 			{
+				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
 				willBePurged = true;
 			}
 		}
 		else
 		{
-			std::cout << "!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing." << std::endl;
+			//std::cout << "!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing." << std::endl;
+			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString,"!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing.", "\n");
 		}
 	}
-	std::cout << "!!! Finished printing relationshipTrackerContainer contents. Enter number to continue. " << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
+	
+	if (clipperPolyLogger.isLoggingSet() == true)
+	{
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !! Finished purging analysis.", "\n");
+		clipperPolyLogger.waitForDebugInput();
+	}
 
 	return willBePurged;
+}
+
+void MassZonePointClipper::setClipperDebugLevel(PolyDebugLevel in_polyDebugLevel, std::string in_zoneString)
+{
+	clipperPolyLogger.setDebugLevel(in_polyDebugLevel);
+	clipperPolyLoggerDebugLevel = in_polyDebugLevel;
+	zoneString = in_zoneString;
 }
 
 bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef)
@@ -168,6 +188,7 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 	auto linksEnd = in_borderLineLinkContainerRef->linkMap.end();
 	for (; linksBegin != linksEnd; linksBegin++)
 	{
+		bool pointFoundAsCoplanar = false;	// set to true when the point as being coplanar to any STriangle.
 		PointToSPolyRelationshipTracker* trackerRef = in_trackerContainerRef->fetchSpecificSPolyRelationshipTrackerByPoint(linksBegin->second.linkPoint);
 		auto trackerSPolysBegin = trackerRef->relationships.begin();
 		auto trackerSPolysEnd = trackerRef->relationships.end();
@@ -177,71 +198,83 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 			auto currentSPolySTriangleEnd = trackerSPolysBegin->second.sTriangleRelationshipMap.end();
 			for (; currentSPolySTriangleBegin != currentSPolySTriangleEnd; currentSPolySTriangleBegin++)
 			{
-				// round the points of the triangle to compare to, for both th first and second border line refs.
 				STriangle* currentTriangleToCompareTo = currentSPolySTriangleBegin->second.sTriangleRef;
+				if (clipperPolyLogger.isLoggingSet() == true)
+				{
+					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " Points of triangle to compare to: ", "\n");
+					for (int x = 0; x < 3; x++)
+					{
+						clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " [", x, "]: ", currentTriangleToCompareTo->triangleLines[x].pointA.x, ", ", currentTriangleToCompareTo->triangleLines[x].pointA.y, ", ", currentTriangleToCompareTo->triangleLines[x].pointA.z, "\n");
+					}
+
+				}
+
+				// We must check if either of the border lines which are part of the BorderLineLink we're looking at, are on the same plane as
+				// any of the STriangles for which this point is found as being within that STriangle's PBZ.
 
 				// *********************************************************First border line 
 				SPolyBorderLines* firstBorderLineInLinkRef = linksBegin->second.linkedBorderLines[0];
 				STriangleLine tempLine;
 				tempLine.pointA = firstBorderLineInLinkRef->pointA;
 				tempLine.pointB = firstBorderLineInLinkRef->pointB;
-				
-				std::cout << "!!!>>>> (First line) Comparing line with points (" << tempLine.pointA.x << ", " << tempLine.pointA.y << ", " << tempLine.pointA.z << " | "
-																	<< tempLine.pointB.x << ", " << tempLine.pointB.y << ", " << tempLine.pointB.z << ") " << std::endl;
-				std::cout << "!!!>>>> To triangle with (rounded) points: " << std::endl;
-				for (int x = 0; x < 3; x++)
-				{
-					std::cout << "[" << x << "]: " << currentTriangleToCompareTo->triangleLines[x].pointA.x << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.y << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.z << std::endl;
-					//std::cout << "[" << x << "]: " << triangleCopy.triangleLines[x].pointA.x << ", " << triangleCopy.triangleLines[x].pointA.y << ", " << triangleCopy.triangleLines[x].pointA.z << std::endl;
-				}
-				
-
+				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (First line) Comparing line with points (", tempLine.pointA.x, ", ", tempLine.pointA.y, ", ", tempLine.pointA.z, " | ",
+					tempLine.pointB.x, ", ", tempLine.pointB.y, ", ", tempLine.pointB.z, ") ", "\n");
 				FusionCandidateProducer shellProducerFirst(PolyDebugLevel::NONE);
 				FusionCandidate shellCandidateFirst = shellProducerFirst.produceCandidate(*currentTriangleToCompareTo, tempLine);		// send a copy of the STriangle
 				if
 				(
 					(shellCandidateFirst.candidateIntersectionResult.wasIntersectFound == 1)
+					&&
+					(shellCandidateFirst.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
 				)
 				{
-					std::cout << "(First Line) (( NOTICE )): point " << tempLine.pointB.x << ", " << tempLine.pointB.y << ", " << tempLine.pointB.z << std::endl;
-					std::cout << "----> intersection value was: " << shellCandidateFirst.candidateIntersectionResult.wasIntersectFound << std::endl;
-					std::cout << "----> actual intersected point was: " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.x << ", " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.y << ", " << shellCandidateFirst.candidateIntersectionResult.intersectedPoint.z << std::endl;
-
+					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(First Line) (( NOTICE )) : point ", tempLine.pointB.x, ", ", tempLine.pointB.y, ", ", tempLine.pointB.z,
+					" found as being coplanar, breaking.", "\n");
 					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLine.pointB, BorderLineLinkPointState::COPLANAR);
+					pointFoundAsCoplanar = true;
+					break;
 				}
 
-				// *********************************************************First border line 
+				// *********************************************************Second border line 
 				SPolyBorderLines* secondBorderLineInLinkRef = linksBegin->second.linkedBorderLines[1];
 				STriangleLine tempLineB;
 				tempLineB.pointA = secondBorderLineInLinkRef->pointA;
 				tempLineB.pointB = secondBorderLineInLinkRef->pointB;
-
-				std::cout << "!!!>>>> (Second line) Comparing line with points (" << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << " | "
-					<< tempLineB.pointB.x << ", " << tempLineB.pointB.y << ", " << tempLineB.pointB.z << ") " << std::endl;
+				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (Second line) Comparing line with points (", tempLineB.pointA.x, ", ", tempLineB.pointA.y, ", ", tempLineB.pointA.z, " | ",
+					tempLineB.pointB.x, ", ", tempLineB.pointB.y, ", ", tempLineB.pointB.z, ") ", "\n");
 				FusionCandidateProducer shellProducerSecond(PolyDebugLevel::NONE);
 				FusionCandidate shellCandidateSecond = shellProducerSecond.produceCandidate(*currentTriangleToCompareTo, tempLineB);
 				if
 				(
 					(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound == 1)
+					&&
+					(shellCandidateSecond.candidateIntersectionResult.intersectedPoint == tempLineB.pointA)
 				)
 				{
-					std::cout << "(Second Line) (( NOTICE )): point " << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << std::endl;
-					std::cout << "----> intersection value was: " << shellCandidateSecond.candidateIntersectionResult.wasIntersectFound << std::endl;
-					std::cout << "----> actual intersected point was: " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.x << ", " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.y << ", " << shellCandidateSecond.candidateIntersectionResult.intersectedPoint.z << std::endl;
-
+					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(Second Line) (( NOTICE )) : point ", tempLineB.pointA.x, ", ", tempLineB.pointA.y, ", ", tempLineB.pointA.z,
+						" found as being coplanar, breaking.", "\n");
 					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLineB.pointA, BorderLineLinkPointState::COPLANAR);
+					pointFoundAsCoplanar = true;
+					break;
 				}
 
+			}
+
+			// as soon as a point in the first pass is determined as being coplanar to any STriangle that it is related to,
+			// we should stop, as continuing on is pointless. 
+			if (pointFoundAsCoplanar == true)		//if we broke out of the previous loop, break out of this one too, and we'll be done.
+			{
+				break;
 			}
 		}
 	}
 	if (in_borderLineLinkContainerRef->checkIfAllLinksPointsAreCoplanar() == true)
 	{
-		std::cout << "!!! (( FLAGGED AS PURGABLE -> ) This SPoly has all it's point set to COPLANAR; the SPoly is now purgable; this function will now halt and return TRUE." << std::endl;
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," FLAGGED AS PURGABLE -> This SPoly has all it's point set to COPLANAR; the SPoly is now purgable; this function will now halt and return TRUE.", "\n");
 		isPurgable = true;
 	}
 
-	std::cout << "!! Finished passes for this SPoly. " << std::endl;
+	//std::cout << "!! Finished passes for this SPoly. " << std::endl;
 
 	return isPurgable;
 }

@@ -101,7 +101,7 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		// Generic options
 		case (DebugOption::MASSZONEMASTER_OLDZONE_PRINT_BOUNDARY_CATEGORIZED_LINES): { oldZone.printBoundaryLinesLogLevel = PolyDebugLevel::DEBUG; break; };
 		case (DebugOption::MASSZONEMASTER_OLDZONE_HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION): {oldZone.boundarySPolyConstructionLogLevel = PolyDebugLevel::DEBUG; break; };
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POINT_CLIPPING): {oldZone.pointClippingLogLevel = PolyDebugLevel::DEBUG; break; };
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POINT_CLIPPING): {oldZone.clipper.setClipperDebugLevel(PolyDebugLevel::DEBUG, "(OLD_ZONE) "); break; };
 
 		// NEG_Z options (North)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
@@ -156,6 +156,6 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		// Generic options
 		case (DebugOption::MASSZONEMASTER_NEWZONE_PRINT_BOUNDARY_CATEGORIZED_LINES): { newZone.printBoundaryLinesLogLevel = PolyDebugLevel::DEBUG; break; };
 		case (DebugOption::MASSZONEMASTER_NEWZONE_HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION): {newZone.boundarySPolyConstructionLogLevel = PolyDebugLevel::DEBUG; break; };
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POINT_CLIPPING): {newZone.pointClippingLogLevel = PolyDebugLevel::DEBUG; break; };
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POINT_CLIPPING): {newZone.clipper.setClipperDebugLevel(PolyDebugLevel::DEBUG, "(NEW_ZONE) "); break; };
 	}
 }
