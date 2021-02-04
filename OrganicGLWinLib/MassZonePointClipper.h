@@ -4,6 +4,7 @@
 #define MASSZONEPOINTCLIPPER_H
 
 #include <map>
+#include <set>
 #include "SPoly.h"
 #include "SPolySupergroup.h"
 #include "PolyLogger.h"
@@ -25,15 +26,16 @@ class MassZonePointClipper
 
 	private:	
 		friend class MassZoneMaster;
-		friend class MassZone;	
+		friend class MassZone;
+		friend class SPolySet;
 		std::map<int, SPoly*> clippingShellMap;
 		std::map<int, MeshMatterMeta>* otherZoneMeshMatterMetaMapRef = nullptr;
-
+		std::set<int> sPolysToPurge;
 		void insertSPolySuperGroupRefsIntoClippingShell(SPolySupergroup* in_sPolySuperGroupRef);
 		void insertSPolyRefIntoClippingShell(SPoly* in_sPolyRef);
 		void setOtherZoneMeshMatterMetaMapRef(std::map<int, MeshMatterMeta>* in_otherZoneMeshMatterMetaMapRef);
 		void run();
-		void compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef);
+		bool compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef);
 		bool checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy);
 		bool runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef);
 };

@@ -26,6 +26,7 @@ class MassZoneMaster
 		void handleDebugOption(DebugOption in_debugOption);
 		void runPointClippers();
 	private:
+		friend class SPolySet;
 		std::map<int, MassZoneType> sPolyZoneTypeMap;
 		MassZone oldZone;
 		MassZone newZone;

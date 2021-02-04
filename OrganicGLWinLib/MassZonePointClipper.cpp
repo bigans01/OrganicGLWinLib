@@ -33,12 +33,17 @@ void MassZonePointClipper::run()
 	auto otherMeshMatterMapEnd = otherZoneMeshMatterMetaMapRef->end();
 	for (; otherMeshMatterMapBegin != otherMeshMatterMapEnd; otherMeshMatterMapBegin++)
 	{
-		compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second);
+		if (compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second) == true)	// if it was determined that it needs to be purged, put it into sPolysToPurgeSet.
+		{
+			std::cout << "!!! Flagging SPoly with ID " << otherMeshMatterMapBegin->second.referencedSPolyID << " as purgable." << std::endl;
+			sPolysToPurge.insert(otherMeshMatterMapBegin->second.referencedSPolyID);
+		}
 	}
 }
 
-void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef)
+bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatterMeta* in_meshMatterMetaRef)
 {
+	bool willBePurged = false;
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
 	std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
 
@@ -137,7 +142,10 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			relationshipTrackerContainer.printRelationshipTrackerData();
 			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
 			std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
-			runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer);
+			if (runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer) == true)
+			{
+				willBePurged = true;
+			}
 		}
 		else
 		{
@@ -147,6 +155,8 @@ void MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	std::cout << "!!! Finished printing relationshipTrackerContainer contents. Enter number to continue. " << std::endl;
 	int someVal = 3;
 	std::cin >> someVal;
+
+	return willBePurged;
 }
 
 bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef)
@@ -169,13 +179,6 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 			{
 				// round the points of the triangle to compare to, for both th first and second border line refs.
 				STriangle* currentTriangleToCompareTo = currentSPolySTriangleBegin->second.sTriangleRef;
-				STriangle triangleCopy = *currentTriangleToCompareTo;
-				for (int x = 0; x < 3; x++)
-				{
-					triangleCopy.triangleLines[x].pointA = OrganicGLWinUtils::roundVec3ToHundredths(triangleCopy.triangleLines[x].pointA);
-					triangleCopy.triangleLines[x].pointB = OrganicGLWinUtils::roundVec3ToHundredths(triangleCopy.triangleLines[x].pointA);
-				}
-
 
 				// *********************************************************First border line 
 				SPolyBorderLines* firstBorderLineInLinkRef = linksBegin->second.linkedBorderLines[0];
@@ -188,20 +191,16 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 				std::cout << "!!!>>>> To triangle with (rounded) points: " << std::endl;
 				for (int x = 0; x < 3; x++)
 				{
-					//std::cout << "[" << x << "]: " << currentTriangleToCompareTo->triangleLines[x].pointA.x << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.y << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.z << std::endl;
-					std::cout << "[" << x << "]: " << triangleCopy.triangleLines[x].pointA.x << ", " << triangleCopy.triangleLines[x].pointA.y << ", " << triangleCopy.triangleLines[x].pointA.z << std::endl;
+					std::cout << "[" << x << "]: " << currentTriangleToCompareTo->triangleLines[x].pointA.x << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.y << ", " << currentTriangleToCompareTo->triangleLines[x].pointA.z << std::endl;
+					//std::cout << "[" << x << "]: " << triangleCopy.triangleLines[x].pointA.x << ", " << triangleCopy.triangleLines[x].pointA.y << ", " << triangleCopy.triangleLines[x].pointA.z << std::endl;
 				}
 				
 
 				FusionCandidateProducer shellProducerFirst(PolyDebugLevel::NONE);
-				//FusionCandidate shellCandidate = shellProducer.produceCandidate(*currentTriangleToCompareTo, tempLine);		// send a copy of the STriangle
-				FusionCandidate shellCandidateFirst = shellProducerFirst.produceCandidate(triangleCopy, tempLine);		// send a copy of the STriangle
+				FusionCandidate shellCandidateFirst = shellProducerFirst.produceCandidate(*currentTriangleToCompareTo, tempLine);		// send a copy of the STriangle
 				if
 				(
 					(shellCandidateFirst.candidateIntersectionResult.wasIntersectFound == 1)
-					//&&
-					//(OrganicGLWinUtils::roundVec3ToHundredths(shellCandidate.candidateIntersectionResult.intersectedPoint) == tempLine.pointB)
-					//(shellCandidate.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
 				)
 				{
 					std::cout << "(First Line) (( NOTICE )): point " << tempLine.pointB.x << ", " << tempLine.pointB.y << ", " << tempLine.pointB.z << std::endl;
@@ -220,15 +219,10 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 				std::cout << "!!!>>>> (Second line) Comparing line with points (" << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << " | "
 					<< tempLineB.pointB.x << ", " << tempLineB.pointB.y << ", " << tempLineB.pointB.z << ") " << std::endl;
 				FusionCandidateProducer shellProducerSecond(PolyDebugLevel::NONE);
-				FusionCandidate shellCandidateSecond = shellProducerSecond.produceCandidate(triangleCopy, tempLineB);
+				FusionCandidate shellCandidateSecond = shellProducerSecond.produceCandidate(*currentTriangleToCompareTo, tempLineB);
 				if
 				(
-					//(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound != 0)
-					//&&
-					//(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound != 3)
 					(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound == 1)
-						//(OrganicGLWinUtils::roundVec3ToHundredths(shellCandidate.candidateIntersectionResult.intersectedPoint) == tempLine.pointB)
-						//(shellCandidate.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
 				)
 				{
 					std::cout << "(Second Line) (( NOTICE )): point " << tempLineB.pointA.x << ", " << tempLineB.pointA.y << ", " << tempLineB.pointA.z << std::endl;
@@ -244,6 +238,7 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 	if (in_borderLineLinkContainerRef->checkIfAllLinksPointsAreCoplanar() == true)
 	{
 		std::cout << "!!! (( FLAGGED AS PURGABLE -> ) This SPoly has all it's point set to COPLANAR; the SPoly is now purgable; this function will now halt and return TRUE." << std::endl;
+		isPurgable = true;
 	}
 
 	std::cout << "!! Finished passes for this SPoly. " << std::endl;

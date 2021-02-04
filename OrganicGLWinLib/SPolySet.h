@@ -123,6 +123,7 @@ private:
 	void setOption(DebugOption in_option);
 	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);
 	PolyDebugLevel checkForSPolyOptionInSpecificSPoly(int in_sPolyID, SPolyDO in_sPolyDO);
+	void removeSPolysFlaggedAsPurgable();
 };
 
 #endif

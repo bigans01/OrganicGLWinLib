@@ -113,6 +113,29 @@ void SPolySet::applyDebugOptionsToSpecificSPolys()
 	}
 }
 
+void SPolySet::removeSPolysFlaggedAsPurgable()
+{
+	// old zone
+	std::set<int> oldZonePurgables = zoneMaster.oldZone.clipper.sPolysToPurge;
+	auto oldPurgablesBegin = oldZonePurgables.begin();
+	auto oldPurgablesEnd = oldZonePurgables.end();
+	for (; oldPurgablesBegin != oldPurgablesEnd; oldPurgablesBegin++)
+	{
+		polyFracturingResults.supergroupMap[*oldPurgablesBegin].sPolyMap.clear();
+		std::cout << "!! Purgable poly SuperGroup having ID " << *oldPurgablesBegin << " has been cleared. " << std::endl;
+	}
+
+	// new zone
+	std::set<int> newZonePurgables = zoneMaster.newZone.clipper.sPolysToPurge;
+	auto newPurgablesBegin = newZonePurgables.begin();
+	auto newPurgablesEnd = newZonePurgables.end();
+	for (; newPurgablesBegin != newPurgablesEnd; newPurgablesBegin++)
+	{
+		polyFracturingResults.supergroupMap[*newPurgablesBegin].sPolyMap.clear();
+		std::cout << "!! Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
+	}
+}
+
 void SPolySet::reset()
 {
 	numberOfPolys = 0;
@@ -1182,6 +1205,8 @@ void SPolySet::performFracturing()
 	//int continueVal = 3;
 	//std::cout << "Fracturing for this poly complete; enter number to continue..." << std::endl;
 	//std::cin >> continueVal;
+
+	removeSPolysFlaggedAsPurgable();
 }
 
 void SPolySet::insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup)

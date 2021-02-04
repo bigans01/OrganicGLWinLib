@@ -21,6 +21,7 @@ class MassZone
 {
 public:
 	friend class MassZoneMaster;
+	friend class SPolySet;
 	MassZoneBox zoneBox;
 	void setMassZoneLogLevel(PolyDebugLevel in_polyDebugLevel);
 	void insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy);

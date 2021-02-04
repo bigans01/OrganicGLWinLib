@@ -5,6 +5,7 @@
 
 #include <map>
 #include "SPoly.h"
+#include "OrganicGLWinUtils.h"
 
 class SPolySupergroup
 {
@@ -49,6 +50,27 @@ class SPolySupergroup
 			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
 			{
 				sPolysBegin->second.polyEmptyNormal = in_emptyNormalValue;
+			}
+		}
+		void roundAllSTrianglesToHundredths()
+		{
+			auto sPolysBegin = sPolyMap.begin();
+			auto sPolysEnd = sPolyMap.end();
+			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+			{
+				auto sTrianglesBegin = sPolysBegin->second.triangles.begin();
+				auto sTrianglesEnd = sPolysBegin->second.triangles.end();
+				for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
+				{
+					for (int x = 0; x < 3; x++)
+					{
+						//std::cout << "Point " << x << ": "
+						//	<< sTrianglesBegin->second.triangleLines[x].pointA.x << ", "
+						//	<< sTrianglesBegin->second.triangleLines[x].pointA.y << ", "
+						//	<< sTrianglesBegin->second.triangleLines[x].pointA.z << std::endl;
+						sTrianglesBegin->second.triangleLines[x].pointA = OrganicGLWinUtils::roundVec3ToHundredths(sTrianglesBegin->second.triangleLines[x].pointA);
+					}
+				}
 			}
 		}
 };
