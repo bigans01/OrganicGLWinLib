@@ -172,6 +172,8 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 		boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 		boundarySPolySG.roundAllSTrianglesToHundredths();
+		boundarySPolySG.buildSPolyBorderLines();
+		//boundarySPolySG.
 	}
 }
 

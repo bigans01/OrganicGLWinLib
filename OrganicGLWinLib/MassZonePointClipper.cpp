@@ -80,6 +80,20 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				{
 					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef);
 				}
+				else
+				{
+					/*
+					if (clipperPolyLogger.isLoggingSet() == true)
+					{
+						std::cout << "!! The point " << pointToCompareFor.x << ", " << pointToCompareFor.y << ", " << pointToCompareFor.z << "was found as not being within the STriangle." << std::endl;
+						for (int x = 0; x < 3; x++)
+						{
+							clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " [", x, "]: ", currentSTriangleRef->triangleLines[x].pointA.x, ", ", currentSTriangleRef->triangleLines[x].pointA.y, ", ", currentSTriangleRef->triangleLines[x].pointA.z, "\n");
+						}
+						clipperPolyLogger.waitForDebugInput();
+					}
+					*/
+				}
 				
 				// ...
 			}
@@ -118,6 +132,10 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		int comparedToIndex = *compareAgainstBegin;
 		auto foundSPolyIterator = clippingShellMap.find(comparedToIndex);
 		CoplanarChecker checker(currentMeshMatterSPoly, foundSPolyIterator->second, PolyDebugLevel::NONE);
+		//CoplanarChecker checker(currentMeshMatterSPoly, foundSPolyIterator->second, clipperPolyLogger.getLogLevel());
+
+
+
 		if (checker.coplanarityDetected == true)
 		{
 			foundAsBeingCoplanar = true;
@@ -125,6 +143,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!!! Notice, coplanarity detected for mesh matter SPoly with ID: ", in_meshMatterMetaRef->referencedSPolyID, "\n");
 			break;
 		}
+
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "####################### Finished coplanarity checks. ", "\n");
 	}
 
 	// CHECK 2.2
@@ -284,7 +304,16 @@ bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, ST
 	bool isWithinPBZ = false;
 
 	glm::vec3 pointToCheckCopy = in_pointToCheck;
+
 	STriangle sTriangleCopy = in_sTriangleCopy;
+	for (int x = 0; x < 3; x++)
+	{
+		if (in_pointToCheck == sTriangleCopy.triangleLines[x].pointA)
+		{
+			return true;
+		}
+	}
+	
 
 	QuatRotationPoints points;
 	points.pointsRefVector.push_back(&pointToCheckCopy);

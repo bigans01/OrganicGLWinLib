@@ -122,7 +122,7 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	for (; oldPurgablesBegin != oldPurgablesEnd; oldPurgablesBegin++)
 	{
 		polyFracturingResults.supergroupMap[*oldPurgablesBegin].sPolyMap.clear();
-		std::cout << "!! Purgable poly SuperGroup having ID " << *oldPurgablesBegin << " has been cleared. " << std::endl;
+		std::cout << "!! (OLD_ZONE purgables) Purgable poly SuperGroup having ID " << *oldPurgablesBegin << " has been cleared. " << std::endl;
 	}
 
 	// new zone
@@ -132,7 +132,7 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	for (; newPurgablesBegin != newPurgablesEnd; newPurgablesBegin++)
 	{
 		polyFracturingResults.supergroupMap[*newPurgablesBegin].sPolyMap.clear();
-		std::cout << "!! Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
+		std::cout << "!! (NEW_ZONE purgables) Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
 	}
 }
 

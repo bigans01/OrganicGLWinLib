@@ -69,8 +69,18 @@ class SPolySupergroup
 						//	<< sTrianglesBegin->second.triangleLines[x].pointA.y << ", "
 						//	<< sTrianglesBegin->second.triangleLines[x].pointA.z << std::endl;
 						sTrianglesBegin->second.triangleLines[x].pointA = OrganicGLWinUtils::roundVec3ToHundredths(sTrianglesBegin->second.triangleLines[x].pointA);
+						sTrianglesBegin->second.triangleLines[x].pointB = OrganicGLWinUtils::roundVec3ToHundredths(sTrianglesBegin->second.triangleLines[x].pointB);
 					}
 				}
+			}
+		}
+		void buildSPolyBorderLines()
+		{
+			auto sPolysBegin = sPolyMap.begin();
+			auto sPolysEnd = sPolyMap.end();
+			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+			{
+				sPolysBegin->second.determineBorderLines();
 			}
 		}
 };

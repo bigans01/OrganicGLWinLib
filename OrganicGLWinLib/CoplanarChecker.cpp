@@ -11,7 +11,9 @@ void CoplanarChecker::performCoPlanarAnalysis()
 		std::cout << "######## DEBUG, printing polyA border lines: " << std::endl;
 		polyAPtr->printBorderLines();
 		std::cout << "######## DEBUG, printing polyB border lines: " << std::endl;
+		std::cout << "######## Debug, polyB number of triangles: " << polyBPtr->triangles.size() << std::endl;
 		polyBPtr->printBorderLines();
+
 		std::cout << "************** printing of lines complete. " << std::endl;
 		coplanarCheckerLogger.waitForDebugInput();
 	}

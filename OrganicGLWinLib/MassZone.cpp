@@ -202,6 +202,10 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		//std::cout << ">> Comparing SPoly based subZone,  with the SPoly having ID: " << subZoneToSPolyMap[subZoneMapBegin->first] << std::endl;
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
 		clipper.insertSPolyRefIntoClippingShell(&subZoneMapBegin->second.sPolyCopy);
+
+		std::cout << "++++++++++++++++ Printing out SPoly lines, of the SPoly we are about to insert: " << std::endl;
+		subZoneMapBegin->second.sPolyCopy.printBorderLines();
+
 		std::cout << "!!! Inserted SPoly ref into clipper. " << std::endl;
 	}
 
