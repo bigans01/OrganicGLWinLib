@@ -206,6 +206,10 @@
     <ClInclude Include="CoplanarMassManipulator.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
+    <ClInclude Include="CuttableTriangle.h" />
+    <ClInclude Include="CuttableTriangleContainer.h" />
+    <ClInclude Include="CuttingTriangle.h" />
+    <ClInclude Include="CuttingTriangleManager.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
@@ -283,6 +287,8 @@
     <ClInclude Include="SPolyDO.h" />
     <ClInclude Include="SPolyDOSet.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
+    <ClInclude Include="STriangleCutter.h" />
+    <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
@@ -431,6 +437,9 @@
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />
+    <ClCompile Include="CuttableTriangle.cpp" />
+    <ClCompile Include="CuttableTriangleContainer.cpp" />
+    <ClCompile Include="CuttingTriangle.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
@@ -495,6 +504,7 @@
     <ClCompile Include="SPolyFracturer.cpp" />
     <ClCompile Include="SPolySet.cpp" />
     <ClCompile Include="STriangle.cpp" />
+    <ClCompile Include="STriangleCutter.cpp" />
     <ClCompile Include="TerrainComputeGearT1.cpp" />
     <ClCompile Include="TerrainDebugGearT1.cpp" />
     <ClCompile Include="TerrainForwardGearT1.cpp" />

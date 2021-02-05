@@ -7,6 +7,7 @@
 #include "CategorizedLinePool.h"
 #include "SPolyMorphTracker.h"
 #include "SPolyFracturer.h"
+#include "STriangleCutter.h"
 
 class CoplanarMassCreator : public CoplanarMassManipulator
 {

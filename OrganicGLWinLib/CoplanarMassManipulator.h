@@ -28,6 +28,7 @@ class CoplanarMassManipulator
 
 		float calculateSPolyArea(SPoly* in_sPolyRef);
 		float calculateTriangleArea(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
+		double calculateTriangleAreaDouble(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 };
 
 #endif

@@ -124,6 +124,7 @@ void CoplanarMassCreator::runMassManipulation()
 		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, massManipulatorLogLevel);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
 		
 		// (Step 5: ) Get area, from the fractured 
+		//fracturer.sPolySG.roundAllSTrianglesToHundredths();
 		auto sPolySuperGroupBegin = fracturer.sPolySG.sPolyMap.begin();
 		auto sPolySuperGroupEnd = fracturer.sPolySG.sPolyMap.end();
 		for (; sPolySuperGroupBegin != sPolySuperGroupEnd; sPolySuperGroupBegin++)
@@ -136,9 +137,24 @@ void CoplanarMassCreator::runMassManipulation()
 			{
 				std::cout << "!!! Acquiring total related area..." << std::endl;
 
-				areaConsumedByCurrentSPoly += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
+				float areaConsumed = calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
 					sTrianglesBegin->second.triangleLines[1].pointA,
 					sTrianglesBegin->second.triangleLines[2].pointA);
+				std::cout << "(float) area consumed: " << areaConsumed << std::endl;
+
+				//double dAreaConsumed = calculateTriangleAreaDouble(sTrianglesBegin->second.triangleLines[0].pointA,
+					//sTrianglesBegin->second.triangleLines[1].pointA,
+					//sTrianglesBegin->second.triangleLines[2].pointA);
+				//std::cout << "(double) area consumed: " << dAreaConsumed << std::endl;
+
+				//double areaConsumedDouble;
+
+				//areaConsumedByCurrentSPoly += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
+					//sTrianglesBegin->second.triangleLines[1].pointA,
+					//sTrianglesBegin->second.triangleLines[2].pointA);
+				areaConsumedByCurrentSPoly += areaConsumed;
+
+
 			}
 
 			std::cout << "!! Iteration through STriangle complete, continue? " << std::endl;

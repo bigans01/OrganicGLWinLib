@@ -753,6 +753,24 @@
     <ClInclude Include="BorderLineLinkPointState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="STriangleCutter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttableTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingTriangleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttableTriangleContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="STriangleOutputContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1098,6 +1116,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="STriangleCutter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangleContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttingTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

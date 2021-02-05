@@ -34,8 +34,24 @@ float CoplanarMassManipulator::calculateTriangleArea(glm::vec3 in_point0, glm::v
 	// Heron's formula
 	float s = .5 * (line1 + line2 + line3);
 	float A = sqrt(s * (s - line1) * (s - line2) * (s - line3));
+	
+	
 
 	std::cout << "Area is: " << A << std::endl;
+
+	return A;
+}
+
+double CoplanarMassManipulator::calculateTriangleAreaDouble(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
+{
+	// find distance between 
+	float line1 = glm::distance(in_point0, in_point1);
+	float line2 = glm::distance(in_point1, in_point2);
+	float line3 = glm::distance(in_point2, in_point0);
+
+	// Heron's formula (doubles)
+	double s = .5 * (line1 + line2 + line3);
+	double A = sqrtl(s * (s - line1) * (s - line2) * (s - line3));
 
 	return A;
 }
