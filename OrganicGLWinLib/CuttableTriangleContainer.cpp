@@ -8,7 +8,7 @@ void CuttableTriangleContainer::buildFirstCuttableTriangle(STriangle in_firstTri
 
 void CuttableTriangleContainer::insertNewCuttableTriangle(STriangle in_sTriangle)
 {
-	int currentMapSize = cuttableTriangleMap.size();
+	int currentMapSize = int(cuttableTriangleMap.size());
 	cuttableTriangleMap[currentMapSize].buildCuttableTriangle(in_sTriangle);
 }
 

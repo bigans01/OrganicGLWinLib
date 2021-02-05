@@ -208,7 +208,9 @@
     <ClInclude Include="CoplanarRelationshipTracker.h" />
     <ClInclude Include="CuttableTriangle.h" />
     <ClInclude Include="CuttableTriangleContainer.h" />
+    <ClInclude Include="CuttableTriangleLine.h" />
     <ClInclude Include="CuttingTriangle.h" />
+    <ClInclude Include="CuttingTriangleLine.h" />
     <ClInclude Include="CuttingTriangleManager.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
@@ -280,6 +282,8 @@
     <ClInclude Include="PointToSTriangleRelationship.h" />
     <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
+    <ClInclude Include="QMVec3Base.h" />
+    <ClInclude Include="QMVec3FindCentroidFacingNormal.h" />
     <ClInclude Include="QMVoidBase.h" />
     <ClInclude Include="QMVoidFindCyclingDirection.h" />
     <ClInclude Include="RayIntersectionResult.h" />
@@ -440,6 +444,7 @@
     <ClCompile Include="CuttableTriangle.cpp" />
     <ClCompile Include="CuttableTriangleContainer.cpp" />
     <ClCompile Include="CuttingTriangle.cpp" />
+    <ClCompile Include="CuttingTriangleManager.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
@@ -483,6 +488,8 @@
     <ClCompile Include="PointTranslationCheck.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
+    <ClCompile Include="QMVec3Base.cpp" />
+    <ClCompile Include="QMVec3FindCentroidFacingNormal.cpp" />
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />

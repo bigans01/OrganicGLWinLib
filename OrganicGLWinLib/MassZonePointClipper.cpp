@@ -9,14 +9,14 @@ void MassZonePointClipper::insertSPolySuperGroupRefsIntoClippingShell(SPolySuper
 	{
 		//std::cout << ":: Inserted SPoly from super group into clipper. " << std::endl;
 		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," :: Inserted SPoly from super group into clipper. ", "\n");
-		int currentMapSize = clippingShellMap.size();
+		int currentMapSize = int(clippingShellMap.size());
 		clippingShellMap[currentMapSize] = &superGroupSPolysBegin->second;
 	}
 }
 
 void MassZonePointClipper::insertSPolyRefIntoClippingShell(SPoly* in_sPolyRef)
 {
-	int currentMapSize = clippingShellMap.size();
+	int currentMapSize = int(clippingShellMap.size());
 	clippingShellMap[currentMapSize] = in_sPolyRef;
 }
 

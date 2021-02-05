@@ -5,7 +5,11 @@
 
 #include "STriangle.h"
 #include "CuttingTriangle.h"
+#include "CuttableTriangleLine.h"
 #include <map>
+#include "OrganicGLWinUtils.h"
+#include "QuatRotationPoints.h"
+#include "QMVec3FindCentroidFacingNormal.h"
 
 class CuttableTriangle
 {
@@ -16,6 +20,8 @@ class CuttableTriangle
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
 		std::map<int, STriangle> outputTriangles;
+		CuttableTriangleLine cuttableTriangleLines[3];
+		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
 };
 
 #endif
