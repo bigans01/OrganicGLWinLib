@@ -280,7 +280,9 @@
     <ClInclude Include="PointToSPolyRelationshipTracker.h" />
     <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h" />
     <ClInclude Include="PointToSTriangleRelationship.h" />
+    <ClInclude Include="QMBoolAreLinesColinear.h" />
     <ClInclude Include="QMBoolBase.h" />
+    <ClInclude Include="QMBoolDoLinesIntersect.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVec3Base.h" />
     <ClInclude Include="QMVec3FindCentroidFacingNormal.h" />
@@ -296,6 +298,7 @@
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TwoDLineSegment.h" />
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzerOptionEnum.h" />
     <ClInclude Include="TwoDLineSegmentIntersectResult.h" />
@@ -486,7 +489,9 @@
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
+    <ClCompile Include="QMBoolAreLinesColinear.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
+    <ClCompile Include="QMBoolDoLinesIntersect.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVec3Base.cpp" />
     <ClCompile Include="QMVec3FindCentroidFacingNormal.cpp" />
@@ -540,6 +545,7 @@
     <ClCompile Include="TileCoordinateProducer.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
     <ClCompile Include="TwoDLineSegment.cpp" />
+    <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp" />
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="UnsolvedPreciseSolver.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />

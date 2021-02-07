@@ -783,6 +783,15 @@
     <ClInclude Include="CuttingTriangleLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMBoolAreLinesColinear.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolDoLinesIntersect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1149,6 +1158,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CuttingTriangleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolAreLinesColinear.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolDoLinesIntersect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
