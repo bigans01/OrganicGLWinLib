@@ -5,19 +5,14 @@
 
 #include "STriangle.h"
 #include "CuttingTriangleLine.h"
+#include "OrganicGLWinUtils.h"
+#include "QMVec3FindCentroidFacingNormal.h"
 
 class CuttingTriangle
 {
 	public:
 		CuttingTriangle() {};
-		CuttingTriangle(STriangle in_sTriangle)
-		{
-			for (int x = 0; x < 3; x++)
-			{
-				CuttingTriangleLine newLine(in_sTriangle.triangleLines[x]);
-				cuttingLines[x] = newLine;
-			}
-		};
+		CuttingTriangle(STriangle in_sTriangle);
 	private:
 		friend class STriangleCutter;
 		friend class CuttableTriangle;

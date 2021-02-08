@@ -297,6 +297,7 @@
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
+    <ClInclude Include="TwoDIntersectionRecordManager.h" />
     <ClInclude Include="TwoDLineSegment.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h" />
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h" />

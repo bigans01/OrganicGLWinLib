@@ -10,11 +10,14 @@
 #include "OrganicGLWinUtils.h"
 #include "QuatRotationPoints.h"
 #include "QMVec3FindCentroidFacingNormal.h"
+#include "TwoDLineSegment.h"
+#include "TwoDLineSegmentIntersectAnalyzerV2.h"
 
 class CuttableTriangle
 {
 	public:
-		void buildCuttableTriangle(STriangle in_cuttableTriangle);
+		CuttableTriangle() {};
+		CuttableTriangle(STriangle in_cuttableTriangle);
 		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
 	private:
 		friend class STriangleOutputContainer;

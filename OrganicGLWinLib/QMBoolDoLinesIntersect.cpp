@@ -96,14 +96,18 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		else if (secondLinePointBRef->y > 0)
 		{
 			std::cout << "**** notice: point B >= 0. " << std::endl;
-			y_diff = abs(0 - secondLinePointARef->y);	// get the distance that point A has to travel, to get to Y = 0; must subtract since A is < 0.
-			distance_to_travel_to_y_0 = y_diff / resultantSlope.y;
+			float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
+			y_diff = abs(secondLinePointARef->y);								  // because B is greater than y, get the value
+			float travel_distance = y_diff / ab_diff;
+			distance_to_travel_to_y_0 = travel_distance;
 		}
 		else if (secondLinePointBRef->y < 0)
 		{
 			std::cout << "**** notice: point A >= 0. " << std::endl;
-			y_diff = abs(secondLinePointARef->y);	// get the distance that point A has to travel, to get to Y = 0; value is equal to y of point A.
-			distance_to_travel_to_y_0 = y_diff / resultantSlope.y;
+			float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
+			y_diff = abs(secondLinePointARef->y);								  // because B is less than y, get the absolute value
+			float travel_distance = y_diff / ab_diff;
+			distance_to_travel_to_y_0 = travel_distance;
 		}
 
 
@@ -120,6 +124,10 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 			glm::vec3* intersectedPointRef = in_quatRotationPointsRef->getPointRefByIndex(4);
 			*intersectedPointRef = calculatedPoint;
 			rotatePointsToOriginalPosition(&rotationRecords, in_quatRotationPointsRef);
+			if (pointCheck.requiresTranslation == 1)
+			{
+				in_quatRotationPointsRef->applyTranslation(pointCheck.getReverseTranslationValue());
+			}
 			returnValue = true;
 		}
 

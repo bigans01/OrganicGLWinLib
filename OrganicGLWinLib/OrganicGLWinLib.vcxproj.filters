@@ -792,6 +792,9 @@
     <ClInclude Include="QMBoolDoLinesIntersect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TwoDIntersectionRecordManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

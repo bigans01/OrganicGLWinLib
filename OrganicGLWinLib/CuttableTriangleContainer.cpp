@@ -3,13 +3,15 @@
 
 void CuttableTriangleContainer::buildFirstCuttableTriangle(STriangle in_firstTriangle)
 {
-	cuttableTriangleMap[0].buildCuttableTriangle(in_firstTriangle);
+	CuttableTriangle primeTriangle(in_firstTriangle);
+	cuttableTriangleMap[0] = primeTriangle;
 }
 
 void CuttableTriangleContainer::insertNewCuttableTriangle(STriangle in_sTriangle)
 {
 	int currentMapSize = int(cuttableTriangleMap.size());
-	cuttableTriangleMap[currentMapSize].buildCuttableTriangle(in_sTriangle);
+	CuttableTriangle newTriangle(in_sTriangle);
+	cuttableTriangleMap[currentMapSize] = newTriangle;
 }
 
 void CuttableTriangleContainer::rebuildCuttableTriangleMapFromContainer(STriangleOutputContainer* in_sTriangleOutputContainerRef)
@@ -20,6 +22,7 @@ void CuttableTriangleContainer::rebuildCuttableTriangleMapFromContainer(STriangl
 	int currentIndex = 0;
 	for (; outputContainerBegin != outputContainerEnd; outputContainerBegin++)
 	{
-		cuttableTriangleMap[currentIndex++].buildCuttableTriangle(*outputContainerBegin);
+		CuttableTriangle newTriangle(*outputContainerBegin);
+		cuttableTriangleMap[currentIndex++] = newTriangle;
 	}
 }

@@ -3,21 +3,23 @@
 #ifndef CUTTABLETRIANGLELINE_H
 #define CUTTABLETRIANGLELINE_H
 
-#include "STriangleLine.h"
+#include <glm/glm.hpp>
+#include "TwoDIntersectionRecordManager.h"
 
 class CuttableTriangleLine
 {
-	//public:
 	private:
 		friend class CuttableTriangle;
 		CuttableTriangleLine() {};
-		CuttableTriangleLine(STriangleLine in_sTriangleLine) :
-			pointA(in_sTriangleLine.pointA),
-			pointB(in_sTriangleLine.pointB)
+		CuttableTriangleLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_centroidFacingNormal) :
+			pointA(in_pointA),
+			pointB(in_pointB),
+			cuttableTriangleCentroidFacingNormal(in_centroidFacingNormal)
 		{}
 		glm::vec3 pointA;
 		glm::vec3 pointB;
 		glm::vec3 cuttableTriangleCentroidFacingNormal;
+		TwoDIntersectionRecordManager cuttableIntersectionManager;
 };
 
 #endif
