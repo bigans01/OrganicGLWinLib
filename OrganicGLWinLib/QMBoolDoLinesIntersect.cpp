@@ -93,21 +93,18 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		}
 
 		// other wise, check normally.
-		else if (secondLinePointBRef->y > 0)
+		else
 		{
-			std::cout << "**** notice: point B >= 0. " << std::endl;
+			// because the cuttable line is such that Y = 0 and X > 0, 
+			// and the cutting line intersects somehow, it holds true that the intersecting point is Y = 0.
+			// The distance to travel to get to Y can then be calculated by getting the absolute value of the cutting line's point A, 
+			// divided by the absolute value of the of Y-difference between both points of the cutting line. The resulting value is the
+			// percentage of the distance of the line, to get to Y = 0. Multiplying the slope of the cutting line by this percentage, 
+			// results in the intersecting point.
+
 			float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
-			y_diff = abs(secondLinePointARef->y);								  // because B is greater than y, get the value
-			float travel_distance = y_diff / ab_diff;
-			distance_to_travel_to_y_0 = travel_distance;
-		}
-		else if (secondLinePointBRef->y < 0)
-		{
-			std::cout << "**** notice: point A >= 0. " << std::endl;
-			float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
-			y_diff = abs(secondLinePointARef->y);								  // because B is less than y, get the absolute value
-			float travel_distance = y_diff / ab_diff;
-			distance_to_travel_to_y_0 = travel_distance;
+			y_diff = abs(secondLinePointARef->y);								  
+			distance_to_travel_to_y_0 = y_diff / ab_diff;
 		}
 
 
