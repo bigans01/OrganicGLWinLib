@@ -5,6 +5,7 @@
 
 #include <map>
 #include <glm/glm.hpp>
+#include <iostream>
 
 class TwoDIntersectionRecordManager
 {
@@ -21,6 +22,20 @@ class TwoDIntersectionRecordManager
 		{
 			return recordMap[in_idToGetPointFor];
 		}
+		void printRecordMap()
+		{
+			auto recordMapBegin = recordMap.begin();
+			auto recordMapEnd = recordMap.end();
+			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
+			{
+				std::cout << "[" << recordMapBegin->first << "]" 
+					      << " point: " << recordMapBegin->second.x << ", " << recordMapBegin->second.y << ", " << recordMapBegin->second.z << std::endl;
+			}
+		}
+		int numberOfRecords() 
+		{ 
+			return recordMap.size(); 
+		};
 	private:
 		std::map<int, glm::vec3> recordMap;	// the key of the map = the ID of the line in the triangle that performed the intersection; value = intersecting point.
 

@@ -26,6 +26,12 @@ void STriangleCutter::runCuttingSequence()
 		{
 			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second);
 
+			// optional: print out the contents before output triangles are constructed.
+			std::cout << "++++ Printing out registry for the cuttable triangle: " << std::endl;
+			currentTriangleToCutBegin->second.printCuttableLineIntersections();
+			std::cout << "++++ Printing out registry for the cutting triangle: " << std::endl;
+			cuttingTrianglesBegin->second.printCuttingLineIntersections();
+
 			// fetch whatever the result of the comparison was -- if it is completely eliminated, the size of the vector will be 0.
 			// Otherwise, it's size will be >= 1.
 			outputsForCurrentCuttingTriangle.insertOutputSTriangles(&currentTriangleToCutBegin->second.outputTriangles);	
@@ -37,6 +43,7 @@ void STriangleCutter::runCuttingSequence()
 		// reset the CuttingTriangle that was used in this iteration.
 		cuttingTrianglesBegin->second.reset();
 	}
+
 
 	// if the number of CuttableTriangles in the cuttableContainer's cuttableTriangleMap is 0, it means everything got clipped, and the STriangle
 	// was completely eliminated. Otherwise, it will remain.

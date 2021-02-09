@@ -55,11 +55,21 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 			TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, PolyDebugLevel::NONE);
 			if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
 			{
+				glm::vec3 convertedPoint = convert2DpointTo3D(analyzerV2.analyzedResult.intersectedPoint);
+				// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
+				cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, convertedPoint);
+
+				// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
+				in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, convertedPoint);
+
 				std::cout << "!!! Non-colinear intersection detected; cuttable ID is: " << currentCuttableTriangleLineID
 					<< " | cutting ID is: " << currentCuttingTriangleLineID
 					<< " | point is: " << analyzerV2.analyzedResult.intersectedPoint.x << ", " << analyzerV2.analyzedResult.intersectedPoint.y << std::endl;
 				int outputVal = 3;
 				std::cin >> outputVal;
+
+
+
 			}
 		}
 	}
@@ -70,4 +80,21 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 void CuttableTriangle::compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef)
 {
 
+}
+
+void CuttableTriangle::printCuttableLineIntersections()
+{
+	for (int x = 0; x < 3; x++)
+	{
+		std::cout << "Data for line with index " << x << ": " << std::endl;
+		cuttableTriangleLines[x].printCuttingIntersections();
+	}
+}
+
+glm::vec3 CuttableTriangle::convert2DpointTo3D(TwoDPoint in_2dPoint)
+{
+	glm::vec3 returnVec;
+	returnVec.x = in_2dPoint.x;
+	returnVec.y = in_2dPoint.y;
+	return returnVec;
 }

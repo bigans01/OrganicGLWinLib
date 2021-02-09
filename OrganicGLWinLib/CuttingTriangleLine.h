@@ -21,6 +21,13 @@ class CuttingTriangleLine
 		glm::vec3 pointB;
 		glm::vec3 outwardFacingNormal;
 		TwoDIntersectionRecordManager cuttingIntersectionManager;
+		void printCuttableIntersections()
+		{
+			if (cuttingIntersectionManager.numberOfRecords() > 0)
+			{
+				cuttingIntersectionManager.printRecordMap();
+			}
+		};
 };
 
 #endif

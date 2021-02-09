@@ -12,6 +12,7 @@
 #include "QMVec3FindCentroidFacingNormal.h"
 #include "TwoDLineSegment.h"
 #include "TwoDLineSegmentIntersectAnalyzerV2.h"
+#include "TwoDPoint.h"
 
 class CuttableTriangle
 {
@@ -25,6 +26,8 @@ class CuttableTriangle
 		std::map<int, STriangle> outputTriangles;
 		CuttableTriangleLine cuttableTriangleLines[3];
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
+		glm::vec3 convert2DpointTo3D(TwoDPoint in_2dPoint);
+		void printCuttableLineIntersections();
 };
 
 #endif

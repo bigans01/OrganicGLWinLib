@@ -20,6 +20,13 @@ class CuttableTriangleLine
 		glm::vec3 pointB;
 		glm::vec3 cuttableTriangleCentroidFacingNormal;
 		TwoDIntersectionRecordManager cuttableIntersectionManager;
+		void printCuttingIntersections()
+		{
+			if (cuttableIntersectionManager.numberOfRecords() > 0)
+			{
+				cuttableIntersectionManager.printRecordMap();
+			}
+		};
 };
 
 #endif

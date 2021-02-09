@@ -34,3 +34,12 @@ void CuttingTriangle::reset()
 {
 
 }
+
+void CuttingTriangle::printCuttingLineIntersections()
+{
+	for (int x = 0; x < 3; x++)
+	{
+		std::cout << "Data for line with index " << x << ": " << std::endl;
+		cuttingLines[x].printCuttableIntersections();
+	}
+}
