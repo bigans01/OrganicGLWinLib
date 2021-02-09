@@ -34,7 +34,7 @@ class TwoDIntersectionRecordManager
 		}
 		int numberOfRecords() 
 		{ 
-			return recordMap.size(); 
+			return int(recordMap.size()); 
 		};
 	private:
 		friend class CuttableTriangle;

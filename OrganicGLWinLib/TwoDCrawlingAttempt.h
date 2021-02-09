@@ -9,6 +9,11 @@ class TwoDCrawlingAttempt
 {
 	public:
 		TwoDCrawlingAttempt() {};
+		TwoDCrawlingAttempt(TwoDCrawlingType in_crawlingType, int in_cuttingTriangleLineID, int in_beginIntersectionLineID) :
+			crawlingType(in_crawlingType),
+			cuttingTriangleLineID(in_cuttingTriangleLineID),
+			beginIntersectionLineID(in_beginIntersectionLineID)
+		{};
 		TwoDCrawlingAttempt(TwoDCrawlingType in_crawlingType, int in_cuttingTriangleLineID, int in_beginIntersectionLineID, int in_endIntersectionLineID) :
 			crawlingType(in_crawlingType),
 			cuttingTriangleLineID(in_cuttingTriangleLineID),

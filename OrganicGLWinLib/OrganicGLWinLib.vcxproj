@@ -206,6 +206,8 @@
     <ClInclude Include="CoplanarMassManipulator.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
+    <ClInclude Include="CutLine.h" />
+    <ClInclude Include="CutLinePool.h" />
     <ClInclude Include="CuttableTriangle.h" />
     <ClInclude Include="CuttableTriangleContainer.h" />
     <ClInclude Include="CuttableTriangleLine.h" />

@@ -15,6 +15,7 @@
 #include "TwoDPoint.h"
 #include <vector>
 #include "TwoDCrawlingAttempt.h"
+#include "CutLinePool.h"
 
 class CuttableTriangle
 {
@@ -30,8 +31,14 @@ class CuttableTriangle
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
 		glm::vec3 convert2DpointTo3D(TwoDPoint in_2dPoint);
 		void printCuttableLineIntersections();
-		void checkForSlicingCondition(CuttingTriangle* in_cuttingTriangleRef);
+		void buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriangleRef);
+		void buildRemainingAttempts(CuttingTriangle* in_cuttingTriangleRef);
+		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
+		CutLinePool buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
+		CutLinePool buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
+		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);
+		bool testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
 };
 
 #endif
