@@ -74,7 +74,34 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		}
 	}
 
-	// second, do analysis on the previous loop's run.
+	// second, check for any slicing conditions that might have been met -- this would happen when any cutting line in the cutting triangle has 2 intersections
+	// registered to it. Update the cuttableIntersetionManagers, by removing records that refer to the cutting line which had 2 lines.
+	checkForSlicingCondition(in_cuttingTriangleRef);
+}
+
+void CuttableTriangle::checkForSlicingCondition(CuttingTriangle* in_cuttingTriangleRef)
+{
+	for (int x = 0; x < 3; x++)
+	{
+		if (in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() == 2)
+		{
+			//std::cout << "!!! SLICE detected in cutting triangle line, line ID is: " << x << std::endl;
+			//int sliceVal = 3;
+			//std::cin >> sliceVal;
+
+			auto beginIntersectionLineID = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
+			auto endIntersectionLineID = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.rbegin();
+			TwoDCrawlingAttempt slicingAttempt(TwoDCrawlingType::SLICE, x, beginIntersectionLineID->first, endIntersectionLineID->first);
+			crawlingAttemptsVector.push_back(slicingAttempt);
+
+			// remove corresponding entries from the cuttable triangle lines
+			cuttableTriangleLines[beginIntersectionLineID->first].cuttableIntersectionManager.eraseRecord(x);
+			cuttableTriangleLines[endIntersectionLineID->first].cuttableIntersectionManager.eraseRecord(x);
+
+			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for beginIntersectionLineID: " << cuttableTriangleLines[beginIntersectionLineID->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
+			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for endIntersectionLineID: " << cuttableTriangleLines[endIntersectionLineID->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
+		}
+	}
 }
 
 void CuttableTriangle::compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef)

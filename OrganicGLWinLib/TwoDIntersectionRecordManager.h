@@ -37,6 +37,7 @@ class TwoDIntersectionRecordManager
 			return recordMap.size(); 
 		};
 	private:
+		friend class CuttableTriangle;
 		std::map<int, glm::vec3> recordMap;	// the key of the map = the ID of the line in the triangle that performed the intersection; value = intersecting point.
 
 };

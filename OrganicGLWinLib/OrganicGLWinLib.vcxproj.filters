@@ -795,6 +795,12 @@
     <ClInclude Include="TwoDIntersectionRecordManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TwoDCrawlingType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDCrawlingAttempt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
