@@ -285,6 +285,7 @@
     <ClInclude Include="QMBoolAreLinesColinear.h" />
     <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolDoLinesIntersect.h" />
+    <ClInclude Include="QMVec3FindCyclingDirectionPoint.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVec3Base.h" />
     <ClInclude Include="QMVec3FindCentroidFacingNormal.h" />
@@ -497,6 +498,7 @@
     <ClCompile Include="QMBoolAreLinesColinear.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
     <ClCompile Include="QMBoolDoLinesIntersect.cpp" />
+    <ClCompile Include="QMVec3FindCyclingDirection.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVec3Base.cpp" />
     <ClCompile Include="QMVec3FindCentroidFacingNormal.cpp" />

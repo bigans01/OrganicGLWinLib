@@ -16,6 +16,7 @@
 #include <vector>
 #include "TwoDCrawlingAttempt.h"
 #include "CutLinePool.h"
+#include "QMVec3FindCyclingDirectionPoint.h"
 
 class CuttableTriangle
 {

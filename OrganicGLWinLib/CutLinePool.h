@@ -9,7 +9,13 @@
 class CutLinePool
 {
 	public:
-		std::map<int, CutLine> cutLineMap;
+		void insertLineIntoPool(CutLine in_weldedLineToInsert)
+		{
+			int currentIndex = int(pool.size());
+			pool[currentIndex] = in_weldedLineToInsert;
+		}
+	private:
+		std::map<int, CutLine> pool;
 };
 
 #endif

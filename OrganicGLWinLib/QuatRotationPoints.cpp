@@ -29,6 +29,18 @@ void QuatRotationPoints::applyTranslation(glm::vec3 in_translation)
 	}
 }
 
+void QuatRotationPoints::applyTranslationToIndexRange(glm::vec3 in_translation, int in_indexStart, int in_indexEnd)
+{
+	auto pointsStart = pointsRefVector.begin() + in_indexStart;
+	int numberOfIterations = (in_indexEnd - in_indexStart) + 1; // number of iterations = to the difference between the index range, +1 (to include the beginning of the range)
+	for (int x = 0; x < numberOfIterations; x++)
+	{
+		auto pointsPtr = *pointsStart;
+		*pointsPtr += in_translation;
+		pointsStart++;
+	}
+}
+
 void QuatRotationPoints::printTrianglePoints()
 {
 	
