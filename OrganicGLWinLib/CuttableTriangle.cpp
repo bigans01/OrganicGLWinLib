@@ -191,33 +191,33 @@ CutLinePool CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt i
 
 	// First, find the cyling direction. 
 	// line A point values, from the CuttingLine
-	glm::vec3 lineAPointA = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointA;
-	glm::vec3 lineAPointB = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointB;
+	glm::vec3 cuttingLinePointA = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointA;
+	glm::vec3 cuttingLinePointB = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointB;
 
 	// outward facing normal
 	glm::vec3 cuttingLineNormal = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].outwardFacingNormal;
 	int idOfLineFoundInCuttingLine = in_attempt.beginIntersectionLineID;
 
 	// line B point values, from the CuttableLine
-	glm::vec3 lineBPointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
-	glm::vec3 lineBPointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
+	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
+	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
 
-	std::cout << "::> cutting line point A: " << lineAPointA.x << ", " << lineAPointA.y << ", " << lineAPointA.z << std::endl;
-	std::cout << "::> cutting line point B: " << lineAPointB.x << ", " << lineAPointB.y << ", " << lineAPointB.z << std::endl;
-	std::cout << "::> cuttable line point A: " << lineBPointA.x << ", " << lineBPointA.y << ", " << lineBPointA.z << std::endl;
-	std::cout << "::> cuttable line point B: " << lineBPointB.x << ", " << lineBPointB.y << ", " << lineBPointB.z << std::endl;
+	std::cout << "::> cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	std::cout << "::> cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
+	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
 
 	QuatRotationPoints solveForCuttableLinePoints;
-	glm::vec3 solveForCuttableLineAPointA = lineBPointA;
-	glm::vec3 solveForCuttableLineAPointB = lineBPointB;
-	glm::vec3 solveForCuttableLineBPointA = lineAPointA;
-	glm::vec3 solveForCuttableLineBPointB = lineAPointB;
+	glm::vec3 solveForCuttablecuttingLinePointA = cuttableLinePointA;
+	glm::vec3 solveForCuttablecuttingLinePointB = cuttableLinePointB;
+	glm::vec3 solveForCuttablecuttableLinePointA = cuttingLinePointA;
+	glm::vec3 solveForCuttablecuttableLinePointB = cuttingLinePointB;
 	glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal;
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineAPointA);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineAPointB);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineBPointA);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineBPointB);
+	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointA);
+	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointB);
+	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointA);
+	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointB);
 	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineInwardNormal);
 	QMVec3FindCyclingDirectionPoint cuttableLineSolver;
 	glm::vec3 determinedCuttingPointToUse = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
@@ -230,20 +230,20 @@ CutLinePool CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt i
 
 
 	QuatRotationPoints solveForCuttingLinePoints;
-	glm::vec3 solveForCuttingLineAPointA = lineAPointA;
-	glm::vec3 solveForCuttingLineAPointB = lineAPointB;
-	glm::vec3 solveForCuttingLineBPointA = lineBPointA;
-	glm::vec3 solveForCuttingLineBPointB = lineBPointB;
+	glm::vec3 solveForCuttingcuttingLinePointA = cuttingLinePointA;
+	glm::vec3 solveForCuttingcuttingLinePointB = cuttingLinePointB;
+	glm::vec3 solveForCuttingcuttableLinePointA = cuttableLinePointA;
+	glm::vec3 solveForCuttingcuttableLinePointB = cuttableLinePointB;
 	glm::vec3 solveForCuttingOutwardNormal = cuttingLineNormal;
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingLineAPointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingLineAPointB);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingLineBPointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingLineBPointB);
+	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointA);
+	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointB);
+	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointA);
+	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointB);
 	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingOutwardNormal);
 	QMVec3FindCyclingDirectionPoint cuttingLineSolver;
-	glm::vec3 determinedPoint = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
+	glm::vec3 cuttablePointToUse = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
-	std::cout << "::> Cuttable point to use, determined by cutting line: " << determinedPoint.x << ", " << determinedPoint.y << ", " << determinedPoint.z << std::endl;
+	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 
 	// the CutLine spawned from the CuttingLine should be: 
 	// point A = selected end point from cuttableLineSolver, 
@@ -268,10 +268,10 @@ CutLinePool CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt i
 	// point A = shared point,
 	// point B = selected end point from cuttingLineSolver
 	// normal = the cuttable line's centroid facing normal.
-	CutLine cuttableCutLine(sharedPoint, determinedPoint, cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
+	CutLine cuttableCutLine(sharedPoint, cuttablePointToUse, cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
 	std::cout << "Cuttable cut line stats: " << std::endl;
 	std::cout << "Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
-	std::cout << "Cuttable, point B: " << determinedPoint.x << ", " << determinedPoint.y << ", " << determinedPoint.z << std::endl;
+	std::cout << "Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 	std::cout << "Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
@@ -279,6 +279,19 @@ CutLinePool CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt i
 	// insert lines into pool, in appropriate order (cuttingCutLine, then cuttableCutLine)
 	returnPool.insertLineIntoPool(cuttingCutLine);
 	returnPool.insertLineIntoPool(cuttableCutLine);
+
+	// determine the cycling direction value to use, which will be based on the value of cuttablePointToUse.
+	CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
+	if (cuttablePointToUse == cuttableLinePointA)
+	{
+		std::cout << "!! CyclingDirection will be BACKWARD." << std::endl;
+		cutLineDirection = CyclingDirection::REVERSE;
+	}
+	else if (cuttablePointToUse == cuttableLinePointB)
+	{
+		std::cout << "!! CyclingDirection will be FORWARD." << std::endl;
+		cutLineDirection = CyclingDirection::FORWARD;
+	}
 
 	return returnPool;
 }

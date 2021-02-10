@@ -7,6 +7,22 @@ void STriangleCutter::setCuttingParameters(STriangle in_sTriangle, CuttingTriang
 	cuttingTrianglesRef = in_cuttingTriangleManagerRef;
 }
 
+void STriangleCutter::setDebugLevelForSpecificCuttingTriangle(int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel)
+{
+	specificCuttingTriangleOptionMap[in_cuttingTriangleID] = in_polyDebugLevel;
+}
+
+PolyDebugLevel STriangleCutter::getPolyDebugLevelForSpecificCuttingTriangle(int in_cuttingTriangleID)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
+	auto specificFinder = specificCuttingTriangleOptionMap.find(in_cuttingTriangleID);
+	if (specificFinder != specificCuttingTriangleOptionMap.end())	// it was found, so get whatever the debug option is.
+	{
+		returnLevel = specificFinder->second;
+	}
+	return returnLevel;
+}
+
 void STriangleCutter::runCuttingSequence()
 {
 	// number of iterations will be equal to the size of the map in the reference CuttingTriangleManager.
