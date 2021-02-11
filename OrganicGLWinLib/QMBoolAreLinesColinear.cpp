@@ -58,11 +58,11 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	)
 	{
 		areLinesColinear = true;
-		std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
+		//std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
 	}
 	else
 	{
-		std::cout << "!!! Both points ARE NOT colinear; returning FALSE. " << std::endl;
+		//std::cout << "!!! Both points ARE NOT colinear; returning FALSE. " << std::endl;
 	}
 
 	return areLinesColinear;
@@ -76,7 +76,7 @@ void QMBoolAreLinesColinear::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRot
 	{
 		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
 		{
-			std::cout << "!!! Rotate around Z detected." << std::endl;
+			//std::cout << "!!! Rotate around Z detected." << std::endl;
 
 			float radians = 0.0f;
 			float fullRadian360 = 6.28319;
@@ -104,8 +104,8 @@ void QMBoolAreLinesColinear::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRot
 			in_quatRotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
 			in_quatRotationRecordStackRef->push(s1record);
 
-			std::cout << "!!! Printing resulting points. " << std::endl;
-			in_quatRotationPointsRef->printPoints();
+			//std::cout << "!!! Printing resulting points. " << std::endl;
+			//in_quatRotationPointsRef->printPoints();
 		}
 	}
 }
@@ -135,15 +135,15 @@ bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm:
 		firstPassRotateRadians = fullRadian360 + atan2result;
 	}
 
-	std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
 	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
 	if (firstPassRotateRadians == 1.5708f)
 	{
 		wasRightAngleFound = true;
-		std::cout << "!!! Right angle detected. " << std::endl;
+		//std::cout << "!!! Right angle detected. " << std::endl;
 	}
 
 	return wasRightAngleFound;

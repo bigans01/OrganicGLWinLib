@@ -208,12 +208,15 @@
     <ClInclude Include="CoplanarRelationshipTracker.h" />
     <ClInclude Include="CutLine.h" />
     <ClInclude Include="CutLinePool.h" />
+    <ClInclude Include="CutLinePoolGuide.h" />
+    <ClInclude Include="CutLineWelder.h" />
     <ClInclude Include="CuttableTriangle.h" />
     <ClInclude Include="CuttableTriangleContainer.h" />
     <ClInclude Include="CuttableTriangleLine.h" />
     <ClInclude Include="CuttingTriangle.h" />
     <ClInclude Include="CuttingTriangleLine.h" />
     <ClInclude Include="CuttingTriangleManager.h" />
+    <ClInclude Include="CutTriangleGroupBuilder.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
@@ -450,6 +453,7 @@
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />
+    <ClCompile Include="CutLineWelder.cpp" />
     <ClCompile Include="CuttableTriangle.cpp" />
     <ClCompile Include="CuttableTriangleContainer.cpp" />
     <ClCompile Include="CuttingTriangle.cpp" />

@@ -18,13 +18,17 @@
 #include "CutLinePool.h"
 #include "QMVec3FindCyclingDirectionPoint.h"
 #include "CyclingDirection.h"
+#include "PolyDebugLevel.h"
+#include "PolyLogger.h"
+#include "CutTriangleGroupBuilder.h"
+#include "CutLineWelder.h"
 
 class CuttableTriangle
 {
 	public:
 		CuttableTriangle() {};
 		CuttableTriangle(STriangle in_cuttableTriangle);
-		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
+		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel);
 	private:
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
@@ -34,7 +38,7 @@ class CuttableTriangle
 		glm::vec3 convert2DpointTo3D(TwoDPoint in_2dPoint);
 		void printCuttableLineIntersections();
 		void buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriangleRef);
-		void buildRemainingAttempts(CuttingTriangle* in_cuttingTriangleRef);
+		void buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		CutLinePool buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		CutLinePool buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);

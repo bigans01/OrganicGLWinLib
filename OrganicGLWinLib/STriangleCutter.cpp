@@ -40,7 +40,9 @@ void STriangleCutter::runCuttingSequence()
 		auto currentTriangleToCutEnd = cuttableContainer.cuttableTriangleMap.end();
 		for (; currentTriangleToCutBegin != currentTriangleToCutEnd; currentTriangleToCutBegin++)
 		{
-			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second);
+			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
+																			cuttingTrianglesBegin->first, 
+																			getPolyDebugLevelForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
 
 			// optional: print out the contents before output triangles are constructed.
 			std::cout << "++++ Printing out registry for the cuttable triangle: " << std::endl;

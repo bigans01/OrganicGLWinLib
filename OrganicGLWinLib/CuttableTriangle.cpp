@@ -29,10 +29,13 @@ CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 	}
 }
 
-void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef)
+void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel)
 {
-	// perform consumption tests; if they fail, continue with normal operations in final branch.
+	PolyLogger tempLogger;
+	tempLogger.setDebugLevel(in_polyDebugLevel);
+	tempLogger.log("(CuttableTriangle) beginning run of comparison against the CuttingTriangle, having index ", in_cuttingTriangleID, ".", "\n");
 
+	// perform consumption tests; if they fail, continue with normal operations in final branch.
 	// do all points of the CuttableTriangle lie within the CuttingTriangle?
 	if (testIfCuttingTriangleConsumesThisTriangle(in_cuttingTriangleRef) == true)
 	{
@@ -62,8 +65,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.x,
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y);
 
-				std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
-				std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
+				//std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
+				//std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
+				tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
+				tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
 				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, PolyDebugLevel::NONE);
 				if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
@@ -75,14 +80,18 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, convertedPoint);
 
-					std::cout << "!!! Non-colinear intersection detected; cuttable ID is: " << currentCuttableTriangleLineID
-						<< " | cutting ID is: " << currentCuttingTriangleLineID
-						<< " | point is: " << analyzerV2.analyzedResult.intersectedPoint.x << ", " << analyzerV2.analyzedResult.intersectedPoint.y << std::endl;
-					int outputVal = 3;
-					std::cin >> outputVal;
+					//std::cout << "!!! Non-colinear intersection detected; cuttable ID is: " << currentCuttableTriangleLineID
+						//<< " | cutting ID is: " << currentCuttingTriangleLineID
+						//<< " | point is: " << analyzerV2.analyzedResult.intersectedPoint.x << ", " << analyzerV2.analyzedResult.intersectedPoint.y << std::endl;
+					//int outputVal = 3;
+					//std::cin >> outputVal;
 
+					tempLogger.log("(CuttableTriangle) !!! Non-colinear intersection detected; cuttable ID is: ", currentCuttableTriangleLineID,
+						" | cutting ID is: ", currentCuttingTriangleLineID,
+						" | point is: ", analyzerV2.analyzedResult.intersectedPoint.x, ", ", analyzerV2.analyzedResult.intersectedPoint.y, "\n");
+					tempLogger.waitForDebugInput();
 
-
+ 
 				}
 			}
 		}
@@ -92,8 +101,8 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		// and update the cuttableIntersetionManagers, by removing records that refer to the cutting line which had 2 lines.
 		buildAllSlicingAttempts(in_cuttingTriangleRef);
 
-		// third, find the first of any other cuttingTriangleLines which have 1 intersection, if they exist.
-		buildRemainingAttempts(in_cuttingTriangleRef);
+		// third, find the first of any other cuttingTriangleLines which have 1 intersection, if they exist; these would be typical attempts.
+		buildTypicalAttempts(in_cuttingTriangleRef);
 
 		// fourth: test whether or not this triangle consumes the CuttingTriangle; this is only true when:
 		// A) all points of the CuttingTriangle are within the CuttableTriangle
@@ -147,7 +156,7 @@ void CuttableTriangle::buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriang
 	}
 }
 
-void CuttableTriangle::buildRemainingAttempts(CuttingTriangle* in_cuttingTriangleRef)
+void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef)
 {
 	for (int x = 0; x < 3; x++)
 	{
@@ -169,16 +178,20 @@ void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cutti
 	auto attemptsEnd = crawlingAttemptsVector.end();
 	for (; attemptsBegin != attemptsEnd; attemptsBegin++)
 	{
+		CutLinePool currentPool;
 		if (attemptsBegin->crawlingType == TwoDCrawlingType::SLICE)
 		{
 			std::cout << "SLICE crawl type found..." << std::endl;
-			buildLinesFromSliceAttempt(*attemptsBegin, in_cuttingTriangleRef);
+			currentPool = buildLinesFromSliceAttempt(*attemptsBegin, in_cuttingTriangleRef);
 		}
 		else if (attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
 		{
 			std::cout << "TYPICAL crawl type found..." << std::endl;
-			buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
+			currentPool = buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
 		}
+
+		CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPool);
+		//CutTriangleGroupBuilder groupBuilder(PolyDebugLevel::NONE, std::move(currentPool));
 	}
 }
 
