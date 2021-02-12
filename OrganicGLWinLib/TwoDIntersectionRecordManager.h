@@ -22,6 +22,16 @@ class TwoDIntersectionRecordManager
 		{
 			return recordMap[in_idToGetPointFor];
 		}
+		bool doesRecordExist(int in_idToGetPointFor)
+		{
+			bool returnValue = false;
+			auto recordFinder = recordMap.find(in_idToGetPointFor);
+			if (recordFinder != recordMap.end())
+			{
+				returnValue = true;
+			}
+			return returnValue;
+		}
 		void printRecordMap()
 		{
 			auto recordMapBegin = recordMap.begin();

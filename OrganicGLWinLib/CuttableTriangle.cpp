@@ -3,11 +3,19 @@
 
 CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 {
+
+
 	// find the centroid
-	glm::vec3 pointA = cuttableTriangleLines[0].pointA;
-	glm::vec3 pointB = cuttableTriangleLines[1].pointA;
-	glm::vec3 pointC = cuttableTriangleLines[2].pointA;
+	glm::vec3 pointA = in_cuttableTriangle.triangleLines[0].pointA;
+	glm::vec3 pointB = in_cuttableTriangle.triangleLines[1].pointA;
+	glm::vec3 pointC = in_cuttableTriangle.triangleLines[2].pointA;
 	glm::vec3 centroid = OrganicGLWinUtils::findTriangleCentroid(pointA, pointB, pointC);
+
+	//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << std::endl;
+	//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << std::endl;
+	//std::cout << "Point C: " << pointC.x << ", " << pointC.y << ", " << pointC.z << std::endl;
+
+	//std::cout << "Centroid value is: " << centroid.x << ", " << centroid.y << ", " << centroid.z << std::endl;
 
 	// find the centroid facing normal for each line
 	for (int x = 0; x < 3; x++)
@@ -26,6 +34,9 @@ CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 		glm::vec3 centroidFacingNormal = normalFinder.solve(&points, PolyDebugLevel::NONE);
 		CuttableTriangleLine newLine(in_cuttableTriangle.triangleLines[x].pointA, in_cuttableTriangle.triangleLines[x].pointB, centroidFacingNormal);
 		cuttableTriangleLines[x] = newLine;
+
+		//std::cout << "############## Centroid facing normal, for index " << x << "for this cuttableTriangle, is: " <<
+			//centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	}
 }
 
@@ -147,8 +158,8 @@ void CuttableTriangle::buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriang
 			crawlingAttemptsVector.push_back(slicingAttempt);
 
 			// remove corresponding entries from the cuttable triangle lines
-			cuttableTriangleLines[intersectionRecordsBegin->first].cuttableIntersectionManager.eraseRecord(x);
-			cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.eraseRecord(x);
+			//cuttableTriangleLines[intersectionRecordsBegin->first].cuttableIntersectionManager.eraseRecord(x);
+			//cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.eraseRecord(x);
 
 			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for beginIntersectionLineID: " << cuttableTriangleLines[beginIntersectionLineID->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
 			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for intersectionRecordsEnd: " << cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.numberOfRecords() << std::endl;

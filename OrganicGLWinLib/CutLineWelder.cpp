@@ -79,20 +79,32 @@ void CutLineWelder::handleSliceRun()
 {
 	int nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(copiedAttempt.beginIntersectionLineID, cuttableCyclingDirection);
 	std::cout << "Handling SLICE run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
-	// check whether or not the the line in the cuttableTriangle, having an index of nextCuttableLineIndexToUse, contains any 
-	// registries. If it doesn't, enter the entire line into the pool, taking into account the FORWARD or REVERSE CyclingDirection.
-	if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
+	bool continueFlag = true;
+	while (continueFlag == true)
 	{
-		std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
-		CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
-		currentPool.insertLineIntoPool(newLine);
-		std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+		std::cout << "!! cuttingTriangleLineID is: " << copiedAttempt.cuttingTriangleLineID << std::endl;
+		// check whether or not the the line in the cuttableTriangle, having an index of nextCuttableLineIndexToUse, contains any 
+		// registries. If it doesn't, enter the entire line into the pool, taking into account the FORWARD or REVERSE CyclingDirection.
+		if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
+		{
+			std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+			CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
+			currentPool.insertLineIntoPool(newLine);
+			std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+		}
+		//else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() != 0)
+		else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.doesRecordExist(copiedAttempt.cuttingTriangleLineID) == true)
+		{
+			glm::vec3 intersectedPointToUse = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getPointForRecord(copiedAttempt.cuttingTriangleLineID);
+			std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
+			CutLine newLine = producePartialCuttableCutLineForPool(nextCuttableLineIndexToUse, intersectedPointToUse);
+			currentPool.insertLineIntoPool(newLine);
+			continueFlag = false;
+		}
+		nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(nextCuttableLineIndexToUse, cuttableCyclingDirection);
 	}
-	else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() != 0)
-	{
-		std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
-	}
-
+	std::cout << "SLICE run-> printing lines in pool..." << std::endl;
+	currentPool.printLines();
 }
 
 CutLine CutLineWelder::produceEntireCuttableCutLineForPool(int in_currentCuttableLineID)
@@ -108,6 +120,24 @@ CutLine CutLineWelder::produceEntireCuttableCutLineForPool(int in_currentCuttabl
 	{
 		returnLine.pointA = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointB;
 		returnLine.pointB = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointA;
+		returnLine.emptyNormal = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].cuttableTriangleCentroidFacingNormal;
+	}
+	return returnLine;
+}
+
+CutLine CutLineWelder::producePartialCuttableCutLineForPool(int in_currentCuttableLineID, glm::vec3 in_intersectedPointToUse)
+{
+	CutLine returnLine;
+	if (cuttableCyclingDirection == CyclingDirection::FORWARD)
+	{
+		returnLine.pointA = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointA;
+		returnLine.pointB = in_intersectedPointToUse;
+		returnLine.emptyNormal = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].cuttableTriangleCentroidFacingNormal;
+	}
+	else if (cuttableCyclingDirection == CyclingDirection::REVERSE)
+	{
+		returnLine.pointA = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointB;
+		returnLine.pointB = in_intersectedPointToUse;
 		returnLine.emptyNormal = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].cuttableTriangleCentroidFacingNormal;
 	}
 	return returnLine;
