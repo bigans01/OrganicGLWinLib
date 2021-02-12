@@ -10,6 +10,7 @@ class CuttableTriangleLine
 {
 	private:
 		friend class CuttableTriangle;
+		friend class CutLineWelder;
 		CuttableTriangleLine() {};
 		CuttableTriangleLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_centroidFacingNormal) :
 			pointA(in_pointA),

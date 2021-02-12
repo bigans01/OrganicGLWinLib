@@ -32,6 +32,12 @@ class CuttableTriangle
 	private:
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
+		friend class CutLineWelder;
+		struct PoolAndDirectionPair
+		{
+			CutLinePool pairPool;
+			CyclingDirection pairCyclingDirection = CyclingDirection::NOVAL;
+		};
 		std::map<int, STriangle> outputTriangles;
 		CuttableTriangleLine cuttableTriangleLines[3];
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
@@ -40,8 +46,8 @@ class CuttableTriangle
 		void buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
-		CutLinePool buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
-		CutLinePool buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
+		PoolAndDirectionPair buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
+		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
