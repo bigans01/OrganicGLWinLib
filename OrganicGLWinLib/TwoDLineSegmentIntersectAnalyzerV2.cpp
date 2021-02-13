@@ -76,7 +76,58 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) NONCOLINEAR_INTERSECT detected. Value is: ", foundIntersectionValue.x, ", ", foundIntersectionValue.y, "\n");
 			analyzedResult.intersectedPoint.x = foundIntersectionValue.x;
 			analyzedResult.intersectedPoint.y = foundIntersectionValue.y;
-			analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
+
+			// now, determine if a T-junction exists; 
+			float lineALength = glm::distance(convert2DPointTo3D(twoDLineSegmentA.a), convert2DPointTo3D(twoDLineSegmentA.b));
+			float distBetweenLineAPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.a), foundIntersectionValue);
+			float distBetweenLineAPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.b), foundIntersectionValue);
+
+			//std::cout << "###--> length of line A: " << lineALength << std::endl;
+			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineAPointAAndIntersectedPoint << std::endl;
+			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineAPointBAndIntersectedPoint << std::endl;
+
+			bool tJunctionTestForLineAPointAToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointAAndIntersectedPoint);
+			bool tJunctionTestForLineAPointBToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointBAndIntersectedPoint);
+
+			float lineBLength = glm::distance(convert2DPointTo3D(twoDLineSegmentB.a), convert2DPointTo3D(twoDLineSegmentB.b));
+			float distBetweenLineBPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.a), foundIntersectionValue);
+			float distBetweenLineBPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.b), foundIntersectionValue);
+
+			//std::cout << "###--> length of line B: " << lineBLength << std::endl;
+			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineBPointAAndIntersectedPoint << std::endl;
+			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineBPointBAndIntersectedPoint << std::endl;
+
+			bool tJunctionTestForLineBPointAToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointAAndIntersectedPoint);
+			bool tJunctionTestForLineBPointBToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointBAndIntersectedPoint);
+
+			if (tJunctionTestForLineAPointAToIntersectedPoint == true)
+			{
+				std::cout << "!!! Notice, T-junction detected: Point B of Line A splits Line B." << std::endl;
+				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_B" << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B;
+			}
+			else if (tJunctionTestForLineAPointBToIntersectedPoint == true)
+			{
+				std::cout << "!!! Notice, T-junction detected, Point A of Line A splits Line B. " << std::endl;
+				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_A" << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A;
+			}
+			else if (tJunctionTestForLineBPointAToIntersectedPoint == true)
+			{
+				std::cout << "!!! Notice, T-junction detected, Point B of Line B splits Line A. " << std::endl;
+				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_B" << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_B;
+			}
+			else if (tJunctionTestForLineBPointBToIntersectedPoint == true)
+			{
+				std::cout << "!!! Notice, T-junction detected, Point A of Line B splits Line A. " << std::endl;
+				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_A" << std::endl;
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A;
+			}
+			else   // as long as no T-junction detected, return as being a NONCOLINEAR_INTERSECT.
+			{
+				analyzedResult.intersectType = TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT;
+			}
 		}
 		else
 		{
@@ -126,4 +177,25 @@ float TwoDLineSegmentIntersectAnalyzerV2::calculateTwoDLineSegmentIntersectScala
 		scalarValue = in_numerator / in_denominator;
 	}
 	return scalarValue;
+}
+
+bool TwoDLineSegmentIntersectAnalyzerV2::runTJunctionTest(float in_lineLength, float in_distanceToIntersectedPointToAnalyze)
+{
+	bool returnValue = false;
+	float roundedLength = float(floor(in_lineLength * 10000 + 0.5) / 10000);
+	float roundedDistanceToIntersectedPointToAnalyze = float(floor(in_distanceToIntersectedPointToAnalyze * 10000 + 0.5) / 10000);
+	//float roundedDistanceFromAtoIntersectedPoint = float(floor(in_distanceFromAtoIntersectedPoint * 10000 + 0.5) / 10000);
+	//float roundedDistanceFromBtoIntersectedPoint = float(floor(in_distanceFromBToIntersectedPoint * 10000 + 0.5) / 10000);
+	//if
+	//(
+		//(roundedLength == roundedDistanceFromAtoIntersectedPoint)
+		//||
+		//(roundedLength == roundedDistanceFromBtoIntersectedPoint)
+	//)
+
+	if (roundedLength == roundedDistanceToIntersectedPointToAnalyze)
+	{
+		returnValue = true;
+	}
+	return returnValue;
 }

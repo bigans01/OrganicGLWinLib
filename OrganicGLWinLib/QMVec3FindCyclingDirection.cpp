@@ -51,6 +51,7 @@ glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRota
 		flipOnXAxis(in_quatRotationPointsRef);
 	}
 
+
 	// now, find out which point is on positive Y; the same binary Y value as the normal.
 	if (in_quatRotationPointsRef->getPointByIndex(2).y > 0)
 	{
@@ -59,8 +60,8 @@ glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRota
 	else if (in_quatRotationPointsRef->getPointByIndex(3).y > 0)
 	{
 		returnVec = originalCandidatePointB;
-	}
 
+	}
 	return returnVec;
 }
 

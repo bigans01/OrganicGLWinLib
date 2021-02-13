@@ -104,6 +104,53 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 
  
 				}
+				//else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A)
+				//{
+					//glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					//glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					//glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					//glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
+				//}
+				//else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B)
+				//{
+
+				//}
+				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A)
+				{
+					// point A of line B splits line A; so we must check point B of line B.
+					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB; 
+					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
+					QuatRotationPoints tJunctionPoints;
+					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
+					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
+					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
+					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
+
+					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
+					// If true, we can insert a record.
+
+				}
+				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_B)
+				{
+					// point B of line B splits line A; so we must check point A of line B.
+					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
+					QuatRotationPoints tJunctionPoints;
+					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
+					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
+					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
+					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
+
+					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
+					// If true, we can insert a record.
+				}
+
+
+				// T_junction logic needs to be handled here....
 			}
 		}
 

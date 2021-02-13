@@ -36,6 +36,7 @@ class TwoDLineSegmentIntersectAnalyzerV2
 		float calculateTwoDLineSegmentIntersectScalar(float in_numerator, float in_denominator);
 		PolyLogger twoDLineSegmentIntersectV2Logger;
 		PolyDebugLevel twoDLineSegmentIntersectV2LogLevel = PolyDebugLevel::NONE;
+		bool runTJunctionTest(float in_lineLength, float in_distanceToIntersectedPointToAnalyze);
 };
 
 #endif
