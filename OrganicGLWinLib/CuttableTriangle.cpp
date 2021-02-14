@@ -79,7 +79,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				//std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
 				//std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
 				tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
-				tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
+				tempLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
 				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, PolyDebugLevel::NONE);
 				if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
@@ -117,36 +117,89 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				//}
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A)
 				{
+					//std::cout << "######::: NOTICE, running T-junction validity test for T_JUNCTION_B_SPLITS_A_VIA_POINT_A. " << std::endl;
+					//glm::vec3 interestedPointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					//std::cout << "Point to check will be: " << interestedPointToCheck.x << ", " << interestedPointToCheck.y << ", " << interestedPointToCheck.z << std::endl;
+					//int tJunctionWait = 3;
+					//std::cin >> tJunctionWait;
+
+					tempLogger.log("(CuttableTriangle) ######::: NOTICE, running T-junction validity test for T_JUNCTION_B_SPLITS_A_VIA_POINT_A. ", "\n");
+					tempLogger.log("(CuttableTriangle) Checking this point for validity: ",
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.x, ", ",
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y, "\n");
+					tempLogger.waitForDebugInput();
+
+
 					// point A of line B splits line A; so we must check point B of line B.
-					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB; 
 					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
 					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
 					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
 					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
+					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
 					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
 
 					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
 					// If true, we can insert a record.
+					QMBoolIsTJunctionCuttable cuttableTester;
+					bool result = cuttableTester.solve(&tJunctionPoints, PolyDebugLevel::NONE);
+					if (result == true)
+					{
+						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
+						// since point A of the cutting line was the point that split line A, use it as the intersecting point.
+						glm::vec3 pointToUse = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
+						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
+
+						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+					}
+					
+				
 
 				}
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_B)
 				{
+					//std::cout << "######::: NOTICE, running T-junction validity test for T_JUNCTION_B_SPLITS_A_VIA_POINT_B. " << std::endl;
+					//glm::vec3 interestedPointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					//std::cout << "Point to check will be: " << interestedPointToCheck.x << ", " << interestedPointToCheck.y << ", " << interestedPointToCheck.z << std::endl;
+					//int tJunctionWait = 3;
+					//std::cin >> tJunctionWait;
+
+					tempLogger.log("(CuttableTriangle) ######::: NOTICE, running T-junction validity test for T_JUNCTION_B_SPLITS_A_VIA_POINT_B. ", "\n");
+					tempLogger.log("(CuttableTriangle) Checking this point for validity: ",
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA.x, ", ",
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA.y, "\n");
+					tempLogger.waitForDebugInput();
+
 					// point B of line B splits line A; so we must check point A of line B.
-					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
 					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
 					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
 					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
+					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
 					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
 
 					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
 					// If true, we can insert a record.
+					QMBoolIsTJunctionCuttable cuttableTester;
+					bool result = cuttableTester.solve(&tJunctionPoints, PolyDebugLevel::NONE);
+					if (result == true)
+					{
+						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
+						// since point B of the cutting line was the point that split line A, use it as the intersecting point.
+						glm::vec3 pointToUse = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
+						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
+
+						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+					}
 				}
 
 

@@ -52,6 +52,13 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	//std::cout << "***** Second Line point A: " << secondLinePointARef->x << ", " << secondLinePointARef->y << std::endl;
 	//std::cout << "***** Second Line point B: " << secondLinePointBRef->x << ", " << secondLinePointBRef->y << std::endl;
 
+	// round the Y by 10-thousandths.
+	roundVec3YByTenThousandths(secondLinePointARef);
+	roundVec3YByTenThousandths(secondLinePointBRef);
+
+	std::cout << "::: secondLinePointARef->y = " << secondLinePointARef->y << std::endl;
+	std::cout << "::: secondLinePointBRef->y = " << secondLinePointBRef->y << std::endl;
+
 
 	// remember, points A and B of the first line have y = 0, after the call to rotateLineToYZeroPositiveX.
 	if
@@ -78,6 +85,7 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		float distance_to_travel_to_y_0 = 0.0f;
 		float y_diff;
 		glm::vec3 calculatedPoint;
+
 
 		// first check: is point B of the second line exactly on 0?
 		if (secondLinePointBRef->y == 0.0f)
@@ -177,4 +185,9 @@ void QMBoolDoLinesIntersect::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRot
 			//in_quatRotationPointsRef->printPoints();
 		}
 	}
+}
+
+void QMBoolDoLinesIntersect::roundVec3YByTenThousandths(glm::vec3* in_vec3Ref)
+{
+	in_vec3Ref->y = float(floor(in_vec3Ref->y * 10000 + 0.5) / 10000);
 }
