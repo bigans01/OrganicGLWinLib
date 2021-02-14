@@ -25,8 +25,15 @@ class TwoDIntersectionRecordManager
 		bool doesRecordExist(int in_idToGetPointFor)
 		{
 			bool returnValue = false;
+			/*
 			auto recordFinder = recordMap.find(in_idToGetPointFor);
 			if (recordFinder != recordMap.end())
+			{
+				returnValue = true;
+			}
+			*/
+					
+			if (auto finder = recordMap.find(in_idToGetPointFor); finder != recordMap.end())
 			{
 				returnValue = true;
 			}

@@ -4,9 +4,9 @@
 CuttingTriangle::CuttingTriangle(STriangle in_sTriangle)
 {
 	// find the centroid
-	glm::vec3 pointA = cuttingLines[0].pointA;
-	glm::vec3 pointB = cuttingLines[1].pointA;
-	glm::vec3 pointC = cuttingLines[2].pointA;
+	glm::vec3 pointA = in_sTriangle.triangleLines[0].pointA;
+	glm::vec3 pointB = in_sTriangle.triangleLines[1].pointA;
+	glm::vec3 pointC = in_sTriangle.triangleLines[2].pointA;
 	glm::vec3 centroid = OrganicGLWinUtils::findTriangleCentroid(pointA, pointB, pointC);
 
 	// find the centroid facing normal for each line
@@ -25,6 +25,7 @@ CuttingTriangle::CuttingTriangle(STriangle in_sTriangle)
 		QMVec3FindCentroidFacingNormal normalFinder;
 		glm::vec3 centroidFacingNormal = normalFinder.solve(&points, PolyDebugLevel::NONE);
 		centroidFacingNormal *= -1;	// outward facing normal is just the centroid normal multiplied by -1.
+
 		CuttingTriangleLine newLine(in_sTriangle.triangleLines[x].pointA, in_sTriangle.triangleLines[x].pointB, centroidFacingNormal);
 		cuttingLines[x] = newLine;
 	}
