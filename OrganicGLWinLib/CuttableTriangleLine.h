@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include "TwoDIntersectionRecordManager.h"
+#include <map>
 
 class CuttableTriangleLine
 {
@@ -17,10 +18,7 @@ class CuttableTriangleLine
 			pointB(in_pointB),
 			cuttableTriangleCentroidFacingNormal(in_centroidFacingNormal)
 		{}
-		glm::vec3 pointA;
-		glm::vec3 pointB;
-		glm::vec3 cuttableTriangleCentroidFacingNormal;
-		TwoDIntersectionRecordManager cuttableIntersectionManager;
+	
 		void printCuttingIntersections()
 		{
 			if (cuttableIntersectionManager.numberOfRecords() > 0)
@@ -28,6 +26,20 @@ class CuttableTriangleLine
 				cuttableIntersectionManager.printRecordMap();
 			}
 		};
+		void insertNonIntersectingCuttingLinePoint(int in_cuttingLineID, glm::vec3 in_point)
+		{
+			cuttingLineNonIntersectingPoints[in_cuttingLineID] = in_point;
+		};
+		glm::vec3 getNonIntersectingPountForCuttingLine(int in_cuttingLineID)
+		{
+			return cuttingLineNonIntersectingPoints[in_cuttingLineID];
+		}
+
+		glm::vec3 pointA;
+		glm::vec3 pointB;
+		glm::vec3 cuttableTriangleCentroidFacingNormal;
+		TwoDIntersectionRecordManager cuttableIntersectionManager;
+		std::map<int, glm::vec3> cuttingLineNonIntersectingPoints;
 };
 
 #endif

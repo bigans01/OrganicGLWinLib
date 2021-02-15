@@ -5,12 +5,14 @@
 
 #include <glm/glm.hpp>
 #include "TwoDIntersectionRecordManager.h"
+#include "CyclingDirection.h"
 
 class CuttingTriangleLine
 {
 	private:
 		friend class CuttableTriangle;
 		friend class CuttingTriangle;
+		friend class CutLineWelder;
 		CuttingTriangleLine() {};
 		CuttingTriangleLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_outwardFacingNormal) :
 			pointA(in_pointA),
@@ -28,6 +30,19 @@ class CuttingTriangleLine
 				cuttingIntersectionManager.printRecordMap();
 			}
 		};
+		CyclingDirection determineCyclingDirectionToUseFromPoint(glm::vec3 in_point)
+		{
+			CyclingDirection returnDirection;
+			if (in_point == pointA)
+			{
+				returnDirection = CyclingDirection::REVERSE;
+			}
+			else if (in_point == pointB)
+			{
+				returnDirection = CyclingDirection::FORWARD;
+			}
+			return returnDirection;
+		}
 };
 
 #endif

@@ -28,6 +28,7 @@ class CutLineWelder
 		void handleSliceRun();
 		CutLine produceEntireCuttableCutLineForPool(int in_currentCuttableLineID);
 		CutLine producePartialCuttableCutLineForPool(int in_currentCuttableLineID, glm::vec3 in_intersectedPointToUse);
+		CutLine producePartialCuttingCutLineForPool(int in_currentCuttingLineID, glm::vec3 in_pointAForNewLine, glm::vec3 in_pointBForNewLine);
 };
 
 #endif

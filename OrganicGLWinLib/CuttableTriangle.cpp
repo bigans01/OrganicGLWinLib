@@ -88,6 +88,25 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
 					cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, convertedPoint);
 
+					// find the point which wasn't intersected, store it.
+					QuatRotationPoints solveForCuttableLinePoints;
+					glm::vec3 solveForCuttablecuttingLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+					glm::vec3 solveForCuttablecuttingLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 solveForCuttablecuttableLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					glm::vec3 solveForCuttablecuttableLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
+					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointA);
+					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointB);
+					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointA);
+					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointB);
+					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineInwardNormal);
+					QMVec3FindCyclingDirectionPoint cuttableLineSolver;
+					glm::vec3 determinedNonIntersectingPoint = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
+
+					// store the non intersecting point for this cutting line.
+					cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, determinedNonIntersectingPoint);
+
+
 					// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, convertedPoint);
 
@@ -141,6 +160,8 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
 					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
 
+
+
 					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
 					// If true, we can insert a record.
 					QMBoolIsTJunctionCuttable cuttableTester;
@@ -152,6 +173,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						glm::vec3 pointToUse = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
 						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
+
+						// the non-intersecting point will be equal to point B of the cuttling line.
+						glm::vec3 cuttingLineNonIntersectingPoint = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+						cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, cuttingLineNonIntersectingPoint);
 
 						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
@@ -196,6 +221,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						glm::vec3 pointToUse = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
 						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
+
+						// the non-intersecting point will be equal to point A of the cuttling line.
+						glm::vec3 cuttingLineNonIntersectingPoint = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+						cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, cuttingLineNonIntersectingPoint);
 
 						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);

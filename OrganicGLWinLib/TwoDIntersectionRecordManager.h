@@ -33,7 +33,8 @@ class TwoDIntersectionRecordManager
 			}
 			*/
 					
-			if (auto finder = recordMap.find(in_idToGetPointFor); finder != recordMap.end())
+			if (auto finder = recordMap.find(in_idToGetPointFor); finder != recordMap.end())	// new in C++ 17. Should be retroactively applied, to other similiar
+																								// functions, when time permits.
 			{
 				returnValue = true;
 			}
@@ -52,6 +53,21 @@ class TwoDIntersectionRecordManager
 		int numberOfRecords() 
 		{ 
 			return int(recordMap.size()); 
+		};
+		int getIdOfClosestPoint(glm::vec3 in_pointToCompareAgainst)
+		{
+			float distance = 10000.0f;
+			int shortestID = 0;
+			auto recordMapBegin = recordMap.begin();
+			auto recordMapEnd = recordMap.end();
+			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
+			{
+				if (glm::distance(in_pointToCompareAgainst, recordMapBegin->second) < distance)
+				{
+					shortestID = recordMapBegin->first;
+				};
+			}
+			return shortestID;
 		};
 	private:
 		friend class CuttableTriangle;

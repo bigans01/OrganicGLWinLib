@@ -17,6 +17,7 @@ class CuttingTriangle
 		friend class STriangleCutter;
 		friend class CuttableTriangle;
 		friend class CuttingTriangleManager;
+		friend class CutLineWelder;
 		
 		CuttingTriangleLine cuttingLines[3];
 		void reset();
