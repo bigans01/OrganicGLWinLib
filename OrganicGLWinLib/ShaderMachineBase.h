@@ -26,6 +26,7 @@
 #include "ImGuiButtonClickResult.h"
 //#include "ImGuiSliderFloatPanel.h"
 #include "ImGuiSliderFloatPanelContainer.h"
+#include "ImGuiInputTextPanelContainer.h"
 
 class ShaderMachineBase
 {
@@ -90,6 +91,7 @@ public:
 
 		// imgui features
 		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
+		void checkForTextInput();
 		void renderSliders();								// will render single float interactable sliders
 
 		// set direction
@@ -163,6 +165,7 @@ protected:
 		// imgui objects
 		ImGuiButtonPanelContainer buttonPanelContainer;
 		ImGuiSliderFloatPanelContainer sliderPanelContainer;
+		ImGuiInputTextPanelContainer inputPanelContainer;
 
 		// gearTrain related functions
 		void runGearTrain();

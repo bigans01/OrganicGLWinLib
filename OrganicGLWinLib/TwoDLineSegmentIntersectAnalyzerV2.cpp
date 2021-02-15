@@ -72,7 +72,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 		if (areLinesInteresecting == true)
 		{
 			glm::vec3 foundIntersectionValue = intersectionTestPoints.getPointByIndex(4);
-			//std::cout << "!! Point found as a result of intersection machine is: " << foundIntersectionValue.x << ", " << foundIntersectionValue.y << std::endl;
+			std::cout << "!! Point found as a result of intersection machine is: " << foundIntersectionValue.x << ", " << foundIntersectionValue.y << std::endl;
 			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) NONCOLINEAR_INTERSECT detected. Value is: ", foundIntersectionValue.x, ", ", foundIntersectionValue.y, "\n");
 			analyzedResult.intersectedPoint.x = foundIntersectionValue.x;
 			analyzedResult.intersectedPoint.y = foundIntersectionValue.y;

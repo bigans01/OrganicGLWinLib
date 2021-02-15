@@ -19,7 +19,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	vaoAttribByteSize = 40;
 
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
-	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
+	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW windowgf
 	OrganicGLWinUtils::checkWindowValidity(window);			// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::makeContextCurrent(window);
 	OrganicGLWinUtils::initializeGlew();
@@ -48,6 +48,10 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	buttonPanelContainer.insertNewPanel("panel1", 10, 10, 200, 100);
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button2");
+
+	// create a test panel for input.
+	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 100);
+	inputPanelContainer.insertInputIntoPanel("test_input", "input_area1");
 
 	//testPanel.insertNewSliderFloat("slider1", &globalAmbienceMultiplier, 0.0f, 1.0f);
 	sliderPanelContainer.insertNewPanel("adjustable uniforms", 10, 120, 200, 100);

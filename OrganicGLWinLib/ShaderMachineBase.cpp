@@ -108,6 +108,11 @@ ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
 	return buttonPanelContainer.checkAllPanelsForClickResults();
 }
 
+void ShaderMachineBase::checkForTextInput()
+{
+	inputPanelContainer.checkForInput();
+}
+
 void ShaderMachineBase::renderSliders()
 {
 	sliderPanelContainer.runAllSliders();

@@ -822,6 +822,18 @@
     <ClInclude Include="QMBoolIsTJunctionCuttable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiInputText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextPanelContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextResponse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1206,6 +1218,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMBoolIsTJunctionCuttable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiInputText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

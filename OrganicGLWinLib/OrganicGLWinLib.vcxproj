@@ -250,9 +250,13 @@
     <ClInclude Include="ImGuiButtonClickResult.h" />
     <ClInclude Include="ImGuiButtonPanel.h" />
     <ClInclude Include="ImGuiButtonPanelContainer.h" />
+    <ClInclude Include="ImGuiInputTextPanel.h" />
+    <ClInclude Include="ImGuiInputTextPanelContainer.h" />
+    <ClInclude Include="ImGuiInputTextResponse.h" />
     <ClInclude Include="ImGuiSliderFloat.h" />
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
+    <ClInclude Include="ImGuiInputText.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectAnalyzerOption.h" />
@@ -476,6 +480,7 @@
     <ClCompile Include="GuestLineReactor.cpp" />
     <ClCompile Include="HighlighterGearT1.cpp" />
     <ClCompile Include="HostLineReactor.cpp" />
+    <ClCompile Include="ImGuiInputText.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />

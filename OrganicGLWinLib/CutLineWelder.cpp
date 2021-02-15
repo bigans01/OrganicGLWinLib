@@ -120,8 +120,20 @@ void CutLineWelder::handleTypicalRun()
 			// Otherwise, if the value of nextCuttingLineIndexToUse isn't equal to copiedAttempt.beginIntersectionLineID, there is still a line to crawl on the CuttingTriangle.
 			if (copiedAttempt.beginIntersectionLineID == nextCuttingLineIndexToUse)
 			{
+				std::cout << "TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. " << std::endl;
 				CutLine newLineFromCuttingTriangle = producePartialCuttingCutLineForPool(cuttingLineIDOfClosestPoint, intersectedPointToUse, startingNonintersectingPoint);
 				currentPool.insertLineIntoPool(newLineFromCuttingTriangle);
+			}
+			else
+			{
+				std::cout << "TYPICAL-> nextCuttinLineIndexToUse doesn't equal copiedAttempt.beginIntersectionLineID; must crawl an additional line. " << std::endl;
+				CutLine newLineFromCuttingTriangle = producePartialCuttingCutLineForPool(cuttingLineIDOfClosestPoint, intersectedPointToUse, startingNonintersectingPoint);
+				currentPool.insertLineIntoPool(newLineFromCuttingTriangle);
+
+				// produce the second line, and we'll be done
+				CutLine secondLine = produceEntireCuttingCutLineForPool(nextCuttingLineIndexToUse, cuttingTriangleCyclingDirection);
+				currentPool.insertLineIntoPool(secondLine);
+
 			}
 
 		}
@@ -209,6 +221,24 @@ CutLine CutLineWelder::producePartialCuttableCutLineForPool(int in_currentCuttab
 		returnLine.pointB = in_intersectedPointToUse;
 		returnLine.emptyNormal = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].cuttableTriangleCentroidFacingNormal;
 	}
+	return returnLine;
+}
+
+CutLine CutLineWelder::produceEntireCuttingCutLineForPool(int in_currentCuttingLineID, CyclingDirection in_cuttingTriangleCyclingDirection)
+{
+	CutLine returnLine;
+	if (in_cuttingTriangleCyclingDirection == CyclingDirection::FORWARD)
+	{
+		returnLine.pointA = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].pointA;
+		returnLine.pointB = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].pointB;
+	}
+	else if (in_cuttingTriangleCyclingDirection == CyclingDirection::REVERSE)
+	{
+		returnLine.pointA = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].pointB;
+		returnLine.pointB = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].pointA;
+	}
+	returnLine.emptyNormal = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].outwardFacingNormal;
+
 	return returnLine;
 }
 

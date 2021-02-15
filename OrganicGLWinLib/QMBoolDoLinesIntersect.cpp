@@ -83,7 +83,7 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		float lengthOfInterceptingLine = glm::distance(*secondLinePointARef, *secondLinePointBRef);
 		glm::vec3 resultantSlope = *secondLinePointBRef - *secondLinePointARef;
 		float distance_to_travel_to_y_0 = 0.0f;
-		float y_diff;
+		float a_absolute;
 		glm::vec3 calculatedPoint;
 
 
@@ -104,24 +104,38 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		else
 		{
 			// because the cuttable line is such that Y = 0 and X > 0, 
-			// and the cutting line intersects somehow, it holds true that the intersecting point is Y = 0.
+			// and the cutting line may or may not intersect somehow (not determined at this point), it holds true that the intersecting point would be at Y = 0.
 			// The distance to travel to get to Y can then be calculated by getting the absolute value of the cutting line's point A, 
-			// divided by the absolute value of the of Y-difference between both points of the cutting line. The resulting value is the
+			// divided by the combined absolute values of the of Y-values for each point. The resulting value is the
 			// percentage of the distance of the line, to get to Y = 0. Multiplying the slope of the cutting line by this percentage, 
 			// results in the intersecting point.
 
-			float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
-			y_diff = abs(secondLinePointARef->y);								  
-			distance_to_travel_to_y_0 = y_diff / ab_diff;
+			//float ab_diff = abs(secondLinePointBRef->y - secondLinePointARef->y); // the total y-difference between the two points
+			float ab_combinedAbsolute = abs(secondLinePointBRef->y) + abs(secondLinePointARef->y); // the total y-difference between the two points
+			a_absolute = abs(secondLinePointARef->y);
+			distance_to_travel_to_y_0 = a_absolute / ab_combinedAbsolute;
 		}
 
+		//std::cout << "+++++++++ printing points: " << std::endl;
+		//in_quatRotationPointsRef->printPoints();
 
-		
+
+
+		//std::cout << "----> distance_to_travel_to_y_0 = " << distance_to_travel_to_y_0 << std::endl;
 		calculatedPoint.x = secondLinePointARef->x + (resultantSlope.x * distance_to_travel_to_y_0);
 		calculatedPoint.y = secondLinePointARef->y + (resultantSlope.y * distance_to_travel_to_y_0);
 
+		//std::cout << "----> calculated point, before rotation back: " << calculatedPoint.x << ", " << calculatedPoint.y << std::endl;
+
 		// ensure that the resulting calculated point has an X <= to the second point of the first line (because that point has X >= 0)
-		if (calculatedPoint.x <= in_quatRotationPointsRef->getPointByIndex(1).x)
+		// --AND--
+		// that it's X is greater than 0 (because point A of the first line starts at X = 0, if it is less than 0 it doesn't intersect.)
+		if 
+		(
+			(calculatedPoint.x <= in_quatRotationPointsRef->getPointByIndex(1).x)
+			&&
+			(calculatedPoint.x >= 0)
+		)
 		{
 			//std::cout << "!!! Valid intersection point found. " << std::endl;
 			//std::cout << "!!! Point is: " << calculatedPoint.x << ", " << calculatedPoint.y << std::endl;
@@ -135,6 +149,10 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 			}
 			returnValue = true;
 		}
+
+
+		//std::cout << "+++++++++ printing points: " << std::endl;
+		//in_quatRotationPointsRef->printPoints();
 
 	}
 	else
