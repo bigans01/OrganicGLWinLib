@@ -330,7 +330,28 @@ void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cutti
 			currentPair = buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
 		}
 
+		// run a CutLineWelder, take its produced pool and use it in the CutTriangleGroupBuilder.
 		CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPair.pairPool, currentPair.pairCyclingDirection);
+		CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
+		builder.runCutTraceObserver();
+
+		// extract all the CutTriangles from the CutTriangleGroupBuilder.
+
+		
+		std::cout << "------------ended trace observer run. " << std::endl;
+		auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
+		auto containerVectorEnd = builder.cutTriangleContainerVector.end();
+		for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+		{
+			std::cout << ">>>>> Printing contents for container..." << std::endl;
+			auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
+			auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
+			for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+			{
+				containerTrianglesBegin->second.printPoints();
+			}
+		}
+		
 	}
 }
 

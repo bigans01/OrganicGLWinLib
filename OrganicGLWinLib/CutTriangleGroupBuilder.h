@@ -6,6 +6,9 @@
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "CutLinePool.h"
+#include <vector>
+#include "CutTriangleContainer.h"
+#include "CutLineTraceObserver.h"
 
 class CutTriangleGroupBuilder
 {
@@ -16,8 +19,14 @@ class CutTriangleGroupBuilder
 		{
 			cutTriangleGroupBuilderLogger.setDebugLevel(in_polyDebugLevel);
 		};
+		void runCutTraceObserver();
+		std::vector<CutTriangleContainer> cutTriangleContainerVector;
 	private:
 		CutLinePool linePool;
+		CutLineTraceObserver tracer;
+		int currentLineOfSightLineIndex = 0;		// default is at 0, because we don't know what the ending ID of the linePool is. (which should be set before the builder runs)
+		void acquireWeldedLinesForWindowAndBuildObservation();
+		void handleFinalObservation();
 		PolyLogger cutTriangleGroupBuilderLogger;
 		PolyDebugLevel cutTriangleGroupBuilderLoggerLogLevel = PolyDebugLevel::NONE;
 };

@@ -18,6 +18,7 @@ class CutLineWelder
 					 CutLinePool in_basePool,
 			         CyclingDirection in_cuttableCyclingDirection);
 	private:
+		friend class CuttableTriangle;
 		CuttableTriangle* cuttableTriangleRef = nullptr;
 		CuttingTriangle* cuttingTriangleRef = nullptr;
 		TwoDCrawlingAttempt copiedAttempt;

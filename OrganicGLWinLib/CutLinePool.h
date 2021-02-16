@@ -4,6 +4,7 @@
 #define CUTLINEPOOL_H
 
 #include <map>
+#include <iostream>
 #include "CutLine.h"
 
 class CutLinePool

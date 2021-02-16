@@ -209,6 +209,7 @@
     <ClInclude Include="CutLine.h" />
     <ClInclude Include="CutLinePool.h" />
     <ClInclude Include="CutLinePoolGuide.h" />
+    <ClInclude Include="CutLineTraceObserver.h" />
     <ClInclude Include="CutLineWelder.h" />
     <ClInclude Include="CuttableTriangle.h" />
     <ClInclude Include="CuttableTriangleContainer.h" />
@@ -216,7 +217,11 @@
     <ClInclude Include="CuttingTriangle.h" />
     <ClInclude Include="CuttingTriangleLine.h" />
     <ClInclude Include="CuttingTriangleManager.h" />
+    <ClInclude Include="CutTriangle.h" />
+    <ClInclude Include="CutTriangleContainer.h" />
     <ClInclude Include="CutTriangleGroupBuilder.h" />
+    <ClInclude Include="CutTriangleProducer.h" />
+    <ClInclude Include="CutTriangleProductionResult.h" />
     <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
@@ -458,11 +463,13 @@
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />
+    <ClCompile Include="CutLineTraceObserver.cpp" />
     <ClCompile Include="CutLineWelder.cpp" />
     <ClCompile Include="CuttableTriangle.cpp" />
     <ClCompile Include="CuttableTriangleContainer.cpp" />
     <ClCompile Include="CuttingTriangle.cpp" />
     <ClCompile Include="CuttingTriangleManager.cpp" />
+    <ClCompile Include="CutTriangleGroupBuilder.cpp" />
     <ClCompile Include="CyclingDirectionFinder.cpp" />
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
