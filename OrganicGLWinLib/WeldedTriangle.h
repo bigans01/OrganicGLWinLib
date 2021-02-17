@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include "QuatRotationPoints.h"
 #include "QuatRotationManager.h"
+#include "QuatUtils.h"
 
 class WeldedTriangle
 {
@@ -47,53 +48,7 @@ class WeldedTriangle
 
 		bool checkIfPointIsWithinTriangle(glm::vec3 in_point)
 		{
-			bool isWithinTriangle = false;
-			bool planeArrayCheckResult[3];
-			for (int x = 0; x < 3; x++)
-			{
-				glm::vec3 pointACopy = lines[x].pointA;
-				glm::vec3 pointBCopy = lines[x].pointB;
-				glm::vec3 pointToCheck = in_point;
-				glm::vec3 centroidFacingNormal = lines[x].emptyNormal;
-
-				// first, check for point translation; only translate pointA/B, and the point to check against.
-				PointTranslationCheck pointCheck;
-				pointCheck.performCheck(pointACopy);
-				if (pointCheck.requiresTranslation == 1)
-				{
-					glm::vec3 translationValue = pointCheck.getTranslationValue();
-					pointACopy += translationValue;
-					pointBCopy += translationValue;
-					pointToCheck += translationValue;
-				}
-
-				QuatRotationPoints rotationPoints;
-				rotationPoints.pointsRefVector.push_back(&pointACopy);
-				rotationPoints.pointsRefVector.push_back(&pointBCopy);
-				rotationPoints.pointsRefVector.push_back(&pointToCheck);
-				rotationPoints.pointsRefVector.push_back(&centroidFacingNormal);		// fetched by rotationManager, to check for flipping on Z-axis
-
-				QuatRotationManager rotationManager;
-				planeArrayCheckResult[x] = rotationManager.initializeAndRunForCheckingIfPointIswithinPlane(&rotationPoints);
-
-			}
-
-			int withinPlaneCount = 0;
-			for (int x = 0; x < 3; x++)
-			{
-				if (planeArrayCheckResult[x] == true)
-				{
-					withinPlaneCount++;
-				}
-			}
-
-			if (withinPlaneCount == 3)
-			{
-				//std::cout << "Point is WITHIN triangle. " << std::endl;
-				isWithinTriangle = true;
-			}
-
-			return isWithinTriangle;
+			return QuatUtils::checkIfPointLiesWithinTrianglePBZ(in_point, lines[0].pointA, lines[1].pointA, lines[2].pointA);
 		}
 
 		WeldedLine fetchTriangleLine(int in_lineID)

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TwoDLineSegmentJudge.h"
+#include "QuatUtils.h"
 
 void TwoDLineSegmentJudge::runJudgement()
 {
@@ -19,12 +20,12 @@ void TwoDLineSegmentJudge::runJudgement()
 			glm::vec3 converted2D = OrganicGLWinUtils::convert2DToGlmVec3(suspectLine.b);
 			if
 				(
-					OrganicGLWinUtils::checkIfPointLiesWithinTriangle(converted2D,
-						sTrianglesBegin->second.triangleLines[0].pointA,
-						sTrianglesBegin->second.triangleLines[1].pointA,
-						sTrianglesBegin->second.triangleLines[2].pointA)
+					QuatUtils::checkIfPointLiesWithinTrianglePBZ(converted2D, 
+							sTrianglesBegin->second.triangleLines[0].pointA, 
+							sTrianglesBegin->second.triangleLines[1].pointA,
+							sTrianglesBegin->second.triangleLines[2].pointA)
 					== true
-					)
+				)
 			{
 				std::cout << "!!! ---> Point B of the suspectLine lies within the tracked SPoly!! (PARTIAL_BOUND categorized line type.)" << std::endl;
 			}

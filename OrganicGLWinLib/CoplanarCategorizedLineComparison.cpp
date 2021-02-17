@@ -186,21 +186,6 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 	int someValYeah = 7;
 	std::cin >> someValYeah;
 
-
-	/*
-	std::cout << "############# Testing function for if point is within triangle. " << std::endl;
-	glm::vec3 pointToCheck;
-	pointToCheck.x = .5;
-	pointToCheck.y = .5;
-
-	glm::vec3 trianglePoint1;
-	glm::vec3 trianglePoint2;
-	trianglePoint2.y = 1.0f;
-	glm::vec3 trianglePoint3;
-	trianglePoint3.x = 1.0f;
-
-	OrganicGLWinUtils::checkIfPointLiesWithinTriangle(pointToCheck, trianglePoint1, trianglePoint2, trianglePoint3);
-	*/
 }
 
 TwoDPoint CoplanarCategorizedLineProducer::convertGlmVec3To2D(glm::vec3 in_glmvec3)

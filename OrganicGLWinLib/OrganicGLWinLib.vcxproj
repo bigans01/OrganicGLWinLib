@@ -304,6 +304,7 @@
     <ClInclude Include="QMVec3FindCentroidFacingNormal.h" />
     <ClInclude Include="QMVoidBase.h" />
     <ClInclude Include="QMVoidFindCyclingDirection.h" />
+    <ClInclude Include="QuatUtils.h" />
     <ClInclude Include="RayIntersectionResult.h" />
     <ClInclude Include="SharedLineReactor.h" />
     <ClInclude Include="SPolyDO.h" />
@@ -525,6 +526,7 @@
     <ClCompile Include="QuatRotationManager.cpp" />
     <ClCompile Include="QuatRotationPoints.cpp" />
     <ClCompile Include="QuatRotationRecord.cpp" />
+    <ClCompile Include="QuatUtils.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SharedLineReactor.cpp" />

@@ -11,6 +11,7 @@
 #include "TwoDSPolyIntersectionType.h"
 #include "CategorizedLine.h"
 #include "OrganicGLWinUtils.h"
+#include "QuatUtils.h"
 
 class TwoDLineSegment
 {

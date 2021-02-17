@@ -85,7 +85,6 @@ public:
 	static glm::vec3 findTriangleCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static glm::vec3 findTriangleCentroidDebug(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
-	static bool checkIfPointLiesWithinTriangle(glm::vec3 in_pointToCheck, glm::vec3 in_trianglePoint0, glm::vec3 in_trianglePoint1, glm::vec3 in_trianglePoint2);
 	static TwoDPoint convertGlmVec3To2D(glm::vec3 in_glmvec3);
 	static glm::vec3 convert2DToGlmVec3(TwoDPoint in_twoDPoint);
 
