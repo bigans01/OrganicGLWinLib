@@ -26,3 +26,14 @@ void CuttableTriangleContainer::rebuildCuttableTriangleMapFromContainer(STriangl
 		cuttableTriangleMap[currentIndex++] = newTriangle;
 	}
 }
+
+void CuttableTriangleContainer::printCuttableTriangles()
+{
+	auto cuttableTrianglesBegin = cuttableTriangleMap.begin();
+	auto cuttableTrianglesEnd = cuttableTriangleMap.end();
+	for (; cuttableTrianglesBegin != cuttableTrianglesEnd; cuttableTrianglesBegin++)
+	{
+		std::cout << "CuttableTriangle with index " << cuttableTrianglesBegin->first << ": " << std::endl;
+		cuttableTrianglesBegin->second.printCuttableTrianglePoints();
+	}
+}

@@ -28,12 +28,14 @@ class CuttableTriangle
 {
 	public:
 		CuttableTriangle() {};
+	private:
+		//CuttableTriangle() {};
 		CuttableTriangle(STriangle in_cuttableTriangle);
 		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel);
-	private:
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
 		friend class CutLineWelder;
+		friend class CuttableTriangleContainer;
 		struct PoolAndDirectionPair
 		{
 			CutLinePool pairPool;
@@ -52,6 +54,9 @@ class CuttableTriangle
 		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
+		void convertAndStoreCutTriangleVector(std::vector<CutTriangle> in_vector);
+		STriangle convertCutTriangleToSTriangle(CutTriangle in_cutTriangle);
+		void printCuttableTrianglePoints();
 };
 
 #endif

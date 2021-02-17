@@ -124,3 +124,20 @@ void CutTriangleGroupBuilder::handleFinalObservation()
 
 	lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
 }
+
+std::vector<CutTriangle> CutTriangleGroupBuilder::produceAndReturnCutTriangleVector()
+{
+	std::vector<CutTriangle> returnVector;
+	auto containerVectorBegin = cutTriangleContainerVector.begin();
+	auto containerVectorEnd = cutTriangleContainerVector.end();
+	for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+	{
+		auto currentCutTriangleBegin = containerVectorBegin->cutTrianglesMap.begin();
+		auto currentCutTriangleEnd = containerVectorBegin->cutTrianglesMap.end();
+		for (; currentCutTriangleBegin != currentCutTriangleEnd; currentCutTriangleBegin++)
+		{
+			returnVector.push_back(currentCutTriangleBegin->second);
+		}
+	}
+	return returnVector;
+}

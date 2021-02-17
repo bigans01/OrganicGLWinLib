@@ -11,6 +11,14 @@ class CutTriangle
 {
 	public:
 		CutTriangle() {};
+	private:
+		friend class CuttableTriangle;
+		friend class CutTriangleProducer;
+		friend class CutTriangleGroupBuilder;
+		friend class CutLineTraceObserver;
+		friend class STriangle;
+
+		//CutTriangle() {};
 		CutTriangle(CutLine in_lineOfSight, CutLine in_rearHook)
 		{
 			lines[0] = in_lineOfSight;
@@ -107,9 +115,6 @@ class CutTriangle
 			}
 		}
 
-	private:
-		CutLine lines[3];
-		glm::vec3 centroid;
 
 		void buildFinalLine()
 		{
@@ -163,6 +168,9 @@ class CutTriangle
 			}
 			*/
 		}
+
+		CutLine lines[3];
+		glm::vec3 centroid;
 };
 
 #endif

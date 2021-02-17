@@ -16,6 +16,7 @@ class CuttableTriangleContainer
 		void insertNewCuttableTriangle(STriangle in_sTriangle);
 		void rebuildCuttableTriangleMapFromContainer(STriangleOutputContainer* in_sTriangleOutputContainerRef);
 		std::map<int, CuttableTriangle> cuttableTriangleMap;
+		void printCuttableTriangles();
 };
 
 #endif

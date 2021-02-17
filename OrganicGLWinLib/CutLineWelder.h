@@ -11,13 +11,12 @@
 class CuttableTriangle;
 class CutLineWelder
 {
-	public:
+	private:
 		CutLineWelder(CuttableTriangle* in_cuttableTriangleRef, 
 					 CuttingTriangle* in_cuttingTriangleRef, 
 					 TwoDCrawlingAttempt in_crawlingAttempt, 
 					 CutLinePool in_basePool,
 			         CyclingDirection in_cuttableCyclingDirection);
-	private:
 		friend class CuttableTriangle;
 		CuttableTriangle* cuttableTriangleRef = nullptr;
 		CuttingTriangle* cuttingTriangleRef = nullptr;

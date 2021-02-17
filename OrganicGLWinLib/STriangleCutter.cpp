@@ -57,6 +57,7 @@ void STriangleCutter::runCuttingSequence()
 
 		// rebuild/analyze the cuttableTriangleMap in the CuttableTriangleContainer, once we've gone through all of the CuttableTriangles in it.
 		cuttableContainer.rebuildCuttableTriangleMapFromContainer(&outputsForCurrentCuttingTriangle);
+		//cuttableContainer.printCuttableTriangles();
 
 		// reset the CuttingTriangle that was used in this iteration.
 		cuttingTrianglesBegin->second.reset();

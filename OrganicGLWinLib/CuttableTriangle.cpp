@@ -334,7 +334,7 @@ void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cutti
 		CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPair.pairPool, currentPair.pairCyclingDirection);
 		CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
 		builder.runCutTraceObserver();
-
+		convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
 		// extract all the CutTriangles from the CutTriangleGroupBuilder.
 
 		
@@ -351,7 +351,36 @@ void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cutti
 				containerTrianglesBegin->second.printPoints();
 			}
 		}
+
+
 		
+	}
+}
+
+void CuttableTriangle::convertAndStoreCutTriangleVector(std::vector<CutTriangle> in_vector)
+{
+	auto vectorBegin = in_vector.begin();
+	auto vectorEnd = in_vector.end();
+	for (; vectorBegin != vectorEnd; vectorBegin++)
+	{
+		STriangle convertedTriangle = convertCutTriangleToSTriangle(*vectorBegin);
+		int currentOutputMapSize = outputTriangles.size();
+		outputTriangles[currentOutputMapSize] = convertedTriangle;
+	}
+}
+
+STriangle CuttableTriangle::convertCutTriangleToSTriangle(CutTriangle in_cutTriangle)
+{
+	STriangle returnSTriangle(in_cutTriangle.lines[0].pointA, in_cutTriangle.lines[1].pointA, in_cutTriangle.lines[2].pointA);
+	return returnSTriangle;
+}
+
+void CuttableTriangle::printCuttableTrianglePoints()
+{
+	for (int x = 0; x < 3; x++)
+	{
+		std::cout << "point " << x << ": ";
+		std::cout << cuttableTriangleLines[x].pointA.x << ", " << cuttableTriangleLines[x].pointA.y << ", " << cuttableTriangleLines[x].pointA.z << std::endl;
 	}
 }
 
