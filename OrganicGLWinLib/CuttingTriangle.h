@@ -6,7 +6,7 @@
 #include "STriangle.h"
 #include "CuttingTriangleLine.h"
 #include "OrganicGLWinUtils.h"
-#include "QMVec3FindCentroidFacingNormal.h"
+#include "QuatUtils.h"
 
 class CuttingTriangle
 {

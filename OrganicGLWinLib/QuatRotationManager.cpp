@@ -156,45 +156,6 @@ void QuatRotationManager::initializeAndRunForCoplanarCategorizedLineEmptyNormal(
 	rotateToOriginalPosition();
 }
 
-void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector)
-{
-	rotationpointsRefVector = in_quatpointsRefVector;
-	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);	
-	
-	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
-	if (pointBRef->y != 0.0f)
-	{
-		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
-		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
-		rotationOrder.push_back(rotateType);
-	}
-
-	// otherwise, if it's already on Y = 0, do this:
-	if (pointBRef->y == 0.0f)
-	{
-		glm::vec3 centroid = in_quatpointsRefVector->getPointByIndex(2);
-		glm::vec3* centroidRef = in_quatpointsRefVector->getPointRefByIndex(2);
-		glm::vec3 emptyNormal;
-
-		if (centroid.y < 0)	// it's going negative y
-		{
-			emptyNormal.y = -1;
-		}
-		if (centroid.y > 0)
-		{
-			emptyNormal.y = 1;
-		}
-
-		*centroidRef = emptyNormal;
-	}
-
-	executeRotationsForFindingBorderLineEmptyNormal();
-	rotateToOriginalPosition();
-
-	//std::cout << "!!! ~~~~~~ Printing points for test of finding the empty normal for a border line: " << std::endl;
-	//rotationpointsRefVector->printPoints();
-}
-
 float QuatRotationManager::initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;
@@ -552,20 +513,6 @@ void QuatRotationManager::executeRotationsForFindingCoplanarCategorizedLineEmpty
 			rotateAroundZToFindCoplanarCategorizedLineEmptyNormalAndPushIntoStack();
 		}
 	}
-}
-
-void QuatRotationManager::executeRotationsForFindingBorderLineEmptyNormal()
-{
-	auto vectorBegin = rotationOrder.begin();
-	auto vectorEnd = rotationOrder.end();
-	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
-	{
-		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
-		{
-			rotateAroundZToFindBorderLineEmptyNormalAndPushIntoStack();
-		}
-	}
-
 }
 
 void QuatRotationManager::executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ()

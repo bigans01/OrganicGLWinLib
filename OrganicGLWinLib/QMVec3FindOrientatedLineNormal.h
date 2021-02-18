@@ -1,11 +1,11 @@
 #pragma once
 
-#ifndef QMVEC3FINDCENTROIDFACINGNORMAL_H
-#define QMVEC3FINDCENTROIDFACINGNORMAL_H
+#ifndef QMVec3FindOrientatedLineNormal_H
+#define QMVec3FindOrientatedLineNormal_H
 
 #include "QMVec3Base.h"
 
-class QMVec3FindCentroidFacingNormal : public QMVec3Base
+class QMVec3FindOrientatedLineNormal : public QMVec3Base
 {
 	public:
 		glm::vec3 solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);

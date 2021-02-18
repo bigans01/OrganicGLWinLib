@@ -301,7 +301,7 @@
     <ClInclude Include="QMVec3FindCyclingDirectionPoint.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVec3Base.h" />
-    <ClInclude Include="QMVec3FindCentroidFacingNormal.h" />
+    <ClInclude Include="QMVec3FindOrientatedLineNormal.h" />
     <ClInclude Include="QMVoidBase.h" />
     <ClInclude Include="QMVoidFindCyclingDirection.h" />
     <ClInclude Include="QuatUtils.h" />
@@ -434,7 +434,7 @@
     <ClInclude Include="WeldedTriangleGroupBuilder.h" />
     <ClInclude Include="WeldedTriangleProducer.h" />
     <ClInclude Include="WeldedTriangleProductionResult.h" />
-    <ClInclude Include="WeldedTriangleSupergroup.h" />
+    <ClInclude Include="WeldedTriangleSuperGroup.h" />
     <ClInclude Include="WorldLight.h" />
     <ClInclude Include="WorldLightContainer.h" />
     <ClInclude Include="WorldLightContainerMap.h" />
@@ -520,7 +520,7 @@
     <ClCompile Include="QMVec3FindCyclingDirection.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVec3Base.cpp" />
-    <ClCompile Include="QMVec3FindCentroidFacingNormal.cpp" />
+    <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp" />
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />

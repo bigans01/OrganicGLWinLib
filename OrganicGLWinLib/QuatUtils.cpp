@@ -8,3 +8,11 @@ bool QuatUtils::checkIfPointLiesWithinTrianglePBZ(glm::vec3 in_pointToCheck, glm
 	QMBoolPointWithinTrianglePBZ pointSolver;
 	return pointSolver.solve(&points, PolyDebugLevel::NONE);
 }
+
+glm::vec3 QuatUtils::findOrientatedLineNormal(glm::vec3 in_linePointA, glm::vec3 in_linePointB, glm::vec3 in_bearingPoint)
+{
+	QuatRotationPoints points;
+	points.insertPointRefs(&in_linePointA, &in_linePointB, &in_bearingPoint);
+	QMVec3FindOrientatedLineNormal orientatedSolver;
+	return orientatedSolver.solve(&points, PolyDebugLevel::NONE);
+}

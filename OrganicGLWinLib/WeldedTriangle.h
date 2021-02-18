@@ -6,14 +6,19 @@
 #include "WeldedLine.h"
 #include "OrganicGLWinUtils.h"
 #include <glm/glm.hpp>
-#include "QuatRotationPoints.h"
-#include "QuatRotationManager.h"
 #include "QuatUtils.h"
 
 class WeldedTriangle
 {
 	public:
 		WeldedTriangle() {};
+	private:
+		friend class TracingObserver;
+		friend class WeldedTriangleProducer;
+		friend class WeldedTriangleSuperGroup;
+		friend class WeldedTriangleGroupBuilder;
+		friend class SPolyFracturer;
+
 		WeldedTriangle(WeldedLine in_lineOfSight, WeldedLine in_rearHook) 
 		{
 			lines[0] = in_lineOfSight;
@@ -22,12 +27,6 @@ class WeldedTriangle
 			buildFinalLine();
 			findCentroid();
 			determineFinalLineNormal();
-
-			//std::cout << ":::: WeldedTriangle lines are: " << std::endl;
-			for (int x = 0; x < 3; x++)
-			{
-				//std::cout << "[" << x << "]: point A: " << lines[x].pointA.x << ", " << lines[x].pointA.y << ", " << lines[x].pointA.z << " | point B: " << lines[x].pointB.x << ", " << lines[x].pointB.y << ", " << lines[x].pointB.z << std::endl;
-			}
 		}
 
 		WeldedTriangle(WeldedLine in_line0, WeldedLine in_line1, WeldedLine in_line2)
@@ -70,9 +69,7 @@ class WeldedTriangle
 			}
 		}
 
-	private:
-		WeldedLine lines[3];
-		glm::vec3 centroid;
+
 
 		void buildFinalLine()
 		{
@@ -89,41 +86,11 @@ class WeldedTriangle
 
 		void determineFinalLineNormal()
 		{
-			glm::vec3 pointACopy = lines[2].pointA;
-			glm::vec3 pointBCopy = lines[2].pointB;
-			glm::vec3 centroidPointCopy = centroid;
-
-			// first, check for point translation
-			PointTranslationCheck pointCheck;
-			pointCheck.performCheck(pointACopy);
-			if (pointCheck.requiresTranslation == 1)
-			{
-				glm::vec3 translationValue = pointCheck.getTranslationValue();
-				pointACopy += translationValue;
-				pointBCopy += translationValue;
-				centroidPointCopy += translationValue;
-			}
-
-			QuatRotationPoints rotationPoints;
-			rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &centroidPointCopy);
-
-			QuatRotationManager rotationManager;
-			rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);
-
-			lines[2].emptyNormal = centroidPointCopy;
-
-			//std::cout << ":::: Final line calculated empty normal is: " << lines[2].emptyNormal.x << ", " << lines[2].emptyNormal.y << ", " << lines[2].emptyNormal.z << std::endl;
-			
-			/*
-			std::cout << "::::::::::::: Line stats" << std::endl;
-			for (int x = 0; x < 3; x++)
-			{
-				std::cout << "[" << x << "]: point A: " << lines[x].pointA.x << ", " << lines[x].pointA.y << ", " << lines[x].pointA.z <<
-					" | point B: " << lines[x].pointB.x << ", " << lines[x].pointB.y << ", " << lines[x].pointB.z <<
-					" | centroid-facing normal: " << lines[x].emptyNormal.x << ", " << lines[x].emptyNormal.y << ", " << lines[x].emptyNormal.z << std::endl;
-			}
-			*/
+			lines[2].emptyNormal = QuatUtils::findOrientatedLineNormal(lines[2].pointA, lines[2].pointB, centroid);
 		}
+
+		WeldedLine lines[3];
+		glm::vec3 centroid;
 };
 
 #endif

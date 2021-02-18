@@ -43,7 +43,6 @@ public:
 
 	void initializeAndRunforAligningNeighboringCleaveSequencesToPosY(QuatRotationPoints* in_quatpointsRefVector);
 	void initializeAndRunForFindingBorderLine(QuatRotationPoints* in_quatpointsRefVector);
-	void initializeAndRunForFindingBorderLineEmptyNormal(QuatRotationPoints* in_quatpointsRefVector);
 
 	float initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector);
 	bool initializeAndRunForCheckingCoplanarity(QuatRotationPoints* in_quatpointsRefVector);
@@ -58,7 +57,6 @@ public:
 	void executeRotationsForPlanarSlide();
 	void executeRotationsForFindingBorderLine();
 	void executeRotationsForFindingCoplanarCategorizedLineEmptyNormal();
-	void executeRotationsForFindingBorderLineEmptyNormal();
 	void executeRotationsForFindingBorderLineEmptyNormalWithRotateToZ();
 
 	float executeRotationsForFindingObserverRadians();

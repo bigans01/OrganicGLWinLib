@@ -480,9 +480,6 @@
     <ClInclude Include="PermitType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WeldedTriangleSupergroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WeldedTriangleContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -777,9 +774,6 @@
     <ClInclude Include="QMVec3Base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QMVec3FindCentroidFacingNormal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CuttingTriangleLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -850,6 +844,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QuatUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleSuperGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVec3FindOrientatedLineNormal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1214,9 +1214,6 @@
     <ClCompile Include="QMVec3Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QMVec3FindCentroidFacingNormal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CuttingTriangleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1248,6 +1245,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QuatUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

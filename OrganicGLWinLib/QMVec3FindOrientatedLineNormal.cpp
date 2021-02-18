@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "QMVec3FindCentroidFacingNormal.h"
+#include "QMVec3FindOrientatedLineNormal.h"
 
-glm::vec3 QMVec3FindCentroidFacingNormal::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+glm::vec3 QMVec3FindOrientatedLineNormal::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
 	glm::vec3 returnNormal;
 
@@ -28,7 +28,7 @@ glm::vec3 QMVec3FindCentroidFacingNormal::solve(QuatRotationPoints* in_quatRotat
 	return centroidPointCopy;
 }
 
-void QMVec3FindCentroidFacingNormal::runExecutionsForFindingCentroidFacingNormal(QuatRotationPoints* in_quatRotationPoints)
+void QMVec3FindOrientatedLineNormal::runExecutionsForFindingCentroidFacingNormal(QuatRotationPoints* in_quatRotationPoints)
 {
 	QuatRotationPoints* rotationpointsRefVector = in_quatRotationPoints;
 	glm::vec3* pointBRef = rotationpointsRefVector->getPointRefByIndex(1);
@@ -95,7 +95,7 @@ void QMVec3FindCentroidFacingNormal::runExecutionsForFindingCentroidFacingNormal
 	rotatePointsToOriginalPosition(&rotationRecords, rotationpointsRefVector);
 }
 
-void QMVec3FindCentroidFacingNormal::rotateLineAroundZToYZero(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMVec3FindOrientatedLineNormal::rotateLineAroundZToYZero(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;
@@ -127,7 +127,7 @@ void QMVec3FindCentroidFacingNormal::rotateLineAroundZToYZero(glm::vec3* in_poin
 	//std::cout << ":::: Radian value is: " << radianValue << std::endl;
 }
 
-void QMVec3FindCentroidFacingNormal::rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMVec3FindOrientatedLineNormal::rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319;
@@ -151,7 +151,7 @@ void QMVec3FindCentroidFacingNormal::rotateLineAroundYToPosXAndPushIntoStack(glm
 	in_quatRotationRecordStackRef->push(s1record);						// push into the stack
 }
 
-void QMVec3FindCentroidFacingNormal::rotateLineToZPlane(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
+void QMVec3FindOrientatedLineNormal::rotateLineToZPlane(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
 {
 	auto vectorBegin = (*in_rotationOrderVectorRef).begin();
 	auto vectorEnd = (*in_rotationOrderVectorRef).end();
@@ -169,7 +169,7 @@ void QMVec3FindCentroidFacingNormal::rotateLineToZPlane(glm::vec3* in_pointToRot
 	}
 }
 
-float QMVec3FindCentroidFacingNormal::getRadiansForRotateToPosYViaX(glm::vec3 in_vec3)
+float QMVec3FindOrientatedLineNormal::getRadiansForRotateToPosYViaX(glm::vec3 in_vec3)
 {
 
 	// The overarching goal is to get to POS Y for this 3rd point (3rd point is the value that was passed in)

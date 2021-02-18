@@ -25,6 +25,7 @@
 #include "SPolyDOSet.h"
 #include "PointToMassRelationshipMap.h"
 #include "BorderLineLinkContainer.h"
+#include "QuatUtils.h"
 
 class SPoly
 {

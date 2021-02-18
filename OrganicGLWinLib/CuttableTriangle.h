@@ -9,7 +9,6 @@
 #include <map>
 #include "OrganicGLWinUtils.h"
 #include "QuatRotationPoints.h"
-#include "QMVec3FindCentroidFacingNormal.h"
 #include "TwoDLineSegment.h"
 #include "TwoDLineSegmentIntersectAnalyzerV2.h"
 #include "TwoDPoint.h"
@@ -23,6 +22,7 @@
 #include "PolyLogger.h"
 #include "CutTriangleGroupBuilder.h"
 #include "CutLineWelder.h"
+#include "QuatUtils.h"
 
 class CuttableTriangle
 {

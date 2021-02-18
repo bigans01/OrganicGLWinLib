@@ -3,38 +3,18 @@
 
 CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 {
-
-
 	// find the centroid
 	glm::vec3 pointA = in_cuttableTriangle.triangleLines[0].pointA;
 	glm::vec3 pointB = in_cuttableTriangle.triangleLines[1].pointA;
 	glm::vec3 pointC = in_cuttableTriangle.triangleLines[2].pointA;
 	glm::vec3 centroid = OrganicGLWinUtils::findTriangleCentroid(pointA, pointB, pointC);
 
-	//std::cout << "Point A: " << pointA.x << ", " << pointA.y << ", " << pointA.z << std::endl;
-	//std::cout << "Point B: " << pointB.x << ", " << pointB.y << ", " << pointB.z << std::endl;
-	//std::cout << "Point C: " << pointC.x << ", " << pointC.y << ", " << pointC.z << std::endl;
-
-	//std::cout << "Centroid value is: " << centroid.x << ", " << centroid.y << ", " << centroid.z << std::endl;
-
 	// find the centroid facing normal for each line
 	for (int x = 0; x < 3; x++)
-	{
-		QuatRotationPoints points;	// point 0 = pointA of line
-									// point 1 = pointB of line
-									// point 2 = centroid
-		glm::vec3 pointACopy = in_cuttableTriangle.triangleLines[x].pointA;
-		glm::vec3 pointBCopy = in_cuttableTriangle.triangleLines[x].pointB;
-		glm::vec3 centroidCopy = centroid;
-		points.insertPointRefs(&pointACopy, &pointBCopy, &centroidCopy);
-
-		QMVec3FindCentroidFacingNormal normalFinder;
-		glm::vec3 centroidFacingNormal = normalFinder.solve(&points, PolyDebugLevel::NONE);
+	{			
+		glm::vec3 centroidFacingNormal = QuatUtils::findOrientatedLineNormal(in_cuttableTriangle.triangleLines[x].pointA, in_cuttableTriangle.triangleLines[x].pointB, centroid);
 		CuttableTriangleLine newLine(in_cuttableTriangle.triangleLines[x].pointA, in_cuttableTriangle.triangleLines[x].pointB, centroidFacingNormal);
 		cuttableTriangleLines[x] = newLine;
-
-		//std::cout << "############## Centroid facing normal, for index " << x << "for this cuttableTriangle, is: " <<
-			//centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	}
 }
 

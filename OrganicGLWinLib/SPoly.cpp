@@ -191,8 +191,6 @@ glm::vec3 SPoly::findCentroid(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec
 void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 in_centroidPoint)
 {
 	// NOTE: this function requires all points to be coplanar on Z-plane.
-
-
 	glm::vec3 pointACopy = in_borderLineRef->pointA;
 	glm::vec3 pointBCopy = in_borderLineRef->pointB;
 	glm::vec3 centroidPointCopy = in_centroidPoint; // get a copy of the centroid input parameter, so that we may modify it
@@ -216,62 +214,15 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 
 	// at this point, point A and B of line and the centroid itself should be translated, with point A at 0,0,0. So get the midpoint between A and B, 
 	// which is equal to point B / 2.
-
-
 	if (debugFlag == 1)
 	{
 		std::cout << "Post-translate (1) point A: " << pointACopy.x << ", " << pointACopy.y << ", " << pointACopy.z << ", " << std::endl;
 		std::cout << "Post-translate (1) point B: " << pointBCopy.x << ", " << pointBCopy.y << ", " << pointBCopy.z << ", " << std::endl;
 		std::cout << "Centroid point (2) : " << centroidPointCopy.x << ", " << centroidPointCopy.y << ", " << centroidPointCopy.z << std::endl;
 	}
-	glm::vec3 lineMidPoint = pointBCopy;						
-	lineMidPoint /= 2;									
 
-	if (debugFlag == 1)
-	{
-		//std::cout << "#### line midpoint is " << pointBCopy.x << 
-	}
-
-	glm::vec3 translationValueForMidPoint = lineMidPoint *= -1;	// translation would be the inverse of the midpoint
-
-	//pointACopy += translationValueForMidPoint;
-	//pointBCopy += translationValueForMidPoint;
-	//centroidPointCopy += translationValueForMidPoint;
-
-	// the planar vector should now equal whatever value the centroid is at.
-
-	QuatRotationPoints rotationPoints;
-	rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &centroidPointCopy);
-
-	QuatRotationManager rotationManager;
-	rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);
-
-
-	in_borderLineRef->planarVector = centroidPointCopy;
-
-	/*
-	// now, rotate the line and the centroid point, if the line's points aren't on the same Y.
-	if (pointACopy.y != pointBCopy.y)
-	{
-		//std::cout << ">>>>> Rotating for planar vector " << std::endl;
-		//std::cout << "A.y: " << pointACopy.y << std::endl;
-		//std::cout << "B.y: " << pointBCopy.y << std::endl;
-		glm::vec3 calculatedPlanarVector = rotateForPlanarVectorCalc(&pointACopy, &pointBCopy, &centroidPointCopy);
-		in_borderLineRef->planarVector = calculatedPlanarVector;
-	}
-	else if (pointACopy.y == pointBCopy.y)
-	{
-		if (in_centroidPoint.y > in_borderLineRef->pointA.y)	// planar vector is in +y
-		{
-			in_borderLineRef->planarVector.y = 1.0f;
-		}
-		else if (in_centroidPoint.y < in_borderLineRef->pointA.y)
-		{
-			in_borderLineRef->planarVector.y = -1.0f;
-		}
-	}
-	*/
-
+	// the planar vector should now equal whatever value the centroid is at
+	in_borderLineRef->planarVector = QuatUtils::findOrientatedLineNormal(pointACopy, pointBCopy, centroidPointCopy);
 
 	if (debugFlag == 1)
 	{
@@ -281,9 +232,6 @@ void SPoly::calculatePlanarVector(SPolyBorderLines* in_borderLineRef, glm::vec3 
 
 		std::cout << "!!! Final calculated planar vector is: " << in_borderLineRef->planarVector.x << ", " << in_borderLineRef->planarVector.y << ", " << in_borderLineRef->planarVector.z << std::endl;
 	}
-
-
-	//std::cout << std::endl;
 }
 
 glm::vec3 SPoly::rotateForPlanarVectorCalc(glm::vec3* in_pointA, glm::vec3* in_pointB, glm::vec3* in_centroid)

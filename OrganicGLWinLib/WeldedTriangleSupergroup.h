@@ -7,7 +7,7 @@
 #include "WeldedTriangleContainer.h"
 #include "QuatRotationPoints.h"
 
-class WeldedTriangleSupergroup
+class WeldedTriangleSuperGroup
 {
 	public:
 		std::map<int, WeldedTriangleContainer> triangleContainerMap;
