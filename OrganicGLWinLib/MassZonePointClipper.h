@@ -21,6 +21,7 @@
 #include "FusionCandidate.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "QuatUtils.h"
 
 class MassZonePointClipper
 {

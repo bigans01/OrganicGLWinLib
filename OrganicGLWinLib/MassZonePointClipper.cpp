@@ -301,10 +301,7 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 
 bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, STriangle in_sTriangleCopy)
 {
-	bool isWithinPBZ = false;
-
 	glm::vec3 pointToCheckCopy = in_pointToCheck;
-
 	STriangle sTriangleCopy = in_sTriangleCopy;
 	for (int x = 0; x < 3; x++)
 	{
@@ -313,30 +310,5 @@ bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, ST
 			return true;
 		}
 	}
-	
-
-	QuatRotationPoints points;
-	points.pointsRefVector.push_back(&pointToCheckCopy);
-	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[0].pointA);
-	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[1].pointA);
-	points.pointsRefVector.push_back(&sTriangleCopy.triangleLines[2].pointA);
-	QMBoolPointWithinTrianglePBZ pointSolver;
-	isWithinPBZ = pointSolver.solve(&points, PolyDebugLevel::NONE);
-
-	/*
-	if (isWithinPBZ == true)
-	{
-		std::cout << "!!! Point " << in_pointToCheck.x << ", " << in_pointToCheck.y << ", " << in_pointToCheck.z << " is within PBZ; " << std::endl;
-		std::cout << "Triangle PBZ points are: " << std::endl;
-		for (int x = 0; x < 3; x++)
-		{
-			std::cout << x << ": " << in_sTriangleCopy.triangleLines[x].pointA.x << ", " << in_sTriangleCopy.triangleLines[x].pointA.y << ", " << in_sTriangleCopy.triangleLines[x].pointA.z << std::endl;
-		}
-		std::cout <<  "Enter number to continue..." << std::endl;
-		int someVal = 3;
-		std::cin >> someVal;
-	}
-	*/
-
-	return isWithinPBZ;
+	return QuatUtils::checkIfPointLiesWithinTrianglePBZ(pointToCheckCopy, sTriangleCopy.triangleLines[0].pointA, sTriangleCopy.triangleLines[1].pointA, sTriangleCopy.triangleLines[2].pointA);
 }

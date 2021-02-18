@@ -66,9 +66,7 @@ bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPoin
 		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>>>>: centroid Copy, post translate: ", centroidPointCopy.x, ", ", centroidPointCopy.y, ", ", centroidPointCopy.z, "\n");
 
 		QuatRotationPoints rotationPoints;
-		rotationPoints.pointsRefVector.push_back(&pointACopy);
-		rotationPoints.pointsRefVector.push_back(&pointBCopy);
-		rotationPoints.pointsRefVector.push_back(&centroidPointCopy);
+		rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &centroidPointCopy);
 		runExecutionsForFindingCentroidFacingNormal(&rotationPoints);
 
 
@@ -106,11 +104,8 @@ bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPoin
 		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) pointBCopy value is: ", pointBCopy.x, ", ", pointBCopy.y, ", ", pointBCopy.z, "\n");
 		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) pointToCheck value is: ", pointToCheck.x, ", ", pointToCheck.y, ", ", pointToCheck.z, "\n");
 		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) centroidFacingNormal value is: ", centroidFacingNormal.x, ", ", centroidFacingNormal.y, ", ", centroidFacingNormal.z, "\n");
-
-		rotationPoints.pointsRefVector.push_back(&pointACopy);
-		rotationPoints.pointsRefVector.push_back(&pointBCopy);
-		rotationPoints.pointsRefVector.push_back(&pointToCheck);
-		rotationPoints.pointsRefVector.push_back(&centroidFacingNormal);		// fetched by rotationManager, to check for flipping on Z-axis
+	
+		rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &pointToCheck, &centroidFacingNormal); // centroidFacingNormal is fetched by rotationManager, to check for flipping on Z-axis
 		planeArrayCheckResult[x] = runTriangleLinePlanarityTestForPoint(&rotationPoints);
 
 	}

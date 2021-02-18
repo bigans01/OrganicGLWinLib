@@ -55,19 +55,6 @@ void SPolyFracturer::checkForCleaveIntersections()
 	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef, fracturerLoggerDebugLevel);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
 	quatPoints.clearPoints();															// clear out the quat points, so that we may insert the below.
 
-	/*
-	auto weldedTrianglesBegin = intersectFinder.weldedTriangles.begin();
-	auto weldedTrianglesEnd = intersectFinder.weldedTriangles.end();
-	for (; weldedTrianglesBegin != weldedTrianglesEnd; weldedTrianglesBegin++)
-	{
-		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(0)->pointA);
-		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(1)->pointA);
-		quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(2)->pointA);
-
-
-	}
-	*/
-
 	intersectFinder.triangleSupergroup.loadTrianglesIntoQuatRotationPoints(&quatPoints);
 
 	// remember, work in reverse order: quaternions get reverse-applied, then reverse any translations.
@@ -236,9 +223,7 @@ void SPolyFracturer::populatePointsForQuaternions()
 		std::cout << "Populate points for quaternion rotation(s)..." << std::endl;
 	}
 	// insert the primal points -- these should be inserted first
-	quatPoints.pointsRefVector.push_back(&polyRef->primePoint0);
-	quatPoints.pointsRefVector.push_back(&polyRef->primePoint1);
-	quatPoints.pointsRefVector.push_back(&polyRef->primePoint2);
+	quatPoints.insertPointRefs(&polyRef->primePoint0, &polyRef->primePoint1, &polyRef->primePoint2);
 
 
 	// insert the cleave map points, and their normals
@@ -250,9 +235,8 @@ void SPolyFracturer::populatePointsForQuaternions()
 		auto currentLinesEnd = cleaveMapBegin->second.cleavingLines.end();
 		for (currentLinesBegin; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
 		{
-			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
-			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
-			quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
+			// insert references to point A, point B, and the empty normal
+			quatPoints.insertPointRefs(&currentLinesBegin->second.line.pointA, &currentLinesBegin->second.line.pointB, &currentLinesBegin->second.emptyNormal);
 		}
 	}
 
@@ -260,9 +244,7 @@ void SPolyFracturer::populatePointsForQuaternions()
 	int totalBorderLines = polyRef->numberOfBorderLines;
 	for (int x = 0; x < totalBorderLines; x++)
 	{
-		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointA);	// push back point A
-		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointB);	// ""
-		quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].planarVector);
+		quatPoints.insertPointRefs(&polyRef->borderLines[x].pointA, &polyRef->borderLines[x].pointB, &polyRef->borderLines[x].planarVector);
 	}
 }
 
@@ -299,9 +281,6 @@ void SPolyFracturer::printPointMetaData()
 				pointsStart++;
 				std::cout << "--Empty normal: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
 				pointsStart++;
-				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointA);	// push a refernce to point A into the vector
-				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.line.pointB);	// push a refernce to point A into the vector
-				//quatPoints.pointsRefVector.push_back(&currentLinesBegin->second.emptyNormal);	// push a reference to the empty normal vector into the vector
 			}
 		}
 
@@ -311,9 +290,6 @@ void SPolyFracturer::printPointMetaData()
 		for (int x = 0; x < totalBorderLines; x++)
 		{
 			std::cout << "---Border line at " << x << " --- " << std::endl;
-			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointA);	// push back point A
-			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].pointB);	// ""
-			//quatPoints.pointsRefVector.push_back(&polyRef->borderLines[x].planarVector);
 			std::cout << "--Point A: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;
 			pointsStart++;
 			std::cout << "--Point B: " << (*pointsStart)->x << ", " << (*pointsStart)->y << ", " << (*pointsStart)->z << std::endl;

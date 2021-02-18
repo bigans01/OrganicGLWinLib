@@ -20,14 +20,11 @@ glm::vec3 QMVec3FindCentroidFacingNormal::solve(QuatRotationPoints* in_quatRotat
 		centroidPointCopy += translationValue;
 	}
 
-	QuatRotationPoints rotationPoints;
-	rotationPoints.pointsRefVector.push_back(&pointACopy);
-	rotationPoints.pointsRefVector.push_back(&pointBCopy);
-	rotationPoints.pointsRefVector.push_back(&centroidPointCopy);		// the centroid value gets replaced with the centroid-facing normal, when
-																		// runExecutionsForFindingCentroidFacingNormal() is called.
+	QuatRotationPoints rotationPoints;	
+	// NOTE: the centroid value gets replaced with the centroid-facing normal, when
+	// runExecutionsForFindingCentroidFacingNormal() is called.
+	rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &centroidPointCopy);
 	runExecutionsForFindingCentroidFacingNormal(&rotationPoints);
-
-
 	return centroidPointCopy;
 }
 

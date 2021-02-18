@@ -58,11 +58,7 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 
 
 	// push back the copied values into the quat points
-	quatPoints.pointsRefVector.push_back(&point0Copy);
-	quatPoints.pointsRefVector.push_back(&point1Copy);
-	quatPoints.pointsRefVector.push_back(&point2Copy);
-	quatPoints.pointsRefVector.push_back(&triangleCentroidCopy);
-	quatPoints.pointsRefVector.push_back(&containerCenterCopy);
+	quatPoints.insertPointRefs(&point0Copy, &point1Copy, &point2Copy, &triangleCentroidCopy, &containerCenterCopy);
 
 	// find the planar sliding vector
 	glm::vec3 tempVec = findPlanarSlidingVector(triangleNormalCopy, blueprintKey_x, blueprintKey_y, blueprintKey_z);
@@ -74,20 +70,14 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 
 	// clear out the quat points; load them with the original points of the triangle
 	quatPoints.clearPoints();
-	quatPoints.pointsRefVector.push_back(&point0);
-	quatPoints.pointsRefVector.push_back(&point1);
-	quatPoints.pointsRefVector.push_back(&point2);
+	quatPoints.insertPointRefs(&point0, &point1, &point2);
 
 	// apply the planar sliding vector
 	applyPlanarSlidingVector();
 
 	// add the container's center as the next point
 	containerCenterCopy = containerCenter;
-	quatPoints.pointsRefVector.push_back(&containerCenterCopy);
-
-	// add the normal to the quat points, after copying the original value again
-	//triangleNormalCopy = triangleNormal;
-	//quatPoints.pointsRefVector.push_back(&triangleNormalCopy);
+	quatPoints.insertPointRefs(&containerCenterCopy);
 
 	// move the plane that slid so that Z is 0.
 	alignToZPlane();
@@ -150,8 +140,7 @@ glm::vec3 TileCoordinateProducer::findPlanarSlidingVector(glm::vec3 in_triangleN
 	// [4] center point of the container that the triangle is in
 	// [5] normal of the triangle (not translated)
 	// [6] the resulting sliding vector that is calculated later
-	quatPoints.pointsRefVector.push_back(&triangleNormalCopy);
-	quatPoints.pointsRefVector.push_back(&slidingVector);
+	quatPoints.insertPointRefs(&triangleNormalCopy, &slidingVector);
 
 	glm::vec3 centroidPrint = quatPoints.getPointByIndex(3);
 	//std::cout << "#### Centroid point after translation is now at: " << centroidPrint.x << ", " << centroidPrint.y << ", " << centroidPrint.z << std::endl;
@@ -223,7 +212,7 @@ void TileCoordinateProducer::alignToZPlane()
 	// [2] point 2 of triangle
 	// [3] center of the container
 	// [4] normal of the triangle (not translated)
-	quatPoints.pointsRefVector.push_back(&triangleNormalCopy);
+	quatPoints.insertPointRefs(&triangleNormalCopy);
 	rotationManager.initializeAndRunForPlanarAlignmentToZ(&quatPoints);
 }
 

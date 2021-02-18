@@ -14,11 +14,7 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 	//std::cout << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
 	//std::cout << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
 
-	quatPoints.pointsRefVector.push_back(&point0Copy);
-	quatPoints.pointsRefVector.push_back(&point1Copy);
-	quatPoints.pointsRefVector.push_back(&point2Copy);
-	quatPoints.pointsRefVector.push_back(&mrp);			// push the mrp into the vector
-	quatPoints.pointsRefVector.push_back(&calculatedNormal);
+	quatPoints.insertPointRefs(&point0Copy, &point1Copy, &point2Copy, &mrp, &calculatedNormal);
 
 	// check for any translation
 	pointTranslator.performCheck(quatPoints.getFirstPoint());

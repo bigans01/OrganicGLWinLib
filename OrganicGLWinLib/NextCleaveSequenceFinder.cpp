@@ -174,7 +174,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	auto distanceToPointMapEnd = distanceToPointMap.end();
 	for (; distanceToPointMapBegin != distanceToPointMapEnd; distanceToPointMapBegin++)
 	{
-		quatPoints.pointsRefVector.push_back(&distanceToPointMapBegin->second.point);
+		quatPoints.insertPointRefs(&distanceToPointMapBegin->second.point);
 	}
 
 	// next, determine which point of the border line to rotate to, based on the CyclingDirection
@@ -189,7 +189,7 @@ void NextCleaveSequenceFinder::findAndSortNeighboringCleaveSequences()
 	}
 
 	// push the value we just determined into the quat points. This should always be the last value in the vector.
-	quatPoints.pointsRefVector.push_back(&selectedPointOfBorderLine);
+	quatPoints.insertPointRefs(&selectedPointOfBorderLine);
 
 	glm::vec3 rotationTargetPoint = quatPoints.getLastPoint();
 	//std::cout << ">>> Point to rotate to (pre translation) will be: " << rotationTargetPoint.x << ", " << rotationTargetPoint.y << ", " << rotationTargetPoint.z << std::endl;
