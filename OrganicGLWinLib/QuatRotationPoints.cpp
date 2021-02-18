@@ -2,6 +2,11 @@
 #include "OrganicGLWinUtils.h"
 #include "QuatRotationPoints.h"
 
+std::vector<glm::vec3*>::iterator QuatRotationPoints::getPointsRefVectorBeginIteratior()
+{
+	return pointsRefVector.begin();
+}
+
 void QuatRotationPoints::applyQuaternion(glm::quat in_quat)
 {
 	auto pointsStart = pointsRefVector.begin();

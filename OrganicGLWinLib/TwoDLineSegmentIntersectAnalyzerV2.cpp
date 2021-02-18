@@ -47,10 +47,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 	glm::vec3 lineAPointB = convert2DPointTo3D(twoDLineSegmentA.b);
 	glm::vec3 lineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 	glm::vec3 lineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
-	points.pointsRefVector.push_back(&lineAPointA);
-	points.pointsRefVector.push_back(&lineAPointB);
-	points.pointsRefVector.push_back(&lineBPointA);
-	points.pointsRefVector.push_back(&lineBPointB);
+	points.insertPointRefs(&lineAPointA, &lineAPointB, &lineBPointA, &lineBPointB);
 	QMBoolAreLinesColinear linearTester;
 	bool areLinesColinear = linearTester.solve(&points, PolyDebugLevel::NONE);
 	if (areLinesColinear == false)
@@ -62,11 +59,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 		glm::vec3 testLineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 		glm::vec3 testLineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
 		glm::vec3 resultingIntersection;
-		intersectionTestPoints.pointsRefVector.push_back(&testLineAPointA);
-		intersectionTestPoints.pointsRefVector.push_back(&testLineAPointB);
-		intersectionTestPoints.pointsRefVector.push_back(&testLineBPointA);
-		intersectionTestPoints.pointsRefVector.push_back(&testLineBPointB);
-		intersectionTestPoints.pointsRefVector.push_back(&resultingIntersection);
+		intersectionTestPoints.insertPointRefs(&testLineAPointA, &testLineAPointB, &testLineBPointA, &testLineBPointB, &resultingIntersection);
 		QMBoolDoLinesIntersect intersectionTester;
 		bool areLinesInteresecting = intersectionTester.solve(&intersectionTestPoints, PolyDebugLevel::NONE);
 		if (areLinesInteresecting == true)

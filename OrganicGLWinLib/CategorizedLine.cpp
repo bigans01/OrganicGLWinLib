@@ -121,9 +121,8 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		//std::cout << "!! (PARTIAL_BOUND) Border point: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
 		//std::cout << "!! (PARTIAL_BOUND) Empty normal is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
 
-		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderPoint);
-		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointB);
+		// add pointA, borderPoint, and pointB, to translate them.
+		rotationPoints.insertPointRefs(&borderLineCopy.pointA, &borderPoint, &borderLineCopy.pointB);
 
 		PointTranslationCheck pointTranslator;
 		pointTranslator.performCheck(rotationPoints.getPointByIndex(1));	// get the "borderPoint", translate to it if necessary.
@@ -133,7 +132,7 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		}
 
 		// now, add the normal at the end.
-		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+		rotationPoints.insertPointRefs(&emptyNormalCopy);
 
 		//QuatRotationManager rotationManager;
 		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
@@ -203,9 +202,8 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		//std::cout << "!! Border line point B: " << borderLineCopy.pointB.x << ", " << borderLineCopy.pointB.y << ", " << borderLineCopy.pointB.z << std::endl;
 		//std::cout << "!! Border point: " << borderPoint.x << ", " << borderPoint.y << ", " << borderPoint.z << std::endl;
 
-		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderPoint);
-		rotationPoints.pointsRefVector.push_back(&borderLineCopy.pointB);
+		// add pointA, borderPoint, and pointB, to translate them.
+		rotationPoints.insertPointRefs(&borderLineCopy.pointA, &borderPoint, &borderLineCopy.pointB);
 
 		PointTranslationCheck pointTranslator;
 		pointTranslator.performCheck(rotationPoints.getPointByIndex(1));	// get the "borderPoint", translate to it if necessary.
@@ -215,7 +213,7 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		}
 
 		// now, add the normal at the end.
-		rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+		rotationPoints.insertPointRefs(&emptyNormalCopy);
 
 		//QuatRotationManager rotationManager;
 		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
@@ -312,26 +310,14 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
 		//std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
-
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
-
+		rotationPoints.insertPointRefs(&borderLineACopy.pointA, &borderLineACopy.pointB, &borderLineBCopy.pointB);
 		pointToTranslateAgainst = borderLineACopy.pointB;
-
-		//rotationPoints.pointsRefVector.push
 	}
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
 		//std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
-
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
-
-		//borderLineBCopy.pointB
-
+		rotationPoints.insertPointRefs(&borderLineBCopy.pointA, &borderLineBCopy.pointB, &borderLineACopy.pointB);
 		pointToTranslateAgainst = borderLineBCopy.pointB;
 	}
 
@@ -346,7 +332,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 
 	// now, add the normal at the end.
-	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+	rotationPoints.insertPointRefs(&emptyNormalCopy);
 	//std::cout << ">>>> Rotation manager initialized (2)...." << std::endl;
 
 	//std::cout << ":::: Printing points: " << std::endl;

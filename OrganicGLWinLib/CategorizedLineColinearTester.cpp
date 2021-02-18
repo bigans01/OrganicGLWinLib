@@ -6,13 +6,11 @@ void CategorizedLineColinearTester::runColinearTests()
 	// load the STriangle's line's first points
 	for (int x = 0; x < 3; x++)
 	{
-		coplanarPoints.pointsRefVector.push_back(&hostSTriangle.triangleLines[x].pointA);
-		//coplanarPoints.pointsRefVector.push_back(&hostSTriangle.triangleLines[x].pointB);
+		coplanarPoints.insertPointRefs(&hostSTriangle.triangleLines[x].pointA);
 	}
 
 	// load the candidate line's points into the coplanar points
-	coplanarPoints.pointsRefVector.push_back(&candidateLine.line.pointA);
-	coplanarPoints.pointsRefVector.push_back(&candidateLine.line.pointB);
+	coplanarPoints.insertPointRefs(&candidateLine.line.pointA, &candidateLine.line.pointB);
 
 	// translate by the first point of the first line in the host STriangle
 	pointTranslator.performCheck(hostSTriangle.triangleLines[0].pointA);

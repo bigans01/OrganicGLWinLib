@@ -356,13 +356,8 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 
 				//withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
 
-				QuatRotationPoints points;	// first point = point to check, remaining 3 = points of triangle (see header file for QMBoolPointWithinTrianglePBZ)
-				points.pointsRefVector.push_back(&in_line.pointB);
-				points.pointsRefVector.push_back(&point0);
-				points.pointsRefVector.push_back(&point1);
-				points.pointsRefVector.push_back(&point2);
-				QMBoolPointWithinTrianglePBZ pointSolver;
-				withinFlag = pointSolver.solve(&points, candidateProductionLogger.getLogLevel());
+				// first point = point to check, remaining 3 = points of triangle (see header file for QMBoolPointWithinTrianglePBZ)
+				withinFlag = QuatUtils::checkIfPointLiesWithinTrianglePBZ(in_line.pointB, point0, point1, point2);
 
 				//std::cout << "||||||||| Triangle planar check; triangle points are: " << std::endl;
 				//std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;

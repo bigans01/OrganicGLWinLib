@@ -85,9 +85,7 @@ void CoplanarChecker::performCoPlanarAnalysis()
 			glm::vec3 sPolyAEmptyNormal = polyAPtr->polyEmptyNormal;
 
 			QuatRotationPoints rotationPoints;
-			rotationPoints.pointsRefVector.push_back(&comparisonOriginPointCopy);
-			rotationPoints.pointsRefVector.push_back(&currentComparedPointInTriangleB);		
-			rotationPoints.pointsRefVector.push_back(&sPolyAEmptyNormal);					// used by quat rotation manager to get the normal to X = 1, 0, 0
+			rotationPoints.insertPointRefs(&comparisonOriginPointCopy, &currentComparedPointInTriangleB, &sPolyAEmptyNormal);
 
 			QuatRotationManager rotationManager;
 			bool isComparisonCoplanar = rotationManager.initializeAndRunForCheckingCoplanarity(&rotationPoints);

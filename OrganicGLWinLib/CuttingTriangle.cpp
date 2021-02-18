@@ -18,9 +18,7 @@ CuttingTriangle::CuttingTriangle(STriangle in_sTriangle)
 		glm::vec3 pointACopy = in_sTriangle.triangleLines[x].pointA;
 		glm::vec3 pointBCopy = in_sTriangle.triangleLines[x].pointB;
 		glm::vec3 centroidCopy = centroid;
-		points.pointsRefVector.push_back(&pointACopy);
-		points.pointsRefVector.push_back(&pointBCopy);
-		points.pointsRefVector.push_back(&centroidCopy);
+		points.insertPointRefs(&pointACopy, &pointBCopy, &centroidCopy);
 
 		QMVec3FindCentroidFacingNormal normalFinder;
 		glm::vec3 centroidFacingNormal = normalFinder.solve(&points, PolyDebugLevel::NONE);

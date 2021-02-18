@@ -41,7 +41,7 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	// now that all lines are aligned to be Y = 0, and X > 0, insert a new point that is just Y = 1. 
 	glm::vec3 upwardNormal;
 	upwardNormal.y = 1.0f;
-	in_quatRotationPointsRef->pointsRefVector.push_back(&upwardNormal);
+	in_quatRotationPointsRef->insertPointRefs(&upwardNormal);
 
 	// next, rotate the normal around Z to Y zero.
 	rotateAroundZToYZero(&upwardNormal, in_quatRotationPointsRef, &rotationRecords);

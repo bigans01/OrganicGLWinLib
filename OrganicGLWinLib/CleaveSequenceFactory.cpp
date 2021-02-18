@@ -292,10 +292,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		//std::cout << "!!-> Point A is: " << nonBoundMapBegin->second.line.pointA.x << ", " << nonBoundMapBegin->second.line.pointA.y << ", " << nonBoundMapBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
-		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.emptyNormal);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&nonBoundMapBegin->second.line.pointA, &nonBoundMapBegin->second.line.pointB);
 	}
 
 	// invert partials
@@ -309,11 +306,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		//std::cout << "!!-> Point A is: " << partialsBegin->second.line.pointA.x << ", " << partialsBegin->second.line.pointA.y << ", " << partialsBegin->second.line.pointA.z << std::endl;
 		//std::cout << "!!-> Point B is: " << partialsBegin->second.line.pointB.x << ", " << partialsBegin->second.line.pointB.y << ", " << partialsBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
-		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
-		//partialsBegin->second.emptyNormal *= -1.0f;
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.emptyNormal);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&partialsBegin->second.line.pointA, &partialsBegin->second.line.pointB);
 	}
 
 	// invert slices
@@ -324,10 +317,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		//std::cout << "!! Inverting slice..." << std::endl;
 		//std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering slice refs...", "\n");
-		//slicesBegin->second.emptyNormal *= -1.0f;
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&slicesBegin->second.line.pointA, &slicesBegin->second.line.pointB);
 	}
 
 	// invert intercept_points_precise
@@ -338,10 +328,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		//std::cout << "!! Inverting intercept_points_precise..." << std::endl;
 		//std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs...", "\n");
-		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&interceptsPreciseBegin->second.line.pointA, &interceptsPreciseBegin->second.line.pointB);
 	}
 }
 
@@ -361,9 +348,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		//std::cout << "!!-> Point B is: " << nonBoundMapBegin->second.line.pointB.x << ", " << nonBoundMapBegin->second.line.pointB.y << ", " << nonBoundMapBegin->second.line.pointB.z << std::endl;
 		//std::cout << "!!-> Empty normal is: " << nonBoundMapBegin->second.emptyNormal.x << ", " << nonBoundMapBegin->second.emptyNormal.y << ", " << nonBoundMapBegin->second.emptyNormal.z << std::endl;
 		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
-		in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.emptyNormal);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointA);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&nonBoundMapBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&nonBoundMapBegin->second.emptyNormal);
 		insertionCount++;
 	}
 
@@ -380,9 +365,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		//std::cout << "!!-> Empty normal is: " << partialsBegin->second.emptyNormal.x << ", " << partialsBegin->second.emptyNormal.y << ", " << partialsBegin->second.emptyNormal.z << std::endl;
 		//nonBoundMapBegin->second.emptyNormal *= -1.0f;
 		//partialsBegin->second.emptyNormal *= -1.0f;
-		in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.emptyNormal);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointA);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&partialsBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&partialsBegin->second.emptyNormal);
 		insertionCount++;
 	}
 
@@ -395,9 +378,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		//std::cout << "(CleaveSequenceFactory) !! Gathering slice refs..." << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring A_SLICE normal references...", "\n");
 		//slicesBegin->second.emptyNormal *= -1.0f;
-		in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.emptyNormal);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointA);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&slicesBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&slicesBegin->second.emptyNormal);
 		insertionCount++;
 	}
 
@@ -410,9 +391,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		//std::cout << "(CleaveSequenceFactory) !! Gathering intercepts_point_precise refs..." << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring INTERCEPTS_POINT_PRECISE normal references...", "\n");
 		//interceptsPreciseBegin->second.emptyNormal *= -1.0f;
-		in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.emptyNormal);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointA);
-		//in_quatRotationPointsRef->pointsRefVector.push_back(&interceptsPreciseBegin->second.line.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&interceptsPreciseBegin->second.emptyNormal);
 		insertionCount++;
 	}
 
@@ -837,27 +816,15 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	{
 		//std::cout << "(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. " << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. ", "\n");
-
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
-
+		rotationPoints.insertPointRefs(&borderLineACopy.pointA, &borderLineACopy.pointB, &borderLineBCopy.pointB);
 		pointToTranslateAgainst = borderLineACopy.pointB;
-
-		//rotationPoints.pointsRefVector.push
 	}
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
 		//std::cout << "(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. " << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. ", "\n");
-
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointA);
-		rotationPoints.pointsRefVector.push_back(&borderLineBCopy.pointB);
-		rotationPoints.pointsRefVector.push_back(&borderLineACopy.pointB);
-
-		//borderLineBCopy.pointB
-
+		rotationPoints.insertPointRefs(&borderLineBCopy.pointA, &borderLineBCopy.pointB, &borderLineACopy.pointB);
 		pointToTranslateAgainst = borderLineBCopy.pointB;
 	}
 
@@ -870,7 +837,7 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 	}
 
 	// now, add the normal at the end.
-	rotationPoints.pointsRefVector.push_back(&emptyNormalCopy);
+	rotationPoints.insertPointRefs(&emptyNormalCopy);
 
 	//std::cout << ":::: Printing points: " << std::endl;
 	//rotationPoints.printPoints();

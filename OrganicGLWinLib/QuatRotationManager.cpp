@@ -831,10 +831,6 @@ void QuatRotationManager::calculateEmptyNormal()
 	*currentNormalRef = calibratedEmptyNormal;
 
 	//std::cout << "##!~~~~~ (calibrated) current normal is: " << currentNormalRef->x << ", " << currentNormalRef->y << ", " << currentNormalRef->z << std::endl;
-
-	//int someVal = 3;
-	//std::cin >> someVal;
-	//rotationpointsRefVector->pointsRefVector.push_back(currentNormal);
 }
 
 glm::vec3 QuatRotationManager::checkForEmptyNormalCorrection(glm::vec3 in_mrpCopy, glm::vec3 in_normalCopy)
@@ -1603,23 +1599,6 @@ void QuatRotationManager::rotateToOriginalPosition()
 		//rotationpointsRefVector->printPoints();
 
 		rotationRecords.pop();
-	}
-}
-
-void QuatRotationManager::eraseElementsFromEndOfPointsRefVector(int in_numberOfElementsToErase)
-{
-	//for (int x = 0; x < in_numberOfElementsToErase; x++)
-	//{
-		//auto lastElement = rotationpointsRefVector->pointsRefVector.begin();
-		//rotationpointsRefVector->pointsRefVector.erase(lastElement);
-	//}
-
-	int vectorSize = rotationpointsRefVector->pointsRefVector.size();
-	int lastElement = vectorSize - 1;
-	for (int x = 0; x < in_numberOfElementsToErase; x++)
-	{
-		rotationpointsRefVector->pointsRefVector.erase(rotationpointsRefVector->pointsRefVector.begin() + lastElement);
-		lastElement--;
 	}
 }
 

@@ -53,7 +53,6 @@ class WeldedTriangleSupergroup
 
 		void loadTrianglesIntoQuatRotationPoints(QuatRotationPoints* in_quatRotationPointsRef)
 		{
-			//quatPoints.pointsRefVector.push_back(&(*weldedTrianglesBegin).fetchTriangleLineRef(0)->pointA);
 			auto triangleContainerMapBegin = triangleContainerMap.begin();
 			auto triangleContainerMapEnd = triangleContainerMap.end();
 			for (; triangleContainerMapBegin != triangleContainerMapEnd; triangleContainerMapBegin++)
@@ -62,9 +61,9 @@ class WeldedTriangleSupergroup
 				auto trianglesEnd = triangleContainerMapBegin->second.triangleMap.end();
 				for (; trianglesBegin != trianglesEnd; trianglesBegin++)
 				{
-					in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.fetchTriangleLineRef(0)->pointA);
-					in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.fetchTriangleLineRef(1)->pointA);
-					in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.fetchTriangleLineRef(2)->pointA);
+					in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.fetchTriangleLineRef(0)->pointA,
+															&trianglesBegin->second.fetchTriangleLineRef(1)->pointA,
+															&trianglesBegin->second.fetchTriangleLineRef(2)->pointA);
 				}
 			}
 			//in_quatRotationPointsRef->points

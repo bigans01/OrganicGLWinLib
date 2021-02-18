@@ -682,8 +682,7 @@ void SPoly::loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_qua
 	{
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointA);
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
 		}
 	}
 
@@ -692,8 +691,7 @@ void SPoly::loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_qua
 	auto borderLinesEnd = borderLines.end();
 	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
 	{
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&borderLinesBegin->second.pointA, &borderLinesBegin->second.pointB);
 	}
 
 	// load CleaveSequence data
@@ -703,9 +701,7 @@ void SPoly::loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_qua
 void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 {
 	// load the primals
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint0);
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint1);
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint2);
+	in_quatRotationPointsRef->insertPointRefs(&primePoint0, &primePoint1, &primePoint2);
 
 	// load STriangles.
 	auto trianglesBegin = triangles.begin();
@@ -715,8 +711,7 @@ void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_
 		// load the lines of each STriangle
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointA);
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
 		}
 	}
 
@@ -725,17 +720,14 @@ void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_
 	auto borderLinesEnd = borderLines.end();
 	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
 	{
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&borderLinesBegin->second.pointA, &borderLinesBegin->second.pointB);
 	}
 }
 
 void SPoly::loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 {
 	// load the primals
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint0);
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint1);
-	in_quatRotationPointsRef->pointsRefVector.push_back(&primePoint2);
+	in_quatRotationPointsRef->insertPointRefs(&primePoint0, &primePoint1, &primePoint2);
 
 	// load STriangles.
 	auto trianglesBegin = triangles.begin();
@@ -745,8 +737,7 @@ void SPoly::loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 		// load the lines of each STriangle
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointA);
-			in_quatRotationPointsRef->pointsRefVector.push_back(&trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
 		}
 	}
 
@@ -755,8 +746,7 @@ void SPoly::loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 	auto borderLinesEnd = borderLines.end();
 	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
 	{
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointA);
-		in_quatRotationPointsRef->pointsRefVector.push_back(&borderLinesBegin->second.pointB);
+		in_quatRotationPointsRef->insertPointRefs(&borderLinesBegin->second.pointA, &borderLinesBegin->second.pointB);
 	}
 
 	// load CleaveSequence data

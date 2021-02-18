@@ -252,7 +252,8 @@ void SPolyFracturer::printPointMetaData()
 {
 	if (polyRef->debugFlag == 1)
 	{
-		std::vector<glm::vec3*>::iterator pointsStart = quatPoints.pointsRefVector.begin();
+		auto pointsStart = quatPoints.getPointsRefVectorBeginIteratior();
+
 		// print the points
 		std::cout << (*pointsStart)->x << std::endl;
 		std::cout << "--------------------------------------------- Printing point meta-data for Fracturing process -----------------------------------------------------" << std::endl;
