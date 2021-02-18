@@ -8,6 +8,8 @@
 #include "SPolyMorphTracker.h"
 #include "SPolyFracturer.h"
 #include "STriangleCutter.h"
+#include "CuttingTriangleManager.h"
+#include "STriangleCutter.h"
 
 class CoplanarMassCreator : public CoplanarMassManipulator
 {

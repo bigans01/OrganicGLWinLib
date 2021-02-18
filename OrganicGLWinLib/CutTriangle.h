@@ -104,9 +104,7 @@ class CutTriangle
 			}
 
 			QuatRotationPoints rotationPoints;
-			rotationPoints.pointsRefVector.push_back(&pointACopy);
-			rotationPoints.pointsRefVector.push_back(&pointBCopy);
-			rotationPoints.pointsRefVector.push_back(&centroidPointCopy);
+			rotationPoints.insertPointRefs(&pointACopy, &pointBCopy, &centroidPointCopy);
 
 			QuatRotationManager rotationManager;
 			rotationManager.initializeAndRunForFindingBorderLineEmptyNormal(&rotationPoints);

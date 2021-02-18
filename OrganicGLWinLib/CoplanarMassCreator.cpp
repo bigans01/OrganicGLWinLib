@@ -40,6 +40,9 @@ void CoplanarMassCreator::runMassManipulation()
 	int someVal = 3;
 	std::cin >> someVal;
 
+	// ########################################### NEW METHOD, to replace below:
+	CuttingTriangleManager cuttingManager;
+	STriangleCutter cutter;
 
 	// ########################################### METHOD 1 
 

@@ -14,6 +14,19 @@ class OrganicGLWinUtils;
 class QuatRotationPoints
 {
 public:
+	template<typename FirstOption, typename ...RemainingOptions> void insertPointRefs(FirstOption && firstOption, RemainingOptions && ...optionParams)
+	{
+		if constexpr
+		(
+			std::is_same<FirstOption, glm::vec3*>::value
+		)
+		{
+			pointsRefVector.push_back(std::forward<FirstOption>(firstOption));
+			insertPointRefs(std::forward<RemainingOptions>(optionParams)...);
+		}
+	}
+	void insertPointRefs() {};
+
 	std::vector<glm::vec3*> pointsRefVector;	// contains the points to cycle through
 	void applyQuaternion(glm::quat in_quat);
 	void applyTranslation(glm::vec3 in_translation);

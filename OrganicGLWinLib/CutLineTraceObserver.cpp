@@ -165,11 +165,9 @@ void CutLineTraceObserver::determineObservationRadians()
 	CutLine lineOfSightCopy = lineOfSight;
 	CutLine observationEndLineCopy = observationEndLine;
 
-	QuatRotationPoints points;
-	points.pointsRefVector.push_back(&observationEndLineCopy.pointA);
-	points.pointsRefVector.push_back(&observationEndLineCopy.pointB);
-	points.pointsRefVector.push_back(&lineOfSightCopy.pointA);
-	points.pointsRefVector.push_back(&lineOfSightCopy.pointB);				// this will be  pointBRef in the quatRotationManager (index 3)
+	// lineOfSightCopy will be  pointBRef in the quatRotationManager (index 3)
+	QuatRotationPoints points;			
+	points.insertPointRefs(&observationEndLineCopy.pointA, &observationEndLineCopy.pointB, &lineOfSightCopy.pointA, &lineOfSightCopy.pointB);
 
 	// adjust the x and y to 0, if need be.
 	// do a translation check.
@@ -183,8 +181,8 @@ void CutLineTraceObserver::determineObservationRadians()
 	}
 
 	// last two elements of vector will be the empty normals; but should only be inserted post translation.
-	points.pointsRefVector.push_back(&observationEndLineCopy.emptyNormal);
-	points.pointsRefVector.push_back(&lineOfSightCopy.emptyNormal);			// index 5, which should check in the QuatRotationManager for flipping on the Y axis
+	// index 5 = should check in the QuatRotationManager for flipping on the Y axis
+	points.insertPointRefs(&observationEndLineCopy.emptyNormal, &lineOfSightCopy.emptyNormal);
 
 	QuatRotationManager rotationManager;
 	float calculatedRadians = rotationManager.initializeAndRunForFindingObserverRadians(&points);

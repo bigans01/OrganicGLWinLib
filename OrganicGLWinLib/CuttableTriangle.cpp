@@ -26,9 +26,7 @@ CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 		glm::vec3 pointACopy = in_cuttableTriangle.triangleLines[x].pointA;
 		glm::vec3 pointBCopy = in_cuttableTriangle.triangleLines[x].pointB;
 		glm::vec3 centroidCopy = centroid;
-		points.pointsRefVector.push_back(&pointACopy);
-		points.pointsRefVector.push_back(&pointBCopy);
-		points.pointsRefVector.push_back(&centroidCopy);
+		points.insertPointRefs(&pointACopy, &pointBCopy, &centroidCopy);
 
 		QMVec3FindCentroidFacingNormal normalFinder;
 		glm::vec3 centroidFacingNormal = normalFinder.solve(&points, PolyDebugLevel::NONE);
@@ -95,11 +93,11 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 solveForCuttablecuttableLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 solveForCuttablecuttableLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointA);
-					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointB);
-					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointA);
-					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointB);
-					solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineInwardNormal);
+					solveForCuttableLinePoints.insertPointRefs(&solveForCuttablecuttingLinePointA,
+															&solveForCuttablecuttingLinePointB,
+															&solveForCuttablecuttableLinePointA,
+															&solveForCuttablecuttableLinePointB,
+															&solveForCuttableLineInwardNormal);
 					QMVec3FindCyclingDirectionPoint cuttableLineSolver;
 					glm::vec3 determinedNonIntersectingPoint = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
 
@@ -155,12 +153,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
 					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
-					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
-					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
-					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
-
-
+					tJunctionPoints.insertPointRefs(&splitLinePointA,
+													&splitLinePointB,
+													&pointToCheck,
+													&splitLineNormal);
 
 					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
 					// If true, we can insert a record.
@@ -205,10 +201,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
 					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.pointsRefVector.push_back(&splitLinePointA);
-					tJunctionPoints.pointsRefVector.push_back(&splitLinePointB);
-					tJunctionPoints.pointsRefVector.push_back(&pointToCheck);
-					tJunctionPoints.pointsRefVector.push_back(&splitLineNormal);
+					tJunctionPoints.insertPointRefs(&splitLinePointA,
+													&splitLinePointB,
+													&pointToCheck,
+													&splitLineNormal);
 
 					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
 					// If true, we can insert a record.
@@ -417,11 +413,11 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	glm::vec3 solveForCuttablecuttableLinePointA = cuttingLinePointA;
 	glm::vec3 solveForCuttablecuttableLinePointB = cuttingLinePointB;
 	glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal;
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointA);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttingLinePointB);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointA);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttablecuttableLinePointB);
-	solveForCuttableLinePoints.pointsRefVector.push_back(&solveForCuttableLineInwardNormal);
+	solveForCuttableLinePoints.insertPointRefs(&solveForCuttablecuttingLinePointA,
+												&solveForCuttablecuttingLinePointB,
+												&solveForCuttablecuttableLinePointA,
+												&solveForCuttablecuttableLinePointB,
+												&solveForCuttableLineInwardNormal);
 	QMVec3FindCyclingDirectionPoint cuttableLineSolver;
 	glm::vec3 determinedCuttingPointToUse = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
 	std::cout << "::> Cuttable line normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x 
@@ -438,11 +434,11 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	glm::vec3 solveForCuttingcuttableLinePointA = cuttableLinePointA;
 	glm::vec3 solveForCuttingcuttableLinePointB = cuttableLinePointB;
 	glm::vec3 solveForCuttingOutwardNormal = cuttingLineNormal;
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointB);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointB);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingOutwardNormal);
+	solveForCuttingLinePoints.insertPointRefs(&solveForCuttingcuttingLinePointA,
+												&solveForCuttingcuttingLinePointB,
+												&solveForCuttingcuttableLinePointA,
+												&solveForCuttingcuttableLinePointB,
+												&solveForCuttingOutwardNormal);
 	QMVec3FindCyclingDirectionPoint cuttingLineSolver;
 	glm::vec3 cuttablePointToUse = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
@@ -531,11 +527,11 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	glm::vec3 solveForCuttingcuttableLinePointA = cuttableLinePointA;
 	glm::vec3 solveForCuttingcuttableLinePointB = cuttableLinePointB;
 	glm::vec3 solveForCuttingOutwardNormal = cuttingLineNormal;
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttingLinePointB);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointA);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingcuttableLinePointB);
-	solveForCuttingLinePoints.pointsRefVector.push_back(&solveForCuttingOutwardNormal);
+	solveForCuttingLinePoints.insertPointRefs(&solveForCuttingcuttingLinePointA,
+												&solveForCuttingcuttingLinePointB,
+												&solveForCuttingcuttableLinePointA,
+												&solveForCuttingcuttableLinePointB,
+												&solveForCuttingOutwardNormal);
 	QMVec3FindCyclingDirectionPoint cuttingLineSolver;
 	glm::vec3 cuttablePointToUse = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;

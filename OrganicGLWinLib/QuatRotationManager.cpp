@@ -195,69 +195,6 @@ void QuatRotationManager::initializeAndRunForFindingBorderLineEmptyNormal(QuatRo
 	//rotationpointsRefVector->printPoints();
 }
 
-bool QuatRotationManager::initializeAndRunForCheckingIfPointIswithinPlane(QuatRotationPoints* in_quatpointsRefVector)
-{
-	rotationpointsRefVector = in_quatpointsRefVector;
-	pointBRef = in_quatpointsRefVector->getPointRefByIndex(1);
-
-	// we should only need to check if the y is equal to 0; this function assumes that the SPoly has been aligned to the Z-plane.
-	if (pointBRef->y != 0.0f)
-	{
-		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
-		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
-		rotationOrder.push_back(rotateType);
-	}
-
-	// if the centroid-facing normal is on -y, flip it on the X axis
-	return executeRotationsAndGetResultForCheckingIfPointIswithinPlane();
-}
-
-bool QuatRotationManager::executeRotationsAndGetResultForCheckingIfPointIswithinPlane()
-{
-	bool isWithinPlane = false;
-	auto vectorBegin = rotationOrder.begin();
-	auto vectorEnd = rotationOrder.end();
-	for (vectorBegin; vectorBegin != vectorEnd; vectorBegin++)
-	{
-		if (*vectorBegin == QuatRotationType::ROTATE_AROUND_Z)
-		{
-			rotateAroundZToYZero();
-		}
-	}
-
-	// check if the normal of the lineOfSightCopy is negative y; flip it on X axis if so.
-	if (rotationpointsRefVector->getPointByIndex(3).y < 0)
-	{
-		//std::cout << "!!! Note: Flip on x axis required... " << std::endl;
-		flipOnXAxis();
-	}
-
-	//glm::vec3 comparedPointCurrentPosition = rotationpointsRefVector->getPointByIndex(2);
-	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
-	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(rotationpointsRefVector->getPointByIndex(2));		
-	glm::vec3 centroidFacingNormal = rotationpointsRefVector->getPointByIndex(3);
-	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
-	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
-	if
-	(
-		//(rotationpointsRefVector->getPointByIndex(2).y >= 0)
-		(comparedPointCurrentPosition.y >= 0)
-		&&
-		(rotationpointsRefVector->getPointByIndex(3).y > 0)
-	)
-	{
-		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
-		isWithinPlane = true;
-	}
-	else
-	{
-		//std::cout << "!!!! Point is not within triangle! " << std::endl;
-	}
-	return isWithinPlane;
-}
-
-
-
 float QuatRotationManager::initializeAndRunForFindingObserverRadians(QuatRotationPoints* in_quatpointsRefVector)
 {
 	rotationpointsRefVector = in_quatpointsRefVector;

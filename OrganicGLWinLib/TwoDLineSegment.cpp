@@ -427,9 +427,7 @@ glm::vec3 TwoDLineSegment::determineCoplanarCategorizedLineEmptyNormal(glm::vec3
 	QuatRotationManager rotationManager;
 	PointTranslationCheck pointTranslator;
 
-	quatPoints.pointsRefVector.push_back(&segmentACopy);
-	quatPoints.pointsRefVector.push_back(&segmentBCopy);
-	quatPoints.pointsRefVector.push_back(&centroidCopy);
+	quatPoints.insertPointRefs(&segmentACopy, &segmentBCopy, &centroidCopy);
 
 	pointTranslator.performCheck(quatPoints.getFirstPoint());
 	if (pointTranslator.requiresTranslation == 1)
@@ -438,7 +436,7 @@ glm::vec3 TwoDLineSegment::determineCoplanarCategorizedLineEmptyNormal(glm::vec3
 	}
 
 	// after translation, insert a reference to the calculatedEmptyNormal
-	quatPoints.pointsRefVector.push_back(&calculatedEmptyNormal);
+	quatPoints.insertPointRefs(&calculatedEmptyNormal);
 
 	rotationManager.initializeAndRunForCoplanarCategorizedLineEmptyNormal(&quatPoints);
 

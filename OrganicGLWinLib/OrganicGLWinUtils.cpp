@@ -1135,9 +1135,7 @@ glm::vec3 OrganicGLWinUtils::findTriangleNormal(glm::vec3 in_point0, glm::vec3 i
 	glm::vec3 point1Copy = in_point1;
 	glm::vec3 point2Copy = in_point2;
 
-	quatPoints.pointsRefVector.push_back(&point0Copy);
-	quatPoints.pointsRefVector.push_back(&point1Copy);
-	quatPoints.pointsRefVector.push_back(&point2Copy);
+	quatPoints.insertPointRefs(&point0Copy, &point1Copy, &point2Copy);
 
 	// check for any translation
 	pointTranslator.performCheck(quatPoints.getFirstPoint());
