@@ -66,20 +66,17 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
 					cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, convertedPoint);
 
-					// find the point which wasn't intersected, store it.
-					QuatRotationPoints solveForCuttableLinePoints;
-					glm::vec3 solveForCuttablecuttingLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
-					glm::vec3 solveForCuttablecuttingLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
-					glm::vec3 solveForCuttablecuttableLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
-					glm::vec3 solveForCuttablecuttableLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
-					glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					solveForCuttableLinePoints.insertPointRefs(&solveForCuttablecuttingLinePointA,
-															&solveForCuttablecuttingLinePointB,
-															&solveForCuttablecuttableLinePointA,
-															&solveForCuttablecuttableLinePointB,
-															&solveForCuttableLineInwardNormal);
-					QMVec3FindCyclingDirectionPoint cuttableLineSolver;
-					glm::vec3 determinedNonIntersectingPoint = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
+					// find the point which wasn't intersected, store it; this will be used to help determine the cycling direction, as well as determining
+					// point B for the line to insert.
+					glm::vec3 determinedNonIntersectingPoint = QuatUtils::findPointForDeterminingCyclingDirection(
+																			cuttableTriangleLines[currentCuttableTriangleLineID].pointA,
+																			cuttableTriangleLines[currentCuttableTriangleLineID].pointB,
+																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
+																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB,
+																			cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal
+																		);
+
+
 
 					// store the non intersecting point for this cutting line.
 					cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, determinedNonIntersectingPoint);
@@ -386,41 +383,25 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
 	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
+	glm::vec3 determinedCuttingPointToUse = QuatUtils::findPointForDeterminingCyclingDirection(cuttableLinePointA,
+																							cuttableLinePointB,
+																							cuttingLinePointA,
+																							cuttingLinePointB,
+																							cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal
+																						);
 
-	QuatRotationPoints solveForCuttableLinePoints;
-	glm::vec3 solveForCuttablecuttingLinePointA = cuttableLinePointA;
-	glm::vec3 solveForCuttablecuttingLinePointB = cuttableLinePointB;
-	glm::vec3 solveForCuttablecuttableLinePointA = cuttingLinePointA;
-	glm::vec3 solveForCuttablecuttableLinePointB = cuttingLinePointB;
-	glm::vec3 solveForCuttableLineInwardNormal = cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal;
-	solveForCuttableLinePoints.insertPointRefs(&solveForCuttablecuttingLinePointA,
-												&solveForCuttablecuttingLinePointB,
-												&solveForCuttablecuttableLinePointA,
-												&solveForCuttablecuttableLinePointB,
-												&solveForCuttableLineInwardNormal);
-	QMVec3FindCyclingDirectionPoint cuttableLineSolver;
-	glm::vec3 determinedCuttingPointToUse = cuttableLineSolver.solve(&solveForCuttableLinePoints, PolyDebugLevel::NONE);
 	std::cout << "::> Cuttable line normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x 
 									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y 
 									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
 	std::cout << "::> Cutting point to use, determined by cuttable line: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
 
-
-
-
-	QuatRotationPoints solveForCuttingLinePoints;
-	glm::vec3 solveForCuttingcuttingLinePointA = cuttingLinePointA;
-	glm::vec3 solveForCuttingcuttingLinePointB = cuttingLinePointB;
-	glm::vec3 solveForCuttingcuttableLinePointA = cuttableLinePointA;
-	glm::vec3 solveForCuttingcuttableLinePointB = cuttableLinePointB;
-	glm::vec3 solveForCuttingOutwardNormal = cuttingLineNormal;
-	solveForCuttingLinePoints.insertPointRefs(&solveForCuttingcuttingLinePointA,
-												&solveForCuttingcuttingLinePointB,
-												&solveForCuttingcuttableLinePointA,
-												&solveForCuttingcuttableLinePointB,
-												&solveForCuttingOutwardNormal);
-	QMVec3FindCyclingDirectionPoint cuttingLineSolver;
-	glm::vec3 cuttablePointToUse = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
+	glm::vec3 cuttablePointToUse = QuatUtils::findPointForDeterminingCyclingDirection(
+																						cuttingLinePointA, 
+																						cuttingLinePointB, 
+																						cuttableLinePointA, 
+																						cuttableLinePointB, 
+																						cuttingLineNormal
+																					);
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
 	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 
@@ -501,19 +482,14 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
 
-	QuatRotationPoints solveForCuttingLinePoints;
-	glm::vec3 solveForCuttingcuttingLinePointA = cuttingLinePointA;
-	glm::vec3 solveForCuttingcuttingLinePointB = cuttingLinePointB;
-	glm::vec3 solveForCuttingcuttableLinePointA = cuttableLinePointA;
-	glm::vec3 solveForCuttingcuttableLinePointB = cuttableLinePointB;
-	glm::vec3 solveForCuttingOutwardNormal = cuttingLineNormal;
-	solveForCuttingLinePoints.insertPointRefs(&solveForCuttingcuttingLinePointA,
-												&solveForCuttingcuttingLinePointB,
-												&solveForCuttingcuttableLinePointA,
-												&solveForCuttingcuttableLinePointB,
-												&solveForCuttingOutwardNormal);
-	QMVec3FindCyclingDirectionPoint cuttingLineSolver;
-	glm::vec3 cuttablePointToUse = cuttingLineSolver.solve(&solveForCuttingLinePoints, PolyDebugLevel::NONE);
+	glm::vec3 cuttablePointToUse = QuatUtils::findPointForDeterminingCyclingDirection(
+																						cuttingLinePointA, 
+																						cuttingLinePointB, 
+																						cuttableLinePointA, 
+																						cuttableLinePointB, 
+																						cuttingLineNormal
+																					 );
+
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
 	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 

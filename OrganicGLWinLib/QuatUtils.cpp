@@ -16,3 +16,24 @@ glm::vec3 QuatUtils::findOrientatedLineNormal(glm::vec3 in_linePointA, glm::vec3
 	QMVec3FindOrientatedLineNormal orientatedSolver;
 	return orientatedSolver.solve(&points, PolyDebugLevel::NONE);
 }
+
+glm::vec3 QuatUtils::findPointForDeterminingCyclingDirection
+(
+	glm::vec3 in_lineAPointA,
+	glm::vec3 in_lineAPointB,
+	glm::vec3 in_lineBPointA,
+	glm::vec3 in_lineBPointB,
+	glm::vec3 in_lineAOrientingNormal
+)
+{
+	QuatRotationPoints points;
+	points.insertPointRefs(
+								&in_lineAPointA,
+								&in_lineAPointB,
+								&in_lineBPointA,
+								&in_lineBPointB,
+								&in_lineAOrientingNormal
+							);
+	QMVec3FindCyclingDirectionPoint cyclingPointSolver;
+	return cyclingPointSolver.solve(&points, PolyDebugLevel::NONE);
+}
