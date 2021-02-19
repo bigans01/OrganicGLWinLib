@@ -9,6 +9,10 @@
 #include "QMBoolPointWithinTrianglePBZ.h"
 #include "QMVec3FindOrientatedLineNormal.h"
 #include "QMVec3FindCyclingDirectionPoint.h"
+#include "QMBoolIsTJunctionCuttable.h"
+#include "QMBoolAreLinesColinear.h"
+#include "QMBoolDoLinesIntersect.h"
+#include <iostream>
 
 class QuatUtils
 {
@@ -22,7 +26,25 @@ class QuatUtils
 																	glm::vec3 in_lineBPointB,
 																	glm::vec3 in_lineAOrientingNormal
 																);
-			                                                     
+		static bool checkTJunctionUsability(
+												glm::vec3 in_splitLinePointA,
+												glm::vec3 in_splitLinePointB,
+												glm::vec3 in_pointToCheck,
+												glm::vec3 in_splitLineNormal
+											);
+		static bool checkIfLinesAreColinear(
+												glm::vec3 in_lineAPointA,
+												glm::vec3 in_lineAPointB,
+												glm::vec3 in_lineBPointA,
+												glm::vec3 in_lineBPointB
+											);
+		static bool areLinesIntersecting(
+											glm::vec3* in_lineAPointA,
+											glm::vec3* in_lineAPointB,
+											glm::vec3* in_lineBPointA,
+											glm::vec3* in_lineBPointB,
+			                                glm::vec3* in_discoveredIntersectingPointStorage
+										);
 };
 
 #endif

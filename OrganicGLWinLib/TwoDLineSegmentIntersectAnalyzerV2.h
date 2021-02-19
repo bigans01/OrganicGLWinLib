@@ -9,8 +9,6 @@
 #include <iostream>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
-#include "QMBoolAreLinesColinear.h"
-#include "QMBoolDoLinesIntersect.h"
 #include "QuatRotationPoints.h"
 
 class TwoDLineSegmentIntersectAnalyzerV2
@@ -19,7 +17,6 @@ class TwoDLineSegmentIntersectAnalyzerV2
 		TwoDLineSegmentIntersectAnalyzerV2(TwoDLineSegment in_TwoDLineSegmentA, TwoDLineSegment in_TwoDLineSegmentB, PolyDebugLevel in_polyDebugLevel) :
 			twoDLineSegmentA(in_TwoDLineSegmentA),
 			twoDLineSegmentB(in_TwoDLineSegmentB),
-			//analyzerOption(in_option),
 			twoDLineSegmentIntersectV2LogLevel(in_polyDebugLevel)
 		{
 			twoDLineSegmentIntersectV2Logger.setDebugLevel(in_polyDebugLevel);

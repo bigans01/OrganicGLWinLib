@@ -37,3 +37,61 @@ glm::vec3 QuatUtils::findPointForDeterminingCyclingDirection
 	QMVec3FindCyclingDirectionPoint cyclingPointSolver;
 	return cyclingPointSolver.solve(&points, PolyDebugLevel::NONE);
 }
+
+bool QuatUtils::checkTJunctionUsability
+(
+	glm::vec3 in_splitLinePointA,
+	glm::vec3 in_splitLinePointB,
+	glm::vec3 in_pointToCheck,
+	glm::vec3 in_splitLineNormal
+)
+{
+	QuatRotationPoints points;
+	points.insertPointRefs(
+								&in_splitLinePointA,
+								&in_splitLinePointB,
+								&in_pointToCheck,
+								&in_splitLineNormal
+							);
+	QMBoolIsTJunctionCuttable tJunctionCuttableSolver;
+	return tJunctionCuttableSolver.solve(&points, PolyDebugLevel::NONE);
+}
+
+bool QuatUtils::checkIfLinesAreColinear
+(
+	glm::vec3 in_lineAPointA,
+	glm::vec3 in_lineAPointB,
+	glm::vec3 in_lineBPointA,
+	glm::vec3 in_lineBPointB
+)
+{
+	QuatRotationPoints points;
+	points.insertPointRefs(
+								&in_lineAPointA,
+								&in_lineAPointB,
+								&in_lineBPointA,
+								&in_lineBPointB
+							);
+	QMBoolAreLinesColinear areLinesColinear;
+	return areLinesColinear.solve(&points, PolyDebugLevel::NONE);
+}
+
+bool QuatUtils::areLinesIntersecting(
+	glm::vec3* in_lineAPointA,
+	glm::vec3* in_lineAPointB,
+	glm::vec3* in_lineBPointA,
+	glm::vec3* in_lineBPointB,
+	glm::vec3* in_discoveredIntersectingPointStorage
+)
+{
+	QuatRotationPoints points;
+	points.insertPointRefs(
+								in_lineAPointA,
+								in_lineAPointB,
+								in_lineBPointA,
+								in_lineBPointB,
+		                        in_discoveredIntersectingPointStorage
+							);
+	QMBoolDoLinesIntersect doLinesIntersect;
+	return doLinesIntersect.solve(&points, PolyDebugLevel::NONE);
+}

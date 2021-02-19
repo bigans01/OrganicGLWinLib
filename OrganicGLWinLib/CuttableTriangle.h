@@ -15,7 +15,6 @@
 #include <vector>
 #include "TwoDCrawlingAttempt.h"
 #include "CutLinePool.h"
-#include "QMBoolIsTJunctionCuttable.h"
 #include "CyclingDirection.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"

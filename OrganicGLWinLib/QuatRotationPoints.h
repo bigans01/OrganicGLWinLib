@@ -16,14 +16,19 @@ class QuatRotationPoints
 	public:
 		template<typename FirstOption, typename ...RemainingOptions> void insertPointRefs(FirstOption && firstOption, RemainingOptions && ...optionParams)
 		{
-			if constexpr
-			(
-				std::is_same<FirstOption, glm::vec3*>::value
-			)
-			{
+			//if constexpr
+			//(
+			//	std::is_same<FirstOption, glm::vec3*>::value
+			//)
+			//{
 				pointsRefVector.push_back(std::forward<FirstOption>(firstOption));
 				insertPointRefs(std::forward<RemainingOptions>(optionParams)...);
-			}
+			//}
+			//else
+			//{
+			//	std::cout << "!!! Warning, attempted to insert non glm::vec3* into pointsRefVector! " << std::endl;
+			//	std::cout << "!!! Type was: " << typeid(firstOption).name() << std::endl;
+			//}
 		}
 		void insertPointRefs() {};
 		std::vector<glm::vec3*>::iterator getPointsRefVectorBeginIteratior();
@@ -37,6 +42,7 @@ class QuatRotationPoints
 		void printPoints();
 		void clearPoints();
 		void roundAllPointsToHundredths();
+		int getSize();
 		glm::vec3 getFirstPoint();
 		glm::vec3 getLastPoint();
 		glm::vec3 getSecondPoint();

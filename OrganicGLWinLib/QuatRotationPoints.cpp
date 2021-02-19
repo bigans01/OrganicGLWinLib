@@ -129,6 +129,11 @@ void QuatRotationPoints::roundAllPointsToHundredths()
 	}
 }
 
+int QuatRotationPoints::getSize()
+{
+	return pointsRefVector.size();
+}
+
 glm::vec3 QuatRotationPoints::getFirstPoint()
 {
 	auto pointsStart = pointsRefVector.begin();

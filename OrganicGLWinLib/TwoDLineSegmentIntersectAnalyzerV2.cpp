@@ -42,29 +42,23 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 	twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Line Segment B scalar (variable u) is : ", u, "\n");
 
 	// perform colinear test; need to convert the 2d points to 3d before putting them into the QM.
-	QuatRotationPoints points;
 	glm::vec3 lineAPointA = convert2DPointTo3D(twoDLineSegmentA.a);
 	glm::vec3 lineAPointB = convert2DPointTo3D(twoDLineSegmentA.b);
 	glm::vec3 lineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 	glm::vec3 lineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
-	points.insertPointRefs(&lineAPointA, &lineAPointB, &lineBPointA, &lineBPointB);
-	QMBoolAreLinesColinear linearTester;
-	bool areLinesColinear = linearTester.solve(&points, PolyDebugLevel::NONE);
+	bool areLinesColinear = QuatUtils::checkIfLinesAreColinear(lineAPointA, lineAPointB, lineBPointA, lineBPointB);
 	if (areLinesColinear == false)
 	{
 		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Lines NOT detected as colinear; continuing this branch. ", "\n");
-		QuatRotationPoints intersectionTestPoints;
 		glm::vec3 testLineAPointA = convert2DPointTo3D(twoDLineSegmentA.a);
 		glm::vec3 testLineAPointB = convert2DPointTo3D(twoDLineSegmentA.b);
 		glm::vec3 testLineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 		glm::vec3 testLineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
 		glm::vec3 resultingIntersection;
-		intersectionTestPoints.insertPointRefs(&testLineAPointA, &testLineAPointB, &testLineBPointA, &testLineBPointB, &resultingIntersection);
-		QMBoolDoLinesIntersect intersectionTester;
-		bool areLinesInteresecting = intersectionTester.solve(&intersectionTestPoints, PolyDebugLevel::NONE);
+		bool areLinesInteresecting = QuatUtils::areLinesIntersecting(&testLineAPointA, &testLineAPointB, &testLineBPointA, &testLineBPointB, &resultingIntersection);
 		if (areLinesInteresecting == true)
 		{
-			glm::vec3 foundIntersectionValue = intersectionTestPoints.getPointByIndex(4);
+			glm::vec3 foundIntersectionValue = resultingIntersection;
 			std::cout << "!! Point found as a result of intersection machine is: " << foundIntersectionValue.x << ", " << foundIntersectionValue.y << std::endl;
 			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) NONCOLINEAR_INTERSECT detected. Value is: ", foundIntersectionValue.x, ", ", foundIntersectionValue.y, "\n");
 			analyzedResult.intersectedPoint.x = foundIntersectionValue.x;

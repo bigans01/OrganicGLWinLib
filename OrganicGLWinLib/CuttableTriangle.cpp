@@ -123,22 +123,14 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y, "\n");
 					tempLogger.waitForDebugInput();
 
-
+					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
+					// If true, we can insert a record.
 					// point A of line B splits line A; so we must check point B of line B.
 					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.insertPointRefs(&splitLinePointA,
-													&splitLinePointB,
-													&pointToCheck,
-													&splitLineNormal);
-
-					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
-					// If true, we can insert a record.
-					QMBoolIsTJunctionCuttable cuttableTester;
-					bool result = cuttableTester.solve(&tJunctionPoints, PolyDebugLevel::NONE);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -177,16 +169,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					QuatRotationPoints tJunctionPoints;
-					tJunctionPoints.insertPointRefs(&splitLinePointA,
-													&splitLinePointB,
-													&pointToCheck,
-													&splitLineNormal);
-
-					// run a bool QM machine to test whether or not pointToCheck is in the same direction as the splitLineNormal.
-					// If true, we can insert a record.
-					QMBoolIsTJunctionCuttable cuttableTester;
-					bool result = cuttableTester.solve(&tJunctionPoints, PolyDebugLevel::NONE);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
