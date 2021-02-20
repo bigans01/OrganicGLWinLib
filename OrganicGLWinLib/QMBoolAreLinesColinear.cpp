@@ -47,8 +47,15 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	rotateAroundZToYZero(&upwardNormal, in_quatRotationPointsRef, &rotationRecords);
 
 	// perform two right angle checks: upwardNormal vs second line's pointA, and upwardNormal vs second line's pointB
+	//std::cout << "||||||:::: BEGIN: print points, before coplanarity test: " << std::endl;
+	//in_quatRotationPointsRef->printPoints();
+
+	//std::cout << "||||||:::: BEGIN: Coplanarity test, running right-angle checks: " << std::endl;
 	bool checkPointA = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(2));	// point A of second line
 	bool checkPointB = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(3));	// point B of second line
+	//std::cout << "||||||:::: END: Coplanarity test, running right-angle checks: " << std::endl;
+	//int waitVal = 3;
+	//std::cin >> waitVal;
 
 	if
 	(
@@ -138,9 +145,14 @@ bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm:
 	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
 	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
-	if (firstPassRotateRadians == 1.5708f)
+	if 
+	(	
+		(firstPassRotateRadians == 1.5708f) // 90 degrees
+		||
+		(firstPassRotateRadians == (1.5708f * 3)) // 270 degrees
+	)
 	{
 		wasRightAngleFound = true;
 		//std::cout << "!!! Right angle detected. " << std::endl;

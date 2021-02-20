@@ -78,7 +78,7 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		)
 	)
 	{
-		//std::cout << "************ entered first comparison branch.  " << std::endl;
+		std::cout << "************ entered first comparison branch.  " << std::endl;
 		// get the length of the line
 		float lengthOfInterceptingLine = glm::distance(*secondLinePointARef, *secondLinePointBRef);
 		glm::vec3 resultantSlope = *secondLinePointBRef - *secondLinePointARef;

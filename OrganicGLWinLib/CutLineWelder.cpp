@@ -63,6 +63,11 @@ int CutLineWelder::fetchNextLineViaCyclingDirection(int in_currentLineID, Cyclin
 void CutLineWelder::handleTypicalRun()
 {
 	int nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(copiedAttempt.beginIntersectionLineID, cuttableCyclingDirection);
+
+	std::cout << "::::::::::::::: First two lines of typical run pool are: " << std::endl;
+	currentPool.printLines();
+
+
 	std::cout << "Handling TYPICAL run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
 	std::cout << "TYPICAL-> beginning intersection line ID is: " << copiedAttempt.beginIntersectionLineID << std::endl;
 	glm::vec3 leadingPoint;

@@ -35,11 +35,14 @@ void STriangleCutter::runCuttingSequence()
 		// in the very first iteration of this loop -- the very beginning of the cuttingSequence -- there should only be 1 CuttingTriangle, which
 		// is the one constructed by the call to cuttableContainer.buildFirstCuttableTriangle.
 
+		std::cout << "!!!! Next pass begin. " << std::endl;
+
 		STriangleOutputContainer outputsForCurrentCuttingTriangle;
 		auto currentTriangleToCutBegin = cuttableContainer.cuttableTriangleMap.begin();
 		auto currentTriangleToCutEnd = cuttableContainer.cuttableTriangleMap.end();
 		for (; currentTriangleToCutBegin != currentTriangleToCutEnd; currentTriangleToCutBegin++)
 		{
+			std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
 																			cuttingTrianglesBegin->first, 
 																			getPolyDebugLevelForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
@@ -53,14 +56,23 @@ void STriangleCutter::runCuttingSequence()
 			// fetch whatever the result of the comparison was -- if it is completely eliminated, the size of the vector will be 0.
 			// Otherwise, it's size will be >= 1.
 			outputsForCurrentCuttingTriangle.insertOutputSTriangles(&currentTriangleToCutBegin->second.outputTriangles);	
+
+			// reset the CuttingTriangle that was used in this iteration.
+			cuttingTrianglesBegin->second.reset();
+			std::cout << "!! END: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 		}
+
+		std::cout << "!!!! Next pass end. " << std::endl;
 
 		// rebuild/analyze the cuttableTriangleMap in the CuttableTriangleContainer, once we've gone through all of the CuttableTriangles in it.
 		cuttableContainer.rebuildCuttableTriangleMapFromContainer(&outputsForCurrentCuttingTriangle);
-		//cuttableContainer.printCuttableTriangles();
+		std::cout << "||||||||||||||||| printing out cuttable triangles, after this pass: " << std::endl;
+		cuttableContainer.printCuttableTriangles();
+		int passWait = 3; 
+		std::cin >> passWait;
 
 		// reset the CuttingTriangle that was used in this iteration.
-		cuttingTrianglesBegin->second.reset();
+		//cuttingTrianglesBegin->second.reset();
 	}
 
 

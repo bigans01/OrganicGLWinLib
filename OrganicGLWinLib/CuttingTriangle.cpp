@@ -21,7 +21,10 @@ CuttingTriangle::CuttingTriangle(STriangle in_sTriangle)
 
 void CuttingTriangle::reset()
 {
-
+	for (int x = 0; x < 3; x++)
+	{
+		cuttingLines[x].resetRecordManager();
+	}
 }
 
 void CuttingTriangle::printCuttingLineIntersections()

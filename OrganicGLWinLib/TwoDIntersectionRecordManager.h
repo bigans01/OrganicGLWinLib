@@ -18,6 +18,10 @@ class TwoDIntersectionRecordManager
 		{
 			recordMap.erase(in_idToErase);
 		}
+		void clearRecordMap()
+		{
+			recordMap.clear();
+		}
 		glm::vec3 getPointForRecord(int in_idToGetPointFor)
 		{
 			return recordMap[in_idToGetPointFor];

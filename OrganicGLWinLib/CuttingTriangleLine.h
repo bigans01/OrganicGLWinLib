@@ -43,6 +43,10 @@ class CuttingTriangleLine
 			}
 			return returnDirection;
 		}
+		void resetRecordManager()
+		{
+			cuttingIntersectionManager.clearRecordMap();
+		}
 };
 
 #endif

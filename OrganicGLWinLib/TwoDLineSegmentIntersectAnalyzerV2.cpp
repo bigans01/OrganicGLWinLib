@@ -130,6 +130,11 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 	else if (areLinesColinear == true)
 	{
 		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Lines detected as colinear. ", "\n");
+		std::cout << "!!! Notice, colinear line detected: " << std::endl;
+		std::cout << "!!! Line A: " << lineAPointA.x << ", " << lineAPointA.y << std::endl;
+		std::cout << "!!! Line B: " << lineBPointA.x << ", " << lineBPointB.y << std::endl;
+		int colinearTempStop = 3;
+		std::cin >> colinearTempStop;
 	}
 }
 

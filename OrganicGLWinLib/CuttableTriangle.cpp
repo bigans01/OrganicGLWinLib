@@ -54,10 +54,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.x,
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y);
 
-				//std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
-				//std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
-				tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
-				tempLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
+				std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
+				std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
+				//tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
+				//tempLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
 				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, PolyDebugLevel::NONE);
 				if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
@@ -145,6 +145,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 
 						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+
+						std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
+						int finishVal = 3;
+						std::cin >> finishVal;
 					}
 					
 				
@@ -184,9 +188,12 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 
 						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
 						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+
+						std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
+						int finishVal = 3;
+						std::cin >> finishVal;
 					}
 				}
-
 
 				// T_junction logic needs to be handled here....
 			}
@@ -342,6 +349,8 @@ void CuttableTriangle::printCuttableTrianglePoints()
 
 CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef)
 {
+
+	std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: BEGIN, construction of first two Typical attempt lines. " << std::endl;
 	//CutLinePool returnPool;
 	PoolAndDirectionPair returnPair;
 
@@ -436,6 +445,7 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 		cutLineDirection = CyclingDirection::FORWARD;
 	}
 	returnPair.pairCyclingDirection = cutLineDirection;
+	std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: END, construction of first two Typical attempt lines. " << std::endl;
 
 	return returnPair;
 }
