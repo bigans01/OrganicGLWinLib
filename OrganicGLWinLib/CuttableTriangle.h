@@ -34,11 +34,32 @@ class CuttableTriangle
 		friend class STriangleCutter;
 		friend class CutLineWelder;
 		friend class CuttableTriangleContainer;
+
 		struct PoolAndDirectionPair
 		{
 			CutLinePool pairPool;
 			CyclingDirection pairCyclingDirection = CyclingDirection::NOVAL;
 		};
+
+		struct CuttablePointPair
+		{
+			CuttablePointPair(glm::vec3 in_point0, glm::vec3 in_point1)
+			{
+				pointArray[0] = in_point0;
+				pointArray[1] = in_point1;
+			};
+			CuttablePointPair() {};
+			glm::vec3 pointArray[2];
+		};
+
+		struct PotentialLineColinearityResult
+		{
+			bool isColinear = false;
+		};
+
+		glm::vec3 fetchThirdPoint(CuttablePointPair in_cuttablePointPair);
+		PotentialLineColinearityResult acquireColinearityResult(glm::vec3 in_thirdPoint, glm::vec3 in_intersectingPoint, glm::vec3 in_cuttingLinePointA, glm::vec3 in_cuttingLinePointB);
+
 		std::map<int, STriangle> outputTriangles;
 		CuttableTriangleLine cuttableTriangleLines[3];
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);

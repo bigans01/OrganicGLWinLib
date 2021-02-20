@@ -51,8 +51,36 @@ glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRota
 		flipOnXAxis(in_quatRotationPointsRef);
 	}
 
+	//std::cout << ":::::::::::::: START: find cylcing direction, printing points: " << std::endl;
+	//in_quatRotationPointsRef->printPoints();
+	//std::cout << ":::::::::::::: END: find cylcing direction, printing points: " << std::endl;
 
 	// now, find out which point is on positive Y; the same binary Y value as the normal.
+	/*
+	if
+	(	// there's a possibility where one point is "near" 0 but the other is definitely not near 0
+		(in_quatRotationPointsRef->getPointByIndex(2).y > 0)
+		&&
+		(in_quatRotationPointsRef->getPointByIndex(3).y > 0)
+	)
+	{
+		std::cout << "!!! Both points of line B have y > 0. " << std::endl;
+		int waitVal = 3;
+		std::cin >> waitVal;
+
+		// find which point of line B has the greatest distance between y = 0.
+		glm::vec3 yzero;
+		glm::vec3 pointA = in_quatRotationPointsRef->getPointByIndex(2);
+		glm::vec3 pointB = in_quatRotationPointsRef->getPointByIndex(3);
+		float distToA = glm::distance(yzero, pointA);
+		float distToB = glm::distance(yzero, pointB);
+
+
+	}
+	*/
+
+	roundVec3YByTenThousandths(in_quatRotationPointsRef->getPointRefByIndex(2));
+	roundVec3YByTenThousandths(in_quatRotationPointsRef->getPointRefByIndex(3));
 	if (in_quatRotationPointsRef->getPointByIndex(2).y > 0)
 	{
 		returnVec = originalCandidatePointA;
@@ -105,4 +133,9 @@ void QMVec3FindCyclingDirectionPoint::rotateLineToYZeroPositiveX(glm::vec3* in_p
 			in_quatRotationPointsRef->printPoints();
 		}
 	}
+}
+
+void QMVec3FindCyclingDirectionPoint::roundVec3YByTenThousandths(glm::vec3* in_vec3Ref)
+{
+	in_vec3Ref->y = float(floor(in_vec3Ref->y * 10000 + 0.5) / 10000);
 }

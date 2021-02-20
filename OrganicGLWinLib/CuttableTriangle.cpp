@@ -63,6 +63,18 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
 				{
 					glm::vec3 convertedPoint = convert2DpointTo3D(analyzerV2.analyzedResult.intersectedPoint);
+					// get the third, unused point; use it to check if there are actually two points which are coplanar to the cutting line.
+					CuttableTriangle::CuttablePointPair pointPair(convert2DpointTo3D(cuttableSegment.a), convert2DpointTo3D(cuttableSegment.b));
+					glm::vec3 thirdUnusedPoint = fetchThirdPoint(pointPair);
+					CuttableTriangle::PotentialLineColinearityResult colinearityResult = acquireColinearityResult(thirdUnusedPoint,
+																										convertedPoint,
+																										in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
+																										in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB);
+																												
+
+					std::cout << "###!!! Third unused point is: " << thirdUnusedPoint.x << ", " << thirdUnusedPoint.y << ", " << thirdUnusedPoint.z << std::endl;
+
+
 					// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
 					cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, convertedPoint);
 
@@ -98,17 +110,63 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 
  
 				}
-				//else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A)
-				//{
+				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A)
+				{
 					//glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
-					//glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
-					//glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
-					//glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
-				//}
-				//else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B)
-				//{
+					glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					if (result == true)
+					{
+						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
+						// since point A of the cutting line was the point that split line A, use it as the intersecting point.
+						glm::vec3 pointToUse = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
+						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
 
-				//}
+						// the non-intersecting point will be equal to point B of the cuttling line.
+						glm::vec3 cuttingLineNonIntersectingPoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+						cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, cuttingLineNonIntersectingPoint);
+
+						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
+						std::cout << "::::::: point to use, for T-junction insert: " << pointToUse.x << ", " << pointToUse.y << ", " << pointToUse.z << std::endl;
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+
+						std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
+						int finishVal = 3;
+						std::cin >> finishVal;
+					}
+				}
+				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B)
+				{
+					glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					if (result == true)
+					{
+						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
+						// since point B of the cutting line was the point that split line A, use it as the intersecting point.
+						glm::vec3 pointToUse = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+						// insert the ID of the cutting line, into the appropriate line in the cuttable triangle
+						cuttableTriangleLines[currentCuttableTriangleLineID].cuttableIntersectionManager.insertRecord(currentCuttingTriangleLineID, pointToUse);
+
+						// the non-intersecting point will be equal to point B of the cuttling line.
+						glm::vec3 cuttingLineNonIntersectingPoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+						cuttableTriangleLines[currentCuttableTriangleLineID].insertNonIntersectingCuttingLinePoint(currentCuttingTriangleLineID, cuttingLineNonIntersectingPoint);
+
+						// insert the ID of the cuttable line, into the appropriate line in the cutting triangle
+						std::cout << "::::::: point to use, for T-junction insert: " << pointToUse.x << ", " << pointToUse.y << ", " << pointToUse.z << std::endl;
+						in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].cuttingIntersectionManager.insertRecord(currentCuttableTriangleLineID, pointToUse);
+
+						std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
+						int finishVal = 3;
+						std::cin >> finishVal;
+					}
+				}
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A)
 				{
 					//std::cout << "######::: NOTICE, running T-junction validity test for T_JUNCTION_B_SPLITS_A_VIA_POINT_A. " << std::endl;
@@ -222,6 +280,43 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 			produceCutLinePoolsFromAttempts(in_cuttingTriangleRef);
 		}
 	}
+}
+
+glm::vec3 CuttableTriangle::fetchThirdPoint(CuttablePointPair in_cuttablePointPair)
+{
+	glm::vec3 returnPoint;
+	for (int x = 0; x < 3; x++)
+	{
+		glm::vec3 pointToCheckFor = cuttableTriangleLines[x].pointA;
+		bool wasMatchFound = false;
+		for (int y = 0; y < 2; y++)
+		{
+			if (pointToCheckFor == in_cuttablePointPair.pointArray[y])
+			{
+				wasMatchFound = true;
+				break;
+			}
+		}
+
+		if (wasMatchFound == false)
+		{
+			returnPoint = pointToCheckFor;
+		}
+	}
+	return returnPoint;
+}
+
+CuttableTriangle::PotentialLineColinearityResult CuttableTriangle::acquireColinearityResult(glm::vec3 in_thirdPoint, glm::vec3 in_intersectingPoint, glm::vec3 in_cuttingLinePointA, glm::vec3 in_cuttingLinePointB)
+{
+	PotentialLineColinearityResult colinearityResult;
+	bool areLinesColinear = QuatUtils::checkIfLinesAreColinear(in_thirdPoint, in_intersectingPoint, in_cuttingLinePointA, in_cuttingLinePointB);
+	if (areLinesColinear == true)
+	{
+		std::cout << "----> CoLinearity result: lines are colinear; waiting for input to continue. " << std::endl;
+		int waitVal = 3; 
+		std::cin >> waitVal;
+	}
+	return colinearityResult;
 }
 
 bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef)

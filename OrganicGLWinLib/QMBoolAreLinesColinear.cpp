@@ -145,7 +145,7 @@ bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm:
 	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
 	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
 	//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
 	if 
 	(	
