@@ -110,14 +110,18 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 
  
 				}
+
+				// ||||||||||||||||: T-junction checks begin here 
+				// For reference, the "tJunctionBasePoint" is the point in a T-junction that represents the bottom of the "T"; it is the nonintersecting point 
+				// of the line that causes the split (the other point is the one that actually causes the junction)
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A)
 				{
 					//glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
-					glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
+					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -143,9 +147,9 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				{
 					glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
-					glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
+					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -186,9 +190,9 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// point A of line B splits line A; so we must check point B of line B.
 					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
-					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
+					glm::vec3 tJunctionBasePoint = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -229,9 +233,9 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// point B of line B splits line A; so we must check point A of line B.
 					glm::vec3 splitLinePointA = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
-					glm::vec3 pointToCheck = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
+					glm::vec3 tJunctionBasePoint = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, pointToCheck, splitLineNormal);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -321,6 +325,26 @@ CuttableTriangle::PotentialLineColinearityResult CuttableTriangle::acquireColine
 
 bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef)
 {
+	// compare all lines of the cuttable,
+	for (int x = 0; x < 3; x++)
+	{
+		// to all lines of the cutting
+		for (int y = 0; y < 3; y++)
+		{
+			glm::vec3 cuttablePointA = cuttableTriangleLines[x].pointA;
+			glm::vec3 cuttablePointB = cuttableTriangleLines[x].pointB;
+			glm::vec3 cuttingPointA = in_cuttingTriangleRef->cuttingLines[y].pointA;
+			glm::vec3 cuttingPointB = in_cuttingTriangleRef->cuttingLines[y].pointB;
+			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, cuttablePointB, cuttingPointA, cuttablePointB);
+			if (containmentDetected == true)
+			{
+				std::cout << "!!!!!!! NOTICE-> containment detected. Halting and waiting for input. " << std::endl;
+				int haltWait = 3;
+				std::cin >> haltWait;
+			}
+			// if containment is detected, we must check the 3rd point.
+		}
+	}
 	return false;	// placeholder
 }
 

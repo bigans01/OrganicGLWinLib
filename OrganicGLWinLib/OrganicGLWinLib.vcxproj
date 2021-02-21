@@ -297,6 +297,7 @@
     <ClInclude Include="QMBoolAreLinesColinear.h" />
     <ClInclude Include="QMBoolBase.h" />
     <ClInclude Include="QMBoolDoLinesIntersect.h" />
+    <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h" />
     <ClInclude Include="QMBoolIsTJunctionCuttable.h" />
     <ClInclude Include="QMVec3FindCyclingDirectionPoint.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
@@ -516,6 +517,7 @@
     <ClCompile Include="QMBoolAreLinesColinear.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
     <ClCompile Include="QMBoolDoLinesIntersect.cpp" />
+    <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp" />
     <ClCompile Include="QMBoolIsTJunctionCuttable.cpp" />
     <ClCompile Include="QMVec3FindCyclingDirection.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />

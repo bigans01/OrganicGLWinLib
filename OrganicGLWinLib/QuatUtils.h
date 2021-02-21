@@ -12,6 +12,7 @@
 #include "QMBoolIsTJunctionCuttable.h"
 #include "QMBoolAreLinesColinear.h"
 #include "QMBoolDoLinesIntersect.h"
+#include "QMBoolIsColinearLineAContainedWithinB.h"
 #include <iostream>
 
 class QuatUtils
@@ -45,6 +46,13 @@ class QuatUtils
 											glm::vec3* in_lineBPointB,
 			                                glm::vec3* in_discoveredIntersectingPointStorage
 										);
+		static bool isLineAContainedWithinB(
+											glm::vec3 in_lineAPointA,
+											glm::vec3 in_lineAPointB,
+											glm::vec3 in_lineBPointA,
+											glm::vec3 in_lineBPointB
+										);
+										
 };
 
 #endif

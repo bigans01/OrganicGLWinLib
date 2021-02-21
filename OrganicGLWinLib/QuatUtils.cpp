@@ -95,3 +95,42 @@ bool QuatUtils::areLinesIntersecting(
 	QMBoolDoLinesIntersect doLinesIntersect;
 	return doLinesIntersect.solve(&points, PolyDebugLevel::NONE);
 }
+
+bool QuatUtils::isLineAContainedWithinB
+(
+	glm::vec3 in_lineAPointA,
+	glm::vec3 in_lineAPointB,
+	glm::vec3 in_lineBPointA,
+	glm::vec3 in_lineBPointB
+)
+{
+	bool isContainedWithinB = false;
+	
+	glm::vec3 setALineAPointA = in_lineAPointA;
+	glm::vec3 setALineAPointB = in_lineAPointB;
+	glm::vec3 setALineBPointA = in_lineBPointA;
+	glm::vec3 setALineBPointB = in_lineBPointB;
+	bool areLinesColinear = checkIfLinesAreColinear(setALineAPointA, setALineAPointB,setALineBPointA, setALineBPointB);
+	if (areLinesColinear == true)
+	{
+		
+		glm::vec3 secondTestLineAPointA = in_lineAPointA;
+		glm::vec3 secondTestLineAPointB = in_lineAPointB;
+		glm::vec3 secondTestLineBPointA = in_lineBPointA;
+		glm::vec3 secondTestLineBPointB = in_lineBPointB;
+		QuatRotationPoints containmentCheckPoints;
+		containmentCheckPoints.insertPointRefs(
+													&secondTestLineAPointA,
+													&secondTestLineAPointB,
+													&secondTestLineBPointA,
+													&secondTestLineBPointB
+												);
+		QMBoolIsColinearLineAContainedWithinB containmentChecker;
+		isContainedWithinB = containmentChecker.solve(&containmentCheckPoints, PolyDebugLevel::NONE);
+	}
+	else
+	{
+		isContainedWithinB = false;	// can't possibly be contained if it isn't even colinear to begin with.
+	}
+	return isContainedWithinB;
+}

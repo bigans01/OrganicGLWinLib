@@ -852,6 +852,9 @@
     <ClInclude Include="QMVec3FindOrientatedLineNormal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1248,6 +1251,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
