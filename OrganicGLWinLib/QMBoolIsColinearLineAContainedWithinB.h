@@ -16,7 +16,7 @@ class QMBoolIsColinearLineAContainedWithinB : public QMBoolBase
 											QuatRotationPoints* in_quatRotationPointsRef, 
 											std::vector<QuatRotationType>* in_rotationOrderVectorRef
 										);
-		void roundVec3YByTenThousandths(glm::vec3* in_vec3Ref);
+		void roundVec3XByTenThousandths(glm::vec3* in_vec3Ref);
 		bool checkIfLineAPointIsContainedWithinLineB(glm::vec3 in_pointToCheck, QuatRotationPoints* in_quatRotationPointsRef);
 };
 

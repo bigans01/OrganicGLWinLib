@@ -113,7 +113,8 @@ bool QuatUtils::isLineAContainedWithinB
 	bool areLinesColinear = checkIfLinesAreColinear(setALineAPointA, setALineAPointB,setALineBPointA, setALineBPointB);
 	if (areLinesColinear == true)
 	{
-		
+		//std::cout << "!!! Lines detected a sbeing colinear..." << std::endl;
+
 		glm::vec3 secondTestLineAPointA = in_lineAPointA;
 		glm::vec3 secondTestLineAPointB = in_lineAPointB;
 		glm::vec3 secondTestLineBPointA = in_lineBPointA;

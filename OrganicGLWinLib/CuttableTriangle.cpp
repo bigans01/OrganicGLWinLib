@@ -325,9 +325,12 @@ CuttableTriangle::PotentialLineColinearityResult CuttableTriangle::acquireColine
 
 bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef)
 {
+	bool isCuttingTriangleConsumed = false;
+
 	// compare all lines of the cuttable,
 	for (int x = 0; x < 3; x++)
 	{
+		
 		// to all lines of the cutting
 		for (int y = 0; y < 3; y++)
 		{
@@ -335,17 +338,46 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 			glm::vec3 cuttablePointB = cuttableTriangleLines[x].pointB;
 			glm::vec3 cuttingPointA = in_cuttingTriangleRef->cuttingLines[y].pointA;
 			glm::vec3 cuttingPointB = in_cuttingTriangleRef->cuttingLines[y].pointB;
-			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, cuttablePointB, cuttingPointA, cuttablePointB);
+
+			std::cout << ":::::::: Comparison points: " << std::endl;
+			std::cout << "Cuttable point A: " << cuttablePointA.x << ", " << cuttablePointA.y << ", " << cuttablePointA.z << std::endl;
+			std::cout << "Cuttable point B: " << cuttablePointB.x << ", " << cuttablePointB.y << ", " << cuttablePointB.z << std::endl;
+			std::cout << "Cutting point A: " << cuttingPointA.x << ", " << cuttingPointA.y << ", " << cuttingPointA.z << std::endl;
+			std::cout << "Cutting point B: " << cuttingPointB.x << ", " << cuttingPointB.y << ", " << cuttingPointB.z << std::endl;
+
+
+			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, cuttablePointB, cuttingPointA, cuttingPointB);
 			if (containmentDetected == true)
 			{
 				std::cout << "!!!!!!! NOTICE-> containment detected. Halting and waiting for input. " << std::endl;
+				
+
+				CuttableTriangle::CuttablePointPair pointPair(cuttablePointA, cuttablePointB);
+				glm::vec3 thirdUnusedPoint = fetchThirdPoint(pointPair);
+				glm::vec3 cuttingTrianglePoint0 = in_cuttingTriangleRef->cuttingLines[0].pointA;
+				glm::vec3 cuttingTrianglePoint1 = in_cuttingTriangleRef->cuttingLines[1].pointA;
+				glm::vec3 cuttingTrianglePoint2 = in_cuttingTriangleRef->cuttingLines[2].pointA;
+				bool doesThirdPointLieWithinPBZ = QuatUtils::checkIfPointLiesWithinTrianglePBZ(
+																									thirdUnusedPoint,
+																									cuttingTrianglePoint0,
+																									cuttingTrianglePoint1,
+																									cuttingTrianglePoint2
+																								);	
+				if (doesThirdPointLieWithinPBZ == true)
+				{
+					std::cout << "!!!! NOTICE-> third point found as being within PBZ, this CuttableTriangle is completely cut! " << std::endl;
+
+				}
+
 				int haltWait = 3;
 				std::cin >> haltWait;
+
+				isCuttingTriangleConsumed = true;
 			}
 			// if containment is detected, we must check the 3rd point.
 		}
 	}
-	return false;	// placeholder
+	return isCuttingTriangleConsumed;
 }
 
 bool CuttableTriangle::testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef)

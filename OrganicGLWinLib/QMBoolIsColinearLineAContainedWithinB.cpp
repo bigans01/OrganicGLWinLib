@@ -13,7 +13,9 @@ bool QMBoolIsColinearLineAContainedWithinB::solve(QuatRotationPoints* in_quatRot
 
 		bool containedWithinB = false;
 
-		glm::vec3 pointACopy = in_quatRotationPointsRef->getPointByIndex(0);
+		// the point to translate all points (itself included) to point 0,0 is the first point of the second line, 
+		// (since we're checking if the first line is within the second)
+		glm::vec3 pointACopy = in_quatRotationPointsRef->getPointByIndex(2);
 		PointTranslationCheck pointCheck;
 		pointCheck.performCheck(pointACopy);
 		if (pointCheck.requiresTranslation == 1)
@@ -21,27 +23,27 @@ bool QMBoolIsColinearLineAContainedWithinB::solve(QuatRotationPoints* in_quatRot
 			in_quatRotationPointsRef->applyTranslation(pointCheck.getTranslationValue());
 		}
 
-		// check if the second point of the first line, is aligned such that x > 0, and y = 0.
+		// check if the second point of the second line, is aligned such that x > 0, and y = 0.
 		// if neither of these are true, we must rotate along the Z axis to positive X.
 		std::vector<QuatRotationType> rotationOrder;
 		std::stack<QuatRotationRecord> rotationRecords;
-		glm::vec3* lineAPointBRef = in_quatRotationPointsRef->getPointRefByIndex(1);
+		glm::vec3* lineBPointBRef = in_quatRotationPointsRef->getPointRefByIndex(3);
 		if
 		(
-			(lineAPointBRef->x <= 0.0f)
+			(lineBPointBRef->x <= 0.0f)
 			||
-			(lineAPointBRef->y != 0.0f)
+			(lineBPointBRef->y != 0.0f)
 		)
 		{
 			QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
 			rotationOrder.push_back(rotateType);		// should call rotateAroundZToYZero();
 		}
-		rotateLineToYZeroPositiveX(lineAPointBRef, &rotationRecords, in_quatRotationPointsRef, &rotationOrder);
+		rotateLineToYZeroPositiveX(lineBPointBRef, &rotationRecords, in_quatRotationPointsRef, &rotationOrder);
 
 		// next, round all 4 points to the nearest ten-thousandth.
 		for (int x = 0; x < 4; x++)
 		{
-			roundVec3YByTenThousandths(in_quatRotationPointsRef->getPointRefByIndex(x));
+			roundVec3XByTenThousandths(in_quatRotationPointsRef->getPointRefByIndex(x));
 		}
 
 		// check for containment, in points A and B of line A.
@@ -107,9 +109,9 @@ void QMBoolIsColinearLineAContainedWithinB::rotateLineToYZeroPositiveX
 	}
 }
 
-void QMBoolIsColinearLineAContainedWithinB::roundVec3YByTenThousandths(glm::vec3* in_vec3Ref)
+void QMBoolIsColinearLineAContainedWithinB::roundVec3XByTenThousandths(glm::vec3* in_vec3Ref)
 {
-	in_vec3Ref->y = float(floor(in_vec3Ref->y * 10000 + 0.5) / 10000);
+	in_vec3Ref->x = float(floor(in_vec3Ref->x * 10000 + 0.5) / 10000);
 }
 
 bool QMBoolIsColinearLineAContainedWithinB::checkIfLineAPointIsContainedWithinLineB(glm::vec3 in_pointToCheck, QuatRotationPoints* in_quatRotationPointsRef)
