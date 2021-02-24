@@ -30,6 +30,7 @@ class CutLineWelder
 		CutLine producePartialCuttableCutLineForPool(int in_currentCuttableLineID, glm::vec3 in_intersectedPointToUse);
 		CutLine produceEntireCuttingCutLineForPool(int in_currentCuttableLineID, CyclingDirection in_cuttingTriangleCyclingDirection);
 		CutLine producePartialCuttingCutLineForPool(int in_currentCuttingLineID, glm::vec3 in_pointAForNewLine, glm::vec3 in_pointBForNewLine);
+		CutLine produceCutLineFromTerminatedSliceRun(int in_currentCuttingLineID, glm::vec3 in_pointAForNewLine, glm::vec3 in_pointBForNewLine);
 };
 
 #endif

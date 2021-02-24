@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "TwoDIntersectionRecordManager.h"
 #include <map>
+#include "CyclingDirection.h"
 
 class CuttableTriangleLine
 {
@@ -33,6 +34,17 @@ class CuttableTriangleLine
 		glm::vec3 getNonIntersectingPountForCuttingLine(int in_cuttingLineID)
 		{
 			return cuttingLineNonIntersectingPoints[in_cuttingLineID];
+		}
+		glm::vec3 fetchNextPointBasedOnCyclingDirection(CyclingDirection in_cyclingDirection)
+		{
+			if (in_cyclingDirection == CyclingDirection::FORWARD)
+			{
+				return pointB;
+			}
+			else if (in_cyclingDirection == CyclingDirection::REVERSE)
+			{
+				return pointA;
+			}
 		}
 
 		glm::vec3 pointA;

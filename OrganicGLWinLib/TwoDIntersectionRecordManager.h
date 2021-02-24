@@ -73,6 +73,32 @@ class TwoDIntersectionRecordManager
 			}
 			return shortestID;
 		};
+		bool doesPointExist(glm::vec3 in_point)
+		{
+			bool wasFound = false;
+			auto recordMapBegin = recordMap.begin();
+			auto recordMapEnd = recordMap.end();
+			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
+			{
+				if (recordMapBegin->second == in_point)
+				{
+					wasFound = true;
+				}
+			}
+			return wasFound;
+		}
+		bool arePointsEqual() // would be used to invalidate a SLICE attempt
+		{
+			bool arePointsEqual = false;
+			auto firstPoint = recordMap.begin();
+			auto secondPoint = recordMap.rbegin();
+			if (firstPoint->second == secondPoint->second)
+			{
+				arePointsEqual = true;
+			}
+			return arePointsEqual;
+		}
+
 	private:
 		friend class CuttableTriangle;
 		std::map<int, glm::vec3> recordMap;	// the key of the map = the ID of the line in the triangle that performed the intersection; value = intersecting point.

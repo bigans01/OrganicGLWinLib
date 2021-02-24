@@ -23,8 +23,11 @@ PolyDebugLevel STriangleCutter::getPolyDebugLevelForSpecificCuttingTriangle(int 
 	return returnLevel;
 }
 
-void STriangleCutter::runCuttingSequence()
+bool STriangleCutter::runCuttingSequence()
 {
+	// the result of whether or not it was completely "destroyed"
+	bool wasTriangleDestroyedDuringSequence = false;
+
 	// number of iterations will be equal to the size of the map in the reference CuttingTriangleManager.
 	auto cuttingTrianglesBegin = cuttingTrianglesRef->cuttingTriangles.begin();
 	auto cuttingTrianglesEnd = cuttingTrianglesRef->cuttingTriangles.end();
@@ -66,7 +69,7 @@ void STriangleCutter::runCuttingSequence()
 
 		// rebuild/analyze the cuttableTriangleMap in the CuttableTriangleContainer, once we've gone through all of the CuttableTriangles in it.
 		cuttableContainer.rebuildCuttableTriangleMapFromContainer(&outputsForCurrentCuttingTriangle);
-		std::cout << "||||||||||||||||| printing out cuttable triangles, after this pass: " << std::endl;
+		std::cout << "||||||||||||||||| printing out cuttable triangles, after this pass: (Cutting Triangle ID was: " << cuttingTrianglesBegin->first << ")" << std::endl;
 		cuttableContainer.printCuttableTriangles();
 		int passWait = 3; 
 		std::cin >> passWait;
@@ -75,7 +78,25 @@ void STriangleCutter::runCuttingSequence()
 		//cuttingTrianglesBegin->second.reset();
 	}
 
-
 	// if the number of CuttableTriangles in the cuttableContainer's cuttableTriangleMap is 0, it means everything got clipped, and the STriangle
 	// was completely eliminated. Otherwise, it will remain.
+	if (cuttableContainer.cuttableTriangleMap.size() == 0)
+	{
+		wasTriangleDestroyedDuringSequence = true;
+		std::cout << "#########################::::::" << std::endl;
+		std::cout << ":::::::::::: NOTICE: cutting sequence flagged the STriangle as being completely destroyed!" << std::endl;
+		std::cout << "#########################::::::" << std::endl;
+	}
+	else if (cuttableContainer.cuttableTriangleMap.size() != 0)
+	{
+		auto resultStart = cuttableContainer.cuttableTriangleMap.begin();
+		auto resultEnd = cuttableContainer.cuttableTriangleMap.end();
+		for (; resultStart != resultEnd; resultStart++)
+		{
+			std::cout << "---> Resulting triangle points: " << std::endl;
+			resultStart->second.printCuttableTrianglePoints();
+		}
+	}
+	std::cout << "########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). " << std::endl;
+	return wasTriangleDestroyedDuringSequence;
 }

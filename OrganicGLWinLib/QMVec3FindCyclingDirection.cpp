@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "QMVec3FindCyclingDirectionPoint.h"
 
-glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+Vec3Result QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
-	glm::vec3 returnVec;
+	//glm::vec3 returnVec;
+	Vec3Result returnResult;
 	// Remember: this function presumes we are in the XY plane -- the Z coordinate should be 0.
 
 	// Point 0 = first line, point A
@@ -51,9 +52,9 @@ glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRota
 		flipOnXAxis(in_quatRotationPointsRef);
 	}
 
-	//std::cout << ":::::::::::::: START: find cylcing direction, printing points: " << std::endl;
-	//in_quatRotationPointsRef->printPoints();
-	//std::cout << ":::::::::::::: END: find cylcing direction, printing points: " << std::endl;
+	std::cout << ":::::::::::::: START: find cylcing direction, printing points: " << std::endl;
+	in_quatRotationPointsRef->printPoints();
+	std::cout << ":::::::::::::: END: find cylcing direction, printing points: " << std::endl;
 
 	// now, find out which point is on positive Y; the same binary Y value as the normal.
 	/*
@@ -83,14 +84,31 @@ glm::vec3 QMVec3FindCyclingDirectionPoint::solve(QuatRotationPoints* in_quatRota
 	roundVec3YByTenThousandths(in_quatRotationPointsRef->getPointRefByIndex(3));
 	if (in_quatRotationPointsRef->getPointByIndex(2).y > 0)
 	{
-		returnVec = originalCandidatePointA;
+		std::cout << "Candidate A selected. " << std::endl;
+		returnResult.resultPoint = originalCandidatePointA;
+		//returnVec = originalCandidatePointA;
+		std::cout << "Value: " << originalCandidatePointA.x << ", " << originalCandidatePointA.y << ", " << originalCandidatePointA.z << std::endl;
 	}
 	else if (in_quatRotationPointsRef->getPointByIndex(3).y > 0)
 	{
-		returnVec = originalCandidatePointB;
+		std::cout << "Candidate B selected. " << std::endl;
+		//returnVec = originalCandidatePointB;
+		returnResult.resultPoint = originalCandidatePointB;
+		std::cout << "Value: " << originalCandidatePointB.x << ", " << originalCandidatePointB.y << ", " << originalCandidatePointB.z << std::endl;
 
 	}
-	return returnVec;
+	else
+	{
+		std::cout << "!!!!!!!!!!! Warning, couldn't determine proper value for returnVec, halting. " << std::endl;
+		returnResult.isResultValid = false;
+		int someVal = 3;
+		//while (someVal == 3)
+		//{
+
+		//}
+	}
+	//return returnVec;
+	return returnResult;
 }
 
 void QMVec3FindCyclingDirectionPoint::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
@@ -103,6 +121,11 @@ void QMVec3FindCyclingDirectionPoint::rotateLineToYZeroPositiveX(glm::vec3* in_p
 		{
 			std::cout << "!!! Rotate around Z detected." << std::endl;
 
+			/*
+			std::cout << ":::::::::::::::::::::::::: >>>>>>>>>> START printing points prior to rotate: " << std::endl;
+			in_quatRotationPointsRef->printPoints();
+			std::cout << ":::::::::::::::::::::::::: >>>>>>>>>> END printing points prior to rotate: " << std::endl;
+			*/
 			float radians = 0.0f;
 			float fullRadian360 = 6.28319;
 			//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;

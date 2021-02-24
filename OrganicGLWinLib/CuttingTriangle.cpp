@@ -35,3 +35,12 @@ void CuttingTriangle::printCuttingLineIntersections()
 		cuttingLines[x].printCuttableIntersections();
 	}
 }
+
+void CuttingTriangle::printPoints()
+{
+	std::cout << "#### Printing points for CuttingTriangle: " << std::endl;
+	for (int x = 0; x < 3; x++)
+	{
+		std::cout << "point " << x << ": " << cuttingLines[x].pointA.x << ", " << cuttingLines[x].pointA.y << ", " << cuttingLines[x].pointA.z << std::endl;
+	}
+}

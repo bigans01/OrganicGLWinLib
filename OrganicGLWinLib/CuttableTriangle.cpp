@@ -24,20 +24,31 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 	tempLogger.setDebugLevel(in_polyDebugLevel);
 	tempLogger.log("(CuttableTriangle) beginning run of comparison against the CuttingTriangle, having index ", in_cuttingTriangleID, ".", "\n");
 
+
+
 	// perform consumption tests; if they fail, continue with normal operations in final branch.
 	// do all points of the CuttableTriangle lie within the CuttingTriangle?
 	if (testIfCuttingTriangleConsumesThisTriangle(in_cuttingTriangleRef) == true)
 	{
 		// we should be done if this is the case.
+		std::cout << "******** CONSUMPTION DETECTED. " << std::endl;
 	}
 
 	// otherwise, attempt to generate attempts as normal.
 	else
 	{
+		std::cout << "******** BEGIN LINE ANALYSIS. " << std::endl;
+
 
 		// first, run each CuttableTriangleLine against each CuttingTriangleLine.
 		for (int currentCuttableTriangleLineID = 0; currentCuttableTriangleLineID < 3; currentCuttableTriangleLineID++)
 		{
+			std::cout << ":::::::::::::::::::!!! Printing out cuttable/cutting triangle points: " << std::endl;
+			std::cout << "Cuttables: " << std::endl;
+			printCuttableTrianglePoints();
+			std::cout << "Cutting: " << std::endl;
+			in_cuttingTriangleRef->printPoints();
+
 			for (int currentCuttingTriangleLineID = 0; currentCuttingTriangleLineID < 3; currentCuttingTriangleLineID++)
 			{
 
@@ -54,8 +65,8 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.x,
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y);
 
-				std::cout << ":::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
-				std::cout << ":::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
+				std::cout << "#####:::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
+				std::cout << "#####:::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
 				//tempLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
 				//tempLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
@@ -86,7 +97,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
 																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB,
 																			cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal
-																		);
+																		).resultPoint;
 
 
 
@@ -121,7 +132,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
+
+					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_A must be the inverse of the  outwardFacingNormal, 
+					// since the tJunctionBasePoint would have to fall WITHIN the CuttingTriangle's area (PBZ) to actually be used.
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -149,7 +163,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);
+
+					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_B must be the inverse of the  outwardFacingNormal, 
+					// since the tJunctionBasePoint would have to fall WITHIN the CuttingTriangle's area (PBZ) to actually be used.
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
 					if (result == true)
 					{
 						std::cout << ":::::::::: T-junction is VALID; inserting..." << std::endl;
@@ -269,19 +286,35 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		// third, find the first of any other cuttingTriangleLines which have 1 intersection, if they exist; these would be typical attempts.
 		buildTypicalAttempts(in_cuttingTriangleRef);
 
+		std::cout << "!!!! Size of attempts: " << crawlingAttemptsVector.size() << std::endl;
+		int attemptsWait = 3;
+		std::cin >> attemptsWait;
+
 		// fourth: test whether or not this triangle consumes the CuttingTriangle; this is only true when:
 		// A) all points of the CuttingTriangle are within the CuttableTriangle
 		// B) there are no attempts built, meaning there are 0 intersections.
 		//
 		// If true, do special logic. Otherwise, if false, produce cut line pools as normal.
-		if (testIfThisTriangleConsumesCuttingTriangle(in_cuttingTriangleRef) == true)
+		if    // the CuttableTriangle actually consumes the CuttingTriangle ("engulfing" style) 
+		(
+			(testIfThisTriangleConsumesCuttingTriangle(in_cuttingTriangleRef) == true)
+			&&
+			(crawlingAttemptsVector.size() == 0)
+		)
 		{
 			// special logic.
 		}
-		else
+		else if (crawlingAttemptsVector.size() != 0)	// the CuttableTriangle will be modified
 		{
 			// fourth, build the CutLinePools from each attempt.
 			produceCutLinePoolsFromAttempts(in_cuttingTriangleRef);
+		}
+		else if (crawlingAttemptsVector.size() == 0)	// there weren't any intersections; the CuttableTriangle is unmodified, so just use the 
+														// CuttableTriangle and it's original points to form an STriangle, and put it into
+														// the output STriangle vector.
+		{
+			STriangle returnSTriangle(cuttableTriangleLines[0].pointA, cuttableTriangleLines[1].pointA, cuttableTriangleLines[2].pointA);
+			outputTriangles[0] = returnSTriangle;
 		}
 	}
 }
@@ -327,6 +360,14 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 {
 	bool isCuttingTriangleConsumed = false;
 
+	std::cout << ":::::::::::::: START PBZ Test: " << std::endl;
+	std::cout << "Cuttable points are: " << std::endl;
+	printCuttableTrianglePoints();
+	std::cout << "Cutting triangle points are: " << std::endl;
+	in_cuttingTriangleRef->printPoints();
+	int waitForPrint = 3;
+	std::cin >> waitForPrint;
+	
 	// compare all lines of the cuttable,
 	for (int x = 0; x < 3; x++)
 	{
@@ -345,7 +386,7 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 			std::cout << "Cutting point A: " << cuttingPointA.x << ", " << cuttingPointA.y << ", " << cuttingPointA.z << std::endl;
 			std::cout << "Cutting point B: " << cuttingPointB.x << ", " << cuttingPointB.y << ", " << cuttingPointB.z << std::endl;
 
-
+			//
 			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, cuttablePointB, cuttingPointA, cuttingPointB);
 			if (containmentDetected == true)
 			{
@@ -366,17 +407,58 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 				if (doesThirdPointLieWithinPBZ == true)
 				{
 					std::cout << "!!!! NOTICE-> third point found as being within PBZ, this CuttableTriangle is completely cut! " << std::endl;
-
+					isCuttingTriangleConsumed = true;
 				}
 
-				int haltWait = 3;
-				std::cin >> haltWait;
+				//int haltWait = 3;
+				//std::cin >> haltWait;
 
-				isCuttingTriangleConsumed = true;
+				//isCuttingTriangleConsumed = true;
 			}
 			// if containment is detected, we must check the 3rd point.
 		}
 	}
+	
+	/*
+	bool boolArray[3] = { false };
+	for (int x = 0; x < 3; x++)
+	{
+		glm::vec3 thirdUnusedPoint = cuttableTriangleLines[x].pointA;
+
+		std::cout << "Point to check for index " << x << " will be: " << thirdUnusedPoint.x << ", " << thirdUnusedPoint.y << ", " << thirdUnusedPoint.z << std::endl;
+
+		glm::vec3 cuttingTrianglePoint0 = in_cuttingTriangleRef->cuttingLines[0].pointA;
+		glm::vec3 cuttingTrianglePoint1 = in_cuttingTriangleRef->cuttingLines[1].pointA;
+		glm::vec3 cuttingTrianglePoint2 = in_cuttingTriangleRef->cuttingLines[2].pointA;
+		boolArray[x] = QuatUtils::checkIfPointLiesWithinTrianglePBZ(
+			thirdUnusedPoint,
+			cuttingTrianglePoint0,
+			cuttingTrianglePoint1,
+			cuttingTrianglePoint2
+		);
+
+	}
+	
+	int boolCount = 0;
+	for (int y = 0; y < 3; y++)
+	{
+		if (boolArray[y] == true)
+		{
+			std::cout << "Bool value at " << y << " was true!" << std::endl;
+			boolCount++;
+		}
+	}
+	if (boolCount == 3)
+	{
+		std::cout << "Notice::: Triangle is entirely contained within PBZ. " << std::endl;
+		isCuttingTriangleConsumed = true;
+	}
+	*/
+
+	std::cout << ":::::::::::::: END PBZ Test: " << std::endl;
+	int endTest = 3;
+	std::cin >> endTest;
+
 	return isCuttingTriangleConsumed;
 }
 
@@ -391,29 +473,41 @@ void CuttableTriangle::buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriang
 	{
 		if (in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() == 2)
 		{
-			//std::cout << "!!! SLICE detected in cutting triangle line, line ID is: " << x << std::endl;
-			//int sliceVal = 3;
-			//std::cin >> sliceVal;
+			// a slice run can only be run, as long as the two points involved aren't equal. 
+			if (in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.arePointsEqual() == false)
+			{
+				//std::cout << "!!! SLICE detected in cutting triangle line, line ID is: " << x << std::endl;
+				//int sliceVal = 3;
+				//std::cin >> sliceVal;
 
-			auto intersectionRecordsBegin = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
-			auto intersectionRecordsEnd = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.rbegin();
-			TwoDCrawlingAttempt slicingAttempt(TwoDCrawlingType::SLICE, x, intersectionRecordsBegin->first, intersectionRecordsBegin->second, intersectionRecordsEnd->first, intersectionRecordsEnd->second);
-			crawlingAttemptsVector.push_back(slicingAttempt);
+				auto intersectionRecordsBegin = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
+				auto intersectionRecordsEnd = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.rbegin();
+				TwoDCrawlingAttempt slicingAttempt(TwoDCrawlingType::SLICE, x, intersectionRecordsBegin->first, intersectionRecordsBegin->second, intersectionRecordsEnd->first, intersectionRecordsEnd->second);
+				crawlingAttemptsVector.push_back(slicingAttempt);
 
-			// remove corresponding entries from the cuttable triangle lines
-			//cuttableTriangleLines[intersectionRecordsBegin->first].cuttableIntersectionManager.eraseRecord(x);
-			//cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.eraseRecord(x);
+					// remove corresponding entries from the cuttable triangle lines
+					//cuttableTriangleLines[intersectionRecordsBegin->first].cuttableIntersectionManager.eraseRecord(x);
+					//cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.eraseRecord(x);
 
-			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for beginIntersectionLineID: " << cuttableTriangleLines[beginIntersectionLineID->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
-			//std::cout << "!! Size of cuttableIntersectionManager, post modification, for intersectionRecordsEnd: " << cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
+					//std::cout << "!! Size of cuttableIntersectionManager, post modification, for beginIntersectionLineID: " << cuttableTriangleLines[beginIntersectionLineID->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
+					//std::cout << "!! Size of cuttableIntersectionManager, post modification, for intersectionRecordsEnd: " << cuttableTriangleLines[intersectionRecordsEnd->first].cuttableIntersectionManager.numberOfRecords() << std::endl;
+			}
 		}
 	}
 }
 
 void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef)
 {
+	for (int a = 0; a < 3; a++)
+	{
+		std::cout << "Size of cutting lines, index " << a << " records: " << in_cuttingTriangleRef->cuttingLines[a].cuttingIntersectionManager.numberOfRecords() << std::endl;
+	}
+	int outputVal = 3;
+	std::cin >> outputVal;
+
 	for (int x = 0; x < 3; x++)
 	{
+		std::cout << "--2-- Size of cutting lines , index " << x << " records: " << in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() << std::endl;
 		// we found a line that had exactly 1 record; generate what we need and then break.
 		if (in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() == 1)	
 		{
@@ -421,53 +515,120 @@ void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleR
 			auto intersectionRecordsBegin = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
 			TwoDCrawlingAttempt typicalAttempt(TwoDCrawlingType::TYPICAL, x, intersectionRecordsBegin->first, intersectionRecordsBegin->second);
 			crawlingAttemptsVector.push_back(typicalAttempt);
-			break;
+			//break;
 		}
 	}
 }
 
 void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef)
 {
+	std::cout << "+++++++++++++++ Size of attempts: " << crawlingAttemptsVector.size() << std::endl;
+	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
+	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
+	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
+
+	//std::cout << crawlingAttemptsVector.size() << std::endl;
+	int attemptsSizeOutput = 3;
+	std::cin >> attemptsSizeOutput;
+
+	
 	auto attemptsBegin = crawlingAttemptsVector.begin();
 	auto attemptsEnd = crawlingAttemptsVector.end();
+	int numberOfCancelledAttempts = 0;
+	bool wasTypicalUsed = false;
+	
 	for (; attemptsBegin != attemptsEnd; attemptsBegin++)
 	{
+		bool wasAttemptMade = false;
 		PoolAndDirectionPair currentPair;
 		if (attemptsBegin->crawlingType == TwoDCrawlingType::SLICE)
 		{
 			std::cout << "SLICE crawl type found..." << std::endl;
-			currentPair = buildLinesFromSliceAttempt(*attemptsBegin, in_cuttingTriangleRef);
+			//TwoDCrawlingAttempt* crawlAttemptPtr = &(*attemptsBegin);
+			currentPair = buildLinesFromSliceAttempt(&(*attemptsBegin), in_cuttingTriangleRef);
+			wasAttemptMade = true;
 		}
-		else if (attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
+		else if 
+		(
+			(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
+			&&
+			(wasTypicalUsed == false)
+		)
 		{
 			std::cout << "TYPICAL crawl type found..." << std::endl;
 			currentPair = buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
+			wasAttemptMade = true;
 		}
 
 		// run a CutLineWelder, take its produced pool and use it in the CutTriangleGroupBuilder.
-		CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPair.pairPool, currentPair.pairCyclingDirection);
-		CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
-		builder.runCutTraceObserver();
-		convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
-		// extract all the CutTriangles from the CutTriangleGroupBuilder.
-
-		
-		std::cout << "------------ended trace observer run. " << std::endl;
-		auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
-		auto containerVectorEnd = builder.cutTriangleContainerVector.end();
-		for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+		if (currentPair.isAttemptValid == true)
 		{
-			std::cout << ">>>>> Printing contents for container..." << std::endl;
-			auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
-			auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
-			for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+
+			CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPair.pairPool, currentPair.pairCyclingDirection);
+			CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
+			builder.runCutTraceObserver();
+			convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
+			// extract all the CutTriangles from the CutTriangleGroupBuilder.
+
+
+			std::cout << "------------ended trace observer run. " << std::endl;
+			auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
+			auto containerVectorEnd = builder.cutTriangleContainerVector.end();
+			for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
 			{
-				containerTrianglesBegin->second.printPoints();
+				std::cout << ">>>>> Printing contents for container..." << std::endl;
+				auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
+				auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
+				for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+				{
+					containerTrianglesBegin->second.printPoints();
+				}
 			}
+
+			// if it's valid, and typical, set the wasTypicalUsed flag.
+			if
+			(
+				(currentPair.isAttemptValid == true)
+				&&
+				(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
+			)
+			{
+				wasTypicalUsed = true;
+			}
+
 		}
+		else if 
+		(
+			(currentPair.isAttemptValid == false)
+			&&
+			(wasAttemptMade == true)
+		)
+		{
+			std::cout << "This tracing attempt has been marked as invalid; it will not be used. " << std::endl;
+			numberOfCancelledAttempts++;
+			int validWait = 3;
+			std::cin >> validWait;
 
+			
+			
 
-		
+		}
+	}
+
+	if (numberOfCancelledAttempts == crawlingAttemptsVector.size())
+	{
+		std::cout << "!!! Number of cancelled attempts (" << numberOfCancelledAttempts <<  ") matches attempts vector size. Continue? " << std::endl;
+		//int attemptWait;
+		//std::cin >> attemptWait;
+		int cancelledLooper = 3;
+
+		// insert the original form of the triangle.
+		STriangle originalForm(cuttableTriangleLines[0].pointA, cuttableTriangleLines[1].pointA, cuttableTriangleLines[2].pointA);
+		outputTriangles[0] = originalForm;
+		//while (cancelledLooper == 3)
+		//{
+
+		//}
 	}
 }
 
@@ -521,30 +682,36 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
 	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
 
+	std::cout << "::> Found cutting line index is: " << in_attempt.cuttingTriangleLineID << std::endl;
+	std::cout << "::> Point registry, for this cutting line is: " << std::endl;
+	in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].printCuttableIntersections();
+
 	std::cout << "::> cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
 	std::cout << "::> cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
 	std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
 	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
-	glm::vec3 determinedCuttingPointToUse = QuatUtils::findPointForDeterminingCyclingDirection(cuttableLinePointA,
+	Vec3Result determinedCuttingAttempt = QuatUtils::findPointForDeterminingCyclingDirection(cuttableLinePointA,
 																							cuttableLinePointB,
 																							cuttingLinePointA,
 																							cuttingLinePointB,
 																							cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal
 																						);
+	glm::vec3 determinedCuttingPointToUse = determinedCuttingAttempt.resultPoint;
 
 	std::cout << "::> Cuttable line normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x 
 									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y 
 									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
 	std::cout << "::> Cutting point to use, determined by cuttable line: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
 
-	glm::vec3 cuttablePointToUse = QuatUtils::findPointForDeterminingCyclingDirection(
+	Vec3Result determinedCuttableAttempt = QuatUtils::findPointForDeterminingCyclingDirection(
 																						cuttingLinePointA, 
 																						cuttingLinePointB, 
 																						cuttableLinePointA, 
 																						cuttableLinePointB, 
 																						cuttingLineNormal
 																					);
+	glm::vec3 cuttablePointToUse = determinedCuttableAttempt.resultPoint;
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
 	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 
@@ -579,6 +746,21 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
 
+	// flag as invalid, if we detected it (either one would cause an invalid run)
+	if
+	(
+		(determinedCuttingAttempt.isResultValid == false)
+		||
+		(determinedCuttableAttempt.isResultValid == false)
+	)
+	{
+		returnPair.isAttemptValid = false;
+	}
+	else
+	{
+		returnPair.isAttemptValid = true;	// otherwise, the runis valid
+	}
+
 	// insert lines into pool, in appropriate order (cuttingCutLine, then cuttableCutLine)
 	returnPair.pairPool.insertLineIntoPool(cuttingCutLine);
 	returnPair.pairPool.insertLineIntoPool(cuttableCutLine);
@@ -595,46 +777,61 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 		std::cout << "!! CyclingDirection will be FORWARD." << std::endl;
 		cutLineDirection = CyclingDirection::FORWARD;
 	}
+	else
+	{
+		std::cout << "!!!!! Warning, could not determine CyclingDirection; halting. " << std::endl;
+		int haltVal = 3; 
+		std::cin >> haltVal;
+	}
+
 	returnPair.pairCyclingDirection = cutLineDirection;
 	std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: END, construction of first two Typical attempt lines. " << std::endl;
 
 	return returnPair;
 }
-CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef)
+CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAttempt(TwoDCrawlingAttempt* in_attempt, CuttingTriangle* in_cuttingTriangleRef)
 {
 	PoolAndDirectionPair returnPair;
 
-	// common point between both lines:
-	glm::vec3 sharedPoint = in_attempt.beginIntersectingPoint;
-
 	// First, find the cyling direction. 
-	// line A point values, from the CuttingLine
-	glm::vec3 cuttingLinePointA = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointA;
-	glm::vec3 cuttingLinePointB = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].pointB;
+// line A point values, from the CuttingLine
+	glm::vec3 cuttingLinePointA = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].pointA;
+	glm::vec3 cuttingLinePointB = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].pointB;
 
 	// outward facing normal
-	glm::vec3 cuttingLineNormal = in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].outwardFacingNormal;
-	int idOfLineFoundInCuttingLine = in_attempt.beginIntersectionLineID;
+	glm::vec3 cuttingLineNormal = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal;
+
+	// |||||||||||||||||||||||||||||||||||| BEGIN Slice test for begin intersection
+
+	// common point between both lines:
+	glm::vec3 sharedPoint = in_attempt->beginIntersectingPoint;
+
+
+
+	
+	int idOfLineFoundInCuttingLine = in_attempt->beginIntersectionLineID;
 
 	// line B point values, from the CuttableLine
 	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
 	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
 
-	std::cout << "::> cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
-	std::cout << "::> cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
-	std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
-	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
+	std::cout << "::> (BEGIN) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	std::cout << "::> (BEGIN) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	std::cout << "::> (BEGIN) cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
+	std::cout << "::> (BEGIN) cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
+	std::cout << "::> (BEGIN) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
 
-	glm::vec3 cuttablePointToUse = QuatUtils::findPointForDeterminingCyclingDirection(
+	Vec3Result cuttableResult = QuatUtils::findPointForDeterminingCyclingDirection(
 																						cuttingLinePointA, 
 																						cuttingLinePointB, 
 																						cuttableLinePointA, 
 																						cuttableLinePointB, 
 																						cuttingLineNormal
 																					 );
+	glm::vec3 cuttablePointToUse = cuttableResult.resultPoint;
 
-	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+	//std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
 	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 
 	// the CuttableLine spawned by the CuttingLine should be:
@@ -642,18 +839,133 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	// point B = selected end point from cuttingLineSolver
 	// normal = the cuttable line's centroid facing normal.
 	CutLine cuttableCutLine(sharedPoint, cuttablePointToUse, cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
-	std::cout << "Cuttable cut line stats: " << std::endl;
-	std::cout << "Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
-	std::cout << "Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
-	std::cout << "Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
+	std::cout << "(BEGIN) Cuttable cut line stats: " << std::endl;
+	std::cout << "(BEGIN) Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
+	std::cout << "(BEGIN) Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
+	std::cout << "(BEGIN) Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
 		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
 
 	// for a SLICE attempt, the first line is always going to be the sliced line.
-	CutLine slicedCutLine(in_attempt.endIntersectingPoint, in_attempt.beginIntersectingPoint, in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].outwardFacingNormal);
+	CutLine slicedCutLineBegin(in_attempt->endIntersectingPoint, in_attempt->beginIntersectingPoint, in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal);
 
+	// |||||||||||||||||||||||||||||||||||| END Slice test for begin intersection
+
+	// ----------------
+
+	// |||||||||||||||||||||||||||||||||||| BEGIN Slice test for end intersection
+
+
+	// common point between both lines:
+	glm::vec3 sharedPointEnd = in_attempt->endIntersectingPoint;
+
+	// outward facing normal
+	int idOfEndLineFoundInCuttingLine = in_attempt->endIntersectionLineID;
+
+	// line B point values, from the CuttableLine
+	glm::vec3 endCuttableLinePointA = cuttableTriangleLines[idOfEndLineFoundInCuttingLine].pointA;
+	glm::vec3 endCuttableLinePointB = cuttableTriangleLines[idOfEndLineFoundInCuttingLine].pointB;
+
+	std::cout << "::> (END) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	std::cout << "::> (END) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	std::cout << "::> (END) cuttable line point A: " << endCuttableLinePointA.x << ", " << endCuttableLinePointA.y << ", " << endCuttableLinePointA.z << std::endl;
+	std::cout << "::> (END) cuttable line point B: " << endCuttableLinePointB.x << ", " << endCuttableLinePointB.y << ", " << endCuttableLinePointB.z << std::endl;
+	std::cout << "::> (END) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+
+	Vec3Result endCuttableResult = QuatUtils::findPointForDeterminingCyclingDirection(
+																						cuttingLinePointA,
+																						cuttingLinePointB,
+																						endCuttableLinePointA,
+																						endCuttableLinePointB,
+																						cuttingLineNormal
+																					);
+	glm::vec3 endCuttablePointToUse = endCuttableResult.resultPoint;
+	CutLine endingCuttableCutLine(sharedPointEnd, endCuttablePointToUse, cuttableTriangleLines[idOfEndLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
+	CutLine endingSlicedCutLineBegin(in_attempt->beginIntersectingPoint, in_attempt->endIntersectingPoint, in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal);
+
+	// |||||||||||||||||||||||||||||||||||| END Slice test for begin intersection
+
+
+	// Use the first line in the slice that is detected as being valid; 
+	// If using the second result, be sure to swap the intersection ids, for usage in CutLineWelder::handleSliceRun().
+	// Otherwise, it's invalid.
+	if (cuttableResult.isResultValid == true)
+	{
+		std::cout << "BEGIN intersection is valid for SLICE. " << std::endl;
+		// the second line will be a line where point A = the begin intersecting point, point B = the cuttablePointToUse, and the normal is the centroid facing normal from the cuttable line.
+		returnPair.pairPool.insertLineIntoPool(slicedCutLineBegin);
+		returnPair.pairPool.insertLineIntoPool(cuttableCutLine);
+
+		std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build from BEGIN intersecting point: " << std::endl;
+		returnPair.pairPool.printLines();
+
+		// determine the cycling direction value to use, which will be based on the value of cuttablePointToUse.
+		CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
+		if (cuttablePointToUse == cuttableLinePointA)
+		{
+			std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			cutLineDirection = CyclingDirection::REVERSE;
+		}
+		else if (cuttablePointToUse == cuttableLinePointB)
+		{
+			std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			cutLineDirection = CyclingDirection::FORWARD;
+		}
+		returnPair.pairCyclingDirection = cutLineDirection;
+		returnPair.isAttemptValid = true;
+	}
+	else if (endCuttableResult.isResultValid == true)
+	{
+		std::cout << "END intersection is valid for SLICE. " << std::endl;
+		returnPair.pairPool.insertLineIntoPool(endingSlicedCutLineBegin);
+		returnPair.pairPool.insertLineIntoPool(endingCuttableCutLine);
+
+		std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build from END intersecting point: " << std::endl;
+		returnPair.pairPool.printLines();
+
+		// determine the cycling direction value to use, which will be based on the value of cuttablePointToUse.
+		CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
+		if (endCuttablePointToUse == endCuttableLinePointA)
+		{
+			std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			cutLineDirection = CyclingDirection::REVERSE;
+		}
+		else if (endCuttablePointToUse == endCuttableLinePointB)
+		{
+			std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			cutLineDirection = CyclingDirection::FORWARD;
+		}
+
+		// make sure to swap the begin and intersection line IDs.
+		int oldBegin = in_attempt->beginIntersectionLineID;
+		int oldEnd = in_attempt->endIntersectionLineID;
+		in_attempt->beginIntersectionLineID = oldEnd;
+		in_attempt->endIntersectionLineID = oldBegin;
+
+		returnPair.pairCyclingDirection = cutLineDirection;
+		returnPair.isAttemptValid = true;
+	}
+	else
+	{
+		returnPair.isAttemptValid = false;
+	}
+
+
+	// flag as invalid, if we detected it.
+	/*
+	if
+	(
+		(cuttableResult.isResultValid == false)
+	)
+	{
+		returnPair.isAttemptValid = false;
+	}
+	*/
+
+
+	/*
 	// the second line will be a line where point A = the begin intersecting point, point B = the cuttablePointToUse, and the normal is the centroid facing normal from the cuttable line.
-	returnPair.pairPool.insertLineIntoPool(slicedCutLine);
+	returnPair.pairPool.insertLineIntoPool(slicedCutLineBegin);
 	returnPair.pairPool.insertLineIntoPool(cuttableCutLine);
 
 	std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build: " << std::endl;
@@ -672,7 +984,7 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 		cutLineDirection = CyclingDirection::FORWARD;
 	}
 	returnPair.pairCyclingDirection = cutLineDirection;
-
+	*/
 	return returnPair;
 }
 

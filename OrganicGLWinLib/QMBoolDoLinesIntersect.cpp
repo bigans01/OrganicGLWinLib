@@ -134,7 +134,9 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		calculatedPoint.x = secondLinePointARef->x + (resultantSlope.x * distance_to_travel_to_y_0);
 		calculatedPoint.y = secondLinePointARef->y + (resultantSlope.y * distance_to_travel_to_y_0);
 
-		std::cout << "----> calculated point, before rotation back: " << calculatedPoint.x << ", " << calculatedPoint.y << std::endl;
+		std::cout << "----> calculated point, before rotation back: " << calculatedPoint.x << ", " << calculatedPoint.y  
+			      << "||| first line, point A: " << in_quatRotationPointsRef->getPointByIndex(0).x << ", " << in_quatRotationPointsRef->getPointByIndex(0).y
+				  << "||| point B: " << in_quatRotationPointsRef->getPointByIndex(1).x << ", " << in_quatRotationPointsRef->getPointByIndex(1).y << std::endl;
 
 		// ensure that the resulting calculated point has an X <= to the second point of the first line (because that point has X >= 0)
 		// --AND--

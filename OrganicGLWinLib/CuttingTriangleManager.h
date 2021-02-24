@@ -11,6 +11,7 @@ class CuttingTriangleManager
 	public:
 		void insertCuttingTriangle(STriangle in_sTriangle);
 		std::map<int, CuttingTriangle> cuttingTriangles;
+		void printCuttingTriangles();
 };
 
 #endif

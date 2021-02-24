@@ -15,7 +15,7 @@ class STriangleCutter
 	public:
 		void setCuttingParameters(STriangle in_sTriangle, CuttingTriangleManager* in_cuttingTriangleManagerRef);
 		void setDebugLevelForSpecificCuttingTriangle(int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel);
-		void runCuttingSequence();
+		bool runCuttingSequence();
 	private:
 		CuttableTriangleContainer cuttableContainer;
 		CuttingTriangleManager* cuttingTrianglesRef = nullptr;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "QMVec3Base.h"
+#include "QMVec3ResultBase.h"
 
-glm::quat QMVec3Base::createQuaternion(float radians, glm::vec3 in_angle)
+glm::quat QMVec3ResultBase::createQuaternion(float radians, glm::vec3 in_angle)
 {
 	glm::quat returnQuat;
 
@@ -12,7 +12,7 @@ glm::quat QMVec3Base::createQuaternion(float radians, glm::vec3 in_angle)
 	return returnQuat;
 }
 
-void QMVec3Base::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
+void QMVec3ResultBase::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	while (!(*in_quatRotationRecordStackRef).empty())
 	{
@@ -24,9 +24,9 @@ void QMVec3Base::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* 
 
 		if (qmVec3BaseLogger.isLoggingSet() == true)
 		{
-			qmVec3BaseLogger.log("(QMVec3Base) >>> starting printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########) ", "\n");
+			qmVec3BaseLogger.log("(QMVec3ResultBase) >>> starting printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########) ", "\n");
 			in_quatRotationPointsRef->printPoints();
-			qmVec3BaseLogger.log("(QMVec3Base) >>> finished printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########)", "\n");
+			qmVec3BaseLogger.log("(QMVec3ResultBase) >>> finished printing of quat points( ** AFTER APPLYING A QUAT-RECORD #########)", "\n");
 		}
 
 
@@ -34,7 +34,7 @@ void QMVec3Base::rotatePointsToOriginalPosition(std::stack<QuatRotationRecord>* 
 	}
 }
 
-void QMVec3Base::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
+void QMVec3ResultBase::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
 {
 	glm::vec3 rotationAroundX;
 	rotationAroundX.x = -1.0f;

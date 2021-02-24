@@ -40,14 +40,59 @@ void CoplanarMassCreator::runMassManipulation()
 	int someVal = 3;
 	std::cin >> someVal;
 
+	/*
 	// ########################################### NEW METHOD, to replace below:
-	CuttingTriangleManager cuttingManager;
-	STriangleCutter cutter;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
 
+
+	CuttingTriangleManager cuttingManager;
+	// load all STriangles that aren't in the tracked copy, into the cuttingManager.
+	auto relatedSPolysToUseForCuttingBegin = sPolyRefMap.refMap.begin();
+	auto relatedSPolysToUseForCuttingEnd = sPolyRefMap.refMap.end();
+	for (; relatedSPolysToUseForCuttingBegin != relatedSPolysToUseForCuttingEnd; relatedSPolysToUseForCuttingBegin++)
+	{
+		auto currentSTrianglesBegin = relatedSPolysToUseForCuttingBegin->second.triangles.begin();
+		auto currentSTrianglesEnd = relatedSPolysToUseForCuttingBegin->second.triangles.end();
+		for (; currentSTrianglesBegin != currentSTrianglesEnd; currentSTrianglesBegin++)
+		{
+			cuttingManager.insertCuttingTriangle(currentSTrianglesBegin->second);
+		}
+	}
+
+	std::cout << "############################# Printing out CuttingTriangles that will be used: " << std::endl;
+	cuttingManager.printCuttingTriangles();
+
+	int beginTest = 3;
+	std::cin >> beginTest;
+
+
+	// run each STriangle in the tracked copy, against the STriangles in the cuttingManager.
+	STriangleCutter cutter;
+	std::map<int, bool> cuttingResultsMap;
+	auto trackedCopySTrianglesBegin = trackedCopy.triangles.begin();
+	auto trackedCopySTrianglesEnd = trackedCopy.triangles.end();
+	for (; trackedCopySTrianglesBegin != trackedCopySTrianglesEnd; trackedCopySTrianglesBegin++)
+	{
+		STriangleCutter cutter;
+		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
+		cutter.runCuttingSequence();
+	}
+
+	std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	int endTest = 3;
+	std::cin >> endTest;
 	// ########################################### METHOD 1 
+	
 
 	// first, find the total area of the tracked SPoly.
 	//float totalTrackedArea = calculateSPolyArea(trackedSPolyRef);
+	*/
 	float totalTrackedArea = calculateSPolyArea(&trackedSPolyRef);
 
 	// second, we need to find how each related SPoly intersects (if they do) with the tracked SPoly, in order to calculate the area that each related SPoly

@@ -69,9 +69,9 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 			float distBetweenLineAPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.a), foundIntersectionValue);
 			float distBetweenLineAPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.b), foundIntersectionValue);
 
-			//std::cout << "###--> length of line A: " << lineALength << std::endl;
-			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineAPointAAndIntersectedPoint << std::endl;
-			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineAPointBAndIntersectedPoint << std::endl;
+			std::cout << "###--> length of line A: " << lineALength << std::endl;
+			std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineAPointAAndIntersectedPoint << std::endl;
+			std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineAPointBAndIntersectedPoint << std::endl;
 
 			bool tJunctionTestForLineAPointAToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointAAndIntersectedPoint);
 			bool tJunctionTestForLineAPointBToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointBAndIntersectedPoint);
@@ -80,9 +80,9 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 			float distBetweenLineBPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.a), foundIntersectionValue);
 			float distBetweenLineBPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.b), foundIntersectionValue);
 
-			//std::cout << "###--> length of line B: " << lineBLength << std::endl;
-			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineBPointAAndIntersectedPoint << std::endl;
-			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineBPointBAndIntersectedPoint << std::endl;
+			std::cout << "###--> length of line B: " << lineBLength << std::endl;
+			std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineBPointAAndIntersectedPoint << std::endl;
+			std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineBPointBAndIntersectedPoint << std::endl;
 
 			bool tJunctionTestForLineBPointAToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointAAndIntersectedPoint);
 			bool tJunctionTestForLineBPointBToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointBAndIntersectedPoint);
@@ -185,7 +185,25 @@ bool TwoDLineSegmentIntersectAnalyzerV2::runTJunctionTest(float in_lineLength, f
 		//(roundedLength == roundedDistanceFromBtoIntersectedPoint)
 	//)
 
+	/*
 	if (roundedLength == roundedDistanceToIntersectedPointToAnalyze)
+	{
+		returnValue = true;
+	}
+	*/
+
+	float percentageThresholdUpperBound = 1.0001f;
+	float precentageThresholdLowerBound = .9999f;
+
+	float resultingPercentage = in_lineLength / in_distanceToIntersectedPointToAnalyze;
+	//std::cout << "TEST: resultingPercentage would be: " << resultingPercentage << std::endl;
+	
+	if
+	(
+		(resultingPercentage < percentageThresholdUpperBound)
+		&&
+		(resultingPercentage > precentageThresholdLowerBound)
+	)
 	{
 		returnValue = true;
 	}

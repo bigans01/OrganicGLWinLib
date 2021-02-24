@@ -115,7 +115,7 @@ bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPoin
 	{
 		if (planeArrayCheckResult[x] == true)
 		{
-			//std::cout << "!!! found as being within plane! " << std::endl;
+			std::cout << "!!! Plane result " << x << " found as being within plane! " << std::endl;
 			qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) !!! found as being within plane! ", "\n");
 			withinPlaneCount++;
 		}
@@ -480,9 +480,12 @@ bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_po
 
 	//glm::vec3 comparedPointCurrentPosition = rotationpointsRefVector->getPointByIndex(2);
 	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
-	glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(in_quatRotationPointsRef->getPointByIndex(2));
+	//glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(in_quatRotationPointsRef->getPointByIndex(2));
+	glm::vec3 comparedPointCurrentPosition = roundPointToTenThousandths(in_quatRotationPointsRef->getPointByIndex(2));
+	//glm::vec3 comparedPointCurrentPosition = in_quatRotationPointsRef->getPointByIndex(2);
+
 	glm::vec3 centroidFacingNormal = in_quatRotationPointsRef->getPointByIndex(3);
-	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
+	std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
 	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(
@@ -501,4 +504,14 @@ bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_po
 		//std::cout << "!!!! Point is not within triangle! " << std::endl;
 	}
 	return isWithinPlane;
+}
+
+glm::vec3 QMBoolPointWithinTrianglePBZ::roundPointToTenThousandths(glm::vec3 in_vec3)
+{
+	//in_vec3Ref->x = float(floor(in_vec3Ref->x * 10000 + 0.5) / 10000);
+	glm::vec3 returnVec;
+	returnVec.x = float(floor(in_vec3.x * 10000 + 0.5) / 10000);
+	returnVec.y = float(floor(in_vec3.y * 10000 + 0.5) / 10000);
+	returnVec.z = float(floor(in_vec3.z * 10000 + 0.5) / 10000);
+	return returnVec;
 }

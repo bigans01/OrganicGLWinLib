@@ -855,6 +855,12 @@
     <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMVec3ResultBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3Result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1254,6 +1260,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3ResultBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -303,6 +303,7 @@
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVec3Base.h" />
     <ClInclude Include="QMVec3FindOrientatedLineNormal.h" />
+    <ClInclude Include="QMVec3ResultBase.h" />
     <ClInclude Include="QMVoidBase.h" />
     <ClInclude Include="QMVoidFindCyclingDirection.h" />
     <ClInclude Include="QuatUtils.h" />
@@ -427,6 +428,7 @@
     <ClInclude Include="TwoDSPolyIntersectionType.h" />
     <ClInclude Include="UnsolvedPreciseSolver.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
+    <ClInclude Include="Vec3Result.h" />
     <ClInclude Include="WeldedLine.h" />
     <ClInclude Include="WeldedLinePool.h" />
     <ClInclude Include="WeldedLinePoolGuide.h" />
@@ -523,6 +525,7 @@
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVec3Base.cpp" />
     <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp" />
+    <ClCompile Include="QMVec3ResultBase.cpp" />
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />

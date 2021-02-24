@@ -17,7 +17,7 @@ glm::vec3 QuatUtils::findOrientatedLineNormal(glm::vec3 in_linePointA, glm::vec3
 	return orientatedSolver.solve(&points, PolyDebugLevel::NONE);
 }
 
-glm::vec3 QuatUtils::findPointForDeterminingCyclingDirection
+Vec3Result QuatUtils::findPointForDeterminingCyclingDirection
 (
 	glm::vec3 in_lineAPointA,
 	glm::vec3 in_lineAPointB,
@@ -113,7 +113,7 @@ bool QuatUtils::isLineAContainedWithinB
 	bool areLinesColinear = checkIfLinesAreColinear(setALineAPointA, setALineAPointB,setALineBPointA, setALineBPointB);
 	if (areLinesColinear == true)
 	{
-		//std::cout << "!!! Lines detected a sbeing colinear..." << std::endl;
+		std::cout << "!!! Lines detected asbeing colinear..." << std::endl;
 
 		glm::vec3 secondTestLineAPointA = in_lineAPointA;
 		glm::vec3 secondTestLineAPointB = in_lineAPointB;

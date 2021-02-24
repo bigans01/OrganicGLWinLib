@@ -21,6 +21,7 @@ class QMBoolPointWithinTrianglePBZ : public QMBoolBase
 		void rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef);
 		float getRadiansForRotateToPosYViaX(glm::vec3 in_vec3);
 		bool runRotationsAndPlanarityTest(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef);
+		glm::vec3 roundPointToTenThousandths(glm::vec3 in_vec3);
 };
 
 #endif

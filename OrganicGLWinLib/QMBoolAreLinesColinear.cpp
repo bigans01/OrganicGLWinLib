@@ -51,8 +51,8 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	//in_quatRotationPointsRef->printPoints();
 
 	//std::cout << "||||||:::: BEGIN: Coplanarity test, running right-angle checks: " << std::endl;
-	bool checkPointA = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(2));	// point A of second line
-	bool checkPointB = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(3));	// point B of second line
+	bool checkPointA = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(2), in_quatRotationPointsRef);	// point A of second line
+	bool checkPointB = runCoplanarCheck(upwardNormal, in_quatRotationPointsRef->getPointByIndex(3), in_quatRotationPointsRef);	// point B of second line
 	//std::cout << "||||||:::: END: Coplanarity test, running right-angle checks: " << std::endl;
 	//int waitVal = 3;
 	//std::cin >> waitVal;
@@ -65,7 +65,7 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	)
 	{
 		areLinesColinear = true;
-		//std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
+		std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
 	}
 	else
 	{
@@ -73,6 +73,21 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	}
 
 	return areLinesColinear;
+}
+
+bool QMBoolAreLinesColinear::checkIfPointEqualsLineAPointAOrB(glm::vec3 in_pointToCheck, QuatRotationPoints* in_quatRotationPointsRef)
+{
+	bool equalsPointOnLine = false;
+	if
+	(
+		(in_pointToCheck == in_quatRotationPointsRef->getPointByIndex(0))
+		||
+		(in_pointToCheck == in_quatRotationPointsRef->getPointByIndex(1))
+	)
+	{
+		equalsPointOnLine = true;
+	}
+	return equalsPointOnLine;
 }
 
 void QMBoolAreLinesColinear::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
@@ -117,47 +132,58 @@ void QMBoolAreLinesColinear::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRot
 	}
 }
 
-bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm::vec3 in_pointToCompareTo)
+bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm::vec3 in_pointToCompareTo, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	bool wasRightAngleFound = false;
-	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
-
-	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
-	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
-	float atan2result = atan2(in_pointToCompareTo.y, in_pointToCompareTo.x); // find the radians we'll need to rotate by
-	//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
-	float firstPassRotateRadians = 0.0f;
-
-	//std::cout << "::: atan2 result is: " << atan2result << std::endl;
-
-	if (atan2result > 0.0)
+	bool equalityCheck = checkIfPointEqualsLineAPointAOrB(in_pointToCompareTo, in_quatRotationPointsRef);
+	if (equalityCheck == false)
 	{
-		//firstPassRotateRadians = fullRadian360 - atan2result;
-		firstPassRotateRadians = atan2result;
+
+		float radians = 0.0f;
+		float fullRadian360 = 6.28319;
+
+		//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
+		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
+		float atan2result = atan2(in_pointToCompareTo.y, in_pointToCompareTo.x); // find the radians we'll need to rotate by
+		//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
+		float firstPassRotateRadians = 0.0f;
+
+		//std::cout << "::: atan2 result is: " << atan2result << std::endl;
+
+		if (atan2result > 0.0)
+		{
+			//firstPassRotateRadians = fullRadian360 - atan2result;
+			firstPassRotateRadians = atan2result;
+		}
+		else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+		{
+			//firstPassRotateRadians = abs(atan2result);
+			firstPassRotateRadians = fullRadian360 + atan2result;
+		}
+
+		//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
+		//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
+		firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
+		std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+		//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
+		if
+		(
+			//(firstPassRotateRadians == 1.5708f) // 90 degrees
+			(isWithin90DegreeThreshold(firstPassRotateRadians) == true)
+			||
+			//(firstPassRotateRadians == (1.5708f * 3)) // 270 degrees
+			(isWithin270DegreeThreshold(firstPassRotateRadians) == true)
+		)
+		{
+			wasRightAngleFound = true;
+			//std::cout << "!!! Right angle detected. " << std::endl;
+		}
 	}
-	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	else if (equalityCheck == true)
 	{
-		//firstPassRotateRadians = abs(atan2result);
-		firstPassRotateRadians = fullRadian360 + atan2result;
-	}
-
-	//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
-	//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
-	firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-	//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
-	//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
-	if 
-	(	
-		(firstPassRotateRadians == 1.5708f) // 90 degrees
-		||
-		(firstPassRotateRadians == (1.5708f * 3)) // 270 degrees
-	)
-	{
+		std::cout << "Point equality found...." << std::endl;
 		wasRightAngleFound = true;
-		//std::cout << "!!! Right angle detected. " << std::endl;
 	}
-
 	return wasRightAngleFound;
 }
 
@@ -211,4 +237,44 @@ void QMBoolAreLinesColinear::rotateAroundZToYZero(glm::vec3* in_upwardNormalRef,
 
 		//std::cout << ":::: Radian value is: " << radianValue << std::endl;
 	}
+}
+
+bool QMBoolAreLinesColinear::isWithin90DegreeThreshold(float in_radians)
+{
+	bool isWithin = false;
+	float baseRadianValue = 1.5708f;
+	float threshold = .0017f;
+
+	float upperBound = baseRadianValue + threshold;
+	float lowerBound = baseRadianValue - threshold;
+	if
+	(
+		(in_radians < upperBound)
+		&&
+		(in_radians > lowerBound)
+	)
+	{
+		isWithin = true;
+	}
+	return isWithin;
+}
+
+bool QMBoolAreLinesColinear::isWithin270DegreeThreshold(float in_radians)
+{
+	bool isWithin = false;
+	float baseRadianValue = 1.5708f * 3;
+	float threshold = .0017f;
+
+	float upperBound = baseRadianValue + threshold;
+	float lowerBound = baseRadianValue - threshold;
+	if
+	(
+		(in_radians < upperBound)
+		&&
+		(in_radians > lowerBound)
+	)
+	{
+		isWithin = true;
+	}
+	return isWithin;
 }

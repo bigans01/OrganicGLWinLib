@@ -14,13 +14,14 @@
 #include "QMBoolDoLinesIntersect.h"
 #include "QMBoolIsColinearLineAContainedWithinB.h"
 #include <iostream>
+#include "Vec3Result.h"
 
 class QuatUtils
 {
 	public:
 		static bool checkIfPointLiesWithinTrianglePBZ(glm::vec3 in_pointToCheck, glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 		static glm::vec3 findOrientatedLineNormal(glm::vec3 in_linePointA, glm::vec3 in_linePointB, glm::vec3 in_bearingPoint);
-		static glm::vec3 findPointForDeterminingCyclingDirection(
+		static Vec3Result findPointForDeterminingCyclingDirection(
 																	glm::vec3 in_lineAPointA,
 																	glm::vec3 in_lineAPointB,
 																	glm::vec3 in_lineBPointA,

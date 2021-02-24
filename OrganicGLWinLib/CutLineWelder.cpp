@@ -70,8 +70,22 @@ void CutLineWelder::handleTypicalRun()
 
 	std::cout << "Handling TYPICAL run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
 	std::cout << "TYPICAL-> beginning intersection line ID is: " << copiedAttempt.beginIntersectionLineID << std::endl;
+
+
+	std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
+	cuttableTriangleRef->printCuttableTrianglePoints();
+	std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
+	cuttingTriangleRef->printPoints();
+
 	glm::vec3 leadingPoint;
 	bool continueFlag = true;
+	int typicalTicks = 0;
+
+	if (cuttableCyclingDirection == CyclingDirection::NOVAL)
+	{
+		std::cout << "!!!!!!!!!!! Warning, no cycling direction set! " << std::endl;
+	}
+
 	while (continueFlag == true)
 	{
 		// check whether or not the the line in the cuttableTriangle, having an index of nextCuttableLineIndexToUse, contains any 
@@ -143,6 +157,23 @@ void CutLineWelder::handleTypicalRun()
 
 		}
 
+		typicalTicks++;
+		if (typicalTicks >= 5)
+		{
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "!!!! Warning, unusual TYPICAL trace detected; please check previous output. " << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			int typicalCheck = 3;
+			std::cin >> typicalCheck;
+			int infiniteLoop = 3;
+			while (infiniteLoop == 3)
+			{
+
+			}
+		}
+
 	}
 	std::cout << "TYPICAL run-> printing lines in pool..." << std::endl;
 	currentPool.printLines();
@@ -152,27 +183,74 @@ void CutLineWelder::handleSliceRun()
 {
 	int nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(copiedAttempt.beginIntersectionLineID, cuttableCyclingDirection);
 	std::cout << "Handling SLICE run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
+	std::cout << "Copied attempt cutting triangle line ID: " << copiedAttempt.cuttingTriangleLineID << std::endl;
+	std::cout << "Points of nextCuttableLine: " << std::endl;
+	glm::vec3 tempPointA = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].pointA;
+	glm::vec3 tempPointB = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].pointB;
+	std::cout << "A: " << tempPointA.x << ", " << tempPointA.y << ", " << tempPointA.z << std::endl;
+	std::cout << "B: " << tempPointB.x << ", " << tempPointB.y << ", " << tempPointB.z << std::endl;
+
+	std::cout << "Registered points on the cutting line are: " << std::endl;
+	cuttingTriangleRef->cuttingLines[copiedAttempt.cuttingTriangleLineID].printCuttableIntersections();
+
+	std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
+	cuttableTriangleRef->printCuttableTrianglePoints();
+	std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
+	cuttingTriangleRef->printPoints();
+
 	bool continueFlag = true;
+	int sliceTicks = 0;
 	while (continueFlag == true)
 	{
 		std::cout << "!! cuttingTriangleLineID is: " << copiedAttempt.cuttingTriangleLineID << std::endl;
 		// check whether or not the the line in the cuttableTriangle, having an index of nextCuttableLineIndexToUse, contains any 
 		// registries. If it doesn't, enter the entire line into the pool, taking into account the FORWARD or REVERSE CyclingDirection.
-		if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
+
+		// check if the selected endpoint of the next cuttable line is actually within the cutting line's intersection record manager
+		glm::vec3 endpointOfNextCuttableLine = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].fetchNextPointBasedOnCyclingDirection(cuttableCyclingDirection);
+		bool wasPointFound = cuttingTriangleRef->cuttingLines[copiedAttempt.cuttingTriangleLineID].cuttingIntersectionManager.doesPointExist(endpointOfNextCuttableLine);
+		if (wasPointFound == false)
 		{
-			std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
-			CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
-			currentPool.insertLineIntoPool(newLine);
-			std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
-			nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(nextCuttableLineIndexToUse, cuttableCyclingDirection);
+			if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
+			{
+				std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+				CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
+				currentPool.insertLineIntoPool(newLine);
+				std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+				nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(nextCuttableLineIndexToUse, cuttableCyclingDirection);
+			}
+			else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.doesRecordExist(copiedAttempt.cuttingTriangleLineID) == true)
+			{
+				glm::vec3 intersectedPointToUse = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getPointForRecord(copiedAttempt.cuttingTriangleLineID);
+				std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
+				CutLine newLine = producePartialCuttableCutLineForPool(nextCuttableLineIndexToUse, intersectedPointToUse);
+				currentPool.insertLineIntoPool(newLine);
+				continueFlag = false;
+			}
 		}
-		else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.doesRecordExist(copiedAttempt.cuttingTriangleLineID) == true)
+		else if (wasPointFound == true)
 		{
-			glm::vec3 intersectedPointToUse = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getPointForRecord(copiedAttempt.cuttingTriangleLineID);
-			std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
-			CutLine newLine = producePartialCuttableCutLineForPool(nextCuttableLineIndexToUse, intersectedPointToUse);
+			glm::vec3 beginPointForTerminatingLine = currentPool.fetchLineFromPoolViaIndex(1).pointB;
+			CutLine newLine = produceCutLineFromTerminatedSliceRun(nextCuttableLineIndexToUse, beginPointForTerminatingLine, endpointOfNextCuttableLine);
 			currentPool.insertLineIntoPool(newLine);
 			continueFlag = false;
+		}
+
+		sliceTicks++;
+		if (sliceTicks >= 4)
+		{
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "!!!! Warning, unusual SLICE trace detected; please check previous output. " << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			std::cout << "###################################################################################################" << std::endl;
+			int typicalCheck = 3;
+			std::cin >> typicalCheck;
+			int infiniteLoop = 3;
+			while (infiniteLoop == 3)
+			{
+
+			}
 		}
 	}
 	std::cout << "SLICE run-> printing lines in pool..." << std::endl;
@@ -253,5 +331,14 @@ CutLine CutLineWelder::producePartialCuttingCutLineForPool(int in_currentCutting
 	returnLine.pointA = in_pointAForNewLine;
 	returnLine.pointB = in_pointBForNewLine;
 	returnLine.emptyNormal = cuttingTriangleRef->cuttingLines[in_currentCuttingLineID].outwardFacingNormal;
+	return returnLine;
+}
+
+CutLine CutLineWelder::produceCutLineFromTerminatedSliceRun(int in_currentCuttableLineID, glm::vec3 in_pointAForNewLine, glm::vec3 in_pointBForNewLine)
+{
+	CutLine returnLine;
+	returnLine.pointA = in_pointAForNewLine;
+	returnLine.pointB = in_pointBForNewLine;
+	returnLine.emptyNormal = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].cuttableTriangleCentroidFacingNormal;
 	return returnLine;
 }

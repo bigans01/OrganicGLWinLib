@@ -82,16 +82,83 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 
 
-	// 1.3 rotate points by the quaternion, to get to Z = 0, then round points
+	// 1.3.1 rotate points by the quaternion, then run them through the STriangleCutter (do not round before using the STriangleCutter!)
 
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
+	
+	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
+	trackedSPolyRef.printBorderLines();
+	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): done printing lines for tracked SPoly. " << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 
-	//std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
-	//trackedSPolyRef.printBorderLines();
-	//std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): done printing lines for tracked SPoly. " << std::endl;
-	//int someVal = 3;
-	//std::cin >> someVal;
+	
+	// ########################################### NEW METHOD, to replace below:
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
+	std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPolyRef.triangles.size();
 
+	CuttingTriangleManager cuttingManager;
+	// load all STriangles that aren't in the tracked copy, into the cuttingManager.
+	auto relatedSPolysToUseForCuttingBegin = relationshipMap.refMap.begin();
+	auto relatedSPolysToUseForCuttingEnd = relationshipMap.refMap.end();
+	for (; relatedSPolysToUseForCuttingBegin != relatedSPolysToUseForCuttingEnd; relatedSPolysToUseForCuttingBegin++)
+	{
+		auto currentSTrianglesBegin = relatedSPolysToUseForCuttingBegin->second.triangles.begin();
+		auto currentSTrianglesEnd = relatedSPolysToUseForCuttingBegin->second.triangles.end();
+		for (; currentSTrianglesBegin != currentSTrianglesEnd; currentSTrianglesBegin++)
+		{
+			cuttingManager.insertCuttingTriangle(currentSTrianglesBegin->second);
+		}
+	}
+
+	std::cout << "############################# Printing out CuttingTriangles that will be used: " << std::endl;
+	cuttingManager.printCuttingTriangles();
+
+	int beginTest = 3;
+	std::cin >> beginTest;
+
+
+	// run each STriangle in the tracked copy, against the STriangles in the cuttingManager.
+	STriangleCutter cutter;
+	std::map<int, bool> cuttingResultsMap;
+	auto trackedCopySTrianglesBegin = trackedSPolyRef.triangles.begin();
+	auto trackedCopySTrianglesEnd = trackedSPolyRef.triangles.end();
+	for (; trackedCopySTrianglesBegin != trackedCopySTrianglesEnd; trackedCopySTrianglesBegin++)
+	{
+		std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
+		std::cout << "STriangle points are: " << std::endl;
+		trackedCopySTrianglesBegin->second.printPoints();
+		int readyToContinue = 3;
+		std::cin >> readyToContinue;
+
+		STriangleCutter cutter;
+		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
+		cutter.runCuttingSequence();
+
+		std::cout << "::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		int finishedWait = 3;
+		std::cin >> finishedWait;
+	}
+
+	std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	std::cout << "#######################################################" << std::endl;
+	int endTest = 3;
+	std::cin >> endTest;
+	// ########################################### METHOD 1
+	
+
+
+
+	// 1.3.2: round points, before doing the new SPoly generation.
 	coplanarPoints.roundAllPointsToHundredths();
 
 	std::cout << "--> printing lines for tracked SPoly " << std::endl;

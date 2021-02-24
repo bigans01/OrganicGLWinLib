@@ -39,6 +39,8 @@ class CuttableTriangle
 		{
 			CutLinePool pairPool;
 			CyclingDirection pairCyclingDirection = CyclingDirection::NOVAL;
+			//bool isAttemptValid = true;
+			bool isAttemptValid = false;
 		};
 
 		struct CuttablePointPair
@@ -69,7 +71,7 @@ class CuttableTriangle
 		void buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
-		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
+		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt* in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);

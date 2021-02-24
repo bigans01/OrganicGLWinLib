@@ -22,6 +22,7 @@ class CuttingTriangle
 		CuttingTriangleLine cuttingLines[3];
 		void reset();
 		void printCuttingLineIntersections();
+		void printPoints();
 };
 
 #endif

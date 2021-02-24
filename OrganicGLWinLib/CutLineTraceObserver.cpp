@@ -63,9 +63,13 @@ void CutLineTraceObserver::buildNewCutObservation(CutLinePoolGuide in_cutLinePoo
 
 	if (currentObserverState != TracingObserverState::TERMINATED)
 	{
+		std::cout << "!! State is not Terminated. " << std::endl;
 		if (currentObserverState == TracingObserverState::FINAL_OBSERVE)
 		{
 			// run logic for final observe
+
+			std::cout << "!! State is not Terminated, but entering FINAL_OBSERVE. " << std::endl;
+
 			if
 				(
 				(areRemainingRadiansValid == true)
@@ -132,13 +136,13 @@ bool CutLineTraceObserver::insertWeldedTriangleIfLineOfSightIsMaintained()
 	// if there was an intersect found, the line of sight has become broken.
 	if (isLineOfSightMaintained == false)
 	{
-		//std::cout << "###### This observation has been TERMINATED. " << std::endl;
-		//std::cout << "###### (3) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
+		std::cout << "###### This observation has been TERMINATED. " << std::endl;
+		std::cout << "###### (3) Pool size is: " << poolGuide.weldedLinePoolRef->getPoolSize() << std::endl;
 		currentObserverState = TracingObserverState::TERMINATED;
 	}
 	else if (isLineOfSightMaintained == true)
 	{
-		//std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
+		std::cout << "!!!! Line of sight is MAINTAINED for the produced triangle; it is VALID! " << std::endl;
 		CutLine invertedLine = productionResult.producedCutTriangle.fetchTriangleLine(2);
 		invertedLine.swapPointsAndInvertNormal();
 
@@ -217,6 +221,7 @@ void CutLineTraceObserver::determineObservationState()
 	}
 	else if (weldedPoolCount == 4)		// we can do one final observation, but there are no comparables to do intersect tests against.
 	{
+		std::cout << "!!! This shall be a FINAL_OBSERVE" << std::endl;
 		currentObserverState = TracingObserverState::FINAL_OBSERVE;
 	}
 	else if (weldedPoolCount >= 5)

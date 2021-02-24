@@ -39,11 +39,15 @@ class CutTriangleProducer
 			CutLine candidateRearHook = cutLinePoolRef->fetchLineFromPoolViaIndex(linePoolGuide.rearHook);
 			CutTriangle candidateTriangle(candidateLineOfSight, candidateRearHook);
 			candidateCutTriangle = candidateTriangle;
+
+			std::cout << "::::::: prior to check if point is within Triangle: " << std::endl;
+			candidateCutTriangle.printPoints();
 		}
 
 		void checkIfFrontHookPointBIsInCandidateTriangle()
 		{
 			glm::vec3 pointToCheck = cutLinePoolRef->fetchLineFromPoolViaIndex(linePoolGuide.frontHook).pointB;
+			std::cout << "::::::: point to check will be: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
 			bool wasWithinTriangle = candidateCutTriangle.checkIfPointIsWithinTriangle(pointToCheck);
 			if (wasWithinTriangle == true)
 			{
