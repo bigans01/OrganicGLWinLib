@@ -79,7 +79,7 @@ public:
 	void loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 	void loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 	void loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
-	int loadEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
+	void loadEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 
 	void findPlanarVectorForSingleBorderLine(glm::vec3 in_point0, SPolyBorderLines* in_borderLineOneRef);
 	void findPlanarVectorsForTwoBorderLines(SPolyBorderLines* in_borderLineOneRef, SPolyBorderLines* in_borderLineTwoRef);

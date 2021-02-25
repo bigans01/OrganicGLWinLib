@@ -8,19 +8,20 @@
 #include "SPoly.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
+#include "OperableIntSet.h"
 
 
 class CoplanarRelationshipTracker
 {
-
-public:
-	std::map<int, CoplanarRelationships> relationshipContainer;
-	void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
-	void buildCoplanarCategorizedLines();
-	void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
-private:
-	PolyDebugLevel relationshipTrackerDebugLevel = PolyDebugLevel::NONE;
-	PolyLogger relationshipTrackerLogger;
+	private:
+		std::map<int, CoplanarRelationships> relationshipContainer;
+		void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
+		void runAllCuttingSequenceTests();
+		void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
+		friend class SPolySet;
+		PolyDebugLevel relationshipTrackerDebugLevel = PolyDebugLevel::NONE;
+		PolyLogger relationshipTrackerLogger;
+		OperableIntSet removableSPolys;
 };
 
 #endif

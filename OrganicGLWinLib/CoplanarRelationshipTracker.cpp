@@ -9,11 +9,9 @@ void CoplanarRelationshipTracker::insertCoplanarRelationship(int in_trackedSPoly
 																				// we must set the tracked poly data (via setTrackedPolyData),
 																				// and the logger debug level for the relationship (via setLoggerDebugLevel)
 	{
-		//relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, in_trackedSPolyRef);
 		relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, *in_trackedSPolyRef);
 		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
 	}
-	//relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, in_relatedSPolyRef);
 	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
 
 	//std::cout << "!! Verifying pointers are OK: " << std::endl;
@@ -23,7 +21,8 @@ void CoplanarRelationshipTracker::insertCoplanarRelationship(int in_trackedSPoly
 	//std::cout << "-> related SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].relationshipMap.refMap[in_relatedSPolyID].numberOfBorderLines << std::endl;
 	
 }
-void CoplanarRelationshipTracker::buildCoplanarCategorizedLines()
+
+void CoplanarRelationshipTracker::runAllCuttingSequenceTests()
 {
 	
 	auto relationshipsBegin = relationshipContainer.begin();
@@ -31,7 +30,11 @@ void CoplanarRelationshipTracker::buildCoplanarCategorizedLines()
 	for (; relationshipsBegin != relationshipsEnd; relationshipsBegin++)
 	{
 		//std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
-		relationshipsBegin->second.rotateToXYPlaneAndCompare();
+		bool didSPolyPassCuttingTests = relationshipsBegin->second.rotateToXYPlaneAndRunCuttingSequenceTests();
+		if (didSPolyPassCuttingTests == false)
+		{
+			removableSPolys.intSet.insert(relationshipsBegin->first);
+		}
 	}
 	
 }

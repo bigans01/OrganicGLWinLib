@@ -134,6 +134,14 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 		polyFracturingResults.supergroupMap[*newPurgablesBegin].sPolyMap.clear();
 		std::cout << "!! (NEW_ZONE purgables) Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
 	}
+
+	// removable polys found in coplanarTracker
+	auto coplanarTrackerRemovablesBegin = coplanarTracker.removableSPolys.intSet.begin();
+	auto coplanarTrackerRemovablesEnd = coplanarTracker.removableSPolys.intSet.end();
+	for (; coplanarTrackerRemovablesBegin != coplanarTrackerRemovablesEnd; coplanarTrackerRemovablesBegin++)
+	{
+		polyFracturingResults.supergroupMap[*coplanarTrackerRemovablesBegin].sPolyMap.clear();
+	}
 }
 
 void SPolySet::reset()
@@ -304,7 +312,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
 	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
-	coplanarTracker.buildCoplanarCategorizedLines();
+	coplanarTracker.runAllCuttingSequenceTests();
 	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 

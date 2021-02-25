@@ -1,20 +1,12 @@
 #include "stdafx.h"
 #include "CoplanarRelationships.h"
 
-
-CoplanarRelationships::CoplanarRelationships()
-{
-
-}
-
-
-//void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef)
-void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef)
+void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPoly)
 {
 	trackedPolyID = in_trackedPolyID;
-	trackedSPolyRef = in_trackedSPolyRef;
+	trackedSPoly = in_trackedSPoly;
 }
-//void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly* in_relatedSPolyRef)
+
 void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly in_relatedSPolyRef)
 {
 	relationshipMap.insertSPolyRef(in_relatedSPolyID, in_relatedSPolyRef);
@@ -26,79 +18,16 @@ void CoplanarRelationships::setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel
 	relationshipsLogger.setDebugLevel(in_polyDebugLevel);
 }
 
-
-void CoplanarRelationships::rotateToXYPlaneAndCompare()
+bool CoplanarRelationships::performCuttingSequenceTest()
 {
-	// step 1: rotate involved SPolys to the XY plane
+	bool didSPolySurvive = true;
 
-	// Printing lines in pool, prior to rotate to Z = 0;
-	std::cout << "!##################### ((1)) ! " << std::endl;
-	std::cout << "!################### Printing lines for the tracked SPoly with ID: " << trackedPolyID << std::endl;
-	//trackedSPolyRef->sequenceFactory.printLinesInPool();
-	trackedSPolyRef.sequenceFactory.printLinesInPool();
-	std::cout << "!##################### ((2)) ! " << std::endl;
-	int someValWaits = 3;
-	std::cin >> someValWaits;
-
-
-
-	// 1.1: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
-	// 1.1.1: load points from the trackedSpolyRef
-	//trackedSPolyRef->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
-	//trackedSPolyRef->loadPrimalsTrianglesAndBordersIntoQuatPoints(&coplanarPoints);
-	//trackedSPolyRef->loadAllIntoQuatPoints(&coplanarPoints);		// don't use this, or rework it; (12/17/2020); doing this translates the normals (should NOT be done!!)
-	trackedSPolyRef.loadAllIntoQuatPoints(&coplanarPoints);
-
-	// 1.1.2: load points from the related SPolys
-	auto relatedSPolysBegin = relationshipMap.refMap.begin();
-	auto relatedSPolysEnd = relationshipMap.refMap.end();
-	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
-	{
-		//relatedSPolysBegin->second->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
-		relatedSPolysBegin->second.loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
-	}
-
-	// 1.2: translate the first point of the first triangle in the first SPoly to 0.
-	//pointTranslator.performCheck(trackedSPolyRef->borderLines[0].pointA);
-	pointTranslator.performCheck(trackedSPolyRef.borderLines[0].pointA);
-	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
-	{
-		std::cout << "!! prime point 0 requires translation!! " << std::endl;
-		//std::cout << "It's value is: " << trackedSPolyRef->borderLines[0].pointA.x << ", " << trackedSPolyRef->borderLines[0].pointA.y << ", " << trackedSPolyRef->borderLines[0].pointA.z << std::endl;
-		std::cout << "It's value is: " << trackedSPolyRef.borderLines[0].pointA.x << ", " << trackedSPolyRef.borderLines[0].pointA.y << ", " << trackedSPolyRef.borderLines[0].pointA.z << std::endl;
-		coplanarPoints.applyTranslation(pointTranslator.getTranslationValue());
-	}
-	else
-	{
-		std::cout << "!! prime point 0 requires no translation. " << std::endl;
-	}
-	//int numberOfEmptyNormalsInserted = trackedSPolyRef->loadEmptyNormalsIntoQuatPoints(&coplanarPoints);	// normals can only be rotated, not translated; they should be inserted only after 
-																		// any translation occurs.
-	int numberOfEmptyNormalsInserted = trackedSPolyRef.loadEmptyNormalsIntoQuatPoints(&coplanarPoints);
-
-
-
-
-
-
-
-	// 1.3.1 rotate points by the quaternion, then run them through the STriangleCutter (do not round before using the STriangleCutter!)
-
-	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
-	
-	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
-	trackedSPolyRef.printBorderLines();
-	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): done printing lines for tracked SPoly. " << std::endl;
-	int someVal = 3;
-	std::cin >> someVal;
-
-	
 	// ########################################### NEW METHOD, to replace below:
 	std::cout << "#######################################################" << std::endl;
 	std::cout << "#######################################################" << std::endl;
 	std::cout << "#######################################################" << std::endl;
 	std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
-	std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPolyRef.triangles.size();
+	std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPoly.triangles.size();
 
 	CuttingTriangleManager cuttingManager;
 	// load all STriangles that aren't in the tracked copy, into the cuttingManager.
@@ -120,12 +49,11 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 	int beginTest = 3;
 	std::cin >> beginTest;
 
-
 	// run each STriangle in the tracked copy, against the STriangles in the cuttingManager.
 	STriangleCutter cutter;
-	std::map<int, bool> cuttingResultsMap;
-	auto trackedCopySTrianglesBegin = trackedSPolyRef.triangles.begin();
-	auto trackedCopySTrianglesEnd = trackedSPolyRef.triangles.end();
+	std::map<int, bool> sTriangleDestructionTrackerMap;	// used for tracking whether or not each STriangle in the tracked copy was completely destroyed.
+	auto trackedCopySTrianglesBegin = trackedSPoly.triangles.begin();
+	auto trackedCopySTrianglesEnd = trackedSPoly.triangles.end();
 	for (; trackedCopySTrianglesBegin != trackedCopySTrianglesEnd; trackedCopySTrianglesBegin++)
 	{
 		std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
@@ -136,7 +64,7 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 
 		STriangleCutter cutter;
 		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
-		cutter.runCuttingSequence();
+		sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
 
 		std::cout << "::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
 		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
@@ -147,93 +75,147 @@ void CoplanarRelationships::rotateToXYPlaneAndCompare()
 		std::cin >> finishedWait;
 	}
 
+	// now, check if each destruction flag in sTriangleDestructionTrackerMap was set to TRUE. If this is the case, it means
+	// all STriangles were completely destroyed, which means the SPoly itself was completely destroyed.
+	int destroyedSTriangleCount = 0;
+	auto destructionMapBegin = sTriangleDestructionTrackerMap.begin();
+	auto destructionMapEnd = sTriangleDestructionTrackerMap.end();
+	for (; destructionMapBegin != destructionMapEnd; destructionMapBegin++)
+	{
+		if (destructionMapBegin->second == true)
+		{
+			destroyedSTriangleCount++;
+		}
+	}
+	if (destroyedSTriangleCount == sTriangleDestructionTrackerMap.size())
+	{
+		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		std::cout << "||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. " << std::endl;
+		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		didSPolySurvive = false;
+	}
+
 	std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
 	std::cout << "#######################################################" << std::endl;
 	std::cout << "#######################################################" << std::endl;
 	std::cout << "#######################################################" << std::endl;
 	int endTest = 3;
 	std::cin >> endTest;
-	// ########################################### METHOD 1
-	
+
+	return didSPolySurvive;
+}
+
+
+bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
+{
+	// Step 1: rotate involved SPolys to the XY plane
+
+	// Printing lines in pool, prior to rotate to Z = 0;
+	std::cout << "!##################### ((1)) ! " << std::endl;
+	std::cout << "!################### Printing lines for the tracked SPoly with ID: " << trackedPolyID << std::endl;
+	//trackedSPoly->sequenceFactory.printLinesInPool();
+	trackedSPoly.sequenceFactory.printLinesInPool();
+	std::cout << "!##################### ((2)) ! " << std::endl;
+	int someValWaits = 3;
+	std::cin >> someValWaits;
 
 
 
-	// 1.3.2: round points, before doing the new SPoly generation.
-	coplanarPoints.roundAllPointsToHundredths();
+	// Step 2: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
+	// 2.1: load points from the trackedSPoly
+	trackedSPoly.loadAllIntoQuatPoints(&coplanarPoints);
 
-	std::cout << "--> printing lines for tracked SPoly " << std::endl;
-	//trackedSPolyRef->printBorderLines();
-	trackedSPolyRef.printBorderLines();
-	std::cout << "!#####################! " << std::endl;
-	//trackedSPolyRef->sequenceFactory.printLinesInPool();
-	trackedSPolyRef.sequenceFactory.printLinesInPool();
-	std::cout << "!#####################! " << std::endl;
-
-	relatedSPolysBegin = relationshipMap.refMap.begin();
-	relatedSPolysEnd = relationshipMap.refMap.end();
+	// 2.2: load points from the related SPolys
+	auto relatedSPolysBegin = relationshipMap.refMap.begin();
+	auto relatedSPolysEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
 	{
-		std::cout << "-->printing lines for related SPoly " << std::endl;
-		//relatedSPolysBegin->second->printBorderLines();
-		relatedSPolysBegin->second.printBorderLines();
+		//relatedSPolysBegin->second->loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
+		relatedSPolysBegin->second.loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
 	}
-	
-	std::cout << "Pre-rotate print out complete; continue? " << std::endl;
-	int preRotate;
-	std::cin >> preRotate;
 
-	// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
-	//		if CREATION -> use CoplanarMassCreator
-	//		if DESTRUCTION -> use CoplanarMassDestroyer
-	// arguments:
-	// 1.) a reference to the tracked SPoly
-	// 2.) a copy of the relationship map
-	// 3.) a referenece to this instance's instantiaton of coplanarPoints. This is because we will first append the new CategorizedLines produced by the 
-	// CoplanarMassManipulator, apply the quaternion to them, then remove the references to the empty normal, before translating the points of the categorized lines.
-	// All of this data should be insreted at the end of the coplanarPoints.
-
-	// 2.1: set the manipulator, run as CREATION or DESTRUCTION after initializing.
-	//if (trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
-	if (trackedSPolyRef.massManipulationSetting == MassManipulationMode::CREATION)
+	// Step 3: translate the first point of the first triangle in the first SPoly to 0, if we need to.
+	pointTranslator.performCheck(trackedSPoly.borderLines[0].pointA);
+	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
-		std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
-		manipulator.reset(new CoplanarMassCreator());
-		manipulator->initialize(trackedSPolyRef, relationshipMap, &coplanarPoints, relationshipsDebugLevel);
-		manipulator->runMassManipulation();
+		//std::cout << "!! prime point 0 requires translation!! " << std::endl;
+		//std::cout << "It's value is: " << trackedSPoly.borderLines[0].pointA.x << ", " << trackedSPoly.borderLines[0].pointA.y << ", " << trackedSPoly.borderLines[0].pointA.z << std::endl;
+		coplanarPoints.applyTranslation(pointTranslator.getTranslationValue());
 	}
 
-
-	// ********************************************** the below steps are deprecated until further notice, as there appears to be no point in rotating the coplanarPoints back to
-	// the original positions, since all we're really doing is checking for SPolys that are entirely consumed.
-
-	// 2.2: when the manipulator is done, apply the reverse of the quaternion rotation, and then round back.
 	/*
-	rotationManager.rotateToOriginalPosition();
-	coplanarPoints.roundAllPointsToHundredths();
+	// Load the empty normals from the tracked SPoly.
+	// The normals should only be rotated, not translated; they should be inserted only after 
+	// any translation occurs.
+	//trackedSPoly.loadEmptyNormalsIntoQuatPoints(&coplanarPoints);		// |||||||| Flagged as deprecated, 2/25/2021; only used with the commented out deprecated code-block below.
+	*/
 
-	// 2.3: before translating back, remove references to the empty normals of the newly produced categorized lines;
-	//      we do this by removing point refs beginning from the end of QuatRotationManager::rotationPointsRefVector's pointsRefVector, equivalent to the number
-	//      of normals that were passed in (the number which was stored in numberOfEmptyNormalsInserted above).
-	rotationManager.eraseElementsFromEndOfPointsRefVector(numberOfEmptyNormalsInserted);
+	// Step 4: Rotate points by the quaternion, then run them through the cutting sequence test (do NOT round before running this test!)
+	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
+	/*
+	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
+	trackedSPoly.printBorderLines();
+	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): done printing lines for tracked SPoly. " << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
+	*/
+	bool didSPolyPassCuttingSequenceTests = performCuttingSequenceTest();		
+	/*
 
-	// 2.4: lastly, translate all involved SPolys back to their original position.
-	if (pointTranslator.requiresTranslation == 1)
+	//||||||||||||||||||||||||||||||||||||||||||||||| Flagged as deprecated, on 2/25/2021, replaced by functionality of the 
+	//||||||||||||||||||||||||||||||||||||||||||||||| CoplanarRelationships::performCuttingSequenceTest().
+	//||||||||||||||||||||||||||||||||||||||||||||||| This section of code is deemed "historical" and may be reviewed in the future,
+	//||||||||||||||||||||||||||||||||||||||||||||||| running it may or may not cause a program crash and it should only be used for
+	//||||||||||||||||||||||||||||||||||||||||||||||| debugging purposes.
+
+	// only attempt to build border lines, if the SPoly passed the cutting sequence test.
+	// If it didn't pass, there is no point in doing the calculations, as it is going to be removed.
+
+	if (didSPolyPassCuttingSequenceTests == true)
 	{
-		coplanarPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
-	}
-	
+		// 1.3.2: round points, before doing the new SPoly generation.
+		coplanarPoints.roundAllPointsToHundredths();
 
-	std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-	std::cout << "--> printing lines for tracked SPoly " << std::endl;
-	//trackedSPolyRef->printBorderLines();
-	trackedSPolyRef.printBorderLines();
-	relatedSPolysBegin = relationshipMap.refMap.begin();
-	relatedSPolysEnd = relationshipMap.refMap.end();
-	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
-	{
-		std::cout << "-->printing lines for related SPoly " << std::endl;
-		//relatedSPolysBegin->second->printBorderLines();
-		relatedSPolysBegin->second.printBorderLines();
+		std::cout << "--> printing lines for tracked SPoly " << std::endl;
+		trackedSPoly.printBorderLines();
+		std::cout << "!#####################! " << std::endl;
+		trackedSPoly.sequenceFactory.printLinesInPool();
+		std::cout << "!#####################! " << std::endl;
+
+		relatedSPolysBegin = relationshipMap.refMap.begin();
+		relatedSPolysEnd = relationshipMap.refMap.end();
+		for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
+		{
+			std::cout << "-->printing lines for related SPoly " << std::endl;
+			relatedSPolysBegin->second.printBorderLines();
+		}
+
+		std::cout << "Pre-rotate print out complete; continue? " << std::endl;
+		int preRotate;
+		std::cin >> preRotate;
+
+		// step 2: check if its MassManipulationMode::CREATION or DESTRUCTION.
+		//		if CREATION -> use CoplanarMassCreator
+		//		if DESTRUCTION -> use CoplanarMassDestroyer
+		// arguments:
+		// 1.) a reference to the tracked SPoly
+		// 2.) a copy of the relationship map
+		// 3.) a referenece to this instance's instantiaton of coplanarPoints. This is because we will first append the new CategorizedLines produced by the 
+		// CoplanarMassManipulator, apply the quaternion to them, then remove the references to the empty normal, before translating the points of the categorized lines.
+		// All of this data should be insreted at the end of the coplanarPoints.
+
+		// 2.1: set the manipulator, run as CREATION or DESTRUCTION after initializing.
+		//if (trackedSPoly->massManipulationSetting == MassManipulationMode::CREATION)
+		if (trackedSPoly.massManipulationSetting == MassManipulationMode::CREATION)
+		{
+			std::cout << "!!!! MM Mode is set as creation; processing via CoplanarMassCreator..." << std::endl;
+			manipulator.reset(new CoplanarMassCreator());
+			manipulator->initialize(trackedSPoly, relationshipMap, &coplanarPoints, relationshipsDebugLevel);
+			manipulator->runMassManipulation();
+		}
 	}
 	*/
+	return didSPolyPassCuttingSequenceTests;
 }

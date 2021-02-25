@@ -17,38 +17,31 @@
 class CoplanarRelationships
 {
 	public:
-		//CoplanarRelationships() {};
-
-		
-		CoplanarRelationships();
-		
+		CoplanarRelationships() {};
 		CoplanarRelationships& operator=(const CoplanarRelationships& in_coplanarRelationshipsB)
 		{
 			trackedPolyID = in_coplanarRelationshipsB.trackedPolyID;
-			trackedSPolyRef = in_coplanarRelationshipsB.trackedSPolyRef;
+			trackedSPoly = in_coplanarRelationshipsB.trackedSPoly;
 			relationshipMap = in_coplanarRelationshipsB.relationshipMap;
 			//rotationManager = in_coplanarRelationshipsB.rotationManager;
 			//coplanarPoints = in_coplanarRelationshipsB.coplanarPoints;
 			//pointTranslator = in_coplanarRelationshipsB.pointTranslator;
 			return *this;
 		}
-		
-
-		std::unique_ptr<CoplanarMassManipulator> manipulator;		// for either CREATION or DESTRUCTION modes
+	private:
+		std::unique_ptr<CoplanarMassManipulator> manipulator;		// for either CREATION or DESTRUCTION modes; flagged as deprecated (2/25/2021)
 		int trackedPolyID = 0;
-		//SPoly* trackedSPolyRef = nullptr;
-		SPoly trackedSPolyRef;
+		SPoly trackedSPoly;
 		SPolyRefMap relationshipMap;
 		QuatRotationManager rotationManager;
 		QuatRotationPoints coplanarPoints;
 		PointTranslationCheck pointTranslator;
-		//void setTrackedPolyData(int in_trackedPolyID, SPoly* in_trackedSPolyRef);
 		void setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef);
-		//void insertRelationship(int in_sPolyIndex, SPoly* in_sPolyRef);
 		void insertRelationship(int in_sPolyIndex, SPoly in_sPolyRef);
-		void rotateToXYPlaneAndCompare();
+		bool rotateToXYPlaneAndRunCuttingSequenceTests();
 		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
-	private:
+		friend class CoplanarRelationshipTracker;
+		bool performCuttingSequenceTest();
 		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
 		PolyLogger relationshipsLogger;
 
