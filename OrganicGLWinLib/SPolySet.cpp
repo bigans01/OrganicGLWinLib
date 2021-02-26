@@ -144,6 +144,21 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	}
 }
 
+MassManipulationMode SPolySet::getManipulationModeForSPolyGroup(int in_sPolyGroupID) // gets the MMM for a group of SPolys (passed in value should be 0 or 1
+{
+	MassManipulationMode returnMode = MassManipulationMode::NOVAL;
+	auto sPolysBegin = secondaryPolys.begin();
+	auto sPolysEnd = secondaryPolys.end();
+	for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+	{
+		if (sPolysBegin->second.groupID == in_sPolyGroupID)
+		{
+			returnMode = sPolysBegin->second.massManipulationSetting;
+		}
+	}
+	return returnMode;
+}
+
 void SPolySet::reset()
 {
 	numberOfPolys = 0;
@@ -179,6 +194,10 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	//zoneMaster.setMassZoneLogLevels(PolyDebugLevel::DEBUG);			// hard-coded for testing, for the time being. (1/11/2021)
 	zoneMaster.createMassZoneBoxBoundaries(in_massZoneBoxType);
 	zoneMaster.setZoneClipperReferences();
+
+	// set the mass manipulation mode for each zone's clipper; we must sample the mmm from the SPoly group IDs.
+	zoneMaster.setOldZoneClipperManipulationMode(getManipulationModeForSPolyGroup(0));	// old zone uses group 0's manipulation mode
+	zoneMaster.setNewZoneClipperManipulationMode(getManipulationModeForSPolyGroup(1));  // new zone uses group 0's manipulation mode
 
 
 	//zoneMaster.printMassZoneBorderLineCounts();

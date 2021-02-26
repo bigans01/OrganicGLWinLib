@@ -22,6 +22,7 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "QuatUtils.h"
+#include "MassManipulationMode.h"
 
 class MassZonePointClipper
 {
@@ -32,6 +33,7 @@ class MassZonePointClipper
 		std::map<int, SPoly*> clippingShellMap;
 		std::map<int, MeshMatterMeta>* otherZoneMeshMatterMetaMapRef = nullptr;
 		std::set<int> sPolysToPurge;		// stores the SPolySet ID(s) of any SPoly that needs to be purged.
+		MassManipulationMode clipperManipulationMode = MassManipulationMode::NOVAL;
 		void insertSPolySuperGroupRefsIntoClippingShell(SPolySupergroup* in_sPolySuperGroupRef);
 		void insertSPolyRefIntoClippingShell(SPoly* in_sPolyRef);
 		void setOtherZoneMeshMatterMetaMapRef(std::map<int, MeshMatterMeta>* in_otherZoneMeshMatterMetaMapRef);

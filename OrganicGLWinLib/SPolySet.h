@@ -32,6 +32,7 @@
 #include "FusionCandidateOrigin.h"
 #include "FusedPointReactor.h"
 #include "SPolyDOSet.h"
+#include "MassManipulationMode.h"
 
 class SPolySet
 {
@@ -119,6 +120,8 @@ private:
 
 	float getRadiansForPosZViaY(glm::vec3 in_vec3);
 	float getRadiansForPosYViaX(glm::vec3 in_vec3);
+
+	MassManipulationMode getManipulationModeForSPolyGroup(int in_sPolyGroupID); // gets the MMM for a group of SPolys (passed in value should be 0 or 1)
 
 	void setOption(DebugOption in_option);
 	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);

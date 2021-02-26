@@ -37,10 +37,24 @@ void MassZonePointClipper::run()
 	auto otherMeshMatterMapEnd = otherZoneMeshMatterMetaMapRef->end();
 	for (; otherMeshMatterMapBegin != otherMeshMatterMapEnd; otherMeshMatterMapBegin++)
 	{
-		if (compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second) == true)	// if it was determined that it needs to be purged, put it into sPolysToPurgeSet.
+		// the following returns true, if the SPoly in the current MeshMatterMeta we are analyzing (otherMeshMatterMetaMapBegin->second)
+		// is found as being entirely within this clipper's Clipping shells. 
+		bool wasMeshMatterClipped = (compareMeshMatterMetaAgainstClippingShells(&otherMeshMatterMapBegin->second));	
+		bool shouldClippedMatterExist = false; // whether or not the matter should exist, which is dependent on the call to MeshMatterMeta::determineSPolyExistenceVerdict (see that function for explanation)
+
+		// determining a verdict is dependent on the MassManipulationMode of the MeshMatterMeta we are analyzing, this clipper's manipulation mode, and whether or not wasMeshMatterClipped is true. When wasMeshMatterClipped == true, it means that the SPoly was entirely CONSUMED.
+		if (wasMeshMatterClipped == true)	
 		{
-			//std::cout << "!!! Flagging SPoly with ID " << otherMeshMatterMapBegin->second.referencedSPolyID << " as purgable." << std::endl;
-			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! Flagging SPoly with ID ", otherMeshMatterMapBegin->second.referencedSPolyID, " as purgable.", "\n");
+			shouldClippedMatterExist = otherMeshMatterMapBegin->second.determineSPolyExistenceVerdict(clipperManipulationMode, MassComparisonResult::CONSUMED);
+		}
+		else if (wasMeshMatterClipped == false)
+		{
+			shouldClippedMatterExist = otherMeshMatterMapBegin->second.determineSPolyExistenceVerdict(clipperManipulationMode, MassComparisonResult::NOT_CONSUMED);
+		}
+
+		// if the result of the verdict indicates that the SPoly should be completely erased, put it into the purgable set.
+		if (shouldClippedMatterExist == false)
+		{
 			sPolysToPurge.insert(otherMeshMatterMapBegin->second.referencedSPolyID);
 		}
 	}

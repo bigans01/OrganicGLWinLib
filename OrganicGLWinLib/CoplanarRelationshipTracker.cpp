@@ -3,16 +3,16 @@
 
 void CoplanarRelationshipTracker::insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef)
 {
-	
-	auto checkIfRelationshipForTrackedPolyExists = relationshipContainer.find(in_trackedSPolyID);
-	if (checkIfRelationshipForTrackedPolyExists == relationshipContainer.end())	// it doesn't exist, so we'll have to insert a fresh relationship;
-																				// we must set the tracked poly data (via setTrackedPolyData),
-																				// and the logger debug level for the relationship (via setLoggerDebugLevel)
+	if (in_trackedSPolyRef->massManipulationSetting == MassManipulationMode::CREATION)
 	{
-		relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, *in_trackedSPolyRef);
-		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
+		insertRelationship(in_trackedSPolyID, in_trackedSPolyRef, in_relatedSPolyID, in_relatedSPolyRef);
 	}
-	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
+	else if (in_trackedSPolyRef->massManipulationSetting == MassManipulationMode::DESTRUCTION)
+	{
+		// for a destructive relationship, the parameters to use for the tracked/related SPolys are reversed.
+		// In other words, the tracked SPoly passed into this function becomes the related SPoly, and the related SPoly becomes the tracked SPoly.
+		insertRelationship(in_relatedSPolyID, in_relatedSPolyRef, in_trackedSPolyID, in_trackedSPolyRef);
+	}
 
 	//std::cout << "!! Verifying pointers are OK: " << std::endl;
 	//std::cout << "-> tracked SPoly, number of border lines: " << relationshipContainer[in_trackedSPolyID].trackedSPolyRef->numberOfBorderLines << std::endl;
@@ -43,4 +43,29 @@ void CoplanarRelationshipTracker::setDebugLevel(PolyDebugLevel in_polyDebugLevel
 {
 	relationshipTrackerLogger.setDebugLevel(in_polyDebugLevel);
 	relationshipTrackerDebugLevel = in_polyDebugLevel;
+}
+
+void CoplanarRelationshipTracker::insertDebugLevelOptionForSpecificTrackedSPoly(int in_trackedSPolyID, PolyDebugLevel in_polyDebugLevel)
+{
+	specificRelationshipOptions[in_trackedSPolyID] = in_polyDebugLevel;
+}
+
+PolyDebugLevel CoplanarRelationshipTracker::retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
+
+	return returnLevel;
+}
+
+void CoplanarRelationshipTracker::insertRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef)
+{
+	// it doesn't exist, so we'll have to insert a fresh relationship;
+	// we must set the tracked poly data (via setTrackedPolyData),
+	// and the logger debug level for the relationship (via setLoggerDebugLevel)
+	if (auto checkIfRelationshipForTrackedPolyExists = relationshipContainer.find(in_trackedSPolyID); checkIfRelationshipForTrackedPolyExists == relationshipContainer.end())	
+	{
+		relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, *in_trackedSPolyRef);
+		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
+	}
+	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
 }

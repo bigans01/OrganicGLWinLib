@@ -61,6 +61,16 @@ void MassZoneMaster::runPointClippers()
 	newZone.runClipper();
 }
 
+void MassZoneMaster::setOldZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode)
+{
+	oldZone.clipper.clipperManipulationMode = in_massManipulationMode;
+}
+
+void MassZoneMaster::setNewZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode)
+{
+	newZone.clipper.clipperManipulationMode = in_massManipulationMode;
+}
+
 void MassZoneMaster::setMassZoneLogLevels(PolyDebugLevel in_polyDebugLevel)
 {
 	oldZone.setMassZoneLogLevel(in_polyDebugLevel);

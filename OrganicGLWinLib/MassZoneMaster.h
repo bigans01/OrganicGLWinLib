@@ -11,6 +11,7 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "DebugOption.h"
+#include "MassManipulationMode.h"
 
 class MassZoneMaster
 {
@@ -25,6 +26,8 @@ class MassZoneMaster
 		void printMassZoneBorderLineCounts();
 		void handleDebugOption(DebugOption in_debugOption);
 		void runPointClippers();
+		void setOldZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode);
+		void setNewZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode);
 	private:
 		friend class SPolySet;
 		std::map<int, MassZoneType> sPolyZoneTypeMap;

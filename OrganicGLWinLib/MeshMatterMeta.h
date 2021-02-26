@@ -10,20 +10,21 @@
 class MeshMatterMeta
 {
 	public:
-		MeshMatterMeta() {};
+		MeshMatterMeta() {};	// required for usage by std::map (tuple?)
+	private:
 		MeshMatterMeta(int in_referencedSPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode) :
 			referencedSPolyID(in_referencedSPolyID),
 			massSPolyRef(in_massSPolyRef),
 			originManipulationMode(in_originMassManipulationMode)
 		{};
-
+		friend class MassZone;
+		friend class MassZonePointClipper;
 		int referencedSPolyID = 0;			// the ID (index) of the referenced SPoly, as it exists within the superceding SPolySet
 		SPoly* massSPolyRef = nullptr;
 		MassManipulationMode originManipulationMode = MassManipulationMode::NOVAL;
-		MassManipulationMode comparedToManipulationMode = MassManipulationMode::NOVAL;
-		MassComparisonResult comparisonResult = MassComparisonResult::NOVAL;
-		bool determineSPolyExistenceVerdict();
-		bool shouldSPolyRemain = true;		// assume that the SPoly will remain (innocent until proven guilty; guilty being contained entirely with a MassZone's produced shell)
+
+		// determines whether or not the SPoly referenced by this instance should exist, or be annihilated.
+		bool determineSPolyExistenceVerdict(MassManipulationMode in_comparedToMassManipulationMode, MassComparisonResult in_massComparisonResult); 
 };
 
 #endif
