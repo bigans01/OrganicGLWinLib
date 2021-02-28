@@ -40,6 +40,7 @@ class CoplanarRelationships
 		QuatRotationPoints coplanarPoints;
 		PointTranslationCheck pointTranslator;
 		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
+		PolyDebugLevel dlPrintBorderLines = PolyDebugLevel::NONE;	// for printing out the border lines in the tracked and related SPolys.
 		PolyLogger relationshipsLogger;
 
 		void setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef);

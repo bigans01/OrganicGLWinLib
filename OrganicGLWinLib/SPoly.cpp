@@ -799,6 +799,14 @@ void SPoly::printLines()
 	}
 }
 
+void SPoly::printPoints()
+{
+	for (int x = 0; x < numberOfBorderLines; x++)
+	{
+		std::cout << "Point " << x << ": " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
+	}
+}
+
 void SPoly::printBorderLines()
 {
 	for (int x = 0; x < numberOfBorderLines; x++)

@@ -462,7 +462,7 @@
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
-    <ClCompile Include="CoplanarCategorizedLineComparison.cpp" />
+    <ClCompile Include="CoplanarCategorizedLineProducer.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CoplanarMassCreator.cpp" />
     <ClCompile Include="CoplanarRelationshipDebugFlags.cpp" />

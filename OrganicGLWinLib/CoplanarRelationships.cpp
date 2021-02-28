@@ -63,6 +63,7 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 		std::cin >> readyToContinue;
 
 		STriangleCutter cutter;
+		// you would set debug options for the cutter here...
 		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
 		sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
 
@@ -109,30 +110,36 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 
 void CoplanarRelationships::applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
 {
-
+	dlPrintBorderLines = in_coplanarRelationshipsDebugFlagsRef->dlPrintBorderLinesOfTrackedAndRelatedSPolys;	// if set, prints border lines of tracked/related SPolys.
 }
 
 
 bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
 {
-	// Step 1: rotate involved SPolys to the XY plane
+	// Optional debug output
+	PolyLogger lineOutputLogger;
+	lineOutputLogger.setDebugLevel(dlPrintBorderLines);
+	if (lineOutputLogger.isLoggingSet())
+	{
+		lineOutputLogger.log("(CoplanarRelationships): indexed SPoly ", trackedPolyID, ": >>>>>>>>>>>>>>>>>> BEGIN printing border lines of tracked and related SPolys: ", "\n");
+		lineOutputLogger.log("(CoplanarRelationships): printing out tracked SPoly points: ", "\n");
+		trackedSPoly.printPoints();
+		lineOutputLogger.log("(CoplanarRelationships): printing out related SPoly points: ", "\n");
+		auto relatedLineOutputBegin = relationshipMap.refMap.begin();
+		auto relatedLineOutputEnd = relationshipMap.refMap.end();
+		for (; relatedLineOutputBegin != relatedLineOutputEnd; relatedLineOutputBegin++)
+		{
+			lineOutputLogger.log("(CoplanarRelationships): points for related SPoly with ID ", relatedLineOutputBegin->first, ": ", "\n");
+			relatedLineOutputBegin->second.printPoints();
+		}
+		lineOutputLogger.waitForDebugInput();
+	}
 
-	// Printing lines in pool, prior to rotate to Z = 0;
-	std::cout << "!##################### ((1)) ! " << std::endl;
-	std::cout << "!################### Printing lines for the tracked SPoly with ID: " << trackedPolyID << std::endl;
-	//trackedSPoly->sequenceFactory.printLinesInPool();
-	trackedSPoly.sequenceFactory.printLinesInPool();
-	std::cout << "!##################### ((2)) ! " << std::endl;
-	int someValWaits = 3;
-	std::cin >> someValWaits;
-
-
-
-	// Step 2: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
-	// 2.1: load points from the trackedSPoly
+	// Step 1: load the points (that is, points of STriangles and SPolyBorderLines) before applying translation.
+	// 1.1: load points from the trackedSPoly
 	trackedSPoly.loadAllIntoQuatPoints(&coplanarPoints);
 
-	// 2.2: load points from the related SPolys
+	// 1.2: load points from the related SPolys
 	auto relatedSPolysBegin = relationshipMap.refMap.begin();
 	auto relatedSPolysEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
@@ -141,7 +148,7 @@ bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
 		relatedSPolysBegin->second.loadTrianglesAndBorderLinesIntoQuatPoints(&coplanarPoints);
 	}
 
-	// Step 3: translate the first point of the first triangle in the first SPoly to 0, if we need to.
+	// Step 2: translate the first point of the first triangle in the first SPoly to 0, if we need to.
 	pointTranslator.performCheck(trackedSPoly.borderLines[0].pointA);
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
@@ -157,7 +164,7 @@ bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
 	//trackedSPoly.loadEmptyNormalsIntoQuatPoints(&coplanarPoints);		// |||||||| Flagged as deprecated, 2/25/2021; only used with the commented out deprecated code-block below.
 	*/
 
-	// Step 4: Rotate points by the quaternion, then run them through the cutting sequence test (do NOT round before running this test!)
+	// Step 3: Rotate points by the quaternion, then run them through the cutting sequence test (do NOT round before running this test!)
 	rotationManager.initializeAndRunForZFracture(&coplanarPoints);
 	/*
 	std::cout << "+++++++++++++++++ (PRE-TRACKED ROUND TO HUNDREDTHS): printing lines for tracked SPoly: " << std::endl;
