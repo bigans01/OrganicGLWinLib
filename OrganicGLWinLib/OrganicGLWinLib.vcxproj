@@ -204,6 +204,7 @@
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
     <ClInclude Include="CoplanarMassCreator.h" />
     <ClInclude Include="CoplanarMassManipulator.h" />
+    <ClInclude Include="CoplanarRelationshipDebugFlags.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
     <ClInclude Include="CutLine.h" />
@@ -464,6 +465,7 @@
     <ClCompile Include="CoplanarCategorizedLineComparison.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CoplanarMassCreator.cpp" />
+    <ClCompile Include="CoplanarRelationshipDebugFlags.cpp" />
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />

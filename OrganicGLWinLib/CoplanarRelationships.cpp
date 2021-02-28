@@ -107,6 +107,11 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	return didSPolySurvive;
 }
 
+void CoplanarRelationships::applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
+{
+
+}
+
 
 bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
 {

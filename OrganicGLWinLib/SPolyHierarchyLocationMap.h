@@ -66,9 +66,9 @@ class SPolyHierarchyLocationMap
 
 
 		std::map<int, SPolyHierarchyLocation> locationMap;		
-		void insertHierarchyLocation(int in_primalPolyID, int in_pieceID)
+		void insertHierarchyLocation(int in_primalPolyID, int in_pieceID, int in_sPolySetIndex)
 		{
-			SPolyHierarchyLocation location(in_primalPolyID, in_pieceID);
+			SPolyHierarchyLocation location(in_primalPolyID, in_pieceID, in_sPolySetIndex);
 			locationMap[int(locationMap.size())] = location;
 		}
 
@@ -78,7 +78,7 @@ class SPolyHierarchyLocationMap
 			auto locationsEnd = locationMap.end();
 			for (; locationsBegin != locationsEnd; locationsBegin++)
 			{
-				std::cout << "Primal poly ID: [" << locationsBegin->second.primalPolyID << "], piece ID: [" << locationsBegin->second.pieceID << "] " << std::endl;
+				std::cout << "Primal poly ID: [" << locationsBegin->second.primalPolyID << "], piece ID: [" << locationsBegin->second.pieceID << "], sPolySetIndex: " << locationsBegin->second.indexInSPolySet << std::endl;
 			}
 		}
 };

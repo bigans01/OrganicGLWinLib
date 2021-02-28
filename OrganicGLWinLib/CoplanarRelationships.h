@@ -13,6 +13,7 @@
 #include <mutex>
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
+#include "CoplanarRelationshipDebugFlags.h"
 
 class CoplanarRelationships
 {
@@ -29,6 +30,8 @@ class CoplanarRelationships
 			return *this;
 		}
 	private:
+		friend class CoplanarRelationshipTracker;
+
 		std::unique_ptr<CoplanarMassManipulator> manipulator;		// for either CREATION or DESTRUCTION modes; flagged as deprecated (2/25/2021)
 		int trackedPolyID = 0;
 		SPoly trackedSPoly;
@@ -36,14 +39,15 @@ class CoplanarRelationships
 		QuatRotationManager rotationManager;
 		QuatRotationPoints coplanarPoints;
 		PointTranslationCheck pointTranslator;
+		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
+		PolyLogger relationshipsLogger;
+
 		void setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef);
 		void insertRelationship(int in_sPolyIndex, SPoly in_sPolyRef);
 		bool rotateToXYPlaneAndRunCuttingSequenceTests();
 		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
-		friend class CoplanarRelationshipTracker;
 		bool performCuttingSequenceTest();
-		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
-		PolyLogger relationshipsLogger;
+		void applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
 
 };
 

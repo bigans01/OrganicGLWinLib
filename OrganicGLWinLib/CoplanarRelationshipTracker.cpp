@@ -30,6 +30,7 @@ void CoplanarRelationshipTracker::runAllCuttingSequenceTests()
 	for (; relationshipsBegin != relationshipsEnd; relationshipsBegin++)
 	{
 		//std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
+		applyCoplanarRelationshipDebugFlagsIfFound(relationshipsBegin->first);
 		bool didSPolyPassCuttingTests = relationshipsBegin->second.rotateToXYPlaneAndRunCuttingSequenceTests();
 		if (didSPolyPassCuttingTests == false)
 		{
@@ -45,9 +46,15 @@ void CoplanarRelationshipTracker::setDebugLevel(PolyDebugLevel in_polyDebugLevel
 	relationshipTrackerDebugLevel = in_polyDebugLevel;
 }
 
-void CoplanarRelationshipTracker::insertDebugLevelOptionForSpecificTrackedSPoly(int in_trackedSPolyID, PolyDebugLevel in_polyDebugLevel)
+void CoplanarRelationshipTracker::insertDOForSpecificTrackedSPoly(int in_trackedSPolyID, DebugOption in_debugOption)
 {
-	specificRelationshipOptions[in_trackedSPolyID] = in_polyDebugLevel;
+	//specificRelationshipOptions[in_trackedSPolyID] = in_polyDebugLevel;
+	relationshipDebugFlags[in_trackedSPolyID].handleSpecificTrackedSPolyDebugOption(in_debugOption);
+}
+
+void CoplanarRelationshipTracker::insertDOForSpecificTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, DebugOption in_debugOption)
+{
+
 }
 
 PolyDebugLevel CoplanarRelationshipTracker::retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID)
@@ -68,4 +75,12 @@ void CoplanarRelationshipTracker::insertRelationship(int in_trackedSPolyID, SPol
 		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
 	}
 	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
+}
+
+void CoplanarRelationshipTracker::applyCoplanarRelationshipDebugFlagsIfFound(int in_trackedSPolyID)
+{
+	if (auto checkIfRelationshipDebugFlagsForTrackedPolyExist = relationshipDebugFlags.find(in_trackedSPolyID); checkIfRelationshipDebugFlagsForTrackedPolyExist != relationshipDebugFlags.end())
+	{
+		relationshipContainer[in_trackedSPolyID].applyDebugOptions(&relationshipDebugFlags[in_trackedSPolyID]);
+	}
 }

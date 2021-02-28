@@ -4,11 +4,13 @@
 //#define SMALL_NUM   0.00000001 // anything that avoids division overflow
 #define SMALL_NUM   0.000001 // anything that avoids division overflow
 
-void SPolySet::addPoly(SPoly in_sPoly)
+int SPolySet::addPoly(SPoly in_sPoly)
 {
+	int indexToUse = numberOfPolys;	// indexToUse will be used as the return value, but must be set before numberOfPolys get incremented at the end of the function.
 	secondaryPolys[numberOfPolys] = in_sPoly;		// add the poly, and increment it
 	polyMorphTracker.morphablePolys[numberOfPolys] = in_sPoly;
 	numberOfPolys++;
+	return indexToUse;
 }
 
 void SPolySet::setOption(DebugOption in_option)

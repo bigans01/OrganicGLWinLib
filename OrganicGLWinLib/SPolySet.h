@@ -39,16 +39,16 @@ class SPolySet
 public:
 	SPolySupergroupManager polyFracturingResults;	// publicly available, can be used for various things.
 	// ************************** Recursive template function for enabling debugging on the SPolySet **********************************
-	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptions(FirstOption && firstOption, RemainingOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDebugOptions(FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		// needs work; but if statement is done to avoid user error of parameters not passed in as DebugOption.
 		if constexpr
 		(
-			(std::is_same<FirstOption, DebugOption>::value)
+			(std::is_same<FirstDebugOption, DebugOption>::value)
 		)
 		{
-			setOption(std::forward<FirstOption>(firstOption));
-			setDebugOptions(std::forward<RemainingOptions>(optionParams)...);
+			setOption(std::forward<FirstDebugOption>(firstOption));
+			setDebugOptions(std::forward<RemainingDebugOptions>(optionParams)...);
 		}
 		else
 		{
@@ -58,15 +58,15 @@ public:
 	void setDebugOptions() {};
 
 	// ************************** Recursive template function for enabling debug options on a specific SPoly **********************************
-	template<typename FirstOption, typename ...RemainingOptions> void setDebugOptionsForSpecificSPoly(int in_sPolyID, FirstOption && firstOption, RemainingOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDebugOptionsForSpecificSPoly(int in_sPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		if constexpr
 		(
-			(std::is_same<FirstOption, DebugOption>::value)
+			(std::is_same<FirstDebugOption, DebugOption>::value)
 		)
 		{
-			setSpecificSPolyOption(in_sPolyID, std::forward<FirstOption>(firstOption));
-			setDebugOptionsForSpecificSPoly(in_sPolyID, std::forward<RemainingOptions>(optionParams)...);
+			setSpecificSPolyOption(in_sPolyID, std::forward<FirstDebugOption>(firstOption));
+			setDebugOptionsForSpecificSPoly(in_sPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
 		}
 		else
 		{
@@ -75,8 +75,24 @@ public:
 	}
 	void setDebugOptionsForSpecificSPoly(int in_sPolyID) {};
 
+	// ************************** Recursive template function for enabling debug options on a specific tracked SPoly in an instance of CoplanarRelationships **********************************
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolyInCoplanarRelationship(int in_trackedSPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	{
+		coplanarTracker.insertDOForSpecificTrackedSPoly(in_trackedSPolyID, std::forward<FirstDebugOption>(firstOption));
+		setDOForSpecificTrackedSPolyInCoplanarRelationship(in_trackedSPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
+	}
+	void setDOForSpecificTrackedSPolyInCoplanarRelationship(int in_sPolyID) {};
+
+	// ************************** Recursive template function for enabling debug options on a specific STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	{
+		coplanarTracker.insertDOForSpecificTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
+		setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
+	};
+	void setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
+
 	// generic functions for public interface
-	void addPoly(SPoly in_sPoly);
+	int addPoly(SPoly in_sPoly);	// adds a new SPoly, and returns the index in the secondaryPolys map that it was inserted in.
 	void configurePolys();
 	void configurePolysWithoutNormalCalcs();
 	void runPolyComparison(MassZoneBoxType in_massZoneBoxType);

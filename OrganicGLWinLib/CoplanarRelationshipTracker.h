@@ -9,23 +9,28 @@
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "OperableIntSet.h"
+#include "CoplanarRelationshipDebugFlags.h"
 
 
 class CoplanarRelationshipTracker
 {
 	private:
 		friend class SPolySet;
-		std::map<int, CoplanarRelationships> relationshipContainer;
-		void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
-		void runAllCuttingSequenceTests();
-		void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
-		void insertDebugLevelOptionForSpecificTrackedSPoly(int in_trackedSPolyID, PolyDebugLevel in_polyDebugLevel);
-		PolyDebugLevel retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID);
-		void insertRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
+
 		PolyDebugLevel relationshipTrackerDebugLevel = PolyDebugLevel::NONE;
 		PolyLogger relationshipTrackerLogger;
 		OperableIntSet removableSPolys;
-		std::map<int, PolyDebugLevel> specificRelationshipOptions;
+		std::map<int, CoplanarRelationshipDebugFlags> relationshipDebugFlags;
+		std::map<int, CoplanarRelationships> relationshipContainer;
+
+		void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
+		void runAllCuttingSequenceTests();
+		void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
+		void insertDOForSpecificTrackedSPoly(int in_trackedSPolyID, DebugOption in_debugOption);
+		void insertDOForSpecificTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, DebugOption in_debugOption);
+		PolyDebugLevel retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID);
+		void insertRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
+		void applyCoplanarRelationshipDebugFlagsIfFound(int in_trackedSPolyID);
 };
 
 #endif
