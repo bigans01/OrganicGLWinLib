@@ -91,6 +91,15 @@ public:
 	};
 	void setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
 
+	// ************************** Recursive template function for enabling debug options on a specific cutting STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	{
+		coplanarTracker.insertDOForSpecificTrackedCutterCuttingTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
+		setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
+	};
+	void setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
+
+
 	// generic functions for public interface
 	int addPoly(SPoly in_sPoly);	// adds a new SPoly, and returns the index in the secondaryPolys map that it was inserted in.
 	void configurePolys();

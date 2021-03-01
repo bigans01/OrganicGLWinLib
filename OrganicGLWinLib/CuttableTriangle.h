@@ -21,6 +21,7 @@
 #include "CutTriangleGroupBuilder.h"
 #include "CutLineWelder.h"
 #include "QuatUtils.h"
+#include "DebugOptionSet.h"
 
 class CuttableTriangle
 {
@@ -29,7 +30,7 @@ class CuttableTriangle
 	private:
 		//CuttableTriangle() {};
 		CuttableTriangle(STriangle in_cuttableTriangle);
-		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel);
+		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet);
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
 		friend class CutLineWelder;

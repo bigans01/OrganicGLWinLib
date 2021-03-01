@@ -14,6 +14,8 @@
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "CoplanarRelationshipDebugFlags.h"
+#include "STriangleCutter.h"
+#include "DebugOptionSet.h"
 
 class CoplanarRelationships
 {
@@ -42,6 +44,8 @@ class CoplanarRelationships
 		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
 		PolyDebugLevel dlPrintBorderLines = PolyDebugLevel::NONE;	// for printing out the border lines in the tracked and related SPolys.
 		PolyLogger relationshipsLogger;
+		std::map<int, DebugOptionSet> specificTrackedSTriangleDOSForCutter;
+		std::map<int, DebugOptionSet> specificTrackedSPolyCutterCuttingDOS;
 
 		void setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef);
 		void insertRelationship(int in_sPolyIndex, SPoly in_sPolyRef);
@@ -49,6 +53,8 @@ class CoplanarRelationships
 		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		bool performCuttingSequenceTest();
 		void applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
+		DebugOptionSet acquireDOSForSpecificTrackedSTriangle(int in_sTriangleID);
+		DebugOptionSet acquireDOSForCutterCuttingTriangles(int in_sTriangleID);
 
 };
 

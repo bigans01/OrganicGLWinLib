@@ -18,10 +18,10 @@ CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 	}
 }
 
-void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel)
+void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet)
 {
 	PolyLogger tempLogger;
-	tempLogger.setDebugLevel(in_polyDebugLevel);
+	tempLogger.setDebugLevel(PolyDebugLevel::DEBUG);
 	tempLogger.log("(CuttableTriangle) beginning run of comparison against the CuttingTriangle, having index ", in_cuttingTriangleID, ".", "\n");
 
 

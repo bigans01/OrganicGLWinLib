@@ -8,3 +8,13 @@ void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolyDebugOption(Debug
 		dlPrintBorderLinesOfTrackedAndRelatedSPolys = PolyDebugLevel::DEBUG;
 	}
 }
+
+void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolySTriangleDebugOption(int in_sTriangleID, DebugOption in_debugOption)
+{
+
+}
+
+void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolyCutterCuttingTriangleDebugOption(int in_cuttingTriangleID, DebugOption in_debugOption)
+{
+
+}

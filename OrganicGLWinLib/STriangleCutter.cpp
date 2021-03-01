@@ -7,20 +7,31 @@ void STriangleCutter::setCuttingParameters(STriangle in_sTriangle, CuttingTriang
 	cuttingTrianglesRef = in_cuttingTriangleManagerRef;
 }
 
-void STriangleCutter::setDebugLevelForSpecificCuttingTriangle(int in_cuttingTriangleID, PolyDebugLevel in_polyDebugLevel)
+void STriangleCutter::setDebugOptionForSpecificCuttingTriangle(int in_cuttingTriangleID, DebugOption in_debugOption)
 {
-	specificCuttingTriangleOptionMap[in_cuttingTriangleID] = in_polyDebugLevel;
+	//specificCuttingTriangleOptionMap[in_cuttingTriangleID] = in_polyDebugLevel;
+	specificCuttingTriangleDOSMap[in_cuttingTriangleID] += in_debugOption;
 }
 
-PolyDebugLevel STriangleCutter::getPolyDebugLevelForSpecificCuttingTriangle(int in_cuttingTriangleID)
+void STriangleCutter::setCuttingTriangleDOSMap(std::map<int, DebugOptionSet> in_debugOptionSetMap)
 {
-	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
-	auto specificFinder = specificCuttingTriangleOptionMap.find(in_cuttingTriangleID);
-	if (specificFinder != specificCuttingTriangleOptionMap.end())	// it was found, so get whatever the debug option is.
+	specificCuttingTriangleDOSMap = in_debugOptionSetMap;
+}
+
+void STriangleCutter::setCuttableDOS(DebugOptionSet in_debugOptionSet)
+{
+	cutterCuttableSTriangleDOS = in_debugOptionSet;
+}
+
+DebugOptionSet STriangleCutter::getDOSForSpecificCuttingTriangle(int in_cuttingTriangleID)
+{
+	DebugOptionSet returnDOS;
+	auto specificFinder = specificCuttingTriangleDOSMap.find(in_cuttingTriangleID);
+	if (specificFinder != specificCuttingTriangleDOSMap.end())	// it was found, so get whatever the debug option is.
 	{
-		returnLevel = specificFinder->second;
+		returnDOS = specificFinder->second;
 	}
-	return returnLevel;
+	return returnDOS;
 }
 
 bool STriangleCutter::runCuttingSequence()
@@ -48,7 +59,7 @@ bool STriangleCutter::runCuttingSequence()
 			std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
 																			cuttingTrianglesBegin->first, 
-																			getPolyDebugLevelForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
+																			getDOSForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
 
 			// optional: print out the contents before output triangles are constructed.
 			std::cout << "++++ Printing out registry for the cuttable triangle: " << std::endl;

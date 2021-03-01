@@ -54,7 +54,12 @@ void CoplanarRelationshipTracker::insertDOForSpecificTrackedSPoly(int in_tracked
 
 void CoplanarRelationshipTracker::insertDOForSpecificTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, DebugOption in_debugOption)
 {
+	relationshipDebugFlags[in_trackedSPolyID].handleSpecificTrackedSPolySTriangleDebugOption(in_trackedSPolySTriangleID, in_debugOption);
+}
 
+void CoplanarRelationshipTracker::insertDOForSpecificTrackedCutterCuttingTriangle(int in_trackedSPolyID, int in_trackedSPolyCuttingTriangleID, DebugOption in_debugOption)
+{
+	relationshipDebugFlags[in_trackedSPolyID].handleSpecificTrackedSPolyCutterCuttingTriangleDebugOption(in_trackedSPolyCuttingTriangleID, in_debugOption);
 }
 
 PolyDebugLevel CoplanarRelationshipTracker::retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID)

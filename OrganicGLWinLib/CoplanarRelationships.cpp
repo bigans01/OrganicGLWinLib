@@ -18,6 +18,28 @@ void CoplanarRelationships::setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel
 	relationshipsLogger.setDebugLevel(in_polyDebugLevel);
 }
 
+DebugOptionSet CoplanarRelationships::acquireDOSForSpecificTrackedSTriangle(int in_sTriangleID)
+{
+	DebugOptionSet returnSet;
+	auto setFinder = specificTrackedSTriangleDOSForCutter.find(in_sTriangleID);
+	if (setFinder != specificTrackedSTriangleDOSForCutter.end())
+	{
+		returnSet = setFinder->second;
+	}
+	return returnSet;
+}
+
+DebugOptionSet CoplanarRelationships::acquireDOSForCutterCuttingTriangles(int in_sTriangleID)
+{
+	DebugOptionSet returnSet;
+	auto setFinder = specificTrackedSPolyCutterCuttingDOS.find(in_sTriangleID);
+	if (setFinder != specificTrackedSPolyCutterCuttingDOS.end())
+	{
+		returnSet = setFinder->second;
+	}
+	return returnSet;
+}
+
 bool CoplanarRelationships::performCuttingSequenceTest()
 {
 	bool didSPolySurvive = true;
@@ -64,6 +86,9 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 
 		STriangleCutter cutter;
 		// you would set debug options for the cutter here...
+		cutter.setCuttableDOS(acquireDOSForSpecificTrackedSTriangle(trackedCopySTrianglesBegin->first));
+		cutter.setCuttingTriangleDOSMap(specificTrackedSPolyCutterCuttingDOS);
+
 		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
 		sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
 
@@ -111,6 +136,8 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 void CoplanarRelationships::applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
 {
 	dlPrintBorderLines = in_coplanarRelationshipsDebugFlagsRef->dlPrintBorderLinesOfTrackedAndRelatedSPolys;	// if set, prints border lines of tracked/related SPolys.
+	specificTrackedSTriangleDOSForCutter = in_coplanarRelationshipsDebugFlagsRef->specificTrackedSTriangleDOSMap;	// copy/load debug option sets for specific STriangles in the tracked SPoly
+	specificTrackedSPolyCutterCuttingDOS = in_coplanarRelationshipsDebugFlagsRef->specificTrackedCutterCuttingTriangleDOSMap;
 }
 
 
