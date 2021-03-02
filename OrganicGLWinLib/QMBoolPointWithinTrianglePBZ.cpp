@@ -115,7 +115,7 @@ bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPoin
 	{
 		if (planeArrayCheckResult[x] == true)
 		{
-			std::cout << "!!! Plane result " << x << " found as being within plane! " << std::endl;
+			//std::cout << "!!! Plane result " << x << " found as being within plane! " << std::endl;
 			qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) !!! found as being within plane! ", "\n");
 			withinPlaneCount++;
 		}
@@ -485,7 +485,7 @@ bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_po
 	//glm::vec3 comparedPointCurrentPosition = in_quatRotationPointsRef->getPointByIndex(2);
 
 	glm::vec3 centroidFacingNormal = in_quatRotationPointsRef->getPointByIndex(3);
-	std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
+	//std::cout << "Compared point: " << comparedPointCurrentPosition.x << ", " << comparedPointCurrentPosition.y << ", " << comparedPointCurrentPosition.z << std::endl;
 	//std::cout << "Centroid normal is: " << centroidFacingNormal.x << ", " << centroidFacingNormal.y << ", " << centroidFacingNormal.z << std::endl;
 	if
 	(

@@ -39,7 +39,7 @@ class SPolySet
 public:
 	SPolySupergroupManager polyFracturingResults;	// publicly available, can be used for various things.
 	// ************************** Recursive template function for enabling debugging on the SPolySet **********************************
-	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDebugOptions(FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOGeneric(FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		// needs work; but if statement is done to avoid user error of parameters not passed in as DebugOption.
 		if constexpr
@@ -48,17 +48,17 @@ public:
 		)
 		{
 			setOption(std::forward<FirstDebugOption>(firstOption));
-			setDebugOptions(std::forward<RemainingDebugOptions>(optionParams)...);
+			setDOGeneric(std::forward<RemainingDebugOptions>(optionParams)...);
 		}
 		else
 		{
 			std::cout << "(SPolySet) Invalid debug option passed in. " << std::endl;
 		}
 	}
-	void setDebugOptions() {};
+	void setDOGeneric() {};
 
 	// ************************** Recursive template function for enabling debug options on a specific SPoly **********************************
-	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDebugOptionsForSpecificSPoly(int in_sPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOSpecificSPoly(int in_sPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		if constexpr
 		(
@@ -66,38 +66,38 @@ public:
 		)
 		{
 			setSpecificSPolyOption(in_sPolyID, std::forward<FirstDebugOption>(firstOption));
-			setDebugOptionsForSpecificSPoly(in_sPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
+			setDOSpecificSPoly(in_sPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
 		}
 		else
 		{
 			std::cout << "(SPolySet) Invalid debug option passed in. " << std::endl;
 		}
 	}
-	void setDebugOptionsForSpecificSPoly(int in_sPolyID) {};
+	void setDOSpecificSPoly(int in_sPolyID) {};
 
 	// ************************** Recursive template function for enabling debug options on a specific tracked SPoly in an instance of CoplanarRelationships **********************************
-	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolyInCoplanarRelationship(int in_trackedSPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOTrackedSPoly(int in_trackedSPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		coplanarTracker.insertDOForSpecificTrackedSPoly(in_trackedSPolyID, std::forward<FirstDebugOption>(firstOption));
-		setDOForSpecificTrackedSPolyInCoplanarRelationship(in_trackedSPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
+		setDOTrackedSPoly(in_trackedSPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
 	}
-	void setDOForSpecificTrackedSPolyInCoplanarRelationship(int in_sPolyID) {};
+	void setDOTrackedSPoly(int in_sPolyID) {};
 
 	// ************************** Recursive template function for enabling debug options on a specific STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
-	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
 		coplanarTracker.insertDOForSpecificTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
-		setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
+		setDOTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
 	};
-	void setDOForSpecificTrackedSPolySTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
+	void setDOTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
 
 	// ************************** Recursive template function for enabling debug options on a specific cutting STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
-	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOCuttingTriangle(int in_trackedSPolyID, int in_cuttingTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
-		coplanarTracker.insertDOForSpecificTrackedCutterCuttingTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
-		setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
+		coplanarTracker.insertDOForSpecificTrackedCutterCuttingTriangle(in_trackedSPolyID, in_cuttingTriangleID, std::forward<FirstDebugOption>(firstOption));
+		setDOCuttingTriangle(in_trackedSPolyID, in_cuttingTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
 	};
-	void setDOForSpecificTrackedSPolyCutterCuttingTriangleInCoplanarRelationship(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
+	void setDOCuttingTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
 
 
 	// generic functions for public interface

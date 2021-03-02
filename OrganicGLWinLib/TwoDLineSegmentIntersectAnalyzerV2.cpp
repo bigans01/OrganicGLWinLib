@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "TwoDLineSegmentIntersectAnalyzerV2.h"
 
+void TwoDLineSegmentIntersectAnalyzerV2::setColinearQMDebugLevel(PolyDebugLevel in_debugLevel)
+{
+	colinearQMDebugLevel = in_debugLevel;
+}
+void TwoDLineSegmentIntersectAnalyzerV2::setIntersectionQMDebugLevel(PolyDebugLevel in_debugLevel)
+{
+	intersectingQMDebugLevel = in_debugLevel;
+}
+
 void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 {
 	// see this URL: https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect

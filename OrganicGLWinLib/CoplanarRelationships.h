@@ -54,7 +54,6 @@ class CoplanarRelationships
 		bool performCuttingSequenceTest();
 		void applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
 		DebugOptionSet acquireDOSForSpecificTrackedSTriangle(int in_sTriangleID);
-		DebugOptionSet acquireDOSForCutterCuttingTriangles(int in_sTriangleID);
 
 };
 

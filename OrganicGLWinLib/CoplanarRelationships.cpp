@@ -29,17 +29,6 @@ DebugOptionSet CoplanarRelationships::acquireDOSForSpecificTrackedSTriangle(int 
 	return returnSet;
 }
 
-DebugOptionSet CoplanarRelationships::acquireDOSForCutterCuttingTriangles(int in_sTriangleID)
-{
-	DebugOptionSet returnSet;
-	auto setFinder = specificTrackedSPolyCutterCuttingDOS.find(in_sTriangleID);
-	if (setFinder != specificTrackedSPolyCutterCuttingDOS.end())
-	{
-		returnSet = setFinder->second;
-	}
-	return returnSet;
-}
-
 bool CoplanarRelationships::performCuttingSequenceTest()
 {
 	bool didSPolySurvive = true;

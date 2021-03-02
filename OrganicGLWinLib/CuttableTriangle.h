@@ -28,9 +28,7 @@ class CuttableTriangle
 	public:
 		CuttableTriangle() {};
 	private:
-		//CuttableTriangle() {};
 		CuttableTriangle(STriangle in_cuttableTriangle);
-		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet);
 		friend class STriangleOutputContainer;
 		friend class STriangleCutter;
 		friend class CutLineWelder;
@@ -62,9 +60,12 @@ class CuttableTriangle
 
 		glm::vec3 fetchThirdPoint(CuttablePointPair in_cuttablePointPair);
 		PotentialLineColinearityResult acquireColinearityResult(glm::vec3 in_thirdPoint, glm::vec3 in_intersectingPoint, glm::vec3 in_cuttingLinePointA, glm::vec3 in_cuttingLinePointB);
-
+		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		std::map<int, STriangle> outputTriangles;
 		CuttableTriangleLine cuttableTriangleLines[3];
+		DebugOptionSet cuttingTriangleDOS;
+
+		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet);
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
 		glm::vec3 convert2DpointTo3D(TwoDPoint in_2dPoint);
 		void printCuttableLineIntersections();
@@ -73,12 +74,12 @@ class CuttableTriangle
 		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt* in_attempt, CuttingTriangle* in_cuttingTriangleRef);
-		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfThisTriangleConsumesCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef);
 		void convertAndStoreCutTriangleVector(std::vector<CutTriangle> in_vector);
 		STriangle convertCutTriangleToSTriangle(CutTriangle in_cutTriangle);
 		void printCuttableTrianglePoints();
+		PolyDebugLevel checkForCuttingTriangleDO(DebugOption in_debugOptionToFind);	// returns PolyDebugLevel::DEBUG if a the passed-in DebugOption is found.
 };
 
 #endif

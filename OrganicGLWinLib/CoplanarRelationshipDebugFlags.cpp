@@ -11,10 +11,10 @@ void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolyDebugOption(Debug
 
 void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolySTriangleDebugOption(int in_sTriangleID, DebugOption in_debugOption)
 {
-
+	specificTrackedSTriangleDOSMap[in_sTriangleID] += in_debugOption;
 }
 
 void CoplanarRelationshipDebugFlags::handleSpecificTrackedSPolyCutterCuttingTriangleDebugOption(int in_cuttingTriangleID, DebugOption in_debugOption)
 {
-
+	specificTrackedCutterCuttingTriangleDOSMap[in_cuttingTriangleID] += in_debugOption;
 }
