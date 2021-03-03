@@ -55,7 +55,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 	glm::vec3 lineAPointB = convert2DPointTo3D(twoDLineSegmentA.b);
 	glm::vec3 lineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 	glm::vec3 lineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
-	bool areLinesColinear = QuatUtils::checkIfLinesAreColinear(lineAPointA, lineAPointB, lineBPointA, lineBPointB);
+	bool areLinesColinear = QuatUtils::checkIfLinesAreColinear(lineAPointA, lineAPointB, lineBPointA, lineBPointB, colinearQMDebugLevel);
 	if (areLinesColinear == false)
 	{
 		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Lines NOT detected as colinear; continuing this branch. ", "\n");
@@ -64,7 +64,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 		glm::vec3 testLineBPointA = convert2DPointTo3D(twoDLineSegmentB.a);
 		glm::vec3 testLineBPointB = convert2DPointTo3D(twoDLineSegmentB.b);
 		glm::vec3 resultingIntersection;
-		bool areLinesInteresecting = QuatUtils::areLinesIntersecting(&testLineAPointA, &testLineAPointB, &testLineBPointA, &testLineBPointB, &resultingIntersection);
+		bool areLinesInteresecting = QuatUtils::areLinesIntersecting(&testLineAPointA, &testLineAPointB, &testLineBPointA, &testLineBPointB, &resultingIntersection, intersectingQMDebugLevel);
 		if (areLinesInteresecting == true)
 		{
 			glm::vec3 foundIntersectionValue = resultingIntersection;

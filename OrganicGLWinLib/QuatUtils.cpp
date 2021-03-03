@@ -23,7 +23,8 @@ Vec3Result QuatUtils::findPointForDeterminingCyclingDirection
 	glm::vec3 in_lineAPointB,
 	glm::vec3 in_lineBPointA,
 	glm::vec3 in_lineBPointB,
-	glm::vec3 in_lineAOrientingNormal
+	glm::vec3 in_lineAOrientingNormal,
+	PolyDebugLevel in_polyDebugLevel
 )
 {
 	QuatRotationPoints points;
@@ -35,7 +36,7 @@ Vec3Result QuatUtils::findPointForDeterminingCyclingDirection
 								&in_lineAOrientingNormal
 							);
 	QMVec3FindCyclingDirectionPoint cyclingPointSolver;
-	return cyclingPointSolver.solve(&points, PolyDebugLevel::NONE);
+	return cyclingPointSolver.solve(&points, in_polyDebugLevel);
 }
 
 bool QuatUtils::checkTJunctionUsability
@@ -62,7 +63,8 @@ bool QuatUtils::checkIfLinesAreColinear
 	glm::vec3 in_lineAPointA,
 	glm::vec3 in_lineAPointB,
 	glm::vec3 in_lineBPointA,
-	glm::vec3 in_lineBPointB
+	glm::vec3 in_lineBPointB,
+	PolyDebugLevel in_polyDebugLevel
 )
 {
 	QuatRotationPoints points;
@@ -73,7 +75,7 @@ bool QuatUtils::checkIfLinesAreColinear
 								&in_lineBPointB
 							);
 	QMBoolAreLinesColinear areLinesColinear;
-	return areLinesColinear.solve(&points, PolyDebugLevel::NONE);
+	return areLinesColinear.solve(&points, in_polyDebugLevel);
 }
 
 bool QuatUtils::areLinesIntersecting(
@@ -81,7 +83,8 @@ bool QuatUtils::areLinesIntersecting(
 	glm::vec3* in_lineAPointB,
 	glm::vec3* in_lineBPointA,
 	glm::vec3* in_lineBPointB,
-	glm::vec3* in_discoveredIntersectingPointStorage
+	glm::vec3* in_discoveredIntersectingPointStorage,
+	PolyDebugLevel in_polyDebugLevel
 )
 {
 	QuatRotationPoints points;
@@ -93,7 +96,7 @@ bool QuatUtils::areLinesIntersecting(
 		                        in_discoveredIntersectingPointStorage
 							);
 	QMBoolDoLinesIntersect doLinesIntersect;
-	return doLinesIntersect.solve(&points, PolyDebugLevel::NONE);
+	return doLinesIntersect.solve(&points, in_polyDebugLevel);
 }
 
 bool QuatUtils::isLineAContainedWithinB
@@ -101,7 +104,8 @@ bool QuatUtils::isLineAContainedWithinB
 	glm::vec3 in_lineAPointA,
 	glm::vec3 in_lineAPointB,
 	glm::vec3 in_lineBPointA,
-	glm::vec3 in_lineBPointB
+	glm::vec3 in_lineBPointB,
+	PolyDebugLevel in_polyDebugLevel
 )
 {
 	bool isContainedWithinB = false;
@@ -110,7 +114,7 @@ bool QuatUtils::isLineAContainedWithinB
 	glm::vec3 setALineAPointB = in_lineAPointB;
 	glm::vec3 setALineBPointA = in_lineBPointA;
 	glm::vec3 setALineBPointB = in_lineBPointB;
-	bool areLinesColinear = checkIfLinesAreColinear(setALineAPointA, setALineAPointB,setALineBPointA, setALineBPointB);
+	bool areLinesColinear = checkIfLinesAreColinear(setALineAPointA, setALineAPointB,setALineBPointA, setALineBPointB, in_polyDebugLevel);
 	if (areLinesColinear == true)
 	{
 		std::cout << "!!! Lines detected asbeing colinear..." << std::endl;

@@ -15,6 +15,7 @@
 #include "QMBoolIsColinearLineAContainedWithinB.h"
 #include <iostream>
 #include "Vec3Result.h"
+#include "PolyDebugLevel.h"
 
 class QuatUtils
 {
@@ -26,7 +27,8 @@ class QuatUtils
 																	glm::vec3 in_lineAPointB,
 																	glm::vec3 in_lineBPointA,
 																	glm::vec3 in_lineBPointB,
-																	glm::vec3 in_lineAOrientingNormal
+																	glm::vec3 in_lineAOrientingNormal,
+																	PolyDebugLevel in_polyDebugLevel
 																);
 		static bool checkTJunctionUsability(
 												glm::vec3 in_splitLinePointA,
@@ -38,20 +40,23 @@ class QuatUtils
 												glm::vec3 in_lineAPointA,
 												glm::vec3 in_lineAPointB,
 												glm::vec3 in_lineBPointA,
-												glm::vec3 in_lineBPointB
+												glm::vec3 in_lineBPointB,
+												PolyDebugLevel in_polyDebugLevel
 											);
 		static bool areLinesIntersecting(
 											glm::vec3* in_lineAPointA,
 											glm::vec3* in_lineAPointB,
 											glm::vec3* in_lineBPointA,
 											glm::vec3* in_lineBPointB,
-			                                glm::vec3* in_discoveredIntersectingPointStorage
+			                                glm::vec3* in_discoveredIntersectingPointStorage,
+											PolyDebugLevel in_polyDebugLevel
 										);
 		static bool isLineAContainedWithinB(
 											glm::vec3 in_lineAPointA,
 											glm::vec3 in_lineAPointB,
 											glm::vec3 in_lineBPointA,
-											glm::vec3 in_lineBPointB
+											glm::vec3 in_lineBPointB,
+											PolyDebugLevel in_polyDebugLevel
 										);
 										
 };

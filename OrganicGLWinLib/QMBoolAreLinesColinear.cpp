@@ -3,6 +3,10 @@
 
 bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
+	// set logging level 
+	qmBoolBaseLoggerDebugLevel = in_polyDebugLevel;
+	qmBoolBaseLogger.setDebugLevel(qmBoolBaseLoggerDebugLevel);
+
 	// Remember: this function presumes we are in the XY plane -- the Z coordinate should be 0.
 
 	// Point 0 = first line, point A
@@ -65,7 +69,8 @@ bool QMBoolAreLinesColinear::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	)
 	{
 		areLinesColinear = true;
-		std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
+		//std::cout << "!!! Both points found as colinear; returning TRUE." << std::endl;
+		qmBoolBaseLogger.log("(QMBoolAreLinesColinear): !!! Both points found as colinear; returning TRUE.", "\n");
 	}
 	else
 	{
@@ -164,7 +169,8 @@ bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm:
 		//std::cout << ">>>> Check for right angle radians (pre-round) is: " << firstPassRotateRadians << std::endl;
 		//quatRotationManagerLogger.log(">>>> Check for right angle radians (pre-round) is: ", firstPassRotateRadians, "\n");
 		firstPassRotateRadians = roundRadiansForRightAngleCheck(firstPassRotateRadians);
-		std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+		//std::cout << ">>>> Check for right angle radians (post-round) is: " << firstPassRotateRadians << std::endl;
+		qmBoolBaseLogger.log("(QMBoolAreLinesColinear): >>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
 		//quatRotationManagerLogger.log(">>>> Check for right angle radians (post-round) is: ", firstPassRotateRadians, "\n");
 		if
 		(
@@ -181,7 +187,8 @@ bool QMBoolAreLinesColinear::runCoplanarCheck(glm::vec3 in_upwardNormalRef, glm:
 	}
 	else if (equalityCheck == true)
 	{
-		std::cout << "Point equality found...." << std::endl;
+		//std::cout << "Point equality found...." << std::endl;
+		qmBoolBaseLogger.log("(QMBoolAreLinesColinear): Point equality found. ", "\n");
 		wasRightAngleFound = true;
 	}
 	return wasRightAngleFound;

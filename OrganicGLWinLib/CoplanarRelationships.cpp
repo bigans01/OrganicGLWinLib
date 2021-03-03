@@ -67,7 +67,7 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	auto trackedCopySTrianglesEnd = trackedSPoly.triangles.end();
 	for (; trackedCopySTrianglesBegin != trackedCopySTrianglesEnd; trackedCopySTrianglesBegin++)
 	{
-		std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
+		std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for tracked SPoly with ID " << trackedPolyID << ", STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
 		std::cout << "STriangle points are: " << std::endl;
 		trackedCopySTrianglesBegin->second.printPoints();
 		int readyToContinue = 3;

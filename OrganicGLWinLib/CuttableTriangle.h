@@ -38,7 +38,6 @@ class CuttableTriangle
 		{
 			CutLinePool pairPool;
 			CyclingDirection pairCyclingDirection = CyclingDirection::NOVAL;
-			//bool isAttemptValid = true;
 			bool isAttemptValid = false;
 		};
 
@@ -53,13 +52,7 @@ class CuttableTriangle
 			glm::vec3 pointArray[2];
 		};
 
-		struct PotentialLineColinearityResult
-		{
-			bool isColinear = false;
-		};
-
 		glm::vec3 fetchThirdPoint(CuttablePointPair in_cuttablePointPair);
-		PotentialLineColinearityResult acquireColinearityResult(glm::vec3 in_thirdPoint, glm::vec3 in_intersectingPoint, glm::vec3 in_cuttingLinePointA, glm::vec3 in_cuttingLinePointB);
 		std::vector<TwoDCrawlingAttempt> crawlingAttemptsVector;
 		std::map<int, STriangle> outputTriangles;
 		CuttableTriangleLine cuttableTriangleLines[3];
@@ -71,7 +64,7 @@ class CuttableTriangle
 		void printCuttableLineIntersections();
 		void buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef);
-		void produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef);
+		void produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt* in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);

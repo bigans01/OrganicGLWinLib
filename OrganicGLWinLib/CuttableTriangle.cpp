@@ -90,10 +90,6 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// get the third, unused point; use it to check if there are actually two points which are coplanar to the cutting line.
 					CuttableTriangle::CuttablePointPair pointPair(convert2DpointTo3D(cuttableSegment.a), convert2DpointTo3D(cuttableSegment.b));
 					glm::vec3 thirdUnusedPoint = fetchThirdPoint(pointPair);
-					CuttableTriangle::PotentialLineColinearityResult colinearityResult = acquireColinearityResult(thirdUnusedPoint,
-																										convertedPoint,
-																										in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
-																										in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB);
 																												
 
 					//std::cout << "###!!! Third unused point is: " << thirdUnusedPoint.x << ", " << thirdUnusedPoint.y << ", " << thirdUnusedPoint.z << std::endl;
@@ -106,12 +102,13 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					// find the point which wasn't intersected, store it; this will be used to help determine the cycling direction, as well as determining
 					// point B for the line to insert.
 					glm::vec3 determinedNonIntersectingPoint = QuatUtils::findPointForDeterminingCyclingDirection(
-																			cuttableTriangleLines[currentCuttableTriangleLineID].pointA,
-																			cuttableTriangleLines[currentCuttableTriangleLineID].pointB,
-																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
-																			in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB,
-																			cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal
-																		).resultPoint;
+																		cuttableTriangleLines[currentCuttableTriangleLineID].pointA,
+																		cuttableTriangleLines[currentCuttableTriangleLineID].pointB,
+																		in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA,
+																		in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB,
+																		cuttableTriangleLines[currentCuttableTriangleLineID].cuttableTriangleCentroidFacingNormal,
+																		checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
+																	).resultPoint;
 
 
 
@@ -337,7 +334,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		else if (crawlingAttemptsVector.size() != 0)	// the CuttableTriangle will be modified
 		{
 			// fourth, build the CutLinePools from each attempt.
-			produceCutLinePoolsFromAttempts(in_cuttingTriangleRef);
+			produceCutTriangles(in_cuttingTriangleRef);
 		}
 		else if (crawlingAttemptsVector.size() == 0)	// there weren't any intersections; the CuttableTriangle is unmodified, so just use the 
 														// CuttableTriangle and it's original points to form an STriangle, and put it into
@@ -373,30 +370,32 @@ glm::vec3 CuttableTriangle::fetchThirdPoint(CuttablePointPair in_cuttablePointPa
 	return returnPoint;
 }
 
-CuttableTriangle::PotentialLineColinearityResult CuttableTriangle::acquireColinearityResult(glm::vec3 in_thirdPoint, glm::vec3 in_intersectingPoint, glm::vec3 in_cuttingLinePointA, glm::vec3 in_cuttingLinePointB)
-{
-	PotentialLineColinearityResult colinearityResult;
-	bool areLinesColinear = QuatUtils::checkIfLinesAreColinear(in_thirdPoint, in_intersectingPoint, in_cuttingLinePointA, in_cuttingLinePointB);
-	if (areLinesColinear == true)
-	{
-		std::cout << "----> CoLinearity result: lines are colinear; waiting for input to continue. " << std::endl;
-		int waitVal = 3; 
-		std::cin >> waitVal;
-	}
-	return colinearityResult;
-}
-
 bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef)
 {
 	bool isCuttingTriangleConsumed = false;
 
-	std::cout << ":::::::::::::: START PBZ Test: " << std::endl;
-	std::cout << "Cuttable points are: " << std::endl;
-	printCuttableTrianglePoints();
-	std::cout << "Cutting triangle points are: " << std::endl;
-	in_cuttingTriangleRef->printPoints();
-	int waitForPrint = 3;
-	std::cin >> waitForPrint;
+	//std::cout << ":::::::::::::: START PBZ Test: " << std::endl;
+	//std::cout << "Cuttable points are: " << std::endl;
+	//printCuttableTrianglePoints();
+	//std::cout << "Cutting triangle points are: " << std::endl;
+	//in_cuttingTriangleRef->printPoints();
+	//int waitForPrint = 3;
+	//std::cin >> waitForPrint;
+
+	PolyLogger pbzLogger;
+	pbzLogger.setDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_PBZ_TEST));
+	pbzLogger.log("(CuttableTriangle) ::::::::::::: Starting PBZ test (is CuttableTriangle consumed by CuttingTriangle)", "\n");
+	pbzLogger.log("(CuttableTriangle) CuttableTriangles points for PBZ test are: ", "\n");
+	if (pbzLogger.isLoggingSet())
+	{
+		printCuttableTrianglePoints();
+	}
+	pbzLogger.log("(CuttableTriangle) CuttingTriangle points for PBZ test are: ", "\n");
+	if (pbzLogger.isLoggingSet())
+	{
+		in_cuttingTriangleRef->printPoints();
+	}
+	pbzLogger.waitForDebugInput();
 	
 	// compare all lines of the cuttable,
 	for (int x = 0; x < 3; x++)
@@ -410,17 +409,27 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 			glm::vec3 cuttingPointA = in_cuttingTriangleRef->cuttingLines[y].pointA;
 			glm::vec3 cuttingPointB = in_cuttingTriangleRef->cuttingLines[y].pointB;
 
-			std::cout << ":::::::: Comparison points: " << std::endl;
-			std::cout << "Cuttable point A: " << cuttablePointA.x << ", " << cuttablePointA.y << ", " << cuttablePointA.z << std::endl;
-			std::cout << "Cuttable point B: " << cuttablePointB.x << ", " << cuttablePointB.y << ", " << cuttablePointB.z << std::endl;
-			std::cout << "Cutting point A: " << cuttingPointA.x << ", " << cuttingPointA.y << ", " << cuttingPointA.z << std::endl;
-			std::cout << "Cutting point B: " << cuttingPointB.x << ", " << cuttingPointB.y << ", " << cuttingPointB.z << std::endl;
+			//std::cout << ":::::::: Comparison points: " << std::endl;
+			//std::cout << "Cuttable point A: " << cuttablePointA.x << ", " << cuttablePointA.y << ", " << cuttablePointA.z << std::endl;
+			//std::cout << "Cuttable point B: " << cuttablePointB.x << ", " << cuttablePointB.y << ", " << cuttablePointB.z << std::endl;
+			//std::cout << "Cutting point A: " << cuttingPointA.x << ", " << cuttingPointA.y << ", " << cuttingPointA.z << std::endl;
+			//std::cout << "Cutting point B: " << cuttingPointB.x << ", " << cuttingPointB.y << ", " << cuttingPointB.z << std::endl;
+			pbzLogger.log("(CuttableTriangle) :::::::: Comparison points: ", "\n");
+			pbzLogger.log("(CuttableTriangle) Cuttable point A : ", cuttablePointA.x, ", ", cuttablePointA.y, ", ", cuttablePointA.z, "\n");
+			pbzLogger.log("(CuttableTriangle) Cuttable point B : ", cuttablePointB.x, ", ", cuttablePointB.y, ", ", cuttablePointB.z, "\n");
+			pbzLogger.log("(CuttableTriangle) Cutting point A: ", cuttingPointA.x, ", ", cuttingPointA.y, ", ", cuttingPointA.z, "\n");
+			pbzLogger.log("(CuttableTriangle) Cutting point B: ", cuttingPointB.x, ", ", cuttingPointB.y, ", ", cuttingPointB.z, "\n");
 
 			//
-			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, cuttablePointB, cuttingPointA, cuttingPointB);
+			bool containmentDetected = QuatUtils::isLineAContainedWithinB(cuttablePointA, 
+																		cuttablePointB, 
+																		cuttingPointA, 
+																		cuttingPointB, 
+																		checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_PBZ_TEST));
 			if (containmentDetected == true)
 			{
-				std::cout << "!!!!!!! NOTICE-> containment detected. Halting and waiting for input. " << std::endl;
+				//std::cout << "!!!!!!! NOTICE-> containment detected. Halting and waiting for input. " << std::endl;
+				pbzLogger.log("(CuttableTriangle) !!!!!!! NOTICE-> containment detected. Halting and waiting for input. ", "\n");
 				
 
 				CuttableTriangle::CuttablePointPair pointPair(cuttablePointA, cuttablePointB);
@@ -436,7 +445,8 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 																								);	
 				if (doesThirdPointLieWithinPBZ == true)
 				{
-					std::cout << "!!!! NOTICE-> third point found as being within PBZ, this CuttableTriangle is completely cut! " << std::endl;
+					//std::cout << "!!!! NOTICE-> third point found as being within PBZ, this CuttableTriangle is completely cut! " << std::endl;
+					pbzLogger.log("(CuttableTriangle) !!!! NOTICE-> third point found as being within PBZ, this CuttableTriangle is completely cut! ", "\n");
 					isCuttingTriangleConsumed = true;
 				}
 
@@ -485,9 +495,12 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 	}
 	*/
 
-	std::cout << ":::::::::::::: END PBZ Test: " << std::endl;
-	int endTest = 3;
-	std::cin >> endTest;
+	//std::cout << ":::::::::::::: END PBZ Test: " << std::endl;
+	//int endTest = 3;
+	//std::cin >> endTest;
+
+	pbzLogger.log("(CuttableTriangle): :::::::::::::: END PBZ Test: ", "\n");
+	pbzLogger.waitForDebugInput();
 
 	return isCuttingTriangleConsumed;
 }
@@ -528,12 +541,14 @@ void CuttableTriangle::buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriang
 
 void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef)
 {
+	/*
 	for (int a = 0; a < 3; a++)
 	{
 		std::cout << "Size of cutting lines, index " << a << " records: " << in_cuttingTriangleRef->cuttingLines[a].cuttingIntersectionManager.numberOfRecords() << std::endl;
 	}
 	int outputVal = 3;
 	std::cin >> outputVal;
+	*/
 
 	for (int x = 0; x < 3; x++)
 	{
@@ -550,17 +565,18 @@ void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleR
 	}
 }
 
-void CuttableTriangle::produceCutLinePoolsFromAttempts(CuttingTriangle* in_cuttingTriangleRef)
+void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef)
 {
+	/*
 	std::cout << "+++++++++++++++ Size of attempts: " << crawlingAttemptsVector.size() << std::endl;
 	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
 	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
 	std::cout << "++++++++++++++++++++++++++++++++++++++++++ " << std::endl;
-
-	//std::cout << crawlingAttemptsVector.size() << std::endl;
 	int attemptsSizeOutput = 3;
 	std::cin >> attemptsSizeOutput;
+	*/
 
+	std::cout << "(CuttableTriangle): Beginning attempted production of cut triangles, from TYPICAL/SLICE attempts. " << std::endl;
 	
 	auto attemptsBegin = crawlingAttemptsVector.begin();
 	auto attemptsEnd = crawlingAttemptsVector.end();
@@ -735,7 +751,8 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 																							cuttableLinePointB,
 																							cuttingLinePointA,
 																							cuttingLinePointB,
-																							cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal
+																							cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal,
+																							checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																						);
 	glm::vec3 determinedCuttingPointToUse = determinedCuttingAttempt.resultPoint;
 
@@ -749,7 +766,8 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 																						cuttingLinePointB, 
 																						cuttableLinePointA, 
 																						cuttableLinePointB, 
-																						cuttingLineNormal
+																						cuttingLineNormal,
+																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																					);
 	glm::vec3 cuttablePointToUse = determinedCuttableAttempt.resultPoint;
 	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
@@ -867,7 +885,8 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 																						cuttingLinePointB, 
 																						cuttableLinePointA, 
 																						cuttableLinePointB, 
-																						cuttingLineNormal
+																						cuttingLineNormal,
+																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																					 );
 	glm::vec3 cuttablePointToUse = cuttableResult.resultPoint;
 
@@ -917,7 +936,8 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 																						cuttingLinePointB,
 																						endCuttableLinePointA,
 																						endCuttableLinePointB,
-																						cuttingLineNormal
+																						cuttingLineNormal,
+																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																					);
 	glm::vec3 endCuttablePointToUse = endCuttableResult.resultPoint;
 	CutLine endingCuttableCutLine(sharedPointEnd, endCuttablePointToUse, cuttableTriangleLines[idOfEndLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);

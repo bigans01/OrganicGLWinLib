@@ -3,6 +3,10 @@
 
 bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
+	// set logging level
+	qmBoolBaseLoggerDebugLevel = in_polyDebugLevel;
+	qmBoolBaseLogger.setDebugLevel(qmBoolBaseLoggerDebugLevel);
+
 	// Remember: this function presumes we are in the XY plane -- the Z coordinate should be 0.
 
 	// Point 0 = first line, point A
@@ -60,8 +64,10 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 	roundVec3YByTenThousandths(secondLinePointARef);
 	roundVec3YByTenThousandths(secondLinePointBRef);
 
-	std::cout << "::: secondLinePointARef->y = " << secondLinePointARef->y << std::endl;
-	std::cout << "::: secondLinePointBRef->y = " << secondLinePointBRef->y << std::endl;
+	//std::cout << "::: secondLinePointARef->y = " << secondLinePointARef->y << std::endl;
+	//std::cout << "::: secondLinePointBRef->y = " << secondLinePointBRef->y << std::endl;
+	qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): ::: secondLinePointARef->y = ", secondLinePointARef->y, "\n");
+	qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): ::: secondLinePointBRef->y = ", secondLinePointBRef->y, "\n");
 
 
 	// remember, points A and B of the first line have y = 0, after the call to rotateLineToYZeroPositiveX.
@@ -82,7 +88,8 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		)
 	)
 	{
-		std::cout << "************ entered first comparison branch.  " << std::endl;
+		//std::cout << "************ entered first comparison branch.  " << std::endl;
+		qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): ************ entered first comparison branch.  ", "\n");
 		// get the length of the line
 		float lengthOfInterceptingLine = glm::distance(*secondLinePointARef, *secondLinePointBRef);
 		glm::vec3 resultantSlope = *secondLinePointBRef - *secondLinePointARef;
@@ -94,20 +101,23 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 		// first check: is point B of the second line exactly on 0?
 		if (secondLinePointBRef->y == 0.0f)
 		{
-			std::cout << "**** notice: point B is exactly on 0. " << std::endl;
+			//std::cout << "**** notice: point B is exactly on 0. " << std::endl;
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): **** notice: point B is exactly on 0. ", "\n");
 			distance_to_travel_to_y_0 = 1;
 		}
 
 		// second check: is point A of the second line exactly on 0?
 		else if (secondLinePointARef->y == 0.0f)
 		{
-			std::cout << "**** notice: point A is exactly on 0; no travelling to get to y = 0. " << std::endl;
+			//std::cout << "**** notice: point A is exactly on 0; no travelling to get to y = 0. " << std::endl;
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): **** notice: point A is exactly on 0; no travelling to get to y = 0. ", "\n");
 		}
 
 		// other wise, check normally.
 		else
 		{
-			std::cout << "**** entered third branch (normal)" << std::endl;
+			//std::cout << "**** entered third branch (normal)" << std::endl;
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): **** entered third branch (normal)", "\n");
 			// because the cuttable line is such that Y = 0 and X > 0, 
 			// and the cutting line may or may not intersect somehow (not determined at this point), it holds true that the intersecting point would be at Y = 0.
 			// The distance to travel to get to Y can then be calculated by getting the absolute value of the cutting line's point A, 
@@ -119,24 +129,33 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 			float ab_combinedAbsolute = abs(secondLinePointBRef->y) + abs(secondLinePointARef->y); // the total y-difference between the two points
 			a_absolute = abs(secondLinePointARef->y);
 			distance_to_travel_to_y_0 = a_absolute / ab_combinedAbsolute;
-			std::cout << ":::: distance to y is: " << distance_to_travel_to_y_0 << std::endl;
+
+			//std::cout << ":::: distance to y is: " << distance_to_travel_to_y_0 << std::endl;
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): :::: distance to y is: ", distance_to_travel_to_y_0, "\n");
 		}
 
 		//std::cout << "+++++++++ printing points: " << std::endl;
 		//in_quatRotationPointsRef->printPoints();
 
 
-		std::cout << ":: secondLine, pointA, before applying slope: " << secondLinePointARef->x << ", " << secondLinePointARef->y << std::endl;
-		std::cout << ":: secondLine, pointB, before applying slope: " << secondLinePointBRef->x << ", " << secondLinePointBRef->y << std::endl;
-		std::cout << ":: slope: " << resultantSlope.x << ", " << resultantSlope.y << std::endl;
+		//std::cout << ":: secondLine, pointA, before applying slope: " << secondLinePointARef->x << ", " << secondLinePointARef->y << std::endl;
+		//std::cout << ":: secondLine, pointB, before applying slope: " << secondLinePointBRef->x << ", " << secondLinePointBRef->y << std::endl;
+		//std::cout << ":: slope: " << resultantSlope.x << ", " << resultantSlope.y << std::endl;
+		qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): :: secondLine, pointA, before applying slope: ", secondLinePointARef->x, ", ", secondLinePointARef->y, "\n");
+		qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): :: secondLine, pointB, before applying slope: ", secondLinePointBRef->x, ", ", secondLinePointBRef->y, "\n");
+		qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): :: slope: ", resultantSlope.x, ", ", resultantSlope.y, "\n");
 
 		//std::cout << "----> distance_to_travel_to_y_0 = " << distance_to_travel_to_y_0 << std::endl;
 		calculatedPoint.x = secondLinePointARef->x + (resultantSlope.x * distance_to_travel_to_y_0);
 		calculatedPoint.y = secondLinePointARef->y + (resultantSlope.y * distance_to_travel_to_y_0);
 
-		std::cout << "----> calculated point, before rotation back: " << calculatedPoint.x << ", " << calculatedPoint.y  
-			      << "||| first line, point A: " << in_quatRotationPointsRef->getPointByIndex(0).x << ", " << in_quatRotationPointsRef->getPointByIndex(0).y
-				  << "||| point B: " << in_quatRotationPointsRef->getPointByIndex(1).x << ", " << in_quatRotationPointsRef->getPointByIndex(1).y << std::endl;
+		//std::cout << "----> calculated point, before rotation back: " << calculatedPoint.x << ", " << calculatedPoint.y  
+			//      << "||| first line, point A: " << in_quatRotationPointsRef->getPointByIndex(0).x << ", " << in_quatRotationPointsRef->getPointByIndex(0).y
+				//  << "||| point B: " << in_quatRotationPointsRef->getPointByIndex(1).x << ", " << in_quatRotationPointsRef->getPointByIndex(1).y << std::endl;
+		qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): ----> calculated point, before rotation back: ", calculatedPoint.x, ", ", calculatedPoint.y,
+						" ||| first line, point A: ", in_quatRotationPointsRef->getPointByIndex(0).x, ", ", in_quatRotationPointsRef->getPointByIndex(0).y,
+						" ||| point B: ", in_quatRotationPointsRef->getPointByIndex(1).x, ", ", in_quatRotationPointsRef->getPointByIndex(1).y, "\n");
+
 
 		// ensure that the resulting calculated point has an X <= to the second point of the first line (because that point has X >= 0)
 		// --AND--
@@ -148,8 +167,10 @@ bool QMBoolDoLinesIntersect::solve(QuatRotationPoints* in_quatRotationPointsRef,
 			(calculatedPoint.x >= 0)
 		)
 		{
-			std::cout << "!!! Valid intersection point found. " << std::endl;
-			std::cout << "!!! Point is: " << calculatedPoint.x << ", " << calculatedPoint.y << std::endl;
+			//std::cout << "!!! Valid intersection point found. " << std::endl;
+			//std::cout << "!!! Point is: " << calculatedPoint.x << ", " << calculatedPoint.y << std::endl;
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): !!! Valid intersection point found. ", "\n");
+			qmBoolBaseLogger.log("(QMBoolDoLinesIntersect): !!! Point is: ", calculatedPoint.x, ", ", calculatedPoint.y, "\n");
 
 			glm::vec3* intersectedPointRef = in_quatRotationPointsRef->getPointRefByIndex(4);
 			*intersectedPointRef = calculatedPoint;
