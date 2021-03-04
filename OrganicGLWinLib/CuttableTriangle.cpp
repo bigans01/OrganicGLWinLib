@@ -79,10 +79,19 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				//tJunctionLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
 				// create an analyzer; set the debug levels for it, then analyze.
-				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, PolyDebugLevel::NONE);
+				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_INTERSECT_ANALYZER_RESULT));
 				analyzerV2.setColinearQMDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_QUAT_COLINEAR));
 				analyzerV2.setIntersectionQMDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_QUAT_INTERSECTING));
 				analyzerV2.performAnalysis();
+
+				// For any of the below statements, a record is inserted into the cuttable and cutting intersection managers, only if
+				// at least one point of the cuttable line is found as being in the direction of the inward-facing side of the CuttingLine.
+				// It is determined in one of two ways:
+				//
+				// 1.) For a NONCOLINEAR_INTERSECT, at least one point will always be inward facing.
+				// 2.) For any T-JUNCTION, the point stored in tJunctionBasePoint must be the point that is inward facing.
+				//
+
 
 				if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::NONCOLINEAR_INTERSECT)
 				{
@@ -144,8 +153,8 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
 
-					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_A must be the inverse of the  outwardFacingNormal, 
-					// since the tJunctionBasePoint would have to fall WITHIN the CuttingTriangle's area (PBZ) to actually be used.
+					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_A must be the inverse of the outwardFacingNormal, 
+					// since the tJunctionBasePoint would have to be inward-facing (meaning, on the same side of the line that faces the CuttingTriangle's centroid) to actually be used.
 					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
 					if (result == true)
 					{
@@ -179,8 +188,8 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
 
-					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_B must be the inverse of the  outwardFacingNormal, 
-					// since the tJunctionBasePoint would have to fall WITHIN the CuttingTriangle's area (PBZ) to actually be used.
+					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_B must be the inverse of the outwardFacingNormal, 
+					// since the tJunctionBasePoint would have to be inward-facing (meaning, on the same side of the line that faces the CuttingTriangle's centroid) to actually be used.
 					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
 					if (result == true)
 					{
@@ -777,6 +786,12 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	// point A = selected end point from cuttableLineSolver, 
 	// point B = shared point, 
 	// normal = the cutting line's outward facing normal.
+	//
+	// This is also the first of two lines that are inserted into returnPair's pairPool. 
+	// The first line in a TYPICAL run, is one that is is coplanar to the cutting line, has the first point of this line equal to a point in the CuttingLine that it
+	// intersects, and has the second point equal to the sharedPoint (the intersecting point spawned when the cutting line hits the cuttable line). 
+	// The resulting line, which is coplanar to the cutting line, is the first one in the pool.
+
 	CutLine cuttingCutLine(determinedCuttingPointToUse, sharedPoint, cuttingLineNormal);
 	std::cout << "Cutting cut line stats: " << std::endl;
 	std::cout << "Cutting, point A: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
@@ -851,33 +866,56 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 {
 	PoolAndDirectionPair returnPair;
 
+	// set the temporary output logger.
+	PolyLogger sliceLogger;
+	sliceLogger.setDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_SLICE_ATTEMPTS));
+
 	// First, find the cyling direction. 
-// line A point values, from the CuttingLine
+	// line A point values, from the CuttingLine
 	glm::vec3 cuttingLinePointA = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].pointA;
 	glm::vec3 cuttingLinePointB = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].pointB;
 
 	// outward facing normal
 	glm::vec3 cuttingLineNormal = in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal;
 
+	// the CuttableLine spawned by the CuttingLine should be:
+	// point A = shared point,
+	// point B = selected end point from cuttingLineSolver
+	// normal = the cuttable line's centroid facing normal.
+
+	// Important note about SLICE runs:
+	// 
+	// When attempting to find the point used for determining a cycling direction, there is a chance the bool Vec3Result.isResultValid 
+	// gets flagged as false. This will occur when an intersecting line that registered itself to the cutting line did so as a T-Junction, and 
+	// the base point of the resulting T-junction isn't on the same as the direction of the CuttingLines' outwardFacingNormal. This means that the "splitting point" of the 
+	// T-junction falls exactly on a line, and the "base point" of the T-junction falls on the side opposite the outward facing normal. This effectively means that the 
+	// entirety of the line falls within the area of the CuttingTriangle, which makes that intersection that was registered in the cutting line impossible to use, and
+	// thus the line shouldn't be selected as the one to start the SLICE run from (the run can start from etiher the begin or end intersection)
+	// In the event that both the BEGIN and END both fall on the inward side, then the entire SLICE attempt becomes invalid.
+
 	// |||||||||||||||||||||||||||||||||||| BEGIN Slice test for begin intersection
 
 	// common point between both lines:
 	glm::vec3 sharedPoint = in_attempt->beginIntersectingPoint;
 
-
-
-	
-	int idOfLineFoundInCuttingLine = in_attempt->beginIntersectionLineID;
+	// outward facing normal
+	int idOfBeginLineFoundInCuttingLine = in_attempt->beginIntersectionLineID;
 
 	// line B point values, from the CuttableLine
-	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
-	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
+	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfBeginLineFoundInCuttingLine].pointA;
+	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfBeginLineFoundInCuttingLine].pointB;
 
-	std::cout << "::> (BEGIN) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
-	std::cout << "::> (BEGIN) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
-	std::cout << "::> (BEGIN) cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
-	std::cout << "::> (BEGIN) cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
-	std::cout << "::> (BEGIN) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+	//std::cout << "::> (BEGIN) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	//std::cout << "::> (BEGIN) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	//std::cout << "::> (BEGIN) cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
+	//std::cout << "::> (BEGIN) cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
+	//std::cout << "::> (BEGIN) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> cutting line point A: ", cuttingLinePointA.x, ", ", cuttingLinePointA.y, ", ", cuttingLinePointA.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> cutting line point B: ", cuttingLinePointB.x, ", ", cuttingLinePointB.y, ", ", cuttingLinePointB.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> cuttable line point A: ", cuttableLinePointA.x, ", ", cuttableLinePointA.y, ", ", cuttableLinePointA.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> cuttable line point B: ", cuttableLinePointB.x, ", ", cuttableLinePointB.y, ", ", cuttableLinePointB.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> Cutting line normal: ", cuttingLineNormal.x, ", ", cuttingLineNormal.y, ", ", cuttingLineNormal.z, "\n");
+
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
 
 	Vec3Result cuttableResult = QuatUtils::findPointForDeterminingCyclingDirection(
@@ -888,25 +926,13 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 																						cuttingLineNormal,
 																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																					 );
-	glm::vec3 cuttablePointToUse = cuttableResult.resultPoint;
 
 	//std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
-	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
-
-	// the CuttableLine spawned by the CuttingLine should be:
-	// point A = shared point,
-	// point B = selected end point from cuttingLineSolver
-	// normal = the cuttable line's centroid facing normal.
-	CutLine cuttableCutLine(sharedPoint, cuttablePointToUse, cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
-	std::cout << "(BEGIN) Cuttable cut line stats: " << std::endl;
-	std::cout << "(BEGIN) Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
-	std::cout << "(BEGIN) Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
-	std::cout << "(BEGIN) Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
-		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
-		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
-
-	// for a SLICE attempt, the first line is always going to be the sliced line.
+	glm::vec3 cuttablePointToUse = cuttableResult.resultPoint;
 	CutLine slicedCutLineBegin(in_attempt->endIntersectingPoint, in_attempt->beginIntersectingPoint, in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal);
+	CutLine cuttableCutLine(sharedPoint, cuttablePointToUse, cuttableTriangleLines[idOfBeginLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
+	//std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, BEGIN intersection ||> Determined cuttable point to use: ", cuttablePointToUse.x, ", ", cuttablePointToUse.y, ", ", cuttablePointToUse.z, "\n");
 
 	// |||||||||||||||||||||||||||||||||||| END Slice test for begin intersection
 
@@ -925,11 +951,17 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	glm::vec3 endCuttableLinePointA = cuttableTriangleLines[idOfEndLineFoundInCuttingLine].pointA;
 	glm::vec3 endCuttableLinePointB = cuttableTriangleLines[idOfEndLineFoundInCuttingLine].pointB;
 
-	std::cout << "::> (END) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
-	std::cout << "::> (END) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
-	std::cout << "::> (END) cuttable line point A: " << endCuttableLinePointA.x << ", " << endCuttableLinePointA.y << ", " << endCuttableLinePointA.z << std::endl;
-	std::cout << "::> (END) cuttable line point B: " << endCuttableLinePointB.x << ", " << endCuttableLinePointB.y << ", " << endCuttableLinePointB.z << std::endl;
-	std::cout << "::> (END) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+	//std::cout << "::> (END) cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	//std::cout << "::> (END) cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	//std::cout << "::> (END) cuttable line point A: " << endCuttableLinePointA.x << ", " << endCuttableLinePointA.y << ", " << endCuttableLinePointA.z << std::endl;
+	//std::cout << "::> (END) cuttable line point B: " << endCuttableLinePointB.x << ", " << endCuttableLinePointB.y << ", " << endCuttableLinePointB.z << std::endl;
+	//std::cout << "::> (END) Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> cutting line point A: ", cuttingLinePointA.x, ", ", cuttingLinePointA.y, ", ", cuttingLinePointA.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> cutting line point B: ", cuttingLinePointB.x, ", ", cuttingLinePointB.y, ", ", cuttingLinePointB.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> cuttable line point A: ", endCuttableLinePointA.x, ", ", endCuttableLinePointA.y, ", ", endCuttableLinePointA.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> cuttable line point B: ", endCuttableLinePointB.x, ", ", endCuttableLinePointB.y, ", ", endCuttableLinePointB.z, "\n");
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> Cutting line normal: ", cuttingLineNormal.x, ", ", cuttingLineNormal.y, ", ", cuttingLineNormal.z, "\n");
 
 	Vec3Result endCuttableResult = QuatUtils::findPointForDeterminingCyclingDirection(
 																						cuttingLinePointA,
@@ -940,9 +972,9 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																					);
 	glm::vec3 endCuttablePointToUse = endCuttableResult.resultPoint;
-	CutLine endingCuttableCutLine(sharedPointEnd, endCuttablePointToUse, cuttableTriangleLines[idOfEndLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
 	CutLine endingSlicedCutLineBegin(in_attempt->beginIntersectingPoint, in_attempt->endIntersectingPoint, in_cuttingTriangleRef->cuttingLines[in_attempt->cuttingTriangleLineID].outwardFacingNormal);
-
+	CutLine endingCuttableCutLine(sharedPointEnd, endCuttablePointToUse, cuttableTriangleLines[idOfEndLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
+	sliceLogger.log("(CuttableTriangle) SLICE Attempt, END intersection ||> Determined cuttable point to use: ", endCuttablePointToUse.x, ", ", endCuttablePointToUse.y, ", ", endCuttablePointToUse.z, "\n");
 	// |||||||||||||||||||||||||||||||||||| END Slice test for begin intersection
 
 
@@ -951,24 +983,32 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	// Otherwise, it's invalid.
 	if (cuttableResult.isResultValid == true)
 	{
-		std::cout << "BEGIN intersection is valid for SLICE. " << std::endl;
+		//std::cout << "BEGIN intersection is valid for SLICE. " << std::endl;
+		sliceLogger.log("(CuttableTriangle) BEGIN intersection is valid for SLICE. ", "\n");
+
 		// the second line will be a line where point A = the begin intersecting point, point B = the cuttablePointToUse, and the normal is the centroid facing normal from the cuttable line.
 		returnPair.pairPool.insertLineIntoPool(slicedCutLineBegin);
 		returnPair.pairPool.insertLineIntoPool(cuttableCutLine);
 
-		std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build from BEGIN intersecting point: " << std::endl;
-		returnPair.pairPool.printLines();
+		//std::cout << "|||| printing CutLinePool, after SLICE attempt build from BEGIN intersecting point: " << std::endl;
+		sliceLogger.log("(CuttableTriangle) |||| printing CutLinePool, after SLICE attempt build from BEGIN intersecting point:  ", "\n");
+		if (sliceLogger.isLoggingSet())
+		{
+			returnPair.pairPool.printLines();
+		}
 
 		// determine the cycling direction value to use, which will be based on the value of cuttablePointToUse.
 		CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
 		if (cuttablePointToUse == cuttableLinePointA)
 		{
-			std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			//std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			sliceLogger.log("(CuttableTriangle) !! Slice attempt -- CyclingDirection will be BACKWARD.", "\n");
 			cutLineDirection = CyclingDirection::REVERSE;
 		}
 		else if (cuttablePointToUse == cuttableLinePointB)
 		{
-			std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			//std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			sliceLogger.log("(CuttableTriangle) !! Slice attempt -- CyclingDirection will be FORWARD.", "\n");
 			cutLineDirection = CyclingDirection::FORWARD;
 		}
 		returnPair.pairCyclingDirection = cutLineDirection;
@@ -976,23 +1016,31 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromSliceAtte
 	}
 	else if (endCuttableResult.isResultValid == true)
 	{
-		std::cout << "END intersection is valid for SLICE. " << std::endl;
+		//std::cout << "END intersection is valid for SLICE. " << std::endl;
+		sliceLogger.log("(CuttableTriangle) END intersection is valid for SLICE. ", "\n");
+
 		returnPair.pairPool.insertLineIntoPool(endingSlicedCutLineBegin);
 		returnPair.pairPool.insertLineIntoPool(endingCuttableCutLine);
 
-		std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build from END intersecting point: " << std::endl;
-		returnPair.pairPool.printLines();
+		//std::cout << "||||||||||||||||| printing CutLinePool, after SLICE attempt build from END intersecting point: " << std::endl;
+		sliceLogger.log("(CuttableTriangle) |||| printing CutLinePool, after SLICE attempt build from END intersecting point:  ", "\n");
+		if (sliceLogger.isLoggingSet())
+		{
+			returnPair.pairPool.printLines();
+		}
 
 		// determine the cycling direction value to use, which will be based on the value of cuttablePointToUse.
 		CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
 		if (endCuttablePointToUse == endCuttableLinePointA)
 		{
-			std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			//std::cout << "!! Slice attempt -- CyclingDirection will be BACKWARD." << std::endl;
+			sliceLogger.log("(CuttableTriangle) !! Slice attempt -- CyclingDirection will be BACKWARD.", "\n");
 			cutLineDirection = CyclingDirection::REVERSE;
 		}
 		else if (endCuttablePointToUse == endCuttableLinePointB)
 		{
-			std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			//std::cout << "!! Slice attempt -- CyclingDirection will be FORWARD." << std::endl;
+			sliceLogger.log("(CuttableTriangle) !! Slice attempt -- CyclingDirection will be FORWARD.", "\n");
 			cutLineDirection = CyclingDirection::FORWARD;
 		}
 

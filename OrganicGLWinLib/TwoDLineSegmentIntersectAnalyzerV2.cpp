@@ -68,7 +68,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 		if (areLinesInteresecting == true)
 		{
 			glm::vec3 foundIntersectionValue = resultingIntersection;
-			std::cout << "!! Point found as a result of intersection machine is: " << foundIntersectionValue.x << ", " << foundIntersectionValue.y << std::endl;
+			//std::cout << "!! Point found as a result of intersection machine is: " << foundIntersectionValue.x << ", " << foundIntersectionValue.y << std::endl;
 			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) NONCOLINEAR_INTERSECT detected. Value is: ", foundIntersectionValue.x, ", ", foundIntersectionValue.y, "\n");
 			analyzedResult.intersectedPoint.x = foundIntersectionValue.x;
 			analyzedResult.intersectedPoint.y = foundIntersectionValue.y;
@@ -78,9 +78,12 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 			float distBetweenLineAPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.a), foundIntersectionValue);
 			float distBetweenLineAPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentA.b), foundIntersectionValue);
 
-			std::cout << "###--> length of line A: " << lineALength << std::endl;
-			std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineAPointAAndIntersectedPoint << std::endl;
-			std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineAPointBAndIntersectedPoint << std::endl;
+			//std::cout << "###--> length of line A: " << lineALength << std::endl;
+			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineAPointAAndIntersectedPoint << std::endl;
+			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineAPointBAndIntersectedPoint << std::endl;
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> length of line A: ", lineALength, "\n");
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> (Line A) dist between pointA and intersected value: ", distBetweenLineAPointAAndIntersectedPoint, "\n");
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> (Line A) dist between pointB and intersected value: ", distBetweenLineAPointBAndIntersectedPoint, "\n");
 
 			bool tJunctionTestForLineAPointAToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointAAndIntersectedPoint);
 			bool tJunctionTestForLineAPointBToIntersectedPoint = runTJunctionTest(lineALength, distBetweenLineAPointBAndIntersectedPoint);
@@ -89,35 +92,48 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 			float distBetweenLineBPointAAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.a), foundIntersectionValue);
 			float distBetweenLineBPointBAndIntersectedPoint = glm::distance(convert2DPointTo3D(twoDLineSegmentB.b), foundIntersectionValue);
 
-			std::cout << "###--> length of line B: " << lineBLength << std::endl;
-			std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineBPointAAndIntersectedPoint << std::endl;
-			std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineBPointBAndIntersectedPoint << std::endl;
+			//std::cout << "###--> length of line B: " << lineBLength << std::endl;
+			//std::cout << "###--> dist between pointA and intersected value: " << distBetweenLineBPointAAndIntersectedPoint << std::endl;
+			//std::cout << "###--> dist between pointB and intersected value: " << distBetweenLineBPointBAndIntersectedPoint << std::endl;
+
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> length of line B: ", lineALength, "\n");
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> (Line B) dist between pointA and intersected value: ", distBetweenLineBPointAAndIntersectedPoint, "\n");
+			twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) ###--> (Line B) dist between pointB and intersected value: ", distBetweenLineBPointBAndIntersectedPoint, "\n");
 
 			bool tJunctionTestForLineBPointAToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointAAndIntersectedPoint);
 			bool tJunctionTestForLineBPointBToIntersectedPoint = runTJunctionTest(lineBLength, distBetweenLineBPointBAndIntersectedPoint);
 
 			if (tJunctionTestForLineAPointAToIntersectedPoint == true)
 			{
-				std::cout << "!!! Notice, T-junction detected: Point B of Line A splits Line B." << std::endl;
-				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_B" << std::endl;
+				//std::cout << "!!! Notice, T-junction detected: Point B of Line A splits Line B." << std::endl;
+				//std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_B" << std::endl;
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Notice, T-junction detected: Point B of Line A splits Line B.", "\n");
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_B", "\n");
+
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B;
 			}
 			else if (tJunctionTestForLineAPointBToIntersectedPoint == true)
 			{
-				std::cout << "!!! Notice, T-junction detected, Point A of Line A splits Line B. " << std::endl;
-				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_A" << std::endl;
+				//std::cout << "!!! Notice, T-junction detected, Point A of Line A splits Line B. " << std::endl;
+				//std::cout << "!!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_A" << std::endl;
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Notice, T-junction detected, Point A of Line A splits Line B.", "\n");
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Resulting t-junction type is: T_JUNCTION_A_SPLITS_B_VIA_POINT_A", "\n");
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A;
 			}
 			else if (tJunctionTestForLineBPointAToIntersectedPoint == true)
 			{
-				std::cout << "!!! Notice, T-junction detected, Point B of Line B splits Line A. " << std::endl;
-				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_B" << std::endl;
+				//std::cout << "!!! Notice, T-junction detected, Point B of Line B splits Line A. " << std::endl;
+				//std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_B" << std::endl;
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Notice, T-junction detected, Point B of Line B splits Line A.", "\n");
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_B", "\n");
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_B;
 			}
 			else if (tJunctionTestForLineBPointBToIntersectedPoint == true)
 			{
-				std::cout << "!!! Notice, T-junction detected, Point A of Line B splits Line A. " << std::endl;
-				std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_A" << std::endl;
+				//std::cout << "!!! Notice, T-junction detected, Point A of Line B splits Line A. " << std::endl;
+				//std::cout << "!!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_A" << std::endl;
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Notice, T-junction detected, Point A of Line B splits Line A.", "\n");
+				twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) !!! Resulting t-junction type is: T_JUNCTION_B_SPLITS_A_VIA_POINT_A", "\n");
 				analyzedResult.intersectType = TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A;
 			}
 			else   // as long as no T-junction detected, return as being a NONCOLINEAR_INTERSECT.
@@ -139,11 +155,14 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 	else if (areLinesColinear == true)
 	{
 		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Lines detected as colinear. ", "\n");
-		std::cout << "!!! Notice, colinear line detected: " << std::endl;
-		std::cout << "!!! Line A: " << lineAPointA.x << ", " << lineAPointA.y << std::endl;
-		std::cout << "!!! Line B: " << lineBPointA.x << ", " << lineBPointB.y << std::endl;
-		int colinearTempStop = 3;
-		std::cin >> colinearTempStop;
+		//std::cout << "!!! Notice, colinear line detected: " << std::endl;
+		//std::cout << "!!! Line A: " << lineAPointA.x << ", " << lineAPointA.y << std::endl;
+		//std::cout << "!!! Line B: " << lineBPointA.x << ", " << lineBPointB.y << std::endl;
+		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Colinear Line A | point A: ", lineAPointA.x, ", ", lineAPointA.y, " | point B: ", lineAPointB.x, ", ", lineAPointB.y, "\n");
+		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Colinear Line B | point A: ", lineBPointA.x, ", ", lineBPointA.y, " | point B: ", lineBPointB.x, ", ", lineBPointB.y, "\n");
+		//int colinearTempStop = 3;
+		//std::cin >> colinearTempStop;
+		twoDLineSegmentIntersectV2Logger.waitForDebugInput();
 	}
 }
 

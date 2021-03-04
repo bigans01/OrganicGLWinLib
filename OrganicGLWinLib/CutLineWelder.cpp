@@ -143,6 +143,11 @@ void CutLineWelder::handleTypicalRun()
 				CutLine newLineFromCuttingTriangle = producePartialCuttingCutLineForPool(cuttingLineIDOfClosestPoint, intersectedPointToUse, startingNonintersectingPoint);
 				currentPool.insertLineIntoPool(newLineFromCuttingTriangle);
 			}
+
+			// if the nextCuttingLineIndexToUse -- which is the ID of the next line in the CuttingTriangle to use, based on the chosen CyclingDirection -- 
+			// doesn't match copiedAttempt.beginIntersectionLineID, it means that the CuttingTriangleLine in the CuttingTriangle having ID of nextCuttingLineIndexToUse will
+			// have to be inserted entirely. For example -- when doing a CyclingDirection value of FORWARD -- if copiedAttempt.beginIntersectionLineID = 2, but nextCuttingLineIndexToUse is 0, it means that the line with index 
+			// 1 is an entire line in the CuttingTriangle that would have to be inserted, after the call to producePartialCuttingCutLineForPool. Then, we are done.
 			else
 			{
 				std::cout << "TYPICAL-> nextCuttinLineIndexToUse doesn't equal copiedAttempt.beginIntersectionLineID; must crawl an additional line. " << std::endl;
