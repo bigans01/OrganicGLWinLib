@@ -7,6 +7,8 @@
 #include "TwoDCrawlingAttempt.h"
 #include "CutLinePool.h"
 #include "CyclingDirection.h"
+#include "PolyLogger.h"
+#include "PolyDebugLevel.h"
 
 class CuttableTriangle;
 class CutLineWelder
@@ -16,13 +18,17 @@ class CutLineWelder
 					 CuttingTriangle* in_cuttingTriangleRef, 
 					 TwoDCrawlingAttempt in_crawlingAttempt, 
 					 CutLinePool in_basePool,
-			         CyclingDirection in_cuttableCyclingDirection);
+			         CyclingDirection in_cuttableCyclingDirection,
+			         PolyDebugLevel in_polyDebugLevel);
 		friend class CuttableTriangle;
 		CuttableTriangle* cuttableTriangleRef = nullptr;
 		CuttingTriangle* cuttingTriangleRef = nullptr;
 		TwoDCrawlingAttempt copiedAttempt;
 		CutLinePool currentPool;
 		CyclingDirection cuttableCyclingDirection;
+		PolyLogger cutLineWelderLogger;
+		PolyDebugLevel cutLineWelderDebugLevel = PolyDebugLevel::NONE;
+
 		int fetchNextLineViaCyclingDirection(int in_currentLineID, CyclingDirection in_cyclingDirection);
 		void handleTypicalRun();
 		void handleSliceRun();

@@ -618,14 +618,24 @@ void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRe
 		// run a CutLineWelder, take its produced pool and use it in the CutTriangleGroupBuilder.
 		if (currentPair.isAttemptValid == true)
 		{
+			// the CutLineWelder class will need some sort of error/bad logic/bug handling, due to the fact that there is a possibility 
+			// of going into an infinite while loop. (3/4/2021) ...the run of STriangleCutter may need to stop, and return some sort of code
+			// to handle it.
+			CutLineWelder welder(this, 
+								in_cuttingTriangleRef, 
+								*attemptsBegin, 
+								currentPair.pairPool, 
+								currentPair.pairCyclingDirection,
+								checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CUTLINEWELDER)
+								);
 
-			CutLineWelder welder(this, in_cuttingTriangleRef, *attemptsBegin, currentPair.pairPool, currentPair.pairCyclingDirection);
+			// an instance of CutTriangleGroupBuilder should only be done if the CutLineWelder didn't error/bug out (3/4/2021)
 			CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
 			builder.runCutTraceObserver();
 			convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
+
+
 			// extract all the CutTriangles from the CutTriangleGroupBuilder.
-
-
 			std::cout << "------------ended trace observer run. " << std::endl;
 			auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
 			auto containerVectorEnd = builder.cutTriangleContainerVector.end();
@@ -726,10 +736,11 @@ PolyDebugLevel CuttableTriangle::checkForCuttingTriangleDO(DebugOption in_debugO
 
 CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef)
 {
-
-	std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: BEGIN, construction of first two Typical attempt lines. " << std::endl;
-	//CutLinePool returnPool;
 	PoolAndDirectionPair returnPair;
+	PolyLogger typicalLogger;
+	typicalLogger.setDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_TYPICAL_ATTEMPTS));
+	//std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: BEGIN, construction of first two Typical attempt lines. " << std::endl;
+	typicalLogger.log("(CuttableTriangle) TYPICAL attempt-> ::: BEGIN, construction of first two Typical attempt lines. ", "\n");
 
 	// common point between both lines:
 	glm::vec3 sharedPoint = in_attempt.beginIntersectingPoint;
@@ -747,14 +758,36 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	glm::vec3 cuttableLinePointA = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointA;
 	glm::vec3 cuttableLinePointB = cuttableTriangleLines[idOfLineFoundInCuttingLine].pointB;
 
-	std::cout << "::> Found cutting line index is: " << in_attempt.cuttingTriangleLineID << std::endl;
-	std::cout << "::> Point registry, for this cutting line is: " << std::endl;
-	in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].printCuttableIntersections();
+	//std::cout << "::> Found cutting line index is: " << in_attempt.cuttingTriangleLineID << std::endl;
+	//std::cout << "::> Point registry, for this cutting line is: " << std::endl;
+	//in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].printCuttableIntersections();
 
-	std::cout << "::> cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
-	std::cout << "::> cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
-	std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
-	std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
+	typicalLogger.log("(CuttableTriangle) TYPICAL attempt-> cuttingTriangleLineID to use from the attempt is: ", in_attempt.cuttingTriangleLineID, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL attempt-> Registered points in the cutting line with ID ", in_attempt.cuttingTriangleLineID, " are: ", "\n");
+	if (typicalLogger.isLoggingSet())
+	{
+		in_cuttingTriangleRef->cuttingLines[in_attempt.cuttingTriangleLineID].printCuttableIntersections();
+	}
+
+	//std::cout << "::> cutting line point A: " << cuttingLinePointA.x << ", " << cuttingLinePointA.y << ", " << cuttingLinePointA.z << std::endl;
+	//std::cout << "::> cutting line point B: " << cuttingLinePointB.x << ", " << cuttingLinePointB.y << ", " << cuttingLinePointB.z << std::endl;
+	//std::cout << "::> cuttable line point A: " << cuttableLinePointA.x << ", " << cuttableLinePointA.y << ", " << cuttableLinePointA.z << std::endl;
+	//std::cout << "::> cuttable line point B: " << cuttableLinePointB.x << ", " << cuttableLinePointB.y << ", " << cuttableLinePointB.z << std::endl;
+
+	// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Optional print of Line stats
+	typicalLogger.log("(CuttableTriangle) TYPICAL, line stats-> Cutting line point A: ", cuttingLinePointA.x, ", ", cuttingLinePointA.y, ", ", cuttingLinePointA.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, line stats-> Cutting line point B: ", cuttingLinePointB.x, ", ", cuttingLinePointB.y, ", ", cuttingLinePointB.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, line stats-> Cuttable line point A: ", cuttableLinePointA.x, ", ", cuttableLinePointA.y, ", ", cuttableLinePointA.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, line stats-> Cuttable line point B: ", cuttableLinePointB.x, ", ", cuttableLinePointB.y, ", ", cuttableLinePointB.z, "\n");
+
+	//std::cout << "::> Cuttable line normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x 
+	//								  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y 
+	//								  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
+	typicalLogger.log("(CuttableTriangle) TYPICAL, line stats-> Cuttable line normal is: ", cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x,
+																								", ", cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y, 
+																								", ", cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z, "\n");
+
+	// |||||||||||||||||||||||||||||||||||||||| BEGIN logic for first CutLine 
 	// two quat machines for finding the points: one for the cutting line, one for the cuttable line
 	Vec3Result determinedCuttingAttempt = QuatUtils::findPointForDeterminingCyclingDirection(cuttableLinePointA,
 																							cuttableLinePointB,
@@ -764,23 +797,8 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 																							checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
 																						);
 	glm::vec3 determinedCuttingPointToUse = determinedCuttingAttempt.resultPoint;
+	//std::cout << "::> Cutting point to use, determined by cuttable line: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
 
-	std::cout << "::> Cuttable line normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x 
-									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y 
-									  << ", " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
-	std::cout << "::> Cutting point to use, determined by cuttable line: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
-
-	Vec3Result determinedCuttableAttempt = QuatUtils::findPointForDeterminingCyclingDirection(
-																						cuttingLinePointA, 
-																						cuttingLinePointB, 
-																						cuttableLinePointA, 
-																						cuttableLinePointB, 
-																						cuttingLineNormal,
-																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
-																					);
-	glm::vec3 cuttablePointToUse = determinedCuttableAttempt.resultPoint;
-	std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
-	std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
 
 	// the CutLine spawned from the CuttingLine should be: 
 	// point A = selected end point from cuttableLineSolver, 
@@ -793,31 +811,52 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	// The resulting line, which is coplanar to the cutting line, is the first one in the pool.
 
 	CutLine cuttingCutLine(determinedCuttingPointToUse, sharedPoint, cuttingLineNormal);
-	std::cout << "Cutting cut line stats: " << std::endl;
-	std::cout << "Cutting, point A: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
-	std::cout << "Cutting, point B: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
-	std::cout << "Cutting, normal: " << cuttingLineNormal.x << ", "
-		<< cuttingLineNormal.y << ", "
-		<< cuttingLineNormal.z << std::endl;
+	//std::cout << "Cutting cut line stats: " << std::endl;
+	//std::cout << "Cutting, point A: " << determinedCuttingPointToUse.x << ", " << determinedCuttingPointToUse.y << ", " << determinedCuttingPointToUse.z << std::endl;
+	//std::cout << "Cutting, point B: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
+	//std::cout << "Cutting, normal: " << cuttingLineNormal.x << ", "
+		//<< cuttingLineNormal.y << ", "
+		//<< cuttingLineNormal.z << std::endl;
+	typicalLogger.log("(CuttableTriangle) TYPICAL, first CutLine-> ********** stats of the first cutLine are: ", "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, first CutLine-> determined value for point A (from call to determine cycling direction): ", determinedCuttingPointToUse.x, ", ", determinedCuttingPointToUse.y, ", ", determinedCuttingPointToUse.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, first CutLine-> determined value for point B (shared point): ", sharedPoint.x, ", ", sharedPoint.y, ", ", sharedPoint.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, first CutLine-> normal for this cut line is: ", cuttingLineNormal.x, ", ", cuttingLineNormal.y, ", ", cuttingLineNormal.z, "\n");
 
+	// |||||||||||||||||||||||||||||||||||||||| END logic for first CutLine 
 
-
-
-
-
-
-
+	
+	// |||||||||||||||||||||||||||||||||||||||| BEGIN logic for second CutLine 
+	Vec3Result determinedCuttableAttempt = QuatUtils::findPointForDeterminingCyclingDirection(
+																						cuttingLinePointA, 
+																						cuttingLinePointB, 
+																						cuttableLinePointA, 
+																						cuttableLinePointB, 
+																						cuttingLineNormal,
+																						checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CYCLING_DIRECTION)
+																					);
+	glm::vec3 cuttablePointToUse = determinedCuttableAttempt.resultPoint;	// this value is used to determine the CyclingDirection.
 	// the CuttableLine spawned by the CuttingLine should be:
 	// point A = shared point,
 	// point B = selected end point from cuttingLineSolver
 	// normal = the cuttable line's centroid facing normal.
 	CutLine cuttableCutLine(sharedPoint, cuttablePointToUse, cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal);
-	std::cout << "Cuttable cut line stats: " << std::endl;
-	std::cout << "Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
-	std::cout << "Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
-	std::cout << "Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
-		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
-		<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
+
+	//std::cout << "::> Cutting line normal: " << cuttingLineNormal.x << ", " << cuttingLineNormal.y << ", " << cuttingLineNormal.z << std::endl;
+	//std::cout << "::> Cuttable point to use, determined by cutting line: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
+	//std::cout << "Cuttable cut line stats: " << std::endl;
+	//std::cout << "Cuttable, point A: " << sharedPoint.x << ", " << sharedPoint.y << ", " << sharedPoint.z << std::endl;
+	//std::cout << "Cuttable, point B: " << cuttablePointToUse.x << ", " << cuttablePointToUse.y << ", " << cuttablePointToUse.z << std::endl;
+	//std::cout << "Cuttable, normal: " << cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.x << ", "
+		//<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.y << ", "
+		//<< cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal.z << std::endl;
+
+	typicalLogger.log("(CuttableTriangle) TYPICAL, second CutLine-> ********** stats of the second cutLine are: ", "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, second CutLine-> determined value for point A (shared point): ", sharedPoint.x, ", ", sharedPoint.y, ", ", sharedPoint.z, "\n");
+	typicalLogger.log("(CuttableTriangle) TYPICAL, second CutLine-> determined value for point B (from call to determine cycling direction): ", cuttablePointToUse.x, ", ", cuttablePointToUse.y, ", ", cuttablePointToUse.z, "\n");
+	glm::vec3 cuttableCentroidFacingNormal = cuttableTriangleLines[idOfLineFoundInCuttingLine].cuttableTriangleCentroidFacingNormal;
+	typicalLogger.log("(CuttableTriangle) TYPICAL, second CutLine-> normal for this cut line is: ", cuttableCentroidFacingNormal.x, ", ", cuttableCentroidFacingNormal.y, ", ", cuttableCentroidFacingNormal.z, "\n");
+
+	// |||||||||||||||||||||||||||||||||||||||| END logic for second CutLine 
 
 	// flag as invalid, if we detected it (either one would cause an invalid run)
 	if
@@ -842,23 +881,27 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	CyclingDirection cutLineDirection = CyclingDirection::NOVAL;
 	if (cuttablePointToUse == cuttableLinePointA)
 	{
-		std::cout << "!! CyclingDirection will be BACKWARD." << std::endl;
+		//std::cout << "!! CyclingDirection will be BACKWARD." << std::endl;
+		typicalLogger.log("(CuttableTriangle) TYPICAL -> !! CyclingDirection will be BACKWARD.", "\n");
 		cutLineDirection = CyclingDirection::REVERSE;
 	}
 	else if (cuttablePointToUse == cuttableLinePointB)
 	{
-		std::cout << "!! CyclingDirection will be FORWARD." << std::endl;
+		//std::cout << "!! CyclingDirection will be FORWARD." << std::endl;
+		typicalLogger.log("(CuttableTriangle) TYPICAL -> !! CyclingDirection will be FORWARD.", "\n");
 		cutLineDirection = CyclingDirection::FORWARD;
 	}
 	else
 	{
-		std::cout << "!!!!! Warning, could not determine CyclingDirection; halting. " << std::endl;
+		std::cout << "(CuttableTriangle) TYPICAL -> !!! Warning, could not determine CyclingDirection; halting. " << std::endl;
+		//typicalLogger.log("(CuttableTriangle) TYPICAL -> !! CyclingDirection will be FORWARD.", "\n");
 		int haltVal = 3; 
 		std::cin >> haltVal;
 	}
 
 	returnPair.pairCyclingDirection = cutLineDirection;
-	std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: END, construction of first two Typical attempt lines. " << std::endl;
+	//std::cout << "::::::::::::::::::::::::::::::::::::::::::::::: END, construction of first two Typical attempt lines. " << std::endl;
+	typicalLogger.log("(CuttableTriangle) TYPICAL ->  ::::::::::::::::::::::: END, construction of first two Typical attempt lines. ", "\n");
 
 	return returnPair;
 }

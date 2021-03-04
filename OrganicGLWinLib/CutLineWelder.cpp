@@ -6,13 +6,16 @@ CutLineWelder::CutLineWelder(CuttableTriangle* in_cuttableTriangleRef,
 							CuttingTriangle* in_cuttingTriangleRef, 
 							TwoDCrawlingAttempt in_attemptCopy, 
 							CutLinePool in_basePool,
-							CyclingDirection in_cuttableCyclingDirection)
+							CyclingDirection in_cuttableCyclingDirection,
+							PolyDebugLevel in_polyDebugLevel)
 {
 	cuttableTriangleRef = in_cuttableTriangleRef;
 	cuttingTriangleRef = in_cuttingTriangleRef;
 	copiedAttempt = in_attemptCopy;
 	currentPool = in_basePool;
 	cuttableCyclingDirection = in_cuttableCyclingDirection;
+	cutLineWelderDebugLevel = in_polyDebugLevel;
+	cutLineWelderLogger.setDebugLevel(cutLineWelderDebugLevel);
 
 	if (copiedAttempt.crawlingType == TwoDCrawlingType::TYPICAL)
 	{
