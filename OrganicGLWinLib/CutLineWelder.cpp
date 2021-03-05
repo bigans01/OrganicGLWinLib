@@ -17,6 +17,7 @@ CutLineWelder::CutLineWelder(CuttableTriangle* in_cuttableTriangleRef,
 	cutLineWelderDebugLevel = in_polyDebugLevel;
 	cutLineWelderLogger.setDebugLevel(cutLineWelderDebugLevel);
 
+	/*
 	if (copiedAttempt.crawlingType == TwoDCrawlingType::TYPICAL)
 	{
 		handleTypicalRun();
@@ -25,6 +26,21 @@ CutLineWelder::CutLineWelder(CuttableTriangle* in_cuttableTriangleRef,
 	{
 		handleSliceRun();
 	}
+	*/
+}
+
+ErrorSensor CutLineWelder::executeRun()
+{
+	ErrorSensor sensor;
+	if (copiedAttempt.crawlingType == TwoDCrawlingType::TYPICAL)
+	{
+		sensor = handleTypicalRun();
+	}
+	else if (copiedAttempt.crawlingType == TwoDCrawlingType::SLICE)
+	{
+		sensor = handleSliceRun();
+	}
+	return sensor;
 }
 
 int CutLineWelder::fetchNextLineViaCyclingDirection(int in_currentLineID, CyclingDirection in_cyclingDirection)
@@ -63,30 +79,45 @@ int CutLineWelder::fetchNextLineViaCyclingDirection(int in_currentLineID, Cyclin
 	return nextIndex;
 }
 
-void CutLineWelder::handleTypicalRun()
+ErrorSensor CutLineWelder::handleTypicalRun()
 {
+	ErrorSensor typicalSensor;
 	int nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(copiedAttempt.beginIntersectionLineID, cuttableCyclingDirection);
 
-	std::cout << "::::::::::::::: First two lines of typical run pool are: " << std::endl;
-	currentPool.printLines();
+	//std::cout << "::::::::::::::: First two lines of typical run pool are: " << std::endl;
+	//currentPool.printLines();
+	cutLineWelderLogger.log("(CutLineWelder) ::::::::::::::: First two lines of typical run pool are :", "\n");
+	if (cutLineWelderLogger.isLoggingSet())
+	{
+		currentPool.printLines();
+	}
+
+	//std::cout << "Handling TYPICAL run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
+	//std::cout << "TYPICAL-> beginning intersection line ID is: " << copiedAttempt.beginIntersectionLineID << std::endl;
+	cutLineWelderLogger.log("(CutLineWelder) Handling TYPICAL run; nextCuttableLineIndexToUse is: ", nextCuttableLineIndexToUse, "\n");
+	cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> beginning intersection line ID is: ", copiedAttempt.beginIntersectionLineID, "\n");
 
 
-	std::cout << "Handling TYPICAL run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
-	std::cout << "TYPICAL-> beginning intersection line ID is: " << copiedAttempt.beginIntersectionLineID << std::endl;
-
-
-	std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
-	cuttableTriangleRef->printCuttableTrianglePoints();
-	std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
-	cuttingTriangleRef->printPoints();
+	//std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
+	//cuttableTriangleRef->printCuttableTrianglePoints();
+	//std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
+	//cuttingTriangleRef->printPoints();
+	if (cutLineWelderLogger.isLoggingSet())
+	{
+		cutLineWelderLogger.log("(CutLineWelder) ::::::::::::::: Cuttable triangle points are: ", "\n");
+		cuttableTriangleRef->printCuttableTrianglePoints();
+		cutLineWelderLogger.log("(CutLineWelder) ::::::::::::::: Cutting triangle points are: ", "\n");
+		cuttingTriangleRef->printPoints();
+	}
 
 	glm::vec3 leadingPoint;
 	bool continueFlag = true;
 	int typicalTicks = 0;
 
-	if (cuttableCyclingDirection == CyclingDirection::NOVAL)
+	if (cuttableCyclingDirection == CyclingDirection::NOVAL)	// this shouldn't happen; this should be handled before getting here.
 	{
-		std::cout << "!!!!!!!!!!! Warning, no cycling direction set! " << std::endl;
+		//std::cout << "!!!!!!!!!!! Warning, no cycling direction set! " << std::endl;
+		cutLineWelderLogger.log("(CutLineWelder) !!!!!!!!!!! Warning, no cycling direction set! ", "\n");
 	}
 
 	while (continueFlag == true)
@@ -95,12 +126,16 @@ void CutLineWelder::handleTypicalRun()
 		// registries. If it doesn't, enter the entire line into the pool, taking into account the FORWARD or REVERSE CyclingDirection.
 		if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
 		{
-			std::cout << "TYPICAL-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+			//std::cout << "TYPICAL-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> No records on line with index: ", nextCuttableLineIndexToUse, "; inserting this line as a new line into the pool. ", "\n");
 			CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
 			leadingPoint = newLine.pointB;
 			currentPool.insertLineIntoPool(newLine);
-			std::cout << "TYPICAL-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
-			std::cout << "TYPICAL-> Leading point is now: " << leadingPoint.x << ", " << leadingPoint.y << ", " << leadingPoint.z << ", " << std::endl;
+			//std::cout << "TYPICAL-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+			//std::cout << "TYPICAL-> Leading point is now: " << leadingPoint.x << ", " << leadingPoint.y << ", " << leadingPoint.z << ", " << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Pool size is now: ", currentPool.getPoolSize(), "\n");
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Leading point is now: ", leadingPoint.x, ", ", leadingPoint.y, ", ", leadingPoint.z, ", ", "\n");
+
 			nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(nextCuttableLineIndexToUse, cuttableCyclingDirection);
 		}
 
@@ -108,8 +143,12 @@ void CutLineWelder::handleTypicalRun()
 		{
 			// if we're here, it means we found a cuttable triangle line with records on it.
 			// we must find the closest point, and use that as point B of the new line we are about to insert. 
-			std::cout << "TYPICAL-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
-			std::cout << "TYPICAL-> Leading point is now: " << leadingPoint.x << ", " << leadingPoint.y << ", " << leadingPoint.z << ", " << std::endl;
+
+			//std::cout << "TYPICAL-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
+			//std::cout << "TYPICAL-> Leading point is now: " << leadingPoint.x << ", " << leadingPoint.y << ", " << leadingPoint.z << ", " << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Records found on line with index: ", nextCuttableLineIndexToUse, "\n");
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Leading point is now: ", leadingPoint.x, ", ", leadingPoint.y, ", ", leadingPoint.z, ", ", "\n");
+
 			int cuttingLineIDOfClosestPoint = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getIdOfClosestPoint(leadingPoint);
 			glm::vec3 intersectedPointToUse = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getPointForRecord(cuttingLineIDOfClosestPoint);
 			CutLine newLine = producePartialCuttableCutLineForPool(nextCuttableLineIndexToUse, intersectedPointToUse);
@@ -117,32 +156,38 @@ void CutLineWelder::handleTypicalRun()
 			continueFlag = false;						// no point in continuing after this, as we'll be finished with the crawling.
 
 			//std::cout << "TYPICAL-> Leading point is now: " << leadingPoint.x << ", " << leadingPoint.y << ", " << leadingPoint.z << ", " << std::endl;
-			std::cout << "TYPICAL-> Final value of nextCuttableLineIndexToUse: " << nextCuttableLineIndexToUse << std::endl;
+			//std::cout << "TYPICAL-> Final value of nextCuttableLineIndexToUse: " << nextCuttableLineIndexToUse << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Final value of nextCuttableLineIndexToUse: ", nextCuttableLineIndexToUse, "\n");
 
 
 			// Next, determine what to do for line-crawling on the CuttingTriangle; should always produce at least 1 line that is built from the CuttingTriangle at this point.
 			// use the closest point's cuttableLineID (cuttingLineIDOfClosestPoint) to find the non intersecting point for that line, that exists in the current cuttable line.
 			glm::vec3 startingNonintersectingPoint = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].getNonIntersectingPountForCuttingLine(cuttingLineIDOfClosestPoint);
-			std::cout << "TYPICAL-> Non-intersecting point to use will be: " << startingNonintersectingPoint.x << ", " << startingNonintersectingPoint.y << ", " << startingNonintersectingPoint.z << std::endl;
+			//std::cout << "TYPICAL-> Non-intersecting point to use will be: " << startingNonintersectingPoint.x << ", " << startingNonintersectingPoint.y << ", " << startingNonintersectingPoint.z << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> Non-intersecting point to use will be: ", startingNonintersectingPoint.x, ", ", startingNonintersectingPoint.y, ", ", startingNonintersectingPoint.z, "\n");
 
 			CyclingDirection cuttingTriangleCyclingDirection = CyclingDirection::NOVAL;	// the cycling direction we'll use for crawling the cutting triangle lines
 			cuttingTriangleCyclingDirection = cuttingTriangleRef->cuttingLines[cuttingLineIDOfClosestPoint].determineCyclingDirectionToUseFromPoint(startingNonintersectingPoint);
 			if (cuttingTriangleCyclingDirection == CyclingDirection::FORWARD)
 			{
-				std::cout << "TYPICAL-> will traverse FORWARD on cutting triangle. " << std::endl;
+				//std::cout << "TYPICAL-> will traverse FORWARD on cutting triangle. " << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> will traverse FORWARD on cutting triangle. ", "\n");
 			}
 			else if (cuttingTriangleCyclingDirection == CyclingDirection::REVERSE)
 			{
-				std::cout << "TYPICAL-> will traverse REVERSE on cutting triangle. " << std::endl;
+				//std::cout << "TYPICAL-> will traverse REVERSE on cutting triangle. " << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> will traverse REVERSE on cutting triangle. ", "\n");
 			}
 			int nextCuttingLineIndexToUse = fetchNextLineViaCyclingDirection(cuttingLineIDOfClosestPoint, cuttingTriangleCyclingDirection);
-			std::cout << "TYPICAL-> next cutting triangle line index will be: " << nextCuttingLineIndexToUse << std::endl;
+			//std::cout << "TYPICAL-> next cutting triangle line index will be: " << nextCuttingLineIndexToUse << std::endl;
+			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> next cutting triangle line index will be: ", nextCuttableLineIndexToUse, "\n");
 			
 			// if the value of nextCuttingLineIndexToUse is equal to copiedAttempt.beginIntersectionLineID, we're done, and we just need to insert this line. 
 			// Otherwise, if the value of nextCuttingLineIndexToUse isn't equal to copiedAttempt.beginIntersectionLineID, there is still a line to crawl on the CuttingTriangle.
 			if (copiedAttempt.beginIntersectionLineID == nextCuttingLineIndexToUse)
 			{
-				std::cout << "TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. " << std::endl;
+				//std::cout << "TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. " << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. ", "\n");
 				CutLine newLineFromCuttingTriangle = producePartialCuttingCutLineForPool(cuttingLineIDOfClosestPoint, intersectedPointToUse, startingNonintersectingPoint);
 				currentPool.insertLineIntoPool(newLineFromCuttingTriangle);
 			}
@@ -153,7 +198,8 @@ void CutLineWelder::handleTypicalRun()
 			// 1 is an entire line in the CuttingTriangle that would have to be inserted, after the call to producePartialCuttingCutLineForPool. Then, we are done.
 			else
 			{
-				std::cout << "TYPICAL-> nextCuttinLineIndexToUse doesn't equal copiedAttempt.beginIntersectionLineID; must crawl an additional line. " << std::endl;
+				//std::cout << "TYPICAL-> nextCuttinLineIndexToUse doesn't equal copiedAttempt.beginIntersectionLineID; must crawl an additional line. " << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> nextCuttinLineIndexToUse doesn't equal copiedAttempt.beginIntersectionLineID; must crawl an additional line. ", "\n");
 				CutLine newLineFromCuttingTriangle = producePartialCuttingCutLineForPool(cuttingLineIDOfClosestPoint, intersectedPointToUse, startingNonintersectingPoint);
 				currentPool.insertLineIntoPool(newLineFromCuttingTriangle);
 
@@ -180,37 +226,61 @@ void CutLineWelder::handleTypicalRun()
 			{
 
 			}
+			typicalSensor.insertError(ErrorEnum::CUTLINEWELDER_BAD_TYPICAL_RUN);
 		}
 
 	}
-	std::cout << "TYPICAL run-> printing lines in pool..." << std::endl;
-	currentPool.printLines();
+	//std::cout << "TYPICAL run-> printing lines in pool..." << std::endl;
+	//currentPool.printLines();
+	
+	cutLineWelderLogger.log("(CutLineWelder) TYPICAL run-> printing lines in pool...", "\n");
+	if (cutLineWelderLogger.isLoggingSet())
+	{
+		currentPool.printLines();
+	}
+
+	return typicalSensor;
 }
 
-void CutLineWelder::handleSliceRun() 
+ErrorSensor CutLineWelder::handleSliceRun()
 {
+	ErrorSensor sliceSensor;
 	int nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(copiedAttempt.beginIntersectionLineID, cuttableCyclingDirection);
-	std::cout << "Handling SLICE run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
-	std::cout << "Copied attempt cutting triangle line ID: " << copiedAttempt.cuttingTriangleLineID << std::endl;
-	std::cout << "Points of nextCuttableLine: " << std::endl;
+	//std::cout << "Handling SLICE run; nextCuttableLineIndexToUse is: " << nextCuttableLineIndexToUse << std::endl;
+	//std::cout << "Copied attempt cutting triangle line ID: " << copiedAttempt.cuttingTriangleLineID << std::endl;
+	//std::cout << "Points of nextCuttableLine: " << std::endl;
+	cutLineWelderLogger.log("(CutLineWelder) Handling SLICE run; nextCuttableLineIndexToUse is: ", nextCuttableLineIndexToUse, "\n");
+	cutLineWelderLogger.log("(CutLineWelder) Copied attempt cutting triangle line ID: ", copiedAttempt.cuttingTriangleLineID, "\n");
+	cutLineWelderLogger.log("(CutLineWelder) Points of nextCuttableLine: ", "\n");
+
 	glm::vec3 tempPointA = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].pointA;
 	glm::vec3 tempPointB = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].pointB;
-	std::cout << "A: " << tempPointA.x << ", " << tempPointA.y << ", " << tempPointA.z << std::endl;
-	std::cout << "B: " << tempPointB.x << ", " << tempPointB.y << ", " << tempPointB.z << std::endl;
+	//std::cout << "A: " << tempPointA.x << ", " << tempPointA.y << ", " << tempPointA.z << std::endl;
+	//std::cout << "B: " << tempPointB.x << ", " << tempPointB.y << ", " << tempPointB.z << std::endl;
+	cutLineWelderLogger.log("(CutLineWelder) A: ", tempPointA.x, ", ", tempPointA.y, ", ", tempPointA.z, "\n");
+	cutLineWelderLogger.log("(CutLineWelder) B: ", tempPointB.x, ", ", tempPointB.y, ", ", tempPointB.z, "\n");
 
-	std::cout << "Registered points on the cutting line are: " << std::endl;
-	cuttingTriangleRef->cuttingLines[copiedAttempt.cuttingTriangleLineID].printCuttableIntersections();
+	//std::cout << "Registered points on the cutting line are: " << std::endl;
+	cutLineWelderLogger.log("(CutLineWelder) Registered points on the cutting line are: ", "\n");
+	if (cutLineWelderLogger.isLoggingSet())
+	{
+		cuttingTriangleRef->cuttingLines[copiedAttempt.cuttingTriangleLineID].printCuttableIntersections();
 
-	std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
-	cuttableTriangleRef->printCuttableTrianglePoints();
-	std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
-	cuttingTriangleRef->printPoints();
+		//std::cout << "::::::::::::::: Cuttable triangle points are: " << std::endl;
+		cutLineWelderLogger.log("(CutLineWelder) ::::::::::::::: Cuttable triangle points are: ", "\n");
+		cuttableTriangleRef->printCuttableTrianglePoints();
+
+		//std::cout << "::::::::::::::: Cutting triangle points are: " << std::endl;
+		cutLineWelderLogger.log("(CutLineWelder) ::::::::::::::: Cutting triangle points are: ", "\n");
+		cuttingTriangleRef->printPoints();
+	}
 
 	bool continueFlag = true;
 	int sliceTicks = 0;
 	while (continueFlag == true)
 	{
-		std::cout << "!! cuttingTriangleLineID is: " << copiedAttempt.cuttingTriangleLineID << std::endl;
+		//std::cout << "!! cuttingTriangleLineID is: " << copiedAttempt.cuttingTriangleLineID << std::endl;
+		cutLineWelderLogger.log("(CutLineWelder) !! cuttingTriangleLineID is: ", copiedAttempt.cuttingTriangleLineID, "\n");
 		// check whether or not the the line in the cuttableTriangle, having an index of nextCuttableLineIndexToUse, contains any 
 		// registries. If it doesn't, enter the entire line into the pool, taking into account the FORWARD or REVERSE CyclingDirection.
 
@@ -221,16 +291,19 @@ void CutLineWelder::handleSliceRun()
 		{
 			if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.numberOfRecords() == 0)
 			{
-				std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+				//std::cout << "SLICE-> No records on line with index: " << nextCuttableLineIndexToUse << "; inserting this line as a new line into the pool. " << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) SLICE-> No records on line with index: ", nextCuttableLineIndexToUse, "; inserting this line as a new line into the pool. ", "\n");
 				CutLine newLine = produceEntireCuttableCutLineForPool(nextCuttableLineIndexToUse);
 				currentPool.insertLineIntoPool(newLine);
-				std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+				//std::cout << "SLICE-> Pool size is now: " << currentPool.getPoolSize() << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) SLICE-> Pool size is now: ", currentPool.getPoolSize(), "\n");
 				nextCuttableLineIndexToUse = fetchNextLineViaCyclingDirection(nextCuttableLineIndexToUse, cuttableCyclingDirection);
 			}
 			else if (cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.doesRecordExist(copiedAttempt.cuttingTriangleLineID) == true)
 			{
 				glm::vec3 intersectedPointToUse = cuttableTriangleRef->cuttableTriangleLines[nextCuttableLineIndexToUse].cuttableIntersectionManager.getPointForRecord(copiedAttempt.cuttingTriangleLineID);
-				std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
+				//std::cout << "SLICE-> Records found on line with index: " << nextCuttableLineIndexToUse << std::endl;
+				cutLineWelderLogger.log("(CutLineWelder) SLICE-> Records found on line with index: ", nextCuttableLineIndexToUse, "\n");
 				CutLine newLine = producePartialCuttableCutLineForPool(nextCuttableLineIndexToUse, intersectedPointToUse);
 				currentPool.insertLineIntoPool(newLine);
 				continueFlag = false;
@@ -259,10 +332,19 @@ void CutLineWelder::handleSliceRun()
 			{
 
 			}
+			sliceSensor.insertError(ErrorEnum::CUTLINEWELDER_BAD_SLICE_RUN);
 		}
 	}
-	std::cout << "SLICE run-> printing lines in pool..." << std::endl;
-	currentPool.printLines();
+	//std::cout << "SLICE run-> printing lines in pool..." << std::endl;
+	//currentPool.printLines();
+
+	cutLineWelderLogger.log("(CutLineWelder) SLICE run-> printing lines in pool...", "\n");
+	if (cutLineWelderLogger.isLoggingSet())
+	{
+		currentPool.printLines();
+	}
+
+	return sliceSensor;
 }
 
 CutLine CutLineWelder::produceEntireCuttableCutLineForPool(int in_currentCuttableLineID)
@@ -298,13 +380,13 @@ CutLine CutLineWelder::producePartialCuttableCutLineForPool(int in_currentCuttab
 	}
 	else if (cuttableCyclingDirection == CyclingDirection::REVERSE)
 	{
-		std::cout << "::Direction is REVERSE. Points of cuttable line are: " << std::endl;
+		//std::cout << "::Direction is REVERSE. Points of cuttable line are: " << std::endl;
 
 		glm::vec3 cuttableA = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointA;
 		glm::vec3 cuttableB = cuttableTriangleRef->cuttableTriangleLines[in_currentCuttableLineID].pointB;
 
-		std::cout << "Point A: " << cuttableA.x << ", " << cuttableA.y << ", " << cuttableA.z << std::endl;
-		std::cout << "Point B: " << cuttableB.x << ", " << cuttableB.y << ", " << cuttableB.z << std::endl;
+		//std::cout << "Point A: " << cuttableA.x << ", " << cuttableA.y << ", " << cuttableA.z << std::endl;
+		//std::cout << "Point B: " << cuttableB.x << ", " << cuttableB.y << ", " << cuttableB.z << std::endl;
 
 		//std::cout << "Point A:
 

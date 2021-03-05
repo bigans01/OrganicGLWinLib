@@ -342,7 +342,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		}
 		else if (crawlingAttemptsVector.size() != 0)	// the CuttableTriangle will be modified
 		{
-			// fourth, build the CutLinePools from each attempt.
+			// fourth, build the CutLinePools from each attempt; acquire the ErrorSensor.
 			produceCutTriangles(in_cuttingTriangleRef);
 		}
 		else if (crawlingAttemptsVector.size() == 0)	// there weren't any intersections; the CuttableTriangle is unmodified, so just use the 
@@ -574,7 +574,7 @@ void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleR
 	}
 }
 
-void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef)
+ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef)
 {
 	/*
 	std::cout << "+++++++++++++++ Size of attempts: " << crawlingAttemptsVector.size() << std::endl;
@@ -584,6 +584,7 @@ void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRe
 	int attemptsSizeOutput = 3;
 	std::cin >> attemptsSizeOutput;
 	*/
+	ErrorSensor triangleProductionSensor;
 
 	std::cout << "(CuttableTriangle): Beginning attempted production of cut triangles, from TYPICAL/SLICE attempts. " << std::endl;
 	
@@ -628,39 +629,46 @@ void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRe
 								currentPair.pairCyclingDirection,
 								checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CUTLINEWELDER)
 								);
+			ErrorSensor welderSensorResult = welder.executeRun();	// execute run, get the ErrorSensor.
 
 			// an instance of CutTriangleGroupBuilder should only be done if the CutLineWelder didn't error/bug out (3/4/2021)
-			CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
-			builder.runCutTraceObserver();
-			convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
-
-
-			// extract all the CutTriangles from the CutTriangleGroupBuilder.
-			std::cout << "------------ended trace observer run. " << std::endl;
-			auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
-			auto containerVectorEnd = builder.cutTriangleContainerVector.end();
-			for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+			if (welderSensorResult.wereErrorsFound() == false)
 			{
-				std::cout << ">>>>> Printing contents for container..." << std::endl;
-				auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
-				auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
-				for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+				CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
+				builder.runCutTraceObserver();
+				convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
+
+
+				// extract all the CutTriangles from the CutTriangleGroupBuilder.
+				std::cout << "------------ended trace observer run. " << std::endl;
+				auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
+				auto containerVectorEnd = builder.cutTriangleContainerVector.end();
+				for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
 				{
-					containerTrianglesBegin->second.printPoints();
+					std::cout << ">>>>> Printing contents for container..." << std::endl;
+					auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
+					auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
+					for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+					{
+						containerTrianglesBegin->second.printPoints();
+					}
+				}
+
+				// if it's valid, and typical, set the wasTypicalUsed flag.
+				if
+				(
+					(currentPair.isAttemptValid == true)
+					&&
+					(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
+					)
+				{
+					wasTypicalUsed = true;
 				}
 			}
-
-			// if it's valid, and typical, set the wasTypicalUsed flag.
-			if
-			(
-				(currentPair.isAttemptValid == true)
-				&&
-				(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
-			)
+			else	// there were errors found.
 			{
-				wasTypicalUsed = true;
+				triangleProductionSensor = welderSensorResult;
 			}
-
 		}
 		else if 
 		(
@@ -695,6 +703,7 @@ void CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTriangleRe
 
 		//}
 	}
+	return triangleProductionSensor;
 }
 
 void CuttableTriangle::convertAndStoreCutTriangleVector(std::vector<CutTriangle> in_vector)

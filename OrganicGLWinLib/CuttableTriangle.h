@@ -22,6 +22,7 @@
 #include "CutLineWelder.h"
 #include "QuatUtils.h"
 #include "DebugOptionSet.h"
+#include "ErrorSensor.h"
 
 class CuttableTriangle
 {
@@ -64,7 +65,7 @@ class CuttableTriangle
 		void printCuttableLineIntersections();
 		void buildAllSlicingAttempts(CuttingTriangle* in_cuttingTriangleRef);
 		void buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleRef);
-		void produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef);
+		ErrorSensor produceCutTriangles(CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromTypicalAttempt(TwoDCrawlingAttempt in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		PoolAndDirectionPair buildLinesFromSliceAttempt(TwoDCrawlingAttempt* in_attempt, CuttingTriangle* in_cuttingTriangleRef);
 		bool testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle* in_cuttingTriangleRef);

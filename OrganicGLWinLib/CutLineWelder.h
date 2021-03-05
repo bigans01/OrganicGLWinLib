@@ -9,6 +9,7 @@
 #include "CyclingDirection.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "ErrorSensor.h"
 
 class CuttableTriangle;
 class CutLineWelder
@@ -30,8 +31,9 @@ class CutLineWelder
 		PolyDebugLevel cutLineWelderDebugLevel = PolyDebugLevel::NONE;
 
 		int fetchNextLineViaCyclingDirection(int in_currentLineID, CyclingDirection in_cyclingDirection);
-		void handleTypicalRun();
-		void handleSliceRun();
+		ErrorSensor executeRun();
+		ErrorSensor handleTypicalRun();
+		ErrorSensor handleSliceRun();
 		CutLine produceEntireCuttableCutLineForPool(int in_currentCuttableLineID);
 		CutLine producePartialCuttableCutLineForPool(int in_currentCuttableLineID, glm::vec3 in_intersectedPointToUse);
 		CutLine produceEntireCuttingCutLineForPool(int in_currentCuttableLineID, CyclingDirection in_cuttingTriangleCyclingDirection);
