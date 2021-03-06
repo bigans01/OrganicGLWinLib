@@ -358,27 +358,49 @@ void SMDeferredLightingComputeV1::updateUniformRegistry()
 
 void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
 {
+	//std::cout << "!! Called insertCollectionGLData. | Array size is: " << in_arraySize << std::endl;
 	TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.checkForMemoryMovements(in_jobResults);		// check if there are any memory movements required
 	if (currentMeta.containsMovement == 1)
 	{
+		//std::cout << "!! Branch 1 hit. " << std::endl;
+
+		auto copystart = std::chrono::high_resolution_clock::now();
+		//std::cout << "Notice,  currentMeta contains movement. " << std::endl;
 		OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
 		int writeBackOffset = terrainMemoryTracker.insertNewCollection(in_jobResults);
 		OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
+		auto copyend = std::chrono::high_resolution_clock::now();
 
 		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
 
 		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
 		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
+
+		auto buffersubstart = std::chrono::high_resolution_clock::now();
 		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
+		auto buffersubend = std::chrono::high_resolution_clock::now();
+
+		//auto trueend = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> copyelapsed = copyend - copystart;
+		std::chrono::duration<double> buffersubelapsed = buffersubend - buffersubstart;
+		//std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
+		//std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
 
 	}
 	else if (currentMeta.containsMovement == 0)
 	{
+		//std::cout << "!! Branch 2 hit. " << std::endl;
+		auto truestart = std::chrono::high_resolution_clock::now();
+
 		terrainMemoryTracker.insertNewCollection(in_jobResults);
 		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
 		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
 		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
 		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
+
+		auto trueend = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> trueelapsed = trueend - truestart;
+		//std::cout << ">> !! Branch 2: InsertCollectionGLData time: " << trueelapsed.count() << std::endl;
 	}
 }
 

@@ -93,6 +93,21 @@ void OrganicGLWinUtils::createImmutableBuffer(GLuint* in_bufferID, int in_buffer
 	glBindBuffer(GL_ARRAY_BUFFER, *in_bufferID);
 	const GLbitfield bufferStorageFlags = GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;	// set mandatory flags
 	glBufferStorage(GL_ARRAY_BUFFER, in_bufferSize*in_numberOfBuffers, NULL, bufferStorageFlags);	// allocate immutable buffer
+
+	// prevents initial "stuttering", somehow, by initializing the entire persistent buffer to all 0.
+	int selectedSize = (in_bufferSize*in_numberOfBuffers);
+	std::unique_ptr<float[]> subArray;
+	subArray = std::unique_ptr<float[]>(new float[selectedSize]);
+	for (int x = 0; x < selectedSize; x++)
+	{
+		subArray[x] = 0.0f;
+	}
+
+	//float testArray[5] = { 0 };
+
+	glBufferSubData(GL_ARRAY_BUFFER, 0, selectedSize, subArray.get());
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, 5, &testArray);
+	
 }
 
 void OrganicGLWinUtils::createBuffer(GLuint* in_bufferIDref)
