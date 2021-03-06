@@ -76,6 +76,13 @@ class MassZoneBoxBoundary
 				boundaryPolySet.fracturerDebugLevel = PolyDebugLevel::DEBUG;
 			}
 
+			// check for the FACTORY option.
+			auto factoryFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::FACTORY);
+			if (factoryFinder != in_sPolyDOSet.debugOptions.end())
+			{
+				boundaryPolySet.boundarySPolyRef->sequenceFactory.setFactoryDebugLevel(PolyDebugLevel::DEBUG);
+			}
+
 			// check for the CATEGORIZED_LINES option.
 			auto categorizedLinesFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::CATEGORIZED_LINES);
 			if (categorizedLinesFinder != in_sPolyDOSet.debugOptions.end())

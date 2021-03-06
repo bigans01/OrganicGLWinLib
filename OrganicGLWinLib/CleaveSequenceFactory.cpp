@@ -1214,6 +1214,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> started printing out of produced A_SLICE categorized lines.", "\n");
 			newSequence.printCategorizedLines();
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> finished printing out of produced A_SLICE categorized lines.", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of CleaveSequences is now: ", int((*in_cleaveMapRef).size()), "\n");
 			cleaveSequenceFactoryLogger.waitForDebugInput();
 		}
 
