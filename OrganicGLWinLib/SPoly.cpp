@@ -503,7 +503,9 @@ void SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeM
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
+		std::cout << "!! Constructing Cleave Sequences. " << std::endl;
 		sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
+		std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}
 }
 

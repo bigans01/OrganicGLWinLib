@@ -29,6 +29,12 @@ SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyM
 	//std::cout << "2: " << polyRef->primePoint2.x << ", " << polyRef->primePoint2.y << ", " << polyRef->primePoint2.z << std::endl;
 	morphTrackerRef = in_morphTrackerRef;
 	//generatePlanarNormalsForPoly();	// generate the planar normal for this poly before fracturing begins
+
+	// if the SPoly isn't aligned to the XY plane (that is, Z = 0), rotate/translate it to Z.
+	// The proper rotations/translations are stored in rotationManager, which will then be reverse-applied 
+	// in the call to SPolyFracturer::checkForCleaveIntersections().
+	//
+	// If runFracturing() isn't called, the rotationManager will be empty, but will still be checked in checkForCleaveIntersections().
 	rotationManager.setDebugFlag(polyRef->debugFlag);	// set the debug flag
 	if (in_option == SPolyFracturerOptionEnum::ROTATE_TO_Z)
 	{
@@ -53,7 +59,7 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 void SPolyFracturer::checkForCleaveIntersections()
 {
 	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef, fracturerLoggerDebugLevel);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
-	quatPoints.clearPoints();															// clear out the quat points, so that we may insert the below.
+	quatPoints.clearPoints();															// clear out the quat points (which needs to be done if runFracturing() is called), so that we may insert the below.
 
 	intersectFinder.triangleSupergroup.loadTrianglesIntoQuatRotationPoints(&quatPoints);
 

@@ -68,6 +68,9 @@ void LineWelder::startWelding()
 	//std::cout << "Point B: " << endingCategorizedLine->second.line.pointB.x << ", " << endingCategorizedLine->second.line.pointB.y << ", " << endingCategorizedLine->second.line.pointB.z << std::endl;
 	//std::cout << "Empty normal: " << endingCategorizedLine->second.emptyNormal.x << ", " << endingCategorizedLine->second.emptyNormal.y << ", " << endingCategorizedLine->second.emptyNormal.z << std::endl;
 
+	lineWelderLogger.log("(LineWelder) :::::::: Cleave Map size is: ", sPolyRef->cleaveMap.size(), "\n");
+	lineWelderLogger.log("(LineWelder) :::::::: Number of lines in current cleave: ", cleaveBegin->second.cleavingLines.size(), "\n");
+
 	lineWelderLogger.log("(LineWelder) :::::::: Values of rbegin categorized line are: ", "\n");
 	lineWelderLogger.log("(LineWelder) Point A: ", startingCategorizedLine->second.line.pointA.x, ", ", startingCategorizedLine->second.line.pointA.y, ", ", startingCategorizedLine->second.line.pointA.z, "\n");
 	lineWelderLogger.log("(LineWelder) Point B: ", startingCategorizedLine->second.line.pointB.x, ", ", startingCategorizedLine->second.line.pointB.y, ", ", startingCategorizedLine->second.line.pointB.z, "\n");
@@ -92,6 +95,8 @@ void LineWelder::startWelding()
 	CategorizedLine currentCategorizedLine;
 	foundDirection = startingCategorizedLine->second.direction;			// remember, if the CategorizedLine's type is A_SLICE, the direction comes from pointA.
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
+
+	OperableIntSet unusableSet;
 	if (startingCategorizedLine->second.line.numberOfBorderLines == 1)		// if there are multiple CategorizedLines in the cleave sequence, the first line in the sequence
 																	// will have exactly one border line. The end of the sequence will have another border line.
 	{
@@ -110,6 +115,16 @@ void LineWelder::startWelding()
 		//std::cout << "::: First categorized line empty normal: " << currentCategorizedLine.emptyNormal.x << ", " << currentCategorizedLine.emptyNormal.y << ", " << currentCategorizedLine.emptyNormal.z << std::endl;
 		//std::cout << "(Border Lines = 1) currentBorderLineID: " << currentBorderLineID << std::endl;
 		//std::cout << "(Border Lines = 1) endingBorderLineID: " << endingBorderLineID << std::endl;
+
+		// determine unusable cleave sequences for this call to startWelding(); see commit from 3/8/2021
+		UsableCleaveSequenceCalculator calculator(beginningSequenceID,
+													currentBorderLineID,
+													currentCategorizedLine,
+													currentLeadingPoint,
+													&candidateListMap.candidateMap[currentBorderLineID],
+													&sPolyRef->cleaveMap,
+													lineWelderLoggerDebugLevel);
+		unusableSet = calculator.getUnusables();
 	}
 	else if (startingCategorizedLine->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
 																			// get the borders from the pointA and pointB of this line.
@@ -120,6 +135,13 @@ void LineWelder::startWelding()
 		lineWelderLogger.log("::: Branch hit for two border lines... ", "\n");
 
 
+		if (lineWelderLogger.isLoggingSet())
+		{
+
+			lineWelderLogger.log("(LineWelder) (---- numberOfBorderLines = 2, before logic) printing Candidiate lists, PRIOR TO removal of this beginningSequenceID: ", beginningSequenceID, "\n");
+			candidateListMap.printCandidateLists();
+		}
+
 		BorderLineIDPair retrievedPair = startingCategorizedLine->second.line.getBorderLineIDPair();
 		pointPair = startingCategorizedLine->second.line.getBorderLinePointPair();
 		currentLeadingPoint = pointPair.pointB;			
@@ -127,6 +149,23 @@ void LineWelder::startWelding()
 		endingBorderLineID = retrievedPair.pointABorderLineID;
 		CleaveSequenceMeta* beginningCleaveSequenceMeta = metaTracker.fetchCleaveSequence(beginningSequenceID);		
 		currentCategorizedLine = beginningCleaveSequenceMeta->fetchFirstCategorizedLineForWelder();
+
+		// determine unusable cleave sequences for this call to startWelding(); see commit from 3/8/2021
+		UsableCleaveSequenceCalculator calculator(beginningSequenceID, 
+													currentBorderLineID, 
+													currentCategorizedLine, 
+													currentLeadingPoint, 
+													&candidateListMap.candidateMap[currentBorderLineID], 
+													&sPolyRef->cleaveMap,
+													lineWelderLoggerDebugLevel);
+		unusableSet = calculator.getUnusables();
+
+		if (lineWelderLogger.isLoggingSet())
+		{
+
+			lineWelderLogger.log("(LineWelder) (---- numberOfBorderLines = 2, after logic) printing Candidiate lists, PRIOR TO removal of this beginningSequenceID: ", beginningSequenceID, "\n");
+			candidateListMap.printCandidateLists();
+		}
 
 		//std::cout << "::: First categorized line, Point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z
 			//<< " | Point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
@@ -197,7 +236,23 @@ void LineWelder::startWelding()
 			//std::cout << "! endingBorderLineID: " << endingBorderLineID << std::endl;
 
 			//std::cout << "####  Begin and end border line differ..." << std::endl;
-			findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+
+			if (lineWelderLogger.isLoggingSet())
+			{
+
+				lineWelderLogger.log("(LineWelder) printing Candidiate lists, PRIOR TO removal of this beginningSequenceID: ", beginningSequenceID, "\n");
+				candidateListMap.printCandidateLists();
+			}
+
+
+			findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first, unusableSet);
+
+			if (lineWelderLogger.isLoggingSet())
+			{
+
+				lineWelderLogger.log("(LineWelder) printing Candidiate lists, after removal of this beginningSequenceID: ", beginningSequenceID, "\n");
+				candidateListMap.printCandidateLists();
+			}
 
 			//std::cout << "##!!! Iterating while... " << std::endl;
 			//int someVal = 5;
@@ -208,8 +263,14 @@ void LineWelder::startWelding()
 		if (slicedFlag == true)
 		{
 			//insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
+			lineWelderLogger.log("(LineWelder) slicedFlag found as true...; will insert this line and remove from candidate list.", "\n");
 			insertNewWeldingLine(currentLeadingPoint, currentCategorizedLine.line.pointA, sPolyRef->borderLines[currentBorderLineID].planarVector);
+
+			
+	
+
 			candidateListMap.removeCandidateFromAllCandidateLists(beginningSequenceID);
+
 		}
 
 		// }
@@ -229,14 +290,14 @@ void LineWelder::startWelding()
 		runMode = LineWelderRunMode::ENDING;		// this may not need to be set here; be sure to experiment with this later. (11/16/2020)
 		permit.setPermitInitialData(PermitType::SAME_BORDER_LINE, beginningSequenceID);
 		//std::cout << "############# SPECIAL LOGIC NEEDED. " << std::endl;
-		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first, unusableSet);
 	}
 
 
 	runMode = LineWelderRunMode::ENDING;
 	while (beginningCleaveSequenceMeta->numberOfRemainingLines > 0)
 	{
-		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first);
+		findRemainingWeldingLines(currentBorderLineID, currentLeadingPoint, &candidateListMap.candidateMap[currentBorderLineID], cleaveBegin->first, unusableSet);
 		//std::cout << "##!!! Iterating ENDING while... " << std::endl;
 		//int someVal = 5;
 		//std::cin >> someVal;
@@ -276,6 +337,9 @@ void LineWelder::getCleaveSequenceCandidateListMap()
 {
 	candidateListMap = sPolyRef->buildCleaveSequenceCandidateListMap();
 	candidateListMap.updateRemainingCandidateCount();
+
+	lineWelderLogger.log("(LineWelder) >>>> Building of candidateListMap complete; candidateListMap.remainingCandidateCount is: ", candidateListMap.remainingCandidateCount, "\n");
+	lineWelderLogger.waitForDebugInput();
 }
 
 void LineWelder::getCleaveSequenceMetaTracker()
@@ -283,7 +347,11 @@ void LineWelder::getCleaveSequenceMetaTracker()
 	metaTracker = sPolyRef->buildCleaveSequenceMetaTracker();
 }
 
-void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID)
+void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, 
+											glm::vec3 in_leadingPoint, 
+											CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, 
+											int in_finderStartingCleaveSequenceID,
+											OperableIntSet in_unusableSet)
 {
 	//std::cout << "----------------------------------> Welding leading point for this line is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 	lineWelderLogger.log("(LineWelder) ----------------------------------> Welding leading point for this line is: ", in_leadingPoint.x, ", ", in_leadingPoint.y, ", ", in_leadingPoint.z, "\n");
@@ -316,7 +384,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																runMode, 
 																&weldedLines,
 																permit,
-																lineWelderLoggerDebugLevel);
+																lineWelderLoggerDebugLevel,
+																in_unusableSet);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			//std::cout << "--> Next sequence was found! " << std::endl;
@@ -437,7 +506,8 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3
 																runMode, 
 																&weldedLines, 
 																permit,
-			lineWelderLoggerDebugLevel);
+																lineWelderLoggerDebugLevel,
+																in_unusableSet);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();

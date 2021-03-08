@@ -428,6 +428,7 @@
     <ClInclude Include="TwoDSPolyIntersectionRecord.h" />
     <ClInclude Include="TwoDSPolyIntersectionType.h" />
     <ClInclude Include="UnsolvedPreciseSolver.h" />
+    <ClInclude Include="UsableCleaveSequenceCalculator.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="Vec3Result.h" />
     <ClInclude Include="WeldedLine.h" />
@@ -582,6 +583,7 @@
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp" />
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="UnsolvedPreciseSolver.cpp" />
+    <ClCompile Include="UsableCleaveSequenceCalculator.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>

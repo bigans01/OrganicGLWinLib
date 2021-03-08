@@ -38,6 +38,7 @@ public:
 	glm::vec3 fetchPointToSearch();
 	DistanceToPoint fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID, PolyDebugLevel in_polyDebugLevel);
 	DistanceToPoint fetchClosestPointSelfCompare(glm::vec3 in_pointToCalculateFor, PolyDebugLevel in_polyDebugLevel);
+	CategorizedLine fetchCategorizedLineFromSequenceThatHasBorderPoint(glm::vec3 in_borderPoint, PolyDebugLevel in_polyDebugLevel);
 };
 
 #endif

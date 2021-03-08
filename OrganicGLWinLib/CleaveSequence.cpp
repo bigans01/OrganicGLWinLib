@@ -154,6 +154,68 @@ glm::vec3 CleaveSequence::fetchPointToSearch()
 	return currentPointToSearch;
 }
 
+CategorizedLine CleaveSequence::fetchCategorizedLineFromSequenceThatHasBorderPoint(glm::vec3 in_borderPoint, PolyDebugLevel in_polyDebugLevel)
+{
+	CategorizedLine returnLine;
+	PolyLogger tempLogger;
+	tempLogger.setDebugLevel(in_polyDebugLevel);
+	tempLogger.log("(CleaveSequence)  ---Fetching categorized line that has border point of:", in_borderPoint.x, ",", in_borderPoint.y, ", ", in_borderPoint.z, "\n");
+	if (cleavingLines.size() == 1)
+	{
+		auto categorizedLineIter = cleavingLines.begin();
+		returnLine = categorizedLineIter->second;
+		if (in_borderPoint != returnLine.line.pointA)
+		{
+			returnLine.line.swapToA();
+		}
+	}
+	else if (cleavingLines.size() > 1)
+	{
+		auto firstLine = cleavingLines.begin();
+		auto lastLine = cleavingLines.rbegin();
+
+		// first line analytics
+		bool firstLineMatched = false;
+		auto firstLineCopy = firstLine->second;
+		IRPointType firstLineType = firstLineCopy.checkIfPointIsInLine(in_borderPoint);
+		if (firstLineType != IRPointType::NEITHER)	// it was found
+		{
+			firstLineMatched = true;
+			// if it was matched, but the point wasn't point A, swap to A.
+			if (firstLineType == IRPointType::POINT_B)
+			{
+				firstLineCopy.line.swapToA();
+			}
+		}
+
+		// second line analytics
+		bool lastLineMatched = false;
+		auto lastLineCopy = lastLine->second;
+		IRPointType lastLineType = lastLineCopy.checkIfPointIsInLine(in_borderPoint);
+		if (lastLineType != IRPointType::NEITHER)
+		{
+			lastLineMatched = true;
+			// if it was matched, but the point wasn't point A, swap to A.
+			if (lastLineType == IRPointType::POINT_B)
+			{
+				lastLineCopy.line.swapToA();
+			}
+		}
+
+
+		// get the line based on the analytics.
+		if (firstLineMatched == true)
+		{
+			returnLine = firstLineCopy;
+		}
+		else if (lastLineMatched == true)
+		{
+			returnLine = lastLineCopy;
+		}
+	}
+	return returnLine;
+}
+
 DistanceToPoint CleaveSequence::fetchClosestPointOnBorderLineID(glm::vec3 in_pointToCalculateFor, int in_borderLineID, PolyDebugLevel in_polyDebugLevel)
 {
 	PolyLogger tempLogger;

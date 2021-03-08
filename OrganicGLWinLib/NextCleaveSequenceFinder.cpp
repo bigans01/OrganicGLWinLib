@@ -1,6 +1,16 @@
 #include "stdafx.h"
 #include "NextCleaveSequenceFinder.h"
 
+void NextCleaveSequenceFinder::excludeUnusablesFromFoundSet()
+{
+	auto unusablesBegin = sequenceFinderUnusables.intSet.begin();
+	auto unusablesEnd = sequenceFinderUnusables.intSet.end();
+	for (; unusablesBegin != unusablesEnd; unusablesBegin++)
+	{
+		foundSet.erase(*unusablesBegin);
+	}
+}
+
 void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 {
 	//std::cout << "!!! *******BEGIN******** Sequence finder start point is: " << sequenceFinderStartPoint.x << ", " << sequenceFinderStartPoint.y << ", " << sequenceFinderStartPoint.z << std::endl;
@@ -17,7 +27,9 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 		//std::cout << ":::: entered branch for size == 1" << std::endl;
 
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();	
+		nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) | Records size == 1 | >>>> Number of candidates in set:", foundSet.size(), "\n");
 		checkForperformingFirstPermitAction();
+		excludeUnusablesFromFoundSet();
 
 		if (foundSet.empty())
 		{
@@ -33,11 +45,16 @@ void NextCleaveSequenceFinder::buildNeighboringCleaveSequenceMap()
 	{
 		//std::cout << "+++ Note: neighbors exist! " << std::endl;
 		//std::cout << "+++ Value of finderStartingCleaveSequenceID: " << finderStartingCleaveSequenceID << std::endl;
+		
 
 		//std::cout << ":::: entered branch for size > 1" << std::endl;
 
 		foundSet = cleaveSequenceCandidateListRef->getCandidateSet();		// load the candidate set
+		nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) | Records size > 1 | >>>> Number of candidates in set:", foundSet.size(), "\n");
 		checkForperformingFirstPermitAction();
+		nextCleaveSequenceFinderLogger.log("(NextCleaveSequenceFinder) | Records size > 1 | >>>> Number of candidates in set (after check for first action):", foundSet.size(), "\n");
+
+		excludeUnusablesFromFoundSet();
 
 		/*
 		if (!foundSet.empty())

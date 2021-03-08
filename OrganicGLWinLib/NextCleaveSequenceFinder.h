@@ -20,6 +20,8 @@
 #include "SelfComparePermit.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "UsableCleaveSequenceCalculator.h"
+#include "OperableIntSet.h"
 
 class NextCleaveSequenceFinder
 {
@@ -36,7 +38,8 @@ class NextCleaveSequenceFinder
 										LineWelderRunMode in_lineWelderRunMode,
 										WeldedLinePool* in_weldedLinePoolRef,
 										SelfComparePermit in_passedPermit,
-										PolyDebugLevel in_polyDebugLevel) : 
+										PolyDebugLevel in_polyDebugLevel,
+										OperableIntSet in_unusableSet) : 
 			startingBorderLineID(in_startingborderLineID),
 			borderLineRef(in_borderLineRef), 
 			cleaveMapRef(in_cleaveMapRef),
@@ -48,7 +51,8 @@ class NextCleaveSequenceFinder
 			finderRunMode(in_lineWelderRunMode),
 			weldedLinePoolRef(in_weldedLinePoolRef),
 			passedPermit(in_passedPermit),
-			nextCleaveSequenceFinderLoggerDebugLevel(in_polyDebugLevel)
+			nextCleaveSequenceFinderLoggerDebugLevel(in_polyDebugLevel),
+			sequenceFinderUnusables(in_unusableSet)
 		{
 			nextCleaveSequenceFinderLogger.setDebugLevel(in_polyDebugLevel);
 			buildNeighboringCleaveSequenceMap();
@@ -67,6 +71,7 @@ class NextCleaveSequenceFinder
 		LineWelderRunMode finderRunMode = LineWelderRunMode::NOVAL;	// set upon initialization
 		WeldedLinePool* weldedLinePoolRef = nullptr;	// set upon initialization
 		SelfComparePermit passedPermit;
+		OperableIntSet sequenceFinderUnusables;			// contains CleaveSequenceIDs that should be ignored.
 
 		std::set<int> foundSet;						// will contain the other CleaveSequences on this line, except the one that his the value specified by
 													// finderStartingCleaveSequenceID.
@@ -81,6 +86,7 @@ class NextCleaveSequenceFinder
 
 		void buildNeighboringCleaveSequenceMap();
 		void findAndSortNeighboringCleaveSequences();
+		void excludeUnusablesFromFoundSet();
 
 		PolyLogger nextCleaveSequenceFinderLogger;
 		PolyDebugLevel nextCleaveSequenceFinderLoggerDebugLevel = PolyDebugLevel::NONE;

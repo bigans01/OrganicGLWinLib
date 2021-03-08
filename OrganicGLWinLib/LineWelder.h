@@ -18,6 +18,8 @@
 #include "SelfComparePermit.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "UsableCleaveSequenceCalculator.h"
+#include "OperableIntSet.h"
 
 class LineWelder
 {
@@ -55,7 +57,11 @@ private:
 	int endingBorderLineID = 0;		// the border line we'll be ending on (the while loop will end when it hits this)
 	void getCleaveSequenceCandidateListMap();	// calls the sPolyRef to return a built CleaveSequenceCandidateListMap
 	void getCleaveSequenceMetaTracker();		// calls the sPolyRef to return a built CleaveSequenceMetaTracker
-	void findRemainingWeldingLines(int in_currentBorderLineID, glm::vec3 in_leadingPoint, CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, int in_finderStartingCleaveSequenceID);
+	void findRemainingWeldingLines(int in_currentBorderLineID, 
+									glm::vec3 in_leadingPoint, 
+									CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, 
+									int in_finderStartingCleaveSequenceID,
+									OperableIntSet in_unusableSet);
 	void insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal);
 	void updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
