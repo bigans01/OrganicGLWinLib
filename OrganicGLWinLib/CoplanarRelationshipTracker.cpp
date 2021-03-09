@@ -40,7 +40,7 @@ void CoplanarRelationshipTracker::runAllCuttingSequenceTests()
 	
 }
 
-void CoplanarRelationshipTracker::setDebugLevel(PolyDebugLevel in_polyDebugLevel)
+void CoplanarRelationshipTracker::setRelationshipTrackerDebugLevel(PolyDebugLevel in_polyDebugLevel)
 {
 	relationshipTrackerLogger.setDebugLevel(in_polyDebugLevel);
 	relationshipTrackerDebugLevel = in_polyDebugLevel;
@@ -86,6 +86,6 @@ void CoplanarRelationshipTracker::applyCoplanarRelationshipDebugFlagsIfFound(int
 {
 	if (auto checkIfRelationshipDebugFlagsForTrackedPolyExist = relationshipDebugFlags.find(in_trackedSPolyID); checkIfRelationshipDebugFlagsForTrackedPolyExist != relationshipDebugFlags.end())
 	{
-		relationshipContainer[in_trackedSPolyID].applyDebugOptions(&relationshipDebugFlags[in_trackedSPolyID]);
+		relationshipContainer[in_trackedSPolyID].applyCoplanarRelationshipDebugOptions(&relationshipDebugFlags[in_trackedSPolyID]);
 	}
 }

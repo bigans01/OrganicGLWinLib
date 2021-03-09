@@ -209,7 +209,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	std::cin >> waitVal;
 
 	// set the debug level for the coplanar tracker
-	coplanarTracker.setDebugLevel(comparisonLogger.getLogLevel());
+	coplanarTracker.setRelationshipTrackerDebugLevel(comparisonLogger.getLogLevel());
 
 	int compCount2 = numberOfPolys;
 

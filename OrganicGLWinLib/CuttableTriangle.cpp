@@ -587,8 +587,11 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 	std::cin >> attemptsSizeOutput;
 	*/
 	ErrorSensor triangleProductionSensor;
+	PolyLogger triangleProductionLogger;
+	triangleProductionLogger.setDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CUT_TRIANGLE_PRODUCTION));
 
-	std::cout << "(CuttableTriangle): Beginning attempted production of cut triangles, from TYPICAL/SLICE attempts. " << std::endl;
+	//std::cout << "(CuttableTriangle): Beginning attempted production of cut triangles, from TYPICAL/SLICE attempts. " << std::endl;
+	triangleProductionLogger.log("(CuttableTriangle): Beginning attempted production of cut triangles, from TYPICAL/SLICE attempts. ", "\n");
 	
 	auto attemptsBegin = crawlingAttemptsVector.begin();
 	auto attemptsEnd = crawlingAttemptsVector.end();
@@ -601,7 +604,8 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 		PoolAndDirectionPair currentPair;
 		if (attemptsBegin->crawlingType == TwoDCrawlingType::SLICE)
 		{
-			std::cout << "(CuttableTriangle): SLICE crawl type found..." << std::endl;
+			//std::cout << "(CuttableTriangle): SLICE crawl type found..." << std::endl;
+			triangleProductionLogger.log("(CuttableTriangle): SLICE crawl type found...", "\n");
 			//TwoDCrawlingAttempt* crawlAttemptPtr = &(*attemptsBegin);
 			currentPair = buildLinesFromSliceAttempt(&(*attemptsBegin), in_cuttingTriangleRef);
 			wasAttemptMade = true;
@@ -613,7 +617,8 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 			(wasTypicalUsed == false)
 		)
 		{
-			std::cout << "(CuttableTriangle): TYPICAL crawl type found..." << std::endl;
+			//std::cout << "(CuttableTriangle): TYPICAL crawl type found..." << std::endl;
+			triangleProductionLogger.log("(CuttableTriangle): TYPICAL crawl type found...", "\n");
 			currentPair = buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
 			wasAttemptMade = true;
 		}
@@ -636,26 +641,31 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 			// an instance of CutTriangleGroupBuilder should only be done if the CutLineWelder didn't error/bug out (3/4/2021)
 			if (welderSensorResult.wereErrorsFound() == false)
 			{
-				CutTriangleGroupBuilder builder(PolyDebugLevel::NONE, welder.currentPool);
+				CutTriangleGroupBuilder builder(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CUTTRIANGLEGROUPBUILDER), welder.currentPool);
 				builder.runCutTraceObserver();
 				convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
 
 
 				// extract all the CutTriangles from the CutTriangleGroupBuilder.
-				std::cout << "------------ended trace observer run. " << std::endl;
-				auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
-				auto containerVectorEnd = builder.cutTriangleContainerVector.end();
-				for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+				//std::cout << "------------ended trace observer run. " << std::endl;
+				triangleProductionLogger.log("(CuttableTriangle): ------------ended trace observer run. ", "\n");
+				if (triangleProductionLogger.isLoggingSet())
 				{
-					std::cout << ">>>>> Printing contents for container..." << std::endl;
-					auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
-					auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
-					for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+
+					auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
+					auto containerVectorEnd = builder.cutTriangleContainerVector.end();
+					for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
 					{
-						containerTrianglesBegin->second.printPoints();
+						//std::cout << ">>>>> Printing contents for container..." << std::endl;
+						triangleProductionLogger.log("(CuttableTriangle): >> Printing contents for container:", "\n");
+						auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
+						auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
+						for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+						{
+							containerTrianglesBegin->second.printPoints();
+						}
 					}
 				}
-
 				// if it's valid, and typical, set the wasTypicalUsed flag.
 				if
 				(
@@ -679,14 +689,13 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 			(wasAttemptMade == true)
 		)
 		{
-			std::cout << "This tracing attempt has been marked as invalid; it will not be used. " << std::endl;
 			numberOfCancelledAttempts++;
-			int validWait = 3;
-			std::cin >> validWait;
 
-			
-			
-
+			//std::cout << "This tracing attempt has been marked as invalid; it will not be used. " << std::endl;
+			//int validWait = 3;
+			//std::cin >> validWait;
+			triangleProductionLogger.log("(CuttableTriangle): >> !!!! This tracing attempt has been marked as invalid; it will not be used.", "\n");
+			triangleProductionLogger.waitForDebugInput();
 		}
 	}
 

@@ -23,6 +23,16 @@ void STriangleCutter::setCuttableDOS(DebugOptionSet in_debugOptionSet)
 	cutterCuttableSTriangleDOS = in_debugOptionSet;
 }
 
+PolyDebugLevel STriangleCutter::checkForCutterDO(DebugOption in_debugOptionToFind)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
+	if (auto finder = cutterCuttableSTriangleDOS.find(in_debugOptionToFind); finder != cutterCuttableSTriangleDOS.end())
+	{
+		returnLevel = PolyDebugLevel::DEBUG;
+	}
+	return returnLevel;
+}
+
 DebugOptionSet STriangleCutter::getDOSForSpecificCuttingTriangle(int in_cuttingTriangleID)
 {
 	DebugOptionSet returnDOS;
@@ -36,6 +46,9 @@ DebugOptionSet STriangleCutter::getDOSForSpecificCuttingTriangle(int in_cuttingT
 
 bool STriangleCutter::runCuttingSequence()
 {
+	PolyLogger cutterSequenceLogger;
+	cutterSequenceLogger.setDebugLevel(checkForCutterDO(DebugOption::STRIANGLECUTTER_BASIC));
+
 	// the result of whether or not it was completely "destroyed"
 	bool wasTriangleDestroyedDuringSequence = false;
 
@@ -49,23 +62,31 @@ bool STriangleCutter::runCuttingSequence()
 		// in the very first iteration of this loop -- the very beginning of the cuttingSequence -- there should only be 1 CuttingTriangle, which
 		// is the one constructed by the call to cuttableContainer.buildFirstCuttableTriangle.
 
-		std::cout << "!!!! Next pass begin. Current ID of CuttingTriangle is: " << cuttingTrianglesBegin->first << std::endl;
+		//std::cout << "!!!! Next pass begin. Current ID of CuttingTriangle is: " << cuttingTrianglesBegin->first << std::endl;
+		cutterSequenceLogger.log("(STriangleCutter): !!!! Next pass begin. Current ID of CuttingTriangle is: ", cuttingTrianglesBegin->first, "\n");
 
 		STriangleOutputContainer outputsForCurrentCuttingTriangle;
 		auto currentTriangleToCutBegin = cuttableContainer.cuttableTriangleMap.begin();
 		auto currentTriangleToCutEnd = cuttableContainer.cuttableTriangleMap.end();
 		for (; currentTriangleToCutBegin != currentTriangleToCutEnd; currentTriangleToCutBegin++)
 		{
-			std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
+			//std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
+			cutterSequenceLogger.log("(STriangleCutter): !! START: Comparing against CuttableTriangle, with ID: ", currentTriangleToCutBegin->first, "\n");
 			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
 																			cuttingTrianglesBegin->first, 
 																			getDOSForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
 
 			// optional: print out the contents before output triangles are constructed.
-			std::cout << "++++ Printing out registry for the cuttable triangle: " << std::endl;
-			currentTriangleToCutBegin->second.printCuttableLineIntersections();
-			std::cout << "++++ Printing out registry for the cutting triangle: " << std::endl;
-			cuttingTrianglesBegin->second.printCuttingLineIntersections();
+			if (cutterSequenceLogger.isLoggingSet())
+			{
+
+				//std::cout << "++++ Printing out registry for the cuttable triangle: " << std::endl;
+				cutterSequenceLogger.log("(STriangleCutter): ++++ Printing out registry for the cuttable triangle: ", "\n");
+				currentTriangleToCutBegin->second.printCuttableLineIntersections();
+				//std::cout << "++++ Printing out registry for the cutting triangle: " << std::endl;
+				cutterSequenceLogger.log("(STriangleCutter): ++++ Printing out registry for the cutting triangle: ", "\n");
+				cuttingTrianglesBegin->second.printCuttingLineIntersections();
+			}
 
 			// fetch whatever the result of the comparison was -- if it is completely eliminated, the size of the vector will be 0.
 			// Otherwise, it's size will be >= 1.
@@ -73,17 +94,26 @@ bool STriangleCutter::runCuttingSequence()
 
 			// reset the CuttingTriangle that was used in this iteration.
 			cuttingTrianglesBegin->second.reset();
-			std::cout << "!! END: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
+			cutterSequenceLogger.log("(STriangleCutter): !! END: Comparing against CuttableTriangle, with ID:  ", currentTriangleToCutBegin->first,"\n");
+			//std::cout << "!! END: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 		}
 
 		std::cout << "!!!! Next pass end. " << std::endl;
 
 		// rebuild/analyze the cuttableTriangleMap in the CuttableTriangleContainer, once we've gone through all of the CuttableTriangles in it.
 		cuttableContainer.rebuildCuttableTriangleMapFromContainer(&outputsForCurrentCuttingTriangle);
-		std::cout << "||||||||||||||||| printing out cuttable triangles, after this pass: (Cutting Triangle ID was: " << cuttingTrianglesBegin->first << ")" << std::endl;
-		cuttableContainer.printCuttableTriangles();
-		int passWait = 3; 
-		std::cin >> passWait;
+
+		//std::cout << "||||||||||||||||| printing out cuttable triangles, after this pass: (Cutting Triangle ID was: " << cuttingTrianglesBegin->first << ")" << std::endl;
+		//cuttableContainer.printCuttableTriangles();
+		//int passWait = 3; 
+		//std::cin >> passWait;
+
+		cutterSequenceLogger.log("(STriangleCutter): ||||||||||||||||| printing out cuttable triangles, after this pass: (Cutting Triangle ID was: ", cuttingTrianglesBegin->first, ")", "\n");
+		if (cutterSequenceLogger.isLoggingSet())
+		{
+			cuttableContainer.printCuttableTriangles();
+			cutterSequenceLogger.waitForDebugInput();
+		}
 
 		// reset the CuttingTriangle that was used in this iteration.
 		//cuttingTrianglesBegin->second.reset();

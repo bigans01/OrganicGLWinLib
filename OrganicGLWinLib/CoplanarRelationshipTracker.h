@@ -25,7 +25,7 @@ class CoplanarRelationshipTracker
 
 		void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
 		void runAllCuttingSequenceTests();
-		void setDebugLevel(PolyDebugLevel in_polyDebugLevel);
+		void setRelationshipTrackerDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		void insertDOForSpecificTrackedSPoly(int in_trackedSPolyID, DebugOption in_debugOption);
 		void insertDOForSpecificTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, DebugOption in_debugOption);
 		void insertDOForSpecificTrackedCutterCuttingTriangle(int in_trackedSPolyID, int in_trackedSPolyCuttingTriangleID, DebugOption in_debugOption);

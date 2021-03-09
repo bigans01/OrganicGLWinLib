@@ -52,7 +52,7 @@ class CoplanarRelationships
 		bool rotateToXYPlaneAndRunCuttingSequenceTests();
 		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		bool performCuttingSequenceTest();
-		void applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
+		void applyCoplanarRelationshipDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
 		DebugOptionSet acquireDOSForSpecificTrackedSTriangle(int in_sTriangleID);
 
 };

@@ -122,7 +122,7 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	return didSPolySurvive;
 }
 
-void CoplanarRelationships::applyDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
+void CoplanarRelationships::applyCoplanarRelationshipDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
 {
 	dlPrintBorderLines = in_coplanarRelationshipsDebugFlagsRef->dlPrintBorderLinesOfTrackedAndRelatedSPolys;	// if set, prints border lines of tracked/related SPolys.
 	specificTrackedSTriangleDOSForCutter = in_coplanarRelationshipsDebugFlagsRef->specificTrackedSTriangleDOSMap;	// copy/load debug option sets for specific STriangles in the tracked SPoly

@@ -5,7 +5,7 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 {
 	tracer.setCutLinePoolRef(&linePool);
 	tracer.setCutTriangleContainerVectorRef(&cutTriangleContainerVector);
-	tracer.setObservationLogLevel(PolyDebugLevel::NONE);
+	tracer.setObservationLogLevel(cutTriangleGroupBuilderLoggerLogLevel);
 	currentLineOfSightLineIndex = linePool.getFirstElementID();	// this value should always be set to the initial key value of the first element in the linePool; the initial value should always be 0
 
 	CutLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
@@ -75,11 +75,14 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 	}
 
 
-	std::cout << "#### Total containers: " << totalContainers << std::endl;
-	std::cout << "#### Total triangles: " << totalTriangles << std::endl;
-	int totalVal = 3;
-	std::cin >> totalVal;
+	//std::cout << "#### Total containers: " << totalContainers << std::endl;
+	//std::cout << "#### Total triangles: " << totalTriangles << std::endl;
+	//int totalVal = 3;
+	//std::cin >> totalVal;
 
+	cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder): #### Total containers produced by tracer: ", totalContainers, "\n");
+	cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder): #### Total triangles produced by tracer: ", totalTriangles, "\n");
+	cutTriangleGroupBuilderLogger.waitForDebugInput();
 }
 
 void CutTriangleGroupBuilder::acquireWeldedLinesForWindowAndBuildObservation()

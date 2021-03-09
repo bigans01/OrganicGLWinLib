@@ -8,6 +8,7 @@
 #include "CuttableTriangleContainer.h"
 #include "CuttingTriangleManager.h"
 #include "STriangleOutputContainer.h"
+#include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "DebugOptionSet.h"
 
@@ -25,6 +26,7 @@ class STriangleCutter
 		std::map<int, DebugOptionSet> specificCuttingTriangleDOSMap;
 		DebugOptionSet getDOSForSpecificCuttingTriangle(int in_cuttingTriangleID);
 		DebugOptionSet cutterCuttableSTriangleDOS;	// debug options, for cuttable STriangles
+		PolyDebugLevel checkForCutterDO(DebugOption in_debugOptionToFind);
 };
 
 #endif
