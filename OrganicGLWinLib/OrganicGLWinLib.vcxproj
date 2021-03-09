@@ -198,6 +198,7 @@
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
+    <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="CoplanarCategorizedLineProducer.h" />
     <ClInclude Include="CoplanarChecker.h" />

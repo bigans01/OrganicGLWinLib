@@ -93,6 +93,8 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> starting print of lines in the WeldedTriangleSuperGroup, before rotating back to original position.", "\n");
 			triangleSupergroup.printPointsInSupergroup();
 			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> finished print of lines in the WeldedTriangleSuperGroup.", "\n");
+			intersectFinderLogger.log("(CleaveSequenceIntersectFinder) >>>> ::::: printing consumedSequenceGroups contents.", "\n");
+			welder.printConsumedSequenceGroups();
 		}
 
 	}

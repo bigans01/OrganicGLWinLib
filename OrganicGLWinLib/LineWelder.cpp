@@ -30,6 +30,11 @@ void LineWelder::clearLinePool()
 	weldedLines.clearPool();
 }
 
+void LineWelder::printConsumedSequenceGroups()
+{
+	consumedSequenceGroups.printGroups();
+}
+
 void LineWelder::startWelding()
 {
 	//std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;
@@ -270,6 +275,7 @@ void LineWelder::startWelding()
 	
 
 			candidateListMap.removeCandidateFromAllCandidateLists(beginningSequenceID);
+			consumedSequenceGroups.insertConsumedCleaveSequence(runIteration, beginningSequenceID);	// make sure to keep track of all consumed sequences.
 
 		}
 
@@ -331,6 +337,8 @@ void LineWelder::startWelding()
 	lineWelderLogger.log("(LineWelder) ### ............................................................................>>>>>>>>>>>>>> Welding complete; lines are ready for WeldedTriangleGroupBuilder. Enter number to continue. ", "\n");
 	lineWelderLogger.waitForDebugInput();
 	// use the unused point of the categorized line to determine how to quat to Z = 0 (Z-planar).
+
+	runIteration++;		// the index to use for inserting into consumedSequenceGroups must be incremented every time this function is called, but only at the end.
 }
 
 void LineWelder::getCleaveSequenceCandidateListMap()
@@ -460,6 +468,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 			{
 				//std::cout << "######### CleaveSequence is COMPLETE, removing from candidateList, the ID of: " << discoveredSequence.cleaveSequenceID << std::endl;
 				candidateListMap.removeCandidateFromAllCandidateLists(discoveredSequence.cleaveSequenceID);
+				consumedSequenceGroups.insertConsumedCleaveSequence(runIteration, discoveredSequence.cleaveSequenceID);	// make sure to keep track of all consumed sequences.
 			}
 
 
@@ -565,6 +574,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 			{
 				//std::cout << "######### CleaveSequence is COMPLETE, removing from candidateList, the ID of: " << discoveredSequence.cleaveSequenceID << std::endl;
 				candidateListMap.removeCandidateFromAllCandidateLists(discoveredSequence.cleaveSequenceID);
+				consumedSequenceGroups.insertConsumedCleaveSequence(runIteration, discoveredSequence.cleaveSequenceID);	// make sure to keep track of all consumed sequences.
 			}
 			currentBorderLineID = nextBorderLineID;
 		}

@@ -20,6 +20,7 @@
 #include "PolyDebugLevel.h"
 #include "UsableCleaveSequenceCalculator.h"
 #include "OperableIntSet.h"
+#include "ConsumedCleaveSequenceGroups.h"
 
 class LineWelder
 {
@@ -37,6 +38,7 @@ public:
 	int getRemainingCandidateCount();
 	WeldedLinePool retrieveLinePool();
 	void clearLinePool();
+	void printConsumedSequenceGroups();
 private:
 	SPoly* sPolyRef = nullptr;	// a reference to the SPoly we will be operating on for this LineWelder.
 	MassManipulationMode currentManipulationMode = MassManipulationMode::CREATION;	// CREATION is default value, but will be overrriden by the SPoly's value when
@@ -67,6 +69,8 @@ private:
 
 	PolyLogger lineWelderLogger;
 	PolyDebugLevel lineWelderLoggerDebugLevel = PolyDebugLevel::NONE;
+	int runIteration = 0;			// the ID of the run we are on; used to insert into ConsumedCleaveSequenceGroups
+	ConsumedCleaveSequenceGroups consumedSequenceGroups;
 };
 
 #endif

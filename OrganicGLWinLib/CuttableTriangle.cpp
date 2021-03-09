@@ -558,14 +558,16 @@ void CuttableTriangle::buildTypicalAttempts(CuttingTriangle* in_cuttingTriangleR
 	int outputVal = 3;
 	std::cin >> outputVal;
 	*/
-
+	PolyLogger typicalAttemptBuildLogger;
+	typicalAttemptBuildLogger.setDebugLevel(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_TYPICAL_ATTEMPTS));
 	for (int x = 0; x < 3; x++)
 	{
-		std::cout << "--2-- Size of cutting lines , index " << x << " records: " << in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() << std::endl;
+		//std::cout << "--2-- Size of cutting lines , index " << x << " records: " << in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() << std::endl;
 		// we found a line that had exactly 1 record; generate what we need and then break.
 		if (in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.numberOfRecords() == 1)	
 		{
-			std::cout << "!! Found remaining attempt, building and breaking. " << std::endl;
+			//std::cout << "!! Found remaining attempt, building and breaking. " << std::endl;
+			typicalAttemptBuildLogger.log("(CuttableTriangle): producing typical attempt for for the CuttingLine with ID ", x, "\n");
 			auto intersectionRecordsBegin = in_cuttingTriangleRef->cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
 			TwoDCrawlingAttempt typicalAttempt(TwoDCrawlingType::TYPICAL, x, intersectionRecordsBegin->first, intersectionRecordsBegin->second);
 			crawlingAttemptsVector.push_back(typicalAttempt);
@@ -599,7 +601,7 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 		PoolAndDirectionPair currentPair;
 		if (attemptsBegin->crawlingType == TwoDCrawlingType::SLICE)
 		{
-			std::cout << "SLICE crawl type found..." << std::endl;
+			std::cout << "(CuttableTriangle): SLICE crawl type found..." << std::endl;
 			//TwoDCrawlingAttempt* crawlAttemptPtr = &(*attemptsBegin);
 			currentPair = buildLinesFromSliceAttempt(&(*attemptsBegin), in_cuttingTriangleRef);
 			wasAttemptMade = true;
@@ -611,7 +613,7 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 			(wasTypicalUsed == false)
 		)
 		{
-			std::cout << "TYPICAL crawl type found..." << std::endl;
+			std::cout << "(CuttableTriangle): TYPICAL crawl type found..." << std::endl;
 			currentPair = buildLinesFromTypicalAttempt(*attemptsBegin, in_cuttingTriangleRef);
 			wasAttemptMade = true;
 		}

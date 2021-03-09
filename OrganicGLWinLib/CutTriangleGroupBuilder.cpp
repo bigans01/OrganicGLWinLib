@@ -13,7 +13,7 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 	//std::cout << ":::::::::::::::::::: Printing out contents of line pool. :::::::::::::::::::::............" << std::endl;
 	//linePool.printLines();
 	
-	std::cout << ":::|||||| Size of vector, before anything: " << cutTriangleContainerVector.size() << std::endl;
+	//std::cout << ":::|||||| Size of vector, before anything: " << cutTriangleContainerVector.size() << std::endl;
 	if (linePool.getPoolSize() > 3)
 	{
 		while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
@@ -23,10 +23,12 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 			int preObservationPoolSize = linePool.getPoolSize();
 			acquireWeldedLinesForWindowAndBuildObservation();
 			int postObservationPoolSize = linePool.getPoolSize();
-			std::cout << ":::|||||| Size of vector, after while tick: " << cutTriangleContainerVector.size() << std::endl;
+			//std::cout << ":::|||||| Size of vector, after while tick: " << cutTriangleContainerVector.size() << std::endl;
+			cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder) :::|||||| Size of vector, after while tick: ", cutTriangleContainerVector.size(), "\n");
 			if (preObservationPoolSize == postObservationPoolSize)
 			{
 				std::cout << "~~~~~!!!!!!! Warning, pre and post match...continue? " << std::endl;
+				//cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder) ~~~~~!!!!!!! Warning, pre and post match...continue?  ", "\n");
 				int prepostMatch = 3;
 				while (prepostMatch == 3)
 				{
@@ -77,6 +79,7 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 	std::cout << "#### Total triangles: " << totalTriangles << std::endl;
 	int totalVal = 3;
 	std::cin >> totalVal;
+
 }
 
 void CutTriangleGroupBuilder::acquireWeldedLinesForWindowAndBuildObservation()

@@ -165,10 +165,23 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	bool areAllPointsWithinShell = false;		// if all points of the SPoly are somewhere in the combined PBZ of the shell, this will get set to true.
 	if (relationshipTrackerContainer.relationshipTrackerContainer.size() == currentMeshMatterSPoly->borderLines.size())
 	{
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "####################### !! Check 2.2 met. ", "\n");
 		areAllPointsWithinShell = true;
 	}
 
-	// for printing out the contents of the trackerContainer (debug only)
+	if (clipperPolyLogger.isLoggingSet())
+	{
+		if (foundAsBeingCoplanar == false)
+		{
+			clipperPolyLogger.log("(MassZonePointClipper): foundAsBeingCoplanar is FALSE. ", "\n");
+		}
+		else if (foundAsBeingCoplanar == true)
+		{
+			clipperPolyLogger.log("(MassZonePointClipper): foundAsBeingCoplanar is TRUE. ", "\n");
+		}
+	}
+
+	
 	if 
     (	
 		(foundAsBeingCoplanar == false)
@@ -176,10 +189,17 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		(areAllPointsWithinShell == true)
 	)
 	{
+		//willBePurged = true;
+
+		clipperPolyLogger.log("(MassZonePointClipper): Entered check 2.3. ", "\n");
 		// CHECK 2.3
 		if (relationshipTrackerContainer.checkForAnyPointsWithSingleSPoly() == false)
 		{
+			willBePurged = true;
 
+
+			// Need to test why the below code needs to be called; not sure if it's even useful. (3/8/2021).
+			/*
 			relationshipTrackerContainer.printRelationshipTrackerData();
 			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
 			//std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
@@ -189,6 +209,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
 				willBePurged = true;
 			}
+			*/
 		}
 		else
 		{
@@ -222,6 +243,8 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 	auto linksEnd = in_borderLineLinkContainerRef->linkMap.end();
 	for (; linksBegin != linksEnd; linksBegin++)
 	{
+
+
 		bool pointFoundAsCoplanar = false;	// set to true when the point as being coplanar to any STriangle.
 		PointToSPolyRelationshipTracker* trackerRef = in_trackerContainerRef->fetchSpecificSPolyRelationshipTrackerByPoint(linksBegin->second.linkPoint);
 		auto trackerSPolysBegin = trackerRef->relationships.begin();
