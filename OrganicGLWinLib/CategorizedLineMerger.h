@@ -9,11 +9,15 @@
 #include "CategorizedLinePartialBoundMerger.h"
 #include "CategorizedLineASliceMerger.h"
 #include "CategorizedLinePlaceboMerger.h"
+#include "NonBoundMerger.h"
 #include "CategorizedLineInterceptsPointPreciseMerger.h"
 #include <map>
 #include <mutex>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+
+// NOTICE: if the CategorizedLineMerger doesn't pull all the lines from the factory and merge them, the engine may not generate an appropriate CleaveSequence.
+// Ensure that all categorized lines are extracted from the CleaveSequenceFactory, before merging them and sending them back to it.
 
 class CleaveSequenceFactory;
 class CategorizedLineMerger

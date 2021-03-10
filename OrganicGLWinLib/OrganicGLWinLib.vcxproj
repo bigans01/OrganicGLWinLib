@@ -289,6 +289,7 @@
     <ClInclude Include="MassZonePointClipper.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
+    <ClInclude Include="NonBoundMerger.h" />
     <ClInclude Include="PointToMassRelationshipMap.h" />
     <ClInclude Include="PointToMassRelationship.h" />
     <ClInclude Include="PointToMassRelationshipType.h" />
@@ -516,6 +517,7 @@
     <ClCompile Include="MassZonePointClipper.cpp" />
     <ClCompile Include="MeshMatterMeta.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />
+    <ClCompile Include="NonBoundMerger.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
     <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp" />

@@ -870,6 +870,9 @@
     <ClInclude Include="ConsumedCleaveSequenceGroups.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NonBoundMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1278,6 +1281,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NonBoundMerger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

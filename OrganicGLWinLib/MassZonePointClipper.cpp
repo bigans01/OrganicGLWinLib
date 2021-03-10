@@ -81,8 +81,17 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		auto clippingShellMapEnd = clippingShellMap.end();
 		for (; clippingShellMapBegin != clippingShellMapEnd; clippingShellMapBegin++)
 		{
-			SPoly* currentClippingShellSPolyRef = clippingShellMapBegin->second;	// get a ref to the shell SPoly.
-			int numberOfSTriangles = currentClippingShellSPolyRef->triangles.size();
+			SPoly* currentClippingShellSPolyRef = clippingShellMapBegin->second;	 // get a ref to the shell SPoly.
+			int numberOfSTriangles = currentClippingShellSPolyRef->triangles.size(); 
+
+			/*
+			if (clipperPolyLogger.isLoggingSet())
+			{
+				clipperPolyLogger.log("(MassZonePointClipper): Current SPoly points are: ", "\n");
+				currentClippingShellSPolyRef->printPoints();
+			}
+			*/
+
 			for (int x = 0; x < numberOfSTriangles; x++)
 			{
 				STriangle* currentSTriangleRef = &currentClippingShellSPolyRef->triangles[x];
@@ -195,11 +204,10 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		// CHECK 2.3
 		if (relationshipTrackerContainer.checkForAnyPointsWithSingleSPoly() == false)
 		{
-			willBePurged = true;
-
-
 			// Need to test why the below code needs to be called; not sure if it's even useful. (3/8/2021).
-			/*
+			// Found fix for this on 3/9/2021; part of this problem was due to missing merging machine, NonBoundMerger.
+			// Still needs to be reviewed for further usablity, as of 3/9/2021.
+			
 			relationshipTrackerContainer.printRelationshipTrackerData();
 			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
 			//std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
@@ -209,7 +217,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
 				willBePurged = true;
 			}
-			*/
+			
 		}
 		else
 		{
@@ -244,13 +252,16 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 	for (; linksBegin != linksEnd; linksBegin++)
 	{
 
-
+		// the number of trackers to go through should be equal to the number of points in the SPoly we're analyzing.
 		bool pointFoundAsCoplanar = false;	// set to true when the point as being coplanar to any STriangle.
 		PointToSPolyRelationshipTracker* trackerRef = in_trackerContainerRef->fetchSpecificSPolyRelationshipTrackerByPoint(linksBegin->second.linkPoint);
 		auto trackerSPolysBegin = trackerRef->relationships.begin();
 		auto trackerSPolysEnd = trackerRef->relationships.end();
+
+		// Each point should be related to one or more SPolys...
 		for (; trackerSPolysBegin != trackerSPolysEnd; trackerSPolysBegin++)
-		{
+		{	
+			// ... and specific STriangles in those SPolys. We must check to see what border lines are co planar to these STriangles.
 			auto currentSPolySTriangleBegin = trackerSPolysBegin->second.sTriangleRelationshipMap.begin();
 			auto currentSPolySTriangleEnd = trackerSPolysBegin->second.sTriangleRelationshipMap.end();
 			for (; currentSPolySTriangleBegin != currentSPolySTriangleEnd; currentSPolySTriangleBegin++)

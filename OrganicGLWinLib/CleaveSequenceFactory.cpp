@@ -450,6 +450,15 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			groupMap.printGroupLineCounts();
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) finished printing contents of the CategorizedLineGroupMap...", "\n");
 		}
+
+		if (cleaveSequenceFactoryLogger.isLoggingSet())
+		{
+			if (mergerDebugLevel != PolyDebugLevel::DEBUG)
+			{
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Notice, merger debug level is not set. ", "\n");
+			}
+		}
+
 		CategorizedLineMerger merger(this, mergerDebugLevel);
 
 		//std::cout << "::::::::::::::::::::::::: Post-MERGE stats " << std::endl;
@@ -486,6 +495,12 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		//std::cout << ">>> Handling typical scenario" << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling typical scenario", "\n");
+
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Post-MERGE stats (2) ", "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of nonbounds: ", nonboundCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of partials: ", partialboundCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of precises: ", interceptsPointPreciseCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slices: ", aslicedCount, "\n");
 
 		handleScenarioTypical(in_cleaveMapRef);
 	}
@@ -525,6 +540,11 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	}
 
 	//std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
+	if (cleaveSequenceFactoryLogger.isLoggingSet())
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Number of CleaveSequences produced is: ", (*in_cleaveMapRef).size(), "\n");
+		cleaveSequenceFactoryLogger.waitForDebugInput();
+	}
 }
 
 void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
@@ -945,6 +965,8 @@ std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationD
 
 CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm::vec3 in_pointToSearch)
 {
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Checking for next non-bound line, that has this point: ", in_pointToSearch.x, ",", in_pointToSearch.y, ", ", in_pointToSearch.z, "\n");
+
 	CategorizedLineSearchResult searchResult;
 	if (nonboundCount > 0)		// search for categorized lines, but only if there are ones to search for.
 	{
@@ -956,6 +978,7 @@ CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm:
 		IRPointType pointCheckResult = IRPointType::NEITHER;	// starts out as NEITHER
 		for (nonboundBegin; nonboundBegin != nonboundEnd; nonboundBegin++)
 		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Checking non bound line. ", "\n");
 			pointCheckResult = nonboundBegin->second.checkIfPointIsInLine(in_pointToSearch);
 			if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 			{
@@ -1119,16 +1142,37 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 	}
 
+	if (cleaveSequenceFactoryLogger.isLoggingSet())
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactorY): Line pool, before run of handleScenarioTypical: ", "\n");
+		printLinesInPool();
+	}
+	
+
 	while (partialboundCount > 0)	// do this until all partial_bound lines have been accounted for. 
 	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): BEGIN, partialBoundCount > 0 --> Number of non-bound lines in map is:", nonboundMap.size(), " | count: ", nonboundCount, "\n");
+
 		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 
 		auto partialBoundMapBegin = partialboundMap.begin();					// get the first line in the partial bound map
 		CategorizedLine* partialBoundLineRef = &partialBoundMapBegin->second;	// get a ref to the line
+
+		if (cleaveSequenceFactoryLogger.isLoggingSet())
+		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Current partial bound line stats are:", "\n");
+			cleaveSequenceFactoryLogger.log("Point A: ", partialBoundLineRef->line.pointA.x, ", ", partialBoundLineRef->line.pointA.y, ", ", partialBoundLineRef->line.pointA.z, "\n");
+			cleaveSequenceFactoryLogger.log("Point B: ", partialBoundLineRef->line.pointB.x, ", ", partialBoundLineRef->line.pointB.y, ", ", partialBoundLineRef->line.pointB.z, "\n");
+
+		}
+
 		int firstLineID = partialBoundMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
 		insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
 		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();		// get the searchable point from the first partial bound line we found in the previous step
+
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", firstPointToSearch.x, ", ", firstPointToSearch.y, ", ", firstPointToSearch.z, "\n");
+
 		//std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
 
 
@@ -1138,13 +1182,19 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		// partial bound lines will be removed from partialBoundMap (and the counter decremented) and the nonbound lines will be removed from the nonboundMap (also decrementing here)
 		bool continueSearch = true;
 		CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): MIDDLE, partialBoundCount > 0 --> Number of non-bound lines in map is:", nonboundMap.size(), " | count: ", nonboundCount, "\n");
 		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
 		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found initial non-bound line to insert.", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point A: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z, "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point B: ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
+
 			newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
 			bool continueFlag = true;							// check for the next line, at least once.
 			while (continueFlag == true)	// loop until this is false.
 			{
 				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", nextPointToSearch.x, ", ", nextPointToSearch.y, ", ", nextPointToSearch.z, "\n");
 				CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
 				if (nextResult.wasFound == false)
 				{
@@ -1152,6 +1202,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 				}
 				else if (nextResult.wasFound == true)
 				{
+					cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found next non-bound line to insert.", "\n");
 					newSequence.insertNonboundLine(nextResult.returnLine);
 				}
 			}
@@ -1190,6 +1241,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
 		}
+
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Finished 1 pass of a CategorizedLine. ", "\n");
 	}
 
 	while (aslicedCount > 0)

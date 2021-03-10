@@ -83,6 +83,13 @@ class MassZoneBoxBoundary
 				boundaryPolySet.boundarySPolyRef->sequenceFactory.setFactoryDebugLevel(PolyDebugLevel::DEBUG);
 			}
 
+			// check for the FACTORY_MERGER option
+			auto mergerFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::FACTORY_MERGER);
+			if (mergerFinder != in_sPolyDOSet.debugOptions.end())
+			{
+				boundaryPolySet.boundarySPolyRef->sequenceFactory.setMergerDebugLevel(PolyDebugLevel::DEBUG);
+			}
+
 			// check for the CATEGORIZED_LINES option.
 			auto categorizedLinesFinder = in_sPolyDOSet.debugOptions.find(SPolyDO::CATEGORIZED_LINES);
 			if (categorizedLinesFinder != in_sPolyDOSet.debugOptions.end())

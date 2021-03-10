@@ -6,7 +6,7 @@
 void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 {
 	// print out the counts of intercepts in each border line of the SPoly
-	//auto sPolyBordeLinesBegin = cleaveSequenceFactoryRef->sPolyRef
+	// auto sPolyBordeLinesBegin = cleaveSequenceFactoryRef->sPolyRef
 
 
 	// cycle through the CleaveSequenceFactory's CategorizedLineGroupMap, to generate the appropriate machine for each group, and then extract
@@ -40,6 +40,12 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 		else if (currentGroupMergeType == CategorizedLineMergeType::NO_MERGE_REQUIRED)
 		{
 			machineMap[factoryGroupMapBegin->first].reset(new CategorizedLinePlaceboMerger);
+			machineMap[factoryGroupMapBegin->first]->initialize(cleaveSequenceFactoryRef, &factoryGroupMapBegin->second, mergerDebugLevel);
+			machineMap[factoryGroupMapBegin->first]->extractCategorizedLines();
+		}
+		else if (currentGroupMergeType == CategorizedLineMergeType::MERGE_TO_NON_BOUND)
+		{
+			machineMap[factoryGroupMapBegin->first].reset(new NonBoundMerger);
 			machineMap[factoryGroupMapBegin->first]->initialize(cleaveSequenceFactoryRef, &factoryGroupMapBegin->second, mergerDebugLevel);
 			machineMap[factoryGroupMapBegin->first]->extractCategorizedLines();
 		}
@@ -158,6 +164,15 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 		//std::cout << "! Result is INTERCEPTS_POINT_PRECISE. " << std::endl;
 		mergerLogger.log("(CategorizedLineMerger) ! Result is INTERCEPTS_POINT_PRECISE. ", "\n");
 	}
+	else if
+	(
+		(nonBoundCount > 1)
+	)
+	{
+		mergerLogger.log("(CategorizedLineMerger) ! Result is MERGE_TO_NON_BOUND. ", "\n");
+		returnType = CategorizedLineMergeType::MERGE_TO_NON_BOUND;
+	}
+	
 
 	return returnType;
 }
@@ -174,6 +189,12 @@ void CategorizedLineMerger::runMergingForEachMachine()
 
 void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 {
+	if (mergerLogger.isLoggingSet())
+	{
+		mergerLogger.log("(CategorizedLineMerger) Remaining lines in cleaveSequenceFactory, BEFORE sending over from the CategorizedLineMerger: ");
+		cleaveSequenceFactoryRef->printLinesInPool();
+	}
+
 	auto machineMapBegin = machineMap.begin();
 	auto machineMapEnd = machineMap.end();
 	for (; machineMapBegin != machineMapEnd; machineMapBegin++)
@@ -244,6 +265,14 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 	//std::cout << "!!! Finished call of sendMergedLinesToCleaveSequenceFactory. " << std::endl;
 	//int finishVal = 3;
 	//std::cin >> finishVal;
+
+	if (mergerLogger.isLoggingSet())
+	{
+		mergerLogger.log("(CategorizedLineMerger) Remaining lines in cleaveSequenceFactory, AFTER sending over from the CategorizedLineMerger: ");
+		cleaveSequenceFactoryRef->printLinesInPool();
+	}
+
+
 
 	mergerLogger.log("(CategorizedLineMerger) !!! Finished call of sendMergedLinesToCleaveSequenceFactory. ", "\n");
 	mergerLogger.waitForDebugInput();
