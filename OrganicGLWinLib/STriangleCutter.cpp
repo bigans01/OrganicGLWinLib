@@ -64,6 +64,11 @@ bool STriangleCutter::runCuttingSequence()
 
 		//std::cout << "!!!! Next pass begin. Current ID of CuttingTriangle is: " << cuttingTrianglesBegin->first << std::endl;
 		cutterSequenceLogger.log("(STriangleCutter): !!!! Next pass begin. Current ID of CuttingTriangle is: ", cuttingTrianglesBegin->first, "\n");
+		if (cutterSequenceLogger.isLoggingSet())
+		{
+			cutterSequenceLogger.log("(STriangleCutter): Cutting triangle points are: ", "\n");
+			cuttingTrianglesBegin->second.printPoints();
+		}
 
 		STriangleOutputContainer outputsForCurrentCuttingTriangle;
 		auto currentTriangleToCutBegin = cuttableContainer.cuttableTriangleMap.begin();

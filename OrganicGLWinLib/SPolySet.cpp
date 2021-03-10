@@ -348,7 +348,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		//int buildVal = 3;
 		//std::cin >> buildVal;
@@ -433,14 +433,21 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 	PolyDebugLevel categorizedLineDebugLevel = checkForSPolyOptionInSpecificSPoly(in_hostPolyAID, SPolyDO::CATEGORIZED_LINES);
 	PolyLogger currentComparisonLogger;
 	currentComparisonLogger.setDebugLevel(categorizedLineDebugLevel);
-	currentComparisonLogger.log("(SPolySet): CategorizedLine debug option found for SPoly having ID ", in_hostPolyAID, "; comparing against SPoly with ID ", in_guestPolyID, ".", "\n");
+	currentComparisonLogger.log("(SPolySet): ||||||||||||||||||||||||||||||||||||||||||| CategorizedLine debug option found for SPoly having ID ", in_hostPolyAID, "; comparing against SPoly with ID ", in_guestPolyID, ".", "\n");
 
 	// acquire the debug level for CategorizedLine coplanar tests.
 	PolyDebugLevel coplanarTestDebugLevel = checkForSPolyOptionInSpecificSPoly(in_hostPolyAID, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS);
 
+
 	for (int currentHostPolyTriangle = 0; currentHostPolyTriangle < hostPolyTriangleCount; currentHostPolyTriangle++)					// compare each of poly A's tertiaries...
 	{
 
+		if (currentComparisonLogger.isLoggingSet())
+		{
+			currentComparisonLogger.log("(SPolySet): Begin comparison of STriangle with index ", currentHostPolyTriangle, ", in SPoly ", in_hostPolyAID, "\n");
+			currentComparisonLogger.log("(SPolySet): ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|||||| Points of this host STriangle are:", "\n");
+			in_hostPolyPtr->triangles[currentHostPolyTriangle].printPoints();
+		}
 		//std::cout << "::::::::::::::::::::::::::::::::::: ----------------------------------+++++++++>>>>>>>>>>> Running host poly Triangle comparison: " << std::endl;
 
 		STriangle* hostTrianglePtr = &in_hostPolyPtr->triangles[currentHostPolyTriangle];	// " " 
@@ -459,6 +466,12 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			// compare the host triangle lines, to the guest triangles. |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 			STriangle* guestTrianglePtr = &in_guestPolyPtr->triangles[y]; // get the guest poly's triangle
+			if (currentComparisonLogger.isLoggingSet())
+			{
+				currentComparisonLogger.log("(SPolySet): ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>>>>> Points of the current guest STriangle are:", "\n");
+				guestTrianglePtr->printPoints();
+			}
+
 			//std::cout << "::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> Comparing lines of the host to the guest triangle " << std::endl;
 			currentComparisonLogger.log("(SPolySet) [Comparison: ", in_hostPolyAID, " > ", in_guestPolyID, "] ::::::::::::::::::::::::::::::::::: >>>>>>>>>>>>>>>>>>>>>>>>>>> BEGIN Comparing lines of the host to the guest triangle ", "\n");
 

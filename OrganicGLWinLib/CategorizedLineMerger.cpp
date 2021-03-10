@@ -179,6 +179,7 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 
 void CategorizedLineMerger::runMergingForEachMachine()
 {
+	std::cout << ">>>> Running merging for each machine. " << std::endl;
 	auto machineMapBegin = machineMap.begin();
 	auto machineMapEnd = machineMap.end();
 	for (; machineMapBegin != machineMapEnd; machineMapBegin++)

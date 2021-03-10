@@ -10,8 +10,8 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 
 	CutLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);	// testing only, remove when needed.
 
-	//std::cout << ":::::::::::::::::::: Printing out contents of line pool. :::::::::::::::::::::............" << std::endl;
-	//linePool.printLines();
+	std::cout << ":::::::::::::::::::: Printing out contents of line pool. :::::::::::::::::::::............" << std::endl;
+	linePool.printLines();
 	
 	//std::cout << ":::|||||| Size of vector, before anything: " << cutTriangleContainerVector.size() << std::endl;
 	if (linePool.getPoolSize() > 3)
@@ -30,6 +30,7 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 				std::cout << "~~~~~!!!!!!! Warning, pre and post match...continue? " << std::endl;
 				//cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder) ~~~~~!!!!!!! Warning, pre and post match...continue?  ", "\n");
 				int prepostMatch = 3;
+				std::cout << "~~~~~Number of lines in pool is: " << preObservationPoolSize << std::endl;
 				while (prepostMatch == 3)
 				{
 

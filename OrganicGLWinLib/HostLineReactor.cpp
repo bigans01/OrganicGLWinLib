@@ -61,7 +61,12 @@ void HostLineReactor::runAnalysis()
 	// Search 5: TYPICAL_NONBORDERLINE
 	else if (fusedPointMetaRef->searchForSummary(FusedPointSummary::TYPICAL_NONBORDERLINE).wasFound == true)
 	{
+		glm::vec3 firstNonBorderPoint = fusedPointMetaRef->searchForSummary(FusedPointSummary::TYPICAL_NONBORDERLINE).foundPoint;
+		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(firstNonBorderPoint);
 
+		//std::cout << "******************* NOTICE: typical non_border line found. " << std::endl;
+		reactorBaseLogger.log("(HostLineReactor): building NON_BOUND...", "\n");
+		buildNonBound(firstNonBorderPoint, otherSummary.foundPoint);
 	}
 }
 
@@ -185,4 +190,20 @@ void HostLineReactor::buildASlice(glm::vec3 in_buildStartPoint, glm::vec3 in_oth
 	reactorBaseLogger.log("(HostLineReactor): pointBBorder: ", resultantLine.line.pointBBorder, "\n");
 	reactorBaseLogger.log("(HostLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 
+}
+
+void HostLineReactor::buildNonBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
+{
+	reactorBaseLogger.log("(HostLineReactor) !!!!!!!! building NON_BOUND line. ", "\n");
+	
+	//auto firstPoint = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
+	resultantLine.type = IntersectionType::NON_BOUND;
+	resultantLine.line.pointA = in_buildStartPoint;
+	resultantLine.line.pointB = in_otherPoint;
+	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
+
+	reactorBaseLogger.log("(GuestLineReactor): finished producing NON_BOUND, stats are: ", "\n");
+	reactorBaseLogger.log("(GuestLineReactor): point A: ", resultantLine.line.pointA.x, ", ", resultantLine.line.pointA.y, ", ", resultantLine.line.pointA.z, "\n");
+	reactorBaseLogger.log("(GuestLineReactor): point B: ", resultantLine.line.pointB.x, ", ", resultantLine.line.pointB.y, ", ", resultantLine.line.pointB.z, "\n");
+	reactorBaseLogger.log("(GuestLineReactor): empty normal: ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }

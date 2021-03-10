@@ -175,10 +175,16 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						//std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
 						//int finishVal = 3;
 						//std::cin >> finishVal;
+						tJunctionLogger.log("(CuttableTriangle): currentCuttableTriangleLineID was: ", currentCuttableTriangleLineID, "\n");
+						tJunctionLogger.log("(CuttableTriangle): currentCuttingTriangleLineID was: ", currentCuttingTriangleLineID, "\n");
 
 						tJunctionLogger.log("(CuttableTriangle): Valid T-junction of type T_JUNCTION_A_SPLITS_B_VIA_POINT_A detected, inserting...", "\n");
 						tJunctionLogger.log("(CuttableTriangle): Split point of T-junction: ", tJunctionSplittingPoint.x, ", ", tJunctionSplittingPoint.y, ", ", tJunctionSplittingPoint.z, "\n");
 						tJunctionLogger.waitForDebugInput();
+					}
+					else if (result == false)
+					{
+						tJunctionLogger.log("(CuttableTriangle): T-junction of type T_JUNCTION_A_SPLITS_B_VIA_POINT_A detected, was detected, but considered INVALID.", "\n");
 					}
 				}
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_B)
@@ -210,10 +216,16 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						//std::cout << ":::::::::: Finished T-junction insert. " << std::endl;
 						//int finishVal = 3;
 						//std::cin >> finishVal;
+						tJunctionLogger.log("(CuttableTriangle): currentCuttableTriangleLineID was: ", currentCuttableTriangleLineID, "\n");
+						tJunctionLogger.log("(CuttableTriangle): currentCuttingTriangleLineID was: ", currentCuttingTriangleLineID, "\n");
 
 						tJunctionLogger.log("(CuttableTriangle): Valid T-junction of type T_JUNCTION_A_SPLITS_B_VIA_POINT_B detected, inserting...", "\n");
 						tJunctionLogger.log("(CuttableTriangle): Split point of T-junction: ", tJunctionSplittingPoint.x, ", ", tJunctionSplittingPoint.y, ", ", tJunctionSplittingPoint.z, "\n");
 						tJunctionLogger.waitForDebugInput();
+					}
+					else if (result == false)
+					{
+						tJunctionLogger.log("(CuttableTriangle): T-junction of type T_JUNCTION_A_SPLITS_B_VIA_POINT_B detected, was detected, but considered INVALID.", "\n");
 					}
 				}
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_B_SPLITS_A_VIA_POINT_A)
@@ -261,7 +273,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						tJunctionLogger.log("(CuttableTriangle): Split point of T-junction: ", tJunctionSplittingPoint.x, ", ", tJunctionSplittingPoint.y, ", ", tJunctionSplittingPoint.z, "\n");
 						tJunctionLogger.waitForDebugInput();
 					}
-					
+					else if (result == false)
+					{
+						tJunctionLogger.log("(CuttableTriangle): T-junction of type T_JUNCTION_B_SPLITS_A_VIA_POINT_A detected, was detected, but considered INVALID.", "\n");
+					}
 				
 
 				}
@@ -307,6 +322,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 						tJunctionLogger.log("(CuttableTriangle): Valid T-junction of type T_JUNCTION_B_SPLITS_A_VIA_POINT_B detected, inserting...", "\n");
 						tJunctionLogger.log("(CuttableTriangle): Split point of T-junction: ", tJunctionSplittingPoint.x, ", ", tJunctionSplittingPoint.y, ", ", tJunctionSplittingPoint.z, "\n");
 						tJunctionLogger.waitForDebugInput();
+					}
+					else if (result == false)
+					{
+						tJunctionLogger.log("(CuttableTriangle): T-junction of type T_JUNCTION_B_SPLITS_A_VIA_POINT_B detected, was detected, but considered INVALID.", "\n");
 					}
 				}
 
