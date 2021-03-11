@@ -83,7 +83,7 @@ PointToSPolyRelationshipTracker* PointToSPolyRelationshipTrackerContainer::fetch
 	{
 		if (relationshipTrackerContainerBegin->second.point == in_pointToFind)
 		{
-			std::cout << "!! Point found. " << std::endl;
+			std::cout << "!! Point found. (" << in_pointToFind.x << ", " << in_pointToFind.y << ", " << in_pointToFind.z << ") " << std::endl;
 			returnRef = &relationshipTrackerContainerBegin->second;
 		}
 	}

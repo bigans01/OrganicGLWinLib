@@ -203,10 +203,9 @@ ErrorSensor CutLineWelder::handleTypicalRun()
 			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> next cutting triangle line index will be: ", nextCuttingLineIndexToUse, "\n");
 			cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> next cuttable triangle line index will be: ", nextCuttableLineIndexToUse, "\n");
 			
-			// if the value of nextCuttingLineIndexToUse is equal to copiedAttempt.beginIntersectionLineID, we're done, and we just need to insert this line. 
-			// Otherwise, if the value of nextCuttingLineIndexToUse isn't equal to copiedAttempt.beginIntersectionLineID, there is still a line to crawl on the CuttingTriangle.
-			if (copiedAttempt.beginIntersectionLineID == nextCuttingLineIndexToUse)
-			//if (copiedAttempt.cuttingTriangleLineID == nextCuttingLineIndexToUse)
+			// if the value of nextCuttingLineIndexToUse is equal to copiedAttempt.cuttingTriangleLineID, we're done, and we just need to insert this line. 
+			// Otherwise, if the value of nextCuttingLineIndexToUse isn't equal to copiedAttempt.cuttingTriangleLineID, there is still an additional line to crawl on the CuttingTriangle.
+			if (copiedAttempt.cuttingTriangleLineID == nextCuttingLineIndexToUse)
 			{
 				//std::cout << "TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. " << std::endl;
 				cutLineWelderLogger.log("(CutLineWelder) TYPICAL-> nextCuttinLineIndexToUse equals copiedAttempt.beginIntersectionLineID; no remaining lines to crawl. ", "\n");

@@ -147,15 +147,13 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 				// of the line that causes the split (the other point is the one that actually causes the junction)
 				else if (analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::T_JUNCTION_A_SPLITS_B_VIA_POINT_A)
 				{
-					//glm::vec3 pointToCheck = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLinePointA = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointA;
 					glm::vec3 splitLinePointB = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB;
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
 
-					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_A must be the inverse of the outwardFacingNormal, 
-					// since the tJunctionBasePoint would have to be inward-facing (meaning, on the same side of the line that faces the CuttingTriangle's centroid) to actually be used.
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
+					
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);		// splitLineNormal used to be multiplied by -1 here, before 3/11/2021.
 					if (result == true)
 					{
 						// since point A of the cutting line was the point that split line A, use it as the intersecting point.
@@ -194,9 +192,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointA;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
 
-					// the splitLineNormal to use for T_JUNCTION_A_SPLITS_B_VIA_POINT_B must be the inverse of the outwardFacingNormal, 
-					// since the tJunctionBasePoint would have to be inward-facing (meaning, on the same side of the line that faces the CuttingTriangle's centroid) to actually be used.
-					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal*=-1);
+					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);	// splitLineNormal used to be multiplied by -1 here, before 3/11/2021.
 					if (result == true)
 					{
 						// since point B of the cutting line was the point that split line A, use it as the intersecting point.

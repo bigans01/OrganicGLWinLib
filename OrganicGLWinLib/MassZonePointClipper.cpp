@@ -207,7 +207,15 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			// Need to test why the below code needs to be called; not sure if it's even useful. (3/8/2021).
 			// Found fix for this on 3/9/2021; part of this problem was due to missing merging machine, NonBoundMerger.
 			// Still needs to be reviewed for further usablity, as of 3/9/2021.
+			if (clipperPolyLogger.isLoggingSet())
+			{
+				clipperPolyLogger.log("(MassZonePointClipper): printing shell SPoly points...", "\n");
+				printClippingShellMapPoints();
+			}
+
+			willBePurged = true;
 			
+			/*
 			relationshipTrackerContainer.printRelationshipTrackerData();
 			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
 			//std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
@@ -217,7 +225,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
 				willBePurged = true;
 			}
-			
+			*/
 		}
 		else
 		{
@@ -240,6 +248,17 @@ void MassZonePointClipper::setClipperDebugLevel(PolyDebugLevel in_polyDebugLevel
 	clipperPolyLogger.setDebugLevel(in_polyDebugLevel);
 	clipperPolyLoggerDebugLevel = in_polyDebugLevel;
 	zoneString = in_zoneString;
+}
+
+void MassZonePointClipper::printClippingShellMapPoints()
+{
+	auto clippingBegin = clippingShellMap.begin();
+	auto clippingEnd = clippingShellMap.end();
+	for (; clippingBegin != clippingEnd; clippingBegin++)
+	{
+		std::cout << "||||| Printing shell poly points: " << std::endl;
+		clippingBegin->second->printPoints();
+	}
 }
 
 bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef)
