@@ -385,7 +385,16 @@ void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jo
 		std::chrono::duration<double> buffersubelapsed = buffersubend - buffersubstart;
 		//std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
 		//std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
-
+		/*
+		if (copyelapsed.count() > 0.016)
+		{
+			std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
+		}
+		if (buffersubelapsed.count() > 0.016)
+		{
+			std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
+		}
+		*/
 	}
 	else if (currentMeta.containsMovement == 0)
 	{
@@ -401,6 +410,12 @@ void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jo
 		auto trueend = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> trueelapsed = trueend - truestart;
 		//std::cout << ">> !! Branch 2: InsertCollectionGLData time: " << trueelapsed.count() << std::endl;
+		/*
+		if (trueelapsed.count() > 0.016)
+		{
+			std::cout << ">> !! Branch 2: InsertCollectionGLData time: " << trueelapsed.count() << std::endl;
+		}
+		*/
 	}
 }
 

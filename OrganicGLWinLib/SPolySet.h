@@ -120,6 +120,7 @@ private:
 	PolyLogger comparisonLogger;									// debug output for comparison operations
 	PolyDebugLevel mainFracturerDebugLevel = PolyDebugLevel::NONE;	// debug level that is used if no specific SPoly fracturer debug options are set; i.e, setting this to Debug puts
 																	// all calls of SPolyFracturer in SPolySet to DEBUG mode.
+	PolyDebugLevel coplanarRelationshipDebugLevel = PolyDebugLevel::NONE;	// the debug level that will be used by the coplanar relationship tracker; i.e., pause for input before/after a STriangle that is part of a tracked SPoly runs through a cutting sequence.
 	SPolyDOSet debugOptionsAllSPolys;								// a set of debug options that would be applied to all SPolys; 
 	std::map<int, SPolyDOSet> specificSPolyOptionMap;				// a map containing SPolyDOSets for specific SPolys having certain IDs
 	std::map<int, SPoly> secondaryPolys;							// stores instances of SPoly that have been added to the SPolySet, via addPoly.

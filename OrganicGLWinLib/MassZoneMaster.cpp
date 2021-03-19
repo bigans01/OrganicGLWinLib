@@ -16,7 +16,7 @@ void MassZoneMaster::registerSPolyToMassZone(int in_sPolyID, SPoly in_sPoly, Mas
 
 void MassZoneMaster::disqualifyMeshMatterMeta(int in_sPolyID)
 {
-	std::cout << "!!! Disqualifying SPolyID: " << in_sPolyID << std::endl;
+	//std::cout << "!!! Disqualifying SPolyID: " << in_sPolyID << std::endl;
 	auto typeFinder = sPolyZoneTypeMap.find(in_sPolyID);
 	if (typeFinder != sPolyZoneTypeMap.end())	// it was found
 	{

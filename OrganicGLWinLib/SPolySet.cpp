@@ -47,6 +47,10 @@ void SPolySet::setOption(DebugOption in_option)
 		//debugOptionsAllSPolys.insert(SPolyDO::FACTORY_FRACTURER);
 		mainFracturerDebugLevel = PolyDebugLevel::DEBUG;
 	}
+	else if (in_option == DebugOption::SPOLYSET_ALL_COPLANAR_RELATIONSHIPS_BASIC)
+	{
+		coplanarRelationshipDebugLevel = PolyDebugLevel::DEBUG;
+	}
 
 	// All other options; for MassZoneMaster.
 	else
@@ -209,7 +213,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	std::cin >> waitVal;
 
 	// set the debug level for the coplanar tracker
-	coplanarTracker.setRelationshipTrackerDebugLevel(comparisonLogger.getLogLevel());
+	coplanarTracker.setRelationshipTrackerDebugLevel(coplanarRelationshipDebugLevel);
 
 	int compCount2 = numberOfPolys;
 
@@ -348,7 +352,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		//int buildVal = 3;
 		//std::cin >> buildVal;

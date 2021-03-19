@@ -103,7 +103,8 @@ bool STriangleCutter::runCuttingSequence()
 			//std::cout << "!! END: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 		}
 
-		std::cout << "!!!! Next pass end. " << std::endl;
+		//std::cout << "!!!! Next pass end. " << std::endl;
+		cutterSequenceLogger.log("(STriangleCutter): !!!! Next pass end.", "\n");
 
 		// rebuild/analyze the cuttableTriangleMap in the CuttableTriangleContainer, once we've gone through all of the CuttableTriangles in it.
 		cuttableContainer.rebuildCuttableTriangleMapFromContainer(&outputsForCurrentCuttingTriangle);
@@ -129,20 +130,28 @@ bool STriangleCutter::runCuttingSequence()
 	if (cuttableContainer.cuttableTriangleMap.size() == 0)
 	{
 		wasTriangleDestroyedDuringSequence = true;
-		std::cout << "#########################::::::" << std::endl;
-		std::cout << ":::::::::::: NOTICE: cutting sequence flagged the STriangle as being completely destroyed!" << std::endl;
-		std::cout << "#########################::::::" << std::endl;
+		//std::cout << "#########################::::::" << std::endl;
+		//std::cout << ":::::::::::: NOTICE: cutting sequence flagged the STriangle as being completely destroyed!" << std::endl;
+		//std::cout << "#########################::::::" << std::endl;
+		cutterSequenceLogger.log("(STriangleCutter): #########################::::::", "\n");
+		cutterSequenceLogger.log("(STriangleCutter): :::::::::::: NOTICE: cutting sequence flagged the STriangle as being completely destroyed!", "\n");
+		cutterSequenceLogger.log("(STriangleCutter): #########################::::::", "\n");
+
 	}
 	else if (cuttableContainer.cuttableTriangleMap.size() != 0)
 	{
-		auto resultStart = cuttableContainer.cuttableTriangleMap.begin();
-		auto resultEnd = cuttableContainer.cuttableTriangleMap.end();
-		for (; resultStart != resultEnd; resultStart++)
+		if (cutterSequenceLogger.isLoggingSet())
 		{
-			std::cout << "---> Resulting triangle points: " << std::endl;
-			resultStart->second.printCuttableTrianglePoints();
+			auto resultStart = cuttableContainer.cuttableTriangleMap.begin();
+			auto resultEnd = cuttableContainer.cuttableTriangleMap.end();
+			for (; resultStart != resultEnd; resultStart++)
+			{
+				std::cout << "(STriangleCutter) ---> Resulting triangle points: " << std::endl;
+				resultStart->second.printCuttableTrianglePoints();
+			}
 		}
 	}
-	std::cout << "########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). " << std::endl;
+	//std::cout << "########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). " << std::endl;
+	cutterSequenceLogger.log("(STriangleCutter): ########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). ", "\n");
 	return wasTriangleDestroyedDuringSequence;
 }

@@ -442,7 +442,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// perform merging, but only if the CleaveSequenceMergeMode is MERGE.
 	if (in_cleaveSequenceMergeMode == CleaveSequenceMergeMode::MERGE)
 	{
-		std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
+		//std::cout << "::::::::::::::::::::::::: Pre-MERGE stats " << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Pre-MERGE stats ", "\n");
 		auto borderLinesBegin = in_borderLineArrayRef.begin();
 		auto borderLinesEnd = in_borderLineArrayRef.end();
@@ -467,9 +467,9 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			}
 		}
 
-		std::cout << ">>>> Merger start." << std::endl;
+		//std::cout << ">>>> Merger start." << std::endl;
 		CategorizedLineMerger merger(this, mergerDebugLevel);
-		std::cout << ">>>> Merger complete." << std::endl;
+		//std::cout << ">>>> Merger complete." << std::endl;
 
 		//std::cout << "::::::::::::::::::::::::: Post-MERGE stats " << std::endl;
 		//std::cout << "number of nonbounds: " << nonboundCount << std::endl;

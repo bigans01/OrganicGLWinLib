@@ -14,7 +14,7 @@ void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly in_r
 
 void CoplanarRelationships::setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel)
 {
-	relationshipsDebugLevel = in_polyDebugLevel;
+	relationshipsDebugLevel = in_polyDebugLevel;			// should be set by SPOLYSET_ALL_COPLANAR_RELATIONSHIPS_BASIC
 	relationshipsLogger.setDebugLevel(in_polyDebugLevel);
 }
 
@@ -34,11 +34,17 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	bool didSPolySurvive = true;
 
 	// ########################################### NEW METHOD, to replace below:
-	std::cout << "#######################################################" << std::endl;
-	std::cout << "#######################################################" << std::endl;
-	std::cout << "#######################################################" << std::endl;
-	std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
-	std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPoly.triangles.size();
+	//std::cout << "#######################################################" << std::endl;
+	//std::cout << "#######################################################" << std::endl;
+	//std::cout << "#######################################################" << std::endl;
+	//std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
+	//std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPoly.triangles.size();
+
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");
+	relationshipsLogger.log("(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID ", trackedPolyID, ".", "\n");
+	relationshipsLogger.log("(CoplanarRelationships): ||||| Number of STriangles that will be tested is: ", trackedSPoly.triangles.size(), "\n");
 
 	CuttingTriangleManager cuttingManager;
 	// load all STriangles that aren't in the tracked copy, into the cuttingManager.
@@ -54,11 +60,16 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 		}
 	}
 
-	std::cout << "############################# Printing out CuttingTriangles that will be used: " << std::endl;
-	cuttingManager.printCuttingTriangles();
-
-	int beginTest = 3;
-	std::cin >> beginTest;
+	//std::cout << "############################# Printing out CuttingTriangles that will be used: " << std::endl;
+	//cuttingManager.printCuttingTriangles();
+	//int beginTest = 3;
+	//std::cin >> beginTest;
+	relationshipsLogger.log("(CoplanarRelationships): ###################### Printing out CuttingTriangles that will be used: ", "\n");
+	if (relationshipsLogger.isLoggingSet())
+	{
+		cuttingManager.printCuttingTriangles();
+		relationshipsLogger.waitForDebugInput();
+	}
 
 	// run each STriangle in the tracked copy, against the STriangles in the cuttingManager.
 	STriangleCutter cutter;
@@ -67,11 +78,20 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	auto trackedCopySTrianglesEnd = trackedSPoly.triangles.end();
 	for (; trackedCopySTrianglesBegin != trackedCopySTrianglesEnd; trackedCopySTrianglesBegin++)
 	{
-		std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for tracked SPoly with ID " << trackedPolyID << ", STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
-		std::cout << "STriangle points are: " << std::endl;
-		trackedCopySTrianglesBegin->second.printPoints();
-		int readyToContinue = 3;
-		std::cin >> readyToContinue;
+		//std::cout << "::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for tracked SPoly with ID " << trackedPolyID << ", STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
+		//std::cout << "STriangle points are: " << std::endl;
+		//trackedCopySTrianglesBegin->second.printPoints();
+		//int readyToContinue = 3;
+		//std::cin >> readyToContinue;
+		if (relationshipsLogger.isLoggingSet())
+		{
+			relationshipsLogger.log("(CoplanarRelationships): ::::::::::>>>>>>>>>>>> Beginning STriangleCutter attempt for tracked SPoly with ID ", trackedPolyID, ", tracked STriangle with ID ", trackedCopySTrianglesBegin->first, "\n");
+			relationshipsLogger.log("(CoplanarRelationships): >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): points of the tracked STriangle to be cut are: ", "\n");
+			trackedCopySTrianglesBegin->second.printPoints();
+			relationshipsLogger.waitForDebugInput();
+		}
 
 		STriangleCutter cutter;
 		// you would set debug options for the cutter here...
@@ -81,13 +101,17 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
 		sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
 
-		std::cout << "::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
-		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
-		int finishedWait = 3;
-		std::cin >> finishedWait;
+		//std::cout << "::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
+		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
+		//int finishedWait = 3;
+		//std::cin >> finishedWait;
+		relationshipsLogger.log("(CoplanarRelationships): ::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for the tracked SPoly with ID ", trackedPolyID, ", tracked STriangle with ID ", trackedCopySTrianglesBegin->first, "\n");
+		relationshipsLogger.log("(CoplanarRelationships): >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", "\n");
+		relationshipsLogger.log("(CoplanarRelationships): >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", "\n");
+		relationshipsLogger.waitForDebugInput();
 	}
 
 	// now, check if each destruction flag in sTriangleDestructionTrackerMap was set to TRUE. If this is the case, it means
@@ -104,20 +128,30 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	}
 	if (destroyedSTriangleCount == sTriangleDestructionTrackerMap.size())
 	{
-		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		std::cout << "||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. " << std::endl;
-		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		//std::cout << "||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. " << std::endl;
+		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+		relationshipsLogger.log("(CoplanarRelationships): |||||||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. ", "\n");
+		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
 		didSPolySurvive = false;
 	}
 
-	std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
-	std::cout << "#######################################################" << std::endl;
-	std::cout << "#######################################################" << std::endl;
-	std::cout << "#######################################################" << std::endl;
-	int endTest = 3;
-	std::cin >> endTest;
+	//std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
+	//std::cout << "#######################################################" << std::endl;
+	//std::cout << "#######################################################" << std::endl;
+	//std::cout << "#######################################################" << std::endl;
+	//int endTest = 3;
+	//std::cin >> endTest;
+	relationshipsLogger.log("(CoplanarRelationships): ########### ended call of performCuttingSequenceTests() for the tracked SPoly, having ID of: ", trackedPolyID, "\n");
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", trackedPolyID, "\n");
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", trackedPolyID, "\n");
+	relationshipsLogger.log("(CoplanarRelationships): #######################################################", trackedPolyID, "\n");
+	relationshipsLogger.waitForDebugInput();
 
 	return didSPolySurvive;
 }
