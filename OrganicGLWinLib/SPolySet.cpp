@@ -128,7 +128,7 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	for (; oldPurgablesBegin != oldPurgablesEnd; oldPurgablesBegin++)
 	{
 		polyFracturingResults.supergroupMap[*oldPurgablesBegin].sPolyMap.clear();
-		std::cout << "!! (OLD_ZONE purgables) Purgable poly SuperGroup having ID " << *oldPurgablesBegin << " has been cleared. " << std::endl;
+		//std::cout << "!! (OLD_ZONE purgables) Purgable poly SuperGroup having ID " << *oldPurgablesBegin << " has been cleared. " << std::endl;
 	}
 
 	// new zone
@@ -138,7 +138,7 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	for (; newPurgablesBegin != newPurgablesEnd; newPurgablesBegin++)
 	{
 		polyFracturingResults.supergroupMap[*newPurgablesBegin].sPolyMap.clear();
-		std::cout << "!! (NEW_ZONE purgables) Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
+		//std::cout << "!! (NEW_ZONE purgables) Purgable poly SuperGroup having ID " << *newPurgablesBegin << " has been cleared. " << std::endl;
 	}
 
 	// removable polys found in coplanarTracker
@@ -208,9 +208,9 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 	//zoneMaster.printMassZoneBorderLineCounts();
 	
-	std::cout << "!!! Finished printing immediate values of border line counts. " << std::endl;
-	int waitVal = 3;
-	std::cin >> waitVal;
+	//std::cout << "!!! Finished printing immediate values of border line counts. " << std::endl;
+	//int waitVal = 3;
+	//std::cin >> waitVal;
 
 	// set the debug level for the coplanar tracker
 	coplanarTracker.setRelationshipTrackerDebugLevel(coplanarRelationshipDebugLevel);
@@ -337,7 +337,11 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	// Second pass: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
 	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
+	auto cuttingSequenceTestStart = std::chrono::high_resolution_clock::now();
 	coplanarTracker.runAllCuttingSequenceTests();
+	auto cuttingSequenceTestEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> cuttingSequenceTestElapsed = cuttingSequenceTestEnd - cuttingSequenceTestStart;
+	std::cout << "#-> Cutting sequence test  time  > " << cuttingSequenceTestElapsed.count() << std::endl;
 	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 
@@ -378,12 +382,13 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	}
 	*/
 
-	std::cout << "########################################################################## " << std::endl;
-	std::cout << ".............> printing MassZoneMaster stats: " << std::endl;
-	zoneMaster.printQualifiedMeshMatterMetas();
-	int massZoneInput = 3;
-	std::cin >> massZoneInput;
+	//std::cout << "########################################################################## " << std::endl;
+	//std::cout << ".............> printing MassZoneMaster stats: " << std::endl;
+	//zoneMaster.printQualifiedMeshMatterMetas();
+	//int massZoneInput = 3;
+	//std::cin >> massZoneInput;
 
+	/*
 	std::cout << "########################################################################## " << std::endl;
 	std::cout << "############### Printing cleave map counts ############################### " << std::endl;
 	std::cout << "########################################################################## " << std::endl;
@@ -401,6 +406,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	}
 	int cleaveMapCountStop = 3;
 	std::cin >> cleaveMapCountStop;
+	*/
 }
 
 int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID)
@@ -1198,7 +1204,7 @@ void SPolySet::performFracturing()
 		{
 			// pass the secondary poly to the PolyFracturer
 			
-			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
+			//std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
 			//SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));

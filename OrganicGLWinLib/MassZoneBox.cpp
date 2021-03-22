@@ -9,7 +9,7 @@ void MassZoneBox::insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBo
 																					// allocated memory.
 	boxBoundaries[in_massZoneBoxBoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
 	boxBoundaries[in_massZoneBoxBoundaryOrientation].setSPolySetEmptyNormal();		// sets the empty normal for the MassZoneBoxBoundarySPolySet
-	std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
+	//std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
 };
 
 void MassZoneBox::printBoundaryLineCounts()

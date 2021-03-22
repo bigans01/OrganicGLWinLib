@@ -130,7 +130,7 @@ void SPoly::determinePlanarVectors()
 		//std::cout << "(case 3) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
 		//}
 
-		std::cout << "###################### finding Planar vectors for " << numberOfTriangles << " STriangles. " << std::endl;
+		//std::cout << "###################### finding Planar vectors for " << numberOfTriangles << " STriangles. " << std::endl;
 
 		glm::vec3 rootPoint = borderLines[0].pointA;
 		findPlanarVectorsForTwoBorderLines(&borderLines[0], &borderLines[1]);

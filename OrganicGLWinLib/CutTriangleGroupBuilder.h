@@ -17,7 +17,7 @@ class CutTriangleGroupBuilder
 			cutTriangleGroupBuilderLoggerLogLevel(in_polyDebugLevel),
 			linePool(in_cutLinePool)
 		{
-			cutTriangleGroupBuilderLogger.setDebugLevel(in_polyDebugLevel);
+			cutTriangleGroupBuilderLogger.setDebugLevel(in_polyDebugLevel);	// should be set by REFERENCED_CUTTINGTRIANGLE_CUTTRIANGLEGROUPBUILDER
 		};
 		friend class CuttableTriangle;				// should only need to be used by this class.
 

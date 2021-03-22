@@ -40,18 +40,22 @@ class CutTriangleProducer
 			CutTriangle candidateTriangle(candidateLineOfSight, candidateRearHook);
 			candidateCutTriangle = candidateTriangle;
 
-			std::cout << "::::::: prior to check if point is within Triangle: " << std::endl;
-			candidateCutTriangle.printPoints();
+			//std::cout << "(CutTriangleProducer) ::::::: prior to check if point is within Triangle: " << std::endl;
+
+			//std::cout << "::::::: prior to check if point is within Triangle: " << std::endl;
+			//std::cout << "(CutTriangleProducer) ::::::: prior to check if point is within Triangle: " << std::endl;
+			//int someVal = 3;
+			//candidateCutTriangle.printCutTrianglePoints();
 		}
 
 		void checkIfFrontHookPointBIsInCandidateTriangle()
 		{
 			glm::vec3 pointToCheck = cutLinePoolRef->fetchLineFromPoolViaIndex(linePoolGuide.frontHook).pointB;
-			std::cout << "::::::: point to check will be: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
+			//std::cout << "(CutTriangleProducer) ::::::: point to check will be: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
 			bool wasWithinTriangle = candidateCutTriangle.checkIfPointIsWithinTriangle(pointToCheck);
 			if (wasWithinTriangle == true)
 			{
-				std::cout << "::::::::: detected as being within triangle. flagging to false." << std::endl;
+				//std::cout << "::::::::: detected as being within triangle. flagging to false." << std::endl;
 				wasValidCutTriangleProduced = false;
 			}
 		}
@@ -62,14 +66,14 @@ class CutTriangleProducer
 			auto comparablesEnd = linePoolGuide.comparables.end();
 			for (; comparablesBegin != comparablesEnd; comparablesBegin++)
 			{
-				std::cout << "Checking against comparable line, having the ID: " << *comparablesBegin << std::endl;
+				//std::cout << "Checking against comparable line, having the ID: " << *comparablesBegin << std::endl;
 
 				glm::vec3 pointToCheck = cutLinePoolRef->fetchLineFromPoolViaIndex(*comparablesBegin).pointB;
 				bool wasWithinTriangle = candidateCutTriangle.checkIfPointIsWithinTriangle(pointToCheck);
 				if (wasWithinTriangle == true)
 				{
-					std::cout << "Line " <<  *comparablesBegin << "found as being within!! " << std::endl;
-					std::cout << "Point was: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
+					//std::cout << "Line " <<  *comparablesBegin << "found as being within!! " << std::endl;
+					//std::cout << "Point was: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
 					wasValidCutTriangleProduced = false;
 				}
 			}

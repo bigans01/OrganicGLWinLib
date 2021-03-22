@@ -65,6 +65,11 @@ class FusedPointMetaPair
 					returnResult.pointSummary = in_fusedPointSummary;
 				}
 			}
+			
+			if (returnResult.wasFound == false)
+			{
+				//std::cout << "(SummaryScanResult): notice: originToMatch didn't match anything..." << std::endl;
+			}
 			return returnResult;
 		}
 

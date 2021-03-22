@@ -147,7 +147,7 @@ void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 	MassZoneBoxBoundary belowBoundary(lower_NW, lower_NE, lower_SE, lower_SW, belowEmptyNormal);
 	zoneBox.insertNewBoundary(MassZoneBoxBoundaryOrientation::NEG_Y, belowBoundary, std::move(boundaryDebugOptions[MassZoneBoxBoundaryOrientation::NEG_Y]));
 
-	zoneBox.printBoundaries();
+	//zoneBox.printBoundaries();
 
 	//std::cout << "############### CHECKING #######################" << std::endl;
 	//zoneBox.printBoundaryLineCounts();
@@ -203,10 +203,9 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		zoneBox.runSPolyBasedSubZoneAgainstBoundaries(&subZoneMapBegin->second);
 		clipper.insertSPolyRefIntoClippingShell(&subZoneMapBegin->second.sPolyCopy);
 
-		std::cout << "++++++++++++++++ Printing out SPoly lines, of the SPoly we are about to insert: " << std::endl;
-		subZoneMapBegin->second.sPolyCopy.printBorderLines();
-
-		std::cout << "!!! Inserted SPoly ref into clipper. " << std::endl;
+		//std::cout << "++++++++++++++++ Printing out SPoly lines, of the SPoly we are about to insert: " << std::endl;
+		//subZoneMapBegin->second.sPolyCopy.printBorderLines();
+		//std::cout << "!!! Inserted SPoly ref into clipper. " << std::endl;
 	}
 
 	// Step 2: print the lines in each boundary (for testing only)

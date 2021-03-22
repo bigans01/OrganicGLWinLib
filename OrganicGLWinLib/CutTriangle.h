@@ -60,7 +60,7 @@ class CutTriangle
 			return &lines[in_lineID];
 		}
 
-		void printPoints()
+		void printCutTrianglePoints()
 		{
 			std::cout << "#### Printing points of this CutTriangle: " << std::endl;
 			for (int x = 0; x < 3; x++)

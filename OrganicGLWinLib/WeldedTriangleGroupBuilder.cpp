@@ -116,8 +116,11 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 
 		//std::cout << "!! Looping alignment while..." << std::endl;
 		weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) !! Looping alignment while...", "\n");
-		//int someVal = 3;
-		//std::cin >> someVal;
+		if (weldedTriangleGroupBuilderLogger.isLoggingSet())
+		{
+			int someVal = 3;
+			std::cin >> someVal;
+		}
 	}
 
 	//std::cout << "!!! handleFinalObservation, while loop complete..." << std::endl;

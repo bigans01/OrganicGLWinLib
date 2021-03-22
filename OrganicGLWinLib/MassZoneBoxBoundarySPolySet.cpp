@@ -162,12 +162,17 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 {
+	//std::cout << "(MassZoneBoxBoundarySPolySet): begin building cleave sequences..." << std::endl;
 	boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
+	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
 	if (boundarySPolyRef->cleaveMap.size() != 0)
 	{
 		//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 		SPolyMorphTracker morphTracker;
+
+		//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
 		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
+		//std::cout << "(MassZoneBoxBoundarySPolySet): end fracturing..." << std::endl;
 		//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
 		boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
@@ -175,6 +180,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 		boundarySPolySG.buildSPolyBorderLines();
 		//boundarySPolySG.
 	}
+	//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
 }
 
 int MassZoneBoxBoundarySPolySet::checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB)

@@ -73,10 +73,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.x,
 					in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].pointB.y);
 
-				std::cout << "#####:::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
-				std::cout << "#####:::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
-				//tJunctionLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
-				//tJunctionLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
+				//std::cout << "#####:::: cuttableSegment points: A> " << cuttableSegment.a.x << ", " << cuttableSegment.a.y << " | B> " << cuttableSegment.b.x << ", " << cuttableSegment.b.y << std::endl;
+				//std::cout << "#####:::: cuttingSegment points: A> " << cuttingSegment.a.x << ", " << cuttingSegment.a.y << " | B> " << cuttingSegment.b.x << ", " << cuttingSegment.b.y << std::endl;
+				comparisonLogger.log("(CuttableTriangle) :::: cuttableSegment points: A> ", cuttableSegment.a.x, ", ", cuttableSegment.a.y, " | B> ", cuttableSegment.b.x, ", ", cuttableSegment.b.y, "\n");
+				comparisonLogger.log("(CuttableTriangle) :::: cuttingSegment points: A> ", cuttingSegment.a.x, ", ", cuttingSegment.a.y, " | B> ", cuttingSegment.b.x, ", ", cuttingSegment.b.y, "\n");
 
 				// create an analyzer; set the debug levels for it, then analyze.
 				TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(cuttableSegment, cuttingSegment, checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_INTERSECT_ANALYZER_RESULT));
@@ -677,7 +677,7 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 						auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
 						for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
 						{
-							containerTrianglesBegin->second.printPoints();
+							containerTrianglesBegin->second.printCutTrianglePoints();
 						}
 					}
 				}
@@ -716,7 +716,7 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 
 	if (numberOfCancelledAttempts == crawlingAttemptsVector.size())
 	{
-		std::cout << "!!! Number of cancelled attempts (" << numberOfCancelledAttempts <<  ") matches attempts vector size. Continue? " << std::endl;
+		//std::cout << "!!! Number of cancelled attempts (" << numberOfCancelledAttempts <<  ") matches attempts vector size. Continue? " << std::endl;
 		//int attemptWait;
 		//std::cin >> attemptWait;
 		int cancelledLooper = 3;
@@ -928,10 +928,10 @@ CuttableTriangle::PoolAndDirectionPair CuttableTriangle::buildLinesFromTypicalAt
 	}
 	else
 	{
-		std::cout << "(CuttableTriangle) TYPICAL -> !!! Warning, could not determine CyclingDirection; halting. " << std::endl;
+		std::cout << "(CuttableTriangle) TYPICAL -> !!! Warning, could not determine CyclingDirection....special logic will be used. " << std::endl;
 		//typicalLogger.log("(CuttableTriangle) TYPICAL -> !! CyclingDirection will be FORWARD.", "\n");
-		int haltVal = 3; 
-		std::cin >> haltVal;
+		//int haltVal = 3; 
+		//std::cin >> haltVal;
 	}
 
 	returnPair.pairCyclingDirection = cutLineDirection;
