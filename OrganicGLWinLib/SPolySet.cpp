@@ -356,7 +356,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		//int buildVal = 3;
 		//std::cin >> buildVal;
@@ -366,6 +366,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//int someVal = 3;
 		//std::cin >> someVal;
 	}
+	std::cout << "!!!!! Finished building CleaveSequences. " << std::endl;
 
 	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
 	zoneMaster.runPointClippers();

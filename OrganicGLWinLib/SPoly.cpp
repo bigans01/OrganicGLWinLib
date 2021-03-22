@@ -19,6 +19,29 @@ void SPoly::determinePrimalPoints()
 	primePoint2 = triangles[0].triangleLines[2].pointA;
 }
 
+std::map<int, int> SPoly::getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint)
+{
+	std::map<int, int> returnMap;
+
+	// should always return exactly two values.
+	auto borderLinesBegin = borderLines.begin();
+	auto borderLinesEnd = borderLines.end();
+	for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+	{
+		if
+		(
+			(borderLinesBegin->second.pointA == in_sharedPoint)
+			||
+			(borderLinesBegin->second.pointB == in_sharedPoint)
+		)
+		{
+			int currentMapIndex = returnMap.size();
+			returnMap[currentMapIndex] = borderLinesBegin->first;	// insert the ID of the border line.
+		}
+	}
+	return returnMap;
+}
+
 void SPoly::determineBorderLines()
 {
 	// all SPolys start out in the mode TRIANGLE_FAN

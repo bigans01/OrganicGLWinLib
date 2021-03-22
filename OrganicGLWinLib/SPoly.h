@@ -77,6 +77,8 @@ private:
 	int currentCleaveIndex = 0;	// the index of the current cleave to work on
 	InterceptRegister intercepts; // the interceptRegister instance for this SPoly
 
+	std::map<int, int> getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint);
+
 
 	void determinePrimalPoints();
 	void determineBorderLines();

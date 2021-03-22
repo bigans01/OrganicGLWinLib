@@ -31,12 +31,12 @@ void SharedLineReactor::runAnalysis()
 		(fusedPointMetaRef->searchForSummaryInSpecifiedOrigin(FusedPointSummary::PRECISE_MIXED, FusionCandidateOrigin::HOST).wasFound == true)
 	)
 	{
-		reactorBaseLogger.log("(SharedLineReactor) !! Notice: entered search 2. ", "\n");
+		reactorBaseLogger.log("(SharedLineReactor) !! Notice: entered search 2. (PRECISE_MIXED)", "\n");
 		glm::vec3 precisePoint = fusedPointMetaRef->searchForSummaryInSpecifiedOrigin(FusedPointSummary::PRECISE_MIXED, FusionCandidateOrigin::HOST).foundPoint;
 		reactorBaseLogger.log("(SharedLineReactor) value of precisePoint is: ", precisePoint.x, ", ", precisePoint.y, ", ", precisePoint.z, "\n");
 		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(precisePoint);
 		//std::cout << "(SharedLineReactor) Search 1-> PRECISE found in host (PRECISE_BORDERLINE or PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE." << std::endl;
-		reactorBaseLogger.log("(SharedLineReactor) Search 2-> PRECISE found in host (PRECISE_BORDERLINE or PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE.", "\n");
+		reactorBaseLogger.log("(SharedLineReactor) Search 2-> PRECISE found in host (PRECISE_MIXED); processing for INTERCEPTS_POINT_PRECISE.", "\n");
 		buildInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 	}
 	
@@ -96,11 +96,27 @@ void SharedLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint
 		reactorBaseLogger.log("(SharedLineReactor) : isBorderLine: ", subDataArray[x].isBorderLine, ": borderLineID: ", subDataArray[x].borderLineValue, "\n");
 	}
 
+	auto sharedLines = hostFusionAnalysisRef->sPolyRef->getBorderLinesForSharedPoint(in_buildStartPoint);
+	if (reactorBaseLogger.isLoggingSet())
+	{
+		reactorBaseLogger.log("(SharedLineReactor): printing sharedLines for this point: ", "\n");
+		auto sharedLinesBegin = sharedLines.begin();
+		auto sharedLinesEnd = sharedLines.end();
+		for (; sharedLinesBegin != sharedLinesEnd; sharedLinesBegin++)
+		{
+			std::cout << sharedLinesBegin->second << std::endl;
+		}
+	}
+
 	resultantLine.type = IntersectionType::INTERCEPTS_POINT_PRECISE;
 	resultantLine.line.pointA = in_buildStartPoint;							// point A is the precise point
 	resultantLine.line.pointB = in_otherPoint;								// point B is the other point
-	resultantLine.line.pointABorder = subDataArray[0].borderLineValue;		// load border line values
-	resultantLine.line.pointBBorder = subDataArray[1].borderLineValue;		// "" 
+	//resultantLine.line.pointABorder = subDataArray[0].borderLineValue;		// load border line values
+	//resultantLine.line.pointBBorder = subDataArray[1].borderLineValue;		// "" 
+
+	resultantLine.line.pointABorder = sharedLines[0];		// load border line values
+	resultantLine.line.pointBBorder = sharedLines[1];		// "" 
+
 	resultantLine.line.numberOfBorderLines = 1;
 	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
 

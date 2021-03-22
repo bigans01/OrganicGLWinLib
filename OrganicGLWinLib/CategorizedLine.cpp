@@ -102,6 +102,10 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 	// logic for partial lines.
 	if (type == IntersectionType::PARTIAL_BOUND)
 	{
+		PolyLogger partialLogger;
+		partialLogger.setDebugLevel(in_polyDebugLevel);
+
+
 		int categorizedLineBorderID = line.getBorderLineIDFromSingularBorderLineCount();
 		glm::vec3 borderPoint = line.getBorderPointFromSingularBorderLineCount();
 		glm::vec3 emptyNormalCopy = emptyNormal;		// get a copy of the normal, don't modify the original.
@@ -133,6 +137,13 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 
 		// now, add the normal at the end.
 		rotationPoints.insertPointRefs(&emptyNormalCopy);
+
+		if (partialLogger.isLoggingSet())
+		{
+			partialLogger.log("(CategorizedLine): determineCyclingDirection for PARTIAL_BOUND; printing points in rotationPoints.", "\n");
+			rotationPoints.printPoints();
+			partialLogger.waitForDebugInput();
+		}
 
 		//QuatRotationManager rotationManager;
 		//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
@@ -267,6 +278,9 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		SPolyBorderLines borderLineA = in_borderLineArrayRef[line.pointABorder];
 		SPolyBorderLines borderLineB = in_borderLineArrayRef[line.pointBBorder];
 
+		std::cout << "(CategorizedLine): line.pointABorder value is: " << line.pointABorder << std::endl;
+		std::cout << "(CategorizedLine): line.pointBBorder value is: " << line.pointBBorder << std::endl;
+
 		// will set the direction of the line...
 		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal, in_polyDebugLevel);
 	}
@@ -283,6 +297,9 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	SPolyBorderLines borderLineACopy = in_borderLineA;
 	SPolyBorderLines borderLineBCopy = in_borderLineB;
 	glm::vec3 emptyNormalCopy = in_categorizedLineNormal;
+
+	PolyLogger preciseLogger;
+	preciseLogger.setDebugLevel(in_polyDebugLevel);
 
 	// is in_borderLineA's point B equal to in_borderLineB's point A?
 
@@ -301,11 +318,11 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	glm::vec3 pointToTranslateAgainst;
 
 
-	//std::cout << "BorderLineACopy, point A, is: " << borderLineACopy.pointA.x << ", " << borderLineACopy.pointA.y << ", " << borderLineACopy.pointA.z << std::endl;
-	//std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
+	std::cout << "BorderLineACopy, point A, is: " << borderLineACopy.pointA.x << ", " << borderLineACopy.pointA.y << ", " << borderLineACopy.pointA.z << std::endl;
+	std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
 
-	//std::cout << "border line A: " << borderLineBCopy.pointA.x << ", " << borderLineBCopy.pointA.y << ", " << borderLineBCopy.pointA.z << std::endl;
-	//std::cout << "border line B: " << borderLineBCopy.pointB.x << ", " << borderLineBCopy.pointB.y << ", " << borderLineBCopy.pointB.z << std::endl;
+	std::cout << "border line A: " << borderLineBCopy.pointA.x << ", " << borderLineBCopy.pointA.y << ", " << borderLineBCopy.pointA.z << std::endl;
+	std::cout << "border line B: " << borderLineBCopy.pointB.x << ", " << borderLineBCopy.pointB.y << ", " << borderLineBCopy.pointB.z << std::endl;
 
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
@@ -337,6 +354,12 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 
 	//std::cout << ":::: Printing points: " << std::endl;
 	//rotationPoints.printPoints();
+	if (preciseLogger.isLoggingSet())
+	{
+		preciseLogger.log("(CategorizedLine): generateCyclingDirectionForInterceptPointPrecise, printing points in rotationPoints.", "\n");
+		rotationPoints.printPoints();
+		preciseLogger.waitForDebugInput();
+	}
 
 	//QuatRotationManager rotationManager;
 	//rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
