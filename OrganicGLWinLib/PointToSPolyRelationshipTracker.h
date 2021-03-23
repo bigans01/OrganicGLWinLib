@@ -12,9 +12,9 @@
 class PointToSPolyRelationshipTracker
 {
 	public:
-		void insertPointToSPolyRelationship(int in_sPolyID, int in_sTriangleID, STriangle* in_sTriangleRef)
+		void insertPointToSPolyRelationship(int in_sPolyID, int in_sTriangleID, STriangle* in_sTriangleRef, glm::vec3 in_sPolyEmptyNormal)
 		{
-			relationships[in_sPolyID].insertNewSTriangleRelationship(in_sTriangleID, in_sTriangleRef);
+			relationships[in_sPolyID].insertNewSTriangleRelationship(in_sTriangleID, in_sTriangleRef, in_sPolyEmptyNormal);
 		}
 		OperableIntSet generateSPolyIDSet()
 		{

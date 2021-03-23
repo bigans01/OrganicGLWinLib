@@ -139,3 +139,31 @@ bool QuatUtils::isLineAContainedWithinB
 	}
 	return isContainedWithinB;
 }
+
+bool QuatUtils::isPointWithinMassOfPBZ(
+	glm::vec3 in_pointToCompare,
+	glm::vec3 in_trianglePoint0,
+	glm::vec3 in_trianglePoint1,
+	glm::vec3 in_trianglePoint2,
+	glm::vec3 in_triangleEmptyNormal,
+	PolyDebugLevel in_polyDebugLevel
+)
+{
+	bool isWithinMass = false;
+	QuatRotationPoints checkPoints;
+	glm::vec3 pointToCompareCopy = in_pointToCompare;
+	glm::vec3 in_trianglePoint0Copy = in_trianglePoint0;
+	glm::vec3 in_trianglePoint1Copy = in_trianglePoint1;
+	glm::vec3 in_trianglePoint2Copy = in_trianglePoint2;
+	glm::vec3 in_triangleEmptyNormalCopy = in_triangleEmptyNormal;
+	checkPoints.insertPointRefs(
+									&pointToCompareCopy,
+									&in_trianglePoint0Copy,
+									&in_trianglePoint1Copy,
+									&in_trianglePoint2Copy,
+									&in_triangleEmptyNormalCopy
+								);
+	QMBoolIsPointWithinPBZMassSide massSideChecker;
+	isWithinMass = massSideChecker.solve(&checkPoints, in_polyDebugLevel);
+	return isWithinMass;
+}

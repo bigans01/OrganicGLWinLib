@@ -29,7 +29,7 @@ void CoplanarRelationshipTracker::runAllCuttingSequenceTests()
 	auto relationshipsEnd = relationshipContainer.end();
 	for (; relationshipsBegin != relationshipsEnd; relationshipsBegin++)
 	{
-		//std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
+		std::cout << "-> Found CoplanarRelationship, for tracked SPoly -> " << relationshipsBegin->first << std::endl;
 		applyCoplanarRelationshipDebugFlagsIfFound(relationshipsBegin->first);
 		bool didSPolyPassCuttingTests = relationshipsBegin->second.rotateToXYPlaneAndRunCuttingSequenceTests();
 		if (didSPolyPassCuttingTests == false)

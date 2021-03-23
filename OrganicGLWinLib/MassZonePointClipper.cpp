@@ -55,6 +55,7 @@ void MassZonePointClipper::run()
 		// if the result of the verdict indicates that the SPoly should be completely erased, put it into the purgable set.
 		if (shouldClippedMatterExist == false)
 		{
+			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " !! Notice, referencedSPolyID of ", otherMeshMatterMapBegin->second.referencedSPolyID, " will be erased from existence.", "\n");
 			sPolysToPurge.insert(otherMeshMatterMapBegin->second.referencedSPolyID);
 		}
 	}
@@ -66,6 +67,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
 	//std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
 	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," |||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
+	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
 
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
 	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;
@@ -87,6 +89,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			/*
 			if (clipperPolyLogger.isLoggingSet())
 			{
+				clipperPolyLogger.log("(MassZonePointClipper): Current SPoly empty normal is: ", currentClippingShellSPolyRef->polyEmptyNormal.x, ", ", currentClippingShellSPolyRef->polyEmptyNormal.y, ", ", currentClippingShellSPolyRef->polyEmptyNormal.z, "\n");
 				clipperPolyLogger.log("(MassZonePointClipper): Current SPoly points are: ", "\n");
 				currentClippingShellSPolyRef->printPoints();
 			}
@@ -101,7 +104,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				
 				if (checkIfPointIsWithinPBZ(pointToCompareFor, *currentSTriangleRef) == true)
 				{
-					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef);
+					clipperPolyLogger.log("(MassZonePointClipper): point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, ", ", " was found as being within PBZ. ", "\n");
+					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef, currentClippingShellSPolyRef->polyEmptyNormal);
 				}
 				else
 				{
@@ -123,6 +127,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		}
 	}
 
+	// Phase 1.1: Check if any of the points in the relationshipTrackerContainer, are outside the shell; if they are, we must remove the point
+	relationshipTrackerContainer.removePointsExistingOutsideOfShell(clipperPolyLogger.getLogLevel());
 
 	// Phase 2: Three checks. 
 	
@@ -177,6 +183,10 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "####################### !! Check 2.2 met. ", "\n");
 		areAllPointsWithinShell = true;
 	}
+	else
+	{
+		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "####################### !! Notice...Check 2.2 --NOT--met. ", "\n");
+	}
 
 	if (clipperPolyLogger.isLoggingSet())
 	{
@@ -199,9 +209,13 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	)
 	{
 		//willBePurged = true;
+		//printClippingShellMapPoints();
 
+		
 		clipperPolyLogger.log("(MassZonePointClipper): Entered check 2.3. ", "\n");
 		// CHECK 2.3
+		
+		
 		if (relationshipTrackerContainer.checkForAnyPointsWithSingleSPoly() == false)
 		{
 			// Need to test why the below code needs to be called; not sure if it's even useful. (3/8/2021).
@@ -215,29 +229,35 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 
 			willBePurged = true;
 			
-			/*
-			relationshipTrackerContainer.printRelationshipTrackerData();
-			BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
+			
+			//relationshipTrackerContainer.printRelationshipTrackerData();
+			//BorderLineLinkContainer linkContainer = currentMeshMatterSPoly->buildBuildBorderLineLinkContainer();
 			//std::cout << "!!! Finished building BorderLineLinkContainer." << std::endl;
-			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! Finished building BorderLineLinkContainer.", "\n");
-			if (runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer) == true)
-			{
-				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
-				willBePurged = true;
-			}
-			*/
+			//clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! Finished building BorderLineLinkContainer.", "\n");
+			//if (runFirstTwoDisqualificationPasses(&linkContainer, &relationshipTrackerContainer) == true)
+			//{
+				//clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !!! SPoly flagged as being purgable.", "\n");
+				//willBePurged = true;
+			//}
+			
 		}
 		else
 		{
 			//std::cout << "!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing." << std::endl;
 			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString,"!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing.", "\n");
 		}
+		
 	}
 	
 	if (clipperPolyLogger.isLoggingSet() == true)
 	{
 		clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," !! Finished purging analysis.", "\n");
 		clipperPolyLogger.waitForDebugInput();
+	}
+
+	if (willBePurged == true)
+	{
+		clipperPolyLogger.log("(MassZonePointClipper): NOTICE::: -> SPoly with ID", in_meshMatterMetaRef->referencedSPolyID, " will be CLIPPED.", "\n");
 	}
 
 	return willBePurged;

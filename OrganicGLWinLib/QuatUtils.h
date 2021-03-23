@@ -13,6 +13,7 @@
 #include "QMBoolAreLinesColinear.h"
 #include "QMBoolDoLinesIntersect.h"
 #include "QMBoolIsColinearLineAContainedWithinB.h"
+#include "QMBoolIsPointWithinPBZMassSide.h"
 #include <iostream>
 #include "Vec3Result.h"
 #include "PolyDebugLevel.h"
@@ -58,7 +59,14 @@ class QuatUtils
 											glm::vec3 in_lineBPointB,
 											PolyDebugLevel in_polyDebugLevel
 										);
-										
+		static bool isPointWithinMassOfPBZ(
+											glm::vec3 in_pointToCompare,
+											glm::vec3 in_trianglePoint0,
+											glm::vec3 in_trianglePoint1,
+											glm::vec3 in_trianglePoint2,
+											glm::vec3 in_triangleEmptyNormal,
+											PolyDebugLevel in_polyDebugLevel
+										);
 };
 
 #endif

@@ -11,10 +11,11 @@
 class PointToSPolyRelationship
 {
 	public:
-		void insertNewSTriangleRelationship(int in_sTriangleIndex, STriangle* in_sTriangleRef)
+		void insertNewSTriangleRelationship(int in_sTriangleIndex, STriangle* in_sTriangleRef, glm::vec3 in_relatedSPolyEmptyNormal)
 		{
 			PointToSTriangleRelationship relationship(in_sTriangleIndex, in_sTriangleRef);
 			sTriangleRelationshipMap[in_sTriangleIndex] = relationship;
+			relatedSPolyEmptyNormal = in_relatedSPolyEmptyNormal;
 		}
 		void printSTriangleIndicesAndData()
 		{
@@ -34,7 +35,9 @@ class PointToSPolyRelationship
 		}
 	private:
 		friend class MassZonePointClipper;
+		friend class PointToSPolyRelationshipTrackerContainer;
 		std::map<int, PointToSTriangleRelationship> sTriangleRelationshipMap;
+		glm::vec3 relatedSPolyEmptyNormal;
 };
 
 #endif
