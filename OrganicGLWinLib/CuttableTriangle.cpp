@@ -487,7 +487,7 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 		}
 	}
 	
-	/*
+	
 	bool boolArray[3] = { false };
 	for (int x = 0; x < 3; x++)
 	{
@@ -498,11 +498,12 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 		glm::vec3 cuttingTrianglePoint0 = in_cuttingTriangleRef->cuttingLines[0].pointA;
 		glm::vec3 cuttingTrianglePoint1 = in_cuttingTriangleRef->cuttingLines[1].pointA;
 		glm::vec3 cuttingTrianglePoint2 = in_cuttingTriangleRef->cuttingLines[2].pointA;
-		boolArray[x] = QuatUtils::checkIfPointLiesWithinTrianglePBZ(
+		boolArray[x] = QuatUtils::checkIfPointLiesWithinTrianglePBZDebug(
 			thirdUnusedPoint,
 			cuttingTrianglePoint0,
 			cuttingTrianglePoint1,
-			cuttingTrianglePoint2
+			cuttingTrianglePoint2,
+			pbzLogger.getLogLevel()
 		);
 
 	}
@@ -521,7 +522,7 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 		std::cout << "Notice::: Triangle is entirely contained within PBZ. " << std::endl;
 		isCuttingTriangleConsumed = true;
 	}
-	*/
+	
 
 	//std::cout << ":::::::::::::: END PBZ Test: " << std::endl;
 	//int endTest = 3;

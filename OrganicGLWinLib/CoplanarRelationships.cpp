@@ -39,7 +39,7 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	//std::cout << "#######################################################" << std::endl;
 	//std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
 	//std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPoly.triangles.size();
-	//std::cout << "(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID " << trackedPolyID << std::endl;
+	std::cout << "(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID " << trackedPolyID << std::endl;
 
 	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");
 	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");

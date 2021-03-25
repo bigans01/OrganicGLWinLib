@@ -481,7 +481,9 @@ bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_po
 	//glm::vec3 comparedPointCurrentPosition = rotationpointsRefVector->getPointByIndex(2);
 	// if the point being compared against is "on" the plane's defining line, we will need to round. (may need to experiment with hundredths, and thousandths)
 	//glm::vec3 comparedPointCurrentPosition = OrganicGLWinUtils::roundVec3ToHundredths(in_quatRotationPointsRef->getPointByIndex(2));
-	glm::vec3 comparedPointCurrentPosition = roundPointToTenThousandths(in_quatRotationPointsRef->getPointByIndex(2));
+	glm::vec3 comparedPointCurrentPosition = roundPointToThousandths(in_quatRotationPointsRef->getPointByIndex(2));			// --> rounding to thousandths, appears better than rounding to ten-thousandths; needs to be verified after (3/25/2021).
+	//glm::vec3 comparedPointCurrentPosition = roundPointToTenThousandths(in_quatRotationPointsRef->getPointByIndex(2));	// --> wasn't precise enough in some cases; will occasionally cause a CuttableTriangle that should be classified as being entirely within
+																															// a CuttingTriangle as not being true or detected, resulting in algorithm failure. Again, needs to be revisited at a later time. (3/25/2021)
 	//glm::vec3 comparedPointCurrentPosition = in_quatRotationPointsRef->getPointByIndex(2);
 
 	glm::vec3 centroidFacingNormal = in_quatRotationPointsRef->getPointByIndex(3);
@@ -513,5 +515,15 @@ glm::vec3 QMBoolPointWithinTrianglePBZ::roundPointToTenThousandths(glm::vec3 in_
 	returnVec.x = float(floor(in_vec3.x * 10000 + 0.5) / 10000);
 	returnVec.y = float(floor(in_vec3.y * 10000 + 0.5) / 10000);
 	returnVec.z = float(floor(in_vec3.z * 10000 + 0.5) / 10000);
+	return returnVec;
+}
+
+glm::vec3 QMBoolPointWithinTrianglePBZ::roundPointToThousandths(glm::vec3 in_vec3)
+{
+	//in_vec3Ref->x = float(floor(in_vec3Ref->x * 10000 + 0.5) / 10000);
+	glm::vec3 returnVec;
+	returnVec.x = float(floor(in_vec3.x * 1000 + 0.5) / 1000);
+	returnVec.y = float(floor(in_vec3.y * 1000 + 0.5) / 1000);
+	returnVec.z = float(floor(in_vec3.z * 1000 + 0.5) / 1000);
 	return returnVec;
 }

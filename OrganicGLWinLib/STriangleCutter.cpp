@@ -62,7 +62,7 @@ bool STriangleCutter::runCuttingSequence()
 		// in the very first iteration of this loop -- the very beginning of the cuttingSequence -- there should only be 1 CuttingTriangle, which
 		// is the one constructed by the call to cuttableContainer.buildFirstCuttableTriangle.
 
-		//std::cout << "!!!! Next pass begin. Current ID of CuttingTriangle is: " << cuttingTrianglesBegin->first << std::endl;
+		std::cout << "!!!! Next pass begin. Current ID of CuttingTriangle is: " << cuttingTrianglesBegin->first << std::endl;
 		cutterSequenceLogger.log("(STriangleCutter): !!!! Next pass begin. Current ID of CuttingTriangle is: ", cuttingTrianglesBegin->first, "\n");
 		if (cutterSequenceLogger.isLoggingSet())
 		{

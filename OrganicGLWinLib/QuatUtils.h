@@ -22,6 +22,7 @@ class QuatUtils
 {
 	public:
 		static bool checkIfPointLiesWithinTrianglePBZ(glm::vec3 in_pointToCheck, glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
+		static bool checkIfPointLiesWithinTrianglePBZDebug(glm::vec3 in_pointToCheck, glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, PolyDebugLevel in_polyDebugLevel);
 		static glm::vec3 findOrientatedLineNormal(glm::vec3 in_linePointA, glm::vec3 in_linePointB, glm::vec3 in_bearingPoint);
 		static Vec3Result findPointForDeterminingCyclingDirection(
 																	glm::vec3 in_lineAPointA,
