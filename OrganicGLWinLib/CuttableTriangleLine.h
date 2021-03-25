@@ -7,6 +7,7 @@
 #include "TwoDIntersectionRecordManager.h"
 #include <map>
 #include "CyclingDirection.h"
+#include "IntersectionFindingAttempt.h"
 
 class CuttableTriangleLine
 {
@@ -19,39 +20,20 @@ class CuttableTriangleLine
 			pointB(in_pointB),
 			cuttableTriangleCentroidFacingNormal(in_centroidFacingNormal)
 		{}
-	
-		void printCuttingIntersections()
-		{
-			if (cuttableIntersectionManager.numberOfRecords() > 0)
-			{
-				cuttableIntersectionManager.printRecordMap();
-			}
-		};
-		void insertNonIntersectingCuttingLinePoint(int in_cuttingLineID, glm::vec3 in_point)
-		{
-			cuttingLineNonIntersectingPoints[in_cuttingLineID] = in_point;
-		};
-		glm::vec3 getNonIntersectingPountForCuttingLine(int in_cuttingLineID)
-		{
-			return cuttingLineNonIntersectingPoints[in_cuttingLineID];
-		}
-		glm::vec3 fetchNextPointBasedOnCyclingDirection(CyclingDirection in_cyclingDirection)
-		{
-			if (in_cyclingDirection == CyclingDirection::FORWARD)
-			{
-				return pointB;
-			}
-			else if (in_cyclingDirection == CyclingDirection::REVERSE)
-			{
-				return pointA;
-			}
-		}
 
 		glm::vec3 pointA;
 		glm::vec3 pointB;
 		glm::vec3 cuttableTriangleCentroidFacingNormal;
 		TwoDIntersectionRecordManager cuttableIntersectionManager;
 		std::map<int, glm::vec3> cuttingLineNonIntersectingPoints;
+	
+		void printCuttingIntersections();
+		void insertNonIntersectingCuttingLinePoint(int in_cuttingLineID, glm::vec3 in_point);
+		IntersectionFindingAttempt getNonIntersectingPountForCuttingLine(int in_cuttingLineID, glm::vec3 in_currentLeadingPoint);
+		glm::vec3 getNonIntersectingPountForCuttingLine(int in_cuttingLineID);
+		glm::vec3 fetchNextPointBasedOnCyclingDirection(CyclingDirection in_cyclingDirection);
+		glm::vec3 getOtherEndpoint(glm::vec3 in_currentEndpoint);
+
 };
 
 #endif

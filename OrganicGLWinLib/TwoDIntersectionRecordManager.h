@@ -6,101 +6,25 @@
 #include <map>
 #include <glm/glm.hpp>
 #include <iostream>
+#include "OperableIntSet.h"
 
 class TwoDIntersectionRecordManager
 {
 	public:
-		void insertRecord(int in_idOfTheIntersectingLine, glm::vec3 in_intersectingPoint)
-		{
-			recordMap[in_idOfTheIntersectingLine] = in_intersectingPoint;
-		}
-		void eraseRecord(int in_idToErase)
-		{
-			recordMap.erase(in_idToErase);
-		}
-		void clearRecordMap()
-		{
-			recordMap.clear();
-		}
-		glm::vec3 getPointForRecord(int in_idToGetPointFor)
-		{
-			return recordMap[in_idToGetPointFor];
-		}
-		bool doesRecordExist(int in_idToGetPointFor)
-		{
-			bool returnValue = false;
-			/*
-			auto recordFinder = recordMap.find(in_idToGetPointFor);
-			if (recordFinder != recordMap.end())
-			{
-				returnValue = true;
-			}
-			*/
-					
-			if (auto finder = recordMap.find(in_idToGetPointFor); finder != recordMap.end())	// new in C++ 17. Should be retroactively applied, to other similiar
-																								// functions, when time permits.
-			{
-				returnValue = true;
-			}
-			return returnValue;
-		}
-		void printRecordMap()
-		{
-			auto recordMapBegin = recordMap.begin();
-			auto recordMapEnd = recordMap.end();
-			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
-			{
-				std::cout << "[" << recordMapBegin->first << "]" 
-					      << " point: " << recordMapBegin->second.x << ", " << recordMapBegin->second.y << ", " << recordMapBegin->second.z << std::endl;
-			}
-		}
-		int numberOfRecords() 
-		{ 
-			return int(recordMap.size()); 
-		};
-		int getIdOfClosestPoint(glm::vec3 in_pointToCompareAgainst)
-		{
-			float distance = 10000.0f;
-			int shortestID = 0;
-			auto recordMapBegin = recordMap.begin();
-			auto recordMapEnd = recordMap.end();
-			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
-			{
-				if (glm::distance(in_pointToCompareAgainst, recordMapBegin->second) < distance)
-				{
-					shortestID = recordMapBegin->first;
-				};
-			}
-			return shortestID;
-		};
-		bool doesPointExist(glm::vec3 in_point)
-		{
-			bool wasFound = false;
-			auto recordMapBegin = recordMap.begin();
-			auto recordMapEnd = recordMap.end();
-			for (; recordMapBegin != recordMapEnd; recordMapBegin++)
-			{
-				if (recordMapBegin->second == in_point)
-				{
-					wasFound = true;
-				}
-			}
-			return wasFound;
-		}
-		bool arePointsEqual() // would be used to invalidate a SLICE attempt
-		{
-			bool arePointsEqual = false;
-			auto firstPoint = recordMap.begin();
-			auto secondPoint = recordMap.rbegin();
-			if (firstPoint->second == secondPoint->second)
-			{
-				arePointsEqual = true;
-			}
-			return arePointsEqual;
-		}
-
+		void insertRecord(int in_idOfTheIntersectingLine, glm::vec3 in_intersectingPoint);
+		void eraseRecord(int in_idToErase);
+		void clearRecordMap();
+		glm::vec3 getPointForRecord(int in_idToGetPointFor);
+		bool doesRecordExist(int in_idToGetPointFor);
+		void printRecordMap();
+		int numberOfRecords();
+		int getIdOfClosestPoint(glm::vec3 in_pointToCompareAgainst, OperableIntSet in_linesToExclude);
+		int getIdOfClosestPoint(glm::vec3 in_pointToCompareAgainst);
+		bool doesPointExist(glm::vec3 in_point);
+		bool arePointsEqual();	// would be used to invalidate a SLICE attempt
 	private:
 		friend class CuttableTriangle;
+		friend class CuttingTriangle;
 		std::map<int, glm::vec3> recordMap;	// the key of the map = the ID of the line in the triangle that performed the intersection; value = intersecting point.
 
 };

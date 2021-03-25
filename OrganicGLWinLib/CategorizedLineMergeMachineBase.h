@@ -38,6 +38,7 @@ class CategorizedLineMergeMachineBase
 		CategorizedLine fetchAndRemoveNonboundMergeCandidate(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptsPointPreciseMergeCandidate(int in_fetchIndex);
 		CategorizedLineSearchResult checkForNextNonboundMergeCandidate(glm::vec3 in_pointToSearch);
+		CategorizedLineSearchResult getClosestNonBoundMergeCandidate(glm::vec3 in_pointToSearch); // created for MERGE-0, 3/24/2021.
 
 		CategorizedLine mergedLineResult;	// the final product of the merging
 

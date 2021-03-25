@@ -17,8 +17,8 @@ bool QMBoolIsTJunctionCuttable::solve(QuatRotationPoints* in_quatRotationPointsR
 	pointCheck.performCheck(pointACopy);
 	if (pointCheck.requiresTranslation == 1)
 	{
-		// apply the translation, only to the first 4 points.
-		in_quatRotationPointsRef->applyTranslationToIndexRange(pointCheck.getTranslationValue(), 0, 3);
+		// apply the translation, only to the first 3 points.
+		in_quatRotationPointsRef->applyTranslationToIndexRange(pointCheck.getTranslationValue(), 0, 2);
 	}
 
 	// check if the second point of the first line, is aligned such that x > 0, and y = 0.
@@ -38,7 +38,6 @@ bool QMBoolIsTJunctionCuttable::solve(QuatRotationPoints* in_quatRotationPointsR
 	}
 
 	rotateLineToYZeroPositiveX(lineAPointBRef, &rotationRecords, in_quatRotationPointsRef, &rotationOrder);
-
 	glm::vec3* normalRef = in_quatRotationPointsRef->getPointRefByIndex(3);
 	glm::vec3* pointToCheckRef = in_quatRotationPointsRef->getPointRefByIndex(2);
 	if 

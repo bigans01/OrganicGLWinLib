@@ -876,6 +876,9 @@
     <ClInclude Include="QMBoolIsPointWithinPBZMassSide.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IntersectionFindingAttempt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1290,6 +1293,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMBoolIsPointWithinPBZMassSide.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDIntersectionRecordManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangleLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

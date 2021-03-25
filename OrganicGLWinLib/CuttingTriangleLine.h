@@ -30,7 +30,8 @@ class CuttingTriangleLine
 				cuttingIntersectionManager.printRecordMap();
 			}
 		};
-		CyclingDirection determineCyclingDirectionToUseFromPoint(glm::vec3 in_point)
+
+		CyclingDirection determineCyclingDirectionToUseFromPoint(glm::vec3 in_point)	
 		{
 			CyclingDirection returnDirection;
 			if (in_point == pointA)
@@ -43,6 +44,21 @@ class CuttingTriangleLine
 			}
 			return returnDirection;
 		}
+
+		CyclingDirection determineCyclingDirectionToUseFromFailedAttempt(glm::vec3 in_point)	// created for CUTLINEWELDER_TYPICAL-0
+		{
+			CyclingDirection returnDirection;
+			if (in_point == pointA)
+			{
+				returnDirection = CyclingDirection::FORWARD;
+			}
+			else if (in_point == pointB)
+			{
+				returnDirection = CyclingDirection::REVERSE;
+			}
+			return returnDirection;
+		}
+
 		void resetRecordManager()
 		{
 			cuttingIntersectionManager.clearRecordMap();

@@ -152,6 +152,10 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 					glm::vec3 tJunctionBasePoint = cuttableTriangleLines[currentCuttableTriangleLineID].pointB;
 					glm::vec3 splitLineNormal = in_cuttingTriangleRef->cuttingLines[currentCuttingTriangleLineID].outwardFacingNormal;
 
+					tJunctionLogger.log("(CuttableTriangle): >>> splitLinePointA: ", splitLinePointA.x, ", ", splitLinePointA.y, ", ", splitLinePointA.z, "\n");
+					tJunctionLogger.log("(CuttableTriangle): >>> splitLinePointB: ", splitLinePointB.x, ", ", splitLinePointB.y, ", ", splitLinePointB.z, "\n");
+					tJunctionLogger.log("(CuttableTriangle): >>> tJunctionBasePoint: ", tJunctionBasePoint.x, ", ", tJunctionBasePoint.y, ", ", tJunctionBasePoint.z, "\n");
+					tJunctionLogger.log("(CuttableTriangle): >>>> condition T_JUNCTION_A_SPLITS_B_VIA_POINT_A, splitLineNormal is: ", splitLineNormal.x, ", ", splitLineNormal.y, ", ", splitLineNormal.z, "\n");
 					
 					bool result = QuatUtils::checkTJunctionUsability(splitLinePointA, splitLinePointB, tJunctionBasePoint, splitLineNormal);		// splitLineNormal used to be multiplied by -1 here, before 3/11/2021.
 					if (result == true)

@@ -32,10 +32,12 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 			cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder) :::|||||| Size of vector, after while tick: ", cutTriangleContainerVector.size(), "\n");
 			if (preObservationPoolSize == postObservationPoolSize)
 			{
-				std::cout << "~~~~~!!!!!!! Warning, pre and post match...continue? " << std::endl;
+				std::cout << "(CutTriangleGroupBuilder) ~~~~~!!!!!!! Warning, pre and post match...continue? " << std::endl;
 				//cutTriangleGroupBuilderLogger.log("(CutTriangleGroupBuilder) ~~~~~!!!!!!! Warning, pre and post match...continue?  ", "\n");
 				int prepostMatch = 3;
-				std::cout << "~~~~~Number of lines in pool is: " << preObservationPoolSize << std::endl;
+				std::cout << "(CutTriangleGroupBuilder) ~~~~~Number of lines in pool is: " << preObservationPoolSize << std::endl;
+				std::cout << "(CutTriangleGroupBuilder) Lines are: " << std::endl;
+				linePool.printLines();
 				while (prepostMatch == 3)
 				{
 

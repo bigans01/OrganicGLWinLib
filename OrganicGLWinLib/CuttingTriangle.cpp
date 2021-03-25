@@ -44,3 +44,22 @@ void CuttingTriangle::printPoints()
 		std::cout << "point " << x << ": " << cuttingLines[x].pointA.x << ", " << cuttingLines[x].pointA.y << ", " << cuttingLines[x].pointA.z << std::endl;
 	}
 }
+
+OperableIntSet CuttingTriangle::findInvalidPointsInLines()
+{
+	OperableIntSet returnSet;
+	for (int x = 0; x < 3; x++)
+	{
+		if (cuttingLines[x].cuttingIntersectionManager.recordMap.size() == 2)	// if there are two points, do this.
+		{
+			auto firstPoint = cuttingLines[x].cuttingIntersectionManager.recordMap.begin();
+			auto secondPoint = cuttingLines[x].cuttingIntersectionManager.recordMap.rbegin();
+			if (firstPoint->second == secondPoint->second)
+			{
+				std::cout << "!!! Notice, found points as being same!! Inserting into set." << std::endl;
+				returnSet.intSet.insert(x);
+			}
+		}
+	}
+	return returnSet;
+}

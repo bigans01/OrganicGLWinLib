@@ -7,6 +7,7 @@
 #include "CuttingTriangleLine.h"
 #include "OrganicGLWinUtils.h"
 #include "QuatUtils.h"
+#include "OperableIntSet.h"
 
 class CuttingTriangle
 {
@@ -23,6 +24,7 @@ class CuttingTriangle
 		void reset();
 		void printCuttingLineIntersections();
 		void printPoints();
+		OperableIntSet findInvalidPointsInLines();		// any line which has the same point registered twice, shouldn't be used.
 };
 
 #endif

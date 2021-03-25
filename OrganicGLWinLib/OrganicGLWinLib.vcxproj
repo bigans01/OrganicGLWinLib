@@ -267,6 +267,7 @@
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectAnalyzerOption.h" />
+    <ClInclude Include="IntersectionFindingAttempt.h" />
     <ClInclude Include="IntersectionLine.h" />
     <ClInclude Include="IntersectionLineGroup.h" />
     <ClInclude Include="IntersectionLineValidity.h" />
@@ -477,6 +478,7 @@
     <ClCompile Include="CutLineWelder.cpp" />
     <ClCompile Include="CuttableTriangle.cpp" />
     <ClCompile Include="CuttableTriangleContainer.cpp" />
+    <ClCompile Include="CuttableTriangleLine.cpp" />
     <ClCompile Include="CuttingTriangle.cpp" />
     <ClCompile Include="CuttingTriangleManager.cpp" />
     <ClCompile Include="CutTriangleGroupBuilder.cpp" />
@@ -584,6 +586,7 @@
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
+    <ClCompile Include="TwoDIntersectionRecordManager.cpp" />
     <ClCompile Include="TwoDLineSegment.cpp" />
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp" />
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />

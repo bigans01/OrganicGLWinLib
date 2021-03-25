@@ -10,6 +10,7 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "ErrorSensor.h"
+#include "IntersectionFindingAttempt.h"
 
 class CuttableTriangle;
 class CutLineWelder
