@@ -68,6 +68,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	//std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
 	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," |||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
 	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
+	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> size of clippingShellMap: ", clippingShellMap.size(), "\n");
 
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
 	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;
@@ -139,7 +140,8 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	}
 
 	// Phase 1.1: Check if any of the points in the relationshipTrackerContainer, are outside the shell; if they are, we must remove the point
-	relationshipTrackerContainer.removePointsExistingOutsideOfShell(clipperPolyLogger.getLogLevel());
+	//relationshipTrackerContainer.removePointsExistingOutsideOfShell(clipperPolyLogger.getLogLevel());
+	relationshipTrackerContainer.runPointsAgainstShellSlices(clipperPolyLogger.getLogLevel(),clippingShellMap);
 
 	// Phase 2: Three checks. 
 	

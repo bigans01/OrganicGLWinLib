@@ -277,6 +277,7 @@
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
     <ClInclude Include="LineReactorBase.h" />
+    <ClInclude Include="MappableJudge.h" />
     <ClInclude Include="MassComparisonResult.h" />
     <ClInclude Include="MassSubZone.h" />
     <ClInclude Include="MassZone.h" />
@@ -292,9 +293,11 @@
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
     <ClInclude Include="NonBoundMerger.h" />
+    <ClInclude Include="PointToMassRelationshipJudge.h" />
     <ClInclude Include="PointToMassRelationshipMap.h" />
     <ClInclude Include="PointToMassRelationship.h" />
     <ClInclude Include="PointToMassRelationshipType.h" />
+    <ClInclude Include="PointToMassTrial.h" />
     <ClInclude Include="PointToSPolyRelationship.h" />
     <ClInclude Include="PointToSPolyRelationshipTracker.h" />
     <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h" />
@@ -305,6 +308,7 @@
     <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h" />
     <ClInclude Include="QMBoolIsPointWithinPBZMassSide.h" />
     <ClInclude Include="QMBoolIsTJunctionCuttable.h" />
+    <ClInclude Include="QMFindPointToMassRelationship.h" />
     <ClInclude Include="QMVec3FindCyclingDirectionPoint.h" />
     <ClInclude Include="QMBoolPointWithinTrianglePBZ.h" />
     <ClInclude Include="QMVec3Base.h" />
@@ -525,6 +529,8 @@
     <ClCompile Include="NonBoundMerger.cpp" />
     <ClCompile Include="OrientedQuad.cpp" />
     <ClCompile Include="OrientedQuadPanel.cpp" />
+    <ClCompile Include="PointToMassRelationshipJudge.cpp" />
+    <ClCompile Include="PointToMassTrial.cpp" />
     <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp" />
     <ClCompile Include="PointTranslationCheck.cpp" />
     <ClCompile Include="QMBoolAreLinesColinear.cpp" />
@@ -533,6 +539,7 @@
     <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp" />
     <ClCompile Include="QMBoolIsPointWithinPBZMassSide.cpp" />
     <ClCompile Include="QMBoolIsTJunctionCuttable.cpp" />
+    <ClCompile Include="QMFindPointToMassRelationship.cpp" />
     <ClCompile Include="QMVec3FindCyclingDirection.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />
     <ClCompile Include="QMVec3Base.cpp" />

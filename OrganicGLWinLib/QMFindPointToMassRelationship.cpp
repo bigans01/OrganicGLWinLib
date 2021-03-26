@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "QMBoolIsPointWithinPBZMassSide.h"
+#include "QMFindPointToMassRelationship.h"
 
-bool QMBoolIsPointWithinPBZMassSide::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+PointToMassRelationshipType QMFindPointToMassRelationship::solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
 {
-	// set debug level
-	qmBoolBaseLogger.setDebugLevel(in_polyDebugLevel);
-	qmBoolBaseLoggerDebugLevel = in_polyDebugLevel;
+	PointToMassRelationshipType returnRelationship = PointToMassRelationshipType::NOVAL;
 
-	bool returnValue = true;	// assume innocent (true, as being within mass), until guilty (false, as being outside of it)
+	// set debug level
+	qmRelationshipLogger.setDebugLevel(in_polyDebugLevel);
+	qmRelationshipLoggerDebugLevel = in_polyDebugLevel;
 
 	// point 0 = point to compare
 	// point 1 = point 0 of triangle
@@ -24,17 +24,6 @@ bool QMBoolIsPointWithinPBZMassSide::solve(QuatRotationPoints* in_quatRotationPo
 		in_quatRotationPointsRef->applyTranslationToIndexRange(translationValue, 0, 3);		// translate all but the last (which is the empty normal)
 	}
 
-	// finally, let's print the points, if we're in debug mode.
-	if (qmBoolBaseLogger.isLoggingSet())
-	{
-
-		qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): started printing points, post translation --------- ", "\n");
-		in_quatRotationPointsRef->printPoints();
-		qmBoolBaseLogger.waitForDebugInput();
-		qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): finished printing points, post translation --------- ", "\n");
-	}
-
-	
 	// check if the second point of the first line, is aligned such that x > 0, and y = 0.
 	// if neither of these are true, we must rotate along the Z axis to positive X.
 	std::vector<QuatRotationType> rotationOrder;
@@ -54,70 +43,73 @@ bool QMBoolIsPointWithinPBZMassSide::solve(QuatRotationPoints* in_quatRotationPo
 		rotateTriangleAroundX(in_quatRotationPointsRef, &rotationRecords);
 	}
 
-
-
-
 	// check whether or not the point to compare, is on the same side as the empty normal.
 	glm::vec3* pointToCompareRef = in_quatRotationPointsRef->getPointRefByIndex(0);	// ref to the point to compare.
 
 	// round the Z of the pointToCompare.
 	pointToCompareRef->z = roundZValueToThousandths(pointToCompareRef->z);
-	if (qmBoolBaseLogger.isLoggingSet())
+	if (qmRelationshipLogger.isLoggingSet())
 	{
 		if (pointToCompareRef->z == 0.0f)
 		{
-			qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): pointToCompare's Z is 0!", "\n");
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): pointToCompare's Z is 0!", "\n");
 		}
 	}
 
-	// finally, let's print the points, if we're in debug mode.
-	if (qmBoolBaseLogger.isLoggingSet())
-	{
-
-		qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): printing points... ", "\n");
-		in_quatRotationPointsRef->printPoints();
-		qmBoolBaseLogger.waitForDebugInput();
-	}
-
+	// assuming the points are in their proper position, determine what to do.
 	glm::vec3* emptyNormalRef = in_quatRotationPointsRef->getPointRefByIndex(4);	// ref to the empty normal.
 	if (emptyNormalRef->z > 0)	// empty normal would face > 0
 	{
-		if (pointToCompareRef->z <= 0)	// we'd be behind the empty normal, we're OK.
+		if (pointToCompareRef->z == 0)	// we'd be within the STriangle's plane/triangle, so would be COPLANAR_TO_STRIANGLE
 		{
-
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is COPLANAR_TO_STRIANGLE. ", "\n");
+			returnRelationship = PointToMassRelationshipType::COPLANAR_TO_STRIANGLE;
 		}
-		else
+
+		else if (pointToCompareRef->z < 0)	// we'd be behind the empty normal, so the relationship would be WITHIN_MASS
 		{
-			// not OK, we're outside of the mass
-			qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): Notice, point doesn't exist within Mass. ", "\n");
-			returnValue = false;
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is WITHIN_MASS. ", "\n");
+			returnRelationship = PointToMassRelationshipType::WITHIN_MASS;
+		}
+		else if (pointToCompareRef->z > 0)	// we'd be in front of the empty normal, so the relationship would be OUTSIDE_OF_MASS
+		{
+			
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is OUTSIDE_OF_MASS. ", "\n");
+			returnRelationship = PointToMassRelationshipType::OUTSIDE_OF_MASS;
 		}
 	}
 	else if (emptyNormalRef->z < 0)
 	{
-		if (pointToCompareRef->z >= 0)
+		if (pointToCompareRef->z == 0)	// we'd be within the STriangle's plane/triangle, so would be COPLANAR_TO_STRIANGLE
 		{
-
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is COPLANAR_TO_STRIANGLE. ", "\n");
+			returnRelationship = PointToMassRelationshipType::COPLANAR_TO_STRIANGLE;
 		}
-		else
+
+		else if (pointToCompareRef->z > 0)	// we'd be behind the empty normal, so the relationship would be WITHIN_MASS
+		{
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is WITHIN_MASS. ", "\n");
+			returnRelationship = PointToMassRelationshipType::WITHIN_MASS;
+		}
+		else if (pointToCompareRef->z < 0)   // we'd be in front of the empty normal, so the relationship would be OUTSIDE_OF_MASS
 		{
 			// not OK, we're outside of the mass
-			qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): Notice, point doesn't exist within Mass. ", "\n");
-			returnValue = false;
+			qmRelationshipLogger.log("(QMFindPointToMassRelationship): Notice, relationship is OUTSIDE_OF_MASS. ", "\n");
+			returnRelationship = PointToMassRelationshipType::OUTSIDE_OF_MASS;
 		}
 	}
 
-	return returnValue;
+	return returnRelationship;
 }
 
-void QMBoolIsPointWithinPBZMassSide::findAxisRotationsToGetFirstLineToXYPlane(QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
+void QMFindPointToMassRelationship::findAxisRotationsToGetFirstLineToXYPlane(QuatRotationPoints* in_quatRotationPointsRef, std::vector<QuatRotationType>* in_rotationOrderVectorRef)
 {
 	glm::vec3* pointBRef = in_quatRotationPointsRef->getPointRefByIndex(2);	// grab the second point of the triangle.
 	// check if we need to rotate about the Y-axis to get to the same Z values for the line
 	if (pointBRef->z != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
-		qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): ROTATE_AROUND_Y required. ", "\n");
+		qmRelationshipLogger.log("(QMFindPointToMassRelationship): ROTATE_AROUND_Y required. ", "\n");
 		//std::cout << "ROTATE_AROUND_Y required." << std::endl;
 		in_rotationOrderVectorRef->push_back(rotateType); //push into the vector
 	}
@@ -126,14 +118,15 @@ void QMBoolIsPointWithinPBZMassSide::findAxisRotationsToGetFirstLineToXYPlane(Qu
 	if (pointBRef->y != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
-		qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): ROTATE_AROUND_Z required. ", "\n");
+		qmRelationshipLogger.log("(QMFindPointToMassRelationship): ROTATE_AROUND_Z required. ", "\n");
 		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
 		in_rotationOrderVectorRef->push_back(rotateType);
 	}
 
 
 }
-void QMBoolIsPointWithinPBZMassSide::runRotationsToGetLineToXYPlane(QuatRotationPoints* in_quatRotationPointsRef, 
+
+void QMFindPointToMassRelationship::runRotationsToGetLineToXYPlane(QuatRotationPoints* in_quatRotationPointsRef,
 																	std::vector<QuatRotationType>* in_rotationOrderVectorRef,
 																	std::stack<QuatRotationRecord>* in_rotationRecordStack)
 {
@@ -152,7 +145,7 @@ void QMBoolIsPointWithinPBZMassSide::runRotationsToGetLineToXYPlane(QuatRotation
 	}
 }
 
-void QMBoolIsPointWithinPBZMassSide::rotateFirstTriangleLineAroundYAndPushIntoStack(QuatRotationPoints* in_quatRotationPointsRef,
+void QMFindPointToMassRelationship::rotateFirstTriangleLineAroundYAndPushIntoStack(QuatRotationPoints* in_quatRotationPointsRef,
 																					std::stack<QuatRotationRecord>* in_rotationRecordStack)
 {
 	glm::vec3* pointBRef = in_quatRotationPointsRef->getPointRefByIndex(2);	// we need to get a ref to the second point of the triangle.
@@ -180,12 +173,12 @@ void QMBoolIsPointWithinPBZMassSide::rotateFirstTriangleLineAroundYAndPushIntoSt
 	in_quatRotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
 
 	glm::vec3* pointBAfterYRotate = in_quatRotationPointsRef->getPointRefByIndex(2);
-	qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): value of pointBAfterYRotate:", pointBAfterYRotate->x, ", ", pointBAfterYRotate->y, ", ", pointBAfterYRotate->z, "\n");
+	qmRelationshipLogger.log("(QMFindPointToMassRelationship): value of pointBAfterYRotate:", pointBAfterYRotate->x, ", ", pointBAfterYRotate->y, ", ", pointBAfterYRotate->z, "\n");
 
-	in_rotationRecordStack->push(s1record);						// push into the stack
+	in_rotationRecordStack->push(s1record);
 }
 
-void QMBoolIsPointWithinPBZMassSide::rotateFirstTriangleLineAroundZAndPushIntoStack(QuatRotationPoints* in_quatRotationPointsRef,
+void QMFindPointToMassRelationship::rotateFirstTriangleLineAroundZAndPushIntoStack(QuatRotationPoints* in_quatRotationPointsRef,
 																					std::stack<QuatRotationRecord>* in_rotationRecordStack)
 {
 	glm::vec3* pointBRef = in_quatRotationPointsRef->getPointRefByIndex(2);	// we need to get a ref to the second point of the triangle.
@@ -223,17 +216,16 @@ void QMBoolIsPointWithinPBZMassSide::rotateFirstTriangleLineAroundZAndPushIntoSt
 	in_quatRotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one
 
 	glm::vec3* pointBAfterZRotate = in_quatRotationPointsRef->getPointRefByIndex(2);
-	qmBoolBaseLogger.log("(QMBoolIsPointWithinPBZMassSide): value of pointBAfterZRotate:", pointBAfterZRotate->x, ", ", pointBAfterZRotate->y, ", ", pointBAfterZRotate->z, "\n");
+	qmRelationshipLogger.log("(QMFindPointToMassRelationship): value of pointBAfterZRotate:", pointBAfterZRotate->x, ", ", pointBAfterZRotate->y, ", ", pointBAfterZRotate->z, "\n");
 
 	in_rotationRecordStack->push(s1record);
-
 }
 
-void QMBoolIsPointWithinPBZMassSide::rotateTriangleAroundX(QuatRotationPoints* in_quatRotationPointsRef,
+void QMFindPointToMassRelationship::rotateTriangleAroundX(QuatRotationPoints* in_quatRotationPointsRef,
 															std::stack<QuatRotationRecord>* in_rotationRecordStack)
 {
 	glm::vec3 currentThirdPoint = in_quatRotationPointsRef->getPointByIndex(3);	// get a copy of the value of the 3rd primal point, which should be at index 3.
-	float radiansToRotateBy = findRadiansForRoateTriangleAroundX(currentThirdPoint);
+	float radiansToRotateBy = findRadiansForRotateTriangleAroundX(currentThirdPoint);
 
 
 	//std::cout << "!!! Points in poly plane will be rotated by this many radians to get to Pos Y: " << radiansToRotateBy << std::endl;
@@ -246,12 +238,11 @@ void QMBoolIsPointWithinPBZMassSide::rotateTriangleAroundX(QuatRotationPoints* i
 	in_rotationRecordStack->push(s1record);
 }
 
-float QMBoolIsPointWithinPBZMassSide::findRadiansForRoateTriangleAroundX(glm::vec3 in_vec3)
+float QMFindPointToMassRelationship::findRadiansForRotateTriangleAroundX(glm::vec3 in_vec3)
 {
-
 	// The overarching goal is to get to POS Y for this 3rd point (3rd point is the value that was passed in)
 	//std::cout << ">>>>> vec3 value is: " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
-	qmBoolBaseLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
+	qmRelationshipLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
 
 	float degreesToRotateOnX = 0.0f;
 	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
@@ -320,7 +311,18 @@ float QMBoolIsPointWithinPBZMassSide::findRadiansForRoateTriangleAroundX(glm::ve
 	return degreesToRotateOnX;
 }
 
-float QMBoolIsPointWithinPBZMassSide::roundZValueToThousandths(float in_z)
+glm::quat QMFindPointToMassRelationship::createQuaternion(float radians, glm::vec3 in_angle)
+{
+	glm::quat returnQuat;
+
+	// a = angle of rotation, in radians
+	// R = [cos(a/2), sin(a/2)*x, sin(a/2)*y, sin(a/2)*z] quaternion formula
+	// 90 degrees = 1.5708 radians
+	returnQuat = glm::quat(cos(radians / 2), sin(radians / 2)*in_angle.x, sin(radians / 2)*in_angle.y, sin(radians / 2)*in_angle.z);
+	return returnQuat;
+}
+
+float QMFindPointToMassRelationship::roundZValueToThousandths(float in_z)
 {
 	float returnValue;
 	returnValue = float(floor(in_z * 1000 + 0.5) / 1000);

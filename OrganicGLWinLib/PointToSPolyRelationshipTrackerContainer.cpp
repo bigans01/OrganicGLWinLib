@@ -141,6 +141,8 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 	PolyLogger currentPointLogger;
 	currentPointLogger.setDebugLevel(in_polyDebugLevel);
 	std::vector<int> removableIDs;
+
+	PointToMassTrial massTrial;
 	auto relationshipTrackerContainerBegin = relationshipTrackerContainer.begin();
 	auto relationshipTrackerContainerEnd = relationshipTrackerContainer.end();
 	for (; relationshipTrackerContainerBegin != relationshipTrackerContainerEnd; relationshipTrackerContainerBegin++)
@@ -169,10 +171,20 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 			shellSliceclippingShellMapCopy.erase(shellSliceSPolyID);					// ...and erase the ID of the SPoly that we're doing a shell slice for from it
 			glm::vec3 relatedSPolyEmptyNormal = relatedSPolysBegin->second.relatedSPolyEmptyNormal;	// we need the empty normal of the SPoly we're doing a shell slice for
 
-			// construct the shell slicer, run it
-
+			// insert a new MassZoneShellSlice into the appropriate PointToMassRelationshipJudge, by using the current value of pointToCompare.
+			massTrial.insertShellSlice(pointToCompare, relatedSPolysBegin->first, targetSTriangleRef, relatedSPolyEmptyNormal, shellSliceclippingShellMapCopy);
 		}
 	}
+
+	// optional: print the judges of the PointToMassTrial
+	if (currentPointLogger.isLoggingSet())
+	{
+		currentPointLogger.log("(PointTOSPolyRelationshipTrackerContainer): printing judge data...", "\n");
+		massTrial.printJudgeMetaData();
+	}
+
+	// run the judgements.
+	massTrial.executeAllJudgements();
 
 	// if there any ids in the vector, remove them appropriate ID from the container.
 	auto removalVectorBegin = removableIDs.begin();

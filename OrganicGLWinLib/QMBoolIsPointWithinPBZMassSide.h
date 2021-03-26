@@ -21,7 +21,7 @@ class QMBoolIsPointWithinPBZMassSide : public QMBoolBase
 		void rotateTriangleAroundX(QuatRotationPoints* in_quatRotationPointsRef,
 									std::stack<QuatRotationRecord>* in_rotationRecordStack);
 		float findRadiansForRoateTriangleAroundX(glm::vec3 in_vec3);
-		float roundZValueToTenThousandths(float in_z);
+		float roundZValueToThousandths(float in_z);
 };
 
 #endif

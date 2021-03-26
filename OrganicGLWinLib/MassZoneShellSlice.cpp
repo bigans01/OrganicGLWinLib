@@ -26,3 +26,8 @@ void MassZoneShellSlice::runAnalysis()
 
 	}
 }
+
+PointToMassRelationshipType MassZoneShellSlice::getAnalysisResult()
+{
+	return analysisResult;
+}

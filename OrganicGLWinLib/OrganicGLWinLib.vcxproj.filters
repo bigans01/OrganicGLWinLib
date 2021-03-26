@@ -882,6 +882,18 @@
     <ClInclude Include="MassZoneShellSlice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMFindPointToMassRelationship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationshipJudge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassTrial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MappableJudge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1305,6 +1317,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MassZoneShellSlice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFindPointToMassRelationship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PointToMassRelationshipJudge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PointToMassTrial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

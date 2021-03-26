@@ -12,6 +12,7 @@
 #include <vector>
 #include "QuatUtils.h"
 #include "SPoly.h"
+#include "PointToMassTrial.h"
 
 class PointToSPolyRelationshipTrackerContainer
 {
