@@ -159,17 +159,18 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 			// for the current SPoly we're analyzing for the point, we must pass the following into a ShellSlice constructor:
 			//
 			// -a reference to the STriangle in the SPoly we're looking at in relatedSPolyBegin
-			// -get the ID of the SPoly, and subtract it from a copy of the in_clippingShellMap. 
+			// -get the ID of the SPoly that we're looking at the PBZ of, and subtract it from a copy of the in_clippingShellMap. 
 			// -get the empty normal of this SPoly.
 			// -the point that we're comparing
 
 			STriangle* targetSTriangleRef = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef;	// get the STriangle of the related SPoly.
-			int relatedSPolyID = relatedSPolysBegin->first;
-			auto clippingShellMapCopy = in_clippingShellMapCopy;		// create a copy, 
-			clippingShellMapCopy.erase(relatedSPolyID);					// erase the ID of the SPoly that we're doing a shell slice for from it
-			glm::vec3 relatedSPolyEmptyNormal = relatedSPolysBegin->second.relatedSPolyEmptyNormal;
+			int shellSliceSPolyID = relatedSPolysBegin->first;			// the ID of the SPoly that we're doing a ShellSlice for.
+			auto shellSliceclippingShellMapCopy = in_clippingShellMapCopy;		// create a copy, of all the shells in the map...
+			shellSliceclippingShellMapCopy.erase(shellSliceSPolyID);					// ...and erase the ID of the SPoly that we're doing a shell slice for from it
+			glm::vec3 relatedSPolyEmptyNormal = relatedSPolysBegin->second.relatedSPolyEmptyNormal;	// we need the empty normal of the SPoly we're doing a shell slice for
 
 			// construct the shell slicer, run it
+
 		}
 	}
 

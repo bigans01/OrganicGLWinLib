@@ -288,6 +288,7 @@
     <ClInclude Include="MassZoneBoxType.h" />
     <ClInclude Include="MassZoneMaster.h" />
     <ClInclude Include="MassZonePointClipper.h" />
+    <ClInclude Include="MassZoneShellSlice.h" />
     <ClInclude Include="MassZoneType.h" />
     <ClInclude Include="MeshMatterMeta.h" />
     <ClInclude Include="NonBoundMerger.h" />
@@ -518,6 +519,7 @@
     <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />
     <ClCompile Include="MassZoneMaster.cpp" />
     <ClCompile Include="MassZonePointClipper.cpp" />
+    <ClCompile Include="MassZoneShellSlice.cpp" />
     <ClCompile Include="MeshMatterMeta.cpp" />
     <ClCompile Include="NextCleaveSequenceFinder.cpp" />
     <ClCompile Include="NonBoundMerger.cpp" />

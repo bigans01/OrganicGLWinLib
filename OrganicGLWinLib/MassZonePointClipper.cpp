@@ -78,6 +78,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	auto currentPointToAnalyzeEnd = currentRelationshipMap.relationshipMap.end();
 	for (; currentPointToAnalyzeBegin != currentPointToAnalyzeEnd; currentPointToAnalyzeBegin++)
 	{
+		OperableIntSet currentPointSPolyIDsOfFoundPBZs;		// optional; contains the SPolyIDs of PBZs that this point was found  in.
 		glm::vec3 pointToCompareFor = currentPointToAnalyzeBegin->second.point;
 		auto clippingShellMapBegin = clippingShellMap.begin();
 		auto clippingShellMapEnd = clippingShellMap.end();
@@ -104,8 +105,11 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				
 				if (checkIfPointIsWithinPBZ(pointToCompareFor, *currentSTriangleRef) == true)
 				{
-					clipperPolyLogger.log("(MassZonePointClipper): point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, ", ", " was found as being within PBZ. ", "\n");
+					clipperPolyLogger.log("(MassZonePointClipper): point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, 
+										   ", ", " was found as being within the PBZ of the clipping shell SPoly with ID ", clippingShellMapBegin->first, ", in STriangle with ID ", x, "\n");
 					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef, currentClippingShellSPolyRef->polyEmptyNormal);
+					currentPointSPolyIDsOfFoundPBZs.intSet.insert(clippingShellMapBegin->first);
+					break;	// break, as we should only need one STriangle from the SPoly to match.
 				}
 				else
 				{
@@ -124,6 +128,13 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				
 				// ...
 			}
+		}
+
+		// optional: print the points of SPolys that the current point to analyze was found as being within.
+		if (clipperPolyLogger.isLoggingSet())
+		{
+			clipperPolyLogger.log("(MassZonePointClipper): Printing the IDs of SPolys, for the PBZs that the analyzed point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, "\n");
+			printClippingShellMapPointsViaSet(currentPointSPolyIDsOfFoundPBZs);
 		}
 	}
 
@@ -278,6 +289,17 @@ void MassZonePointClipper::printClippingShellMapPoints()
 	{
 		std::cout << "||||| Printing shell poly points: " << std::endl;
 		clippingBegin->second->printPoints();
+	}
+}
+
+void MassZonePointClipper::printClippingShellMapPointsViaSet(OperableIntSet in_sPolyIDs)
+{
+	auto setBegin = in_sPolyIDs.intSet.begin();
+	auto setEnd = in_sPolyIDs.intSet.end();
+	for (; setBegin != setEnd; setBegin++)
+	{
+		std::cout << ":::: Printing points for SPoly with ID: " << *setBegin << std::endl;
+		clippingShellMap[*setBegin]->printPoints();
 	}
 }
 

@@ -879,6 +879,9 @@
     <ClInclude Include="IntersectionFindingAttempt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MassZoneShellSlice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1299,6 +1302,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CuttableTriangleLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneShellSlice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -43,6 +43,7 @@ class MassZonePointClipper
 		bool runFirstTwoDisqualificationPasses(BorderLineLinkContainer* in_borderLineLinkContainerRef, PointToSPolyRelationshipTrackerContainer* in_trackerContainerRef);
 		void setClipperDebugLevel(PolyDebugLevel in_polyDebugLevel, std::string in_zoneString);
 		void printClippingShellMapPoints();
+		void printClippingShellMapPointsViaSet(OperableIntSet in_sPolyIDs);
 		PolyLogger clipperPolyLogger;
 		PolyDebugLevel clipperPolyLoggerDebugLevel = PolyDebugLevel::NONE;
 		std::string zoneString = "";		// would be set, when calling setDebugLevel.

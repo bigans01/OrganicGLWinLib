@@ -175,3 +175,16 @@ bool QuatUtils::isPointWithinMassOfPBZ(
 	isWithinMass = massSideChecker.solve(&checkPoints, in_polyDebugLevel);
 	return isWithinMass;
 }
+
+PointToMassRelationshipType QuatUtils::findPointToMassRelationship(
+	glm::vec3 in_pointToCompare,
+	glm::vec3 in_trianglePoint0,
+	glm::vec3 in_trianglePoint1,
+	glm::vec3 in_trianglePoint2,
+	glm::vec3 in_triangleEmptyNormal,
+	PolyDebugLevel in_polyDebugLevel
+)
+{
+	PointToMassRelationshipType determinedType = PointToMassRelationshipType::NOVAL;
+	return determinedType;
+}
