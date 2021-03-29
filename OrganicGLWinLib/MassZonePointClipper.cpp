@@ -227,14 +227,14 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		(areAllPointsWithinShell == true)
 	)
 	{
-		//willBePurged = true;
+		willBePurged = true;
 		//printClippingShellMapPoints();
 
 		
 		clipperPolyLogger.log("(MassZonePointClipper): Entered check 2.3. ", "\n");
 		// CHECK 2.3
 		
-		
+		/*
 		if (relationshipTrackerContainer.checkForAnyPointsWithSingleSPoly() == false)
 		{
 			// Need to test why the below code needs to be called; not sure if it's even useful. (3/8/2021).
@@ -265,7 +265,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 			//std::cout << "!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing." << std::endl;
 			clipperPolyLogger.log("(MassZonePointClipper) ", zoneString,"!! Notice: at least one point was detected as having only one SPoly-PBZ relationship; discontinuing.", "\n");
 		}
-		
+		*/
 	}
 	
 	if (clipperPolyLogger.isLoggingSet() == true)

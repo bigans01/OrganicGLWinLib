@@ -91,7 +91,8 @@ void MassZoneShellSlice::runAnalysis()
 				std::cout << "Distance value at index: " << currentIndex << ": " << *distancesBegin << std::endl;
 				if (*distancesBegin < currentShortestDistance)
 				{
-					int currentShortestIndex = currentIndex;
+					currentShortestIndex = currentIndex;
+					std::cout << "!!! Notice: currentShortestIndex is now: " << currentIndex << std::endl;
 					currentShortestDistance = *distancesBegin;
 				}
 				currentIndex++;
@@ -102,6 +103,13 @@ void MassZoneShellSlice::runAnalysis()
 			if (currentShortestIndex != 0)
 			{
 				std::cout << "!!! Notice: no line of sight between the MassZoneShellSlice' base STriangle and the compared-to point!" << std::endl;
+				analysisResult = PointToMassRelationshipType::NO_LINE_OF_SIGHT;
+			}
+
+			// otherwise, line of sight is maintained. 
+			else if (currentShortestIndex == 0)
+			{
+				analysisResult = PointToMassRelationshipType::WITHIN_MASS;
 			}
 		}
 		else

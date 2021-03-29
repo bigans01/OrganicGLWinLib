@@ -74,6 +74,9 @@ void PointToMassTrial::executeAllJudgements()
 	auto judgeMapEnd = judgeMap.end();
 	for (; judgeMapBegin != judgeMapEnd; judgeMapBegin++)
 	{
-		judgeMapBegin->second.runJudgements();
+		if (judgeMapBegin->second.runJudgements() == true)	// if the point should be clipped, insert that judged point into the vector.
+		{
+			clippablePointsVector.push_back(judgeMapBegin->second.point);
+		}
 	}
 }

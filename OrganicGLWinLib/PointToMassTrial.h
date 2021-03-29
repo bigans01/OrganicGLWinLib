@@ -17,6 +17,7 @@ class PointToMassTrial
 			std::map<int, SPoly*> in_shellSliceClippingShellMap);
 		void printJudgeMetaData();
 		void executeAllJudgements();
+		std::vector<glm::vec3> clippablePointsVector;	// contains any points that should be clipped from PointToSPolyRelationshipTrackerContainer
 	private:
 		std::map<int, MappableJudge> judgeMap;
 };

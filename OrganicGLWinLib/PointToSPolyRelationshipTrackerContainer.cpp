@@ -186,6 +186,22 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 	// run the judgements.
 	massTrial.executeAllJudgements();
 
+	// get the vector of removable points in the MassTrial, and check how they match up against the relationships.
+	auto trialRemovablePointsBegin = massTrial.clippablePointsVector.begin();
+	auto trialRemovablePointsEnd = massTrial.clippablePointsVector.end();
+	for (; trialRemovablePointsBegin != trialRemovablePointsEnd; trialRemovablePointsBegin++)
+	{
+		auto containerBegin = relationshipTrackerContainer.begin();
+		auto containerEnd = relationshipTrackerContainer.end();
+		for (; containerBegin != containerEnd; containerBegin++)
+		{
+			if (*trialRemovablePointsBegin == containerBegin->second.point)
+			{
+				removableIDs.push_back(containerBegin->first);
+			}
+		}
+	}
+
 	// if there any ids in the vector, remove them appropriate ID from the container.
 	auto removalVectorBegin = removableIDs.begin();
 	auto removalVectorEnd = removableIDs.end();

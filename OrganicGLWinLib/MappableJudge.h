@@ -22,9 +22,9 @@ class MappableJudge
 			return (point == in_point);
 		}
 
-		void runJudgements()
+		bool runJudgements()
 		{
-			judge.executeJudgementOnShellSlices();	// run the judgements on all shell slices in the underlying judge.
+			return judge.executeJudgementOnShellSlices();	// run the judgements on all shell slices in the underlying judge.
 		}
 };
 
