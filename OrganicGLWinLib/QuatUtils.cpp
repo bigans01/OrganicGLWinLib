@@ -186,5 +186,20 @@ PointToMassRelationshipType QuatUtils::findPointToMassRelationship(
 )
 {
 	PointToMassRelationshipType determinedType = PointToMassRelationshipType::NOVAL;
+	QuatRotationPoints massPoints;
+	glm::vec3 pointToCompareCopy = in_pointToCompare;
+	glm::vec3 in_trianglePoint0Copy = in_trianglePoint0;
+	glm::vec3 in_trianglePoint1Copy = in_trianglePoint1;
+	glm::vec3 in_trianglePoint2Copy = in_trianglePoint2;
+	glm::vec3 in_triangleEmptyNormalCopy = in_triangleEmptyNormal;	
+	massPoints.insertPointRefs(
+									&pointToCompareCopy,
+									&in_trianglePoint0Copy,
+									&in_trianglePoint1Copy,
+									&in_trianglePoint2Copy,
+									&in_triangleEmptyNormalCopy
+								);
+	QMFindPointToMassRelationship relationshipChecker;
+	determinedType = relationshipChecker.solve(&massPoints, in_polyDebugLevel);
 	return determinedType;
 }

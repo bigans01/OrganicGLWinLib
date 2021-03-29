@@ -9,6 +9,9 @@
 #include "SPoly.h"
 #include "PointToMassRelationshipType.h"
 #include "QuatUtils.h"
+#include "Ray.h"
+#include "RaycastIntersectionTest.h"
+#include "RayIntersectionResult.h"
 
 class MassZoneShellSlice
 {

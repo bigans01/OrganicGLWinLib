@@ -180,7 +180,7 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 	if (currentPointLogger.isLoggingSet())
 	{
 		currentPointLogger.log("(PointTOSPolyRelationshipTrackerContainer): printing judge data...", "\n");
-		massTrial.printJudgeMetaData();
+		//massTrial.printJudgeMetaData();
 	}
 
 	// run the judgements.

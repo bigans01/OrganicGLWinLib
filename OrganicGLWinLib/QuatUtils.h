@@ -18,6 +18,7 @@
 #include "Vec3Result.h"
 #include "PolyDebugLevel.h"
 #include "PointToMassRelationshipType.h"
+#include "QMFindPointToMassRelationship.h"
 
 class QuatUtils
 {

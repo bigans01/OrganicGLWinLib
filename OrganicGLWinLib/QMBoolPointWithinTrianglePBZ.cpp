@@ -6,6 +6,10 @@ bool QMBoolPointWithinTrianglePBZ::solve(QuatRotationPoints* in_quatRotationPoin
 	// set debug level
 	qmBoolBaseLogger.setDebugLevel(in_polyDebugLevel);
 	qmBoolBaseLoggerDebugLevel = in_polyDebugLevel;
+	//qmBoolBaseLogger.setDebugLevel(PolyDebugLevel::DEBUG);
+	//qmBoolBaseLoggerDebugLevel = PolyDebugLevel::DEBUG;
+
+
 
 	bool returnValue = false;
 	bool planeArrayCheckResult[3];
@@ -258,8 +262,8 @@ bool QMBoolPointWithinTrianglePBZ::runTriangleLinePlanarityTestForPoint(QuatRota
 	// The centroid must be in a position where it is also within the ZY plane. If it is X= 0, that's fine; otherwise,
 	// rotate to positive Y.
 	//if (pointCRef->y != 1.0f)
-	if (pointCRef->x != 0.0f)		// when rotated towards positive or negative y, the x value should be 0.
-	{
+	//if (pointCRef->x != 0.0f)		// when rotated towards positive or negative y, the x value should be 0.
+	//{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
 		glm::vec3 currentNormalValue = *rotationpointsRefVector->getPointRefByIndex(3);	// get a copy of the value of the centroid-facing normal
 		float radiansToRotateBy = getRadiansForRotateToPosYViaX(currentNormalValue);	// get the number of radians to rotate by
@@ -273,7 +277,7 @@ bool QMBoolPointWithinTrianglePBZ::runTriangleLinePlanarityTestForPoint(QuatRota
 		glm::quat fractureQuat = s1record.returnOriginalRotation();
 		rotationpointsRefVector->applyQuaternion(fractureQuat);	// rotate all values by this one
 		rotationRecords.push(s1record);
-	}
+	//}
 
 
 	/*
@@ -499,6 +503,11 @@ bool QMBoolPointWithinTrianglePBZ::runRotationsAndPlanarityTest(glm::vec3* in_po
 	{
 		//std::cout << "!!!! Point is WITHIN triangle! " << std::endl;
 		qmBoolBaseLogger.log("(QMBoolPointWithinTrianglePBZ) >>> (****PLANARITY TEST****) Found as being WITHIN plane! ", "\n");
+		if (qmBoolBaseLogger.isLoggingSet())
+		{
+			std::cout << "!!!! Points are: " << std::endl;
+			in_quatRotationPointsRef->printPoints();
+		}
 		isWithinPlane = true;
 	}
 	else

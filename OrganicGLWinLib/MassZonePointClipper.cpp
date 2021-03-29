@@ -107,9 +107,15 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				if (checkIfPointIsWithinPBZ(pointToCompareFor, *currentSTriangleRef) == true)
 				{
 					clipperPolyLogger.log("(MassZonePointClipper): point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, 
-										   ", ", " was found as being within the PBZ of the clipping shell SPoly with ID ", clippingShellMapBegin->first, ", in STriangle with ID ", x, "\n");
+										   ", ", " was found as being within the PBZ of the clipping shell SPoly with ID ", clippingShellMapBegin->first, ", in STriangle with ID ", x, " | ",
+						                   " Points of triangle: ", currentSTriangleRef->triangleLines[0].pointA.x, ", ", currentSTriangleRef->triangleLines[0].pointA.y, ", ", currentSTriangleRef->triangleLines[0].pointA.z, " | ",
+																	currentSTriangleRef->triangleLines[1].pointA.x, ", ", currentSTriangleRef->triangleLines[1].pointA.y, ", ", currentSTriangleRef->triangleLines[1].pointA.z, " | ", 
+																	currentSTriangleRef->triangleLines[2].pointA.x, ", ", currentSTriangleRef->triangleLines[2].pointA.y, ", ", currentSTriangleRef->triangleLines[2].pointA.z, "\n" );
+											
 					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef, currentClippingShellSPolyRef->polyEmptyNormal);
 					currentPointSPolyIDsOfFoundPBZs.intSet.insert(clippingShellMapBegin->first);
+					//clipperPolyLogger.log("(MassZonePointClipper): waiting for input, to continue...", "\n");
+					//clipperPolyLogger.waitForDebugInput();
 					break;	// break, as we should only need one STriangle from the SPoly to match.
 				}
 				else
@@ -422,4 +428,5 @@ bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, ST
 		}
 	}
 	return QuatUtils::checkIfPointLiesWithinTrianglePBZ(pointToCheckCopy, sTriangleCopy.triangleLines[0].pointA, sTriangleCopy.triangleLines[1].pointA, sTriangleCopy.triangleLines[2].pointA);
+	//return QuatUtils::checkIfPointLiesWithinTrianglePBZDebug(pointToCheckCopy, sTriangleCopy.triangleLines[0].pointA, sTriangleCopy.triangleLines[1].pointA, sTriangleCopy.triangleLines[2].pointA, PolyDebugLevel::DEBUG);
 }
