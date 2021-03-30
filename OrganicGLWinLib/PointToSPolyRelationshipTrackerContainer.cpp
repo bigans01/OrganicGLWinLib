@@ -172,7 +172,12 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 			glm::vec3 relatedSPolyEmptyNormal = relatedSPolysBegin->second.relatedSPolyEmptyNormal;	// we need the empty normal of the SPoly we're doing a shell slice for
 
 			// insert a new MassZoneShellSlice into the appropriate PointToMassRelationshipJudge, by using the current value of pointToCompare.
-			massTrial.insertShellSlice(pointToCompare, relatedSPolysBegin->first, targetSTriangleRef, relatedSPolyEmptyNormal, shellSliceclippingShellMapCopy);
+			massTrial.insertShellSlice(pointToCompare, 
+										relatedSPolysBegin->first,											// ID of the SPoly
+										relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->first,	// ID of the STriangle
+										targetSTriangleRef, 
+										relatedSPolyEmptyNormal, 
+										shellSliceclippingShellMapCopy);
 		}
 	}
 

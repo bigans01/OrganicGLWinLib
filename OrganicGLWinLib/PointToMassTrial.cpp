@@ -1,16 +1,24 @@
 #include "stdafx.h"
 #include "PointToMassTrial.h"
 
-void PointToMassTrial::insertShellSlice(glm::vec3 in_pointToJudge, int in_sPolyID,
-	STriangle* in_sTriangleRef,
-	glm::vec3 in_shellSliceBaseEmptyNormal,
-	std::map<int, SPoly*> in_shellSliceClippingShellMap)
+void PointToMassTrial::insertShellSlice(glm::vec3 in_pointToJudge, 
+										int in_sPolyID,
+										int in_sTriangleID,
+										STriangle* in_sTriangleRef,
+										glm::vec3 in_shellSliceBaseEmptyNormal,
+										std::map<int, SPoly*> in_shellSliceClippingShellMap
+										)
 {
 	// first, check for any existing points.
 	if (judgeMap.size() == 0) // it's empty, just do a typical insert.
 	{
 		judgeMap[0].point = in_pointToJudge;	// set the point at the first index, so we can match against it later.
-		judgeMap[0].judge.insertShellSliceForSPolyID(in_sPolyID, in_sTriangleRef, in_shellSliceBaseEmptyNormal, in_pointToJudge, in_shellSliceClippingShellMap);
+		judgeMap[0].judge.insertShellSliceForSPolyID(in_sPolyID, 
+													in_sTriangleID, 
+													in_sTriangleRef, 
+													in_shellSliceBaseEmptyNormal, 
+													in_pointToJudge, 
+													in_shellSliceClippingShellMap);
 	}
 	else if (judgeMap.size() != 0)
 	{
@@ -32,7 +40,12 @@ void PointToMassTrial::insertShellSlice(glm::vec3 in_pointToJudge, int in_sPolyI
 		// if we DID find it, just update that existing judge.
 		if (doesPointAlreadyExist == true)
 		{
-			judgeMap[foundPointIndexValue].judge.insertShellSliceForSPolyID(in_sPolyID, in_sTriangleRef, in_shellSliceBaseEmptyNormal, in_pointToJudge, in_shellSliceClippingShellMap);
+			judgeMap[foundPointIndexValue].judge.insertShellSliceForSPolyID(in_sPolyID, 
+																			in_sTriangleID, 
+																			in_sTriangleRef, 
+																			in_shellSliceBaseEmptyNormal, 
+																			in_pointToJudge, 
+																			in_shellSliceClippingShellMap);
 		}
 
 		// if we DID NOT find it, we need to insert a new point into the map.
@@ -40,7 +53,12 @@ void PointToMassTrial::insertShellSlice(glm::vec3 in_pointToJudge, int in_sPolyI
 		{
 			int newIndexToUse = judgeMap.size();	// size of a map also equals the next index to use for map. (in our case)
 			judgeMap[newIndexToUse].point = in_pointToJudge;
-			judgeMap[newIndexToUse].judge.insertShellSliceForSPolyID(in_sPolyID, in_sTriangleRef, in_shellSliceBaseEmptyNormal, in_pointToJudge, in_shellSliceClippingShellMap);
+			judgeMap[newIndexToUse].judge.insertShellSliceForSPolyID(in_sPolyID, 
+																	in_sTriangleID, 
+																	in_sTriangleRef, 
+																	in_shellSliceBaseEmptyNormal, 
+																	in_pointToJudge, 
+																	in_shellSliceClippingShellMap);
 		}
 	}
 

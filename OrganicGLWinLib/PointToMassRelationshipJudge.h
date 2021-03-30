@@ -10,6 +10,7 @@ class PointToMassRelationshipJudge
 {
 	public:
 		void insertShellSliceForSPolyID(int in_sPolyID,
+			int in_sTriangleID,
 			STriangle* in_sTriangleRef,
 			glm::vec3 in_shellSliceBaseEmptyNormal,
 			glm::vec3 in_relationshipPointToCompare,

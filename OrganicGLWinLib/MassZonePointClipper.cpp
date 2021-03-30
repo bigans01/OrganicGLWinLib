@@ -306,7 +306,7 @@ void MassZonePointClipper::printClippingShellMapPointsViaSet(OperableIntSet in_s
 	auto setEnd = in_sPolyIDs.intSet.end();
 	for (; setBegin != setEnd; setBegin++)
 	{
-		std::cout << ":::: Printing points for SPoly with ID: " << *setBegin << std::endl;
+		std::cout << ":::: Printing points for clipping shell SPoly with ID: " << *setBegin << std::endl;
 		clippingShellMap[*setBegin]->printPoints();
 	}
 }

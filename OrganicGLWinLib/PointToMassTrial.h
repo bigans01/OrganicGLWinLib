@@ -11,10 +11,13 @@
 class PointToMassTrial
 {
 	public:
-		void insertShellSlice(glm::vec3 in_pointToJudge, int in_sPolyID,
-			STriangle* in_sTriangleRef,
-			glm::vec3 in_shellSliceBaseEmptyNormal,
-			std::map<int, SPoly*> in_shellSliceClippingShellMap);
+		void insertShellSlice(glm::vec3 in_pointToJudge, 
+							int in_sPolyID,
+							int in_sTriangleID,
+							STriangle* in_sTriangleRef,
+							glm::vec3 in_shellSliceBaseEmptyNormal,
+							std::map<int, SPoly*> in_shellSliceClippingShellMap
+							);
 		void printJudgeMetaData();
 		void executeAllJudgements();
 		std::vector<glm::vec3> clippablePointsVector;	// contains any points that should be clipped from PointToSPolyRelationshipTrackerContainer

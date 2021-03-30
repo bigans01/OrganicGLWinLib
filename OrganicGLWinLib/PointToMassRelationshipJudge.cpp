@@ -2,12 +2,13 @@
 #include "PointToMassRelationshipJudge.h"
 
 void PointToMassRelationshipJudge::insertShellSliceForSPolyID(int in_sPolyID,
+	int in_sTriangleID,
 	STriangle* in_sTriangleRef,
 	glm::vec3 in_shellSliceBaseEmptyNormal,
 	glm::vec3 in_relationshipPointToCompare,
 	std::map<int, SPoly*> in_shellSliceClippingShellMap)
 {
-	MassZoneShellSlice newShellSlice(in_sTriangleRef, in_shellSliceBaseEmptyNormal, in_relationshipPointToCompare, in_shellSliceClippingShellMap);
+	MassZoneShellSlice newShellSlice(in_sTriangleRef, in_sPolyID, in_sTriangleID, in_shellSliceBaseEmptyNormal, in_relationshipPointToCompare, in_shellSliceClippingShellMap);
 	shellSliceMap[in_sPolyID] = newShellSlice;
 }
 
@@ -25,6 +26,7 @@ bool PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 	int noLineOfSightCount = 0;
 	for (; shellSlicesBegin != shellSlicesEnd; shellSlicesBegin++)
 	{
+		shellSlicesBegin->second.setShellSliceDebugLevel(PolyDebugLevel::DEBUG);
 		shellSlicesBegin->second.runAnalysis();
 		PointToMassRelationshipType currentAnalysisResult = shellSlicesBegin->second.getAnalysisResult();
 		if (currentAnalysisResult == PointToMassRelationshipType::COPLANAR_TO_STRIANGLE)
