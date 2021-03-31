@@ -15,6 +15,7 @@
 class CoplanarRelationshipTracker
 {
 	private:
+		friend class CoplanarRelationshipTrackerManager;
 		friend class SPolySet;
 
 		PolyDebugLevel relationshipTrackerDebugLevel = PolyDebugLevel::NONE;

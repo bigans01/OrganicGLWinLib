@@ -49,6 +49,7 @@ class MassZoneShellSlice
 		void setShellSliceDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		void runAnalysis();	// should only need to run once
 		void checkLineOfSightForWithinMassRelationship();
+		void checkLineOfSightForOutsideMassRelationship();
 
 };
 

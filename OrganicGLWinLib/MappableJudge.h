@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include "PointToMassRelationshipJudge.h"
+#include "IndividualVerdict.h"
 
 class MappableJudge
 {
@@ -22,7 +23,7 @@ class MappableJudge
 			return (point == in_point);
 		}
 
-		bool runJudgements()
+		IndividualVerdict runJudgements()
 		{
 			return judge.executeJudgementOnShellSlices();	// run the judgements on all shell slices in the underlying judge.
 		}

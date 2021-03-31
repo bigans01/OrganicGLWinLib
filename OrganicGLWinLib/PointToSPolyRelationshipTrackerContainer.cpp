@@ -186,6 +186,7 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 	{
 		currentPointLogger.log("(PointTOSPolyRelationshipTrackerContainer): printing judge data...", "\n");
 		//massTrial.printJudgeMetaData();
+		//currentPointLogger.waitForDebugInput();
 	}
 
 	// run the judgements.

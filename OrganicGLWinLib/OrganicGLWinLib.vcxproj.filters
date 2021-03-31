@@ -900,6 +900,18 @@
     <ClInclude Include="RaycastIntersectionTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoplanarRelationshipTrackerManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndividualVerdict.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MappableIndividualVerdict.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollectiveVerdictMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1335,6 +1347,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RaycastIntersectionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarRelationshipTrackerManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollectiveVerdictMachine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

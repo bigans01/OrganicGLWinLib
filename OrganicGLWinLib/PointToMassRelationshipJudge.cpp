@@ -12,7 +12,7 @@ void PointToMassRelationshipJudge::insertShellSliceForSPolyID(int in_sPolyID,
 	shellSliceMap[in_sPolyID] = newShellSlice;
 }
 
-bool PointToMassRelationshipJudge::executeJudgementOnShellSlices()
+IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 {
 	// a map for storing the analysis results of each shell slice.
 	//std::map<int, PointToMassRelationshipType> analysisMap;
@@ -70,7 +70,10 @@ bool PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 	//int waitVal = 3;
 	//std::cin >> waitVal;
 	// Step 2: analyze the results of each.
-	return determineVerdict();
+	IndividualVerdict individualResult(determineVerdict(), analysisMap);
+	return individualResult;
+	//return determineVerdict();
+
 }
 
 bool PointToMassRelationshipJudge::determineVerdict()

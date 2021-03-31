@@ -6,6 +6,7 @@
 #include <map>
 #include <glm/glm.hpp>
 #include "MappableJudge.h"
+#include "CollectiveVerdictMachine.h"
 
 
 class PointToMassTrial
@@ -23,6 +24,7 @@ class PointToMassTrial
 		std::vector<glm::vec3> clippablePointsVector;	// contains any points that should be clipped from PointToSPolyRelationshipTrackerContainer
 	private:
 		std::map<int, MappableJudge> judgeMap;
+		CollectiveVerdictMachine collectiveVerdicts;
 };
 
 #endif

@@ -217,7 +217,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 	int compCount2 = numberOfPolys;
 
-	// First pass: check for non-planar categorized lines to produce, but load any non-planar relationships we find into the
+	// Step 1: check for non-planar categorized lines to produce, but load any coplanar relationships we find into the
 	// coplanarTracker.
 	auto comparisonIterationsBegin = std::chrono::high_resolution_clock::now();
 	for (int x = 0; x < compCount2; x++)
@@ -319,6 +319,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	std::chrono::duration<double> comparisonIterationsElapsed = comparisonIterationsEnd - comparisonIterationsBegin;
 	std::cout << "#-> Comparisons time  > " << comparisonIterationsElapsed.count() << std::endl;
 
+	// Step 2:
 	// Build the non-SPoly based MassSubZones, for each MassZone, once all SPolys have been copied into the appropriate MassZone. The combination of temporal or artificial subzones, plus the actual "material" sPolys, should form a "MassZoneShell."
 	// 
 	// To do this:
@@ -334,18 +335,9 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 	
 
-	// Second pass: execute the relationships found in the coplanarTracker, if any
-	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
-	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
-	auto cuttingSequenceTestStart = std::chrono::high_resolution_clock::now();
-	coplanarTracker.runAllCuttingSequenceTests();
-	auto cuttingSequenceTestEnd = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> cuttingSequenceTestElapsed = cuttingSequenceTestEnd - cuttingSequenceTestStart;
-	std::cout << "#-> Cutting sequence test  time  > " << cuttingSequenceTestElapsed.count() << std::endl;
-	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 
-	// Lastly: build the CleaveSequences
+	// Step 3: build the CleaveSequences
 	for (int x = 0; x < compCount2; x++)
 	{
 		//secondaryPolys[x].sequenceFactory.printLinesInPool();
@@ -371,6 +363,15 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
 	zoneMaster.runPointClippers();
 
+	// Step 4: execute the relationships found in the coplanarTracker, if any
+	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
+	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
+	auto cuttingSequenceTestStart = std::chrono::high_resolution_clock::now();
+	coplanarTracker.runAllCuttingSequenceTests();
+	auto cuttingSequenceTestEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> cuttingSequenceTestElapsed = cuttingSequenceTestEnd - cuttingSequenceTestStart;
+	std::cout << "#-> Cutting sequence test  time  > " << cuttingSequenceTestElapsed.count() << std::endl;
+	//std::cout << "|||| Finished coplanar check..." << std::endl;		
 
 	/*
 	for (int x = 0; x < compCount2; x++)

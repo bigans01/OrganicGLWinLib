@@ -196,6 +196,7 @@
     <ClInclude Include="CleaveSequenceMetaTracker.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
+    <ClInclude Include="CollectiveVerdictMachine.h" />
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="CoplanarRelationshipDebugFlags.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
+    <ClInclude Include="CoplanarRelationshipTrackerManager.h" />
     <ClInclude Include="CutLine.h" />
     <ClInclude Include="CutLinePool.h" />
     <ClInclude Include="CutLinePoolGuide.h" />
@@ -264,6 +266,7 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
+    <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />
     <ClInclude Include="IntersectAnalyzerOption.h" />
@@ -277,6 +280,7 @@
     <ClInclude Include="IRLine.h" />
     <ClInclude Include="IRPointType.h" />
     <ClInclude Include="LineReactorBase.h" />
+    <ClInclude Include="MappableIndividualVerdict.h" />
     <ClInclude Include="MappableJudge.h" />
     <ClInclude Include="MassComparisonResult.h" />
     <ClInclude Include="MassSubZone.h" />
@@ -473,6 +477,7 @@
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CleaveSequenceMeta.cpp" />
+    <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="CoplanarCategorizedLineProducer.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
@@ -481,6 +486,7 @@
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />
+    <ClCompile Include="CoplanarRelationshipTrackerManager.cpp" />
     <ClCompile Include="CutLineTraceObserver.cpp" />
     <ClCompile Include="CutLineWelder.cpp" />
     <ClCompile Include="CuttableTriangle.cpp" />

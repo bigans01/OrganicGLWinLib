@@ -92,9 +92,29 @@ void PointToMassTrial::executeAllJudgements()
 	auto judgeMapEnd = judgeMap.end();
 	for (; judgeMapBegin != judgeMapEnd; judgeMapBegin++)
 	{
-		if (judgeMapBegin->second.runJudgements() == true)	// if the point should be clipped, insert that judged point into the vector.
+		IndividualVerdict currentVerdict = judgeMapBegin->second.runJudgements();
+		/*
+		if (currentVerdict.shouldBeClipped == true)	// if the point should be clipped, insert that judged point into the vector.
 		{
 			clippablePointsVector.push_back(judgeMapBegin->second.point);
 		}
+		*/
+		MappableIndividualVerdict mappableVerdict(judgeMapBegin->second.point, currentVerdict);
+		collectiveVerdicts.insertMappableIndividualVerdict(mappableVerdict);
 	}
+
+
+	if (collectiveVerdicts.doesAnomalousMassSPolyExist() == false)		// if this statement were true, an anomaly was detected and must be clipped.
+	{
+		auto individualVerdictsBegin = collectiveVerdicts.individualVerdictMap.begin();
+		auto individualVerdictsEnd = collectiveVerdicts.individualVerdictMap.end();
+		for (; individualVerdictsBegin != individualVerdictsEnd; individualVerdictsBegin++)
+		{
+			if (individualVerdictsBegin->second.shouldBeClipped == true)
+			{
+				clippablePointsVector.push_back(individualVerdictsBegin->second.point);
+			}
+		}
+	}
+	
 }
