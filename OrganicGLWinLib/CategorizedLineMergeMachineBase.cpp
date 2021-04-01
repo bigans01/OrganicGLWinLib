@@ -46,6 +46,15 @@ void CategorizedLineMergeMachineBase::extractCategorizedLines()
 																		&locationVector);
 			mergableASliceMap[mergableASliceCount++] = lineToMove;
 		}
+		else if (categorizedLineGroupRecordVectorBegin->categorizedLineIntersectionType == IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
+		{
+			std::cout << ">>>>>>>>>>> Found A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. " << std::endl;
+			cleaveSequenceFactoryRef->printLineCounts();
+			CategorizedLine lineToMove = cleaveSequenceFactoryRef->fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(
+																		categorizedLineGroupRecordVectorBegin->categorizedLineIndex,
+																		&locationVector);
+			mergableASliceSingleInterceptsPointPreciseMap[mergableASliceSingleInterceptsPointPreciseCount++] = lineToMove;
+		}
 	}
 
 	// remove the records from the group, when we're done extracting the categorized lines.
@@ -75,6 +84,14 @@ CategorizedLine CategorizedLineMergeMachineBase::fetchAndRemoveASliceMergeCandid
 	CategorizedLine returnLine = mergableASliceMap[in_fetchIndex];
 	mergableASliceMap.erase(in_fetchIndex);
 	mergableASliceCount--;
+	return returnLine;
+}
+
+CategorizedLine CategorizedLineMergeMachineBase::fetchAndRemoveASliceSingleInterceptsPointPreciseCandidate(int in_fetchIndex)
+{
+	CategorizedLine returnLine = mergableASliceSingleInterceptsPointPreciseMap[in_fetchIndex];
+	mergableASliceSingleInterceptsPointPreciseMap.erase(in_fetchIndex);
+	mergableASliceSingleInterceptsPointPreciseCount--;
 	return returnLine;
 }
 

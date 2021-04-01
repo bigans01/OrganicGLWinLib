@@ -58,10 +58,10 @@ void CategorizedLineColinearTester::runColinearTests()
 	for (int x = 0; x < 3; x++)
 	{
 		//std::cout << "|||||||||||||| (CoLinear Testing) Categorized Line Segment points are: point A " << categorizedLineSegment.a.x << ", " << categorizedLineSegment.a.y
-		//														   << " | point B " << categorizedLineSegment.b.x << ", " << categorizedLineSegment.b.y << std::endl;
-		//
+		//													   << " | point B " << categorizedLineSegment.b.x << ", " << categorizedLineSegment.b.y << std::endl;
+		
 		//std::cout << "|||||||||||||| (CoLinear Testing) array segment points are: point A " << segmentArray[x].a.x << ", " << segmentArray[x].a.y
-		//	<< " | point B " << segmentArray[x].b.x << ", " << segmentArray[x].b.y << std::endl;
+			//<< " | point B " << segmentArray[x].b.x << ", " << segmentArray[x].b.y << std::endl;
 
 		colinearTesterLogger.log("|||||||||||||| (CoLinear Testing) Categorized Line Segment points are: point A ", categorizedLineSegment.a.x, ", ", categorizedLineSegment.a.y, ", ",
 			" | point B", categorizedLineSegment.b.x, ", ", categorizedLineSegment.b.y, "\n");
@@ -69,7 +69,7 @@ void CategorizedLineColinearTester::runColinearTests()
 			" | point B ", segmentArray[x].b.x, ", ", segmentArray[x].b.y, "\n");
 
 
-
+		/*
 		TwoDLineSegmentIntersectAnalyzer comparator(categorizedLineSegment, segmentArray[x], IntersectAnalyzerOption::ROUND_CROSS, colinearTesterLogLevel);
 		if 
 		(
@@ -78,11 +78,40 @@ void CategorizedLineColinearTester::runColinearTests()
 			(hostSTriangle.triangleLines[x].isBorderLine == 1)	// we only care about COLINEAR_OVERLAPs if the line we are analyzing is a border line.
 		)
 		{
-
-			//std::cout << "!!! Warning: COLINEAR_OVERLAP detected! " << std::endl;
-			colinearTesterLogger.log("!!! Warning: COLINEAR_OVERLAP detected! ", "\n");
+			std::cout << "|||||||||||||| (CoLinear Testing) Categorized Line Segment points are: point A " << categorizedLineSegment.a.x << ", " << categorizedLineSegment.a.y
+																   << " | point B " << categorizedLineSegment.b.x << ", " << categorizedLineSegment.b.y << std::endl;
+			
+			std::cout << "|||||||||||||| (CoLinear Testing) array segment points are: point A " << segmentArray[x].a.x << ", " << segmentArray[x].a.y
+				<< " | point B " << segmentArray[x].b.x << ", " << segmentArray[x].b.y << std::endl;
+			std::cout << "!!! Warning: COLINEAR_OVERLAP detected! " << std::endl;
+			//colinearTesterLogger.log("!!! Warning: COLINEAR_OVERLAP detected! ", "\n");
 			colinearToBorderLineDetected = true;
 		}
+		*/
+		
+		
+		//int hardTestBegin = 3;
+		//std::cout << "!!! Preparing to run analyzerV2 against the segments. " << std::endl;
+		//std::cin >> hardTestBegin;
+		//TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(categorizedLineSegment, segmentArray[x], PolyDebugLevel::DEBUG);
+		TwoDLineSegmentIntersectAnalyzerV2 analyzerV2(categorizedLineSegment, segmentArray[x], PolyDebugLevel::NONE);
+		analyzerV2.performAnalysis();
+		if
+		(
+			(analyzerV2.analyzedResult.intersectType == TwoDLineSegmentIntersectType::COLINEAR)
+			&&
+			(hostSTriangle.triangleLines[x].isBorderLine == 1)	// we only care about COLINEAR_OVERLAPs if the line we are analyzing is a border line.
+		)
+		{
+
+			std::cout << "!!! Warning: COLINEAR_OVERLAP detected! " << std::endl;
+			//colinearTesterLogger.log("!!! Warning: COLINEAR_OVERLAP detected! ", "\n");
+			colinearToBorderLineDetected = true;
+		}
+		//std::cout << "!!! End of hard test. " << std::endl;
+		//int hardTestEnd = 3;
+		//std::cin >> hardTestEnd;
+		
 	}
 
 	/*

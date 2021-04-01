@@ -48,11 +48,12 @@ class CleaveSequenceFactory
 		PolyLogger cleaveSequenceFactoryLogger;
 		PolyDebugLevel mergerDebugLevel = PolyDebugLevel::NONE;
 
-		std::map<int, CategorizedLine> nonboundMap;	// contains NON_BOUND categorized lines.
-		std::map<int, CategorizedLine> partialboundMap;	// contains PARTIAL_BOUND categorized lines.
-		std::map<int, CategorizedLine> aslicedMap;	// contains A_SLICED categorized lines.
-		std::map<int, CategorizedLine> interceptsPointPreciseMap; // contains INTERCEPTS_POINT_PRECISE categorized lines.
+		std::map<int, CategorizedLine> nonboundMap;					// contains NON_BOUND categorized lines.
+		std::map<int, CategorizedLine> partialboundMap;				// contains PARTIAL_BOUND categorized lines.
+		std::map<int, CategorizedLine> aslicedMap;					// contains A_SLICED categorized lines.
+		std::map<int, CategorizedLine> interceptsPointPreciseMap;	// contains INTERCEPTS_POINT_PRECISE categorized lines.
 		std::map<int, CategorizedLine> aslicedSegmentEndpointMap;
+		std::map<int, CategorizedLine> aslicedSingleInterceptsPointPreciseMap;	// contains A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE categorized lines.
 		CategorizedLineGroupMap groupMap;
 
 		int nonboundCount = 0;
@@ -60,12 +61,14 @@ class CleaveSequenceFactory
 		int aslicedCount = 0;
 		int interceptsPointPreciseCount = 0;
 		int aslicedSegmentEndpointCount = 0;
+		int aslicedSingleInterceptsPointPreciseCount = 0;
 		std::map<int, CleaveSequence>* cleaveSequenceMapRef = NULL;	 // initialize as null
 
 		void insertNonboundLine(CategorizedLine in_line);
 		void insertPartialBoundLine(CategorizedLine in_line);
 		void insertAslicedLine(CategorizedLine in_line);
 		void insertAslicedSegmentEndpointLine(CategorizedLine in_line);
+		void insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
 		void clipTwinCategorizedLinesofInterceptPointPrecise();			// potenitally obsolete; this function clears out precise lines when the number is 2.
 		
@@ -77,18 +80,21 @@ class CleaveSequenceFactory
 		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
 
 		// fetch functions, that include a record push.
 		CategorizedLine fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 		CategorizedLine fetchAndRemovePartialBoundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 		CategorizedLine fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
+		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 		CategorizedLine fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 
 
 
 		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		void insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void invertAllEmptyNormals();
 		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);

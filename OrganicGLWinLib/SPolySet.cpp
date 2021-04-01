@@ -344,12 +344,19 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
 
 		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
+		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
+		/*
 		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
+		{
+			//zoneMaster.disqualifyMeshMatterMeta(x);
+		}
+		*/
+		if (secondaryPolys[x].cleaveMap.size() != 0)		// new code, as of 4/1/2021: an SPoly may only be disqualified if it actually managed to produce
+															// valid CleaveSequences.
 		{
 			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
-		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		//int buildVal = 3;
 		//std::cin >> buildVal;
 
@@ -532,11 +539,27 @@ int SPolySet::produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_h
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
 			{	
+				currentComparisonLogger.log("(SPolySet)	Reaction result produced a line! ", "\n");
+
+
 				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, coplanarTestDebugLevel);
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
+					currentComparisonLogger.log("(SPolySet)	Adding a categorized line! ", "\n");
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
 					numberOfIntersections++;
+				}
+				else
+				{
+					currentComparisonLogger.log("(SPolySet) Notice: CategorizedLine to add was detected as being colinear to host:", "\n");
+					std::cout << "!!! Notice: CategorizedLine was detected as being colinear to a line in the host STriangle. " << std::endl;
+					if (currentComparisonLogger.isLoggingSet())
+					{
+						currentComparisonLogger.log("(SPolySet): point A of categorized line: ", reactionResult.resultingLine.line.pointA.x, ", ", reactionResult.resultingLine.line.pointA.y, ", ", reactionResult.resultingLine.line.pointA.z, "\n");
+						currentComparisonLogger.log("(SPolySet): point B of categorized line: ", reactionResult.resultingLine.line.pointB.x, ", ", reactionResult.resultingLine.line.pointB.y, ", ", reactionResult.resultingLine.line.pointB.z, "\n");
+						currentComparisonLogger.log("(SPolySet): points of host STriangle: ", "\n");
+						hostTrianglePtr->printPoints();
+					}
 				}
 			}
 

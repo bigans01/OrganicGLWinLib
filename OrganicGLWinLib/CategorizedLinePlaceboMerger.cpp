@@ -29,6 +29,12 @@ void CategorizedLinePlaceboMerger::runMerging()
 		auto targetLineIterator = mergableASliceMap.begin();
 		mergedLineResult = fetchAndRemoveASliceMergeCandidate(targetLineIterator->first);
 	}
+	else if (mergableASliceSingleInterceptsPointPreciseCount == 1)
+	{
+		auto targetLineIterator = mergableASliceSingleInterceptsPointPreciseMap.begin();
+		mergedLineResult = fetchAndRemoveASliceSingleInterceptsPointPreciseCandidate(targetLineIterator->first);
+	}
+
 	else if (mergableInterceptsPointPreciseCount == 1)
 	{
 		auto targetLineIterator = mergableInterceptsPointPreciseMap.begin();

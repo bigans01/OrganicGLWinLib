@@ -132,7 +132,10 @@ void LineWelder::startWelding()
 		unusableSet = calculator.getUnusables();
 	}
 	else if (startingCategorizedLine->second.line.numberOfBorderLines == 2)	// if there is just one line, it'll have two border lines; now we must
-																			// get the borders from the pointA and pointB of this line.
+																			// get the borders from the pointA and pointB of this line; 
+																			// would be used for Lines of type:
+																			// -A_SLICE
+																			// -A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE
 	{
 		slicedFlag = true;
 

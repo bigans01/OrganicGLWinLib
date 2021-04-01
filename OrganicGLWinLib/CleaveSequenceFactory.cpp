@@ -68,6 +68,11 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!!! Adding A_SLICE_SEGMENT_ENDPOINT line", "\n");
 		insertAslicedSegmentEndpointLine(in_categorizedLine);
 	}
+	else if (in_categorizedLine.type == IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!!! Adding A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE line", "\n");
+		insertAslicedSingleInterceptsPointPrecise(in_categorizedLine);
+	}
 	else
 	{
 		//std::cout << "!!!! WARNING, other line type discovered..." << std::endl;
@@ -110,6 +115,12 @@ void CleaveSequenceFactory::insertAslicedSegmentEndpointLine(CategorizedLine in_
 	aslicedSegmentEndpointMap[aslicedSegmentEndpointCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE_SEGMENT_ENDPOINT, aslicedSegmentEndpointCount);
 	aslicedSegmentEndpointCount++;
+}
+void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line)
+{
+	aslicedSingleInterceptsPointPreciseMap[aslicedSingleInterceptsPointPreciseCount] = in_line;
+	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, aslicedSingleInterceptsPointPreciseCount);
+	aslicedSingleInterceptsPointPreciseCount++;
 }
 
 void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
@@ -172,6 +183,14 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
 	return returnLine;
 }
 
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex)
+{
+	CategorizedLine returnLine = aslicedSingleInterceptsPointPreciseMap[in_fetchIndex];
+	aslicedSingleInterceptsPointPreciseMap.erase(in_fetchIndex);
+	aslicedSingleInterceptsPointPreciseCount--;
+	return returnLine;
+}
+
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
 	CategorizedLine returnLine = aslicedMap[in_fetchIndex];
@@ -179,6 +198,16 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationP
 	in_categorizedLineGroupLocationVectorRef->push_back(location);
 	aslicedMap.erase(in_fetchIndex);
 	aslicedCount--;
+	return returnLine;
+}
+
+CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
+{
+	CategorizedLine returnLine = aslicedSingleInterceptsPointPreciseMap[in_fetchIndex];
+	CategorizedLineGroupLocation location = groupMap.fetchGroupRecordLocation(returnLine.parentPoly, IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, in_fetchIndex);
+	in_categorizedLineGroupLocationVectorRef->push_back(location);
+	aslicedSingleInterceptsPointPreciseMap.erase(in_fetchIndex);
+	aslicedSingleInterceptsPointPreciseCount--;
 	return returnLine;
 }
 
@@ -213,7 +242,10 @@ bool CleaveSequenceFactory::doesFactoryContainLines()
 		||
 		(aslicedCount > 0)
 		||
+		(aslicedSingleInterceptsPointPreciseCount > 0)
+		||
 		(interceptsPointPreciseCount > 0)
+		
 	)
 	{
 		result = true;
@@ -282,7 +314,7 @@ void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
 
 void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef)
 {
-	// invert nonbounds
+	// nonbounds points
 	auto nonBoundMapBegin = nonboundMap.begin();
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
@@ -295,7 +327,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		in_quatRotationPointsRef->insertPointRefs(&nonBoundMapBegin->second.line.pointA, &nonBoundMapBegin->second.line.pointB);
 	}
 
-	// invert partials
+	//  partial points
 	auto partialsBegin = partialboundMap.begin();
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
@@ -309,7 +341,7 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		in_quatRotationPointsRef->insertPointRefs(&partialsBegin->second.line.pointA, &partialsBegin->second.line.pointB);
 	}
 
-	// invert slices
+	// slice points
 	auto slicesBegin = aslicedMap.begin();
 	auto slicesEnd = aslicedMap.end();
 	for (; slicesBegin != slicesEnd; slicesBegin++)
@@ -320,7 +352,16 @@ void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExclud
 		in_quatRotationPointsRef->insertPointRefs(&slicesBegin->second.line.pointA, &slicesBegin->second.line.pointB);
 	}
 
-	// invert intercept_points_precise
+	// a_slice_single_intercepts_point_precise points
+	auto aSliceSingleInterceptsPointPreciseBegin = aslicedSingleInterceptsPointPreciseMap.begin();
+	auto aSliceSingleInterceptsPointPreciseEnd = aslicedSingleInterceptsPointPreciseMap.end();
+	for (; aSliceSingleInterceptsPointPreciseBegin != aSliceSingleInterceptsPointPreciseEnd; aSliceSingleInterceptsPointPreciseBegin++)
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Gathering A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE...", "\n");
+		in_quatRotationPointsRef->insertPointRefs(&aSliceSingleInterceptsPointPreciseBegin->second.line.pointA, &aSliceSingleInterceptsPointPreciseBegin->second.line.pointB);
+	}
+
+	// intercept_points_precise points
 	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
 	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
@@ -337,7 +378,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 	// insertion count
 	int insertionCount = 0;
 
-	// invert nonbounds
+	// load nonbound normals
 	auto nonBoundMapBegin = nonboundMap.begin();
 	auto nonBoundMapEnd = nonboundMap.end();
 	for (; nonBoundMapBegin != nonBoundMapEnd; nonBoundMapBegin++)
@@ -352,7 +393,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		insertionCount++;
 	}
 
-	// invert partials
+	// load partial normals
 	auto partialsBegin = partialboundMap.begin();
 	auto partialsEnd = partialboundMap.end();
 	for (; partialsBegin != partialsEnd; partialsBegin++)
@@ -369,7 +410,7 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		insertionCount++;
 	}
 
-	// invert slices
+	// load slice normals
 	auto slicesBegin = aslicedMap.begin();
 	auto slicesEnd = aslicedMap.end();
 	for (; slicesBegin != slicesEnd; slicesBegin++)
@@ -382,7 +423,17 @@ int CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRot
 		insertionCount++;
 	}
 
-	// invert intercept_points_precise
+	// load a_slice_single_intercepts_point_precise normals
+	auto aSliceSingleInterceptsPointPreciseBegin = aslicedSingleInterceptsPointPreciseMap.begin();
+	auto aSliceSingleInterceptsPointPreciseEnd = aslicedSingleInterceptsPointPreciseMap.end();
+	for (; aSliceSingleInterceptsPointPreciseBegin != aSliceSingleInterceptsPointPreciseEnd; aSliceSingleInterceptsPointPreciseBegin++)
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! acquiring A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE normal references...", "\n");
+		in_quatRotationPointsRef->insertPointRefs(&aSliceSingleInterceptsPointPreciseBegin->second.emptyNormal);
+		insertionCount++;
+	}
+
+	// load intercept_points_precise normals
 	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
 	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
 	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
@@ -420,6 +471,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of partials: ", partialboundCount, "\n");
 	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of precises: ", interceptsPointPreciseCount, "\n");
 	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slices: ", aslicedCount, "\n");
+	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slice single intercepts point precise: ", aslicedSingleInterceptsPointPreciseCount, "\n");
 	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slice segment endpoints: ", aslicedSegmentEndpointCount, "\n");
 
 	if (cleaveSequenceFactoryLogger.isLoggingSet())
@@ -484,6 +536,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of partials: ", partialboundCount, "\n");
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of precises: ", interceptsPointPreciseCount, "\n");
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slices: ", aslicedCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slice single intercepts point precise: ", aslicedSingleInterceptsPointPreciseCount, "\n");
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of a slice segment endpoints: ", aslicedSegmentEndpointCount, "\n");
 		cleaveSequenceFactoryLogger.waitForDebugInput();
 
 	}
@@ -498,7 +552,13 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	// Typical case 1: only do this if there are partial bound lines or a-sliced lines, and exactly 0 intereceptPointPreciseCount; this is the typical situation.
 	if
 	(
-		((partialboundCount > 0) || (aslicedCount > 0))
+		(
+			(partialboundCount > 0) 
+			|| 
+			(aslicedCount > 0)
+			||
+			(aslicedSingleInterceptsPointPreciseCount > 0)
+		)
 		&&
 		(interceptsPointPreciseCount == 0)	
 	)
@@ -598,6 +658,13 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 		aslicedBegin->second.determineCyclingDirection(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 	}
 
+	auto asliceSingleInterceptsPointPreciseBegin = aslicedSingleInterceptsPointPreciseMap.begin();
+	auto asliceSingleInterceptsPointPreciseEnd = aslicedSingleInterceptsPointPreciseMap.end();
+	for (; asliceSingleInterceptsPointPreciseBegin != asliceSingleInterceptsPointPreciseEnd; asliceSingleInterceptsPointPreciseBegin++)
+	{
+		asliceSingleInterceptsPointPreciseBegin->second.determineCyclingDirection(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
+	}
+
 	//std::cout << "!!! Size of partialBoundMap: " << partialboundMap.size() << std::endl;
 	//std::cout << "!!! Size of interceptsPointPreciseMap: " << interceptsPointPreciseMap.size() << std::endl;
 
@@ -615,6 +682,11 @@ void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequenc
 void CleaveSequenceFactory::insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASlice(in_lineIndex));
+}
+
+void CleaveSequenceFactory::insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
+{
+	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(in_lineIndex));
 }
 
 void CleaveSequenceFactory::insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
@@ -654,6 +726,14 @@ void CleaveSequenceFactory::invertAllEmptyNormals()
 		slicesBegin->second.emptyNormal *= -1.0f;
 	}
 
+	// invert A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE
+	auto aSliceSingleInterceptsPointPreciseBegin = aslicedSingleInterceptsPointPreciseMap.begin();
+	auto aSliceSingleInterceptsPointPreciseEnd = aslicedSingleInterceptsPointPreciseMap.end();
+	for (; aSliceSingleInterceptsPointPreciseBegin != aSliceSingleInterceptsPointPreciseEnd; aSliceSingleInterceptsPointPreciseBegin++)
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !! Inverting A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE...", "\n");
+		aSliceSingleInterceptsPointPreciseBegin->second.emptyNormal *= -1.0f;
+	}
 	// invert intercept_points_precise
 	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
 	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
@@ -1114,6 +1194,7 @@ void CleaveSequenceFactory::printLineCounts()
 	std::cout << "(CleaveSequenceFactory) partialBounds: " << partialboundCount << std::endl;
 	std::cout << "(CleaveSequenceFactory) precise: " << interceptsPointPreciseCount << std::endl;
 	std::cout << "(CleaveSequenceFactory) aslice: " << aslicedCount << std::endl;
+	std::cout << "(CleaveSequenceFactory) aslice single intercepts point precise: " << aslicedSingleInterceptsPointPreciseCount << std::endl;
 	std::cout << "(CleaveSequenceFactory) asliceSegmentEndPoint: " << aslicedSegmentEndpointCount << std::endl;
 }
 
@@ -1130,6 +1211,9 @@ void CleaveSequenceFactory::clearLinePools()
 
 	aslicedMap.clear();
 	aslicedCount = 0;
+
+	aslicedSingleInterceptsPointPreciseMap.clear();
+	aslicedSingleInterceptsPointPreciseCount = 0;
 }
 
 void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
@@ -1282,6 +1366,25 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		}
 
 
+	}
+
+	while (aslicedSingleInterceptsPointPreciseCount > 0)
+	{
+		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!", "\n");
+		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!" << std::endl;
+		/*
+		int hammerTime = 3;
+		while (hammerTime == 3)
+		{
+
+		}
+		*/
+		auto aslicedSingleInterceptsPointPreciseFirst = aslicedSingleInterceptsPointPreciseMap.begin();
+		int firstLineID = aslicedSingleInterceptsPointPreciseFirst->first;
+		CleaveSequence newSequence;
+		insertASliceSingleInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
+		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 	}
 }
 

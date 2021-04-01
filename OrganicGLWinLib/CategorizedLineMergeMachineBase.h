@@ -28,13 +28,16 @@ class CategorizedLineMergeMachineBase
 		std::map<int, CategorizedLine> mergableNonboundMap;
 		std::map<int, CategorizedLine> mergableInterceptsPointPreciseMap;
 		std::map<int, CategorizedLine> mergableASliceMap;
+		std::map<int, CategorizedLine> mergableASliceSingleInterceptsPointPreciseMap;
 		int mergablePartialBoundsCount = 0;
 		int mergableNonboundCount = 0;
 		int mergableInterceptsPointPreciseCount = 0;
 		int mergableASliceCount = 0;
+		int mergableASliceSingleInterceptsPointPreciseCount = 0;
 
 		CategorizedLine fetchAndRemovePartialBoundMergeCandidate(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveASliceMergeCandidate(int in_fetchIndex);
+		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPreciseCandidate(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveNonboundMergeCandidate(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptsPointPreciseMergeCandidate(int in_fetchIndex);
 		CategorizedLineSearchResult checkForNextNonboundMergeCandidate(glm::vec3 in_pointToSearch);

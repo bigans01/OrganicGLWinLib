@@ -8,6 +8,9 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 	// print out the counts of intercepts in each border line of the SPoly
 	// auto sPolyBordeLinesBegin = cleaveSequenceFactoryRef->sPolyRef
 
+	//std::cout << "||||||||||| printing factory line counts, before any modifications: " << std::endl;
+	//cleaveSequenceFactoryRef->printLineCounts();
+
 
 	// cycle through the CleaveSequenceFactory's CategorizedLineGroupMap, to generate the appropriate machine for each group, and then extract
 	// the categorized lines for each machine.

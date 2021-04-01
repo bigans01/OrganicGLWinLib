@@ -12,6 +12,7 @@
 #include "CoplanarMassManipulator.h"
 #include "TwoDLineSegment.h"
 #include "TwoDLineSegmentIntersectAnalyzer.h"
+#include "TwoDLineSegmentIntersectAnalyzerV2.h"
 #include "TwoDPoint.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"

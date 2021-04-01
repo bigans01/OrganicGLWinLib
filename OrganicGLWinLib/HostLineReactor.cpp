@@ -24,6 +24,7 @@ void HostLineReactor::runAnalysis()
 		{
 			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
 			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE.", "\n");
+			buildASliceSingleInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 		}
 	}
 
@@ -118,6 +119,50 @@ void HostLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, 
 	reactorBaseLogger.log("(HostLineReactor): pointABorder: ", resultantLine.line.pointABorder, "\n");
 	reactorBaseLogger.log("(HostLineReactor): pointBBorder: ", resultantLine.line.pointBBorder, "\n");
 	reactorBaseLogger.log("(HostLineReactor) : empty normal : ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
+}
+
+void HostLineReactor::buildASliceSingleInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
+{
+	reactorBaseLogger.log("(HostLineReactor): building A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE...", "\n");
+
+	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
+	FusedPointSubData subDataArray[2];
+	auto subDataRefBegin = subDataRef->begin();
+	auto subDataRefEnd = subDataRef->end();
+	int beginIndex = 0;
+	for (; subDataRefBegin != subDataRefEnd; subDataRefBegin++)
+	{
+		subDataArray[beginIndex++] = *subDataRefBegin;
+	}
+
+	// need to get border line ID from the other point.
+	std::vector<FusedPointSubData>* otherPointSubDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_otherPoint);
+	auto otherPointSubDataRefBegin = otherPointSubDataRef->begin();
+	FusedPointSubData otherSingleSubData = *otherPointSubDataRefBegin;
+
+	// testing, print out the contents of the sub data
+	for (int x = 0; x < 2; x++)
+	{
+		//std::cout << "Sub data at index " << x;
+		//std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
+		//std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+		reactorBaseLogger.log("(HostLineReactor) Sub data at index ", x, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : isBorderLine: ", subDataArray[x].isBorderLine, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : borderLineID: ", subDataArray[x].borderLineValue, "\n");
+	}
+
+	resultantLine.type = IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE;
+	resultantLine.line.pointA = in_buildStartPoint;							// point A is the precise point
+	resultantLine.line.isPointAOnBorder = 1;								
+	resultantLine.line.pointB = in_otherPoint;								// point B is the other point
+	resultantLine.line.isPointBOnBorder = 1;
+	resultantLine.line.pointBBorder = otherSingleSubData.borderLineValue;	// the border line ID for the other non-precise point of the slice line
+	resultantLine.createCategorizedLineOptionals();							// must be called to fill the smart pointer data.
+	resultantLine.insertOptionalDataForPoint(IRPointType::POINT_A, *subDataRef);	// fill point A of the optional data w/ the fused point data.
+	resultantLine.line.numberOfBorderLines = 2;
+	resultantLine.emptyNormal = guestFusionAnalysisRef->sPolyRef->polyEmptyNormal;
+
+
 }
 
 void HostLineReactor::buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)

@@ -30,6 +30,7 @@ class HostLineReactor : public LineReactorBase
 		void runAnalysis();
 
 		void buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);
+		void buildASliceSingleInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);
 		void buildPartialBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);
 		void buildASlice(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);
 		void buildNonBound(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint);

@@ -42,6 +42,10 @@ class CategorizedLineGroupMap
 					{
 						std::cout << "A_SLICE ";
 					}
+					else if (recordsBegin->categorizedLineIntersectionType == IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
+					{
+						std::cout << "A_SLICE_SINGLE_INTERCEPTS_POINT_PREICSE ";
+					}
 					else if (recordsBegin->categorizedLineIntersectionType == IntersectionType::INTERCEPTS_POINT_PRECISE)
 					{
 						std::cout << "INTERCEPTS_POINT_PRECISE ";

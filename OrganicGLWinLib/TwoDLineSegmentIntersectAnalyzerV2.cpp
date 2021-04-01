@@ -162,6 +162,7 @@ void TwoDLineSegmentIntersectAnalyzerV2::performAnalysis()
 		twoDLineSegmentIntersectV2Logger.log("(TwoDLineSegmentIntersectAnalyzerV2) Colinear Line B | point A: ", lineBPointA.x, ", ", lineBPointA.y, " | point B: ", lineBPointB.x, ", ", lineBPointB.y, "\n");
 		//int colinearTempStop = 3;
 		//std::cin >> colinearTempStop;
+		analyzedResult.intersectType = TwoDLineSegmentIntersectType::COLINEAR;
 		twoDLineSegmentIntersectV2Logger.waitForDebugInput();
 	}
 }

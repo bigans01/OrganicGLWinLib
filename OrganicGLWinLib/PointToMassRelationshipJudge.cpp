@@ -26,7 +26,8 @@ IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 	int noLineOfSightCount = 0;
 	for (; shellSlicesBegin != shellSlicesEnd; shellSlicesBegin++)
 	{
-		shellSlicesBegin->second.setShellSliceDebugLevel(PolyDebugLevel::DEBUG);
+		//shellSlicesBegin->second.setShellSliceDebugLevel(PolyDebugLevel::DEBUG);
+		shellSlicesBegin->second.setShellSliceDebugLevel(PolyDebugLevel::NONE);
 		shellSlicesBegin->second.runAnalysis();
 		PointToMassRelationshipType currentAnalysisResult = shellSlicesBegin->second.getAnalysisResult();
 		if (currentAnalysisResult == PointToMassRelationshipType::COPLANAR_TO_STRIANGLE)

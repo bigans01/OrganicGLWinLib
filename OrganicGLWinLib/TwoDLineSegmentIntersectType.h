@@ -5,6 +5,7 @@
 
 enum class TwoDLineSegmentIntersectType
 {
+	COLINEAR,
 	COLINEAR_OVERLAP,
 	COLINEAR_NOOVERLAP,
 	PARALLEL,
