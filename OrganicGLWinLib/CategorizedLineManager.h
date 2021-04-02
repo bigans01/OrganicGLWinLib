@@ -44,6 +44,7 @@ class CategorizedLineManager
 		std::map<int, CategorizedLine>::iterator getEndIteratorForType(IntersectionType in_intersectionType);
 
 	private:
+		friend class CategorizedLineMerger;
 		std::map<IntersectionType, CategorizedLineContainer> containerMap;
 		CategorizedLineGroupMap managerGrpMap;
 		PolyLogger categorizedLineManagerLogger;

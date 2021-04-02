@@ -14,8 +14,10 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 
 	// cycle through the CleaveSequenceFactory's CategorizedLineGroupMap, to generate the appropriate machine for each group, and then extract
 	// the categorized lines for each machine.
-	auto factoryGroupMapBegin = cleaveSequenceFactoryRef->groupMap.groups.begin();
-	auto factoryGroupMapEnd = cleaveSequenceFactoryRef->groupMap.groups.end();
+	//auto factoryGroupMapBegin = cleaveSequenceFactoryRef->groupMap.groups.begin();
+	//auto factoryGroupMapEnd = cleaveSequenceFactoryRef->groupMap.groups.end();
+	auto factoryGroupMapBegin = cleaveSequenceFactoryRef->lineManager.managerGrpMap.groups.begin();
+	auto factoryGroupMapEnd = cleaveSequenceFactoryRef->lineManager.managerGrpMap.groups.end();
 	for (; factoryGroupMapBegin != factoryGroupMapEnd; factoryGroupMapBegin++)
 	{
 		//std::cout << "!! Determining machine type, for guest SPoly with ID " << factoryGroupMapBegin->first << std::endl;
@@ -66,13 +68,13 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 	}
 	//std::cout << ":::::: Size of CleaveSequenceFactory's group map: " << cleaveSequenceFactoryRef->groupMap.groups.size() << std::endl;
 	//std::cout << ":::::: Printing line counts in group map: " <<  std::endl;
-	mergerLogger.log("(CategorizedLineMerger) :::::: Size of CleaveSequenceFactory's group map: ", cleaveSequenceFactoryRef->groupMap.groups.size(), "\n");
+	mergerLogger.log("(CategorizedLineMerger) :::::: Size of CleaveSequenceFactory's group map: ", cleaveSequenceFactoryRef->lineManager.managerGrpMap.groups.size(), "\n");
 	mergerLogger.log("(CategorizedLineMerger) :::::: Printing line counts in group map: ", "\n");
 
 	if (mergerLogger.isLoggingSet() == true)
 	{
 		mergerLogger.log("(CategorizedLineMerger) >>>> starting printing group line counts in referenced CleaveSequenceFactory...", "\n");
-		cleaveSequenceFactoryRef->groupMap.printGroupLineCounts();
+		cleaveSequenceFactoryRef->lineManager.managerGrpMap.printGroupLineCounts();
 		mergerLogger.log("(CategorizedLineMerger) >>>> finished printing group line counts in referenced CleaveSequenceFactory...", "\n");
 	}
 	//std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;

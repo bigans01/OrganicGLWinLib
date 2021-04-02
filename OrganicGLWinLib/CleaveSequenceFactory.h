@@ -34,7 +34,7 @@ class CleaveSequenceFactory
 		void printLineCounts();
 		void clearLinePools();
 		void loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef);
-		int loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
+		void loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef);
 		bool doesFactoryContainLines();
 		void setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		void setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel);
@@ -49,6 +49,7 @@ class CleaveSequenceFactory
 		PolyLogger cleaveSequenceFactoryLogger;
 		PolyDebugLevel mergerDebugLevel = PolyDebugLevel::NONE;
 
+		/*
 		std::map<int, CategorizedLine> nonboundMap;					// contains NON_BOUND categorized lines.
 		std::map<int, CategorizedLine> partialboundMap;				// contains PARTIAL_BOUND categorized lines.
 		std::map<int, CategorizedLine> aslicedMap;					// contains A_SLICED categorized lines.
@@ -63,6 +64,7 @@ class CleaveSequenceFactory
 		int interceptsPointPreciseCount = 0;
 		int aslicedSegmentEndpointCount = 0;
 		int aslicedSingleInterceptsPointPreciseCount = 0;
+		*/
 
 		CategorizedLineManager lineManager;
 		std::map<int, CleaveSequence>* cleaveSequenceMapRef = NULL;	 // initialize as null
