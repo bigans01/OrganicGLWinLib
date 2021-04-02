@@ -91,6 +91,11 @@ void CleaveSequenceFactory::insertNonboundLine(CategorizedLine in_line)
 	nonboundMap[nonboundCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::NON_BOUND, nonboundCount);
 	nonboundCount++;
+
+	// NEWW
+	/*
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	*/
 }
 
 void CleaveSequenceFactory::insertPartialBoundLine(CategorizedLine in_line)
@@ -98,6 +103,11 @@ void CleaveSequenceFactory::insertPartialBoundLine(CategorizedLine in_line)
 	partialboundMap[partialboundCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::PARTIAL_BOUND, partialboundCount);
 	partialboundCount++;
+
+	// NEWW
+	/*
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	*/
 }
 
 void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
@@ -105,6 +115,11 @@ void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
 	aslicedMap[aslicedCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE, aslicedCount);
 	aslicedCount++;
+
+	// NEWW
+	/*
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	*/
 }
 
 void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line)
@@ -112,6 +127,11 @@ void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(Categorize
 	aslicedSingleInterceptsPointPreciseMap[aslicedSingleInterceptsPointPreciseCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, aslicedSingleInterceptsPointPreciseCount);
 	aslicedSingleInterceptsPointPreciseCount++;
+
+	// NEWW
+	/*
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	*/
 }
 
 void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
@@ -119,6 +139,11 @@ void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line
 	interceptsPointPreciseMap[interceptsPointPreciseCount] = in_line;
 	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::INTERCEPTS_POINT_PRECISE, interceptsPointPreciseCount);
 	interceptsPointPreciseCount++;
+
+	// NEWW
+	/*
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	*/
 }
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
