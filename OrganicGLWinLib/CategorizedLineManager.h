@@ -15,6 +15,7 @@
 #include "CategorizedLineSearchResult.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "CleaveSequence.h"
 
 
 class CategorizedLineManager
@@ -39,6 +40,8 @@ class CategorizedLineManager
 		void printAllLines();	// use in: CleaveSequenceFactory::printLinesInPool() --> prints all lines in each CategorizedLineContainer.
 		void clearAllLines();	// use in: CleaveSequenceFactory::clearLinePools() --> clears all lines in each CatgorizedLineContainer.
 
+		std::map<int, CategorizedLine>::iterator getBeginIteratorForType(IntersectionType in_intersectionType);
+		std::map<int, CategorizedLine>::iterator getEndIteratorForType(IntersectionType in_intersectionType);
 
 	private:
 		std::map<IntersectionType, CategorizedLineContainer> containerMap;

@@ -100,6 +100,16 @@ void CategorizedLineManager::printAllLines()
 	}
 }
 
+std::map<int, CategorizedLine>::iterator CategorizedLineManager::getBeginIteratorForType(IntersectionType in_intersectionType)
+{
+	return containerMap[in_intersectionType].lineMap.begin();
+}
+
+std::map<int, CategorizedLine>::iterator CategorizedLineManager::getEndIteratorForType(IntersectionType in_intersectionType)
+{
+	return containerMap[in_intersectionType].lineMap.end();
+}
+
 void CategorizedLineManager::clearAllLines()
 {
 	auto containerMapBegin = containerMap.begin();
