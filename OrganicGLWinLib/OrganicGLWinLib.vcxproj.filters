@@ -912,6 +912,12 @@
     <ClInclude Include="CollectiveVerdictMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CategorizedLineContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1353,6 +1359,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollectiveVerdictMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -38,6 +38,7 @@ public:
 	void printAllCleaveLines();
 	void addTriangle(STriangle in_triangle);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
+	bool isSPolyValid();
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib

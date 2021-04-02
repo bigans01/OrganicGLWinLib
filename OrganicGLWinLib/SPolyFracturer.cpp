@@ -93,7 +93,26 @@ void SPolyFracturer::checkForCleaveIntersections()
 			newPoly.polyEmptyNormal = polyRef->polyEmptyNormal;
 			newPoly.addTriangle(newTriangle);
 		}
-		sPolySG.insertSPoly(newPoly);	// insert the new poly when we are all done
+		/*
+		if (fracturerLogger.isLoggingSet() == true)
+		{
+			if (newPoly.isSPolyValid() == false)
+			{
+				std::cout << "!!!! Warning, SPoly is invalid! " << std::endl;
+			}
+		}
+		*/
+
+		// an SPoly should only be added to the SPolySuperGroup if it's actually valid (meaning, 3 unique points in all of its STriangles.)
+		if
+		(
+			(newPoly.triangles.size() != 0)
+			&&
+			(newPoly.isSPolyValid() == true)
+		)
+		{
+			sPolySG.insertSPoly(newPoly);	// insert the new poly when we are all done
+		}
 	}
 	//sPolySG.printSPolys();
 

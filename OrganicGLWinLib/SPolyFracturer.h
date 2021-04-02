@@ -26,7 +26,6 @@ public:
 	PointTranslationCheck pointTranslator; // check for any translation
 	QuatRotationPoints quatPoints;
 	QuatRotationManager rotationManager;
-	//std::vector<SPoly> producedPolys;			// SPolySupergroup would go here
 	SPolySupergroup sPolySG;
 
 	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel);

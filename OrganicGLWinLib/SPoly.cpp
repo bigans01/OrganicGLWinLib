@@ -12,6 +12,22 @@ void SPoly::setEmptyNormal(float in_x, float in_y, float in_z)
 	polyEmptyNormal = glm::normalize(rawEmptyNormal);
 }
 
+bool SPoly::isSPolyValid()
+{
+	bool isValid = true;
+	auto trianglesBegin = triangles.begin();
+	auto trianglesEnd = triangles.end();
+	for (; trianglesBegin != trianglesEnd; trianglesBegin++)
+	{
+		if (trianglesBegin->second.isSTriangleValid() == false)
+		{
+			isValid = false;	// the first invalid we find, we are done.
+			break;				// break out on first contact
+		}
+	}
+	return isValid;
+}
+
 void SPoly::determinePrimalPoints()
 {
 	primePoint0 = triangles[0].triangleLines[0].pointA;

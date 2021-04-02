@@ -3,6 +3,8 @@
 
 void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLine)
 {
+	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+
 	if (in_categorizedLine.type == IntersectionType::A_SLICE)
 	{
 		/*
@@ -63,11 +65,6 @@ void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLin
 
 		insertInterceptsPointPrecise(in_categorizedLine);
 	}
-	else if (in_categorizedLine.type == IntersectionType::A_SLICE_SEGMENT_ENDPOINT)
-	{
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!!! Adding A_SLICE_SEGMENT_ENDPOINT line", "\n");
-		insertAslicedSegmentEndpointLine(in_categorizedLine);
-	}
 	else if (in_categorizedLine.type == IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
 	{
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!!! Adding A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE line", "\n");
@@ -110,12 +107,6 @@ void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
 	aslicedCount++;
 }
 
-void CleaveSequenceFactory::insertAslicedSegmentEndpointLine(CategorizedLine in_line)
-{
-	aslicedSegmentEndpointMap[aslicedSegmentEndpointCount] = in_line;
-	groupMap.insertGroupRecord(in_line.parentPoly, IntersectionType::A_SLICE_SEGMENT_ENDPOINT, aslicedSegmentEndpointCount);
-	aslicedSegmentEndpointCount++;
-}
 void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line)
 {
 	aslicedSingleInterceptsPointPreciseMap[aslicedSingleInterceptsPointPreciseCount] = in_line;
@@ -261,55 +252,6 @@ void CleaveSequenceFactory::setFactoryDebugLevel(PolyDebugLevel in_polyDebugLeve
 void CleaveSequenceFactory::setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel)
 {
 	mergerDebugLevel = in_polyDebugLevel;
-}
-
-void CleaveSequenceFactory::clipTwinCategorizedLinesofInterceptPointPrecise()
-{
-	std::map<int, int> twinCounterMap;
-	auto interceptsPreciseBegin = interceptsPointPreciseMap.begin();
-	auto interceptsPreciseEnd = interceptsPointPreciseMap.end();
-	for (; interceptsPreciseBegin != interceptsPreciseEnd; interceptsPreciseBegin++)
-	{
-		twinCounterMap[interceptsPreciseBegin->second.parentPoly]++;
-	}
-
-	std::set<int> removalSet;
-	auto twinCounterMapBegin = twinCounterMap.begin();
-	auto twinCounterMapEnd = twinCounterMap.end();
-	for (; twinCounterMapBegin != twinCounterMapEnd; twinCounterMapBegin++)
-	{
-		if (twinCounterMapBegin->second == 2)	// there's a twin found.
-		{
-			removalSet.insert(twinCounterMapBegin->first);		// insert the ID of the parent poly into the removal set, as we use this in the next step.
-		}
-	}
-
-	std::vector<int> mappedValuesToRemove;
-	auto removalRunBegin = interceptsPointPreciseMap.begin();
-	auto removalRunEnd = interceptsPointPreciseMap.end();
-	for (; removalRunBegin != removalRunEnd; removalRunBegin++)
-	{
-		auto wasFoundInSet = removalSet.find(removalRunBegin->second.parentPoly);
-		if (wasFoundInSet != removalSet.end())
-		{
-			//std::cout << "!!! Found a twin to remove..." << std::endl;
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) !!! Found a twin to remove...", "\n");
-			mappedValuesToRemove.push_back(removalRunBegin->first);
-		}
-	}
-
-	auto erasingBegin = mappedValuesToRemove.begin();
-	auto erasingEnd = mappedValuesToRemove.end();
-	for (; erasingBegin != erasingEnd; erasingBegin++)
-	{
-		interceptsPointPreciseMap.erase(*erasingBegin);
-		interceptsPointPreciseCount--;
-	}
-
-	//std::cout << "!!! clipping complete, size of interceptsPointPreciseMap is: " << interceptsPointPreciseMap.size() << std::endl;
-
-	//int someValAwYeah = 7;
-	//std::cin >> someValAwYeah;
 }
 
 void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef)
@@ -478,6 +420,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	{
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) lines in pool, prior to merging: ", "\n");
 		printLinesInPool();
+		lineManager.printLineCountsForEachType();
 	}
 
 
@@ -637,7 +580,6 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 
 	// check if there's a condition where there are exactly two categorized lines having the IntersectionType, INTERCEPTS_POINT_PRECISE, and 
 	// which belong to the same parent poly. If this condition is TRUE, these lines must be removed.
-	//clipTwinCategorizedLinesofInterceptPointPrecise();			// potentially obsolete function call
 
 	//int someVal8 = 7;
 	//std::cin >> someVal8;
@@ -906,151 +848,6 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 
 	return searchResult;
 
-}
-
-std::map<MassManipulationMode, int> CleaveSequenceFactory::generateManipulationDirectionsForIntersectsPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal)
-{
-	std::map<MassManipulationMode, int> returnMap;
-	// copy the border lines.
-	SPolyBorderLines borderLineACopy = in_borderLineA;
-	SPolyBorderLines borderLineBCopy = in_borderLineB;
-	glm::vec3 emptyNormalCopy = in_categorizedLineNormal;
-
-	// is in_borderLineA's point B equal to in_borderLineB's point A?
-
-
-
-	QuatRotationPoints rotationPoints;
-	glm::vec3 pointToTranslateAgainst;
-	if (borderLineACopy.pointB == borderLineBCopy.pointA)
-	{
-		//std::cout << "(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. " << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line A links with Line B, at Line A's point B. ", "\n");
-		rotationPoints.insertPointRefs(&borderLineACopy.pointA, &borderLineACopy.pointB, &borderLineBCopy.pointB);
-		pointToTranslateAgainst = borderLineACopy.pointB;
-	}
-	// otherwise, it's the other way around.
-	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
-	{
-		//std::cout << "(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. " << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Line B links with Line A, at Line B's point B. ", "\n");
-		rotationPoints.insertPointRefs(&borderLineBCopy.pointA, &borderLineBCopy.pointB, &borderLineACopy.pointB);
-		pointToTranslateAgainst = borderLineBCopy.pointB;
-	}
-
-	// do a translation check.
-	PointTranslationCheck translationChecker;
-	translationChecker.performCheck(pointToTranslateAgainst);
-	if (translationChecker.requiresTranslation == 1)
-	{
-		rotationPoints.applyTranslation(translationChecker.getTranslationValue());
-	}
-
-	// now, add the normal at the end.
-	rotationPoints.insertPointRefs(&emptyNormalCopy);
-
-	//std::cout << ":::: Printing points: " << std::endl;
-	//rotationPoints.printPoints();
-
-	QuatRotationManager rotationManager;
-	rotationManager.initializeAndRunForFindingBorderLine(&rotationPoints);
-
-	// determine which point it is that is positive y (check the first and third points.)
-	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
-	glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
-	glm::vec3 selectedPoint;
-	if (candidateOne.y > 0)
-	{
-		selectedPoint = candidateOne;
-	}
-	else if (candidateTwo.y > 0)
-	{
-		selectedPoint = candidateTwo;
-	}
-
-	// take the selected point, find out where it belongs; then set the appropriate forward/reverse IDs.
-	int forwardID, reverseID;
-
-	/*
-	if
-	(
-		(borderLineACopy.pointA == selectedPoint)
-		||
-		(borderLineACopy.pointB == selectedPoint)
-	)
-	{
-		std::cout << "Border Line A is the FORWARD line. " << std::endl;
-
-		forwardID = in_borderLineAID;
-		reverseID = in_borderLineBID;
-	}
-
-	else if
-	(
-		(borderLineBCopy.pointA == selectedPoint)
-		||
-		(borderLineBCopy.pointB == selectedPoint)
-	)
-	{
-		std::cout << "Border Line B is the FORWARD line. " << std::endl;
-
-		forwardID = in_borderLineBID;
-		reverseID = in_borderLineAID;
-	}
-	*/
-
-	if
-	(
-		(borderLineACopy.pointA == selectedPoint)
-	)
-	{
-		//std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)", "\n");
-		
-		forwardID = in_borderLineAID;
-		reverseID = in_borderLineBID;
-	}
-	else if
-	(
-		(borderLineACopy.pointB == selectedPoint)
-	)
-	{
-		//std::cout << "(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)", "\n");
-
-		forwardID = in_borderLineAID;
-		reverseID = in_borderLineBID;
-	}
-	else if
-	(
-		(borderLineBCopy.pointA == selectedPoint)
-	)
-	{
-		//std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)", "\n");
-
-		forwardID = in_borderLineBID;
-		reverseID = in_borderLineAID;
-	}
-	else if
-	(
-		(borderLineBCopy.pointB == selectedPoint)
-	)
-	{
-		//std::cout << "(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)", "\n");
-
-		forwardID = in_borderLineBID;
-		reverseID = in_borderLineAID;
-	}
-	
-
-	//std::cout << "(CleaveSequenceFactory) Forward ID: " << forwardID << std::endl;
-	//std::cout << "(CleaveSequenceFactory) Reverse ID: " << reverseID << std::endl;
-	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Forward ID: ", forwardID, "\n");
-	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Reverse ID: ", reverseID, "\n");
-
-	return returnMap;
 }
 
 CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm::vec3 in_pointToSearch)

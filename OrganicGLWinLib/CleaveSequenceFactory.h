@@ -22,6 +22,7 @@
 #include "CategorizedLineGroupLocation.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "CategorizedLineManager.h"
 
 class CleaveSequenceFactory
 {
@@ -62,18 +63,16 @@ class CleaveSequenceFactory
 		int interceptsPointPreciseCount = 0;
 		int aslicedSegmentEndpointCount = 0;
 		int aslicedSingleInterceptsPointPreciseCount = 0;
+
+		CategorizedLineManager lineManager;
 		std::map<int, CleaveSequence>* cleaveSequenceMapRef = NULL;	 // initialize as null
 
 		void insertNonboundLine(CategorizedLine in_line);
 		void insertPartialBoundLine(CategorizedLine in_line);
 		void insertAslicedLine(CategorizedLine in_line);
-		void insertAslicedSegmentEndpointLine(CategorizedLine in_line);
 		void insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line);
 		void insertInterceptsPointPrecise(CategorizedLine in_line);
-		void clipTwinCategorizedLinesofInterceptPointPrecise();			// potenitally obsolete; this function clears out precise lines when the number is 2.
 		
-		
-
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
 		// normal fetch functions.
@@ -97,22 +96,17 @@ class CleaveSequenceFactory
 		void insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
 		void invertAllEmptyNormals();
-		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
-		//CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch, std::map<int, SPolyBorderLines>);
-		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch);
-
 		CategorizedLineSearchResult checkForNextNonboundLine(glm::vec3 in_pointToSearch);
+		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
+		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch);
 
 		// scenario processing -- a scenario just describes different cases that occur, for instance the case in which there is at least
 		// one CategorizedLine with an IntersectionType of INTERCEPTS_POINT_PRECISE.
 
 		void handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
-		//void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef);
 		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef);
 		void handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef);
 
-		// this function may not be needed; potentially removable after review.
-		std::map<MassManipulationMode, int> generateManipulationDirectionsForIntersectsPointPrecise(SPolyBorderLines in_borderLineA, int in_borderLineAID, SPolyBorderLines in_borderLineB, int in_borderLineBID, glm::vec3 in_categorizedLineNormal);
 };
 
 #endif
