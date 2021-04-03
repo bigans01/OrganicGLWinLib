@@ -70,17 +70,17 @@ class CleaveSequenceFactory
 		std::map<int, CleaveSequence>* cleaveSequenceMapRef = NULL;	 // initialize as null
 
 		void insertNonboundLine(CategorizedLine in_line);
-		void insertPartialBoundLine(CategorizedLine in_line);
-		void insertAslicedLine(CategorizedLine in_line);
-		void insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line);
-		void insertInterceptsPointPrecise(CategorizedLine in_line);
+		//void insertPartialBoundLine(CategorizedLine in_line);
+		//void insertAslicedLine(CategorizedLine in_line);
+		//void insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line);
+		//void insertInterceptsPointPrecise(CategorizedLine in_line);
 		
 		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
 		// normal fetch functions.
-		CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
-		CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
-		CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
+		//CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
+		//CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
+		//CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
 
@@ -93,12 +93,12 @@ class CleaveSequenceFactory
 
 
 
-		void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
-		void insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
-		void insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
-		void insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
-		void invertAllEmptyNormals();
-		CategorizedLineSearchResult checkForNextNonboundLine(glm::vec3 in_pointToSearch);
+		//void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		//void insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		//void insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		//void insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
+		//void invertAllEmptyNormals();
+		//CategorizedLineSearchResult checkForNextNonboundLine(glm::vec3 in_pointToSearch);
 		CategorizedLineSearchResult searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch);
 		CategorizedLineSearchResult searchForInterceptPointPreciseCategorizedLine(glm::vec3 in_pointToSearch);
 

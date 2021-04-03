@@ -18,7 +18,6 @@ void CategorizedLineMergeMachineBase::extractCategorizedLines()
 	{
 		if (categorizedLineGroupRecordVectorBegin->categorizedLineIntersectionType == IntersectionType::PARTIAL_BOUND)
 		{
-			//CategorizedLine lineToMove = cleaveSequenceFactoryRef->fetchAndRemovePartialBound(categorizedLineGroupRecordVectorBegin->categorizedLineIndex);
 			CategorizedLine lineToMove = cleaveSequenceFactoryRef->fetchAndRemovePartialBoundWithGroupMapLocationPush(
 																		categorizedLineGroupRecordVectorBegin->categorizedLineIndex,
 																		&locationVector);
@@ -40,7 +39,6 @@ void CategorizedLineMergeMachineBase::extractCategorizedLines()
 		}
 		else if (categorizedLineGroupRecordVectorBegin->categorizedLineIntersectionType == IntersectionType::A_SLICE)
 		{
-			//CategorizedLine lineToMove = cleaveSequenceFactoryRef->fetchAndRemoveASlice(categorizedLineGroupRecordVectorBegin->categorizedLineIndex);
 			CategorizedLine lineToMove = cleaveSequenceFactoryRef->fetchAndRemoveASliceWithGroupMapLocationPush(
 																		categorizedLineGroupRecordVectorBegin->categorizedLineIndex,
 																		&locationVector);

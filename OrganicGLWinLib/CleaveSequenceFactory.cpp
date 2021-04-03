@@ -21,32 +21,42 @@ void CleaveSequenceFactory::insertNonboundLine(CategorizedLine in_line)
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
 
+/*
 void CleaveSequenceFactory::insertPartialBoundLine(CategorizedLine in_line)
 {
 
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
 {
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line)
 {
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
 {
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
+*/
 
+/*
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::NON_BOUND, in_fetchIndex);
 	return fetchedLine;
 }
+*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -54,11 +64,13 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonboundWithGroupMapLocatio
 	return fetchedLine;
 }
 
+/*
 CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIndex)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, in_fetchIndex);
 	return fetchedLine;
 }
+*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBoundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -66,11 +78,13 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBoundWithGroupMapLoc
 	return fetchedLine;
 }
 
+/*
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, in_fetchIndex);
 	return fetchedLine;
 }
+*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -271,30 +285,40 @@ void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::m
 	lineManager.determineCyclingDirections(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 }
 
+/*
 void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemovePartialBound(in_lineIndex));
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASlice(in_lineIndex));
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(in_lineIndex));
 }
+*/
 
+/*
 void CleaveSequenceFactory::insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
 {
 	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveInterceptPointPrecise(in_lineIndex));
 }
+*/
 
+/*
 void CleaveSequenceFactory::invertAllEmptyNormals()
 {
 	lineManager.invertEmptyNormalsInContainers();
 }
+*/
 
 CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch)
 {
@@ -306,10 +330,12 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 	return lineManager.searchManagerForInterceptPointPreciseCategorizedLine(in_pointToSearch);
 }
 
+/*
 CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm::vec3 in_pointToSearch)
 {
 	return lineManager.checkManagerForNextNonboundLine(in_pointToSearch);
 }
+*/
 
 void CleaveSequenceFactory::printLinesInPool()
 {
@@ -370,7 +396,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 		int firstLineID = partialBoundMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
-		insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
+		//insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
+		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, firstLineID));	// insert the first partial bound line we find
 		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();		// get the searchable point from the first partial bound line we found in the previous step
 
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", firstPointToSearch.x, ", ", firstPointToSearch.y, ", ", firstPointToSearch.z, "\n");
@@ -383,7 +410,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		// When this is done, take all the lines invovled (both nonbound and partial bound) and put them into a new CleaveSequence. Remmove their original copies from the appropriate maps --
 		// partial bound lines will be removed from partialBoundMap (and the counter decremented) and the nonbound lines will be removed from the nonboundMap (also decrementing here)
 		bool continueSearch = true;
-		CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		//CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		CategorizedLineSearchResult result = lineManager.checkManagerForNextNonboundLine(firstPointToSearch);	// search for the next nonbound line, via the lineManager
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): MIDDLE, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
 		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
 		{
@@ -397,7 +425,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			{
 				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
 				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", nextPointToSearch.x, ", ", nextPointToSearch.y, ", ", nextPointToSearch.z, "\n");
-				CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				//CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				CategorizedLineSearchResult nextResult = lineManager.checkManagerForNextNonboundLine(nextPointToSearch);	// search for the next nonbound line, via the lineManager
 				if (nextResult.wasFound == false)
 				{
 					continueFlag = false;	// end the loop.
@@ -457,7 +486,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		auto aslicedMapBegin = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE);					// get the first line in the a_slice map
 		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;
-		insertASliceLineForSequence(&newSequence, firstLineID);
+		//insertASliceLineForSequence(&newSequence, firstLineID);
+		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, firstLineID));
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 
@@ -484,7 +514,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		auto aslicedSingleInterceptsPointPreciseFirst = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE);
 		int firstLineID = aslicedSingleInterceptsPointPreciseFirst->first;
 		CleaveSequence newSequence;
-		insertASliceSingleInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		//insertASliceSingleInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		newSequence.insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(firstLineID));
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 	}
@@ -502,7 +533,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		CategorizedLine* partialBoundLineRef = &partialBoundMapBegin->second;	// get a ref to the line
 		int firstLineID = partialBoundMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
-		insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
+		//insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
+		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, firstLineID));  // insert the first partial bound line we find
 		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();		// get the searchable point from the first partial bound line we found in the previous step
 		//std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
 
@@ -512,7 +544,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		// When this is done, take all the lines invovled (both nonbound and partial bound) and put them into a new CleaveSequence. Remmove their original copies from the appropriate maps --
 		// partial bound lines will be removed from partialBoundMap (and the counter decremented) and the nonbound lines will be removed from the nonboundMap (also decrementing here)
 		bool continueSearch = true;
-		CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		//CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		CategorizedLineSearchResult result = lineManager.checkManagerForNextNonboundLine(firstPointToSearch);	// search for the next nonbound line, via the lineManager
 		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
 		{
 			newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
@@ -520,7 +553,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 			while (continueFlag == true)	// loop until this is false.
 			{
 				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
-				CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				//CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				CategorizedLineSearchResult nextResult = lineManager.checkManagerForNextNonboundLine(nextPointToSearch);	// search for the next nonbound line, via the lineManager
 				if (nextResult.wasFound == false)
 				{
 					continueFlag = false;	// end the loop.
@@ -596,7 +630,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		auto aslicedMapBegin = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE);					// get the first line in the a_slice map
 		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;
-		insertASliceLineForSequence(&newSequence, firstLineID);
+		//insertASliceLineForSequence(&newSequence, firstLineID);
+		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, firstLineID));
 		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
 
 		//std::cout << "(CleaveSequenceFactory)  Index for new cleaveSequence is: " << cleaveMapRefSize << std::endl;
@@ -628,12 +663,14 @@ void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::ma
 		auto preciseMapBegin = lineManager.getBeginIteratorForType(IntersectionType::INTERCEPTS_POINT_PRECISE);
 		int firstLineID = preciseMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;
-		insertFirstInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		//insertFirstInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+		newSequence.insertFirstLine(fetchAndRemoveInterceptPointPrecise(firstLineID));
 		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();
 
 		// search for any nonbound lines
 		bool continueSearch = true;
-		CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		//CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+		CategorizedLineSearchResult result = lineManager.checkManagerForNextNonboundLine(firstPointToSearch);	// search for the next nonbound line, via the lineManager
 		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
 		{
 			newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
@@ -641,7 +678,8 @@ void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::ma
 			while (continueFlag == true)	// loop until this is false.
 			{
 				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
-				CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				//CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+				CategorizedLineSearchResult nextResult = lineManager.checkManagerForNextNonboundLine(nextPointToSearch);	// search for the next nonbound line, via the lineManager
 				if (nextResult.wasFound == false)
 				{
 					continueFlag = false;	// end the loop.
