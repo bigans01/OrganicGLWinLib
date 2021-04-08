@@ -104,8 +104,8 @@ void PointToMassTrial::executeAllJudgements()
 	}
 
 
-	if (collectiveVerdicts.doesAnomalousMassSPolyExist() == false)		// if this statement were true, an anomaly was detected and must be clipped.
-	{
+	//if (collectiveVerdicts.doesAnomalousMassSPolyExist() == false)		// if this statement were true, an anomaly was detected and must be clipped.
+	//{
 		auto individualVerdictsBegin = collectiveVerdicts.individualVerdictMap.begin();
 		auto individualVerdictsEnd = collectiveVerdicts.individualVerdictMap.end();
 		for (; individualVerdictsBegin != individualVerdictsEnd; individualVerdictsBegin++)
@@ -115,6 +115,6 @@ void PointToMassTrial::executeAllJudgements()
 				clippablePointsVector.push_back(individualVerdictsBegin->second.point);
 			}
 		}
-	}
+	//}
 	
 }

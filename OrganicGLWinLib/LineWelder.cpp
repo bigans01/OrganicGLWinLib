@@ -99,6 +99,10 @@ void LineWelder::startWelding()
 	*/
 	CategorizedLine currentCategorizedLine;
 	foundDirection = startingCategorizedLine->second.direction;			// remember, if the CategorizedLine's type is A_SLICE, the direction comes from pointA.
+	if (foundDirection == CyclingDirection::NOVAL)	// needs to be handled, in case it does happen.
+	{
+		std::cout << "(LineWelder): warning, no direction found; run should terminate IMMEDIATELY!" << std::endl;
+	}
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
 
 	OperableIntSet unusableSet;

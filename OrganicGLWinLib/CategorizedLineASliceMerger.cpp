@@ -4,7 +4,7 @@
 
 void CategorizedLineASliceMerger::runMerging()
 {
-	//std::cout << "Running merge for A_SLICE. " << std::endl;
+//	std::cout << "(CategorizedLineASliceMerger) Running merge for A_SLICE. " << std::endl;
 	mergeMachineLogger.log("(CategorizedLineASliceMerger) Running merge for A_SLICE. ", "\n");
 
 	// get the first PARTIAL_BOUND line.

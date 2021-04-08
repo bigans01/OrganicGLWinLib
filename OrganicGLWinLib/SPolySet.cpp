@@ -352,11 +352,23 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 			//zoneMaster.disqualifyMeshMatterMeta(x);
 		}
 		*/
-		if (secondaryPolys[x].cleaveMap.size() != 0)		// new code, as of 4/1/2021: an SPoly may only be disqualified if it actually managed to produce
+
+		std::cout << "Size of CleaveMap for SPoly " << x << ": " << secondaryPolys[x].cleaveMap.size() << std::endl;
+		//std::cout << "Has bad production: " << secondaryPolys[x].sequenceFactory.hasBadProduction << std::endl;
+
+		/*
+		if 
+		(
+			(secondaryPolys[x].cleaveMap.size() != 0)		// new code, as of 4/1/2021: an SPoly may only be disqualified if it actually managed to produce
 															// valid CleaveSequences.
+			||
+			(secondaryPolys[x].sequenceFactory.hasBadProduction == true)
+		)
 		{
-			zoneMaster.disqualifyMeshMatterMeta(x);
+			std::cout << "!!!! Disqualifying SPoly with ID: " << x << std::endl;
+			//zoneMaster.disqualifyMeshMatterMeta(x);
 		}
+		*/
 		//int buildVal = 3;
 		//std::cin >> buildVal;
 
@@ -364,6 +376,13 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//std::cout << "+++++ Enter number to go to next poly. " << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
+
+		
+		if (secondaryPolys[x].sequenceFactory.hasBadProduction == true)
+		{
+			std::cout << ">>>>>>>>>> SPoly with ID " << x << " had its production fail. " << std::endl;
+		}
+		
 	}
 	std::cout << "!!!!! Finished building CleaveSequences. " << std::endl;
 
@@ -1229,10 +1248,11 @@ void SPolySet::performFracturing()
 		{
 			// pass the secondary poly to the PolyFracturer
 			
-			//std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
+			std::cout << "########## Performing fracturing for poly with ID: " << x << std::endl;
 			
 			auto truestart = std::chrono::high_resolution_clock::now();
 			//SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));
+			
 			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkForSPolyOptionInSpecificSPoly(x, SPolyDO::FRACTURER));
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
@@ -1284,6 +1304,7 @@ void SPolySet::performFracturing()
 	//std::cin >> continueVal;
 
 	removeSPolysFlaggedAsPurgable();
+	std::cout << "----> reached end of performFracturing()" << std::endl;
 }
 
 void SPolySet::insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup)

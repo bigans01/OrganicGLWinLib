@@ -160,19 +160,25 @@ void CategorizedLineManager::loadCategorizedLinePoints(QuatRotationPoints* in_qu
 	}
 }
 
-void CategorizedLineManager::determineCyclingDirections(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel)
+bool CategorizedLineManager::determineCyclingDirections(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel)
 {
 	auto containerMapBegin = containerMap.begin();
 	auto containerMapEnd = containerMap.end();
+	bool wasEntireRunValid = true;
 	for (; containerMapBegin != containerMapEnd; containerMapBegin++)
 	{
 		auto currentLineBegin = containerMapBegin->second.lineMap.begin();
 		auto currentLineEnd = containerMapBegin->second.lineMap.end();
 		for (; currentLineBegin != currentLineEnd; currentLineBegin++)
 		{
-			currentLineBegin->second.determineCyclingDirection(in_borderLineArrayRef, in_polyDebugLevel);
+			bool currentRunValidity = currentLineBegin->second.determineCyclingDirection(in_borderLineArrayRef, in_polyDebugLevel);
+			if (currentRunValidity == false)
+			{
+				wasEntireRunValid = false;
+			}
 		}
 	}
+	return wasEntireRunValid;
 }
 
 CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundLine(glm::vec3 in_pointToSearch)

@@ -94,10 +94,11 @@ void CategorizedLine::convertLinesToInterceptsPointPrecise(IntersectionLine in_l
 	// do for in_lineB? maybe.
 }
 
-void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel)
+bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel)
 //void CategorizedLine::determineCyclingDirection(SPolyBorderLines in_borderLineArrayRef)
 {
 	//std::cout << "Determining cycling direction for this line; the line's parent SPoly is: " << parentPoly << std::endl;
+	bool wasRunValid = true;	// assumes true.
 
 	// logic for partial lines.
 	if (type == IntersectionType::PARTIAL_BOUND)
@@ -265,6 +266,11 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 			//std::cout << "::: Direction is REVERSE, heading towards point A: " << in_borderLineArrayRef[categorizedLineBorderID].pointA.x << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.y << ", " << in_borderLineArrayRef[categorizedLineBorderID].pointA.z << std::endl;
 			direction = CyclingDirection::REVERSE;
 		}
+		else
+		{
+			std::cout << "!!!! Warning: direction was NOT determined! " << std::endl;
+			wasRunValid = false;
+		}
 
 		//int someVal = 3;
 		//std::cin >> someVal;
@@ -321,7 +327,7 @@ void CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		}
 		*/
 	}
-	
+	return wasRunValid;
 }
 
 void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, 

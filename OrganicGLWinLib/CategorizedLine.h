@@ -76,7 +76,7 @@ public:
 	void convertLinesToNonbound(IntersectionLine in_lineA, IntersectionLine in_lineB);
 	void convertLinesToInterceptsPointPrecise(IntersectionLine in_lineA, IntersectionLine in_lineB);
 
-	void determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel);
+	bool determineCyclingDirection(std::map<int, SPolyBorderLines> in_borderLineArrayRef, PolyDebugLevel in_polyDebugLevel);
 	void generateCyclingDirectionForInterceptPointPrecise(SPolyBorderLines in_borderLineA, 
 													      int in_borderLineAID, 
 														  SPolyBorderLines in_borderLineB, 

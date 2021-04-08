@@ -4,6 +4,7 @@
 
 void CategorizedLinePlaceboMerger::runMerging()
 {
+	//std::cout << "(CategorizedLinePlaceboMerger) executing..." << std::endl;
 	//std::cout << "Running merge for NO_MERGE_REQUIRED (1 line found). " << std::endl;
 	//std::cout << "Line counts: " << std::endl;
 	//std::cout << "PARTIAL_BOUND: " << mergablePartialBoundsCount << std::endl;

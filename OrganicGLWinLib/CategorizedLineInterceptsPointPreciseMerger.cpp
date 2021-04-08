@@ -4,7 +4,7 @@
 
 void CategorizedLineInterceptsPointPreciseMerger::runMerging()
 {
-	//std::cout << "Running merge for INTERCEPTS_POINT_PRECISE. " << std::endl;
+	std::cout << "Running merge for INTERCEPTS_POINT_PRECISE. " << std::endl;
 	mergeMachineLogger.log("(CategorizedLineInterceptsPointPreciseMerger) Running merge for INTERCEPTS_POINT_PRECISE. ", "\n");
 
 	// get the first INTERCEPTS_POINT_PRECISE line.
@@ -31,7 +31,19 @@ void CategorizedLineInterceptsPointPreciseMerger::runMerging()
 
 			pointToSearch = result.returnLine.line.pointB;
 		}
+		else if (result.wasFound == false)
+		{
+			// Organic_Logic_Guidelines code: MERGE-0
 
+			// in the exceptionally rare event that there is a non-bound point that is "slightly off" (discovered on 3/24/2021), we need a way to handle it;
+			// all CategorizedLines produced by a single SPoly MUST have linking points; if they do not, we need to force link them.
+			// See error showcase, CategorizedLinePartialBoundMerger-001.
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger): No matching point found from mergable pool, performing special logic.", "\n");
+			result = getClosestNonBoundMergeCandidate(pointToSearch);
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger): Closest line, point A: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z,
+				" | point B ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
+			pointToSearch = result.returnLine.line.pointB;
+		}
 		//int stopValSpecial = 3;
 		//std::cin >> stopValSpecial;
 		mergeMachineLogger.log("(CategorizedLineInterceptsPointPreciseMerger) While loop complete; enter number to continue.", "\n");

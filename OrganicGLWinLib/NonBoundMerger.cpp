@@ -4,6 +4,7 @@
 
 void NonBoundMerger::runMerging()
 {
+	//std::cout << "(NonBoundMerger) Running merge fo MERGE_TO_NON_BOUND (1 line found)." << std::endl;
 	mergeMachineLogger.log("(NonBoundMerger) Running merge fo MERGE_TO_NON_BOUND (1 line found). ", "\n");
 
 	// load all points from all nonbounds into the counter map.
@@ -69,6 +70,19 @@ void NonBoundMerger::runMerging()
 			//std::cout << "!! Point B of the found non-bound is: " << result.returnLine.line.pointB.x << ", " << result.returnLine.line.pointB.y << ", " << result.returnLine.line.pointB.z << std::endl;
 			mergeMachineLogger.log("(NonBoundMerger) !! Point A of the found non-bound is: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z, "\n");
 			mergeMachineLogger.log("(NonBoundMerger) !! Point B of the found non-bound is: ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
+			pointToSearch = result.returnLine.line.pointB;
+		}
+		else if (result.wasFound == false)
+		{
+			// Organic_Logic_Guidelines code: MERGE-0
+
+			// in the exceptionally rare event that there is a non-bound point that is "slightly off" (discovered on 3/24/2021), we need a way to handle it;
+			// all CategorizedLines produced by a single SPoly MUST have linking points; if they do not, we need to force link them.
+			// See error showcase, CategorizedLinePartialBoundMerger-001.
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger): No matching point found from mergable pool, performing special logic.", "\n");
+			result = getClosestNonBoundMergeCandidate(pointToSearch);
+			mergeMachineLogger.log("(CategorizedLinePartialBoundMerger): Closest line, point A: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z,
+				" | point B ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
 			pointToSearch = result.returnLine.line.pointB;
 		}
 	}

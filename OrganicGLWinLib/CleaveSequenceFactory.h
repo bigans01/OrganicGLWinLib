@@ -38,7 +38,7 @@ class CleaveSequenceFactory
 		bool doesFactoryContainLines();
 		void setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		void setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel);
-
+		bool hasBadProduction = false;
 	private:
 		friend class CategorizedLineMerger;
 		friend class CategorizedLineMergeMachineBase;
@@ -66,6 +66,7 @@ class CleaveSequenceFactory
 		int aslicedSingleInterceptsPointPreciseCount = 0;
 		*/
 
+
 		CategorizedLineManager lineManager;
 		std::map<int, CleaveSequence>* cleaveSequenceMapRef = NULL;	 // initialize as null
 
@@ -75,13 +76,13 @@ class CleaveSequenceFactory
 		//void insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line);
 		//void insertInterceptsPointPrecise(CategorizedLine in_line);
 		
-		void determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
+		bool determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
 
 		// normal fetch functions.
 		//CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
 		//CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
 		//CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
-		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex);
+		//CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex);
 		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
 
 		// fetch functions, that include a record push.

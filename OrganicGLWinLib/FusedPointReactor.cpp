@@ -62,11 +62,24 @@ void FusedPointReactor::runPointAcquisitionAndPointUniquenessTest()
 	if (reactorPointContainer.fusedPointMap.size() == 1)	// if there's only one point in the resulting container, flag it.
 	{
 		fusionContinuationFlag = false;
+
+		
 		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. " << std::endl;
 		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. ", "\n");
 	}
 	else
 	{
+		if (fusedPointReactorLogger.isLoggingSet())
+		{
+			fusedPointReactorLogger.log("(Reactor): Points of fusedPointMap are: ", "\n");
+			auto fetchedMapBegin = reactorPointContainer.fusedPointMap.begin();
+			auto fetchedMapEnd = reactorPointContainer.fusedPointMap.end();
+			for (; fetchedMapBegin != fetchedMapEnd; fetchedMapBegin++)
+			{
+				std::cout <<std::setprecision(9);
+				std::cout << fetchedMapBegin->second.point.x << ", " << fetchedMapBegin->second.point.y << ", " << fetchedMapBegin->second.point.z << std::endl;
+			}
+		}
 		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. " << std::endl;
 		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. ", "\n");
 	}

@@ -277,6 +277,10 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 	if (willBePurged == true)
 	{
 		clipperPolyLogger.log("(MassZonePointClipper): NOTICE::: -> SPoly with ID", in_meshMatterMetaRef->referencedSPolyID, " will be CLIPPED.", "\n");
+		if (clipperPolyLogger.isLoggingSet() == true)
+		{
+			clipperPolyLogger.waitForDebugInput();
+		}
 	}
 
 	return willBePurged;

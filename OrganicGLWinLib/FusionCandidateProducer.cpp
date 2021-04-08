@@ -130,6 +130,15 @@ glm::vec3 FusionCandidateProducer::roundPointToHundredths(glm::vec3 in_point)
 	return returnPoint;
 }
 
+glm::vec3 FusionCandidateProducer::roundPointToTenThousandths(glm::vec3 in_point)
+{
+	glm::vec3 returnPoint;
+	returnPoint.x = float(floor(in_point.x * 10000 + 0.5) / 10000);
+	returnPoint.y = float(floor(in_point.y * 10000 + 0.5) / 10000);
+	returnPoint.z = float(floor(in_point.z * 10000 + 0.5) / 10000);
+	return returnPoint;
+}
+
 double FusionCandidateProducer::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 {
 	double x_multiplied = in_A.x * in_B.x;
@@ -473,7 +482,15 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		returnResult.setResult(1);
 		returnResult.wasIntersectOnBorderLine = in_line.isBorderLine;
 		returnResult.borderLineID = in_line.borderLineID;
-		returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+
+		if (returnResult.wasIntersectFound == 1)
+		{
+			//std::cout << "(Fusion) Intersected point, pre-round: " << intersect_candidate.x << ", " << intersect_candidate.y << ", " << intersect_candidate.z << std::endl;
+		}
+
+		//returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+		returnResult.intersectedPoint = roundPointToTenThousandths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+		//returnResult.intersectedPoint = intersect_candidate;					// the intercept point should be rounded to hundredths!
 
 
 

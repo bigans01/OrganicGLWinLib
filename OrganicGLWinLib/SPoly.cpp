@@ -395,6 +395,11 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 	else if (in_direction == CyclingDirection::NOVAL)
 	{
 		std::cout << "!!! WARNING, no direction detected. " << std::endl;
+		int haltVal = 3;
+		while (haltVal == 3)
+		{
+
+		}
 	}
 	return returnID;
 }
@@ -542,7 +547,7 @@ void SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeM
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
-		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;
+		std::cout << "!! Constructing Cleave Sequences. " << std::endl;
 		sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
 		//std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}

@@ -6,7 +6,7 @@ void CategorizedLinePartialBoundMerger::runMerging()
 {
 	//std::cout << "Running merge for PARTIAL_BOUND. " << std::endl;
 	mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) Running merge for PARTIAL_BOUND. ", "\n");
-
+	//std::cout << "(CategorizedLinePartialBoundMerger) executing..." << std::endl;
 
 	// get the first PARTIAL_BOUND line.
 	auto firstPartialBoundIterator = mergablePartialBoundsMap.begin();
@@ -19,7 +19,7 @@ void CategorizedLinePartialBoundMerger::runMerging()
 	CategorizedLine mostRecentNonBound;
 	while (mergableNonboundCount > 0)
 	{
-		//std::cout << "!! Searching for point: " << pointToSearch.x << ", " << pointToSearch.y << ", " << pointToSearch.z << std::endl;
+		//std::cout << "!! (CategorizedLinePartialBoundMerger) Searching for point: " << pointToSearch.x << ", " << pointToSearch.y << ", " << pointToSearch.z << std::endl;
 		mergeMachineLogger.log("(CategorizedLinePartialBoundMerger) !! Searching for point: ", pointToSearch.x, ", ", pointToSearch.y, ", ", pointToSearch.z, "\n");
 		CategorizedLineSearchResult result = checkForNextNonboundMergeCandidate(pointToSearch);
 		if (result.wasFound == true)

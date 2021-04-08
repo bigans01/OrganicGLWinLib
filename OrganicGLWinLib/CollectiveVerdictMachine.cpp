@@ -54,7 +54,9 @@ bool CollectiveVerdictMachine::doesAnomalousMassSPolyExist()
 		(outsideOfFinder != relationshipList.end())
 	)
 	{
+		
 		doesAnomalyExist = true;
 	}
-	return doesAnomalyExist;
+
+	return doesAnomalyExist;	
 }

@@ -191,6 +191,7 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 
 void CategorizedLineMerger::runMergingForEachMachine()
 {
+	//std::cout << ">>>>> MERGE PROCESS BEGIN. " << std::endl;
 	//std::cout << ">>>> Running merging for each machine. " << std::endl;
 	auto machineMapBegin = machineMap.begin();
 	auto machineMapEnd = machineMap.end();
@@ -202,6 +203,7 @@ void CategorizedLineMerger::runMergingForEachMachine()
 
 void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 {
+	//std::cout << ">>> Attempting send of lines to factory..." << std::endl;
 	if (mergerLogger.isLoggingSet())
 	{
 		mergerLogger.log("(CategorizedLineMerger) Remaining lines in cleaveSequenceFactory, BEFORE sending over from the CategorizedLineMerger: ");
@@ -215,10 +217,10 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 		CategorizedLine currentLine = machineMapBegin->second->fetchProducedLine();
 		int superDumbVal = 3;
 
-		std::cout << "!! Current Line stats: " << std::endl;
-		std::cout << "point A: " << currentLine.line.pointA.x << ", " << currentLine.line.pointA.y << ", " << currentLine.line.pointA.z << std::endl;
-		std::cout << "point B: " << currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
-		std::cout << "Empty normal: " << currentLine.emptyNormal.x << ", " << currentLine.emptyNormal.y << ", " << currentLine.emptyNormal.z << std::endl;
+		//std::cout << "!! Current Line stats: " << std::endl;
+		//std::cout << "point A: " << currentLine.line.pointA.x << ", " << currentLine.line.pointA.y << ", " << currentLine.line.pointA.z << std::endl;
+		//std::cout << "point B: " << currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
+		//std::cout << "Empty normal: " << currentLine.emptyNormal.x << ", " << currentLine.emptyNormal.y << ", " << currentLine.emptyNormal.z << std::endl;
 
 		//mergerLogger.log("(CategorizedLineMerger) !! Current Line stats: ", "\n");
 		//mergerLogger.log("(CategorizedLineMerger) point A: ", currentLine.line.pointA.x, ", ", currentLine.line.pointA.y, ", ", currentLine.line.pointA.z, "\n");
@@ -290,7 +292,7 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 
 		//currentLine.testFunction();
 	}
-
+	//std::cout << ">>> Attempting send of lines to factory COMPLETE..." << std::endl;
 	
 	
 	//std::cout << "!!! Finished call of sendMergedLinesToCleaveSequenceFactory. " << std::endl;
@@ -307,4 +309,6 @@ void CategorizedLineMerger::sendMergedLinesToCleaveSequenceFactory()
 
 	mergerLogger.log("(CategorizedLineMerger) !!! Finished call of sendMergedLinesToCleaveSequenceFactory. ", "\n");
 	mergerLogger.waitForDebugInput();
+
+	//std::cout << ">>>>> MERGE PROCESS END. " << std::endl;
 }

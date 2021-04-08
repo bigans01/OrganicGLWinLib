@@ -92,11 +92,13 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationP
 	return fetchedLine;
 }
 
+/*
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, in_fetchIndex);
 	return fetchedLine;
 }
+*/
 
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
@@ -212,77 +214,93 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 	}
 
 	// find the cycling directions for PARTIAL_BOUND and INTERSECTS_POINT_PRECISE. (will need to eventually include A_SLICE...)
-	determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);
-
-	// Typical case 1: only do this if there are partial bound lines or a-sliced lines, and exactly 0 intereceptPointPreciseCount; this is the typical situation.
-	if
-	(
-		(
-			(lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)
-			||
-			(lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
-			||
-			(lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) > 0)
-			)
-			&&
-			(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) == 0)
-		)
+	// if any of the lines can't be determined, don't bother running the CleaveSequences (4/8/2021).
+	// This logic will eventually need to be moved to a different location, where only CleaveSequences containing "bad" lines should be dropped,
+	// not all CategorizedLines.
+	bool areAllLinesValid = determineCyclingDirectionsForCategorizedLines(in_borderLineArrayRef);
+	
+	if (areAllLinesValid == false)
 	{
-		//std::cout << ">>> Handling typical scenario" << std::endl;
+		std::cout << "(CleaveSequenceFactory): at least one invalid categorized line (undeterminable direction) was found. " << std::endl;
+		int someVal = 3;
+		std::cout << "Size of cleave map is: " << in_cleaveMapRef->size() << std::endl;
+		//while (someVal == 3)
+		//{
 
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling typical scenario", "\n");
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Post-MERGE stats (2) ", "\n");
-		if (cleaveSequenceFactoryLogger.isLoggingSet())
+		//}
+	}
+	
+	else if (areAllLinesValid == true)
+	{
+		// Typical case 1: only do this if there are partial bound lines or a-sliced lines, and exactly 0 intereceptPointPreciseCount; this is the typical situation.
+		if
+			(
+			(
+				(lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)
+				||
+				(lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
+				||
+				(lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) > 0)
+				)
+				&&
+				(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) == 0)
+				)
 		{
-			lineManager.printLineCountsForEachType();
+			//std::cout << ">>> Handling typical scenario" << std::endl;
+
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling typical scenario", "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ::::::::::::::::::::::::: Post-MERGE stats (2) ", "\n");
+			if (cleaveSequenceFactoryLogger.isLoggingSet())
+			{
+				lineManager.printLineCountsForEachType();
+			}
+
+			handleScenarioTypical(in_cleaveMapRef);
 		}
 
-		handleScenarioTypical(in_cleaveMapRef);
-	}
+		// Special case 1: there is 1 line with a value of INTERCEPTS_POINT_PRECISE.
+		else if
+			(
+				// for a situation in which there is exactly one INTERCEPTS_POINT_PRECISE (this condition will change at a later date.)
+			(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) == 1)
+				)
+		{
+			//std::cout << ":::: test: " << in_borderLineArrayRef[0].
+			//std::cout << ">>> Handling precise scenario" << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling precise scenario", "\n");
+			handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
+		}
+		else if
+			(
+			(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) > 1)
+				)
+		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling multiple precise scenario", "\n");
+			handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
+			//int stopVal = 3;
+			//std::cin >> stopVal;
+			cleaveSequenceFactoryLogger.waitForDebugInput();
+		}
+		else
+		{
+			std::cout << "(CleaveSequenceFactory) !!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
+			//std::cout << "!! Number of interceptsPointPrecise: " << interceptsPointPreciseCount << std::endl;
+			//int someVal = 3;
+			//std::cin >> someVal;
+		}
 
-	// Special case 1: there is 1 line with a value of INTERCEPTS_POINT_PRECISE.
-	else if
-	(
-		// for a situation in which there is exactly one INTERCEPTS_POINT_PRECISE (this condition will change at a later date.)
-		(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) == 1)
-	)
-	{
-		//std::cout << ":::: test: " << in_borderLineArrayRef[0].
-		//std::cout << ">>> Handling precise scenario" << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling precise scenario", "\n");
-		handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
+		//std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
+		if (cleaveSequenceFactoryLogger.isLoggingSet())
+		{
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Number of CleaveSequences produced is: ", (*in_cleaveMapRef).size(), "\n");
+			cleaveSequenceFactoryLogger.waitForDebugInput();
+		}
 	}
-	else if
-	(
-		(lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) > 1)
-	)
-	{
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling multiple precise scenario", "\n");
-		handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
-		//int stopVal = 3;
-		//std::cin >> stopVal;
-		cleaveSequenceFactoryLogger.waitForDebugInput();
-	}
-	else
-	{
-		std::cout << "(CleaveSequenceFactory) !!!!!!!!!!!! Warning, invalid scenario detected, or number of intercept points precise has been reduced to 0...; " << std::endl;
-		//std::cout << "!! Number of interceptsPointPrecise: " << interceptsPointPreciseCount << std::endl;
-		//int someVal = 3;
-		//std::cin >> someVal;
-	}
-
-	//std::cout << "================================================>>>>>> End call of constructAndExportCleaveSequences() " << std::endl;
-	if (cleaveSequenceFactoryLogger.isLoggingSet())
-	{
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Number of CleaveSequences produced is: ", (*in_cleaveMapRef).size(), "\n");
-		cleaveSequenceFactoryLogger.waitForDebugInput();
-	}
-
 }
 
-void CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
+bool CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 {
-	lineManager.determineCyclingDirections(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
+	return lineManager.determineCyclingDirections(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 }
 
 /*
@@ -358,6 +376,8 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 {
 	// NEWW
 	// sliced checks.
+	bool areNormalsValid = true;
+	glm::vec3 emptyVector(0, 0, 0);
 	auto slicedBegin = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE);
 	auto slicedEnd = lineManager.getEndIteratorForType(IntersectionType::A_SLICE);
 	for (; slicedBegin != slicedEnd; slicedBegin++)
@@ -368,7 +388,11 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Printing SLICED CategorizedLines: ", "\n");
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point A: ", slicedBegin->second.line.pointA.x, ", ", slicedBegin->second.line.pointA.y, ", ", slicedBegin->second.line.pointA.z, "\n");
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Point B: ", slicedBegin->second.line.pointB.x, ", ", slicedBegin->second.line.pointB.y, ", ", slicedBegin->second.line.pointB.z, "\n");
-
+		if (slicedBegin->second.emptyNormal == emptyVector)
+		{
+			areNormalsValid = false;
+			std::cout << "!!!!! NOTICE: A_SLICE normal detected as invalid." << std::endl;
+		}
 	}
 
 	if (cleaveSequenceFactoryLogger.isLoggingSet())
@@ -377,147 +401,153 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 		lineManager.printAllLines();
 	}
 
-	while (lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)	// do this until all partial_bound lines have been accounted for. 
+	// only continue if areNormalsValid is true.
+	if (areNormalsValid == true)
 	{
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): BEGIN, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
-
-		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
-
-		auto partialBoundMapBegin = lineManager.getBeginIteratorForType(IntersectionType::PARTIAL_BOUND);					// get the first line in the partial bound map
-		CategorizedLine* partialBoundLineRef = &partialBoundMapBegin->second;	// get a ref to the line
-
-		if (cleaveSequenceFactoryLogger.isLoggingSet())
+		while (lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)	// do this until all partial_bound lines have been accounted for. 
 		{
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Current partial bound line stats are:", "\n");
-			cleaveSequenceFactoryLogger.log("Point A: ", partialBoundLineRef->line.pointA.x, ", ", partialBoundLineRef->line.pointA.y, ", ", partialBoundLineRef->line.pointA.z, "\n");
-			cleaveSequenceFactoryLogger.log("Point B: ", partialBoundLineRef->line.pointB.x, ", ", partialBoundLineRef->line.pointB.y, ", ", partialBoundLineRef->line.pointB.z, "\n");
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): BEGIN, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
 
-		}
+			cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
 
-		int firstLineID = partialBoundMapBegin->first;							// store the ID of the first line (for removal later)
-		CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
-		//insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
-		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, firstLineID));	// insert the first partial bound line we find
-		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();		// get the searchable point from the first partial bound line we found in the previous step
+			auto partialBoundMapBegin = lineManager.getBeginIteratorForType(IntersectionType::PARTIAL_BOUND);					// get the first line in the partial bound map
+			CategorizedLine* partialBoundLineRef = &partialBoundMapBegin->second;	// get a ref to the line
 
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", firstPointToSearch.x, ", ", firstPointToSearch.y, ", ", firstPointToSearch.z, "\n");
-
-		//std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
-
-
-		// first, work with the partially bound lines. Get the first available partial bound line in the map, scan for linking nonbound lines, until no more linking lines are found.
-		// Then, scan the partialBoundMap until the ending partially bound line is found (the B point of this partial line will equal the B point of a linked nonbound line). 
-		// When this is done, take all the lines invovled (both nonbound and partial bound) and put them into a new CleaveSequence. Remmove their original copies from the appropriate maps --
-		// partial bound lines will be removed from partialBoundMap (and the counter decremented) and the nonbound lines will be removed from the nonboundMap (also decrementing here)
-		bool continueSearch = true;
-		//CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
-		CategorizedLineSearchResult result = lineManager.checkManagerForNextNonboundLine(firstPointToSearch);	// search for the next nonbound line, via the lineManager
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): MIDDLE, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
-		if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
-		{
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found initial non-bound line to insert.", "\n");
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point A: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z, "\n");
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point B: ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
-
-			newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
-			bool continueFlag = true;							// check for the next line, at least once.
-			while (continueFlag == true)	// loop until this is false.
+			if (cleaveSequenceFactoryLogger.isLoggingSet())
 			{
-				glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
-				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", nextPointToSearch.x, ", ", nextPointToSearch.y, ", ", nextPointToSearch.z, "\n");
-				//CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
-				CategorizedLineSearchResult nextResult = lineManager.checkManagerForNextNonboundLine(nextPointToSearch);	// search for the next nonbound line, via the lineManager
-				if (nextResult.wasFound == false)
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) Current partial bound line stats are:", "\n");
+				cleaveSequenceFactoryLogger.log("Point A: ", partialBoundLineRef->line.pointA.x, ", ", partialBoundLineRef->line.pointA.y, ", ", partialBoundLineRef->line.pointA.z, "\n");
+				cleaveSequenceFactoryLogger.log("Point B: ", partialBoundLineRef->line.pointB.x, ", ", partialBoundLineRef->line.pointB.y, ", ", partialBoundLineRef->line.pointB.z, "\n");
+
+			}
+
+			int firstLineID = partialBoundMapBegin->first;							// store the ID of the first line (for removal later)
+			CleaveSequence newSequence;												// the new line sequence that will eventually be inserted back into the referenced SPoly
+			//insertFirstPartialBoundLineForSequence(&newSequence, firstLineID);		// insert the first partial bound line we find
+			newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, firstLineID));	// insert the first partial bound line we find
+			glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();		// get the searchable point from the first partial bound line we found in the previous step
+
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", firstPointToSearch.x, ", ", firstPointToSearch.y, ", ", firstPointToSearch.z, "\n");
+
+			//std::cout << "!!! Initial point to search is: " << firstPointToSearch.x << ", " << firstPointToSearch.y << ", " << firstPointToSearch.z << std::endl;
+
+
+			// first, work with the partially bound lines. Get the first available partial bound line in the map, scan for linking nonbound lines, until no more linking lines are found.
+			// Then, scan the partialBoundMap until the ending partially bound line is found (the B point of this partial line will equal the B point of a linked nonbound line). 
+			// When this is done, take all the lines invovled (both nonbound and partial bound) and put them into a new CleaveSequence. Remmove their original copies from the appropriate maps --
+			// partial bound lines will be removed from partialBoundMap (and the counter decremented) and the nonbound lines will be removed from the nonboundMap (also decrementing here)
+			bool continueSearch = true;
+			//CategorizedLineSearchResult result = checkForNextNonboundLine(firstPointToSearch);	// search for the first point.
+			CategorizedLineSearchResult result = lineManager.checkManagerForNextNonboundLine(firstPointToSearch);	// search for the next nonbound line, via the lineManager
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): MIDDLE, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
+			if (result.wasFound == true)		// insert the first categorized line into the sequence, if it was found:
+			{
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found initial non-bound line to insert.", "\n");
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point A: ", result.returnLine.line.pointA.x, ", ", result.returnLine.line.pointA.y, ", ", result.returnLine.line.pointA.z, "\n");
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Non-bound point B: ", result.returnLine.line.pointB.x, ", ", result.returnLine.line.pointB.y, ", ", result.returnLine.line.pointB.z, "\n");
+
+				newSequence.insertNonboundLine(result.returnLine);	// insert the fetched line into the sequence
+				bool continueFlag = true;							// check for the next line, at least once.
+				while (continueFlag == true)	// loop until this is false.
 				{
-					continueFlag = false;	// end the loop.
-				}
-				else if (nextResult.wasFound == true)
-				{
-					cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found next non-bound line to insert.", "\n");
-					newSequence.insertNonboundLine(nextResult.returnLine);
+					glm::vec3 nextPointToSearch = newSequence.fetchPointToSearch();
+					cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Next point to search is: ", nextPointToSearch.x, ", ", nextPointToSearch.y, ", ", nextPointToSearch.z, "\n");
+					//CategorizedLineSearchResult nextResult = checkForNextNonboundLine(nextPointToSearch);
+					CategorizedLineSearchResult nextResult = lineManager.checkManagerForNextNonboundLine(nextPointToSearch);	// search for the next nonbound line, via the lineManager
+					if (nextResult.wasFound == false)
+					{
+						continueFlag = false;	// end the loop.
+					}
+					else if (nextResult.wasFound == true)
+					{
+						cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): Found next non-bound line to insert.", "\n");
+						newSequence.insertNonboundLine(nextResult.returnLine);
+					}
 				}
 			}
+
+			// once the search for partially bound lines is done, look for the ending partially bound line for the sequence.
+			glm::vec3 lastPointToSearch = newSequence.fetchPointToSearch();
+			//std::cout << "### Current last point to search is: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
+			CategorizedLineSearchResult finalResult = searchForLastPartialBoundLineForSequence(lastPointToSearch);
+			if (finalResult.wasFound == true)
+			{
+				//std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
+				newSequence.insertLastLine(finalResult.returnLine);
+				newSequence.sequenceStatus = CleaveSequenceStatus::COMPLETE; // mark it as complete
+			}
+			else
+			{
+				//std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
+				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
+
+				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+				std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
+				hasBadProduction = true;
+				newSequence.printCategorizedLines();
+
+				int someVal = 3;
+				std::cin >> someVal;
+			}
+			//std::cout << "## Remaining number of partial bounds: " << partialboundCount << std::endl;
+
+
+			// lastly, if the newSequence is marked as "complete" move it to the referenced sequence. Otherwise, discard it.
+			if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
+			{
+				int cleaveMapRefSize = int((*in_cleaveMapRef).size());
+				//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+				(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
+				//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+			}
+
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Finished 1 pass of a CategorizedLine. ", "\n");
+
 		}
 
-		// once the search for partially bound lines is done, look for the ending partially bound line for the sequence.
-		glm::vec3 lastPointToSearch = newSequence.fetchPointToSearch();
-		//std::cout << "### Current last point to search is: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
-		CategorizedLineSearchResult finalResult = searchForLastPartialBoundLineForSequence(lastPointToSearch);
-		if (finalResult.wasFound == true)
+		while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
 		{
-			//std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
-			newSequence.insertLastLine(finalResult.returnLine);
-			newSequence.sequenceStatus = CleaveSequenceStatus::COMPLETE; // mark it as complete
-		}
-		else
-		{
-			//std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
-			newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
+			//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time. ", "\n");
 
-			std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
-			std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
-			newSequence.printCategorizedLines();
-
-			int someVal = 3;
-			std::cin >> someVal;
-		}
-		//std::cout << "## Remaining number of partial bounds: " << partialboundCount << std::endl;
-
-
-		// lastly, if the newSequence is marked as "complete" move it to the referenced sequence. Otherwise, discard it.
-		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
-		{
+			cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
+			auto aslicedMapBegin = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE);					// get the first line in the a_slice map
+			int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
+			CleaveSequence newSequence;
+			//insertASliceLineForSequence(&newSequence, firstLineID);
+			newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, firstLineID));
 			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
-			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+
+			//newSequence.printCategorizedLines();
+			//int someVal = 3;
+			//std::cin >> someVal;
+
+			if (cleaveSequenceFactoryLogger.isLoggingSet() == true)
+			{
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> started printing out of produced A_SLICE categorized lines.", "\n");
+				newSequence.printCategorizedLines();
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> finished printing out of produced A_SLICE categorized lines.", "\n");
+				cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of CleaveSequences is now: ", int((*in_cleaveMapRef).size()), "\n");
+				cleaveSequenceFactoryLogger.waitForDebugInput();
+			}
+
+
 		}
 
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Finished 1 pass of a CategorizedLine. ", "\n");
-
-	}
-
-	while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
-	{
-		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time. ", "\n");
-
-		cleaveSequenceMapRef = in_cleaveMapRef;									// set the map reference that we will export results to.
-		auto aslicedMapBegin = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE);					// get the first line in the a_slice map
-		int firstLineID = aslicedMapBegin->first;							// store the ID of the first line (for removal later)
-		CleaveSequence newSequence;
-		//insertASliceLineForSequence(&newSequence, firstLineID);
-		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, firstLineID));
-		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
-
-		//newSequence.printCategorizedLines();
-		//int someVal = 3;
-		//std::cin >> someVal;
-
-		if (cleaveSequenceFactoryLogger.isLoggingSet() == true)
+		while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) > 0)
 		{
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> started printing out of produced A_SLICE categorized lines.", "\n");
-			newSequence.printCategorizedLines();
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> finished printing out of produced A_SLICE categorized lines.", "\n");
-			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) number of CleaveSequences is now: ", int((*in_cleaveMapRef).size()), "\n");
-			cleaveSequenceFactoryLogger.waitForDebugInput();
+			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!", "\n");
+			//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!" << std::endl;
+			auto aslicedSingleInterceptsPointPreciseFirst = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE);
+			int firstLineID = aslicedSingleInterceptsPointPreciseFirst->first;
+			CleaveSequence newSequence;
+			//insertASliceSingleInterceptsPointPreciseForSequence(&newSequence, firstLineID);
+			//newSequence.insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(firstLineID));
+			newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, firstLineID));
+			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
+			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 		}
-
-
-	}
-
-	while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) > 0)
-	{
-		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!", "\n");
-		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time....for an aslicedSingleInterceptsPointPrecise!" << std::endl;
-		auto aslicedSingleInterceptsPointPreciseFirst = lineManager.getBeginIteratorForType(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE);
-		int firstLineID = aslicedSingleInterceptsPointPreciseFirst->first;
-		CleaveSequence newSequence;
-		//insertASliceSingleInterceptsPointPreciseForSequence(&newSequence, firstLineID);
-		newSequence.insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(firstLineID));
-		int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-		(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 	}
 }
 
