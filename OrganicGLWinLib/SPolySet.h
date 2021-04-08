@@ -132,21 +132,6 @@ private:
 	void insertPolyFracturingResults(int in_originalSPolyID, SPolySupergroup in_producedSupergroup);
 	void insertOriginalPolyAsFracturingResult(int in_originalSPolyID, SPoly in_sPoly);
 	int produceCategorizedLinesForHostPoly(SPoly* in_hostPolyPtr, int in_hostPolyAID, SPoly* in_guestPolyPtr, int in_guestPolyID);
-
-	IntersectionResult checkIfLineIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
-	IntersectionResult checkIfRayIntersectsTriangle(STriangle in_triangle, STriangleLine in_line);
-	IntersectionResult checkIfRayIntersectsTriangleSpecial(STriangle in_triangle, STriangleLine in_line);
-
-	glm::vec3 cross(glm::vec3 in_A, glm::vec3 in_B);
-	float dot(glm::vec3 in_A, glm::vec3 in_B);
-	double doubledot(glm::vec3 in_A, glm::vec3 in_B);
-	glm::vec3 roundPointToHundredths(glm::vec3 in_point);
-	int checkIfPointsMatch(glm::vec3 in_pointA, glm::vec3 in_pointB);
-	glm::quat createQuaternion(float radians, glm::vec3 in_angle);
-
-	float getRadiansForPosZViaY(glm::vec3 in_vec3);
-	float getRadiansForPosYViaX(glm::vec3 in_vec3);
-
 	MassManipulationMode getManipulationModeForSPolyGroup(int in_sPolyGroupID); // gets the MMM for a group of SPolys (passed in value should be 0 or 1)
 
 	void setOption(DebugOption in_option);

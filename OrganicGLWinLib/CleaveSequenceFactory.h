@@ -83,7 +83,7 @@ class CleaveSequenceFactory
 		//CategorizedLine fetchAndRemovePartialBound(int in_fetchIndex);
 		//CategorizedLine fetchAndRemoveASlice(int in_fetchIndex);
 		//CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex);
-		CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
+		//CategorizedLine fetchAndRemoveInterceptPointPrecise(int in_fetchIndex);
 
 		// fetch functions, that include a record push.
 		CategorizedLine fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);

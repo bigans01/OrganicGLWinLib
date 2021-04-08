@@ -107,11 +107,13 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPoint
 	return fetchedLine;
 }
 
+/*
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int in_fetchIndex)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::INTERCEPTS_POINT_PRECISE, in_fetchIndex);
 	return fetchedLine;
 }
+*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -694,7 +696,8 @@ void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::ma
 		int firstLineID = preciseMapBegin->first;							// store the ID of the first line (for removal later)
 		CleaveSequence newSequence;
 		//insertFirstInterceptsPointPreciseForSequence(&newSequence, firstLineID);
-		newSequence.insertFirstLine(fetchAndRemoveInterceptPointPrecise(firstLineID));
+		//newSequence.insertFirstLine(fetchAndRemoveInterceptPointPrecise(firstLineID));
+		newSequence.insertFirstLine(lineManager.fetchAndRemoveLineAtIndex(IntersectionType::INTERCEPTS_POINT_PRECISE, firstLineID));
 		glm::vec3 firstPointToSearch = newSequence.fetchPointToSearch();
 
 		// search for any nonbound lines
