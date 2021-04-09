@@ -8,6 +8,7 @@ void PointToMassRelationshipJudge::insertShellSliceForSPolyID(int in_sPolyID,
 	glm::vec3 in_relationshipPointToCompare,
 	std::map<int, SPoly*> in_shellSliceClippingShellMap)
 {
+	pointToCompareSlicesAgainst = in_relationshipPointToCompare;
 	MassZoneShellSlice newShellSlice(in_sTriangleRef, in_sPolyID, in_sTriangleID, in_shellSliceBaseEmptyNormal, in_relationshipPointToCompare, in_shellSliceClippingShellMap);
 	shellSliceMap[in_sPolyID] = newShellSlice;
 }
@@ -34,22 +35,30 @@ IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 		{
 			coplanarAnalysisCount++;
 			analysisMap[shellSlicesBegin->first] = currentAnalysisResult;
+			JudgeTriangleLocation location(shellSlicesBegin->second.baseSPolyID, shellSlicesBegin->second.baseSTriangleID);
+			locationMap[shellSlicesBegin->first] = location;
 			break;	// we can break out of the rest of the shell slices, the moment we discover a coplanar result.
 		}
 		else if (currentAnalysisResult == PointToMassRelationshipType::WITHIN_MASS)
 		{
 			withinMassAnalysisCount++;
 			analysisMap[shellSlicesBegin->first] = currentAnalysisResult;
+			JudgeTriangleLocation location(shellSlicesBegin->second.baseSPolyID, shellSlicesBegin->second.baseSTriangleID);
+			locationMap[shellSlicesBegin->first] = location;
 		}
 		else if (currentAnalysisResult == PointToMassRelationshipType::OUTSIDE_OF_MASS)
 		{
 			outsideOfMassAnalysisCount++;
 			analysisMap[shellSlicesBegin->first] = currentAnalysisResult;
+			JudgeTriangleLocation location(shellSlicesBegin->second.baseSPolyID, shellSlicesBegin->second.baseSTriangleID);
+			locationMap[shellSlicesBegin->first] = location;
 		}
 		else if (currentAnalysisResult == PointToMassRelationshipType::NO_LINE_OF_SIGHT)
 		{
 			noLineOfSightCount++;
 			analysisMap[shellSlicesBegin->first] = currentAnalysisResult;
+			JudgeTriangleLocation location(shellSlicesBegin->second.baseSPolyID, shellSlicesBegin->second.baseSTriangleID);
+			locationMap[shellSlicesBegin->first] = location;
 		}
 
 	}
@@ -57,15 +66,15 @@ IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 	// optional: print the analysis map.
 	auto analysisBegin = analysisMap.begin();
 	auto analysisEnd = analysisMap.end();
-	std::cout << "::::::::::::::::: Printing resulting analysis. " << std::endl;
+	std::cout << "::::::::::::::::: Printing resulting analysis, for the point: " << pointToCompareSlicesAgainst.x << ", " << pointToCompareSlicesAgainst.y << ", " << pointToCompareSlicesAgainst.z << ", " << std::endl;
 	for (; analysisBegin != analysisEnd; analysisBegin++)
 	{
 		switch (analysisBegin->second)
 		{
-			case (PointToMassRelationshipType::COPLANAR_TO_STRIANGLE): { std::cout << "[" << analysisBegin->first << "]: COPLANAR_TO_STRIANGLE" << std::endl; break; };
-			case (PointToMassRelationshipType::WITHIN_MASS): { std::cout << "[" << analysisBegin->first << "]: WITHIN_MASS" << std::endl; break; };
-			case (PointToMassRelationshipType::OUTSIDE_OF_MASS): { std::cout << "[" << analysisBegin->first << "]: OUTSIDE_OF_MASS" << std::endl; break; };
-			case (PointToMassRelationshipType::NO_LINE_OF_SIGHT): { std::cout << "[" << analysisBegin->first << "]: NO_LINE_OF_SIGHT" << std::endl; break; };
+			case (PointToMassRelationshipType::COPLANAR_TO_STRIANGLE): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: COPLANAR_TO_STRIANGLE" << std::endl; break; };
+			case (PointToMassRelationshipType::WITHIN_MASS): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: WITHIN_MASS" << std::endl; break; };
+			case (PointToMassRelationshipType::OUTSIDE_OF_MASS): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: OUTSIDE_OF_MASS" << std::endl; break; };
+			case (PointToMassRelationshipType::NO_LINE_OF_SIGHT): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: NO_LINE_OF_SIGHT" << std::endl; break; };
 		}
 	}
 	//int waitVal = 3;
@@ -85,6 +94,12 @@ bool PointToMassRelationshipJudge::determineVerdict()
 	// -if there is at least one value of OUTSIDE_OF_MASS (this maintains line of sight)	->  the point is outside of the mass. (runTestAnyCaseOfOutsideOfMass() == true)
 	// -if there is at least one COPLANAR_TO_SHELL_SPOLY									->  the point is WITHIN the mass.
 	// -if the number of WITHIN_MASS counts equals the entire size of the shell slices		->  the point is WITHIN the mass.
+	//
+	// if the value of shouldPointBeClipped is TRUE, it means that the point will be "clipped" from the PointToSPolyRelationshipTrackerContainer,
+	// which will disqualify it from being removed. A point which is not clipped, -- which would make shouldPointBeClipped equal to FALSE -- means that the
+	// point is within the mass.
+	//
+	// Remember, an SPoly can only be clipped, if all points are considered to be within the mass -- in other words, there would be no clipped points of the SPoly.
 	bool shouldPointBeClipped = false;
 	if
 	(

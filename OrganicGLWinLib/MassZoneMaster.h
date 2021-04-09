@@ -12,12 +12,14 @@
 #include "PolyDebugLevel.h"
 #include "DebugOption.h"
 #include "MassManipulationMode.h"
+#include "DebugOptionSet.h"
 
 class MassZoneMaster
 {
 	public:
 		void registerSPolyToMassZone(int in_sPolyID, SPoly in_sPoly, MassZoneType in_massZoneType);
 		void disqualifyMeshMatterMeta(int in_sPolyID);
+		void setDOForClippableSPolyInClipper(int in_sPolyID, DebugOption in_debugOption);
 		void printQualifiedMeshMatterMetas();
 		void createMassZoneBoxBoundaries(MassZoneBoxType in_massZoneBoxType);
 		void setZoneClipperReferences();
@@ -31,8 +33,10 @@ class MassZoneMaster
 	private:
 		friend class SPolySet;
 		std::map<int, MassZoneType> sPolyZoneTypeMap;
+		std::map<int, DebugOptionSet> massZoneClippableOptionSets;
 		MassZone oldZone;
 		MassZone newZone;
+		void sendClippableDOSetsToClippers();
 };
 
 #endif

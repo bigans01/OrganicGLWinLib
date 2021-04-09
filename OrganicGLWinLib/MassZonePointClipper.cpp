@@ -25,6 +25,24 @@ void MassZonePointClipper::setOtherZoneMeshMatterMetaMapRef(std::map<int, MeshMa
 	otherZoneMeshMatterMetaMapRef = in_otherZoneMeshMatterMetaMapRef;
 }
 
+void MassZonePointClipper::setClippableSPolyDO(int in_sPoly, DebugOption in_debugOption)
+{
+	specificClippableSPolyOptions[in_sPoly] += in_debugOption;
+}
+
+PolyDebugLevel MassZonePointClipper::checkForSpecificDOInSPoly(int in_sPoly, DebugOption in_debugOptionToCheck)
+{
+	PolyDebugLevel returnLevel = PolyDebugLevel::NONE;
+	if (auto sPolyFinder = specificClippableSPolyOptions.find(in_sPoly); sPolyFinder != specificClippableSPolyOptions.end())
+	{
+		if (auto optionFinder = specificClippableSPolyOptions[in_sPoly].find(in_debugOptionToCheck);  optionFinder != specificClippableSPolyOptions[in_sPoly].end())
+		{
+			returnLevel = PolyDebugLevel::DEBUG;
+		}
+	}
+	return returnLevel;
+}
+
 void MassZonePointClipper::run()
 {
 	//std::cout << "!! Size of clipping shell map: " << int(clippingShellMap.size()) << std::endl;
@@ -65,10 +83,24 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 {
 	bool willBePurged = false;
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
-	//std::cout << "|||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
-	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString," |||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
-	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
-	clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> size of clippingShellMap: ", clippingShellMap.size(), "\n");
+	PolyLogger currentSPolyClippingLogger;
+	currentSPolyClippingLogger.setDebugLevel(checkForSpecificDOInSPoly(in_meshMatterMetaRef->referencedSPolyID, DebugOption::SPECIFIC_SPOLY_CLIPPING_SHELL_SPOLYS));
+	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
+	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
+	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> size of clippingShellMap: ", clippingShellMap.size(), "\n");
+
+	//sstd::cout << "(MassZonePointClipper) " << zoneString << " |||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
+	if (currentSPolyClippingLogger.isLoggingSet())
+	{
+		auto clippingShellPrintBegin = clippingShellMap.begin();
+		auto clippingShellPrintEnd = clippingShellMap.end();
+		for (; clippingShellPrintBegin != clippingShellPrintEnd; clippingShellPrintBegin++)
+		{
+			std::cout << "(MassZonePointClipper) Printing points for shell SPoly with ID [" << clippingShellPrintBegin->first << "]" << std::endl;
+			clippingShellPrintBegin->second->printPoints();
+			currentSPolyClippingLogger.waitForDebugInput();
+		}
+	}
 
 	PointToMassRelationshipMap currentRelationshipMap = currentMeshMatterSPoly->generatePointToMassRelationshipMap();
 	PointToSPolyRelationshipTrackerContainer relationshipTrackerContainer;

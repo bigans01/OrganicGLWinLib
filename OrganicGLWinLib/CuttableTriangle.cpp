@@ -493,7 +493,7 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 	{
 		glm::vec3 thirdUnusedPoint = cuttableTriangleLines[x].pointA;
 
-		std::cout << "Point to check for index " << x << " will be: " << thirdUnusedPoint.x << ", " << thirdUnusedPoint.y << ", " << thirdUnusedPoint.z << std::endl;
+		//std::cout << "Point to check for index " << x << " will be: " << thirdUnusedPoint.x << ", " << thirdUnusedPoint.y << ", " << thirdUnusedPoint.z << std::endl;
 
 		glm::vec3 cuttingTrianglePoint0 = in_cuttingTriangleRef->cuttingLines[0].pointA;
 		glm::vec3 cuttingTrianglePoint1 = in_cuttingTriangleRef->cuttingLines[1].pointA;
@@ -513,13 +513,13 @@ bool CuttableTriangle::testIfCuttingTriangleConsumesThisTriangle(CuttingTriangle
 	{
 		if (boolArray[y] == true)
 		{
-			std::cout << "Bool value at " << y << " was true!" << std::endl;
+			//std::cout << "Bool value at " << y << " was true!" << std::endl;
 			boolCount++;
 		}
 	}
 	if (boolCount == 3)
 	{
-		std::cout << "Notice::: Triangle is entirely contained within PBZ. " << std::endl;
+		//std::cout << "Notice::: Triangle is entirely contained within PBZ. " << std::endl;
 		isCuttingTriangleConsumed = true;
 	}
 	

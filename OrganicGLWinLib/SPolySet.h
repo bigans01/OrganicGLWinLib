@@ -57,6 +57,14 @@ public:
 	}
 	void setDOGeneric() {};
 
+	// ************************** Recursive template function for enabling debug options for a specific SPoly's clippable calls (as it runs through MassZonePointClipper)**********************************
+	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOSpecificSPolyClipping(int in_clippingSPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+	{
+		zoneMaster.setDOForClippableSPolyInClipper(in_clippingSPolyID, std::forward<FirstDebugOption>(firstOption));
+		setDOSpecificSPolyClipping(in_clippingSPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
+	}
+	void setDOSpecificSPolyClipping(int in_sPolyID) {};
+
 	// ************************** Recursive template function for enabling debug options on a specific SPoly **********************************
 	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOSpecificSPoly(int in_sPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
@@ -136,6 +144,7 @@ private:
 
 	void setOption(DebugOption in_option);
 	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);
+	void setSpecificClippableSPolyOption(int in_sPolyID, DebugOption in_option);
 	PolyDebugLevel checkForSPolyOptionInSpecificSPoly(int in_sPolyID, SPolyDO in_sPolyDO);
 	void removeSPolysFlaggedAsPurgable();
 };

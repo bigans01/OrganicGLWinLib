@@ -14,6 +14,7 @@
 #include "MassZoneBoxBoundaryOrientation.h"
 #include "MassZoneType.h"
 #include "MassZonePointClipper.h"
+#include "DebugOption.h"
 
 
 
@@ -27,11 +28,13 @@ private:
 	void insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy);
 	void insertSPolyToSubZoneMapEntry(int in_sPolyID, int in_subZoneID);
 	void insertSubZoneToSPolyMapEntry(int in_sPolyID, int in_subZoneID);
+	void insertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);
 	void insertMeshMatterMeta(int in_sPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode);
 	void removeMeshMatterMeta(int in_sPolyID);
 	void printMeshMatterMeta();
 	void createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType);
 	void createMassZoneShell(MassZoneType in_massZoneType);
+	void wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);
 	std::map<int, MassSubZone> subZoneMap;
 	std::map<MassZoneBoxBoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
 	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);

@@ -28,10 +28,20 @@ void MassZone::insertSubZoneToSPolyMapEntry(int in_sPolyID, int in_subZoneID)
 	subZoneToSPolyMap[in_subZoneID] = in_sPolyID;
 }
 
+void MassZone::insertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption)
+{
+	clipper.setClippableSPolyDO(in_sPolyID, in_debugOption);
+}
+
 void MassZone::insertMeshMatterMeta(int in_sPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode)
 {
 	MeshMatterMeta newMeta(in_sPolyID, in_massSPolyRef, in_originMassManipulationMode);
 	meshMatterMetaMap[in_sPolyID] = newMeta;
+}
+
+void MassZone::wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption)
+{
+	clipper.setClippableSPolyDO(in_sPolyID, in_debugOption);
 }
 
 void MassZone::removeMeshMatterMeta(int in_sPolyID)

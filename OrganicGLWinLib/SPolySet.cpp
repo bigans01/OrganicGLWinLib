@@ -344,7 +344,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
 
 		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
-		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		/*
 		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
@@ -353,7 +353,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		}
 		*/
 
-		std::cout << "Size of CleaveMap for SPoly " << x << ": " << secondaryPolys[x].cleaveMap.size() << std::endl;
+		//std::cout << "Size of CleaveMap for SPoly " << x << ": " << secondaryPolys[x].cleaveMap.size() << std::endl;
 		//std::cout << "Has bad production: " << secondaryPolys[x].sequenceFactory.hasBadProduction << std::endl;
 
 		/*

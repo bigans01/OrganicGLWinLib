@@ -284,8 +284,8 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		SPolyBorderLines borderLineA = in_borderLineArrayRef[line.pointABorder];
 		SPolyBorderLines borderLineB = in_borderLineArrayRef[line.pointBBorder];
 
-		std::cout << "(CategorizedLine): line.pointABorder value is: " << line.pointABorder << std::endl;
-		std::cout << "(CategorizedLine): line.pointBBorder value is: " << line.pointBBorder << std::endl;
+		//std::cout << "(CategorizedLine): line.pointABorder value is: " << line.pointABorder << std::endl;
+		//std::cout << "(CategorizedLine): line.pointBBorder value is: " << line.pointBBorder << std::endl;
 
 		// will set the direction of the line...
 		generateCyclingDirectionForInterceptPointPrecise(borderLineA, line.pointABorder, borderLineB, line.pointBBorder, emptyNormal, in_polyDebugLevel);

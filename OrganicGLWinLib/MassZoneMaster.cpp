@@ -31,6 +31,49 @@ void MassZoneMaster::disqualifyMeshMatterMeta(int in_sPolyID)
 	}
 }
 
+void MassZoneMaster::setDOForClippableSPolyInClipper(int in_sPolyID, DebugOption in_debugOption)
+{
+	massZoneClippableOptionSets[in_sPolyID] += in_debugOption;
+}
+
+void MassZoneMaster::sendClippableDOSetsToClippers()
+{
+	auto typeMapBegin = sPolyZoneTypeMap.begin();
+	auto typeMapEnd = sPolyZoneTypeMap.end();
+	for (; typeMapBegin != typeMapEnd; typeMapBegin++)
+	{
+		// remember: sPolyZones of the OLD_ZONE go to the new zone, as that is where they are compared...
+		if (typeMapBegin->second == MassZoneType::OLD_ZONE)
+		{
+			auto setFinder = massZoneClippableOptionSets.find(typeMapBegin->first);
+			if (setFinder != massZoneClippableOptionSets.end())
+			{
+				auto currentSetBegin = massZoneClippableOptionSets[typeMapBegin->first].begin();
+				auto currentSetEnd = massZoneClippableOptionSets[typeMapBegin->first].end();
+				for (; currentSetBegin != currentSetEnd; currentSetBegin++)
+				{
+					newZone.insertDOForClippableSPoly(setFinder->first, *currentSetBegin);	// DebugOptionSets for OLD_ZONE sPolyZones are sent to the NEW_ZONE
+				}
+			}
+		}
+
+		// and vice versa
+		else if (typeMapBegin->second == MassZoneType::NEW_ZONE)
+		{
+			auto setFinder = massZoneClippableOptionSets.find(typeMapBegin->first);
+			if (setFinder != massZoneClippableOptionSets.end())
+			{
+				auto currentSetBegin = massZoneClippableOptionSets[typeMapBegin->first].begin();
+				auto currentSetEnd = massZoneClippableOptionSets[typeMapBegin->first].end();
+				for (; currentSetBegin != currentSetEnd; currentSetBegin++)
+				{
+					oldZone.insertDOForClippableSPoly(setFinder->first, *currentSetBegin);	// DebugOptionSets for NEW_ZONE sPolyZones are sent to the OLD_ZONE
+				}
+			}
+		}
+	}
+}
+
 void MassZoneMaster::printQualifiedMeshMatterMetas()
 {
 	std::cout << "Printing OLD zone qualifieds: " << std::endl;
@@ -57,6 +100,7 @@ void MassZoneMaster::setZoneClipperReferences()
 
 void MassZoneMaster::runPointClippers()
 {
+	sendClippableDOSetsToClippers();
 	oldZone.runClipper();
 	newZone.runClipper();
 }
