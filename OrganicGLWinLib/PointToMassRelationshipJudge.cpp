@@ -13,10 +13,11 @@ void PointToMassRelationshipJudge::insertShellSliceForSPolyID(int in_sPolyID,
 	shellSliceMap[in_sPolyID] = newShellSlice;
 }
 
-IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
+IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices(PolyDebugLevel in_polyDebugLevel)
 {
-	// a map for storing the analysis results of each shell slice.
-	//std::map<int, PointToMassRelationshipType> analysisMap;
+	// logger set up
+	ptmRelationshipJudgeLoggerLogLevel = in_polyDebugLevel;
+	ptmRelationshipJudgeLogger.setDebugLevel(ptmRelationshipJudgeLoggerLogLevel);
 
 	// Step 1: run analysis on all the slices, to compute the appropriate values of the analyzedType in each.
 	auto shellSlicesBegin = shellSliceMap.begin();
@@ -64,17 +65,20 @@ IndividualVerdict PointToMassRelationshipJudge::executeJudgementOnShellSlices()
 	}
 
 	// optional: print the analysis map.
-	auto analysisBegin = analysisMap.begin();
-	auto analysisEnd = analysisMap.end();
-	std::cout << "::::::::::::::::: Printing resulting analysis, for the point: " << pointToCompareSlicesAgainst.x << ", " << pointToCompareSlicesAgainst.y << ", " << pointToCompareSlicesAgainst.z << ", " << std::endl;
-	for (; analysisBegin != analysisEnd; analysisBegin++)
+	if (ptmRelationshipJudgeLogger.isLoggingSet())
 	{
-		switch (analysisBegin->second)
+		auto analysisBegin = analysisMap.begin();
+		auto analysisEnd = analysisMap.end();
+		std::cout << "(PointToMassRelationshipJudge) :::::::: Printing resulting analysis, for the point: " << pointToCompareSlicesAgainst.x << ", " << pointToCompareSlicesAgainst.y << ", " << pointToCompareSlicesAgainst.z << ", " << std::endl;
+		for (; analysisBegin != analysisEnd; analysisBegin++)
 		{
-			case (PointToMassRelationshipType::COPLANAR_TO_STRIANGLE): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: COPLANAR_TO_STRIANGLE" << std::endl; break; };
-			case (PointToMassRelationshipType::WITHIN_MASS): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: WITHIN_MASS" << std::endl; break; };
-			case (PointToMassRelationshipType::OUTSIDE_OF_MASS): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: OUTSIDE_OF_MASS" << std::endl; break; };
-			case (PointToMassRelationshipType::NO_LINE_OF_SIGHT): { std::cout << "Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: NO_LINE_OF_SIGHT" << std::endl; break; };
+			switch (analysisBegin->second)
+			{
+			case (PointToMassRelationshipType::COPLANAR_TO_STRIANGLE): { std::cout << "(PointToMassRelationshipJudge): Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: COPLANAR_TO_STRIANGLE" << std::endl; break; };
+			case (PointToMassRelationshipType::WITHIN_MASS): { std::cout << "(PointToMassRelationshipJudge): Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: WITHIN_MASS" << std::endl; break; };
+			case (PointToMassRelationshipType::OUTSIDE_OF_MASS): { std::cout << "(PointToMassRelationshipJudge): Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: OUTSIDE_OF_MASS" << std::endl; break; };
+			case (PointToMassRelationshipType::NO_LINE_OF_SIGHT): { std::cout << "(PointToMassRelationshipJudge): Shell SPoly [" << locationMap[analysisBegin->first].sPolyID << "], STriangle [" << locationMap[analysisBegin->first].sTriangleID << "]: NO_LINE_OF_SIGHT" << std::endl; break; };
+			}
 		}
 	}
 	//int waitVal = 3;
@@ -110,7 +114,11 @@ bool PointToMassRelationshipJudge::determineVerdict()
 		(runTestAnyCaseOfOutsideOfMass() == true)
 	)
 	{
-		std::cout << "||||| ----> Verdict of this judged point is that it should be clipped. " << std::endl;
+		//std::cout << "(PointToMassRelationshipJudge): ||||| ----> Verdict of this judged point is that it should be clipped. " << std::endl;
+		if (ptmRelationshipJudgeLogger.isLoggingSet())
+		{
+			ptmRelationshipJudgeLogger.log("(PointToMassRelationshipJudge): ||||| ----> Verdict of this judged point is that it should be clipped. ", "\n");
+		}
 		shouldPointBeClipped = true;
 	}
 	return shouldPointBeClipped;

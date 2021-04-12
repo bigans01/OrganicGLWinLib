@@ -83,22 +83,23 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 {
 	bool willBePurged = false;
 	SPoly* currentMeshMatterSPoly = in_meshMatterMetaRef->massSPolyRef;
-	PolyLogger currentSPolyClippingLogger;
-	currentSPolyClippingLogger.setDebugLevel(checkForSpecificDOInSPoly(in_meshMatterMetaRef->referencedSPolyID, DebugOption::SPECIFIC_SPOLY_CLIPPING_SHELL_SPOLYS));
-	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| Running SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
-	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
-	currentSPolyClippingLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> size of clippingShellMap: ", clippingShellMap.size(), "\n");
+	PolyLogger currentSPolyMassTrialLogger;
+	currentSPolyMassTrialLogger.setDebugLevel(checkForSpecificDOInSPoly(in_meshMatterMetaRef->referencedSPolyID, DebugOption::SPECIFIC_SPOLY_CLIPPING_MASS_TRIAL));
+	currentSPolyMassTrialLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| Running MassTrial for SPoly, with SPolySet ID of ", in_meshMatterMetaRef->referencedSPolyID, "\n");
+	currentSPolyMassTrialLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> this SPoly has ", in_meshMatterMetaRef->massSPolyRef->borderLines.size(), "border lines. \n");
+	currentSPolyMassTrialLogger.log("(MassZonePointClipper) ", zoneString, "|||||||||||||||||| --> size of clippingShellMap: ", clippingShellMap.size(), "\n");
 
 	//sstd::cout << "(MassZonePointClipper) " << zoneString << " |||||||||||||||||| Running SPoly, with SPolySet ID of " << in_meshMatterMetaRef->referencedSPolyID << std::endl;
-	if (currentSPolyClippingLogger.isLoggingSet())
+
+	// Optional: print the points of all of the SPolys that the MassTrial can possibly use.
+	if (checkForSpecificDOInSPoly(in_meshMatterMetaRef->referencedSPolyID, DebugOption::SPECIFIC_SPOLY_CLIPPING_SHELL_SPOLYS) == PolyDebugLevel::DEBUG)
 	{
 		auto clippingShellPrintBegin = clippingShellMap.begin();
 		auto clippingShellPrintEnd = clippingShellMap.end();
 		for (; clippingShellPrintBegin != clippingShellPrintEnd; clippingShellPrintBegin++)
 		{
-			std::cout << "(MassZonePointClipper) Printing points for shell SPoly with ID [" << clippingShellPrintBegin->first << "]" << std::endl;
+			std::cout << "(MassZonePointClipper) Printing points for MassTrial shell SPoly with ID [" << clippingShellPrintBegin->first << "]" << std::endl;
 			clippingShellPrintBegin->second->printPoints();
-			currentSPolyClippingLogger.waitForDebugInput();
 		}
 	}
 
@@ -179,7 +180,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 
 	// Phase 1.1: Check if any of the points in the relationshipTrackerContainer, are outside the shell; if they are, we must remove the point
 	//relationshipTrackerContainer.removePointsExistingOutsideOfShell(clipperPolyLogger.getLogLevel());
-	relationshipTrackerContainer.runPointsAgainstShellSlices(clipperPolyLogger.getLogLevel(),clippingShellMap);
+	relationshipTrackerContainer.runPointsAgainstShellSlices(currentSPolyMassTrialLogger.getLogLevel(),clippingShellMap);
 
 	// Phase 2: Three checks. 
 	

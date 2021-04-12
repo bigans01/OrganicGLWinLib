@@ -22,6 +22,7 @@ class FusionCandidateProducer
 	private:
 		RayIntersectionResult determineRayRelationShipToTriangle(STriangle in_triangle, STriangleLine in_line);
 		glm::vec3 roundPointToHundredths(glm::vec3 in_point);
+		glm::vec3 roundPointToThousandths(glm::vec3 in_point);
 		glm::vec3 roundPointToTenThousandths(glm::vec3 in_point);
 		double doubledot(glm::vec3 in_A, glm::vec3 in_B);
 		bool isPointEqualToTrianglePoint(glm::vec3 in_point, STriangle* in_triangleRef);

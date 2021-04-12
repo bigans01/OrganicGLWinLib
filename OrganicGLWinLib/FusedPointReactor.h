@@ -43,6 +43,7 @@ class FusedPointReactor
 		CategorizedLine producedLine;
 		PolyLogger fusedPointReactorLogger;
 		PolyDebugLevel fusedPointReactorDebugLevel;
+		bool performDistanceTest();
 
 };
 

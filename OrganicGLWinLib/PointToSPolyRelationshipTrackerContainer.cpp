@@ -189,8 +189,8 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 		//currentPointLogger.waitForDebugInput();
 	}
 
-	// run the judgements.
-	massTrial.executeAllJudgements();
+	// run the judgements; pass down the debug level for optional debug output.
+	massTrial.executeAllJudgements(in_polyDebugLevel);
 
 	// get the vector of removable points in the MassTrial, and check how they match up against the relationships.
 	auto trialRemovablePointsBegin = massTrial.clippablePointsVector.begin();

@@ -59,6 +59,7 @@ void FusedPointReactor::runPointAcquisitionAndPointUniquenessTest()
 	// load all points, from both FusedAnalysis instance's FusedPointContainer into the reactor's fused point container.
 	hostFusionAnalysisRef->fusedPoints.loadPointsIntoOtherContainer(&reactorPointContainer);
 	guestFusionAnalysisRef->fusedPoints.loadPointsIntoOtherContainer(&reactorPointContainer);
+	bool pointsTooClose = performDistanceTest();
 	if (reactorPointContainer.fusedPointMap.size() == 1)	// if there's only one point in the resulting container, flag it.
 	{
 		fusionContinuationFlag = false;
@@ -67,7 +68,7 @@ void FusedPointReactor::runPointAcquisitionAndPointUniquenessTest()
 		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. " << std::endl;
 		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) FAILED. ", "\n");
 	}
-	else
+	else if (pointsTooClose == false)	// the reactor has more than 1 point (2 points); need to test that they are not too close to each other.
 	{
 		if (fusedPointReactorLogger.isLoggingSet())
 		{
@@ -76,13 +77,43 @@ void FusedPointReactor::runPointAcquisitionAndPointUniquenessTest()
 			auto fetchedMapEnd = reactorPointContainer.fusedPointMap.end();
 			for (; fetchedMapBegin != fetchedMapEnd; fetchedMapBegin++)
 			{
-				std::cout <<std::setprecision(9);
+				std::cout << std::setprecision(9);
 				std::cout << fetchedMapBegin->second.point.x << ", " << fetchedMapBegin->second.point.y << ", " << fetchedMapBegin->second.point.z << std::endl;
 			}
 		}
 		//std::cout << "(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. " << std::endl;
 		fusedPointReactorLogger.log("(Reactor): Test 3 (runPointAcquisitionAndPointUniquenessTest) PASSED. ", "\n");
 	}
+	else if (pointsTooClose == true)	// there were two points, but they are too close.
+	{
+		fusionContinuationFlag = false;
+	}
+}
+
+bool FusedPointReactor::performDistanceTest()
+{
+	bool arePointsTooClose = false;
+	auto firstPoint = reactorPointContainer.fusedPointMap.begin()->second.point;
+	auto secondPoint = reactorPointContainer.fusedPointMap.rbegin()->second.point;
+
+	fusedPointReactorLogger.log("(Reactor): First point to compare: ", firstPoint.x, ", ", firstPoint.y, ", ", firstPoint.z, "\n");
+	fusedPointReactorLogger.log("(Reactor): Second point to compare: ", secondPoint.x, ", ", secondPoint.y, ", ", secondPoint.z, "\n");
+	fusedPointReactorLogger.log("(Reactor): Un-floored distance: ", glm::distance(firstPoint, secondPoint), "\n");
+
+	float distanceBetweenPoints = float(floor(glm::distance(firstPoint, secondPoint) * 10000 + 0.5) / 10000); 
+
+	fusedPointReactorLogger.log("(Reactor): Floored distance: ", distanceBetweenPoints, "\n");
+
+	if (distanceBetweenPoints <= 0.0001f)
+	{
+		arePointsTooClose = true;
+		//std::cout << "!!!! WARNING, points too close.!" << std::endl;
+		fusedPointReactorLogger.log("(Reactor): !!!! WARNING, points too close.!", distanceBetweenPoints, "\n");
+	}
+	//	returnPoint.x = float(floor(in_point.x * 10000 + 0.5) / 10000);
+
+	fusedPointReactorLogger.log("(Reactor): performing distance test between two points; value is: ", distanceBetweenPoints, "\n");
+	return arePointsTooClose;
 }
 
 void FusedPointReactor::runCategorizedLineBaseTypeAnalysis()

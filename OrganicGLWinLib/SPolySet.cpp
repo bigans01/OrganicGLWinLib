@@ -344,7 +344,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//std::cout << "|||| Finished print lines in pool..." << std::endl;
 
 		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
-		//std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
+		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
 		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
 		/*
 		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
@@ -356,19 +356,20 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		//std::cout << "Size of CleaveMap for SPoly " << x << ": " << secondaryPolys[x].cleaveMap.size() << std::endl;
 		//std::cout << "Has bad production: " << secondaryPolys[x].sequenceFactory.hasBadProduction << std::endl;
 
-		/*
+		
 		if 
 		(
 			(secondaryPolys[x].cleaveMap.size() != 0)		// new code, as of 4/1/2021: an SPoly may only be disqualified if it actually managed to produce
 															// valid CleaveSequences.
-			||
-			(secondaryPolys[x].sequenceFactory.hasBadProduction == true)
+			//||
+			//(secondaryPolys[x].sequenceFactory.hasBadProduction == true)
 		)
 		{
-			std::cout << "!!!! Disqualifying SPoly with ID: " << x << std::endl;
-			//zoneMaster.disqualifyMeshMatterMeta(x);
+			//std::cout << "!!!! Disqualifying SPoly with ID: " << x << std::endl;
+			zoneMaster.disqualifyMeshMatterMeta(x);
 		}
-		*/
+		
+		
 		//int buildVal = 3;
 		//std::cin >> buildVal;
 

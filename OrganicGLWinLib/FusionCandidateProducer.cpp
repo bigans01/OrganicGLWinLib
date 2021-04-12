@@ -130,6 +130,15 @@ glm::vec3 FusionCandidateProducer::roundPointToHundredths(glm::vec3 in_point)
 	return returnPoint;
 }
 
+glm::vec3 FusionCandidateProducer::roundPointToThousandths(glm::vec3 in_point)
+{
+	glm::vec3 returnPoint;
+	returnPoint.x = float(floor(in_point.x * 1000 + 0.5) / 1000);
+	returnPoint.y = float(floor(in_point.y * 1000 + 0.5) / 1000);
+	returnPoint.z = float(floor(in_point.z * 1000 + 0.5) / 1000);
+	return returnPoint;
+}
+
 glm::vec3 FusionCandidateProducer::roundPointToTenThousandths(glm::vec3 in_point)
 {
 	glm::vec3 returnPoint;
@@ -489,6 +498,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		}
 
 		//returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+		//returnResult.intersectedPoint = roundPointToThousandths(intersect_candidate);
 		returnResult.intersectedPoint = roundPointToTenThousandths(intersect_candidate);					// the intercept point should be rounded to hundredths!
 		//returnResult.intersectedPoint = intersect_candidate;					// the intercept point should be rounded to hundredths!
 

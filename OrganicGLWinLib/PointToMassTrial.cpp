@@ -86,13 +86,13 @@ void PointToMassTrial::printJudgeMetaData()
 	}
 }
 
-void PointToMassTrial::executeAllJudgements()
+void PointToMassTrial::executeAllJudgements(PolyDebugLevel in_polyDebugLevel)
 {
 	auto judgeMapBegin = judgeMap.begin();
 	auto judgeMapEnd = judgeMap.end();
 	for (; judgeMapBegin != judgeMapEnd; judgeMapBegin++)
 	{
-		IndividualVerdict currentVerdict = judgeMapBegin->second.runJudgements();
+		IndividualVerdict currentVerdict = judgeMapBegin->second.runJudgements(in_polyDebugLevel);
 		/*
 		if (currentVerdict.shouldBeClipped == true)	// if the point should be clipped, insert that judged point into the vector.
 		{
@@ -103,7 +103,7 @@ void PointToMassTrial::executeAllJudgements()
 		collectiveVerdicts.insertMappableIndividualVerdict(mappableVerdict);
 	}
 
-
+	// if the BELOW is true; we will eventually need to special logic for Expunging the SPoly from the MassZone.
 	//if (collectiveVerdicts.doesAnomalousMassSPolyExist() == false)		// if this statement were true, an anomaly was detected and must be clipped.
 	//{
 		auto individualVerdictsBegin = collectiveVerdicts.individualVerdictMap.begin();

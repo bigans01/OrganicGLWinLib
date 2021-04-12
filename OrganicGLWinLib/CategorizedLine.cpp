@@ -309,6 +309,7 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 																     pointAData.rbegin()->borderLineValue, 
 																	 emptyNormal, 
 																	 in_polyDebugLevel);
+
 		std::cout << "::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
 		std::cout << "::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
 		std::cout << "::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
@@ -585,6 +586,13 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
 
+	std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)" << std::endl;
+	std::cout << "||||||||||||||||||| BEFORE APPLICATION **************" << std::endl;
+	std::cout << "||||||| Border Line A ID: " << in_borderLineAID << std::endl;
+	std::cout << "||||||| Border Line B ID: " << in_borderLineBID << std::endl;
+	std::cout << "||||||| Empty normal is: " << emptyNormalCopy.x << ", " << emptyNormalCopy.y << ", " << emptyNormalCopy.z << std::endl;
+	std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) ---> Line, Point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) ---> Line, Point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
 
 	std::cout << "BorderLineACopy, point A, is: " << borderLineACopy.pointA.x << ", " << borderLineACopy.pointA.y << ", " << borderLineACopy.pointA.z << std::endl;
 	std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
@@ -594,14 +602,14 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{
-		//std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
+		std::cout << "Line A links with Line B, at Line A's point B. " << std::endl;
 		rotationPoints.insertPointRefs(&borderLineACopy.pointA, &borderLineACopy.pointB, &borderLineBCopy.pointB);
 		pointToTranslateAgainst = borderLineACopy.pointB;
 	}
 	// otherwise, it's the other way around.
 	else if (borderLineBCopy.pointB == borderLineACopy.pointA)
 	{
-		//std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
+		std::cout << "Line B links with Line A, at Line B's point B. " << std::endl;
 		rotationPoints.insertPointRefs(&borderLineBCopy.pointA, &borderLineBCopy.pointB, &borderLineACopy.pointB);
 		pointToTranslateAgainst = borderLineBCopy.pointB;
 	}
@@ -640,15 +648,53 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 	// determine which point it is that is positive y (check the first and third points.)
 	glm::vec3 candidateOne = rotationPoints.getPointByIndex(0);
 	glm::vec3 candidateTwo = rotationPoints.getPointByIndex(2);
+	glm::vec3 adjustedNormal = rotationPoints.getPointByIndex(3);
+
+	std::cout << "Candidate One is: " << candidateOne.x << ", " << candidateOne.y << ", " << candidateOne.z << std::endl;
+	std::cout << "Candidate Two is: " << candidateTwo.x << ", " << candidateTwo.y << ", " << candidateTwo.z << std::endl;
+	std::cout << "Adjusted normal was: " << adjustedNormal.x << ", " << adjustedNormal.y << ", " << adjustedNormal.z << std::endl;
+	
 	glm::vec3 selectedPoint;
 	if (candidateOne.y > 0)
 	{
+		std::cout << ">>>> Selected CandidateOne. " << std::endl;
 		selectedPoint = candidateOne;
 	}
 	else if (candidateTwo.y > 0)
 	{
+		std::cout << ">>>> Selected CandidateTwo. " << std::endl;
 		selectedPoint = candidateTwo;
 	}
+	
+	else
+	{
+		std::cout << "!!!!! NOTICE: couldn't find any point above y, doing special logic. " << std::endl;
+		glm::vec3 candidateOneBase = candidateOne;
+		glm::vec3 candidateOneAdjusted = candidateOneBase;
+		candidateOneAdjusted.y = 0;
+		float candidateOneDistanceToY0 = glm::distance(candidateOneBase, candidateOneAdjusted);
+		std::cout << "Candidate one y dist: " << candidateOneDistanceToY0 << std::endl;
+
+
+		glm::vec3 candidateTwoBase = candidateTwo;
+		glm::vec3 candidateTwoAdjusted = candidateTwoBase;
+		candidateTwoAdjusted.y = 0;
+		float candidateTwoDistanceToY0 = glm::distance(candidateTwoBase, candidateTwoAdjusted);
+		std::cout << "Candidate two y dist: " << candidateTwoDistanceToY0 << std::endl;
+
+		float closestPoint = std::min(candidateOneDistanceToY0, candidateTwoDistanceToY0);
+
+		if (closestPoint == candidateOneDistanceToY0)
+		{
+			selectedPoint = candidateOne;
+		}
+		else if (closestPoint == candidateTwoDistanceToY0)
+		{
+			selectedPoint = candidateTwo;
+		}
+
+	}
+	
 
 	// take the selected point, find out where it belongs; then set the appropriate forward/reverse IDs.
 
@@ -696,7 +742,7 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 		(borderLineACopy.pointA == selectedPoint)
 	)
 	{
-		//std::cout << "Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		//std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) Border Line A is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
 
 		direction = CyclingDirection::REVERSE;
 
@@ -710,7 +756,7 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 		(borderLineACopy.pointB == selectedPoint)
 	)
 	{
-		//std::cout << "Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		//std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) Border Line A is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
 
 		direction = CyclingDirection::FORWARD;
 
@@ -724,7 +770,7 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 		(borderLineBCopy.pointA == selectedPoint)
 	)
 	{
-		//std::cout << "Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
+		//std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) Border Line B is the FORWARD line, going towards point A (CyclingDirection REVERSE)" << std::endl;
 
 		direction = CyclingDirection::REVERSE;
 
@@ -738,7 +784,7 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 		(borderLineBCopy.pointB == selectedPoint)
 	)
 	{
-		//std::cout << "Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
+		//std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE) Border Line B is the FORWARD line, going towards point B (CyclingDirection FORWARD)" << std::endl;
 
 		direction = CyclingDirection::FORWARD;
 
@@ -748,6 +794,16 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 
 	}
 
+	
+	if (direction == CyclingDirection::FORWARD)
+	{
+		direction = CyclingDirection::REVERSE;
+	}
+	else if (direction == CyclingDirection::REVERSE)
+	{
+		direction = CyclingDirection::FORWARD;
+	}
+	
 	//std::cout << ">>::: Forward ID: " << forwardID << std::endl;
 	//std::cout << ">>::: Reverse ID: " << reverseID << std::endl;
 

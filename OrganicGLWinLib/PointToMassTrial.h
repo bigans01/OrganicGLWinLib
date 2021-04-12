@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include "MappableJudge.h"
 #include "CollectiveVerdictMachine.h"
+#include "PolyDebugLevel.h"
 
 
 class PointToMassTrial
@@ -20,7 +21,7 @@ class PointToMassTrial
 							std::map<int, SPoly*> in_shellSliceClippingShellMap
 							);
 		void printJudgeMetaData();
-		void executeAllJudgements();
+		void executeAllJudgements(PolyDebugLevel in_polyDebugLevel);
 		std::vector<glm::vec3> clippablePointsVector;	// contains any points that should be clipped from PointToSPolyRelationshipTrackerContainer
 	private:
 		std::map<int, MappableJudge> judgeMap;

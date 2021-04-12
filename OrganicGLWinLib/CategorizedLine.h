@@ -19,6 +19,7 @@
 #include "PolyDebugLevel.h"
 #include "QMVoidFindCyclingDirection.h"
 #include <vector>
+#include <algorithm>
 
 
 class SPolyBorderLines;

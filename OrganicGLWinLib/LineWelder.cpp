@@ -203,8 +203,8 @@ void LineWelder::startWelding()
 	}
 
 	// insert the very first line of the welding pool.
-	WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
-	weldedLines.insertLineIntoPool(beginningWeldedLine);
+		WeldedLine beginningWeldedLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+		weldedLines.insertLineIntoPool(beginningWeldedLine);
 
 	/*
 	std::cout << "******** printing cleave lines in the first sequence: " << std::endl;
@@ -276,7 +276,10 @@ void LineWelder::startWelding()
 		{
 			//insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
 			lineWelderLogger.log("(LineWelder) slicedFlag found as true...; will insert this line and remove from candidate list.", "\n");
-			insertNewWeldingLine(currentLeadingPoint, currentCategorizedLine.line.pointA, sPolyRef->borderLines[currentBorderLineID].planarVector);
+			if (currentLeadingPoint != currentCategorizedLine.line.pointA)
+			{
+				insertNewWeldingLine(currentLeadingPoint, currentCategorizedLine.line.pointA, sPolyRef->borderLines[currentBorderLineID].planarVector);
+			}
 
 			
 	
@@ -643,6 +646,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 
 	//std::cout << "#########_> completed iteration of findRemainingWeldingLines" << std::endl;
 	lineWelderLogger.log("(LineWelder) #########_> completed iteration of findRemainingWeldingLines", "\n");
+	lineWelderLogger.log("(LineWelder) #################-> size of line pool, after this iteration: ", weldedLines.getPoolSize(), "\n");
 	//int someVal = 3;
 	//std::cin >> someVal;
 }

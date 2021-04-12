@@ -23,9 +23,9 @@ class MappableJudge
 			return (point == in_point);
 		}
 
-		IndividualVerdict runJudgements()
+		IndividualVerdict runJudgements(PolyDebugLevel in_polyDebugLevel)
 		{
-			return judge.executeJudgementOnShellSlices();	// run the judgements on all shell slices in the underlying judge.
+			return judge.executeJudgementOnShellSlices(in_polyDebugLevel);	// run the judgements on all shell slices in the underlying judge.
 		}
 };
 
