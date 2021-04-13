@@ -24,7 +24,7 @@ class PointToSPolyRelationshipTrackerContainer
 		bool checkForAnyPointsWithSingleSPoly();
 		PointToSPolyRelationshipTracker* fetchSpecificSPolyRelationshipTrackerByPoint(glm::vec3 in_pointToFind);
 		void removePointsExistingOutsideOfShell(PolyDebugLevel in_polyDebugLevel);
-		void runPointsAgainstShellSlices(PolyDebugLevel in_polyDebugLevel, std::map<int, SPoly*> in_clippingShellMapCopy);
+		bool runPointsAgainstShellSlices(PolyDebugLevel in_polyDebugLevel, std::map<int, SPoly*> in_clippingShellMapCopy);
 };
 
 #endif

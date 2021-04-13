@@ -21,7 +21,7 @@ class PointToMassTrial
 							std::map<int, SPoly*> in_shellSliceClippingShellMap
 							);
 		void printJudgeMetaData();
-		void executeAllJudgements(PolyDebugLevel in_polyDebugLevel);
+		bool executeAllJudgements(PolyDebugLevel in_polyDebugLevel);	// run judgements; check if the SPoly is a "nacho dip" SPoly.
 		std::vector<glm::vec3> clippablePointsVector;	// contains any points that should be clipped from PointToSPolyRelationshipTrackerContainer
 	private:
 		std::map<int, MappableJudge> judgeMap;

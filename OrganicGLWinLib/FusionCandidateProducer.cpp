@@ -466,7 +466,10 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		//std::cout << "--> Value of s: " << s << std::endl;
 		//std::cout << "--> S, post-round: " << s << std::endl;
 		//comparisonLogger.log("--> Value of s: ", s, "\n");
-		if (s < 0.0 || s > 1.001f)         // I is outside S
+
+		// changed from 0 to -0.001f  on 4/12/2021
+		if (s < -0.001f || s > 1.001f)         // I is outside S
+		//if (s < 0.0 || s > 1.001f)         // I is outside S
 			//return 0;
 		{
 			//std::cout << "!! Note: I is outside S. " << std::endl;
@@ -480,10 +483,17 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 
 		//std::cout << "--> Value of t: " << t << std::endl;
 		//comparisonLogger.log("--> Value of t: ", t, "\n");
-		if (t < 0.0 || (s + t) > 1.001f)  // I is outside T
+		//if (t < 0.0 || (s + t) > 1.001f)  // I is outside T
+
+		// changed from 0 to -0.001f  on 4/12/2021
+		if (t < -0.001f || (s + t) > 1.001f)  // I is outside T
 			//return 0;
 		{
-			//std::cout << "!! Note: I is outside T. " << std::endl;
+			//if (t == -0.001f)
+			//{
+				//std::cout << "!! Hey, t is " << t << std::endl;
+			//}
+			//std::cout << "!! Note: I is outside T; value of t: " <<  t << "| s: " << s << std::endl;
 			//comparisonLogger.log("!! Note: I is outside T. ", "\n");
 			returnResult.setResult(0);
 		}

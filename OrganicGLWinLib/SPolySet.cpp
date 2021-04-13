@@ -389,6 +389,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
 	zoneMaster.runPointClippers();
+	zoneMaster.checkFissionTargets();
 
 	// Step 4: execute the relationships found in the coplanarTracker, if any
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.

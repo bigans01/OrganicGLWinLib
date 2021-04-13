@@ -136,8 +136,10 @@ void PointToSPolyRelationshipTrackerContainer::removePointsExistingOutsideOfShel
 	}
 }
 
-void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyDebugLevel in_polyDebugLevel, std::map<int, SPoly*> in_clippingShellMapCopy)
+bool PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyDebugLevel in_polyDebugLevel, std::map<int, SPoly*> in_clippingShellMapCopy)
 {
+	bool wasFoundAsFissionTarget = false;
+
 	PolyLogger currentPointLogger;
 	currentPointLogger.setDebugLevel(in_polyDebugLevel);
 	std::vector<int> removableIDs;
@@ -189,8 +191,9 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 		//currentPointLogger.waitForDebugInput();
 	}
 
-	// run the judgements; pass down the debug level for optional debug output.
-	massTrial.executeAllJudgements(in_polyDebugLevel);
+	// run the judgements; pass down the debug level for optional debug output -- check whether or not this is a "nacho dip" SPoly. If it is,
+	// we need to put it into the fission targets set.
+	wasFoundAsFissionTarget = massTrial.executeAllJudgements(in_polyDebugLevel);
 
 	// get the vector of removable points in the MassTrial, and check how they match up against the relationships.
 	auto trialRemovablePointsBegin = massTrial.clippablePointsVector.begin();
@@ -215,4 +218,6 @@ void PointToSPolyRelationshipTrackerContainer::runPointsAgainstShellSlices(PolyD
 	{
 		relationshipTrackerContainer.erase(*removalVectorBegin);
 	}
+
+	return wasFoundAsFissionTarget;
 }

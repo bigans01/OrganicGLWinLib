@@ -86,8 +86,9 @@ void PointToMassTrial::printJudgeMetaData()
 	}
 }
 
-void PointToMassTrial::executeAllJudgements(PolyDebugLevel in_polyDebugLevel)
+bool PointToMassTrial::executeAllJudgements(PolyDebugLevel in_polyDebugLevel)
 {
+	bool isSPolyAFissionTarget = false;
 	auto judgeMapBegin = judgeMap.begin();
 	auto judgeMapEnd = judgeMap.end();
 	for (; judgeMapBegin != judgeMapEnd; judgeMapBegin++)
@@ -103,6 +104,21 @@ void PointToMassTrial::executeAllJudgements(PolyDebugLevel in_polyDebugLevel)
 		collectiveVerdicts.insertMappableIndividualVerdict(mappableVerdict);
 	}
 
+	if (collectiveVerdicts.doesAnomalousMassSPolyExist() == true)
+	{
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		std::cout << "+++++++++++++++++++++++++ANOMALOUS SPOLY DETECTED+++++++++++++++++" << std::endl;
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+		int anomaly = 3;
+		std::cin >> anomaly;
+
+		isSPolyAFissionTarget = true;
+	}
+
 	// if the BELOW is true; we will eventually need to special logic for Expunging the SPoly from the MassZone.
 	//if (collectiveVerdicts.doesAnomalousMassSPolyExist() == false)		// if this statement were true, an anomaly was detected and must be clipped.
 	//{
@@ -116,5 +132,5 @@ void PointToMassTrial::executeAllJudgements(PolyDebugLevel in_polyDebugLevel)
 			}
 		}
 	//}
-	
+	return isSPolyAFissionTarget;
 }

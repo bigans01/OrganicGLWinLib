@@ -36,6 +36,7 @@ class MassZonePointClipper
 		std::map<int, SPoly*> clippingShellMap;
 		std::map<int, MeshMatterMeta>* otherZoneMeshMatterMetaMapRef = nullptr;
 		std::set<int> sPolysToPurge;		// stores the SPolySet ID(s) of any SPoly that needs to be purged.
+		OperableIntSet fissionTargets;		// any "nacho dip" SPolys found within this mass must be kept track of.
 		MassManipulationMode clipperManipulationMode = MassManipulationMode::NOVAL;
 		void insertSPolySuperGroupRefsIntoClippingShell(SPolySupergroup* in_sPolySuperGroupRef);
 		void insertSPolyRefIntoClippingShell(SPoly* in_sPolyRef);

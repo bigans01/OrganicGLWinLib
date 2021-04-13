@@ -180,7 +180,11 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 
 	// Phase 1.1: Check if any of the points in the relationshipTrackerContainer, are outside the shell; if they are, we must remove the point
 	//relationshipTrackerContainer.removePointsExistingOutsideOfShell(clipperPolyLogger.getLogLevel());
-	relationshipTrackerContainer.runPointsAgainstShellSlices(currentSPolyMassTrialLogger.getLogLevel(),clippingShellMap);
+	bool isSPolyAFissile = relationshipTrackerContainer.runPointsAgainstShellSlices(currentSPolyMassTrialLogger.getLogLevel(),clippingShellMap);
+	if (isSPolyAFissile == true)	// if this SPoly is fissile to this MassZone -- as in, it must be broken up into even smaller SPolys -- we must flag it
+	{
+		fissionTargets += in_meshMatterMetaRef->referencedSPolyID;
+	}
 
 	// Phase 2: Three checks. 
 	

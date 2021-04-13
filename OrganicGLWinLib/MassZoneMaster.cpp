@@ -105,6 +105,13 @@ void MassZoneMaster::runPointClippers()
 	newZone.runClipper();
 }
 
+void MassZoneMaster::checkFissionTargets()
+{
+	std::cout << "::::::::::::::--------------> Checking fission targets in clippers. " << std::endl;
+	oldZone.clipper.fissionTargets.printSet();
+	newZone.clipper.fissionTargets.printSet();
+}
+
 void MassZoneMaster::setOldZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode)
 {
 	oldZone.clipper.clipperManipulationMode = in_massManipulationMode;

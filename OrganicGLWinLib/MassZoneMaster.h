@@ -28,6 +28,7 @@ class MassZoneMaster
 		void printMassZoneBorderLineCounts();
 		void handleDebugOption(DebugOption in_debugOption);
 		void runPointClippers();
+		void checkFissionTargets();
 		void setOldZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode);
 		void setNewZoneClipperManipulationMode(MassManipulationMode in_massManipulationMode);
 	private:
