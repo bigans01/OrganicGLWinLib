@@ -19,6 +19,7 @@
 #include "PolyDebugLevel.h"
 #include "PointToMassRelationshipType.h"
 #include "QMFindPointToMassRelationship.h"
+#include "SPolyScalingOps.h"
 
 class QuatUtils
 {
@@ -78,6 +79,8 @@ class QuatUtils
 											glm::vec3 in_triangleEmptyNormal,
 											PolyDebugLevel in_polyDebugLevel
 										);
+		static void rotateSPolyToXZPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
+												 QuatRotationPoints* in_quatRotationPointsRef);
 };
 
 #endif

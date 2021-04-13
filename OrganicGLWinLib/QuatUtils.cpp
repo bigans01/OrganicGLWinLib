@@ -203,3 +203,9 @@ PointToMassRelationshipType QuatUtils::findPointToMassRelationship(
 	determinedType = relationshipChecker.solve(&massPoints, in_polyDebugLevel);
 	return determinedType;
 }
+
+void QuatUtils::rotateSPolyToXZPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
+	QuatRotationPoints* in_quatRotationPointsRef)
+{
+
+}

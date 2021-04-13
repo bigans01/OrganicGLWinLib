@@ -211,7 +211,7 @@
     <ClInclude Include="CoplanarRelationshipDebugFlags.h" />
     <ClInclude Include="CoplanarRelationships.h" />
     <ClInclude Include="CoplanarRelationshipTracker.h" />
-    <ClInclude Include="CoplanarRelationshipTrackerManager.h" />
+    <ClInclude Include="CoplanarFusionMachine.h" />
     <ClInclude Include="CutLine.h" />
     <ClInclude Include="CutLinePool.h" />
     <ClInclude Include="CutLinePoolGuide.h" />
@@ -330,6 +330,8 @@
     <ClInclude Include="SPolyDO.h" />
     <ClInclude Include="SPolyDOSet.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
+    <ClInclude Include="SPolyScaler.h" />
+    <ClInclude Include="SPolyScalingOps.h" />
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
@@ -489,7 +491,7 @@
     <ClCompile Include="CoplanarRelationships.cpp" />
     <ClCompile Include="CoplanarRelationshipTracker.cpp" />
     <ClCompile Include="CoplanarMassManipulator.cpp" />
-    <ClCompile Include="CoplanarRelationshipTrackerManager.cpp" />
+    <ClCompile Include="CoplanarFusionMachine.cpp" />
     <ClCompile Include="CutLineTraceObserver.cpp" />
     <ClCompile Include="CutLineWelder.cpp" />
     <ClCompile Include="CuttableTriangle.cpp" />
@@ -577,6 +579,8 @@
     <ClCompile Include="SMPrimitiveV1.cpp" />
     <ClCompile Include="SPoly.cpp" />
     <ClCompile Include="SPolyFracturer.cpp" />
+    <ClCompile Include="SPolyScaler.cpp" />
+    <ClCompile Include="SPolyScalingOps.cpp" />
     <ClCompile Include="SPolySet.cpp" />
     <ClCompile Include="STriangle.cpp" />
     <ClCompile Include="STriangleCutter.cpp" />

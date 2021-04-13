@@ -251,6 +251,9 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 							coplanarTracker.insertCoplanarRelationship(x, polyA, currentIndex, polyB);
 						}
+
+						// NEW CODE: started on 4/13/2021, for new coplanar fusion logic.
+						fusionMachine.insertCoplanarRelationship(polyA->groupID, x, polyA, currentIndex, polyB);
 					}
 					// otherwise, if they are not coplanar, do the following.
 					else
@@ -306,10 +309,12 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		if (secondaryPolys[x].groupID == 0)
 		{
 			zoneMaster.registerSPolyToMassZone(x, secondaryPolys[x], MassZoneType::OLD_ZONE);
+			fusionMachine.insertSPolyGroupMapLink(x, 0, &secondaryPolys[x]);	// insert the group ID (0) and direct ref to the SPoly
 		}
 		else if (secondaryPolys[x].groupID == 1)
 		{
 			zoneMaster.registerSPolyToMassZone(x, secondaryPolys[x], MassZoneType::NEW_ZONE);
+			fusionMachine.insertSPolyGroupMapLink(x, 1, &secondaryPolys[x]);	// insert the group ID (1) and direct ref to the SPoly
 		}
 
 		//zoneMaster.printMassZoneBorderLineCounts();
@@ -317,7 +322,13 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	}
 	auto comparisonIterationsEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> comparisonIterationsElapsed = comparisonIterationsEnd - comparisonIterationsBegin;
+
+
+	fusionMachine.printRelationshipsInTrackers();
+
 	std::cout << "#-> Comparisons time  > " << comparisonIterationsElapsed.count() << std::endl;
+
+
 
 	// Step 2:
 	// Build the non-SPoly based MassSubZones, for each MassZone, once all SPolys have been copied into the appropriate MassZone. The combination of temporal or artificial subzones, plus the actual "material" sPolys, should form a "MassZoneShell."
@@ -386,6 +397,8 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		
 	}
 	std::cout << "!!!!! Finished building CleaveSequences. " << std::endl;
+	fusionMachine.determineFusionType();
+	std::cout << "!!!!! Finished checking Fusion machine merge type. " << std::endl;
 
 	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
 	zoneMaster.runPointClippers();

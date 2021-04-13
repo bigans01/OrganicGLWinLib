@@ -44,6 +44,7 @@ public:
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
 	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
 private:
+	friend class SPolyScaler;
 	friend class SPolySet;
 	friend class SPolySupergroup;
 	friend class SPolyFracturer;
@@ -62,6 +63,7 @@ private:
 	friend class MassZoneBoxBoundarySPolySet;
 	friend class MassZonePointClipper;
 	friend class TwoDLineSegmentJudge;
+	friend class CoplanarFusionMachine;
 
 	std::map<int, SPolyBorderLines> borderLines;
 	int numberOfBorderLines = 0;

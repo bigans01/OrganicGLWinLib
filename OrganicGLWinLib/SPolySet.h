@@ -20,6 +20,7 @@
 #include <chrono>
 #include "CoplanarChecker.h"
 #include "CoplanarRelationshipTracker.h"
+#include "CoplanarFusionMachine.h"
 #include "SPolySuperGroupManager.h"
 #include "CategorizedLineColinearTester.h"
 #include "MassZoneMaster.h"	// the final frontier. Good luck! (1/4/2021)
@@ -124,6 +125,8 @@ public:
 
 private:
 	CoplanarRelationshipTracker coplanarTracker;					// stores any coplanar relationships that exist between two or more polys
+	CoplanarFusionMachine fusionMachine;
+	
 	MassZoneMaster zoneMaster;										// manages control of the old and new MassZones
 	PolyLogger comparisonLogger;									// debug output for comparison operations
 	PolyDebugLevel mainFracturerDebugLevel = PolyDebugLevel::NONE;	// debug level that is used if no specific SPoly fracturer debug options are set; i.e, setting this to Debug puts
@@ -144,7 +147,6 @@ private:
 
 	void setOption(DebugOption in_option);
 	void setSpecificSPolyOption(int in_sPolyID, DebugOption in_option);
-	void setSpecificClippableSPolyOption(int in_sPolyID, DebugOption in_option);
 	PolyDebugLevel checkForSPolyOptionInSpecificSPoly(int in_sPolyID, SPolyDO in_sPolyDO);
 	void removeSPolysFlaggedAsPurgable();
 };

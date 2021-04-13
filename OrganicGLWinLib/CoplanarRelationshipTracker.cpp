@@ -89,3 +89,19 @@ void CoplanarRelationshipTracker::applyCoplanarRelationshipDebugFlagsIfFound(int
 		relationshipContainer[in_trackedSPolyID].applyCoplanarRelationshipDebugOptions(&relationshipDebugFlags[in_trackedSPolyID]);
 	}
 }
+
+void CoplanarRelationshipTracker::printRelationshipData()
+{
+	auto relationshipContainerBegin = relationshipContainer.begin();
+	auto relationshipContainerEnd = relationshipContainer.end();
+	for (; relationshipContainerBegin != relationshipContainerEnd; relationshipContainerBegin++)
+	{
+		std::cout << "(CoplanarRelationshipTracker) >>> Printing out coplanar relationships of related SPolys, for the tracked SPoly: " << relationshipContainerBegin->first << std::endl;
+		auto relatedSPolysBegin = relationshipContainerBegin->second.relationshipMap.refMap.begin();
+		auto relatedSPolysEnd = relationshipContainerBegin->second.relationshipMap.refMap.end();
+		for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
+		{
+			std::cout << "Related SPoly ID: " << relatedSPolysBegin->first << std::endl;
+		}
+	}
+}

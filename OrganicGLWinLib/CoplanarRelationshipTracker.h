@@ -15,7 +15,7 @@
 class CoplanarRelationshipTracker
 {
 	private:
-		friend class CoplanarRelationshipTrackerManager;
+		friend class CoplanarFusionMachine;
 		friend class SPolySet;
 
 		PolyDebugLevel relationshipTrackerDebugLevel = PolyDebugLevel::NONE;
@@ -33,6 +33,7 @@ class CoplanarRelationshipTracker
 		PolyDebugLevel retrieveDebugLevelOptionIfExistent(int in_trackedSPolyID);
 		void insertRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
 		void applyCoplanarRelationshipDebugFlagsIfFound(int in_trackedSPolyID);
+		void printRelationshipData();
 };
 
 #endif
