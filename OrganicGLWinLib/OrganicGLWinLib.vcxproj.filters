@@ -924,6 +924,12 @@
     <ClInclude Include="CoplanarFusionMachine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoplanarFusionType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMachineFeedback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

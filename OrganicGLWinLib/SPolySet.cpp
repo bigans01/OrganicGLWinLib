@@ -142,8 +142,11 @@ void SPolySet::removeSPolysFlaggedAsPurgable()
 	}
 
 	// removable polys found in coplanarTracker
-	auto coplanarTrackerRemovablesBegin = coplanarTracker.removableSPolys.intSet.begin();
-	auto coplanarTrackerRemovablesEnd = coplanarTracker.removableSPolys.intSet.end();
+	//auto coplanarTrackerRemovablesBegin = coplanarTracker.removableSPolys.intSet.begin();
+	//auto coplanarTrackerRemovablesEnd = coplanarTracker.removableSPolys.intSet.end();
+
+	auto coplanarTrackerRemovablesBegin = fusionMachine.fusedRemovables.intSet.begin();
+	auto coplanarTrackerRemovablesEnd = fusionMachine.fusedRemovables.intSet.end();
 	for (; coplanarTrackerRemovablesBegin != coplanarTrackerRemovablesEnd; coplanarTrackerRemovablesBegin++)
 	{
 		polyFracturingResults.supergroupMap[*coplanarTrackerRemovablesBegin].sPolyMap.clear();
@@ -213,12 +216,12 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	//std::cin >> waitVal;
 
 	// set the debug level for the coplanar tracker
-	coplanarTracker.setRelationshipTrackerDebugLevel(coplanarRelationshipDebugLevel);
+	//coplanarTracker.setRelationshipTrackerDebugLevel(coplanarRelationshipDebugLevel);
+	fusionMachine.setCoplanarFusionMachineDebugLevel(coplanarRelationshipDebugLevel);
 
 	int compCount2 = numberOfPolys;
 
 	// Step 1: check for non-planar categorized lines to produce, but load any coplanar relationships we find into the
-	// coplanarTracker.
 	auto comparisonIterationsBegin = std::chrono::high_resolution_clock::now();
 	for (int x = 0; x < compCount2; x++)
 	{
@@ -242,8 +245,8 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 						// if they are coplanar AND polyA is a group 1 poly, do this
 						if (polyA->groupID == 1)	
 						{
-							//std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
-							//std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
+							std::cout << "!!!! Inserting record into coplanar relationships... " << std::endl;
+							std::cout << "!!!! Tracked Poly ID: " << x << ", Related PolyID: " << currentIndex << std::endl;
 							comparisonLogger.log("!!!! Inserting record into coplanar relationships... ", "\n");
 							comparisonLogger.log("!!!! Tracked Poly ID: ", x, ", Related PolyID: ", currentIndex, "\n");
 							//int someVal = 3;
@@ -397,8 +400,6 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 		
 	}
 	std::cout << "!!!!! Finished building CleaveSequences. " << std::endl;
-	fusionMachine.determineFusionType();
-	std::cout << "!!!!! Finished checking Fusion machine merge type. " << std::endl;
 
 	// After any disqualifications have been applied (that is, an SPoly has CleaveSequences in it), run the point clippers.
 	zoneMaster.runPointClippers();
@@ -408,7 +409,12 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 	// when the SPoly at x has been compared to all other SPolys, we should check for any coplanar relationships for x.
 	// it's completely possible for a SPoly to have categorized lines from a coplanar relationship AND a non-coplanar replationship.
 	auto cuttingSequenceTestStart = std::chrono::high_resolution_clock::now();
-	coplanarTracker.runAllCuttingSequenceTests();
+	//coplanarTracker.runAllCuttingSequenceTests();
+
+	std::cout << "!!!!! Running fusion machine..." << std::endl;
+	fusionMachine.runAllCuttingSequenceTests();
+	fusionMachine.determineFusionType();
+	std::cout << "!!!!! Finished checking Fusion machine merge type. " << std::endl;
 	auto cuttingSequenceTestEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> cuttingSequenceTestElapsed = cuttingSequenceTestEnd - cuttingSequenceTestStart;
 	std::cout << "#-> Cutting sequence test  time  > " << cuttingSequenceTestElapsed.count() << std::endl;
@@ -671,7 +677,15 @@ void SPolySet::performFracturing()
 		else if (secondaryPolys[x].cleaveMap.size() == 0)
 		{
 			insertOriginalPolyAsFracturingResult(x, secondaryPolys[x]);
-			//std::cout << "!! No cleaveMaps found for this SPoly! [" << x << "] " << std::endl;
+			std::cout << "!! No cleaveMaps found for this SPoly! [" << x << "] " << std::endl;
+			std::cout << "!! Stats of the STriangles in the SPoly are: " << std::endl;
+			auto sPolyTrianglesBegin = secondaryPolys[x].triangles.begin();
+			auto sPolyTrianglesEnd = secondaryPolys[x].triangles.end();
+			for (; sPolyTrianglesBegin != sPolyTrianglesEnd; sPolyTrianglesBegin++)
+			{
+				std::cout << "STriangle at indeX: " << sPolyTrianglesBegin->first << std::endl;
+				sPolyTrianglesBegin->second.printPoints();
+			}
 		}
 
 	}
@@ -706,7 +720,6 @@ void SPolySet::performFracturing()
 	//int continueVal = 3;
 	//std::cout << "Fracturing for this poly complete; enter number to continue..." << std::endl;
 	//std::cin >> continueVal;
-
 	removeSPolysFlaggedAsPurgable();
 	std::cout << "----> reached end of performFracturing()" << std::endl;
 }

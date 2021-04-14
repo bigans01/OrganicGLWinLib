@@ -34,6 +34,7 @@ class CoplanarRelationshipTracker
 		void insertRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
 		void applyCoplanarRelationshipDebugFlagsIfFound(int in_trackedSPolyID);
 		void printRelationshipData();
+		void printRemovableSPolys();
 };
 
 #endif

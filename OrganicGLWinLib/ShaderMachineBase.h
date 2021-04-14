@@ -27,6 +27,7 @@
 //#include "ImGuiSliderFloatPanel.h"
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
+#include "ShaderMachineFeedback.h"
 
 class ShaderMachineBase
 {
@@ -91,7 +92,8 @@ public:
 
 		// imgui features
 		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
-		void checkForTextInput();
+		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data.
+		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
 		void renderSliders();								// will render single float interactable sliders
 
 		// set direction
@@ -104,6 +106,7 @@ protected:
 
 		GLUniformRegistry uniformRegistry;
 		WorldLightContainerMap worldLights;
+		ShaderMachineFeedback machineFeedback;				// gets any inputs that were received; it is loaded using a call to checkForTextInput().
 
 		std::map<int, GLuint> bufferMap;									// for typical buffers (non-persistent)
 		std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers

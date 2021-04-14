@@ -110,7 +110,12 @@ ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
 
 void ShaderMachineBase::checkForTextInput()
 {
-	inputPanelContainer.checkForInput();
+	machineFeedback += inputPanelContainer.checkForInput();
+}
+
+ShaderMachineFeedback ShaderMachineBase::retrieveShaderInputs()
+{
+	return std::move(machineFeedback);
 }
 
 void ShaderMachineBase::renderSliders()

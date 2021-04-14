@@ -206,6 +206,7 @@
     <ClInclude Include="CoplanarCategorizedLineProducer.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
+    <ClInclude Include="CoplanarFusionType.h" />
     <ClInclude Include="CoplanarMassCreator.h" />
     <ClInclude Include="CoplanarMassManipulator.h" />
     <ClInclude Include="CoplanarRelationshipDebugFlags.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
+    <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
     <ClInclude Include="InterceptRegister.h" />

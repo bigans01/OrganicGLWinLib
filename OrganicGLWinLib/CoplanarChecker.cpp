@@ -102,4 +102,15 @@ void CoplanarChecker::performCoPlanarAnalysis()
 			}
 		}
 	}
+
+	// if all the points of each STriangle we're looking at match, the number of candidates in each will be 0; then it is definitely coplanar.
+	else if
+	(
+		(triangleACandidates.availableCandidates.size() == 0)
+		&&
+		(triangleBCandidates.availableCandidates.size() == 0)
+	)
+	{
+		coplanarityDetected = true;
+	}
 }

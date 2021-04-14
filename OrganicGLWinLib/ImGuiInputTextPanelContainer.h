@@ -7,6 +7,7 @@
 #include <string>
 #include <unordered_map>
 #include "ImGuiInputTextPanel.h"
+#include "ShaderMachineFeedback.h"
 
 class ImGuiInputTextPanelContainer
 {
@@ -23,14 +24,16 @@ class ImGuiInputTextPanelContainer
 			panels[in_panelName].insertNewInput(in_buttonName);
 		}
 
-		void checkForInput()
+		ShaderMachineFeedback checkForInput()
 		{
+			ShaderMachineFeedback containerFeedback;
 			auto panelsBegin = panels.begin();
 			auto panelsEnd = panels.end();
 			for (; panelsBegin != panelsEnd; panelsBegin++)
 			{
-				panelsBegin->second.scanForInputFocus();
+				containerFeedback += panelsBegin->second.scanForInputFocus();
 			}
+			return containerFeedback;
 		};
 };
 

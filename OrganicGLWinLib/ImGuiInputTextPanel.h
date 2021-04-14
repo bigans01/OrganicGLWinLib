@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "ImGuiInputText.h"
 #include "ImGuiInputTextResponse.h"
+#include "ShaderMachineFeedback.h"
 #include <string>
 
 class ImGuiInputTextPanel
@@ -27,15 +28,17 @@ class ImGuiInputTextPanel
 			ySize(in_ySize)
 		{}
 
-		std::unordered_map<std::string, ImGuiInputText> inputMap;
+		std::unordered_map<std::string, ImGuiInputText> inputMap;	// it is possible to have multiple inputs per panel. May not be really needed, but oh well.
 		std::string panelName = "";
 		float xOffset = 0;
 		float yOffset = 0;
 		float xSize = 0;
 		float ySize = 0;
 
-		void scanForInputFocus()
+		ShaderMachineFeedback scanForInputFocus()
 		{
+			ShaderMachineFeedback feedback;
+
 			auto inputMapBegin = inputMap.begin();
 			auto inputMapEnd = inputMap.end();
 
@@ -56,6 +59,7 @@ class ImGuiInputTextPanel
 				{
 					foundMessageResponse = true;
 					foundMessage = currentPotentialResponse.stringedArray;
+					feedback += currentPotentialResponse;
 				}
 			}
 
@@ -65,6 +69,8 @@ class ImGuiInputTextPanel
 			{
 				std::cout << "Produced string: " << foundMessage << std::endl;
 			}
+
+			return feedback;
 		}
 
 		void insertNewInput(std::string in_inputName)

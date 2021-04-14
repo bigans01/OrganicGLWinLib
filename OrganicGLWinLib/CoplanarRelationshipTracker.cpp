@@ -105,3 +105,14 @@ void CoplanarRelationshipTracker::printRelationshipData()
 		}
 	}
 }
+
+void CoplanarRelationshipTracker::printRemovableSPolys()
+{
+	std::cout << "(CoplanarRelationshipTracker): Printing removable SPolys..." << std::endl;
+	auto removablesBegin = removableSPolys.intSet.begin();
+	auto removablesEnd = removableSPolys.intSet.end();
+	for (; removablesBegin != removablesEnd; removablesBegin++)
+	{
+		std::cout << *removablesBegin << std::endl;
+	}
+}

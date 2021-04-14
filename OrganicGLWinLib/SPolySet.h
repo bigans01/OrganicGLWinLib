@@ -87,7 +87,7 @@ public:
 	// ************************** Recursive template function for enabling debug options on a specific tracked SPoly in an instance of CoplanarRelationships **********************************
 	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOTrackedSPoly(int in_trackedSPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
-		coplanarTracker.insertDOForSpecificTrackedSPoly(in_trackedSPolyID, std::forward<FirstDebugOption>(firstOption));
+		fusionMachine.fmInsertDOForSpecificTrackedSPoly(in_trackedSPolyID, std::forward<FirstDebugOption>(firstOption));
 		setDOTrackedSPoly(in_trackedSPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
 	}
 	void setDOTrackedSPoly(int in_sPolyID) {};
@@ -95,7 +95,7 @@ public:
 	// ************************** Recursive template function for enabling debug options on a specific STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
 	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
-		coplanarTracker.insertDOForSpecificTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
+		fusionMachine.fmInsertDOForSpecificTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<FirstDebugOption>(firstOption));
 		setDOTrackedSPolySTriangle(in_trackedSPolyID, in_trackedSPolySTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
 	};
 	void setDOTrackedSPolySTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};
@@ -103,7 +103,7 @@ public:
 	// ************************** Recursive template function for enabling debug options on a specific cutting STriangle, in a specific tracked SPoly in an instance of CoplanarRelationships **********************************
 	template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOCuttingTriangle(int in_trackedSPolyID, int in_cuttingTriangleID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 	{
-		coplanarTracker.insertDOForSpecificTrackedCutterCuttingTriangle(in_trackedSPolyID, in_cuttingTriangleID, std::forward<FirstDebugOption>(firstOption));
+		fusionMachine.fmInsertDOForSpecificTrackedCutterCuttingTriangle(in_trackedSPolyID, in_cuttingTriangleID, std::forward<FirstDebugOption>(firstOption));
 		setDOCuttingTriangle(in_trackedSPolyID, in_cuttingTriangleID, std::forward<RemainingDebugOptions>(optionParams)...);
 	};
 	void setDOCuttingTriangle(int in_trackedSPolyID, int in_trackedSPolySTriangleID) {};

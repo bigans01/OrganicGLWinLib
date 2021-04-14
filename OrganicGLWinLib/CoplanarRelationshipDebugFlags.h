@@ -15,6 +15,7 @@ class CoplanarRelationshipDebugFlags
 	private:
 		friend class CoplanarRelationships;
 		friend class CoplanarRelationshipTracker;
+		friend class CoplanarFusionMachine;
 
 
 		PolyDebugLevel dlPrintBorderLinesOfTrackedAndRelatedSPolys = PolyDebugLevel::NONE;
