@@ -472,60 +472,60 @@ void ShaderMachineBase::swapAndPoll()
 
 void ShaderMachineBase::insertNewPersistentBuffer(std::string in_bufferName, int in_size)
 {
-	int currentSize = int(persistentBufferMap.size());	// get the index we will use
-	persistentBufferMap[currentSize] = 0;			// initialize to 0; but it will get changed.
-	OrganicGLWinUtils::createImmutableBuffer(&persistentBufferMap[currentSize], in_size, 1);	// pass a reference to the GLuint to bind to
-	persistentBufferLookup[in_bufferName] = currentSize;								// insert the lookup value
-	std::cout << "!!!!!!! ################ persistent buffer ID is: " << persistentBufferMap[currentSize] << std::endl;
+	int indexToUse = persistentBufferMap.getNextAvailableKey();	// get the index we will use
+	persistentBufferMap[indexToUse] = 0;			// initialize to 0; but it will get changed.
+	OrganicGLWinUtils::createImmutableBuffer(&persistentBufferMap[indexToUse], in_size, 1);	// pass a reference to the GLuint to bind to
+	persistentBufferLookup[in_bufferName] = indexToUse;								// insert the lookup value
+	std::cout << "!!!!!!! ################ persistent buffer ID is: " << persistentBufferMap[indexToUse] << std::endl;
 }
 
 void ShaderMachineBase::insertNewFBO(std::string in_fboName)
 {
-	int currentSize = int(fboMap.size());
-	fboMap[currentSize] = 0;	// initialize to 0; but will be changed in next function call
-	OrganicGLWinUtils::createFBO(&fboMap[currentSize]);	// create the FBO; only creates, doesn't do anything special
-	fboLookup[in_fboName] = currentSize;	// insert the lookup value
+	int indexToUse = fboMap.getNextAvailableKey();
+	fboMap[indexToUse] = 0;	// initialize to 0; but will be changed in next function call
+	OrganicGLWinUtils::createFBO(&fboMap[indexToUse]);	// create the FBO; only creates, doesn't do anything special
+	fboLookup[in_fboName] = indexToUse;	// insert the lookup value
 }
 
 void ShaderMachineBase::insertNewBuffer(std::string in_bufferName)
 {
-	int currentSize = int(bufferMap.size());
-	bufferMap[currentSize] = 0;
-	OrganicGLWinUtils::createBuffer(&bufferMap[currentSize]);
-	bufferLookup[in_bufferName] = currentSize;
+	int indexToUse = bufferMap.getNextAvailableKey();
+	bufferMap[indexToUse] = 0;
+	OrganicGLWinUtils::createBuffer(&bufferMap[indexToUse]);
+	bufferLookup[in_bufferName] = indexToUse;
 }
 
 void ShaderMachineBase::insertNewTexture(std::string in_textureName)
 {
-	int currentSize = int(textureMap.size());
-	textureMap[currentSize] = 0;
-	textureLookup[in_textureName] = currentSize;
+	int indexToUse = textureMap.getNextAvailableKey();
+	textureMap[indexToUse] = 0;
+	textureLookup[in_textureName] = indexToUse;
 }
 
 void ShaderMachineBase::insertAndBuildNewAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
 {
-	int currentSize = int(atlasMapMap.size());
+	int indexToUse = atlasMapMap.getNextAvailableKey();
 	AtlasMap newMap;
-	atlasMapMap[currentSize] = newMap;
-	atlasMapMap[currentSize].buildAtlas(in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
+	atlasMapMap[indexToUse] = newMap;
+	atlasMapMap[indexToUse].buildAtlas(in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
 
-	atlasMapLookup[in_atlasFolderName] = currentSize;
+	atlasMapLookup[in_atlasFolderName] = indexToUse;
 }
 
 void ShaderMachineBase::insertAndBuildNewAtlasToSpecifiedTextureChannel(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth)
 {
-	int currentSize = int(atlasMapMap.size());
+	int indexToUse = atlasMapMap.getNextAvailableKey();
 	AtlasMap newMap;
-	atlasMapMap[currentSize] = newMap;
-	atlasMapMap[currentSize].buildAtlasOnTextureUnit(in_texUnit, in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
+	atlasMapMap[indexToUse] = newMap;
+	atlasMapMap[indexToUse].buildAtlasOnTextureUnit(in_texUnit, in_atlasFolderName, in_atlasTextureRef, in_atlasTileWidth, in_atlasWidth);
 
-	atlasMapLookup[in_atlasFolderName] = currentSize;
+	atlasMapLookup[in_atlasFolderName] = indexToUse;
 }
 
 void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
-	int currentSize = int(multiDrawArrayJobMap.size());
-	int targetKeyValue = currentSize;
+	int indexToUse = multiDrawArrayJobMap.getNextAvailableKey();
+	int targetKeyValue = indexToUse;
 
 
 	auto doesJobExist = multiDrawArrayJobLookup.find(in_jobName);
@@ -545,8 +545,8 @@ void ShaderMachineBase::insertNewMultiDrawArrayJob(std::string in_jobName, GLMul
 
 void ShaderMachineBase::insertNewDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
 {
-	int currentSize = int(drawElementsInstancedJobMap.size());
-	int targetKeyValue = currentSize;
+	int indexToUse = drawElementsInstancedJobMap.getNextAvailableKey();
+	int targetKeyValue = indexToUse;
 
 	auto doesJobExist = drawElementsInstancedJobLookup.find(in_jobName);
 	if (doesJobExist != drawElementsInstancedJobLookup.end())
@@ -563,18 +563,18 @@ void ShaderMachineBase::insertNewDrawElementsInstancedJob(std::string in_jobName
 
 void ShaderMachineBase::createProgram(std::string in_programName)
 {
-	int currentSize = int(programMap.size());
-	programMap[currentSize] = 0;
-	OrganicGLWinUtils::loadShadersViaMode(&programMap[currentSize], in_programName);
-	programLookup[in_programName] = programMap[currentSize];
+	int indexToUse = programMap.getNextAvailableKey();
+	programMap[indexToUse] = 0;
+	OrganicGLWinUtils::loadShadersViaMode(&programMap[indexToUse], in_programName);
+	programLookup[in_programName] = programMap[indexToUse];
 }
 
 void ShaderMachineBase::createComputeProgram(std::string in_programName)
 {
-	int currentSize = int(programMap.size());
-	programMap[currentSize] = 0;
-	OrganicGLWinUtils::loadComputeShader(&programMap[currentSize], in_programName);
-	programLookup[in_programName] = programMap[currentSize];
+	int indexToUse = programMap.getNextAvailableKey();
+	programMap[indexToUse] = 0;
+	OrganicGLWinUtils::loadComputeShader(&programMap[indexToUse], in_programName);
+	programLookup[in_programName] = programMap[indexToUse];
 }
 
 void ShaderMachineBase::toggleCameraBoundToMousePointer()

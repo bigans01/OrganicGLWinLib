@@ -28,6 +28,7 @@
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
+#include "SmartIntMap.h"
 
 class ShaderMachineBase
 {
@@ -108,15 +109,20 @@ protected:
 		WorldLightContainerMap worldLights;
 		ShaderMachineFeedback machineFeedback;				// gets any inputs that were received; it is loaded using a call to checkForTextInput().
 
-		std::map<int, GLuint> bufferMap;									// for typical buffers (non-persistent)
-		std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers
-		std::map<int, GLuint> programMap;									// " for program IDs
-		std::map<int, GLuint> fboMap;										// " for frame buffer objects
-		std::map<int, GLuint> textureMap;									// " for textures
-		std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
-		std::map<int, GLMultiDrawArrayJob> multiDrawArrayJobMap;
-		std::map<int, GLDrawElementsInstancedJob> drawElementsInstancedJobMap;
-		std::map<int, AtlasMap> atlasMapMap;
+		SmartIntMap<GLuint> bufferMap;									// (UPDATED 4/15/2021, to SmartIntMap) for typical buffers (non-persistent)
+		SmartIntMap<GLuint> persistentBufferMap;						// (UPDATED 4/15/2021, to SmartIntMap) map that stores IDs of persistent buffers
+		SmartIntMap<GLuint> programMap;									// (UPDATED 4/15/2021, to SmartIntMap) " for program IDs
+		SmartIntMap<GLuint> fboMap;										// (UPDATED 4/15/2021, to SmartIntMap) " for frame buffer objects
+		SmartIntMap<GLuint> textureMap;									// (UPDATED 4/15/2021, to SmartIntMap)  " for textures
+		SmartIntMap<std::unique_ptr<Gear>> gearTrain;					// (UPDATED 4/15/2021, to SmartIntMap) map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
+		SmartIntMap<GLMultiDrawArrayJob> multiDrawArrayJobMap;			// (UPDATED 4/15/2021, to SmartIntMap)
+		SmartIntMap<GLDrawElementsInstancedJob> drawElementsInstancedJobMap;	// (UPDATED 4/15/2021, to SmartIntMap)
+		SmartIntMap<AtlasMap> atlasMapMap;
+
+		//std::map<int, AtlasMap> atlasMapMap;
+		//SmartIntMap<GLMultiDrawArrayJob> multiDrawArrayJobMap;
+		//std::map<int, GLuint> bufferMap;									// for typical buffers (non-persistent)
+
 
 		std::unordered_map<std::string, int> bufferLookup;
 		std::unordered_map<std::string, int> persistentBufferLookup;					// used to look up buffer IDs

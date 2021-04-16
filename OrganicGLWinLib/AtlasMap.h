@@ -29,6 +29,7 @@ class AtlasMap
 	public:
 
 		AtlasMap();
+		AtlasMap(const AtlasMap& in_atlasMapOrig) {};		// needed for use by SmartIntMap in ShaderMachineBase (4/15/2021)
 		AtlasMap& operator=(const AtlasMap& atlasMap_b)
 		{
 			// copy atlas tile data
