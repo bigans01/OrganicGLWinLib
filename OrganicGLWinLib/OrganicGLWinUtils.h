@@ -79,6 +79,7 @@ public:
 	static void setBasicStates();																				// sets basic OpenGL states
 	static void setClearColor(float in_red, float in_green, float in_blue, float in_alpha);						// sets the background color
 	static void copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset);
+	static void moveForCopy(GLuint* in_copyBufferID, int in_readByteOffset, int in_readByteSize, int in_targetWriteBackOffset);
 	static GLuint loadDDS(const char* imagepath);
 	static glm::quat createQuaternion(float in_degrees, glm::vec3 in_unitVector);
 	static glm::vec3 roundVec3ToHundredths(glm::vec3 in_vec3);

@@ -45,8 +45,12 @@ public:
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
 
-		void registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
+		void registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.
 		void registerDrawElementsInstancedJob(std::string in_instancedJobName, int in_numberOfElements);
+
+		void disableMultiDrawArrayJob(std::string in_drawJobName);	// disables a multi draw array job (job must exist to be disabled)
+
+		void enableMultiDrawArrayJob(std::string in_drawJobName);		// enables a multi draw array job (job must exist to be enabled)
 
 		// persistent buffer functions
 		GLuint getPersistentBufferID(std::string in_bufferName);																	// gets the ID of the specified persistent buffer with the value of "in_bufferName"
@@ -133,6 +137,9 @@ protected:
 		std::unordered_map<std::string, int> drawElementsInstancedJobLookup;
 		std::unordered_map<std::string, int> atlasMapLookup;
 
+		// itinerary maps
+		std::unordered_map<std::string, int> multiDrawArrayItineraries;
+
 		// "Terrain" vao data values
 		int vaoAttribMode;			// the VAO attrib mode for rendering
 		int vaoAttribByteSize;		// the size, in bytes, of the combined VAO
@@ -183,8 +190,8 @@ protected:
 		//void sendGearUniforms();
 		void sendGearUniforms();
 		void sendDrawJobs();	
-		void sendMultiDrawArrayJobRequests(Gear* in_gearRef);		// send multi draw array requests, if there are any, to the Gear
-		void sendDrawElementsInstancedRequests(Gear* in_gearRef);	// send draw elements instanced requests, if there are any, to the Gear
+		void sendMultiDrawArrayJobRequests(int in_gearID, Gear* in_gearRef);		// send multi draw array requests, if there are any, to the Gear
+		void sendDrawElementsInstancedRequests(int in_gearID, Gear* in_gearRef);	// send draw elements instanced requests, if there are any, to the Gear
 
 		// buffer creation functions
 		void insertNewPersistentBuffer(std::string in_bufferName, int in_size);		// insert a persistent buffer
@@ -197,6 +204,8 @@ protected:
 		// draw job functions
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		void insertNewDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);
+
+		// draw job disabling functions
 
 		// program creation
 		void createProgram(std::string in_programName);

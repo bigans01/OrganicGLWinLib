@@ -853,6 +853,21 @@ void OrganicGLWinUtils::copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBu
 	glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, in_readByteOffset, in_writeByteOffset, in_readByteSize);
 }
 
+void OrganicGLWinUtils::moveForCopy(GLuint* in_copyBufferID, int in_readByteOffset, int in_readByteSize, int in_targetWriteBackOffset)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, *in_copyBufferID);
+	std::unique_ptr<float[]> dataToMove;
+	int numberOfFloats = in_readByteSize / 4;
+	dataToMove.reset(new float[numberOfFloats]);
+	glGetBufferSubData(GL_ARRAY_BUFFER, in_readByteOffset, in_readByteSize, dataToMove.get());
+	glBufferSubData(GL_ARRAY_BUFFER, in_targetWriteBackOffset, in_readByteSize, dataToMove.get());
+
+	//glBindBuffer(GL_COPY_READ_BUFFER, *in_copyBufferID);	// set the read buffer
+	//glBindBuffer(GL_COPY_WRITE_BUFFER, *in_copyBufferID);
+	//glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, in_readByteOffset, in_targetWriteBackOffset, in_readByteSize);
+
+}
+
 void OrganicGLWinUtils::initializeGlew()
 {
 	glewExperimental = true; // Needed for core profile

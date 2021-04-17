@@ -33,6 +33,7 @@ class Gear
 		virtual void executeGearFunction(std::string in_identifier) = 0;
 		virtual void printData() = 0;
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
+		void removeMultiDrawArrayJob(std::string in_jobName);
 		void insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);
 		
 		template <GLDataType in_dType, typename PassType> void sendUniform(std::string in_uniformName, PassType in_data)

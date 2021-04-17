@@ -405,12 +405,12 @@ void ShaderMachineBase::sendDrawJobs()
 	auto gearTrainEnd = gearTrain.end();
 	for (gearTrainBegin; gearTrainBegin != gearTrainEnd; gearTrainBegin++)
 	{
-		sendMultiDrawArrayJobRequests(gearTrainBegin->second.get());				// if the gear has any multi draw array requests, send them.
-		sendDrawElementsInstancedRequests(gearTrainBegin->second.get());			// if the gear has any instanced drawing requests, send them.
+		sendMultiDrawArrayJobRequests(gearTrainBegin->first, gearTrainBegin->second.get());				// if the gear has any multi draw array requests, send them.
+		sendDrawElementsInstancedRequests(gearTrainBegin->first, gearTrainBegin->second.get());			// if the gear has any instanced drawing requests, send them.
 	}
 }
 
-void ShaderMachineBase::sendMultiDrawArrayJobRequests(Gear* in_gearRef)
+void ShaderMachineBase::sendMultiDrawArrayJobRequests(int in_gearID, Gear* in_gearRef)
 {
 	auto currentDrawJobRequests = in_gearRef->getMultiDrawArrayJobRequests();
 	auto deRefedRequests = *currentDrawJobRequests;
@@ -423,12 +423,46 @@ void ShaderMachineBase::sendMultiDrawArrayJobRequests(Gear* in_gearRef)
 		if (foundResult != multiDrawArrayJobLookup.end())
 		{
 			GLMultiDrawArrayJob jobToSend = getMultiDrawArrayJob(*currentBegin);	// get the job to send
-			in_gearRef->insertMultiDrawArrayJob(*currentBegin, jobToSend);
+			if (jobToSend.isEnabled == true)		// only send if it is enabled.
+			{
+				multiDrawArrayItineraries[*currentBegin] = in_gearID;				// make sure to flag the itinerary.
+				in_gearRef->insertMultiDrawArrayJob(*currentBegin, jobToSend);		// send a copy to the Gear.
+			}
 		}
 	}
 }
 
-void ShaderMachineBase::sendDrawElementsInstancedRequests(Gear* in_gearRef)
+void ShaderMachineBase::disableMultiDrawArrayJob(std::string in_drawJobName)
+{
+	// first, find the Gear that has the draw job in it, and erase it from that gear...if there's even an itinerary for it.
+	auto gearIter = multiDrawArrayItineraries.find(in_drawJobName);
+	if (gearIter != multiDrawArrayItineraries.end())
+	{
+		int gearID = gearIter->second;
+		auto targetGear = gearTrain.find(gearID);
+		targetGear->second.get()->removeMultiDrawArrayJob(in_drawJobName);
+		multiDrawArrayItineraries.erase(in_drawJobName); // erase the itinerary entry, after we've removed the gear's data.
+	}
+
+	// second, set the draw job's isEnabled flag to false, if it exists.
+	auto lookupAttempt = multiDrawArrayJobLookup.find(in_drawJobName);
+	if (lookupAttempt != multiDrawArrayJobLookup.end())
+	{
+		multiDrawArrayJobMap[lookupAttempt->second].isEnabled = false;
+	}
+}
+
+void ShaderMachineBase::enableMultiDrawArrayJob(std::string in_drawJobName)
+{
+	// set the draw job's isEnabled flag to true, if it exists.
+	auto lookupAttempt = multiDrawArrayJobLookup.find(in_drawJobName);
+	if (lookupAttempt != multiDrawArrayJobLookup.end())
+	{
+		multiDrawArrayJobMap[lookupAttempt->second].isEnabled = true;
+	}
+}
+
+void ShaderMachineBase::sendDrawElementsInstancedRequests(int in_gearID, Gear* in_gearRef)
 {
 	auto currentDrawJobRequests = in_gearRef->getDrawElementsInstancedRequests();
 	auto deRefedRequests = *currentDrawJobRequests;
@@ -448,7 +482,7 @@ void ShaderMachineBase::sendDrawElementsInstancedRequests(Gear* in_gearRef)
 }
 
 
-void ShaderMachineBase::registerDrawJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void ShaderMachineBase::registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	GLMultiDrawArrayJob newJob;
 	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);

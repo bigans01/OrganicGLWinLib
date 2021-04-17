@@ -31,6 +31,7 @@ void HighlighterGearT1::render()
 	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");		// find the MVP uniform
 	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
 	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("highlighter_draw_job");	// fetch the draw job
+	//std::cout << "(HighlighterGearT1): jobToUse draw count is: " << jobToUse.drawCount << " | size of draw array job map is: " << gearMultiDrawArrayJobMap.size() << std::endl;
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);	// render with draw job data
 
 	//std::cout << "Rendering highlights..." << std::endl;

@@ -12,7 +12,7 @@ GLMultiDrawArrayJob::GLMultiDrawArrayJob(const GLMultiDrawArrayJob& job_b)
 	//std::cout << "!! Original draw count value: " << drawCount << std::endl;
 	drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
 	drawCount = job_b.drawCount;
-
+	isEnabled = job_b.isEnabled;
 
 	if (drawCount > 0)							// only do the below if there is data to copy.
 	{

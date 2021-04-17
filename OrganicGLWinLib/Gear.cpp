@@ -27,6 +27,17 @@ void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob i
 	
 }
 
+void Gear::removeMultiDrawArrayJob(std::string in_jobName)
+{
+	auto doesJobExist = gearMultiDrawArrayJobLookup.find(in_jobName);
+	if (doesJobExist != gearMultiDrawArrayJobLookup.end())
+	{
+		int targetJobToEraseID = doesJobExist->second;
+		gearMultiDrawArrayJobMap.erase(targetJobToEraseID);
+		gearMultiDrawArrayJobLookup.erase(in_jobName);
+	}
+}
+
 void Gear::insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
 {
 	int currentKey = gearDrawElementsInstancedJobMap.size();	// use this if it's a new job...
@@ -129,15 +140,23 @@ std::vector<std::string>* Gear::getDrawElementsInstancedRequests()
 GLMultiDrawArrayJob Gear::getMultiDrawArrayJob(std::string in_jobName)
 {
 	GLMultiDrawArrayJob returnJob;
-	int lookupID = gearMultiDrawArrayJobLookup[in_jobName];
-	returnJob = gearMultiDrawArrayJobMap[lookupID];
+	auto stringedMultiJobFinder = gearMultiDrawArrayJobLookup.find(in_jobName);
+	if (stringedMultiJobFinder != gearMultiDrawArrayJobLookup.end())	// it was found
+	{
+		int lookupID = gearMultiDrawArrayJobLookup[in_jobName];
+		returnJob = gearMultiDrawArrayJobMap[lookupID];
+	}
 	return returnJob;
 }
 
 GLDrawElementsInstancedJob Gear::getDrawElementsInstancedJob(std::string in_jobName)
 {
 	GLDrawElementsInstancedJob returnJob;
-	int lookupID = gearDrawElementsInstancedJobLookup[in_jobName];
-	returnJob = gearDrawElementsInstancedJobMap[lookupID];
+	auto stringedInstancedJobFinder = gearDrawElementsInstancedJobLookup.find(in_jobName);
+	if (stringedInstancedJobFinder != gearDrawElementsInstancedJobLookup.end())	// it was found
+	{
+		int lookupID = gearDrawElementsInstancedJobLookup[in_jobName];
+		returnJob = gearDrawElementsInstancedJobMap[lookupID];
+	}
 	return returnJob;
 }

@@ -24,6 +24,7 @@ class GLMultiDrawArrayJob
 			drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
 			//std::cout << "!!!! Old draw count: " << drawCount << std::endl;
 			drawCount = job_b.drawCount;
+			isEnabled = job_b.isEnabled;
 			//std::cout << "!!!! New draw count: " << drawCount << std::endl;
 
 			if (drawCount > 0)							// only do the below if there is data to copy.
@@ -45,6 +46,7 @@ class GLMultiDrawArrayJob
 				multiVertexCount.reset();
 			}
 			//std::cout << "!! End Calling operator 1" << std::endl;
+
 			return *this;
 		}
 
@@ -85,6 +87,7 @@ class GLMultiDrawArrayJob
 		std::unique_ptr<GLint[]> multiStartIndices;
 		std::unique_ptr<GLsizei[]> multiVertexCount;
 		int drawCount = 0;
+		bool isEnabled = true;	// determines whether or not this job should currently run; the default is TRUE
 
 		void updateDrawArrayData(GLuint in_drawJobBufferID, GLint* in_multiStartIndicesData, GLsizei* in_multiVertexCountData, int in_drawCount);
 };

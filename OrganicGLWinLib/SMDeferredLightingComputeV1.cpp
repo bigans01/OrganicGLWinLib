@@ -366,10 +366,12 @@ void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jo
 
 		auto copystart = std::chrono::high_resolution_clock::now();
 		//std::cout << "Notice,  currentMeta contains movement. " << std::endl;
-		OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
+		//OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
 		int writeBackOffset = terrainMemoryTracker.insertNewCollection(in_jobResults);
-		OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
+		//OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
 		auto copyend = std::chrono::high_resolution_clock::now();
+
+		OrganicGLWinUtils::moveForCopy(getTerrainBufferRef(), currentMeta.byteOffset, currentMeta.byteSize, writeBackOffset);
 
 		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
 
@@ -385,16 +387,21 @@ void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jo
 		std::chrono::duration<double> buffersubelapsed = buffersubend - buffersubstart;
 		//std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
 		//std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
+		//std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
+		
 		/*
 		if (copyelapsed.count() > 0.016)
 		{
 			std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
+			std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
 		}
 		if (buffersubelapsed.count() > 0.016)
 		{
 			std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
+			std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
 		}
 		*/
+		
 	}
 	else if (currentMeta.containsMovement == 0)
 	{
@@ -428,10 +435,11 @@ void SMDeferredLightingComputeV1::removeUnusedReplaceables()
 		{
 
 			TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.removeUnusedReplaceablesAndShift();
-			OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
+			//OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
 			int writeBackOffset = currentMeta.copyBackOffset;
-			OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
+			//OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
 			//std::cout << std::endl;
+			OrganicGLWinUtils::moveForCopy(getTerrainBufferRef(), currentMeta.byteOffset, currentMeta.byteSize, writeBackOffset);
 			terrainMemoryTracker.outputAllElements();
 
 		}
