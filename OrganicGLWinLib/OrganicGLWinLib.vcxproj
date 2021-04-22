@@ -329,6 +329,7 @@
     <ClInclude Include="RaycastIntersectionTest.h" />
     <ClInclude Include="RayIntersectionResult.h" />
     <ClInclude Include="SharedLineReactor.h" />
+    <ClInclude Include="SinTBW.h" />
     <ClInclude Include="SPolyDO.h" />
     <ClInclude Include="SPolyDOSet.h" />
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
@@ -338,6 +339,7 @@
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
+    <ClInclude Include="TimeBasedWaveBase.h" />
     <ClInclude Include="TwoDCrawlingAttempt.h" />
     <ClInclude Include="TwoDCrawlingType.h" />
     <ClInclude Include="TwoDIntersectionRecordManager.h" />
@@ -571,6 +573,7 @@
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SharedLineReactor.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
+    <ClCompile Include="SinTBW.cpp" />
     <ClCompile Include="SliceFinder.cpp" />
     <ClCompile Include="SMDebugV1.cpp" />
     <ClCompile Include="SMDeferredLightingComputeV1.cpp" />
@@ -612,6 +615,7 @@
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
+    <ClCompile Include="TimeBasedWaveBase.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
     <ClCompile Include="TwoDIntersectionRecordManager.cpp" />
     <ClCompile Include="TwoDLineSegment.cpp" />

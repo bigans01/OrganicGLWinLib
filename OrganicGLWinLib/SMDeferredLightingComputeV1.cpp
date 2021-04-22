@@ -31,7 +31,8 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
@@ -47,7 +48,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	// create the panel, then add buttons to panel.
 	buttonPanelContainer.insertNewPanel("panel1", 10, 10, 200, 100);
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
-	buttonPanelContainer.insertButtonIntoPanel("panel1", "button2");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleBlockTargetHighlight");
 
 	// create a test panel for input.
 	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 100);

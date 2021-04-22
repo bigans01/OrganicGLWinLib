@@ -930,6 +930,12 @@
     <ClInclude Include="ShaderMachineFeedback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TimeBasedWaveBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SinTBW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1380,6 +1386,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CoplanarFusionMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeBasedWaveBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SinTBW.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
