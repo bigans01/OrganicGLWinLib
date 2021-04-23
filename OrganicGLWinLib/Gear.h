@@ -74,6 +74,8 @@ class Gear
 		std::vector<GLUniformRequest>* getUniformRequests();
 		std::vector<std::string>* getMultiDrawArrayJobRequests();
 		std::vector<std::string>* getDrawElementsInstancedRequests();
+		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
+		void deleteUniformRequest(std::string in_uniformName);
 
 	protected:
 		void useProgram();
@@ -101,7 +103,6 @@ class Gear
 		void registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID);		// insert a persistent buffer
 		void registerNewFBO(std::string in_fboName, GLuint in_bufferID);									// insert a FBO
 		void registerNewTexture(std::string in_textureName, GLuint in_textureID);
-		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
 		void insertMultiDrawArrayJobRequest(std::string in_jobName);
 		GLMultiDrawArrayJob getMultiDrawArrayJob(std::string in_jobName);
 		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);

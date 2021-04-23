@@ -117,6 +117,28 @@ void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformNa
 	uniformRequests.push_back(newRequest);
 }
 
+void Gear::deleteUniformRequest(std::string in_uniformName)
+{
+	auto requestsBegin = uniformRequests.begin();
+	auto requestsEnd = uniformRequests.end();
+	bool wasTargetFound = false;
+	int elementOffset = 0;
+	for (; requestsBegin != requestsEnd; requestsBegin++)
+	{
+		if (requestsBegin->uniformName == in_uniformName)
+		{
+			wasTargetFound = true;
+			break;
+		}
+		elementOffset++;
+	}
+
+	if (wasTargetFound == true)
+	{
+		uniformRequests.erase(uniformRequests.begin() + elementOffset);
+	}
+}
+
 void Gear::insertMultiDrawArrayJobRequest(std::string in_jobName)
 {
 	multiDrawArrayJobRequests.push_back(in_jobName);

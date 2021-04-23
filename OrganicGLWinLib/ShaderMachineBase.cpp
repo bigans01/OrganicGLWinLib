@@ -399,6 +399,11 @@ void ShaderMachineBase::sendGearUniforms()
 	}
 }
 
+void ShaderMachineBase::updateWaveUniforms()
+{
+	waveManager.updateWaveValuesInRegistry(&uniformRegistry);
+}
+
 void ShaderMachineBase::sendDrawJobs()
 {
 	auto gearTrainBegin = gearTrain.begin();
@@ -481,6 +486,10 @@ void ShaderMachineBase::sendDrawElementsInstancedRequests(int in_gearID, Gear* i
 	}
 }
 
+float ShaderMachineBase::retrieveFloatUniform(std::string in_floatUniformName)
+{
+	return uniformRegistry.getFloat(in_floatUniformName);
+}
 
 void ShaderMachineBase::registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
@@ -495,6 +504,53 @@ void ShaderMachineBase::registerDrawElementsInstancedJob(std::string in_instance
 	GLDrawElementsInstancedJob newJob;
 	newJob.numberOfElementsToRender = in_numberOfElements;
 	insertNewDrawElementsInstancedJob(in_instancedJobName, newJob);
+}
+
+void ShaderMachineBase::registerTBW(std::string in_tbwName, TimeBasedWaveType in_timeBasedWaveType)
+{
+	waveManager.createTimeBasedWave(in_tbwName, in_timeBasedWaveType);
+}
+
+void ShaderMachineBase::registerTBWAndSendRequestToProgramGear(std::string in_tbwName, TimeBasedWaveType in_timeBasedWaveType, std::string in_programName)
+{
+	// first, attempt to find the program; don't bother continuing if we can't find the program.
+	auto programFinder = programLookup.find("in_programName");
+	if (programFinder != programLookup.end())
+	{
+		waveManager.createTimeBasedWave(in_tbwName, in_timeBasedWaveType);
+		int programIDToFind = programFinder->second;	// the ID to check against each program.
+		auto gearsBegin = gearTrain.begin();
+		auto gearsEnd = gearTrain.end();
+		bool wasSelectedGearFound = false;
+		int selectedGearID = 0;							// this will be set when 
+		for (; gearsBegin != gearsEnd; gearsBegin++)
+		{
+			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
+			{
+				gearsBegin->second.get()->insertUniformRequest(GLDataType::FLOAT, in_tbwName);	// send the newly created request to the selected Gear; waves should always be a float type.
+				wasSelectedGearFound = true;
+				selectedGearID = gearsBegin->first;
+			}
+		}
+
+		// make sure to put the appropriate value in the tbw itinerary.
+		if (wasSelectedGearFound == true)
+		{
+			tbwDestinationItineraries[in_tbwName] = selectedGearID;
+		}
+	}
+}
+
+void ShaderMachineBase::deregisterTBWANdRemoveRequestFromProgramGear(std::string in_tbwName)
+{
+	// first, attempt to find the itinerary associated with the tbwName.
+	auto tbwNameFinder = tbwDestinationItineraries.find(in_tbwName);
+	if (tbwNameFinder != tbwDestinationItineraries.end())
+	{
+		int targetGearKey = tbwNameFinder->second;
+		gearTrain[targetGearKey].get()->deleteUniformRequest(in_tbwName);
+		tbwDestinationItineraries.erase(in_tbwName);
+	}
 }
 
 void ShaderMachineBase::swapAndPoll()

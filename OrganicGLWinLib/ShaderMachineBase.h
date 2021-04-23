@@ -29,6 +29,8 @@
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
 #include "SmartIntMap.h"
+#include "TimeBasedWaveManager.h"
+#include "TimeBasedWaveType.h"
 
 class ShaderMachineBase
 {
@@ -45,12 +47,16 @@ public:
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
 
+		// uniform value retrieval functions
+		float retrieveFloatUniform(std::string in_floatUniformName);
+
+		// GL multi draw array functions
 		void registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.
-		void registerDrawElementsInstancedJob(std::string in_instancedJobName, int in_numberOfElements);
-
 		void disableMultiDrawArrayJob(std::string in_drawJobName);	// disables a multi draw array job (job must exist to be disabled)
-
 		void enableMultiDrawArrayJob(std::string in_drawJobName);		// enables a multi draw array job (job must exist to be enabled)
+
+		// GL instanced drawing functions
+		void registerDrawElementsInstancedJob(std::string in_instancedJobName, int in_numberOfElements);
 
 		// persistent buffer functions
 		GLuint getPersistentBufferID(std::string in_bufferName);																	// gets the ID of the specified persistent buffer with the value of "in_bufferName"
@@ -83,6 +89,11 @@ public:
 		// size fetching functions
 		int getBufferSize();
 
+		// wave manager functions
+		void registerTBW(std::string in_tbwName, TimeBasedWaveType in_timeBasedWaveType);
+		void registerTBWAndSendRequestToProgramGear(std::string in_tbwName, TimeBasedWaveType in_timeBasedWaveType, std::string in_programName);
+		void deregisterTBWANdRemoveRequestFromProgramGear(std::string in_tbwName);
+
 		 // "Terrain" vao data value retrieval functions for OrganicSystem
 		int getVaoAttribMode();
 		int getVaoAttribByteSize();
@@ -112,6 +123,7 @@ protected:
 		GLUniformRegistry uniformRegistry;
 		WorldLightContainerMap worldLights;
 		ShaderMachineFeedback machineFeedback;				// gets any inputs that were received; it is loaded using a call to checkForTextInput().
+		TimeBasedWaveManager waveManager;
 
 		SmartIntMap<GLuint> bufferMap;									// (UPDATED 4/15/2021, to SmartIntMap) for typical buffers (non-persistent)
 		SmartIntMap<GLuint> persistentBufferMap;						// (UPDATED 4/15/2021, to SmartIntMap) map that stores IDs of persistent buffers
@@ -137,8 +149,9 @@ protected:
 		std::unordered_map<std::string, int> drawElementsInstancedJobLookup;
 		std::unordered_map<std::string, int> atlasMapLookup;
 
-		// itinerary maps
+		// itinerary maps -- the int value in each of these should correspond to a valid gear ID, for the key in the gearTrain map.
 		std::unordered_map<std::string, int> multiDrawArrayItineraries;
+		std::unordered_map<std::string, int> tbwDestinationItineraries;
 
 		// "Terrain" vao data values
 		int vaoAttribMode;			// the VAO attrib mode for rendering
@@ -204,6 +217,9 @@ protected:
 		// draw job functions
 		void insertNewMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		void insertNewDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);
+
+		// wave manager functions
+		void updateWaveUniforms();
 
 		// draw job disabling functions
 

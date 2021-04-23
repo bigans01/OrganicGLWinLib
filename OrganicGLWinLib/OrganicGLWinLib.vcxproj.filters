@@ -936,6 +936,12 @@
     <ClInclude Include="SinTBW.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TimeBasedWaveManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeBasedWaveType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1392,6 +1398,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SinTBW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeBasedWaveManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

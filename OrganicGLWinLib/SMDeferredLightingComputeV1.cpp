@@ -229,6 +229,7 @@ void SMDeferredLightingComputeV1::setupTextureAtlases()
 void SMDeferredLightingComputeV1::runAllShadersAndSwap()
 {
 	// RESERVED FOR LATER USER
+	updateWaveUniforms();
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
@@ -238,6 +239,7 @@ void SMDeferredLightingComputeV1::runAllShadersAndSwap()
 
 void SMDeferredLightingComputeV1::runAllShadersNoSwap()
 {
+	updateWaveUniforms();
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.

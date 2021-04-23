@@ -340,6 +340,8 @@
     <ClInclude Include="SummaryScanResult.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TimeBasedWaveBase.h" />
+    <ClInclude Include="TimeBasedWaveManager.h" />
+    <ClInclude Include="TimeBasedWaveType.h" />
     <ClInclude Include="TwoDCrawlingAttempt.h" />
     <ClInclude Include="TwoDCrawlingType.h" />
     <ClInclude Include="TwoDIntersectionRecordManager.h" />
@@ -616,6 +618,7 @@
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
     <ClCompile Include="TileCoordinateProducer.cpp" />
     <ClCompile Include="TimeBasedWaveBase.cpp" />
+    <ClCompile Include="TimeBasedWaveManager.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
     <ClCompile Include="TwoDIntersectionRecordManager.cpp" />
     <ClCompile Include="TwoDLineSegment.cpp" />

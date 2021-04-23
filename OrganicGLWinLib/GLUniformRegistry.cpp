@@ -33,32 +33,80 @@ void GLUniformRegistry::insertInt(std::string in_stringValue, int in_int)
 
 glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 {
-	return regVec2[in_stringValue];
+	glm::vec2 returnVec;
+	auto vec2Finder = regVec2.find(in_stringValue);
+	if (vec2Finder != regVec2.end())
+	{
+		returnVec = regVec2[in_stringValue];
+	}
+	return returnVec;
+
+	//return regVec2[in_stringValue];
 }
 
 glm::vec3 GLUniformRegistry::getVec3(std::string in_stringValue)
 {
-	return regVec3[in_stringValue];
+	glm::vec3 returnVec;
+	auto vec3Finder = regVec3.find(in_stringValue);
+	if (vec3Finder != regVec3.end())
+	{
+		returnVec = regVec3[in_stringValue];
+	}
+	return returnVec;
+
+	//return regVec3[in_stringValue];
 }
 
 glm::mat3 GLUniformRegistry::getMat3(std::string in_stringValue)
 {
-	return regMat3[in_stringValue];
+	glm::mat3 returnMat3;
+	auto mat3Finder = regMat3.find(in_stringValue);
+	if (mat3Finder != regMat3.end())
+	{
+		returnMat3 = regMat3[in_stringValue];
+	}
+	return returnMat3;
+
+	// return regMat3[in_stringValue];
 }
 
 glm::mat4 GLUniformRegistry::getMat4(std::string in_stringValue)
 {
-	return regMat4[in_stringValue];
+	glm::mat4 returnMat4;
+	auto mat4Finder = regMat4.find(in_stringValue);
+	if (mat4Finder != regMat4.end())
+	{
+		returnMat4 = regMat4[in_stringValue];
+	}
+	return returnMat4;
+
+	//return regMat4[in_stringValue];
 }
 
 float GLUniformRegistry::getFloat(std::string in_stringValue)
 {
-	return regFloat[in_stringValue];
+	float returnFloat = 0.0f;
+	auto floatFinder = regFloat.find(in_stringValue);
+	if (floatFinder != regFloat.end())
+	{
+		returnFloat = regFloat[in_stringValue];
+	}
+	return returnFloat;
+
+	//return regFloat[in_stringValue];
 }
 
 int GLUniformRegistry::getInt(std::string in_stringValue)
 {
-	return regInt[in_stringValue];
+	int returnInt = 0;
+	auto intFinder = regInt.find(in_stringValue);
+	if (intFinder != regInt.end())
+	{
+		returnInt = regInt[in_stringValue];
+	}
+	return returnInt;
+
+	//return regInt[in_stringValue];
 }
 
 float* GLUniformRegistry::getFloatRef(std::string in_stringValue)
