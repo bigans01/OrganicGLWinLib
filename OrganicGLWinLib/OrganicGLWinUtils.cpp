@@ -115,6 +115,12 @@ void OrganicGLWinUtils::createBuffer(GLuint* in_bufferIDref)
 	glGenBuffers(1, in_bufferIDref);					// generate the buffer
 }
 
+void OrganicGLWinUtils::deleteBuffer(GLuint* in_bufferIDToDelete)
+{
+	std::cout << "(OrganicGLWinUtils): deleting GL buffer with ID: " << *in_bufferIDToDelete << std::endl;
+	glDeleteBuffers(1, in_bufferIDToDelete);
+}
+
 void OrganicGLWinUtils::createFBO(GLuint* in_fboIDref)
 {
 	glGenFramebuffers(1, in_fboIDref);

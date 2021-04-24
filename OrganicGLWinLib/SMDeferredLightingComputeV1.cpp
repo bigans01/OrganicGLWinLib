@@ -255,7 +255,7 @@ void SMDeferredLightingComputeV1::insertTerrainGear(int in_gearID, GLuint in_pro
 {
 	
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainLightingComputeGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));					// pass the deferred FBO
@@ -267,7 +267,7 @@ void SMDeferredLightingComputeV1::insertTerrainGear(int in_gearID, GLuint in_pro
 void SMDeferredLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new ComputeCopyRBGFromTextureToImageGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
@@ -275,7 +275,7 @@ void SMDeferredLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuin
 void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredLightingComputeGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("original_image_unit_1_texture_ID", getTextureID("computeWrite"));
 	gearTrain[in_gearID]->passGLuintValue("original_image_unit_2_texture_ID", getTextureID("computeRead"));
 	gearTrain[in_gearID]->passGLuintValue("world_lights_ssbo_buffer_ID", getBufferID("world_lights_ssbo"));
@@ -286,7 +286,7 @@ void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_pro
 void SMDeferredLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
@@ -294,7 +294,7 @@ void SMDeferredLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuint
 void SMDeferredLightingComputeV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }
@@ -302,7 +302,7 @@ void SMDeferredLightingComputeV1::insertHighlighterGear(int in_gearID, GLuint in
 void SMDeferredLightingComputeV1::insertInstancedHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new InstancedHighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("mesh_buffer", getBufferID("mesh_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("matrices_buffer", getBufferID("matrices_buffer"));
 	gearTrain[in_gearID]->executeGearFunction("setup_instancing_buffers_and_VAO");

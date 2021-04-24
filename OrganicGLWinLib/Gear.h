@@ -17,7 +17,9 @@
 #include "GLDataType.h"
 #include "GLMultiDrawArrayJob.h"
 #include "GLDrawElementsInstancedJob.h"
+#include "MachineAccessProxy.h"
 
+class ShaderMachineBase;
 class Gear
 {
 	public:
@@ -27,7 +29,7 @@ class Gear
 		GLuint programID;									// the ID of the shader program this Gear uses
 
 		// virtual functions
-		virtual void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef) = 0;
+		virtual void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr) = 0;
 		virtual void render() = 0;
 		virtual void passGLuintValue(std::string in_identifier, GLuint in_gluInt) = 0;
 		virtual void executeGearFunction(std::string in_identifier) = 0;
@@ -76,12 +78,12 @@ class Gear
 		std::vector<std::string>* getDrawElementsInstancedRequests();
 		void insertUniformRequest(GLDataType in_dataType, std::string in_uniformName);
 		void deleteUniformRequest(std::string in_uniformName);
-
 	protected:
 		void useProgram();
 		std::vector<GLUniformRequest> uniformRequests;
 		std::vector<std::string> multiDrawArrayJobRequests;
 		std::vector<std::string> drawElementsInstancedRequests;
+		MachineAccessProxy accessProxy;
 
 		std::map<int, GLuint> gearBufferMap;									// for typical buffers (non-persistent)
 		std::map<int, GLuint> gearPersistentBufferMap;							// map that stores IDs of persistent buffers

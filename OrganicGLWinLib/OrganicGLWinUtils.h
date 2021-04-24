@@ -59,6 +59,9 @@ public:
 	static AtlasMetaData findAtlasMetadata(int in_atlasWidth, int in_tileWidth);
 	static void createAndBindVertexArray(GLuint* in_bufferID);													// creates and binds a single vertex array
 	static void createAndBindDrawIndirectBuffer(GLuint* in_bufferID);											// creates and binds a single indirect buffer
+
+	static void deleteBuffer(GLuint* in_bufferIDToDelete);
+
 	static void initializeLibraryAndSetHints();	// initializes the OpenGL library and the window; adds input(keypress) listening for the window
 	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
 	static void loadShadersViaMode(GLuint* in_programID, std::string in_programName);

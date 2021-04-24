@@ -114,7 +114,7 @@ void SMPrimitiveV1::printDataForGears()
 void SMPrimitiveV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainPrimitiveGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
@@ -123,7 +123,7 @@ void SMPrimitiveV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 void SMPrimitiveV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }

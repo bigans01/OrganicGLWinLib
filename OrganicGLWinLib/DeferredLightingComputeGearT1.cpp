@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "DeferredLightingComputeGearT1.h"
+#include "ShaderMachineBase.h"
 
-void DeferredLightingComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void DeferredLightingComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr)
 {
 	width = in_width;
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
+	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
 
 	screenWidthUniform = glGetUniformLocation(programID, "screenWidth");
 	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");

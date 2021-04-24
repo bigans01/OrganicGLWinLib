@@ -95,6 +95,11 @@ GLMultiDrawArrayJob ShaderMachineBase::getMultiDrawArrayJob(std::string in_jobNa
 	return returnJob;
 }
 
+SmartIntMap<std::unique_ptr<Gear>>* ShaderMachineBase::fetchGearTrainRef()
+{
+	return &gearTrain;
+}
+
 GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::string in_jobName)
 {
 	GLDrawElementsInstancedJob returnJob;
@@ -511,10 +516,49 @@ void ShaderMachineBase::registerTBW(std::string in_tbwName, TimeBasedWaveType in
 	waveManager.createTimeBasedWave(in_tbwName, in_timeBasedWaveType);
 }
 
+void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName)
+{
+	// first, attempt to find the program; don't bother continuing if we can't find the program.
+	auto programFinder = programLookup.find(in_programName);
+	if (programFinder != programLookup.end())
+	{
+		int programIDToFind = programFinder->second;	// the ID to check against each program.
+		auto gearsBegin = gearTrain.begin();
+		auto gearsEnd = gearTrain.end();
+		bool wasSelectedGearFound = false;
+		int selectedGearID = 0;							// this will be set when 
+		for (; gearsBegin != gearsEnd; gearsBegin++)
+		{
+			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
+			{
+				GLuint dynamicBufferID = dynBufferManager.attemptCreateOfDynamicBufferForGear(in_bufferName, gearsBegin->first);
+				gearsBegin->second.get()->passGLuintValue(in_bufferName, dynamicBufferID);
+				std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
+				break;
+			}
+		}
+	}
+}
+
+void ShaderMachineBase::deleteDynamicBuffer(std::string in_bufferName)
+{
+	// first, go to any Gear that uses the buffer, and let it know to unbind any VAO, or other object, that was using it.
+	auto destinationGears = dynBufferManager.getBufferDestinationGears();
+	auto destinationGearsBegin = destinationGears.begin();
+	auto destinationGearsEnd = destinationGears.end();
+	for (; destinationGearsBegin != destinationGearsEnd; destinationGearsBegin++)
+	{
+
+	}
+
+	// second, remove the dynamically created buffer from the dynBufferManager.
+	dynBufferManager.attemptDeleteOfDynamicBuffer(in_bufferName);
+}
+
 void ShaderMachineBase::registerTBWAndSendRequestToProgramGear(std::string in_tbwName, TimeBasedWaveType in_timeBasedWaveType, std::string in_programName)
 {
 	// first, attempt to find the program; don't bother continuing if we can't find the program.
-	auto programFinder = programLookup.find("in_programName");
+	auto programFinder = programLookup.find(in_programName);
 	if (programFinder != programLookup.end())
 	{
 		waveManager.createTimeBasedWave(in_tbwName, in_timeBasedWaveType);

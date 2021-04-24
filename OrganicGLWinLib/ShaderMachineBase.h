@@ -24,13 +24,14 @@
 #include "WorldLightContainerMap.h"
 #include "ImGuiButtonPanelContainer.h"
 #include "ImGuiButtonClickResult.h"
-//#include "ImGuiSliderFloatPanel.h"
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
 #include "SmartIntMap.h"
 #include "TimeBasedWaveManager.h"
 #include "TimeBasedWaveType.h"
+#include "DynamicBufferManager.h"
+#include "MachineAccessProxy.h"
 
 class ShaderMachineBase
 {
@@ -49,6 +50,10 @@ public:
 
 		// uniform value retrieval functions
 		float retrieveFloatUniform(std::string in_floatUniformName);
+
+		// runtime buffer manipulation functions
+		void createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName);
+		void deleteDynamicBuffer(std::string in_bufferName);
 
 		// GL multi draw array functions
 		void registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.
@@ -105,6 +110,7 @@ public:
 		GLFWwindow* getWindow();
 
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
+		SmartIntMap<std::unique_ptr<Gear>> gearTrain;					// (UPDATED 4/15/2021, to SmartIntMap) map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 
 		// imgui features
 		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
@@ -114,7 +120,6 @@ public:
 
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);
-
 protected:
 		// misc
 		GLFWwindow* window;									// pointer to openGL window
@@ -124,13 +129,13 @@ protected:
 		WorldLightContainerMap worldLights;
 		ShaderMachineFeedback machineFeedback;				// gets any inputs that were received; it is loaded using a call to checkForTextInput().
 		TimeBasedWaveManager waveManager;
+		DynamicBufferManager dynBufferManager;
 
 		SmartIntMap<GLuint> bufferMap;									// (UPDATED 4/15/2021, to SmartIntMap) for typical buffers (non-persistent)
 		SmartIntMap<GLuint> persistentBufferMap;						// (UPDATED 4/15/2021, to SmartIntMap) map that stores IDs of persistent buffers
 		SmartIntMap<GLuint> programMap;									// (UPDATED 4/15/2021, to SmartIntMap) " for program IDs
 		SmartIntMap<GLuint> fboMap;										// (UPDATED 4/15/2021, to SmartIntMap) " for frame buffer objects
 		SmartIntMap<GLuint> textureMap;									// (UPDATED 4/15/2021, to SmartIntMap)  " for textures
-		SmartIntMap<std::unique_ptr<Gear>> gearTrain;					// (UPDATED 4/15/2021, to SmartIntMap) map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 		SmartIntMap<GLMultiDrawArrayJob> multiDrawArrayJobMap;			// (UPDATED 4/15/2021, to SmartIntMap)
 		SmartIntMap<GLDrawElementsInstancedJob> drawElementsInstancedJobMap;	// (UPDATED 4/15/2021, to SmartIntMap)
 		SmartIntMap<AtlasMap> atlasMapMap;
@@ -241,6 +246,9 @@ protected:
 		// test, call back function.
 		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+private:
+		friend class MachineAccessProxy;	// this will allow the access proxy to access the private functions in this class, which can be used in any Gear. (two-way communication)
+		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainRef();
 };
 
 #endif;

@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "TerrainLightingComputeGearT1.h"
+#include "ShaderMachineBase.h"
 
-void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void TerrainLightingComputeGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr)
 {
 	width = in_width;
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
+	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
 
 	// get the uniforms; program must have been compiled before this
 	mvpHandle = glGetUniformLocation(programID, "MVP");

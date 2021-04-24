@@ -942,6 +942,12 @@
     <ClInclude Include="TimeBasedWaveType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DynamicBufferManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineAccessProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1401,6 +1407,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TimeBasedWaveManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicBufferManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineAccessProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

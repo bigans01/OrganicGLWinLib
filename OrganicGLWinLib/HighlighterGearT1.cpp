@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "HighlighterGearT1.h"
+#include "ShaderMachineBase.h"
 
-void HighlighterGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef)
+void HighlighterGearT1::initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr)
 {
 	width = in_width;
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
+	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
 
 	// set up the uniform requests
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
@@ -35,6 +37,7 @@ void HighlighterGearT1::render()
 	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);	// render with draw job data
 
 	//std::cout << "Rendering highlights..." << std::endl;
+	//std::cout << "(HighlighterGearT1): testing machine access proxy; there are " << accessProxy.getMachineGearRef()->size() << std::endl;
 
 	//GLint* vertexOut = jobToUse.multiStartIndices.get();
 	//std::cout << "Vertices start: " << vertexOut[0] << std::endl;

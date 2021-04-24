@@ -114,7 +114,7 @@ void SMDeferredComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	//int currentSize = gearTrain.size();
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainComputeGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("render_quad_buffer", getBufferID("render_quad_buffer"));		// pass the render quad buffer
@@ -128,7 +128,7 @@ void SMDeferredComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 void SMDeferredComputeV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("highlighter_buffer", getBufferID("highlighter_buffer"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }
@@ -136,13 +136,13 @@ void SMDeferredComputeV1::insertHighlighterGear(int in_gearID, GLuint in_program
 void SMDeferredComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 }
 
 void SMDeferredComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
@@ -150,7 +150,7 @@ void SMDeferredComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_prog
 void SMDeferredComputeV1::insertInstancedHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new InstancedHighlighterGearT1());
-	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window);
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("mesh_buffer", getBufferID("mesh_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("matrices_buffer", getBufferID("matrices_buffer"));
 	gearTrain[in_gearID]->executeGearFunction("setup_instancing_buffers_and_VAO");

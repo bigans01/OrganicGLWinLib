@@ -233,6 +233,7 @@
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
     <ClInclude Include="DistanceToPoint.h" />
+    <ClInclude Include="DynamicBufferManager.h" />
     <ClInclude Include="EmptyNormalFinder.h" />
     <ClInclude Include="FoundCleaveSequence.h" />
     <ClInclude Include="FusedIntersectionLine.h" />
@@ -269,6 +270,7 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
+    <ClInclude Include="MachineAccessProxy.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
@@ -510,6 +512,7 @@
     <ClCompile Include="DeferredComputeGearT1.cpp" />
     <ClCompile Include="DeferredComputeResultsGearT1.cpp" />
     <ClCompile Include="DeferredLightingComputeGearT1.cpp" />
+    <ClCompile Include="DynamicBufferManager.cpp" />
     <ClCompile Include="EmptyNormalFinder.cpp" />
     <ClCompile Include="FusedPoint.cpp" />
     <ClCompile Include="FusedPointContainer.cpp" />
@@ -537,6 +540,7 @@
     <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
+    <ClCompile Include="MachineAccessProxy.cpp" />
     <ClCompile Include="MassZone.cpp" />
     <ClCompile Include="MassZoneBox.cpp" />
     <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />
