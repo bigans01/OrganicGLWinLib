@@ -95,9 +95,14 @@ GLMultiDrawArrayJob ShaderMachineBase::getMultiDrawArrayJob(std::string in_jobNa
 	return returnJob;
 }
 
-SmartIntMap<std::unique_ptr<Gear>>* ShaderMachineBase::fetchGearTrainRef()
+SmartIntMap<std::unique_ptr<Gear>>* ShaderMachineBase::fetchGearTrainMapRef()
 {
 	return &gearTrain;
+}
+
+GLMultiDrawArrayJob ShaderMachineBase::fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName)
+{
+	return dynBufferManager.fetchDynamicMultiDrawArrayJob(in_bufferName);
 }
 
 GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::string in_jobName)
@@ -496,6 +501,7 @@ float ShaderMachineBase::retrieveFloatUniform(std::string in_floatUniformName)
 	return uniformRegistry.getFloat(in_floatUniformName);
 }
 
+
 void ShaderMachineBase::registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	GLMultiDrawArrayJob newJob;
@@ -532,13 +538,49 @@ void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferNa
 			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
 			{
 				GLuint dynamicBufferID = dynBufferManager.attemptCreateOfDynamicBufferForGear(in_bufferName, gearsBegin->first);
-				gearsBegin->second.get()->passGLuintValue(in_bufferName, dynamicBufferID);
+				Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_IN_GEAR);	// create a new message for the Gear, to let it know to handle the dyn buffer request.
+				requestMessage.insertString(in_bufferName);									// insert the buffer name for dyn buffer request.
+				gearsBegin->second.get()->interpretMessage(requestMessage);					// send the message to the Gear; have it interpret it.
+				//gearsBegin->second.get()->passGLuintValue(in_bufferName, dynamicBufferID);
 				std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
 				break;
 			}
 		}
 	}
 }
+
+void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(std::string in_bufferName,
+																			std::string in_programName,
+																			GLint* in_startArray,
+																			GLsizei* in_vertexCount,
+																			int in_drawCount)
+{
+	// first, attempt to find the program; don't bother continuing if we can't find the program.
+	auto programFinder = programLookup.find(in_programName);
+	if (programFinder != programLookup.end())
+	{
+		int programIDToFind = programFinder->second;	// the ID to check against each program.
+		auto gearsBegin = gearTrain.begin();
+		auto gearsEnd = gearTrain.end();
+		bool wasSelectedGearFound = false;
+		int selectedGearID = 0;							// this will be set when 
+		for (; gearsBegin != gearsEnd; gearsBegin++)
+		{
+			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
+			{
+				// before we send the message to the Gear, we must create the multi draw array job in the DynamicBufferManager
+				dynBufferManager.createDynamicMultiDrawArrayJob(in_bufferName, in_startArray, in_vertexCount, in_drawCount);
+				Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR);	// tell the gear that it needs to fetch a multi draw array job
+																										// from the DynamicBufferManager (dynBufferManager)
+				requestMessage.insertString(in_bufferName);
+				gearsBegin->second.get()->interpretMessage(requestMessage);
+				std::cout << "Sent dynamic multi draw array job message to gear. " << std::endl;
+				break;
+			}
+		}
+	}
+}
+
 
 void ShaderMachineBase::deleteDynamicBuffer(std::string in_bufferName)
 {

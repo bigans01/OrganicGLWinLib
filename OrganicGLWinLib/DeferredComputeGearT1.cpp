@@ -45,3 +45,8 @@ void DeferredComputeGearT1::printData()
 {
 
 }
+
+void DeferredComputeGearT1::interpretMessage(Message in_message)
+{
+
+}

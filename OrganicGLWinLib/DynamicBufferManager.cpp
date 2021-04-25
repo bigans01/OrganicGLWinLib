@@ -42,6 +42,38 @@ void DynamicBufferManager::attemptDeleteOfDynamicBuffer(std::string in_string)
 	}
 }
 
+void DynamicBufferManager::createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_drawCount)
+{
+	// create the multi draw array job.
+	GLMultiDrawArrayJob newJob;
+	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_drawCount);
+
+	auto existingJobFinder = multiDrawArrayJobLookup.find(in_bufferName);
+	if (existingJobFinder == multiDrawArrayJobLookup.end())	// it doesn't exist 
+	{
+		int indexToUse = multiDrawArrayJobMap.getNextAvailableKey();
+		multiDrawArrayJobMap[indexToUse] = newJob;
+		multiDrawArrayJobLookup[in_bufferName] = indexToUse;
+	}
+	else if (existingJobFinder != multiDrawArrayJobLookup.end())
+	{
+		int indexToUpdate = multiDrawArrayJobLookup[in_bufferName];
+		multiDrawArrayJobMap[indexToUpdate] = newJob;
+	}
+}
+
+GLMultiDrawArrayJob DynamicBufferManager::fetchDynamicMultiDrawArrayJob(std::string in_bufferName)
+{
+	GLMultiDrawArrayJob returnJob;
+	auto existingJobFinder = multiDrawArrayJobLookup.find(in_bufferName);
+	if (existingJobFinder != multiDrawArrayJobLookup.end())
+	{
+		int indexToUse = multiDrawArrayJobLookup[in_bufferName];
+		returnJob = multiDrawArrayJobMap[indexToUse];
+	}
+	return returnJob;
+}
+
 std::unordered_map<std::string, OperableIntSet> DynamicBufferManager::getBufferDestinationGears()
 {
 	return bufferDestinationGears;

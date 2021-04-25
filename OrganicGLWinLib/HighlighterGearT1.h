@@ -5,6 +5,7 @@
 
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
+#include "GLMultiDrawArrayJob.h"
 
 class HighlighterGearT1 : public Gear
 {
@@ -15,6 +16,7 @@ public:
 	void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 	void executeGearFunction(std::string in_identifier);
 	void printData();
+	void interpretMessage(Message in_message);
 
 private:
 

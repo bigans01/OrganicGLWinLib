@@ -55,6 +55,11 @@ void TerrainDebugGearT1::printData()
 	std::cout << "Atlas tile width: " << gearUniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;
 }
 
+void TerrainDebugGearT1::interpretMessage(Message in_message)
+{
+
+}
+
 void TerrainDebugGearT1::setupTerrainVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&terrainVaoID);	// create/bind the VAO to quadVaoID

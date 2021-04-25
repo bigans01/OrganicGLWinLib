@@ -58,6 +58,11 @@ void DeferredComputeResultsGearT1::printData()
 
 }
 
+void DeferredComputeResultsGearT1::interpretMessage(Message in_message)
+{
+
+}
+
 void DeferredComputeResultsGearT1::setUpRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID

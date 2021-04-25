@@ -74,6 +74,11 @@ void ComputeCopyRBGFromTextureToImageGearT1::printData()
 
 }
 
+void ComputeCopyRBGFromTextureToImageGearT1::interpretMessage(Message in_message)
+{
+
+}
+
 void ComputeCopyRBGFromTextureToImageGearT1::setUpRenderQuad()
 {
 	/*

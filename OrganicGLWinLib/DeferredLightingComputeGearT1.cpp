@@ -79,6 +79,11 @@ void DeferredLightingComputeGearT1::printData()
 
 }
 
+void DeferredLightingComputeGearT1::interpretMessage(Message in_message)
+{
+
+}
+
 void DeferredLightingComputeGearT1::swapImageTargetBindings()
 {
 	// initial values when SM starts are:

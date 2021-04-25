@@ -16,6 +16,7 @@ public:
 	void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 	void executeGearFunction(std::string in_identifier);
 	void printData();
+	void interpretMessage(Message in_message);
 private:
 
 	//GLuint terrainBufferID = 0;				// the primary terrain buffer

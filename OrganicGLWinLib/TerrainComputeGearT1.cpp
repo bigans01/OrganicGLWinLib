@@ -141,3 +141,8 @@ void TerrainComputeGearT1::printData()
 	std::cout << "Atlas width: " << gearUniformRegistry.getFloat("atlasTextureWidth") << std::endl;
 	std::cout << "Atlas tile width: " << gearUniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;
 }
+
+void TerrainComputeGearT1::interpretMessage(Message in_message)
+{
+
+}

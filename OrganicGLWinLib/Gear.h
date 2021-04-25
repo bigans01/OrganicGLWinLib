@@ -18,6 +18,7 @@
 #include "GLMultiDrawArrayJob.h"
 #include "GLDrawElementsInstancedJob.h"
 #include "MachineAccessProxy.h"
+#include "Message.h"
 
 class ShaderMachineBase;
 class Gear
@@ -34,6 +35,7 @@ class Gear
 		virtual void passGLuintValue(std::string in_identifier, GLuint in_gluInt) = 0;
 		virtual void executeGearFunction(std::string in_identifier) = 0;
 		virtual void printData() = 0;
+		virtual void interpretMessage(Message in_message) = 0;
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		void removeMultiDrawArrayJob(std::string in_jobName);
 		void insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);

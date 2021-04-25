@@ -53,6 +53,11 @@ public:
 
 		// runtime buffer manipulation functions
 		void createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName);
+		void createDynamicBufferMultiDrawArrayJobAndSendToGear(std::string in_bufferName,
+																std::string in_programName,
+																GLint* in_startArray,
+																GLsizei* in_vertexCount,
+																int in_drawCount);
 		void deleteDynamicBuffer(std::string in_bufferName);
 
 		// GL multi draw array functions
@@ -110,7 +115,6 @@ public:
 		GLFWwindow* getWindow();
 
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
-		SmartIntMap<std::unique_ptr<Gear>> gearTrain;					// (UPDATED 4/15/2021, to SmartIntMap) map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 
 		// imgui features
 		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
@@ -137,6 +141,7 @@ protected:
 		SmartIntMap<GLuint> fboMap;										// (UPDATED 4/15/2021, to SmartIntMap) " for frame buffer objects
 		SmartIntMap<GLuint> textureMap;									// (UPDATED 4/15/2021, to SmartIntMap)  " for textures
 		SmartIntMap<GLMultiDrawArrayJob> multiDrawArrayJobMap;			// (UPDATED 4/15/2021, to SmartIntMap)
+		SmartIntMap<std::unique_ptr<Gear>> gearTrain;					// (UPDATED 4/15/2021, to SmartIntMap) map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
 		SmartIntMap<GLDrawElementsInstancedJob> drawElementsInstancedJobMap;	// (UPDATED 4/15/2021, to SmartIntMap)
 		SmartIntMap<AtlasMap> atlasMapMap;
 
@@ -248,7 +253,8 @@ protected:
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 private:
 		friend class MachineAccessProxy;	// this will allow the access proxy to access the private functions in this class, which can be used in any Gear. (two-way communication)
-		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainRef();
+		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainMapRef();								// fetches a reference to the entire Gear train map.
+		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName);		// fetches a copy of a dynamic buffer multi draw array job.
 };
 
 #endif;

@@ -16,6 +16,7 @@ class InstancedHighlighterGearT1 : public Gear
 		void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 		void executeGearFunction(std::string in_identifier);
 		void printData();
+		void interpretMessage(Message in_message);
 	private:
 		void setupInstancingBuffersAndVAO();
 		GLuint instancingVAO;
