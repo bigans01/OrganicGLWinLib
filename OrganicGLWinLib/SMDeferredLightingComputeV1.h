@@ -15,13 +15,16 @@
 #include <unordered_map>
 #include <mutex>
 
-#include "TerrainComputeGearT1.h"
+// gears used by this machine; doesn't represent actual order of usage
+//#include "TerrainComputeGearT1.h"
 #include "TerrainLightingComputeGearT1.h"
 #include "DeferredLightingComputeGearT1.h"
 #include "DeferredComputeResultsGearT1.h"
 #include "HighlighterGearT1.h"
 #include "InstancedHighlighterGearT1.h"
+#include "WaveHighlighterGearT1.h"
 #include "ComputeCopyRBGFromTextureToImageGearT1.h"
+
 #include "ComputeResolution.h"
 
 
@@ -47,6 +50,8 @@ private:
 	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertInstancedHighlighterGear(int in_gearID, GLuint in_programID);
+	void insertWaveHighlighterGear(int in_gearID, GLuint in_programID);
+
 	void setupDeferredFBO();								// sets up the deferred FBO, according to this Machine's needs/specifications
 	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);		// creates a G-Buffer texture for use by the deferred shader.
 	void createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit);		// creates a read/write OpenGL image

@@ -107,6 +107,10 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	insertNewBuffer("matrices_buffer");
 	insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
 
+	// ########################################################################## Wave highlighter gear set up
+	createProgram("WaveHighlighterGearT1");
+	insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
+
 
 
 	std::cout << "++++++++ !! SMDeferredLightingComputeV1 complete. " << std::endl;
@@ -306,6 +310,12 @@ void SMDeferredLightingComputeV1::insertInstancedHighlighterGear(int in_gearID, 
 	gearTrain[in_gearID]->passGLuintValue("mesh_buffer", getBufferID("mesh_buffer"));
 	gearTrain[in_gearID]->passGLuintValue("matrices_buffer", getBufferID("matrices_buffer"));
 	gearTrain[in_gearID]->executeGearFunction("setup_instancing_buffers_and_VAO");
+}
+
+void SMDeferredLightingComputeV1::insertWaveHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new WaveHighlighterGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 }
 
 void SMDeferredLightingComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)

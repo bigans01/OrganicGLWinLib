@@ -48,6 +48,9 @@ public:
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
 
+		// direct Gear program communication 
+		void sendMessageToGLProgram(std::string in_programName, Message in_message);
+
 		// uniform value retrieval functions
 		float retrieveFloatUniform(std::string in_floatUniformName);
 
@@ -58,6 +61,7 @@ public:
 																GLint* in_startArray,
 																GLsizei* in_vertexCount,
 																int in_drawCount);
+		void sendDataToDynamicBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
 		void deleteDynamicBuffer(std::string in_bufferName);
 
 		// GL multi draw array functions
@@ -146,7 +150,6 @@ protected:
 		SmartIntMap<AtlasMap> atlasMapMap;
 
 		//std::map<int, AtlasMap> atlasMapMap;
-		//SmartIntMap<GLMultiDrawArrayJob> multiDrawArrayJobMap;
 		//std::map<int, GLuint> bufferMap;									// for typical buffers (non-persistent)
 
 
@@ -252,6 +255,20 @@ protected:
 		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 private:
+		struct GearFindResult
+		{
+			GearFindResult() {};
+			GearFindResult(bool in_wasResultFound, int in_foundGearIndex, Gear* in_foundGearRef) :
+				wasResultFound(in_wasResultFound),
+				foundGearIndex(in_foundGearIndex),
+				foundGear(in_foundGearRef)
+			{};
+			bool wasResultFound = false;
+			int foundGearIndex = 0;
+			Gear* foundGear = nullptr;
+		};
+		GearFindResult findGear(std::string in_programName);
+
 		friend class MachineAccessProxy;	// this will allow the access proxy to access the private functions in this class, which can be used in any Gear. (two-way communication)
 		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainMapRef();								// fetches a reference to the entire Gear train map.
 		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName);		// fetches a copy of a dynamic buffer multi draw array job.

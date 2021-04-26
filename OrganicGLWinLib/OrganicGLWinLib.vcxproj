@@ -99,6 +99,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,6 +115,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,6 +133,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +153,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -458,6 +462,7 @@
     <ClInclude Include="UsableCleaveSequenceCalculator.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="Vec3Result.h" />
+    <ClInclude Include="WaveHighlighterGearT1.h" />
     <ClInclude Include="WeldedLine.h" />
     <ClInclude Include="WeldedLinePool.h" />
     <ClInclude Include="WeldedLinePoolGuide.h" />
@@ -630,6 +635,7 @@
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="UnsolvedPreciseSolver.cpp" />
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp" />
+    <ClCompile Include="WaveHighlighterGearT1.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
   </ItemGroup>

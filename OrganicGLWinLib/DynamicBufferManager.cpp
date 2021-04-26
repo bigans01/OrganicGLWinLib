@@ -42,6 +42,21 @@ void DynamicBufferManager::attemptDeleteOfDynamicBuffer(std::string in_string)
 	}
 }
 
+void DynamicBufferManager::insertDataIntoDynBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
+{
+	auto existingStringFinder = dynamicBufferLookup.find(in_bufferName);
+	if (existingStringFinder != dynamicBufferLookup.end())	// it was found; lets delete it.
+	{
+		int bufferMapKey = dynamicBufferLookup[in_bufferName];
+		int bufferIDToUse = bufferMap[bufferMapKey];
+		glBindBuffer(GL_ARRAY_BUFFER, bufferIDToUse);				// bind to the specified buffer
+		//std::cout << "Inserted data into dynamic buffer with ID: " << bufferIDToUse << std::endl;
+		//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+		//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+		glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+	}
+}
+
 void DynamicBufferManager::createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_drawCount)
 {
 	// create the multi draw array job.
@@ -74,7 +89,7 @@ GLMultiDrawArrayJob DynamicBufferManager::fetchDynamicMultiDrawArrayJob(std::str
 	return returnJob;
 }
 
-std::unordered_map<std::string, OperableIntSet> DynamicBufferManager::getBufferDestinationGears()
+OperableIntSet DynamicBufferManager::getBufferDestinationGears(std::string in_bufferName)
 {
-	return bufferDestinationGears;
+	return bufferDestinationGears[in_bufferName];
 }

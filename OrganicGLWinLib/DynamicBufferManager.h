@@ -15,9 +15,10 @@ class DynamicBufferManager
 	public:
 		GLuint attemptCreateOfDynamicBufferForGear(std::string in_string, int in_programGearID);
 		void attemptDeleteOfDynamicBuffer(std::string in_string);
+		void insertDataIntoDynBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
 		void createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
 		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJob(std::string in_bufferName);
-		std::unordered_map<std::string, OperableIntSet> getBufferDestinationGears();
+		OperableIntSet getBufferDestinationGears(std::string in_bufferName);
 	private:
 		// buffer related members
 		std::unordered_map<std::string, GLuint> dynamicBufferLookup;

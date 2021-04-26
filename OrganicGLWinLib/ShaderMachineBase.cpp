@@ -100,6 +100,7 @@ SmartIntMap<std::unique_ptr<Gear>>* ShaderMachineBase::fetchGearTrainMapRef()
 	return &gearTrain;
 }
 
+
 GLMultiDrawArrayJob ShaderMachineBase::fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName)
 {
 	return dynBufferManager.fetchDynamicMultiDrawArrayJob(in_bufferName);
@@ -522,9 +523,10 @@ void ShaderMachineBase::registerTBW(std::string in_tbwName, TimeBasedWaveType in
 	waveManager.createTimeBasedWave(in_tbwName, in_timeBasedWaveType);
 }
 
-void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName)
+
+ShaderMachineBase::GearFindResult ShaderMachineBase::findGear(std::string in_programName)
 {
-	// first, attempt to find the program; don't bother continuing if we can't find the program.
+	GearFindResult searchResult;
 	auto programFinder = programLookup.find(in_programName);
 	if (programFinder != programLookup.end())
 	{
@@ -537,15 +539,37 @@ void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferNa
 		{
 			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
 			{
-				GLuint dynamicBufferID = dynBufferManager.attemptCreateOfDynamicBufferForGear(in_bufferName, gearsBegin->first);
-				Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_IN_GEAR);	// create a new message for the Gear, to let it know to handle the dyn buffer request.
-				requestMessage.insertString(in_bufferName);									// insert the buffer name for dyn buffer request.
-				gearsBegin->second.get()->interpretMessage(requestMessage);					// send the message to the Gear; have it interpret it.
-				//gearsBegin->second.get()->passGLuintValue(in_bufferName, dynamicBufferID);
-				std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
+				// the gear with the corresponding program was found, set it and return it.
+				GearFindResult foundResult(true, gearsBegin->first, gearsBegin->second.get());
+				searchResult = foundResult;
 				break;
 			}
 		}
+	}
+	return searchResult;
+}
+
+void ShaderMachineBase::sendMessageToGLProgram(std::string in_programName, Message in_message)
+{
+	GearFindResult programToSearch = findGear(in_programName);
+	if (programToSearch.wasResultFound == true)
+	{
+		programToSearch.foundGear->interpretMessage(in_message);
+	}
+}
+
+void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName)
+{
+	// first, attempt to find the program; don't bother continuing if we can't find the program.
+	GearFindResult programToSearch = findGear(in_programName);
+	if (programToSearch.wasResultFound == true)
+	{
+		GLuint dynamicBufferID = dynBufferManager.attemptCreateOfDynamicBufferForGear(in_bufferName, programToSearch.foundGearIndex);
+		Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_IN_GEAR);	// create a new message for the Gear, to let it know to handle the dyn buffer request.
+		requestMessage.insertString(in_bufferName);									// insert the buffer name for dyn buffer request.
+		requestMessage.insertInt(dynamicBufferID);									// insert the OpenGL buffer ID 
+		programToSearch.foundGear->interpretMessage(requestMessage);					// send the message to the Gear; have it interpret it.
+		std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
 	}
 }
 
@@ -556,41 +580,35 @@ void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(std::s
 																			int in_drawCount)
 {
 	// first, attempt to find the program; don't bother continuing if we can't find the program.
-	auto programFinder = programLookup.find(in_programName);
-	if (programFinder != programLookup.end())
+	GearFindResult programToSearch = findGear(in_programName);
+	if (programToSearch.wasResultFound == true)
 	{
-		int programIDToFind = programFinder->second;	// the ID to check against each program.
-		auto gearsBegin = gearTrain.begin();
-		auto gearsEnd = gearTrain.end();
-		bool wasSelectedGearFound = false;
-		int selectedGearID = 0;							// this will be set when 
-		for (; gearsBegin != gearsEnd; gearsBegin++)
-		{
-			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
-			{
-				// before we send the message to the Gear, we must create the multi draw array job in the DynamicBufferManager
-				dynBufferManager.createDynamicMultiDrawArrayJob(in_bufferName, in_startArray, in_vertexCount, in_drawCount);
-				Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR);	// tell the gear that it needs to fetch a multi draw array job
-																										// from the DynamicBufferManager (dynBufferManager)
-				requestMessage.insertString(in_bufferName);
-				gearsBegin->second.get()->interpretMessage(requestMessage);
-				std::cout << "Sent dynamic multi draw array job message to gear. " << std::endl;
-				break;
-			}
-		}
+		dynBufferManager.createDynamicMultiDrawArrayJob(in_bufferName, in_startArray, in_vertexCount, in_drawCount);
+		Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR);	// tell the gear that it needs to fetch a multi draw array job
+																						// from the DynamicBufferManager (dynBufferManager)
+		requestMessage.insertString(in_bufferName);
+		programToSearch.foundGear->interpretMessage(requestMessage);
+		std::cout << "Sent dynamic multi draw array job message to gear. " << std::endl;
 	}
 }
 
+void ShaderMachineBase::sendDataToDynamicBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
+{
+	dynBufferManager.insertDataIntoDynBuffer(in_bufferName, in_byteSizeToWrite, in_dataArray);
+}
 
 void ShaderMachineBase::deleteDynamicBuffer(std::string in_bufferName)
 {
 	// first, go to any Gear that uses the buffer, and let it know to unbind any VAO, or other object, that was using it.
-	auto destinationGears = dynBufferManager.getBufferDestinationGears();
-	auto destinationGearsBegin = destinationGears.begin();
-	auto destinationGearsEnd = destinationGears.end();
+	auto destinationGears = dynBufferManager.getBufferDestinationGears(in_bufferName);
+	auto destinationGearsBegin = destinationGears.intSet.begin();
+	auto destinationGearsEnd = destinationGears.intSet.end();
 	for (; destinationGearsBegin != destinationGearsEnd; destinationGearsBegin++)
 	{
-
+		// "destinationGears" contains the Gear IDs that data was sent to; cycle through each gear we sent to.
+		Message dynBufferRemovalMessage(MessageType::OPENGL_DEREGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR);
+		dynBufferRemovalMessage.insertString(in_bufferName);
+		gearTrain[*destinationGearsBegin]->interpretMessage(dynBufferRemovalMessage);
 	}
 
 	// second, remove the dynamically created buffer from the dynBufferManager.
