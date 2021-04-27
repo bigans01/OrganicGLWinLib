@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Gear.h"
+#include "ShaderMachineBase.h"
 
 void Gear::useProgram()
 {
@@ -109,6 +110,21 @@ GLuint Gear::getFBOID(std::string in_fboName)
 	int lookupID = gearFboLookup[in_fboName];
 	returnGLuint = gearFboMap[lookupID];
 	return returnGLuint;
+}
+
+SmartIntMap<std::unique_ptr<Gear>>* Gear::fetchGearTrainMapRef()
+{
+	return &gearMachinePtr->gearTrain;
+}
+
+ShaderMachineBase* Gear::fetchGearMachinePtr()
+{
+	return gearMachinePtr;
+}
+
+GLMultiDrawArrayJob Gear::gearBaseFetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName)
+{
+	return gearMachinePtr->dynBufferManager.fetchDynamicMultiDrawArrayJob(in_bufferName);
 }
 
 void Gear::insertUniformRequest(GLDataType in_dataType, std::string in_uniformName)

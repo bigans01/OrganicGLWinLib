@@ -274,7 +274,6 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
-    <ClInclude Include="MachineAccessProxy.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
@@ -545,7 +544,6 @@
     <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
-    <ClCompile Include="MachineAccessProxy.cpp" />
     <ClCompile Include="MassZone.cpp" />
     <ClCompile Include="MassZoneBox.cpp" />
     <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp" />

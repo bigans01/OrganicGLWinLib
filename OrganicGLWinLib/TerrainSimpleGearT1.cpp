@@ -8,7 +8,7 @@ void TerrainSimpleGearT1::initializeMachineShader(int in_width, int in_height, G
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	mvpHandle = glGetUniformLocation(programID, "MVP");
 

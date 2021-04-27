@@ -8,7 +8,7 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	// get the uniforms; program must have been compiled before this
 	mvpHandle = glGetUniformLocation(programID, "MVP");

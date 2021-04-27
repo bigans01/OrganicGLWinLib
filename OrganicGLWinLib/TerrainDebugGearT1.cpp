@@ -8,7 +8,7 @@ void TerrainDebugGearT1::initializeMachineShader(int in_width, int in_height, GL
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	mvpHandle = glGetUniformLocation(programID, "MVP");
 

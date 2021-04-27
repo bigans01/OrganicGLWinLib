@@ -17,8 +17,8 @@
 #include "GLDataType.h"
 #include "GLMultiDrawArrayJob.h"
 #include "GLDrawElementsInstancedJob.h"
-#include "MachineAccessProxy.h"
 #include "Message.h"
+#include "SmartIntMap.h"
 
 class ShaderMachineBase;
 class Gear
@@ -85,7 +85,7 @@ class Gear
 		std::vector<GLUniformRequest> uniformRequests;
 		std::vector<std::string> multiDrawArrayJobRequests;
 		std::vector<std::string> drawElementsInstancedRequests;
-		MachineAccessProxy accessProxy;
+		ShaderMachineBase* gearMachinePtr = nullptr;
 
 		std::map<int, GLuint> gearBufferMap;									// for typical buffers (non-persistent)
 		std::map<int, GLuint> gearPersistentBufferMap;							// map that stores IDs of persistent buffers
@@ -115,6 +115,9 @@ class Gear
 		GLuint getPersistentBufferID(std::string in_bufferName);
 		GLuint getFBOID(std::string in_fboName);
 
+		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainMapRef();
+		ShaderMachineBase* fetchGearMachinePtr();
+		GLMultiDrawArrayJob gearBaseFetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName);
 };
 
 #endif

@@ -95,17 +95,6 @@ GLMultiDrawArrayJob ShaderMachineBase::getMultiDrawArrayJob(std::string in_jobNa
 	return returnJob;
 }
 
-SmartIntMap<std::unique_ptr<Gear>>* ShaderMachineBase::fetchGearTrainMapRef()
-{
-	return &gearTrain;
-}
-
-
-GLMultiDrawArrayJob ShaderMachineBase::fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName)
-{
-	return dynBufferManager.fetchDynamicMultiDrawArrayJob(in_bufferName);
-}
-
 GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::string in_jobName)
 {
 	GLDrawElementsInstancedJob returnJob;

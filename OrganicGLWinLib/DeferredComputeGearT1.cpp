@@ -8,7 +8,7 @@ void DeferredComputeGearT1::initializeMachineShader(int in_width, int in_height,
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	screenWidthUniform = glGetUniformLocation(programID, "screenWidth");
 	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");

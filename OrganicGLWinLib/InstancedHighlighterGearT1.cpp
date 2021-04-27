@@ -8,7 +8,7 @@ void InstancedHighlighterGearT1::initializeMachineShader(int in_width, int in_he
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	// set up the uniform requests
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");

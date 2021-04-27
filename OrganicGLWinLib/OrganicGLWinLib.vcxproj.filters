@@ -945,9 +945,6 @@
     <ClInclude Include="DynamicBufferManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MachineAccessProxy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WaveHighlighterGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1413,9 +1410,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DynamicBufferManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineAccessProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WaveHighlighterGearT1.cpp">

@@ -8,7 +8,7 @@ void WaveHighlighterGearT1::initializeMachineShader(int in_width, int in_height,
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	// set up the uniform requests
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
@@ -60,7 +60,10 @@ void WaveHighlighterGearT1::interpretMessage(Message in_message)
 		{
 			messageCopy.open();
 			std::string bufferName = messageCopy.readString();
-			GLMultiDrawArrayJob testGrab = accessProxy.proxyFetchDynamicMultiDrawArrayJob(bufferName);
+			//GLMultiDrawArrayJob testGrab = accessProxy.proxyFetchDynamicMultiDrawArrayJob(bufferName);
+			//GLMultiDrawArrayJob testGrab = fetchGearMachinePtr()->fetchDynamicMultiDrawArrayJobCopy(bufferName);
+			GLMultiDrawArrayJob testGrab = gearBaseFetchDynamicMultiDrawArrayJobCopy(bufferName);
+
 			waveJobMap[bufferName].setDrawJobDataAndBuildVAO(testGrab);
 			std::cout << "(WaveHighlighterGearT1): testGrab draw count is: " << testGrab.drawCount << std::endl;
 			break;

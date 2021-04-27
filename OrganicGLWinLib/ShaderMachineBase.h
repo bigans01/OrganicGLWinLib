@@ -31,7 +31,6 @@
 #include "TimeBasedWaveManager.h"
 #include "TimeBasedWaveType.h"
 #include "DynamicBufferManager.h"
-#include "MachineAccessProxy.h"
 
 class ShaderMachineBase
 {
@@ -129,6 +128,7 @@ public:
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);
 protected:
+		friend class Gear;
 		// misc
 		GLFWwindow* window;									// pointer to openGL window
 		int width, height;									// screen height, width
@@ -269,9 +269,6 @@ private:
 		};
 		GearFindResult findGear(std::string in_programName);
 
-		friend class MachineAccessProxy;	// this will allow the access proxy to access the private functions in this class, which can be used in any Gear. (two-way communication)
-		SmartIntMap<std::unique_ptr<Gear>>* fetchGearTrainMapRef();								// fetches a reference to the entire Gear train map.
-		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJobCopy(std::string in_bufferName);		// fetches a copy of a dynamic buffer multi draw array job.
 };
 
 #endif;

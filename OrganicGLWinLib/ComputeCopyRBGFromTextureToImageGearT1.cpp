@@ -8,7 +8,7 @@ void ComputeCopyRBGFromTextureToImageGearT1::initializeMachineShader(int in_widt
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
-	accessProxy.setMachinePtr(in_shaderMachineBasePtr);
+	gearMachinePtr = in_shaderMachineBasePtr;
 
 	screenWidthUniform = glGetUniformLocation(programID, "screenWidth");
 	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");
