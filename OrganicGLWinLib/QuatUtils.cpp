@@ -204,8 +204,9 @@ PointToMassRelationshipType QuatUtils::findPointToMassRelationship(
 	return determinedType;
 }
 
-void QuatUtils::rotateSPolyToXZPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
+void QuatUtils::rotateSPolyToXYPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
 	QuatRotationPoints* in_quatRotationPointsRef)
 {
-
+	QMVoidAlignTriangleToXYPlane alignMachine;
+	alignMachine.solve(in_scalingOpsRef, in_quatRotationPointsRef);
 }

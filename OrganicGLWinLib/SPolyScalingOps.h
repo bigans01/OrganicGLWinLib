@@ -9,7 +9,7 @@
 
 class SPolyScalingOps
 {
-	private:
+	public:
 		friend class SPolyScaler;
 
 		glm::vec3 translationVector;										// OP 1: the very first operation that happens: the "center" of the SPoly, 

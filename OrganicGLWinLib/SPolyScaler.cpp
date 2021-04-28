@@ -26,7 +26,7 @@ void SPolyScaler::translateAndRotateToXZPlane()
 	}
 
 	// rotate the SPoly to the XZ plane. Store the recorded operations (OP 2)
-	QuatUtils::rotateSPolyToXZPlanAndRecord(&scalingOps, &sPolyQuatPoints);
+	QuatUtils::rotateSPolyToXYPlanAndRecord(&scalingOps, &sPolyQuatPoints);
 }
 
 /*

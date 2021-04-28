@@ -274,6 +274,7 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
+    <ClInclude Include="QMVoidAlignTriangleToXYPlane.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
@@ -571,6 +572,7 @@
     <ClCompile Include="QMVec3Base.cpp" />
     <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp" />
     <ClCompile Include="QMVec3ResultBase.cpp" />
+    <ClCompile Include="QMVoidAlignTriangleToXYPlane.cpp" />
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QuatRotationManager.cpp" />
