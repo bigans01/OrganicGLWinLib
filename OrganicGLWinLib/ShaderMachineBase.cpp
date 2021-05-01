@@ -558,7 +558,7 @@ void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferNa
 		requestMessage.insertString(in_bufferName);									// insert the buffer name for dyn buffer request.
 		requestMessage.insertInt(dynamicBufferID);									// insert the OpenGL buffer ID 
 		programToSearch.foundGear->interpretMessage(requestMessage);					// send the message to the Gear; have it interpret it.
-		std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
+		//std::cout << "Created new buffer; it's ID is: " << dynamicBufferID << std::endl;
 	}
 }
 
@@ -577,7 +577,7 @@ void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(std::s
 																						// from the DynamicBufferManager (dynBufferManager)
 		requestMessage.insertString(in_bufferName);
 		programToSearch.foundGear->interpretMessage(requestMessage);
-		std::cout << "Sent dynamic multi draw array job message to gear. " << std::endl;
+		//std::cout << "Sent dynamic multi draw array job message to gear. " << std::endl;
 	}
 }
 

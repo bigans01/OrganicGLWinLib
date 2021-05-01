@@ -261,6 +261,7 @@
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="CategorizedLineGroup.h" />
+    <ClInclude Include="GLMultiDrawArrayParams.h" />
     <ClInclude Include="GuestLineReactor.h" />
     <ClInclude Include="HostLineReactor.h" />
     <ClInclude Include="ImGuiButton.h" />

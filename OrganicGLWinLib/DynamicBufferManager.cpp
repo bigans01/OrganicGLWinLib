@@ -18,7 +18,7 @@ GLuint DynamicBufferManager::attemptCreateOfDynamicBufferForGear(std::string in_
 	}
 	else if (existingStringFinder != dynamicBufferLookup.end())		// it exists; just return the existing buffer ID.
 	{
-		bufferID = dynamicBufferLookup[in_string];
+		bufferID = bufferMap[dynamicBufferLookup[in_string]];
 	}
 
 	// before returning, be sure to update the set of gear IDs that the program was sent to.

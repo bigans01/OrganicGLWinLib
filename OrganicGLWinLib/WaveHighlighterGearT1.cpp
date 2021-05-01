@@ -53,7 +53,7 @@ void WaveHighlighterGearT1::interpretMessage(Message in_message)
 			GLuint waveJobBufferID = messageCopy.readInt();
 			WaveDrawJob newWaveDrawJob(waveJobBufferID);
 			waveJobMap[waveJobName] = newWaveDrawJob;
-			std::cout << "(WaveHighlighterGearT1): created and initialized wave for WaveDrawJob, " << waveJobName << std::endl;
+			//std::cout << "(WaveHighlighterGearT1): created and initialized wave for WaveDrawJob, " << waveJobName << std::endl;
 			break;
 		}
 		case (MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR):
@@ -65,7 +65,7 @@ void WaveHighlighterGearT1::interpretMessage(Message in_message)
 			GLMultiDrawArrayJob testGrab = gearBaseFetchDynamicMultiDrawArrayJobCopy(bufferName);
 
 			waveJobMap[bufferName].setDrawJobDataAndBuildVAO(testGrab);
-			std::cout << "(WaveHighlighterGearT1): testGrab draw count is: " << testGrab.drawCount << std::endl;
+			//std::cout << "(WaveHighlighterGearT1): testGrab draw count is: " << testGrab.drawCount << std::endl;
 			break;
 		}
 		case (MessageType::OPENGL_DEREGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR):

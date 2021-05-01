@@ -49,13 +49,14 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	buttonPanelContainer.insertNewPanel("panel1", 10, 10, 200, 100);
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleBlockTargetHighlight");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleCurrentEnclaveHighlighting");
 
 	// create a test panel for input.
-	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 100);
+	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 130);
 	inputPanelContainer.insertInputIntoPanel("test_input", "input_area1");
 
 	//testPanel.insertNewSliderFloat("slider1", &globalAmbienceMultiplier, 0.0f, 1.0f);
-	sliderPanelContainer.insertNewPanel("adjustable uniforms", 10, 120, 200, 100);
+	sliderPanelContainer.insertNewPanel("adjustable uniforms", 10, 150, 200, 100);
 	sliderPanelContainer.insertSliderFloatIntoPanel("adjustable uniforms", "world light", &globalAmbienceMultiplier, 0.0f, 1.0f);
 
 
