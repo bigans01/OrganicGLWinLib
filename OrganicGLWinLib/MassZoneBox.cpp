@@ -115,9 +115,10 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
 		{
-			//std::cout << "> Comparing against NEG_Y: " << std::endl;
+			//std::cout << ">++++++++++++++++++++++++++++++++++++++++++++++ Comparing against NEG_Y: " << std::endl;
 		}
 		boxBoundariesBegin->second.compareSPolyBasedSubZoneSPolyToBoundarySPolySet(&in_massSubZoneRef->sPolyCopy);
+		//std::cout << ">++++++++++++++++++++++++++++++++++++++++++++++ Compare against ended. " << std::endl;
 	}
 }
 
@@ -130,9 +131,45 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 	{
 		// only continue if there's actually 
 		// an SPoly that was produced in the MassZoneBoxBoundarySPolySet.
+		std::cout << "!! Entering next boundary.." << std::endl;
+		switch (currentBoundaryBegin->first)
+		{
+			case MassZoneBoxBoundaryOrientation::NEG_X:
+			{
+				std::cout << "Boundary NEG_X" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::NEG_Z:
+			{
+				std::cout << "Boundary NEG_Z" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_X:
+			{
+				std::cout << "Boundary POS_X" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_Z:
+			{
+				std::cout << "Boundary POS_Z" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_Y:
+			{
+				std::cout << "Boundary POS_Y" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::NEG_Y:
+			{
+				std::cout << "Boundary NEG_Y" << std::endl;
+				break;
+			}
+		}
 
 		if (!currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.empty())	
 		{
+			//std::cout << "!! Found produced SPolys to check.." << std::endl;
+
 			auto producedBorderSPolysBegin = currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.begin();
 			auto producedBorderSPolysEnd = currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.end();
 			for (; producedBorderSPolysBegin != producedBorderSPolysEnd; producedBorderSPolysBegin++)
@@ -142,7 +179,10 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 				for (; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
 				{
 					glm::vec3 currentPoint = currentLinesBegin->second.pointA;
-					ECBPolyPoint convertedPoint(currentPoint.x, currentPoint.y, currentPoint.x);
+					ECBPolyPoint convertedPoint(currentPoint.x, currentPoint.y, currentPoint.z);
+
+					//std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
+
 					ECBPPOrientationResults pointOrientation;
 					switch (in_massZoneBoxType)
 					{
@@ -229,6 +269,52 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 	}
 
 	return generatedTouchedList;
+}
+
+void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet)
+{
+	auto orientationSetBegin = in_orientationSet.begin();
+	auto orientationSetEnd = in_orientationSet.end();
+	for (; orientationSetBegin != orientationSetEnd; orientationSetBegin++)
+	{
+		if (boxBoundaries[*orientationSetBegin].boundaryPolySet.wasLineProducedByReactor == false)
+		{
+			switch (*orientationSetBegin)
+			{
+				case MassZoneBoxBoundaryOrientation::NEG_X:
+				{
+					std::cout << "NEG_X";
+					break;
+				}
+				case MassZoneBoxBoundaryOrientation::NEG_Z:
+				{
+					std::cout << "NEG_Z";
+					break;
+				}
+				case MassZoneBoxBoundaryOrientation::POS_X:
+				{
+					std::cout << "POS_X";
+					break;
+				}
+				case MassZoneBoxBoundaryOrientation::POS_Z:
+				{
+					std::cout << "POS_Z";
+					break;
+				}
+				case MassZoneBoxBoundaryOrientation::POS_Y:
+				{
+					std::cout << "POS_Y";
+					break;
+				}
+				case MassZoneBoxBoundaryOrientation::NEG_Y:
+				{
+					std::cout << "NEG_Y";
+					break;
+				}
+			}
+			std::cout << " needs to have its face produced (tertiary SPoly, 1st pass)" << std::endl;
+		}
+	}
 }
 
 MassZoneBoxBoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)

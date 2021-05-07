@@ -60,6 +60,7 @@ private:
 	friend class GuestLineReactor;
 	friend class SharedLineReactor;
 	friend class LineWelder;
+	friend class MassZone;
 	friend class MassZoneBox;
 	friend class MassZoneBoxBoundary;
 	friend class MassZoneBoxBoundarySPolySet;

@@ -26,8 +26,8 @@ class MassZoneBoxBoundary
 			insertCornerPoint(in_corner3);
 			insertCornerPoint(in_corner4);
 			emptyNormal = in_emptyNormal;
+			boundarySPoly.polyEmptyNormal = in_emptyNormal;
 			buildBoundarySPoly();
-			//setBoundarySPolyInPolySet();
 		};
 		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
 		std::map<int, glm::vec3> cornerPointMap;
@@ -44,6 +44,7 @@ class MassZoneBoxBoundary
 			}
 
 			std::cout << "Empty Normal: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
+			std::cout << "Boundary sPoly empty normal: " << boundarySPoly.polyEmptyNormal.x << ", " << boundarySPoly.polyEmptyNormal.y << ", " << boundarySPoly.polyEmptyNormal.z << std::endl;
 		}
 		void compareSPolyBasedSubZoneSPolyToBoundarySPolySet(SPoly* in_sPolyRef)
 		{

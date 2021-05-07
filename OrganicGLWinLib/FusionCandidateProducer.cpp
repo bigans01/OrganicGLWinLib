@@ -223,7 +223,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 	// condition one, matchCount is 2
 	if (matchCount == 2)
 	{
-		//std::cout << "~~~~~~~~~~~~~~~~ note special case; the triangleLine matches a line exactly in the incoming triangle. flagging as 2." << std::endl;
+		//std::cout << "~~~~~~~~~~~~~~~~ note special case; the triangleLine matches a line exactly in the incoming triangle. flagging as 3." << std::endl;
 		//int someVal = 3;
 		//std::cin >> someVal;
 		returnResult.setResult(3);		// set flag indicatiing that the passed in STriangleLine is equal to a STriangleLine that belongs to the passed in STriangle.

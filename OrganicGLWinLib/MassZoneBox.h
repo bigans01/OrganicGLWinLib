@@ -30,6 +30,7 @@ class MassZoneBox
 		void printCategorizedLinesInBoundaries();
 		void runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZoneRef);
 		std::set<MassZoneBoxBoundaryOrientation> generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
+		void runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet);
 	private:
 		MassZoneBoxBoundaryOrientation convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation);
 };

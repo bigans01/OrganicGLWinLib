@@ -24,6 +24,7 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 {
 	SPoly* polyA = boundarySPolyRef;
 
+	//std::cout << "!! Empty normal of polyA: " << polyA->polyEmptyNormal.x << ", " << polyA->polyEmptyNormal.y << ", " << polyA->polyEmptyNormal.z << std::endl;
 
 	//std::cout << "!!! Size of triangles: " << polyA->triangles.size() << std::endl;
 	//std::cout << "!!! Size of border lines: " << polyA->borderLines.size() << std::endl;
@@ -46,6 +47,14 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 	{
 		//std::cout << " >>> Performing comparison. " << std::endl;
 		insertCategorizedLinesFromNonboundarySPoly(in_sPolyRef);
+	}
+	else if (checker.coplanarityDetected == true)
+	{
+		//std::cout << "!!!! NOTICE: coplanarity was detected; points are: " << std::endl;
+		//std::cout << "::::::::: Border SPoly: " << std::endl;
+		//polyA->printPoints();
+		//std::cout << "::::::::: Input SPoly: " << std::endl;
+		//in_sPolyRef->printPoints();
 	}
 
 	if (boxBoundarySPolySetLogger.isLoggingSet() == true)

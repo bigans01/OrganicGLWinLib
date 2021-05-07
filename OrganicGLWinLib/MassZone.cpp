@@ -183,6 +183,11 @@ std::set<MassZoneBoxBoundaryOrientation> MassZone::getTouchedBoxFacesList(MassZo
 	return returnSet;
 }
 
+void MassZone::runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet)
+{
+	zoneBox.runFirstTertiaryProductionPass(in_orientationSet);
+}
+
 void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
 	// need to apply tertiary extraction options, to all boundaries that need them set.

@@ -57,6 +57,6 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 	// that MassZoneBoxBoundary has its boundarySPolySet::wasLineProducedByReactor set to TRUE. If it is set to FALSE, 
 	// we will return the boundary SPoly that takes up that face itself, as a new SPoly.
 	auto fetchedList = productionMassZone.getTouchedBoxFacesList(in_massZoneBoxType);
-
+	productionMassZone.runFirstTertiaryProductionPassInZoneBox(fetchedList);
 
 }
