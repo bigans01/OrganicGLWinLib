@@ -25,6 +25,7 @@ class MassZoneBoxBoundarySPolySet
 	public:
 		friend class MassZone;
 		friend class MassZoneBoxBoundary;
+		friend class MassZoneBox;
 		void setBoundarySPolyRef(SPoly* in_sPolyRef);
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
@@ -40,6 +41,7 @@ class MassZoneBoxBoundarySPolySet
 		PolyDebugLevel categorizedLineCoplanarTestsDebugLevel = PolyDebugLevel::NONE;
 		int currentComparableSPolyIndex = 1;	// this index should always start at 1.
 		SPolySupergroup boundarySPolySG;
+		bool wasLineProducedByReactor = false;	
 		
 };
 

@@ -103,6 +103,7 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				//FusionCandidateProducer hostCandidateProducer(currentComparisonLogger.getLogLevel());
 				FusionCandidateProducer hostCandidateProducer(PolyDebugLevel::NONE);
 				FusionCandidate hostFusedCandidate = hostCandidateProducer.produceCandidate(*guestTrianglePtr, in_hostPolyPtr->triangles[currentHostPolyTriangle].triangleLines[currentHostTriangleLine]);
+
 				if (hostFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
 					hostLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::HOST, currentHostTriangleLine, hostFusedCandidate);
@@ -120,6 +121,10 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 				//FusionCandidateProducer guestCandidateProducer(currentComparisonLogger.getLogLevel());
 				FusionCandidateProducer guestCandidateProducer(PolyDebugLevel::NONE);
 				FusionCandidate guestFusedCandidate = guestCandidateProducer.produceCandidate(*hostTrianglePtr, guestTrianglePtr->triangleLines[z]);
+
+
+
+
 				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
 					guestLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::GUEST, z, guestFusedCandidate);
@@ -133,7 +138,16 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 			reactionResult.resultingLine.parentPoly = in_guestPolyID;
 			if (reactionResult.wasLineProduced == true)
 			{
+				// if a line was produced, and regardless of whether or not it passes the CategorizedLineColinearTester's check that follows,
+				// we must set the lineProductionStain flag. When the MassZoneBox that this instance is a member of checks to see what cube faces must produce tertiary border SPolys,
+				// (via a call to produceTertiarySPolys) and IF this instance is one of the faces that must have SPolys, this flag will need to be checked. 
+				// If it is set to TRUE, no new SPolys will be returned, because it means that at a minimum, at least one primary SPoly produced a successful candidate line 
+				// that may or may not be inserted. The only way it wouldn't be inserted is if the line to insert was colinear to a border line in the SPoly pointed to by boundarySPolyRef, even though its still a valid line.
+				// Hence, valid lines dictate that the SPoly that produced the line on this border SPoly are technically valid -- regardless of if they pass the CategorizedLineColinearTester test.
+				wasLineProducedByReactor = true;
+
 				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, categorizedLineCoplanarTestsDebugLevel);
+
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);

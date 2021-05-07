@@ -121,6 +121,155 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 	}
 }
 
+std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType)
+{
+	std::set<MassZoneBoxBoundaryOrientation> generatedTouchedList;
+	auto currentBoundaryBegin = boxBoundaries.begin();
+	auto currentBoundaryEnd = boxBoundaries.end();
+	for (; currentBoundaryBegin != currentBoundaryEnd; currentBoundaryBegin++)
+	{
+		// only continue if there's actually 
+		// an SPoly that was produced in the MassZoneBoxBoundarySPolySet.
+
+		if (!currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.empty())	
+		{
+			auto producedBorderSPolysBegin = currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.begin();
+			auto producedBorderSPolysEnd = currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.end();
+			for (; producedBorderSPolysBegin != producedBorderSPolysEnd; producedBorderSPolysBegin++)
+			{
+				auto currentLinesBegin = producedBorderSPolysBegin->second.borderLines.begin();
+				auto currentLinesEnd = producedBorderSPolysBegin->second.borderLines.end();
+				for (; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
+				{
+					glm::vec3 currentPoint = currentLinesBegin->second.pointA;
+					ECBPolyPoint convertedPoint(currentPoint.x, currentPoint.y, currentPoint.x);
+					ECBPPOrientationResults pointOrientation;
+					switch (in_massZoneBoxType)
+					{
+						case MassZoneBoxType::BLOCK:
+						{
+							BlockBorderLineList blockBorders;
+							pointOrientation = IndependentUtils::GetPointOrientation(convertedPoint, &blockBorders);
+							break;
+						};
+						case MassZoneBoxType::ENCLAVE:
+						{
+							EnclaveBorderLineList enclaveBorders;
+							pointOrientation = IndependentUtils::GetEnclavePointOrientation(convertedPoint, &enclaveBorders);
+							if (pointOrientation.otype == ECBPPOrientations::LINE)
+							{
+								IndependentUtils::printOrientationEnum(pointOrientation.osubtype);
+							}
+							break;
+						}
+						case MassZoneBoxType::COLLECTION:
+						{
+							EnclaveKeyDef::EnclaveKey tempKey(0, 0, 0);
+							ECBBorderLineList collectionBorders = IndependentUtils::determineBorderLines(tempKey);
+							pointOrientation = IndependentUtils::GetBlueprintPointOrientation(convertedPoint, &collectionBorders);
+							break;
+						}
+					}
+
+					// get the face list
+					BorderDataMap bdMap;
+					BorderMDFaceList pointFaceList = IndependentUtils::getFaceList(pointOrientation, &bdMap);
+
+					for (int x = 0; x < 3; x++)
+					{
+						if (pointFaceList.faceList[x] != ECBPPOrientations::NOVAL)
+						{
+							MassZoneBoxBoundaryOrientation currentOrientation = convertPointOrientationToBoundaryOrientation(pointFaceList.faceList[x]);
+							generatedTouchedList.insert(currentOrientation);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	std::cout << "+++++++++++++ Printing out values of the generatedTouchedList (size is " << generatedTouchedList.size() << std::endl;
+	auto listBegin = generatedTouchedList.begin();
+	auto listEnd = generatedTouchedList.end();
+	for (; listBegin != listEnd; listBegin++)
+	{
+		switch (*listBegin)
+		{
+			case MassZoneBoxBoundaryOrientation::NEG_X:
+			{
+				std::cout << "NEG_X" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::NEG_Z:
+			{
+				std::cout << "NEG_Z" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_X:
+			{
+				std::cout << "POS_X" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_Z:
+			{
+				std::cout << "POS_Z" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::POS_Y:
+			{
+				std::cout << "POS_Y" << std::endl;
+				break;
+			}
+			case MassZoneBoxBoundaryOrientation::NEG_Y:
+			{
+				std::cout << "NEG_Y" << std::endl;
+				break;
+			}
+		}
+	}
+
+	return generatedTouchedList;
+}
+
+MassZoneBoxBoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)
+{
+	MassZoneBoxBoundaryOrientation returnOrientation;
+	switch (in_pointOrientation)
+	{
+		case ECBPPOrientations::WESTFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_X;
+			break;
+		}	
+		case ECBPPOrientations::NORTHFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_Z;
+			break;
+		}
+		case ECBPPOrientations::EASTFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::POS_X;
+			break;
+		}
+		case ECBPPOrientations::SOUTHFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::POS_Z;
+			break;
+		}
+		case ECBPPOrientations::TOPFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::POS_Y;
+			break;
+		}
+		case ECBPPOrientations::BOTTOMFACE:
+		{
+			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_Y;
+			break;
+		}
+	}
+	return returnOrientation;
+}
+
 void MassZoneBox::printCategorizedLinesInBoundaries()
 {
 	std::cout << "################################# Printing categorized lines in each boundary: " << std::endl;

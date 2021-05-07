@@ -177,8 +177,16 @@ void MassZone::runClipper()
 	clipper.run();
 }
 
+std::set<MassZoneBoxBoundaryOrientation> MassZone::getTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType)
+{
+	std::set<MassZoneBoxBoundaryOrientation> returnSet = zoneBox.generateTouchedBoxFacesList(in_massZoneBoxType);
+	return returnSet;
+}
+
 void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
+	// need to apply tertiary extraction options, to all boundaries that need them set.
+
 	// build the log output prefix 
 	std::string prefixString;
 	if (in_massZoneType == MassZoneType::OLD_ZONE)
@@ -188,6 +196,10 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 	else if (in_massZoneType == MassZoneType::NEW_ZONE)
 	{
 		prefixString = "(MassZone) (NEW_ZONE) ";
+	}
+	else if (in_massZoneType == MassZoneType::COHERENT_ZONE)
+	{
+		prefixString = "(MassZone) (COHERENT_ZONE) ";
 	}
 
 	// Step 1: compare all subZones that are from an SPoly, to all the MassZoneBoxBoundaries, to determine the CategorizedLines that will

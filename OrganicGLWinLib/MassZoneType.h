@@ -7,6 +7,7 @@ enum class MassZoneType
 {
 	OLD_ZONE,
 	NEW_ZONE,
+	COHERENT_ZONE,
 	NOVAL
 };
 

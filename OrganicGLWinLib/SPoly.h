@@ -46,6 +46,7 @@ public:
 private:
 	friend class SPolyScaler;
 	friend class SPolySet;
+	friend class BorderSPolyProducer;
 	friend class SPolySupergroup;
 	friend class SPolyFracturer;
 	friend class BorderLineCycle;
@@ -59,6 +60,7 @@ private:
 	friend class GuestLineReactor;
 	friend class SharedLineReactor;
 	friend class LineWelder;
+	friend class MassZoneBox;
 	friend class MassZoneBoxBoundary;
 	friend class MassZoneBoxBoundarySPolySet;
 	friend class MassZonePointClipper;
