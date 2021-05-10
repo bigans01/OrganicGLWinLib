@@ -18,8 +18,10 @@ CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 	}
 }
 
-void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet)
+ErrorSensor CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet)
 {
+	ErrorSensor currentCutAttemptErrors;
+
 	// set the DOS for the current cutting triangle
 	cuttingTriangleDOS = in_cuttingTriangledebugOptionSet;
 	PolyLogger comparisonLogger, tJunctionLogger, nonColinearIntersectLogger;
@@ -362,7 +364,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 		else if (crawlingAttemptsVector.size() != 0)	// the CuttableTriangle will be modified
 		{
 			// fourth, build the CutLinePools from each attempt; acquire the ErrorSensor.
-			produceCutTriangles(in_cuttingTriangleRef);
+			currentCutAttemptErrors = produceCutTriangles(in_cuttingTriangleRef);
 		}
 		else if (crawlingAttemptsVector.size() == 0)	// there weren't any intersections; the CuttableTriangle is unmodified, so just use the 
 														// CuttableTriangle and it's original points to form an STriangle, and put it into
@@ -372,6 +374,7 @@ void CuttableTriangle::compareAgainstCuttingTriangle(CuttingTriangle* in_cutting
 			outputTriangles[0] = returnSTriangle;
 		}
 	}
+	return currentCutAttemptErrors;
 }
 
 glm::vec3 CuttableTriangle::fetchThirdPoint(CuttablePointPair in_cuttablePointPair)
@@ -663,38 +666,47 @@ ErrorSensor CuttableTriangle::produceCutTriangles(CuttingTriangle* in_cuttingTri
 			{
 				CutTriangleGroupBuilder builder(checkForCuttingTriangleDO(DebugOption::REFERENCED_CUTTINGTRIANGLE_CUTTRIANGLEGROUPBUILDER), welder.currentPool);
 				builder.runCutTraceObserver();
-				convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
-
-
-				// extract all the CutTriangles from the CutTriangleGroupBuilder.
-				//std::cout << "------------ended trace observer run. " << std::endl;
-				triangleProductionLogger.log("(CuttableTriangle): ------------ended trace observer run. ", "\n");
-				if (triangleProductionLogger.isLoggingSet())
+				if (builder.wasRunComplete == true)
 				{
+					convertAndStoreCutTriangleVector(std::move(builder.produceAndReturnCutTriangleVector()));
 
-					auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
-					auto containerVectorEnd = builder.cutTriangleContainerVector.end();
-					for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
+
+					// extract all the CutTriangles from the CutTriangleGroupBuilder.
+					//std::cout << "------------ended trace observer run. " << std::endl;
+					triangleProductionLogger.log("(CuttableTriangle): ------------ended trace observer run. ", "\n");
+					if (triangleProductionLogger.isLoggingSet())
 					{
-						//std::cout << ">>>>> Printing contents for container..." << std::endl;
-						triangleProductionLogger.log("(CuttableTriangle): >> Printing contents for container:", "\n");
-						auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
-						auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
-						for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+
+						auto containerVectorBegin = builder.cutTriangleContainerVector.begin();
+						auto containerVectorEnd = builder.cutTriangleContainerVector.end();
+						for (; containerVectorBegin != containerVectorEnd; containerVectorBegin++)
 						{
-							containerTrianglesBegin->second.printCutTrianglePoints();
+							//std::cout << ">>>>> Printing contents for container..." << std::endl;
+							triangleProductionLogger.log("(CuttableTriangle): >> Printing contents for container:", "\n");
+							auto containerTrianglesBegin = containerVectorBegin->cutTrianglesMap.begin();
+							auto containerTrianglesEnd = containerVectorBegin->cutTrianglesMap.end();
+							for (; containerTrianglesBegin != containerTrianglesEnd; containerTrianglesBegin++)
+							{
+								containerTrianglesBegin->second.printCutTrianglePoints();
+							}
 						}
 					}
+					// if it's valid, and typical, set the wasTypicalUsed flag.
+					if
+						(
+						(currentPair.isAttemptValid == true)
+							&&
+							(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
+							)
+					{
+						wasTypicalUsed = true;
+					}
 				}
-				// if it's valid, and typical, set the wasTypicalUsed flag.
-				if
-				(
-					(currentPair.isAttemptValid == true)
-					&&
-					(attemptsBegin->crawlingType == TwoDCrawlingType::TYPICAL)
-					)
+				else if (builder.wasRunComplete == false)
 				{
-					wasTypicalUsed = true;
+					STriangle originalForm(cuttableTriangleLines[0].pointA, cuttableTriangleLines[1].pointA, cuttableTriangleLines[2].pointA);
+					outputTriangles[0] = originalForm;
+					triangleProductionSensor.insertError(ErrorEnum::CUTTIRANGLEGROUPBUILDER_BAD_BUILD);
 				}
 			}
 			else	// there were errors found.

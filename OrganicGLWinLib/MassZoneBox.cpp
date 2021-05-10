@@ -317,6 +317,16 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOri
 	}
 }
 
+void MassZoneBox::setContestedCategorizedLineAnalysisFlagInBoundaries()
+{
+	auto boundariesBegin = boxBoundaries.begin();
+	auto boundariesEnd = boxBoundaries.end();
+	for (; boundariesBegin != boundariesEnd; boundariesBegin++)
+	{
+		boundariesBegin->second.boundaryPolySet.isContestedCategorizedLineAnalysisEnabled = true;
+	}
+}
+
 MassZoneBoxBoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)
 {
 	MassZoneBoxBoundaryOrientation returnOrientation;

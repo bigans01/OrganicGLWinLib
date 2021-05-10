@@ -187,7 +187,7 @@ void CleaveSequenceIntersectFinder::printCurrentLineValuesInCleaveSequences()
 		{
 			std::cout << "Current line in sequence: "
 				<< "point A-> " << sequenceBegin->second.line.pointA.x << ", " << sequenceBegin->second.line.pointA.y << ", " << sequenceBegin->second.line.pointA.z
-				<< "point B-> " << sequenceBegin->second.line.pointB.x << ", " << sequenceBegin->second.line.pointB.y << ", " << sequenceBegin->second.line.pointB.z << std::endl;
+				<< " point B-> " << sequenceBegin->second.line.pointB.x << ", " << sequenceBegin->second.line.pointB.y << ", " << sequenceBegin->second.line.pointB.z << std::endl;
 		}
 
 	}

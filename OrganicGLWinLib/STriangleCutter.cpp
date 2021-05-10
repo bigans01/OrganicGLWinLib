@@ -77,9 +77,15 @@ bool STriangleCutter::runCuttingSequence()
 		{
 			//std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 			cutterSequenceLogger.log("(STriangleCutter): !! START: Comparing against CuttableTriangle, with ID: ", currentTriangleToCutBegin->first, "\n");
-			currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
+			ErrorSensor currentComparisonErrors = currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
 																			cuttingTrianglesBegin->first, 
 																			getDOSForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
+			if (currentComparisonErrors.wereErrorsFound() == true)
+			{
+				std::cout << "++++++++++WARNING: errors were found!" << std::endl;
+				int errorVal = 3;
+				std::cin >> errorVal;
+			}
 
 			// optional: print out the contents before output triangles are constructed.
 			if (cutterSequenceLogger.isLoggingSet())

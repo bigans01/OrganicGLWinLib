@@ -36,6 +36,14 @@ void CategorizedLineMerger::buildAndLoadCategorizedLinesIntoMachines()
 			machineMap[factoryGroupMapBegin->first]->extractCategorizedLines();
 		}
 
+		else if (currentGroupMergeType == CategorizedLineMergeType::MERGE_TO_A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
+		{
+			machineMap[factoryGroupMapBegin->first].reset(new CategorizedLineInterceptsPreciseToPartialMerger);
+			machineMap[factoryGroupMapBegin->first]->initialize(cleaveSequenceFactoryRef, &factoryGroupMapBegin->second, mergerDebugLevel);
+			machineMap[factoryGroupMapBegin->first]->extractCategorizedLines();
+		}
+
+
 		else if (currentGroupMergeType == CategorizedLineMergeType::MERGE_TO_A_SLICE)
 		{
 			machineMap[factoryGroupMapBegin->first].reset(new CategorizedLineASliceMerger);
@@ -161,12 +169,24 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 	)
 	{
 		returnType = CategorizedLineMergeType::MERGE_TO_A_SLICE;
-		returnType = CategorizedLineMergeType::MERGE_TO_A_SLICE;
 		//std::cout << "! Result is MERGE_TO_A_SLICE. " << std::endl;
 		mergerLogger.log("(CategorizedLineMerger) ! Result is MERGE_TO_A_SLICE. ", "\n");
 	}
 
-	// CASE 4: INTERCEPTS_POINT_PRECISE machine
+	// CASE 4: A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE machine
+	else if
+	(
+		(interceptsPointPreciseCount == 1)
+		&&
+		(partialBoundCount == 1)
+	)
+	{
+		returnType = CategorizedLineMergeType::MERGE_TO_A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE;
+		//std::cout << "! Result is A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. " << std::endl;
+		mergerLogger.log("(CategorizedLineMerger) ! Result is A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. ", "\n");
+	}
+
+	// CASE 5: INTERCEPTS_POINT_PRECISE machine
 	else if
 	(
 		(interceptsPointPreciseCount == 1)

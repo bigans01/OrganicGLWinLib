@@ -27,6 +27,7 @@ class CutTriangleGroupBuilder
 		int currentLineOfSightLineIndex = 0;		// default is at 0, because we don't know what the ending ID of the linePool is. (which should be set before the builder runs)
 		PolyLogger cutTriangleGroupBuilderLogger;
 		PolyDebugLevel cutTriangleGroupBuilderLoggerLogLevel = PolyDebugLevel::NONE;
+		bool wasRunComplete = true;
 		
 		void acquireWeldedLinesForWindowAndBuildObservation();
 		void handleFinalObservation();

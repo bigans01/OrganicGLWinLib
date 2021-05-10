@@ -957,6 +957,12 @@
     <ClInclude Include="BorderSPolyProducer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContestableBorderLineMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineInterceptsPreciseToPartialMerger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1428,6 +1434,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BorderSPolyProducer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContestedBorderLineMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineInterceptsPreciseToPartialMerger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

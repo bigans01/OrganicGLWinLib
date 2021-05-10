@@ -295,38 +295,90 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 	else if (type == IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)
 	{
 		std::cout << "(CategorizedLine): preparing to enter logic for handling cycling directions for a CategorizedLine of type A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE" << std::endl;
-		
-		// get the border line IDs, from the optional data of Point A.
-		auto pointAData = extraData->getPointASubData();
-		SPolyBorderLines sliceSingleInterceptBorderLineA = in_borderLineArrayRef[pointAData.begin()->borderLineValue];
-		SPolyBorderLines sliceSingleInterceptBorderLineB = in_borderLineArrayRef[pointAData.rbegin()->borderLineValue];
-		std::cout << "(CategorizedLine): sliceSingleInterceptBorderLineA value is: " << pointAData.begin()->borderLineValue << std::endl;
-		std::cout << "(CategorizedLine): sliceSingleInterceptBorderLineB value is: " << pointAData.rbegin()->borderLineValue << std::endl;
-
-		generateCyclingDirectionForASliceSingleInterceptPointPrecise(sliceSingleInterceptBorderLineA, 
-																	 pointAData.begin()->borderLineValue, 
-																	 sliceSingleInterceptBorderLineB, 
-																     pointAData.rbegin()->borderLineValue, 
-																	 emptyNormal, 
-																	 in_polyDebugLevel);
-
-		std::cout << "::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
-		std::cout << "::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
-		std::cout << "::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
-
-		std::cout << "::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
-		std::cout << "::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
-		std::cout << "::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
-
-		std::cout << "::: >> current categorized line, number of border lines: " << line.numberOfBorderLines << std::endl;
-
-		/*
-		int sillyLoop = 3;
-		while (sillyLoop == 3)
+		if (containsExtraData == true)
 		{
+			// get the border line IDs, from the optional data of Point A.
+			auto pointAData = extraData->getPointASubData();
+			SPolyBorderLines sliceSingleInterceptBorderLineA = in_borderLineArrayRef[pointAData.begin()->borderLineValue];
+			SPolyBorderLines sliceSingleInterceptBorderLineB = in_borderLineArrayRef[pointAData.rbegin()->borderLineValue];
+			std::cout << "(CategorizedLine): sliceSingleInterceptBorderLineA value is: " << pointAData.begin()->borderLineValue << std::endl;
+			std::cout << "(CategorizedLine): sliceSingleInterceptBorderLineB value is: " << pointAData.rbegin()->borderLineValue << std::endl;
+
+			generateCyclingDirectionForASliceSingleInterceptPointPrecise(sliceSingleInterceptBorderLineA,
+				pointAData.begin()->borderLineValue,
+				sliceSingleInterceptBorderLineB,
+				pointAData.rbegin()->borderLineValue,
+				emptyNormal,
+				in_polyDebugLevel);
+
+			std::cout << "::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+			std::cout << "::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
+			std::cout << "::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
+
+			std::cout << "::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+			std::cout << "::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
+			std::cout << "::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
+
+			std::cout << "::: >> current categorized line, number of border lines: " << line.numberOfBorderLines << std::endl;
+
+			/*
+			int sillyLoop = 3;
+			while (sillyLoop == 3)
+			{
+
+			}
+			*/
+		}
+		else if (containsExtraData == false)
+		{
+			std::cout << "!!!!! NOTICE**** contains extra data is false..." << std::endl;
+
+			glm::vec3 precisePoint = line.pointA;	// point A of an A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE should be what has the precise.
+			std::cout << "Precise point is: " << precisePoint.x << ", " << precisePoint.y << ", " << precisePoint.z << std::endl;
+
+			//std::cout << "::: >> current categorized line, point A: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+			//std::cout << "::: >> current categorized line, point A border: " << line.pointABorder << std::endl;
+			//std::cout << "::: >> current categorized line, is point A on border: " << line.isPointAOnBorder << std::endl;
+
+			//std::cout << "::: >> current categorized line, point B: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+			//std::cout << "::: >> current categorized line, point B border: " << line.pointBBorder << std::endl;
+			//std::cout << "::: >> current categorized line, is point B on border: " << line.isPointBOnBorder << std::endl;
+
+			//std::cout << "Empty normal of this categorized line is: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z << std::endl;
+
+			std::map<int, int> returnMap;
+			auto borderLinesBegin = in_borderLineArrayRef.begin();
+			auto borderLinesEnd = in_borderLineArrayRef.end();
+			for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+			{
+				//std::cout << "Border Line ID: " << borderLinesBegin->first << " | point A: " << borderLinesBegin->second.pointA.x << ", " << borderLinesBegin->second.pointA.y << ", " << borderLinesBegin->second.pointA.z
+				//														   << " | point B: " << borderLinesBegin->second.pointB.x << ", " << borderLinesBegin->second.pointB.y << ", " << borderLinesBegin->second.pointB.z
+				//														   << std::endl;
+
+				if
+				(
+					(borderLinesBegin->second.pointA == precisePoint)
+					||
+					(borderLinesBegin->second.pointB == precisePoint)
+				)
+				{
+					int currentMapIndex = returnMap.size();
+					returnMap[currentMapIndex] = borderLinesBegin->first;	// insert the ID of the border line.
+				}
+			}
+
+			generateCyclingDirectionForASliceSingleInterceptPointPrecise(in_borderLineArrayRef[returnMap[0]],
+																		 returnMap[0],
+																		 in_borderLineArrayRef[returnMap[1]],
+																		 returnMap[1],
+																		 emptyNormal,
+																		 in_polyDebugLevel);
+
+			//int falseVal = 3;
+			//std::cin >> falseVal;
+
 
 		}
-		*/
 	}
 	return wasRunValid;
 }

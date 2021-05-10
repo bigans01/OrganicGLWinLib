@@ -18,6 +18,7 @@ void CutLineTraceObserver::setObservationLogLevel(PolyDebugLevel in_polyDebugLev
 
 void CutLineTraceObserver::buildNewCutObservation(CutLinePoolGuide in_cutLinePoolGuide)
 {
+	//std::cout << "(CutLineTraceObserver): calling buildNewCutObservation..." << std::endl;
 	currentContainer.cutTrianglesMap.clear();	// clear, before we insert new triangles.
 	poolGuide = in_cutLinePoolGuide;
 	remainingRadians = 1000.0f;
@@ -48,11 +49,13 @@ void CutLineTraceObserver::buildNewCutObservation(CutLinePoolGuide in_cutLinePoo
 			// NOTE: be sure to invert the last line in the WeldedTriangle, before inserting as the "new" line into the pool.
 
 			// 2. insert the triangle in some map
+			//std::cout << "Entered branch 1. " << std::endl;
 
 			determineObservationState();	// 3. update the state when we're done, to see if we terminate the while loop.
 		}
 		else
 		{
+			//std::cout << "Entered branch 2. " << std::endl;
 			currentObserverState = TracingObserverState::TERMINATED;
 		}
 
@@ -84,6 +87,7 @@ void CutLineTraceObserver::buildNewCutObservation(CutLinePoolGuide in_cutLinePoo
 				// NOTE: be sure to invert the last line in the WeldedTriangle, before inserting as the "new" line into the pool.
 
 				// 2. insert the triangle in some map
+				//std::cout << "!!! Reached first branch! " << std::endl;
 
 				determineObservationState();	// 3. update the state when we're done, to see if we terminate the while loop.
 			}
@@ -233,6 +237,7 @@ void CutLineTraceObserver::determineObservationState()
 	}
 	else if (weldedPoolCount >= 5)
 	{
+		//std::cout << "!!! State is CONTINUE_OBSERVE. " << std::endl;
 		currentObserverState = TracingObserverState::CONTINUE_OBSERVE;
 	}
 }

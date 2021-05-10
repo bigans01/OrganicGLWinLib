@@ -29,6 +29,7 @@ class CategorizedLineColinearTester
 			runColinearTests();
 		};
 		bool colinearToBorderLineDetected = false;
+		int idOfColinearBorderLine = 0;				// set only if colinearToBorderLineDetected gets set to TRUE
 	private:
 		CategorizedLine candidateLine;
 		STriangle hostSTriangle;

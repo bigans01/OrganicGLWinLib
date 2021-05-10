@@ -107,6 +107,7 @@ void CategorizedLineColinearTester::runColinearTests()
 			std::cout << "!!! Warning: COLINEAR_OVERLAP detected! " << std::endl;
 			//colinearTesterLogger.log("!!! Warning: COLINEAR_OVERLAP detected! ", "\n");
 			colinearToBorderLineDetected = true;
+			idOfColinearBorderLine = hostSTriangle.triangleLines[x].borderLineID;
 		}
 		//std::cout << "!!! End of hard test. " << std::endl;
 		//int hardTestEnd = 3;

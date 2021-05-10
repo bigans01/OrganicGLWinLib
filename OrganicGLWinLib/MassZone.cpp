@@ -188,6 +188,35 @@ void MassZone::runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBound
 	zoneBox.runFirstTertiaryProductionPass(in_orientationSet);
 }
 
+void MassZone::produceExtractableMassZoneShellSPolys()
+{
+	auto zoneBoxBoundariesBegin = zoneBox.boxBoundaries.begin();
+	auto zoneBoxBoundariesEnd = zoneBox.boxBoundaries.end();
+	for (; zoneBoxBoundariesBegin != zoneBoxBoundariesEnd; zoneBoxBoundariesBegin++)
+	{
+		OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(zoneBoxBoundariesBegin->first);
+		if
+		(
+			(zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.size() != 0)
+		)
+		{
+			std::cout << "-> uncontested, but contains produced SPolys. " << std::endl;
+		}
+
+		else if
+		(
+			(zoneBoxBoundariesBegin->second.boundaryPolySet.requiresContestedAnalysis == true)
+		)
+		{
+			std::cout << "-> contested. " << std::endl;
+		}
+		else
+		{
+			std::cout << "-> N/A. " << std::endl;
+		}
+	}
+}
+
 void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
 	// need to apply tertiary extraction options, to all boundaries that need them set.
@@ -262,32 +291,32 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 	{
 		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for NEG_Z..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_Z...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for POS_X..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_X...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for POS_Z..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_Z...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for NEG_X..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_X...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for POS_Y..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for POS_Y...", "\n");
 		}
 		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
 		{
-			//std::cout << "Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
+			std::cout << "|||||||||||||||||||||||||||||||||||||||||||| Attempting boundary artificial SPoly construction for NEG_Y..." << std::endl;
 			tempSPolyBoundaryProductionLogger.log(prefixString, "Attempting boundary artificial SPoly construction for NEG_Y...", "\n");
 		}
 
@@ -351,4 +380,9 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 			tempBoundarySuperGroupLogger.log(prefixString, "Size of clipper SPoly map:", clipper.clippingShellMap.size(), "\n");
 		}
 	}
+}
+
+void MassZone::enableContestedCategorizedLineAnalysis()
+{
+	zoneBox.setContestedCategorizedLineAnalysisFlagInBoundaries();
 }

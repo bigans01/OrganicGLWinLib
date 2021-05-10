@@ -17,21 +17,35 @@ void HostLineReactor::runAnalysis()
 																				// this must be a PARTIAL_BOUND.
 		{
 			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_NONBORDERLINE found; processing for INTERCEPTS_POINT_PRECISE." << std::endl;
-			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_NONBORDERLINE found; processing for INTERCEPTS_POINT_PRECISE.", "\n");
+			reactorBaseLogger.log("(HostLineReactor) Search 1-> TYPICAL_NONBORDERLINE found as otherSummary; processing for INTERCEPTS_POINT_PRECISE.", "\n");
 			buildInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 		}
 		else if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_BORDERLINE)
 		{
 			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
-			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE.", "\n");
+			reactorBaseLogger.log("(HostLineReactor) Search 1-> TYPICAL_BORDERLINE found as otherSummary; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE.", "\n");
 			buildASliceSingleInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
 		}
+		/*
+		else if (otherSummary.pointSummary == FusedPointSummary::PRECISE_MIXED)
+		{
+			std::cout << "(HostLineReactor) Search 2-> PRECISE_MIXED found as otherSummary; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
+		}
+		*/
 	}
 
 	// Search 2: PRECISE_MIXED
 	else if (fusedPointMetaRef->searchForSummary(FusedPointSummary::PRECISE_MIXED).wasFound == true)
 	{
-
+		std::cout << "(HostLineReactor) Search 2 -> PRECISE_MIXED found; processing for " << std::endl;
+		glm::vec3 precisePoint = fusedPointMetaRef->searchForSummary(FusedPointSummary::PRECISE_MIXED).foundPoint;
+		SummaryScanResult otherSummary = fusedPointMetaRef->searchForOtherSummary(precisePoint);
+		if (otherSummary.pointSummary == FusedPointSummary::TYPICAL_BORDERLINE)
+		{
+			//std::cout << "(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE." << std::endl;
+			reactorBaseLogger.log("(HostLineReactor) Search 2-> TYPICAL_BORDERLINE found as otherSummary; processing for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE.", "\n");
+			buildASliceSingleInterceptsPointPrecise(precisePoint, otherSummary.foundPoint);
+		}
 	}
 
 	// Search 3: PRECISE_NONBORDERLINE

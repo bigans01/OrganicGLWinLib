@@ -59,7 +59,7 @@ class CuttableTriangle
 		CuttableTriangleLine cuttableTriangleLines[3];
 		DebugOptionSet cuttingTriangleDOS;
 
-		void compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet);
+		ErrorSensor compareAgainstCuttingTriangle(CuttingTriangle* in_cuttingTriangleRef, int in_cuttingTriangleID, DebugOptionSet in_cuttingTriangledebugOptionSet);
 		void compareCuttableTriangleLineToCuttingTriangleLine(int in_cuttableIndex, CuttableTriangleLine* in_cuttableTriangleLineRef, int in_cuttingIndex, CuttingTriangleLine* in_cuttingTriangleLineRef);
 		glm::vec3 convert2DpointTo3D(TwoDPoint in_2dPoint);
 		void printCuttableLineIntersections();

@@ -26,9 +26,16 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 		productionMassZone.insertSPolyMassSubZone(x, inputSPolys[x]);
 	}
 
+	// enable "shell extraction mode" in the MassZoneShell before creating the shell; should be done after boundary creation, but before shell creation.
+	productionMassZone.enableContestedCategorizedLineAnalysis();
+
 	// now that the input SPolys have been added to the production zone, create the mass zone shell;
 	// be sure to pass any tertiary extraction options.
 	productionMassZone.createMassZoneShell(MassZoneType::COHERENT_ZONE);
+
+	// produce the extractable shell SPolys.
+	productionMassZone.produceExtractableMassZoneShellSPolys();
+
 
 	// have the MassZoneBox in the MassZone, produce a list of faces that were "touched";
 	// a "touched" face is any face whose enum is found in the face list that would be produced by the value of an ECBPPOrientationResults.

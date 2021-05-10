@@ -44,6 +44,11 @@ class FusedPointMeta
 			{
 				std::cout << "TYPICAL_NONBORDERLINE" << std::endl;
 			}
+			else if (summary == FusedPointSummary::PRECISE_MIXED)
+			{
+				std::cout << "PRECISE_MIXED" << std::endl;
+			}
+
 		}
 };
 

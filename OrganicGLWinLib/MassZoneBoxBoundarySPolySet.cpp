@@ -136,6 +136,10 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 				if (guestFusedCandidate.candidateIntersectionResult.wasIntersectFound != 0)
 				{
+					//std::cout << "(MassZoneBoxBoundarySPolySet): (wasIntersectFound value is: " << guestFusedCandidate.candidateIntersectionResult.wasIntersectFound <<  ") guest fused candidate point is: "
+						//<< guestFusedCandidate.candidateIntersectionResult.intersectedPoint.x << ", "
+						//<< guestFusedCandidate.candidateIntersectionResult.intersectedPoint.y << ", "
+						//<< guestFusedCandidate.candidateIntersectionResult.intersectedPoint.z << std::endl;
 					guestLineGroup.insertFusionCandidateIntoAnalyzer(FusionCandidateOrigin::GUEST, z, guestFusedCandidate);
 				}
 			}
@@ -157,9 +161,24 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 				CategorizedLineColinearTester tester(reactionResult.resultingLine, *hostTrianglePtr, categorizedLineCoplanarTestsDebugLevel);
 
+
 				if (tester.colinearToBorderLineDetected == false)		// the categorized line isn't colinear to any line in the host triangle (remember, context is from host triangle)
 				{
+					//std::cout << "!!!!! Added new line: point A " << reactionResult.resultingLine.line.pointA.x << ", " << reactionResult.resultingLine.line.pointA.y << ", " << reactionResult.resultingLine.line.pointA.z
+					//							<< " | point B: " << reactionResult.resultingLine.line.pointB.x << ", " << reactionResult.resultingLine.line.pointB.y << ", " << reactionResult.resultingLine.line.pointB.z << std::endl;
+
 					in_hostPolyPtr->sequenceFactory.addCategorizedLine(reactionResult.resultingLine);
+				}
+				else if (tester.colinearToBorderLineDetected == true)
+				{
+					// if contesting the categorized lines is enabled, we need to record it.
+					if (isContestedCategorizedLineAnalysisEnabled == true)
+					{
+						std::cout << "(MassZoneBoxBoundarySPolyset): line with the following points flagged as contested: " << std::endl;
+						std::cout << "point A: " << reactionResult.resultingLine.line.pointA.x << ", " << reactionResult.resultingLine.line.pointA.y << ", " << reactionResult.resultingLine.line.pointA.z << std::endl;
+						std::cout << "point B: " << reactionResult.resultingLine.line.pointB.x << ", " << reactionResult.resultingLine.line.pointB.y << ", " << reactionResult.resultingLine.line.pointB.z << std::endl;
+						contestables.insertChallengingCategorizedLine(tester.idOfColinearBorderLine, reactionResult.resultingLine);
+					}
 				}
 				//numberOfIntersections++;
 			}
@@ -190,7 +209,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
 	if (boundarySPolyRef->cleaveMap.size() != 0)
 	{
-		//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
+		std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 		SPolyMorphTracker morphTracker;
 
 		//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
@@ -201,7 +220,23 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 		boundarySPolySG.roundAllSTrianglesToHundredths();
 		boundarySPolySG.buildSPolyBorderLines();
+
+		std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
+
 		//boundarySPolySG.
 	}
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
+	if
+	(
+		(boundarySPolyRef->cleaveMap.size() == 0)
+		&&
+		(isContestedCategorizedLineAnalysisEnabled == true)
+		&&
+		(contestables.contestableBorderLineChallengersMap.size() != 0)
+	)
+	{
+		std::cout << "!!! Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
+		requiresContestedAnalysis = true;
+	}
+	
 }

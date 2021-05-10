@@ -653,8 +653,8 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 
 	if (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
 	{
-		//std::cout << "(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
-		//std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? " << std::endl;
+		std::cout << "(CleaveSequenceFactory)  STOP! It's hammer time. " << std::endl;
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  !!!!#### NOTICE: there is at least one A_SLICE in the pools...continue? ", "\n");
 		cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory)  STOP! It's hammer time. ", "\n");
 
@@ -682,6 +682,10 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 		//std::cin >> noticeVal;
 	}
 
+	else if (lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) == 1)
+	{
+		//std::cout << "(CleaveSequenceFactory): handling case of a single INTERCEPTS_POINT_PRECISE. " << std::endl;
+	}
 }
 
 void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)

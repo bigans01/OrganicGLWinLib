@@ -48,11 +48,13 @@ private:
 	void printMeshMatterMeta();
 	void createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType);
 	void createMassZoneShell(MassZoneType in_massZoneType);
+	void enableContestedCategorizedLineAnalysis();
 	void wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);
 	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);
 	void runClipper();
 	std::set<MassZoneBoxBoundaryOrientation> getTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
 	void runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet);
+	void produceExtractableMassZoneShellSPolys();
 };
 
 #endif

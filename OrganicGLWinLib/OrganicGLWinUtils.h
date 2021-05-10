@@ -37,6 +37,7 @@
 #include "TwoDLineSegment.h"
 #include "TwoDPoint.h"
 #include "ThreeDLineSegment.h"
+#include "MassZoneBoxBoundaryOrientation.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -91,6 +92,7 @@ public:
 	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static TwoDPoint convertGlmVec3To2D(glm::vec3 in_glmvec3);
 	static glm::vec3 convert2DToGlmVec3(TwoDPoint in_twoDPoint);
+	static void printMassZoneBoxBoundaryOrientationEnum(MassZoneBoxBoundaryOrientation in_orientation);
 
 	// IMGUI functions
 	static void IMGuiInit(GLFWwindow* in_window);	// set up imgui context

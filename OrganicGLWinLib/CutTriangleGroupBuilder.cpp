@@ -21,7 +21,13 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 	//std::cout << ":::|||||| Size of vector, before anything: " << cutTriangleContainerVector.size() << std::endl;
 	if (linePool.getPoolSize() > 3)
 	{
-		while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+		while
+		(
+			(linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+			&&
+			wasRunComplete == true
+
+		)
 		{
 			//std::cout << "###~~~~~ Building new observation. " << std::endl;
 			//std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
@@ -38,10 +44,15 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 				std::cout << "(CutTriangleGroupBuilder) ~~~~~Number of lines in pool is: " << preObservationPoolSize << std::endl;
 				std::cout << "(CutTriangleGroupBuilder) Lines are: " << std::endl;
 				linePool.printLines();
+
+				wasRunComplete = false;
+				
+				/*
 				while (prepostMatch == 3)
 				{
 
 				}
+				*/
 			}
 		}
 
@@ -51,7 +62,11 @@ void CutTriangleGroupBuilder::runCutTraceObserver()
 		//std::cout << "getPoolSize, pre check 2" << std::endl;
 
 		//acquireWeldedLinesForWindowAndBuildObservation();
-		handleFinalObservation();
+
+		if (wasRunComplete == true)
+		{
+			handleFinalObservation();
+		}
 	}
 	else if (linePool.getPoolSize() == 3)
 	{
@@ -98,6 +113,10 @@ void CutTriangleGroupBuilder::acquireWeldedLinesForWindowAndBuildObservation()
 	//auto windowObservationEndLine = linePool.fetchLastLineInPool();
 	CutLinePoolGuide poolGuide(currentLineOfSightLineIndex, &linePool);
 	//tracer.buildNewObservation(linePool.fetchLineFromPoolViaIndex(poolGuide.lineOfSightLineIndex), linePool.fetchLineFromPoolViaIndex(poolGuide.observationEndLineIndex));
+	//std::cout << "Pool size is: " << linePool.getPoolSize() << std::endl;
+	//std::cout << "Lines are: " << std::endl;
+	//linePool.printLines();
+
 	tracer.buildNewCutObservation(poolGuide);		// build it, let it run
 	cutTriangleContainerVector.push_back(tracer.currentContainer);
 	if (tracer.getCurrentObserverState() == TracingObserverState::TERMINATED)	// if it was prematurely terminated, we must increment the currentLineOfSightIndex

@@ -18,6 +18,7 @@
 #include "FusedPointReactor.h"
 #include "SPolyFracturer.h"
 #include "SPolyMorphTracker.h"
+#include "ContestableBorderLineMap.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -42,7 +43,9 @@ class MassZoneBoxBoundarySPolySet
 		int currentComparableSPolyIndex = 1;	// this index should always start at 1.
 		SPolySupergroup boundarySPolySG;
 		bool wasLineProducedByReactor = false;	
-		
+		bool isContestedCategorizedLineAnalysisEnabled = false;	// if set to true, "rulings" will be made on contested lines, potentially allowing the construction of an entire boundary SPoly.
+		bool requiresContestedAnalysis = false;						
+		ContestableBorderLineMap contestables;					// used only when isContestedCategorizedLineAnalysisEnabled is set to TRUE.
 };
 
 #endif

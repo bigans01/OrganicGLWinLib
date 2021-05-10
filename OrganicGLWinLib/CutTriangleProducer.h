@@ -18,7 +18,9 @@ class CutTriangleProducer
 		{
 			buildCandidateTriangle();
 			checkIfFrontHookPointBIsInCandidateTriangle();
-			checkIfAnyComparablesPointBAreInCandidateTriangle();
+
+			// the below funtion was commented out on 5/8/2021; it needs to be reviwed/reworked.
+			//checkIfAnyComparablesPointBAreInCandidateTriangle();	
 		};
 		bool wasValidCutTriangleProduced = true;
 		CutTriangleProductionResult getProductionResult()
@@ -72,8 +74,8 @@ class CutTriangleProducer
 				bool wasWithinTriangle = candidateCutTriangle.checkIfPointIsWithinTriangle(pointToCheck);
 				if (wasWithinTriangle == true)
 				{
-					//std::cout << "Line " <<  *comparablesBegin << "found as being within!! " << std::endl;
-					//std::cout << "Point was: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
+					std::cout << "Line " <<  *comparablesBegin << "found as being within!! " << std::endl;
+					std::cout << "Point was: " << pointToCheck.x << ", " << pointToCheck.y << ", " << pointToCheck.z << std::endl;
 					wasValidCutTriangleProduced = false;
 				}
 			}

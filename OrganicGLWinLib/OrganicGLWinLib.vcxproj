@@ -183,6 +183,7 @@
     <ClInclude Include="CategorizedLineGroupMap.h" />
     <ClInclude Include="CategorizedLineInsertionRecord.h" />
     <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h" />
+    <ClInclude Include="CategorizedLineInterceptsPreciseToPartialMerger.h" />
     <ClInclude Include="CategorizedLineManager.h" />
     <ClInclude Include="CategorizedLineMergeMachineBase.h" />
     <ClInclude Include="CategorizedLineMerger.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
     <ClInclude Include="ContainerType.h" />
+    <ClInclude Include="ContestableBorderLineMap.h" />
     <ClInclude Include="CoplanarCategorizedLineProducer.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
@@ -489,6 +491,7 @@
     <ClCompile Include="CategorizedLineASliceMerger.cpp" />
     <ClCompile Include="CategorizedLineColinearTester.cpp" />
     <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp" />
+    <ClCompile Include="CategorizedLineInterceptsPreciseToPartialMerger.cpp" />
     <ClCompile Include="CategorizedLineManager.cpp" />
     <ClCompile Include="CategorizedLineMergeMachineBase.cpp" />
     <ClCompile Include="CategorizedLineMerger.cpp" />
@@ -500,6 +503,7 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
+    <ClCompile Include="ContestedBorderLineMap.cpp" />
     <ClCompile Include="CoplanarCategorizedLineProducer.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CoplanarMassCreator.cpp" />

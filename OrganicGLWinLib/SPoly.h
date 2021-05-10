@@ -37,7 +37,9 @@ public:
 	void printPoints();
 	void printAllCleaveLines();
 	void addTriangle(STriangle in_triangle);
+	void setMRP(glm::vec3 in_mrp);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
+	void calculateEmptyNormal();
 	bool isSPolyValid();
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only
@@ -89,8 +91,6 @@ private:
 	void determinePrimalPoints();
 	void determineBorderLines();
 	void buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
-	void setMRP(glm::vec3 in_mrp);
-	void calculateEmptyNormal();
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.
