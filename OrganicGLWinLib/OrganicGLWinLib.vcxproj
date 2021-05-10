@@ -210,6 +210,7 @@
     <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
     <ClInclude Include="ContainerType.h" />
     <ClInclude Include="ContestableBorderLineMap.h" />
+    <ClInclude Include="CoplanarAreaRasterizer.h" />
     <ClInclude Include="CoplanarCategorizedLineProducer.h" />
     <ClInclude Include="CoplanarChecker.h" />
     <ClInclude Include="CoplanarComparisonCandidatePoints.h" />
@@ -504,6 +505,7 @@
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="ContestedBorderLineMap.cpp" />
+    <ClCompile Include="CoplanarAreaRasterizer.cpp" />
     <ClCompile Include="CoplanarCategorizedLineProducer.cpp" />
     <ClCompile Include="CoplanarChecker.cpp" />
     <ClCompile Include="CoplanarMassCreator.cpp" />
