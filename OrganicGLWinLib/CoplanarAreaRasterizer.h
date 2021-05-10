@@ -7,6 +7,7 @@
 #include <set>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <algorithm>
 
 class CoplanarAreaRasterizer
 {
@@ -17,13 +18,13 @@ class CoplanarAreaRasterizer
 		struct TileLocation
 		{
 			TileLocation() {};
-			TileLocation(int in_x, int in_y) :
+			TileLocation(short in_x, short in_y) :
 				x(in_x),
 				y(in_y)
 			{};
 
-			int x = 0;
-			int y = 0;
+			short x = 0;
+			short y = 0;
 		};
 		TileLocation determinePointTileLocation(glm::vec3 in_point);
 		void printRemainingCuttableTiles();
@@ -47,8 +48,8 @@ class CoplanarAreaRasterizer
 
 			void swapLine()
 			{
-				int tempX0 = x0;
-				int tempY0 = y0;
+				short tempX0 = x0;
+				short tempY0 = y0;
 
 				x0 = x1;
 				y0 = y1;
@@ -57,11 +58,44 @@ class CoplanarAreaRasterizer
 				y1 = tempY0;
 			};
 
-			int x0 = 0;
-			int y0 = 0;
+			short x0 = 0;
+			short y0 = 0;
 
-			int x1 = 0;
-			int y1 = 0;
+			short x1 = 0;
+			short y1 = 0;
+		};
+
+		struct RasterizedScanLineEndpoints
+		{
+			TileLocation locationA;
+			TileLocation locationB;
+			bool wasFirstLocationInserted = false;
+			bool wasSecondLocationInserted = false;
+			void insertLocation(TileLocation in_tileLocation)
+			{
+				if (wasFirstLocationInserted == false)
+				{
+					wasFirstLocationInserted = true;
+					locationA = in_tileLocation;
+				}
+				else if (wasFirstLocationInserted == true)
+				{
+					if (wasSecondLocationInserted == false)
+					{
+						locationB = in_tileLocation;
+						wasSecondLocationInserted = true;
+					}
+					else if (wasSecondLocationInserted == true)
+					{
+						int intCurrentDistBetweenLocations = abs(locationA.x - locationB.x);	
+						int currentDistance = abs(locationA.x - in_tileLocation.x);
+						if (currentDistance > intCurrentDistBetweenLocations)
+						{
+							locationB = in_tileLocation;
+						}
+					}
+				}
+			}
 		};
 
 		enum RasterizedMassType
@@ -72,8 +106,8 @@ class CoplanarAreaRasterizer
 
 
 		std::unique_ptr<RasterizationTile[]> rasterizationTileGrid;
-		std::unique_ptr<std::set<int>[]> cuttableHorizontalScanLineRegister;
-		std::unique_ptr<std::set<int>[]> cuttingHorizontalScanLineRegister;
+		std::unique_ptr<RasterizedScanLineEndpoints[]> cuttableHorizontalScanLineRegister;
+		std::unique_ptr<RasterizedScanLineEndpoints[]> cuttingHorizontalScanLineRegister;
 		int numberOfTilesPerDimension = 0;	
 		float dimensionLimit = 0.0f;					
 		float tileGridWidth;

@@ -6,8 +6,9 @@ void CoplanarAreaRasterizer::buildGrid(int in_numberOfTilesPerDimension, float i
 	numberOfTilesPerDimension = in_numberOfTilesPerDimension;
 	dimensionLimit = in_dimensionLimit;
 	rasterizationTileGrid.reset(new RasterizationTile[numberOfTilesPerDimension * numberOfTilesPerDimension]);
-	cuttableHorizontalScanLineRegister.reset(new std::set<int>[numberOfTilesPerDimension]);
-	cuttingHorizontalScanLineRegister.reset(new std::set<int>[numberOfTilesPerDimension]);
+	cuttableHorizontalScanLineRegister.reset(new RasterizedScanLineEndpoints[numberOfTilesPerDimension]);
+	cuttingHorizontalScanLineRegister.reset(new RasterizedScanLineEndpoints[numberOfTilesPerDimension]);
+
 	tileGridWidth = dimensionLimit / numberOfTilesPerDimension;
 }
 
@@ -36,22 +37,21 @@ void CoplanarAreaRasterizer::runScanWithCurrentCuttableTriangle()
 	//std::cout << "!!! Running scan with cuttable X register lines..." << std::endl;
 	for (int y = 0; y < (numberOfTilesPerDimension); y++)
 	{
-		if (cuttableHorizontalScanLineRegister[y].size() > 1)	// has to be greater than 1 to do the scan.
+		if (cuttableHorizontalScanLineRegister[y].wasSecondLocationInserted == true)
 		{
-			//std::cout << "Running scan for line with Y index: " << y << std::endl;
-
-			auto lowestX = cuttableHorizontalScanLineRegister[y].begin();
-			auto highestX = cuttableHorizontalScanLineRegister[y].rbegin();
-			for (int c = *lowestX; c < *highestX + 1; c++)
+			// only do it if the x values aren't the same.
+			if (cuttableHorizontalScanLineRegister[y].locationA.x != cuttableHorizontalScanLineRegister[y].locationB.x)
 			{
-				TileLocation currentTile(c, y);
-				//std::cout << "Current TileLocation values are: " << c << ", " << y << std::endl;
+				int minVal = std::min(cuttableHorizontalScanLineRegister[y].locationA.x, cuttableHorizontalScanLineRegister[y].locationB.x);
+				int maxVal = std::max(cuttableHorizontalScanLineRegister[y].locationA.x, cuttableHorizontalScanLineRegister[y].locationB.x);
+				for (int c = minVal; c < maxVal + 1; c++)
+				{
+					TileLocation currentTile(c, y);
+					int currentIndex = determineTileLocationArrayIndex(currentTile);
+					rasterizationTileGrid[currentIndex].cuttableMassFlag = true;
+				}
 
-				int currentIndex = determineTileLocationArrayIndex(currentTile);
-				rasterizationTileGrid[currentIndex].cuttableMassFlag = true;
 			}
-
-			cuttableHorizontalScanLineRegister[y].clear();
 		}
 	}
 }
@@ -151,13 +151,13 @@ void CoplanarAreaRasterizer::updateTile(TileLocation in_tileLocation, Rasterized
 	if (in_massType == RasterizedMassType::CUTTABLE)
 	{
 		rasterizationTileGrid[arrayIndex].cuttableMassFlag = true;
-		cuttableHorizontalScanLineRegister[in_tileLocation.y].insert(in_tileLocation.x);
+		cuttableHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation);
 
 	}
 	else if (in_massType == RasterizedMassType::CUTTING)
 	{
 		rasterizationTileGrid[arrayIndex].cuttingMassFlag = true;
-		cuttingHorizontalScanLineRegister[in_tileLocation.y].insert(in_tileLocation.x);
+		cuttingHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation);
 	}
 }
 
@@ -192,15 +192,13 @@ void CoplanarAreaRasterizer::printCuttableXRegister()
 {
 	for (int y = 0; y < (numberOfTilesPerDimension); y++)
 	{
-		if (cuttableHorizontalScanLineRegister[y].size() != 0)
+		if (cuttableHorizontalScanLineRegister[y].locationA.x != cuttableHorizontalScanLineRegister[y].locationB.x)
 		{
 			std::cout << "Tiles in for Y line " << y << ": " << std::endl;
-			auto currentYLineXValuesBegin = cuttableHorizontalScanLineRegister[y].begin();
-			auto currentYLineXValuesEnd = cuttableHorizontalScanLineRegister[y].end();
-			for (; currentYLineXValuesBegin != currentYLineXValuesEnd; currentYLineXValuesBegin++)
-			{
-				std::cout << "(" << *currentYLineXValuesBegin << ", " << y << ") " << std::endl;
-			}
+			int minVal = std::min(cuttableHorizontalScanLineRegister[y].locationA.x, cuttableHorizontalScanLineRegister[y].locationB.x);
+			int maxVal = std::max(cuttableHorizontalScanLineRegister[y].locationA.x, cuttableHorizontalScanLineRegister[y].locationB.x);
+			std::cout << "min val: (" << minVal << ", " << y << ") " << std::endl;
+			std::cout << "max val: (" << maxVal << ", " << y << ") " << std::endl;
 		}
 	}
 }
