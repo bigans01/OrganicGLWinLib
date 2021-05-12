@@ -5,6 +5,7 @@
 
 #include "CoplanarRelationshipTracker.h"
 #include "MassZoneType.h"
+#include "MassZoneBoxType.h"
 #include <map>
 #include "CoplanarFusionType.h"
 #include "PolyDebugLevel.h"
@@ -31,6 +32,7 @@ class CoplanarFusionMachine
 				SPoly* sPolyRef = nullptr;
 		};
 
+		MassZoneType fusionMachineMassZoneMode = MassZoneType::NOVAL;
 		CoplanarRelationshipTracker oldSetTracker;
 		CoplanarRelationshipTracker newSetTracker;
 		CoplanarFusionType resultingFusionType = CoplanarFusionType::NOVAL;		// the fusion type that is determined after the call to determineFusionType.
@@ -48,6 +50,7 @@ class CoplanarFusionMachine
 		void determineFusionType();
 		void runAllCuttingSequenceTests();
 		void setCoplanarFusionMachineDebugLevel(PolyDebugLevel in_debugLevel);
+		void setMassZoneMode(MassZoneBoxType in_massZoneBoxType);
 
 		// debug setting functions
 		void fmInsertDOForSpecificTrackedSPoly(int in_trackedSPolyID, DebugOption in_debugOption);

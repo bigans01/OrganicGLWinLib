@@ -7,7 +7,8 @@ enum class MassZoneBoxType
 {
 	BLOCK,
 	ENCLAVE,
-	COLLECTION
+	COLLECTION,
+	NOVAL
 };
 
 #endif

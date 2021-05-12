@@ -44,8 +44,10 @@ DebugOptionSet STriangleCutter::getDOSForSpecificCuttingTriangle(int in_cuttingT
 	return returnDOS;
 }
 
-bool STriangleCutter::runCuttingSequence()
+CuttingSequenceRunStatus STriangleCutter::runCuttingSequence()
 {
+	CuttingSequenceRunStatus attemptedRun;
+	ErrorSensor currentComparisonErrors;
 	PolyLogger cutterSequenceLogger;
 	cutterSequenceLogger.setDebugLevel(checkForCutterDO(DebugOption::STRIANGLECUTTER_BASIC));
 
@@ -77,12 +79,13 @@ bool STriangleCutter::runCuttingSequence()
 		{
 			//std::cout << "!! START: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
 			cutterSequenceLogger.log("(STriangleCutter): !! START: Comparing against CuttableTriangle, with ID: ", currentTriangleToCutBegin->first, "\n");
-			ErrorSensor currentComparisonErrors = currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
+			currentComparisonErrors = currentTriangleToCutBegin->second.compareAgainstCuttingTriangle(&cuttingTrianglesBegin->second, 
 																			cuttingTrianglesBegin->first, 
 																			getDOSForSpecificCuttingTriangle(cuttingTrianglesBegin->first));
 			if (currentComparisonErrors.wereErrorsFound() == true)
 			{
 				std::cout << "++++++++++WARNING: errors were found!" << std::endl;
+				break;
 				int errorVal = 3;
 				std::cin >> errorVal;
 			}
@@ -107,6 +110,13 @@ bool STriangleCutter::runCuttingSequence()
 			cuttingTrianglesBegin->second.reset();
 			cutterSequenceLogger.log("(STriangleCutter): !! END: Comparing against CuttableTriangle, with ID:  ", currentTriangleToCutBegin->first,"\n");
 			//std::cout << "!! END: Comparing against CuttableTriangle, with ID: " << currentTriangleToCutBegin->first << std::endl;
+		}
+
+		if (currentComparisonErrors.wereErrorsFound() == true)
+		{
+			std::cout << "!! Break #2 " << std::endl;
+			attemptedRun.wasRunErrorFree = false;
+			break;	// double-break
 		}
 
 		//std::cout << "!!!! Next pass end. " << std::endl;
@@ -159,5 +169,8 @@ bool STriangleCutter::runCuttingSequence()
 	}
 	//std::cout << "########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). " << std::endl;
 	cutterSequenceLogger.log("(STriangleCutter): ########################--------------------->> end of call to STriangleCutter::runCuttingSequence(). ", "\n");
-	return wasTriangleDestroyedDuringSequence;
+	//return wasTriangleDestroyedDuringSequence;
+	attemptedRun.wasTriangleDestroyed = wasTriangleDestroyedDuringSequence;
+	attemptedRun.sensor = currentComparisonErrors;
+	return attemptedRun;
 }

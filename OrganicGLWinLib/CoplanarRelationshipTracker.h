@@ -10,6 +10,7 @@
 #include "PolyLogger.h"
 #include "OperableIntSet.h"
 #include "CoplanarRelationshipDebugFlags.h"
+#include "MassZoneBoxType.h"
 
 
 class CoplanarRelationshipTracker
@@ -23,6 +24,7 @@ class CoplanarRelationshipTracker
 		OperableIntSet removableSPolys;
 		std::map<int, CoplanarRelationshipDebugFlags> relationshipDebugFlags;
 		std::map<int, CoplanarRelationships> relationshipContainer;
+		MassZoneBoxType coplanarComparisonBoxType = MassZoneBoxType::NOVAL;
 
 		void insertCoplanarRelationship(int in_trackedSPolyID, SPoly* in_trackedSPolyRef, int in_relatedSPolyID, SPoly* in_relatedSPolyRef);
 		void runAllCuttingSequenceTests();
@@ -35,6 +37,8 @@ class CoplanarRelationshipTracker
 		void applyCoplanarRelationshipDebugFlagsIfFound(int in_trackedSPolyID);
 		void printRelationshipData();
 		void printRemovableSPolys();
+		void setCoplanarMassZoneBoxType(MassZoneBoxType in_massZoneBoxType);
+
 };
 
 #endif

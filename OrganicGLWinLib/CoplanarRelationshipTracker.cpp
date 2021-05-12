@@ -77,6 +77,7 @@ void CoplanarRelationshipTracker::insertRelationship(int in_trackedSPolyID, SPol
 	if (auto checkIfRelationshipForTrackedPolyExists = relationshipContainer.find(in_trackedSPolyID); checkIfRelationshipForTrackedPolyExists == relationshipContainer.end())	
 	{
 		relationshipContainer[in_trackedSPolyID].setTrackedPolyData(in_trackedSPolyID, *in_trackedSPolyRef);
+		relationshipContainer[in_trackedSPolyID].setCoplanarRelationshipBoxType(coplanarComparisonBoxType);
 		relationshipContainer[in_trackedSPolyID].setLoggerDebugLevel(relationshipTrackerDebugLevel);
 	}
 	relationshipContainer[in_trackedSPolyID].insertRelationship(in_relatedSPolyID, *in_relatedSPolyRef);
@@ -115,4 +116,9 @@ void CoplanarRelationshipTracker::printRemovableSPolys()
 	{
 		std::cout << *removablesBegin << std::endl;
 	}
+}
+
+void CoplanarRelationshipTracker::setCoplanarMassZoneBoxType(MassZoneBoxType in_massZoneBoxType)
+{
+	coplanarComparisonBoxType = in_massZoneBoxType;
 }

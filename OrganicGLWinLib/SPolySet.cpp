@@ -196,6 +196,9 @@ void SPolySet::configurePolysWithoutNormalCalcs()
 
 void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 {
+	// set the mode in the fusion machine.
+	fusionMachine.setMassZoneMode(in_massZoneBoxType);
+
 	// apply any debug options to existing SPolys.
 	applyDebugOptionsToSpecificSPolys();
 

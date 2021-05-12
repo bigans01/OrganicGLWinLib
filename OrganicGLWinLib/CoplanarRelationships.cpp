@@ -7,6 +7,11 @@ void CoplanarRelationships::setTrackedPolyData(int in_trackedPolyID, SPoly in_tr
 	trackedSPoly = in_trackedSPoly;
 }
 
+void CoplanarRelationships::setCoplanarRelationshipBoxType(MassZoneBoxType in_massZoneBoxType)
+{
+	relationshipBoxType = in_massZoneBoxType;
+}
+
 void CoplanarRelationships::insertRelationship(int in_relatedSPolyID, SPoly in_relatedSPolyRef)
 {
 	relationshipMap.insertSPolyRef(in_relatedSPolyID, in_relatedSPolyRef);
@@ -29,16 +34,9 @@ DebugOptionSet CoplanarRelationships::acquireDOSForSpecificTrackedSTriangle(int 
 	return returnSet;
 }
 
-bool CoplanarRelationships::performCuttingSequenceTest()
+bool CoplanarRelationships::performCuttingSequenceTest(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck)
 {
 	bool didSPolySurvive = true;
-
-	// ########################################### NEW METHOD, to replace below:
-	//std::cout << "#######################################################" << std::endl;
-	//std::cout << "#######################################################" << std::endl;
-	//std::cout << "#######################################################" << std::endl;
-	//std::cout << "############## BEGIN NEW METHOD TEST for OrganicCore. " << std::endl;
-	//std::cout << "############## Number of STriangles in trackedCopy to analyze: " << trackedSPoly.triangles.size();
 	std::cout << "(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID " << trackedPolyID << std::endl;
 
 	relationshipsLogger.log("(CoplanarRelationships): #######################################################", "\n");
@@ -47,12 +45,32 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	relationshipsLogger.log("(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID ", trackedPolyID, ".", "\n");
 	relationshipsLogger.log("(CoplanarRelationships): ||||| Number of STriangles that will be tested is: ", trackedSPoly.triangles.size(), "\n");
 
+	CuttingSequenceRunStatus primaryRunStatus = runPrimaryCuttingSequenceMethod();
+	if (primaryRunStatus.wasRunErrorFree == true)
+	{
+		didSPolySurvive = primaryRunStatus.sPolySurvived;
+	}
+	else if (primaryRunStatus.wasRunErrorFree == false)
+	{
+		std::cout << "(CoplanarRelationships): Primary method of cutting sequence failed; will switch to secondary method (rasterization). " << std::endl;
+		runSecondaryCuttingSequenceMethod(in_quatRotationManager, in_pointTranslationCheck);
+		int waitVal = 3;
+		std::cin >> waitVal;
+	}
+	return didSPolySurvive;
+}
+
+CuttingSequenceRunStatus CoplanarRelationships::runPrimaryCuttingSequenceMethod()
+{
 	CuttingTriangleManager cuttingManager;
+	CuttingSequenceRunStatus currentRunStatus;
 	// load all STriangles that aren't in the tracked copy, into the cuttingManager.
 	auto relatedSPolysToUseForCuttingBegin = relationshipMap.refMap.begin();
 	auto relatedSPolysToUseForCuttingEnd = relationshipMap.refMap.end();
 	for (; relatedSPolysToUseForCuttingBegin != relatedSPolysToUseForCuttingEnd; relatedSPolysToUseForCuttingBegin++)
 	{
+		std::cout << "Related SPoly ID -----> " << relatedSPolysToUseForCuttingBegin->first << std::endl;
+
 		auto currentSTrianglesBegin = relatedSPolysToUseForCuttingBegin->second.triangles.begin();
 		auto currentSTrianglesEnd = relatedSPolysToUseForCuttingBegin->second.triangles.end();
 		for (; currentSTrianglesBegin != currentSTrianglesEnd; currentSTrianglesBegin++)
@@ -100,8 +118,16 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 		cutter.setCuttingTriangleDOSMap(specificTrackedSPolyCutterCuttingDOS);
 
 		cutter.setCuttingParameters(trackedCopySTrianglesBegin->second, &cuttingManager);
-		sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
-
+		currentRunStatus = cutter.runCuttingSequence();
+		if (currentRunStatus.wasRunErrorFree == true)
+		{
+			//sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = cutter.runCuttingSequence();
+			sTriangleDestructionTrackerMap[trackedCopySTrianglesBegin->first] = currentRunStatus.wasTriangleDestroyed;
+		}
+		else if (currentRunStatus.wasRunErrorFree == false)
+		{
+			break;
+		}
 		//std::cout << "::::::::::>>>>>>>>>>>> Finished STriangleCutter attempt for STriangle with ID " << trackedCopySTrianglesBegin->first << std::endl;
 		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
 		//std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << std::endl;
@@ -117,31 +143,34 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 
 	// now, check if each destruction flag in sTriangleDestructionTrackerMap was set to TRUE. If this is the case, it means
 	// all STriangles were completely destroyed, which means the SPoly itself was completely destroyed.
-	int destroyedSTriangleCount = 0;
-	auto destructionMapBegin = sTriangleDestructionTrackerMap.begin();
-	auto destructionMapEnd = sTriangleDestructionTrackerMap.end();
-	for (; destructionMapBegin != destructionMapEnd; destructionMapBegin++)
+	if (currentRunStatus.wasRunErrorFree == true)
 	{
-		if (destructionMapBegin->second == true)
+		int destroyedSTriangleCount = 0;
+		auto destructionMapBegin = sTriangleDestructionTrackerMap.begin();
+		auto destructionMapEnd = sTriangleDestructionTrackerMap.end();
+		for (; destructionMapBegin != destructionMapEnd; destructionMapBegin++)
 		{
-			destroyedSTriangleCount++;
+			if (destructionMapBegin->second == true)
+			{
+				destroyedSTriangleCount++;
+			}
+		}
+		if (destroyedSTriangleCount == sTriangleDestructionTrackerMap.size())
+		{
+			//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+			//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+			//std::cout << "||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. " << std::endl;
+			//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+			//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
+			relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): |||||||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. ", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+			relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
+			//didSPolySurvive = false;
+			currentRunStatus.sPolySurvived = false;
 		}
 	}
-	if (destroyedSTriangleCount == sTriangleDestructionTrackerMap.size())
-	{
-		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		//std::cout << "||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. " << std::endl;
-		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		//std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| " << std::endl;
-		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
-		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
-		relationshipsLogger.log("(CoplanarRelationships): |||||||||||||||||||||||||||||||||||| NOTICE, SPoly was completely destroyed. ", "\n");
-		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
-		relationshipsLogger.log("(CoplanarRelationships): ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| ", "\n");
-		didSPolySurvive = false;
-	}
-
 	//std::cout << "############## END NEW METHOD TEST for OrganicCore. " << std::endl;
 	//std::cout << "#######################################################" << std::endl;
 	//std::cout << "#######################################################" << std::endl;
@@ -154,7 +183,29 @@ bool CoplanarRelationships::performCuttingSequenceTest()
 	relationshipsLogger.log("(CoplanarRelationships): #######################################################", trackedPolyID, "\n");
 	relationshipsLogger.waitForDebugInput();
 
-	return didSPolySurvive;
+	return currentRunStatus;
+}
+
+CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMethod(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck)
+{
+	CuttingSequenceRunStatus returnStatus;
+	// apply rotate to original position from in_quatRotationManager
+	in_quatRotationManager->rotateToOriginalPosition();
+
+	// apply any translation
+	if (in_pointTranslationCheck->requiresTranslation == 1)
+	{
+		in_quatRotationManager->rotationpointsRefVector->applyTranslation(in_pointTranslationCheck->getReverseTranslationValue());
+	}
+
+	//trackedSPoly.printPoints();
+	//std::cout << "!!! Tracked SPoly empty normal: " << trackedSPoly.polyEmptyNormal.x << ", " << trackedSPoly.polyEmptyNormal.y << ", " << trackedSPoly.polyEmptyNormal.z << std::endl;
+
+	// use a QM to rotate all points such that their Z-values are on (or near) the same Z-plane.
+
+	// scale the points up/down if needed, based off of relationshipBoxType.
+
+	return returnStatus;
 }
 
 void CoplanarRelationships::applyCoplanarRelationshipDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef)
@@ -224,7 +275,7 @@ bool CoplanarRelationships::rotateToXYPlaneAndRunCuttingSequenceTests()
 	int someVal = 3;
 	std::cin >> someVal;
 	*/
-	bool didSPolyPassCuttingSequenceTests = performCuttingSequenceTest();		
+	bool didSPolyPassCuttingSequenceTests = performCuttingSequenceTest(&rotationManager, &pointTranslator);		
 	/*
 
 	//||||||||||||||||||||||||||||||||||||||||||||||| Flagged as deprecated, on 2/25/2021, replaced by functionality of the 

@@ -229,6 +229,7 @@
     <ClInclude Include="CuttableTriangle.h" />
     <ClInclude Include="CuttableTriangleContainer.h" />
     <ClInclude Include="CuttableTriangleLine.h" />
+    <ClInclude Include="CuttingSequenceRunStatus.h" />
     <ClInclude Include="CuttingTriangle.h" />
     <ClInclude Include="CuttingTriangleLine.h" />
     <ClInclude Include="CuttingTriangleManager.h" />

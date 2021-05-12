@@ -19,6 +19,12 @@ void CoplanarFusionMachine::setCoplanarFusionMachineDebugLevel(PolyDebugLevel in
 	coplanarFusionMachineLogger.setDebugLevel(in_debugLevel);
 }
 
+void CoplanarFusionMachine::setMassZoneMode(MassZoneBoxType in_massZoneBoxType)
+{
+	oldSetTracker.setCoplanarMassZoneBoxType(in_massZoneBoxType);
+	newSetTracker.setCoplanarMassZoneBoxType(in_massZoneBoxType);
+}
+
 void CoplanarFusionMachine::fmInsertDOForSpecificTrackedSPoly(int in_trackedSPolyID, DebugOption in_debugOption)
 {
 	fushionMachineRelationshipDebugFlags[in_trackedSPolyID].handleSpecificTrackedSPolyDebugOption(in_debugOption);

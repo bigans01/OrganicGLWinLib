@@ -32,6 +32,21 @@ void CoplanarAreaRasterizer::insertCuttableTriangleMass(glm::vec3 in_point0, glm
 	}
 }
 
+void CoplanarAreaRasterizer::printCuttableLineScanAtIndex(int in_index)
+{
+	std::cout << " Current cuttable scan line, at elevation: " << in_index << std::endl;
+	std::cout << "A: (" << cuttableHorizontalScanLineRegister[in_index].locationA.x << ", " << cuttableHorizontalScanLineRegister[in_index].locationA.y << ") " << std::endl;
+	std::cout << "B: (" << cuttableHorizontalScanLineRegister[in_index].locationB.x << ", " << cuttableHorizontalScanLineRegister[in_index].locationB.y << ") " << std::endl;
+
+}
+
+void CoplanarAreaRasterizer::printCuttingLineScanAtIndex(int in_index)
+{
+	std::cout << " Current cutting scan line, at elevation: " << in_index << std::endl;
+	std::cout << "A: (" << cuttingHorizontalScanLineRegister[in_index].locationA.x << ", " << cuttingHorizontalScanLineRegister[in_index].locationA.y << ") " << std::endl;
+	std::cout << "B: (" << cuttingHorizontalScanLineRegister[in_index].locationB.x << ", " << cuttingHorizontalScanLineRegister[in_index].locationB.y << ") " << std::endl;
+}
+
 void CoplanarAreaRasterizer::runScanWithCurrentCuttableTriangle()
 {
 	//std::cout << "!!! Running scan with cuttable X register lines..." << std::endl;
@@ -53,22 +68,114 @@ void CoplanarAreaRasterizer::runScanWithCurrentCuttableTriangle()
 
 			}
 		}
+		cuttableHorizontalScanLineRegister[y].reset();
 	}
+}
+
+void CoplanarAreaRasterizer::insertCuttingTriangleMass(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2)
+{
+	TileLocation point0Location = determinePointTileLocation(in_point0);
+	TileLocation point1Location = determinePointTileLocation(in_point1);
+	TileLocation point2Location = determinePointTileLocation(in_point2);
+
+	BrasenhamLineData brasenhamLines[3];
+	brasenhamLines[0] = BrasenhamLineData(point0Location, point1Location);
+	brasenhamLines[1] = BrasenhamLineData(point1Location, point2Location);
+	brasenhamLines[2] = BrasenhamLineData(point2Location, point0Location);
+
+	// see Wikipedia article on Brasenham's algorithm: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+	// analyze each line to determine which function to call
+	for (int x = 0; x < 3; x++)
+	{
+		//std::cout << "...............Running plot for line: " << x << std::endl;
+		BrasenhamLineData currentLine = brasenhamLines[x];
+		//std::cout << "...............Ended Running plot for line: " << x << std::endl;
+		runLinePlotting(currentLine, RasterizedMassType::CUTTING);
+	}
+}
+
+void CoplanarAreaRasterizer::runScanWithCurrentCuttingTriangle()
+{
+	for (int y = 0; y < (numberOfTilesPerDimension); y++)
+	{
+		if (cuttingHorizontalScanLineRegister[y].wasSecondLocationInserted == true)
+		{
+			// only do it if the x values aren't the same.
+			if (cuttingHorizontalScanLineRegister[y].locationA.x != cuttingHorizontalScanLineRegister[y].locationB.x)
+			{
+				int minVal = std::min(cuttingHorizontalScanLineRegister[y].locationA.x, cuttingHorizontalScanLineRegister[y].locationB.x);
+				int maxVal = std::max(cuttingHorizontalScanLineRegister[y].locationA.x, cuttingHorizontalScanLineRegister[y].locationB.x);
+				for (int c = minVal; c < maxVal + 1; c++)
+				{
+					TileLocation currentTile(c, y);
+					int currentIndex = determineTileLocationArrayIndex(currentTile);
+					rasterizationTileGrid[currentIndex].cuttingMassFlag = true;
+				}
+
+			}
+		}
+		cuttingHorizontalScanLineRegister[y].reset();
+	}
+}
+
+float CoplanarAreaRasterizer::getRemainingCuttableAreaPercentage()
+{
+	bool wasConsumed = false;
+
+	// first pass, set cuttableMassFlag to false if cuttingMassFlag was true
+	for (int x = 0; x < numberOfTilesPerDimension*numberOfTilesPerDimension; x++)
+	{
+		if (rasterizationTileGrid[x].cuttingMassFlag == true)
+		{
+			rasterizationTileGrid[x].cuttableMassFlag = false;
+		}
+	}
+
+	// second pass, check for any cuttableMassFlag that is set to true; break upon first encounter. 
+	bool foundRemainingMass = false;
+	int remainingMassCount = 0;
+	for (int x = 0; x < numberOfTilesPerDimension*numberOfTilesPerDimension; x++)
+	{
+		if (rasterizationTileGrid[x].cuttableMassFlag == true)
+		{
+			//std::cout << "!! Triangle retains some mass, shouldn't be completely destroyed..." << std::endl;
+			foundRemainingMass = true;
+			//break;
+			remainingMassCount++;
+		}
+	}
+
+	std::cout << "!!! Original number of cuttable tiles: " << cuttableCounter << std::endl;
+	std::cout << "!!! Total tiles with remaining mass: " << remainingMassCount << std::endl;
+	float remainingMassPercentage = float(float(remainingMassCount) / float(cuttableCounter));
+	std::cout << "!!! <> Remaining mass percentage is: " << remainingMassPercentage << std::endl;
+
+	if (foundRemainingMass == false)
+	{
+		std::cout << "No mass found; triangle was entirely consumed. " << std::endl;
+		wasConsumed = true;
+	}
+
+	return remainingMassPercentage;
 }
 
 void CoplanarAreaRasterizer::runLinePlotting(BrasenhamLineData in_brasenhamLine, RasterizedMassType in_massType)
 {
+	//std::cout << "!!! Running line: (" << in_brasenhamLine.x0 << ", " << in_brasenhamLine.y0 << ") -> (" << in_brasenhamLine.x1 << ", " << in_brasenhamLine.y1 << ")" << std::endl;
+
 	if (abs(in_brasenhamLine.y1 - in_brasenhamLine.y0) < abs(in_brasenhamLine.x1 - in_brasenhamLine.x0))
 	{
 		if (in_brasenhamLine.x0 > in_brasenhamLine.x1)
 		{
 			// low, but swapped
+			//std::cout << ">>> running low, swapped. " << std::endl;
 			in_brasenhamLine.swapLine();
 			plotLineLow(in_brasenhamLine, in_massType);
 		}
 		else
 		{
 			// low
+			//std::cout << ">>> running low, no swap. " << std::endl;
 			plotLineLow(in_brasenhamLine, in_massType);
 		}
 	}
@@ -77,11 +184,14 @@ void CoplanarAreaRasterizer::runLinePlotting(BrasenhamLineData in_brasenhamLine,
 		if (in_brasenhamLine.y0 > in_brasenhamLine.y1)
 		{
 			// high, but swapped
+			//std::cout << ">>> running high, swapped. " << std::endl;
 			in_brasenhamLine.swapLine();
 			plotLineHigh(in_brasenhamLine, in_massType);
 		}
 		else
 		{
+			//std::cout << ">>> running high, no swap. " << std::endl;
+			//std::cout << ":::: calling high, no swap. " << std::endl;
 			// high
 			plotLineHigh(in_brasenhamLine, in_massType);
 		}
@@ -90,6 +200,8 @@ void CoplanarAreaRasterizer::runLinePlotting(BrasenhamLineData in_brasenhamLine,
 
 void CoplanarAreaRasterizer::plotLineLow(BrasenhamLineData in_brasenhamLine, RasterizedMassType in_massType)
 {
+	bool specialDebugFlag = false;
+
 	int dx = in_brasenhamLine.x1 - in_brasenhamLine.x0;
 	int dy = in_brasenhamLine.y1 - in_brasenhamLine.y0;
 	int yi = 1;		// represents the y direction, can be 1 or -1
@@ -100,25 +212,51 @@ void CoplanarAreaRasterizer::plotLineLow(BrasenhamLineData in_brasenhamLine, Ras
 	}
 	int D = (2 * dy) - dx;
 	int y = in_brasenhamLine.y0;
+	int previous_x = in_brasenhamLine.x0;
 	for (int x = in_brasenhamLine.x0; x < in_brasenhamLine.x1 + 1; x++)		
 	{
 		// update tile
 		TileLocation currentLocation(x, y);
-		updateTile(currentLocation, in_massType);
+		updateTile(currentLocation, in_massType, specialDebugFlag);
 		if (D > 0)
 		{
+			// be sure to fill previous tile location
+
+			int previous_y = y;
 			y = y + yi;
 			D = D + (2 * (dy - dx));
+
+			TileLocation previousTileLocation(previous_x, y);
+			updateTile(previousTileLocation, in_massType, specialDebugFlag);
+
+			if (x < (numberOfTilesPerDimension - 1))
+			{
+				TileLocation previousTileLocation2(x+1, previous_y);
+				updateTile(previousTileLocation2, in_massType, specialDebugFlag);
+			}
 		}
 		else
 		{
 			D = D + 2 * dy;
 		}
+		previous_x = x;
 	}
 }
 
 void CoplanarAreaRasterizer::plotLineHigh(BrasenhamLineData in_brasenhamLine, RasterizedMassType in_massType)
 {
+	bool specialDebug = false;
+	bool specialFlagSecondary = false;
+	if
+	(
+		(in_brasenhamLine.x0 == 0)
+		&&
+		(in_brasenhamLine.y0 == 43)
+	)
+	{
+		//specialDebug = true;
+	}
+
 	int dx = in_brasenhamLine.x1 - in_brasenhamLine.x0;
 	int dy = in_brasenhamLine.y1 - in_brasenhamLine.y0;
 	int xi = 1;
@@ -129,35 +267,70 @@ void CoplanarAreaRasterizer::plotLineHigh(BrasenhamLineData in_brasenhamLine, Ra
 	}
 	int D = (2 * dx) - dy;
 	int x = in_brasenhamLine.x0;
+	int previous_y = in_brasenhamLine.y0;
 	for (int y = in_brasenhamLine.y0; y < in_brasenhamLine.y1 + 1; y++)
 	{
+		specialFlagSecondary = false;
+		if (specialDebug == true && (y == 44))
+		{
+			specialFlagSecondary = true;
+			std::cout << "High plot: location (" << x << ", " << y << ") | scan line values at this location: (";
+			if (in_massType == RasterizedMassType::CUTTABLE)
+			{
+			}
+			else
+			{
+				std::cout << cuttingHorizontalScanLineRegister[y].locationA.x << ", " << cuttingHorizontalScanLineRegister[y].locationA.y << ") | (";
+				std::cout << cuttingHorizontalScanLineRegister[y].locationB.x << ", " << cuttingHorizontalScanLineRegister[y].locationB.y << ") |";
+			}
+		}
 		TileLocation currentLocation(x, y);
-		updateTile(currentLocation, in_massType);
+		updateTile(currentLocation, in_massType, specialDebug);
 		if (D > 0)
 		{
+			// be sure to fill previous tile location
+			//std::cout << "Shift detected..." << std::endl;
+
+			int previous_x = x;
 			x = x + xi;
 			D = D + (2 * (dx - dy));
+
+			//std::cout << "new x: " << x << std::endl;
+			//std::cout << "previous y: " << previous_y << std::endl;
+
+			TileLocation previousTileLocation(x, previous_y);
+			updateTile(previousTileLocation, in_massType, specialFlagSecondary);
+
+			//std::cout << "previous X: " << previous_x << std::endl;
+			//std::cout << "current y: " << y << std::endl;
+			
+			if (y < (numberOfTilesPerDimension - 1))
+			{
+					TileLocation previousTileLocation2(previous_x, y+1);
+					updateTile(previousTileLocation2, in_massType, specialFlagSecondary);
+			}
 		}
 		else
 		{
 			D = D + 2 * dx;
 		}
+		previous_y = y;
 	}
 }
 
-void CoplanarAreaRasterizer::updateTile(TileLocation in_tileLocation, RasterizedMassType in_massType)
+void CoplanarAreaRasterizer::updateTile(TileLocation in_tileLocation, RasterizedMassType in_massType, bool in_debugFlag)
 {
 	int arrayIndex = determineTileLocationArrayIndex(in_tileLocation);
 	if (in_massType == RasterizedMassType::CUTTABLE)
 	{
 		rasterizationTileGrid[arrayIndex].cuttableMassFlag = true;
-		cuttableHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation);
+		cuttableHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation, in_debugFlag);
 
 	}
 	else if (in_massType == RasterizedMassType::CUTTING)
 	{
 		rasterizationTileGrid[arrayIndex].cuttingMassFlag = true;
-		cuttingHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation);
+		cuttingHorizontalScanLineRegister[in_tileLocation.y].insertLocation(in_tileLocation, in_debugFlag);
 	}
 }
 
@@ -187,6 +360,19 @@ void CoplanarAreaRasterizer::printRemainingCuttableTiles()
 	}
 }
 
+int CoplanarAreaRasterizer::getCountOfTilesWithCuttableArea()
+{
+	cuttableCounter = 0;
+	for (int x = 0; x < (numberOfTilesPerDimension*numberOfTilesPerDimension); x++)
+	{
+		if (rasterizationTileGrid[x].cuttableMassFlag == true)
+		{
+			cuttableCounter++;
+		}
+	}
+	//std::cout << "Remaining tiles with cuttable area: " << cuttableCounter << std::endl;
+	return cuttableCounter;
+}
 
 void CoplanarAreaRasterizer::printCuttableXRegister()
 {

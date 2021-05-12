@@ -16,6 +16,8 @@
 #include "CoplanarRelationshipDebugFlags.h"
 #include "STriangleCutter.h"
 #include "DebugOptionSet.h"
+#include "CuttingSequenceRunStatus.h"
+#include "MassZoneBoxType.h"
 
 class CoplanarRelationships
 {
@@ -44,14 +46,20 @@ class CoplanarRelationships
 		PolyDebugLevel relationshipsDebugLevel = PolyDebugLevel::NONE;
 		PolyDebugLevel dlPrintBorderLines = PolyDebugLevel::NONE;	// for printing out the border lines in the tracked and related SPolys.
 		PolyLogger relationshipsLogger;
+		MassZoneBoxType relationshipBoxType = MassZoneBoxType::NOVAL;
 		std::map<int, DebugOptionSet> specificTrackedSTriangleDOSForCutter;
 		std::map<int, DebugOptionSet> specificTrackedSPolyCutterCuttingDOS;
 
 		void setTrackedPolyData(int in_trackedPolyID, SPoly in_trackedSPolyRef);
+		void setCoplanarRelationshipBoxType(MassZoneBoxType in_massZoneBoxType);
 		void insertRelationship(int in_sPolyIndex, SPoly in_sPolyRef);
 		bool rotateToXYPlaneAndRunCuttingSequenceTests();
 		void setLoggerDebugLevel(PolyDebugLevel in_polyDebugLevel);
-		bool performCuttingSequenceTest();
+		bool performCuttingSequenceTest(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck);
+
+		CuttingSequenceRunStatus runPrimaryCuttingSequenceMethod();
+		CuttingSequenceRunStatus runSecondaryCuttingSequenceMethod(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck);
+
 		void applyCoplanarRelationshipDebugOptions(CoplanarRelationshipDebugFlags* in_coplanarRelationshipsDebugFlagsRef);
 		DebugOptionSet acquireDOSForSpecificTrackedSTriangle(int in_sTriangleID);
 

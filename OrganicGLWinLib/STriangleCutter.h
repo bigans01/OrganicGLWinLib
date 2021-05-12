@@ -11,12 +11,13 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "DebugOptionSet.h"
+#include "CuttingSequenceRunStatus.h"
 
 class STriangleCutter
 {
 	public:
 		void setCuttingParameters(STriangle in_sTriangle, CuttingTriangleManager* in_cuttingTriangleManagerRef);
-		bool runCuttingSequence();
+		CuttingSequenceRunStatus runCuttingSequence();
 		void setCuttableDOS(DebugOptionSet in_debugOptionSet);
 		void setDebugOptionForSpecificCuttingTriangle(int in_cuttingTriangleID, DebugOption in_debugOption);
 		void setCuttingTriangleDOSMap(std::map<int, DebugOptionSet> in_debugOptionSetMap);
