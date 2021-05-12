@@ -210,3 +210,9 @@ void QuatUtils::rotateSPolyToXYPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
 	QMVoidAlignTriangleToXYPlane alignMachine;
 	alignMachine.solve(in_scalingOpsRef, in_quatRotationPointsRef);
 }
+
+void QuatUtils::rotatePointsForRasterization(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+{
+	QMVoidTranslatePointsForRasterization rasterizationAlignment;
+	rasterizationAlignment.solve(in_quatRotationPointsRef, in_polyDebugLevel);
+}

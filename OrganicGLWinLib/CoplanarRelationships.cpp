@@ -188,6 +188,7 @@ CuttingSequenceRunStatus CoplanarRelationships::runPrimaryCuttingSequenceMethod(
 
 CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMethod(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck)
 {
+	auto secondaryStart = std::chrono::high_resolution_clock::now();		// optional, for performance testing only	
 	CuttingSequenceRunStatus returnStatus;
 	// apply rotate to original position from in_quatRotationManager
 	in_quatRotationManager->rotateToOriginalPosition();
@@ -198,13 +199,39 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 		in_quatRotationManager->rotationpointsRefVector->applyTranslation(in_pointTranslationCheck->getReverseTranslationValue());
 	}
 
-	//trackedSPoly.printPoints();
+	// before adding the normal and sending to the QM, make sure all points are translated by the center of the selected MassZoneBoxType.
+	glm::vec3 currentZoneBoxCenter;
+	switch (relationshipBoxType)
+	{
+		case MassZoneBoxType::BLOCK: { currentZoneBoxCenter = glm::vec3(0.5, 0.5, 0.5); break; }
+		case MassZoneBoxType::ENCLAVE: { currentZoneBoxCenter = glm::vec3(2, 2, 2); break; }
+		case MassZoneBoxType::COLLECTION: { currentZoneBoxCenter = glm::vec3(16, 16, 16); break; }
+	}
+	PointTranslationCheck boxCenterTranslator;
+	boxCenterTranslator.performCheck(currentZoneBoxCenter);
+	coplanarPoints.applyTranslation(boxCenterTranslator.getTranslationValue());
+
+	// now, push back the empty normal into the quat rotation points
+	in_quatRotationManager->rotationpointsRefVector->insertPointRefs(&trackedSPoly.polyEmptyNormal);
 	//std::cout << "!!! Tracked SPoly empty normal: " << trackedSPoly.polyEmptyNormal.x << ", " << trackedSPoly.polyEmptyNormal.y << ", " << trackedSPoly.polyEmptyNormal.z << std::endl;
 
 	// use a QM to rotate all points such that their Z-values are on (or near) the same Z-plane.
+	QuatUtils::rotatePointsForRasterization(in_quatRotationManager->rotationpointsRefVector, PolyDebugLevel::NONE);
+
+	// remove the normal we just inserted, as it should be removed before we re-use this vector
+	in_quatRotationManager->rotationpointsRefVector->eraseLastElement();
+
+	// next: downscale the points in the points ref vector, so that the X and Y values of the points fit within the boundary.
+	// then, run the CoplanarAreaRasterizer (via new class?)
+
+	
+	//std::cout << "++++++++++++ Printing points for tracked SPoly, post rasterization QM: " << std::endl;
+	//trackedSPoly.printPoints();
 
 	// scale the points up/down if needed, based off of relationshipBoxType.
-
+	auto secondaryEnd = std::chrono::high_resolution_clock::now();		// optional, for performance testing only	
+	std::chrono::duration<double> secondaryElapsed = secondaryEnd - secondaryStart;
+	std::cout << "(CoplanarRelationships): secondary option elapsed time: " << secondaryElapsed.count() << std::endl;
 	return returnStatus;
 }
 

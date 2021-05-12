@@ -43,8 +43,10 @@ class QuatRotationPoints
 		void clearPoints();
 		void roundAllPointsToHundredths();
 		int getSize();
+		void eraseLastElement();
 		glm::vec3 getFirstPoint();
 		glm::vec3 getLastPoint();
+		glm::vec3* getLastPointRef();
 		glm::vec3 getSecondPoint();
 		glm::vec3* getFirstPointRef();
 		glm::vec3* getSecondPointRef();

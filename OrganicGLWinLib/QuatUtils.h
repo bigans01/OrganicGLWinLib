@@ -21,6 +21,7 @@
 #include "QMFindPointToMassRelationship.h"
 #include "SPolyScalingOps.h"
 #include "QMVoidAlignTriangleToXYPlane.h"
+#include "QMVoidTranslatePointsForRasterization.h"
 
 class QuatUtils
 {
@@ -82,6 +83,7 @@ class QuatUtils
 										);
 		static void rotateSPolyToXYPlanAndRecord(SPolyScalingOps* in_scalingOpsRef,
 												 QuatRotationPoints* in_quatRotationPointsRef);
+		static void rotatePointsForRasterization(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);
 };
 
 #endif
