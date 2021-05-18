@@ -277,7 +277,7 @@ void SPolyFracturer::printPointMetaData()
 {
 	if (polyRef->debugFlag == 1)
 	{
-		auto pointsStart = quatPoints.getPointsRefVectorBeginIteratior();
+		auto pointsStart = quatPoints.getPointsVectorBegin();
 
 		// print the points
 		std::cout << (*pointsStart)->x << std::endl;

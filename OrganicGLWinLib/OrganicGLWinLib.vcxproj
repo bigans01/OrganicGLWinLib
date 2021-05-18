@@ -282,6 +282,7 @@
     <ClInclude Include="ImGuiInputText.h" />
     <ClInclude Include="QMVoidAlignTriangleToXYPlane.h" />
     <ClInclude Include="QMVoidTranslatePointsForRasterization.h" />
+    <ClInclude Include="RasterizationPointAdjuster.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
@@ -591,6 +592,7 @@
     <ClCompile Include="QuatRotationPoints.cpp" />
     <ClCompile Include="QuatRotationRecord.cpp" />
     <ClCompile Include="QuatUtils.cpp" />
+    <ClCompile Include="RasterizationPointAdjuster.cpp" />
     <ClCompile Include="RaycastIntersectionTest.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />

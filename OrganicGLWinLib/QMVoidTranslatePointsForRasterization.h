@@ -18,7 +18,7 @@ class QMVoidTranslatePointsForRasterization	: public QMVoidBase
 		std::stack<QuatRotationRecord> rotationRecords;
 
 		void rotateEmptyNormalAroundXToYZero();
-		float findRotationRadiansForGettingToYZeroThroughX(glm::vec3 in_vec3);
+		void findRotationRadiansForGettingToYZeroThroughX(glm::vec3 in_vec3);
 
 		void rotateEmptyNormalAroundYToPosZ();
 		float findRotationRadiansForGettingToPosZThroughY(glm::vec3 in_vec3);

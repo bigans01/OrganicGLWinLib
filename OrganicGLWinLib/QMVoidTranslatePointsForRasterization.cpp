@@ -65,7 +65,7 @@ void QMVoidTranslatePointsForRasterization::rotateEmptyNormalAroundXToYZero()
 	findRotationRadiansForGettingToYZeroThroughX(currentNormalValue);
 }
 
-float QMVoidTranslatePointsForRasterization::findRotationRadiansForGettingToYZeroThroughX(glm::vec3 in_vec3)
+void QMVoidTranslatePointsForRasterization::findRotationRadiansForGettingToYZeroThroughX(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnX = 0.0f;
 	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
@@ -93,6 +93,8 @@ float QMVoidTranslatePointsForRasterization::findRotationRadiansForGettingToYZer
 	//*pointBRef = originalQuat * *pointBRef;	
 	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 	rotationRecords.push(s1record);
+
+
 }
 
 void QMVoidTranslatePointsForRasterization::rotateEmptyNormalAroundYToPosZ()

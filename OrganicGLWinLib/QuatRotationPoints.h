@@ -31,7 +31,9 @@ class QuatRotationPoints
 			//}
 		}
 		void insertPointRefs() {};
-		std::vector<glm::vec3*>::iterator getPointsRefVectorBeginIteratior();
+		//std::vector<glm::vec3*>::iterator getPointsVectorBegin();
+		std::vector<glm::vec3*>::iterator getPointsVectorBegin();
+		std::vector<glm::vec3*>::iterator getPointsVectorEnd();
 
 		void applyQuaternion(glm::quat in_quat);
 		void applyTranslation(glm::vec3 in_translation);

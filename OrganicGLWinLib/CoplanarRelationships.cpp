@@ -221,7 +221,11 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 	// remove the normal we just inserted, as it should be removed before we re-use this vector
 	in_quatRotationManager->rotationpointsRefVector->eraseLastElement();
 
-	// next: downscale the points in the points ref vector, so that the X and Y values of the points fit within the boundary.
+	// next: downscale the points in the points ref vector, so that the X and Y values of the points fit within the boundary; use
+	// an instance of RasterizationPointAdjuster to do this.
+
+
+
 	// then, run the CoplanarAreaRasterizer (via new class?)
 
 	
