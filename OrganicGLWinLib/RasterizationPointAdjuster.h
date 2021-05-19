@@ -42,6 +42,8 @@ class RasterizationPointAdjuster
 					break; 
 				}
 			};
+
+			runFitScans();
 		};
 	private:
 		QuatRotationPoints* pointsRef = nullptr;
