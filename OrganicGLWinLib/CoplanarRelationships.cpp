@@ -45,6 +45,7 @@ bool CoplanarRelationships::performCuttingSequenceTest(QuatRotationManager* in_q
 	relationshipsLogger.log("(CoplanarRelationships): ||||| Beginning call of performCuttingSequenceTest, for the tracked SPoly having ID ", trackedPolyID, ".", "\n");
 	relationshipsLogger.log("(CoplanarRelationships): ||||| Number of STriangles that will be tested is: ", trackedSPoly.triangles.size(), "\n");
 
+	/*
 	CuttingSequenceRunStatus primaryRunStatus = runPrimaryCuttingSequenceMethod();
 	if (primaryRunStatus.wasRunErrorFree == true)
 	{
@@ -53,10 +54,16 @@ bool CoplanarRelationships::performCuttingSequenceTest(QuatRotationManager* in_q
 	else if (primaryRunStatus.wasRunErrorFree == false)
 	{
 		std::cout << "(CoplanarRelationships): Primary method of cutting sequence failed; will switch to secondary method (rasterization). " << std::endl;
-		runSecondaryCuttingSequenceMethod(in_quatRotationManager, in_pointTranslationCheck);
+		CuttingSequenceRunStatus secondaryRunStatus = runSecondaryCuttingSequenceMethod(in_quatRotationManager, in_pointTranslationCheck);
+		didSPolySurvive = secondaryRunStatus.sPolySurvived;
 		int waitVal = 3;
 		std::cin >> waitVal;
 	}
+	*/
+
+	CuttingSequenceRunStatus secondaryRunStatus = runSecondaryCuttingSequenceMethod(in_quatRotationManager, in_pointTranslationCheck);
+	didSPolySurvive = secondaryRunStatus.sPolySurvived;
+
 	return didSPolySurvive;
 }
 
@@ -188,6 +195,7 @@ CuttingSequenceRunStatus CoplanarRelationships::runPrimaryCuttingSequenceMethod(
 
 CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMethod(QuatRotationManager* in_quatRotationManager, PointTranslationCheck* in_pointTranslationCheck)
 {
+	std::cout << "(CoplanarRelationships): beginning secondary cutting sequence method..." << std::endl;
 	auto secondaryStart = std::chrono::high_resolution_clock::now();		// optional, for performance testing only	
 	CuttingSequenceRunStatus returnStatus;
 	// apply rotate to original position from in_quatRotationManager
@@ -223,8 +231,69 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 
 	// next: downscale the points in the points ref vector, so that the X and Y values of the points fit within the boundary; use
 	// an instance of RasterizationPointAdjuster to do this.
+	RasterizationPointAdjuster adjuster(in_quatRotationManager->rotationpointsRefVector, relationshipBoxType);
 
+	// ***************** prep for the CoplanarAreaRasterizer
+	CoplanarAreaRasterizer rasterizer;
+	float gridDimensionWidth = 0.0f;
+	switch (relationshipBoxType)
+	{
+		case MassZoneBoxType::BLOCK: { gridDimensionWidth = 1.0f; break; }
+		case MassZoneBoxType::ENCLAVE: { gridDimensionWidth = 4.0f; break; }
+		case MassZoneBoxType::COLLECTION: { gridDimensionWidth = 32.0f; break; }
+	}
+	rasterizer.buildGrid(256, gridDimensionWidth);
 
+	// load the cuttable mass
+	auto trackedSPolyTrianglesBegin = trackedSPoly.triangles.begin();
+	auto trackedSPolyTrianglesEnd = trackedSPoly.triangles.end();
+	for (; trackedSPolyTrianglesBegin != trackedSPolyTrianglesEnd; trackedSPolyTrianglesBegin++)
+	{
+		std::cout << "==========> Current tracked SPoly, current STriangle: " << std::endl;
+		trackedSPolyTrianglesBegin->second.printPoints();
+
+		rasterizer.insertCuttableTriangleMass(trackedSPolyTrianglesBegin->second.triangleLines[0].pointA,
+											 trackedSPolyTrianglesBegin->second.triangleLines[1].pointA,
+											 trackedSPolyTrianglesBegin->second.triangleLines[2].pointA);
+		rasterizer.runScanWithCurrentCuttableTriangle();
+	}
+	rasterizer.getCountOfTilesWithCuttableArea();
+
+	// load the cutting mass
+	auto relatedSPolysToUseForCuttingBegin = relationshipMap.refMap.begin();
+	auto relatedSPolysToUseForCuttingEnd = relationshipMap.refMap.end();
+	for (; relatedSPolysToUseForCuttingBegin != relatedSPolysToUseForCuttingEnd; relatedSPolysToUseForCuttingBegin++)
+	{
+		std::cout << "Current related SPoly ID: " << relatedSPolysToUseForCuttingBegin->first  << std::endl;
+		auto currentSTrianglesBegin = relatedSPolysToUseForCuttingBegin->second.triangles.begin();
+		auto currentSTrianglesEnd = relatedSPolysToUseForCuttingBegin->second.triangles.end();
+		for (; currentSTrianglesBegin != currentSTrianglesEnd; currentSTrianglesBegin++)
+		{
+			rasterizer.insertCuttingTriangleMass(currentSTrianglesBegin->second.triangleLines[0].pointA,
+												currentSTrianglesBegin->second.triangleLines[1].pointA,
+												currentSTrianglesBegin->second.triangleLines[2].pointA);
+			rasterizer.runScanWithCurrentCuttingTriangle();
+
+			float currentRemainingPercentage = rasterizer.getRemainingCuttableAreaPercentage();
+			std::cout << "+++Current remaining percentage, after applying this related STriangle: " << currentRemainingPercentage << std::endl;
+		}
+	}
+
+	// now, see the results.
+	float remainingPercentage = rasterizer.getRemainingCuttableAreaPercentage();
+
+	//std::cout << "+++++++ printing points, rasterizer: " << std::endl;
+	//in_quatRotationManager->rotationpointsRefVector->printPoints();
+
+	//rasterizer.printRemainingCuttableTiles();
+	std::cout << "!!!!! Remaining percentage is: " << remainingPercentage << std::endl;
+
+	if (remainingPercentage <= 0.001f)
+	{
+		std::cout << "++Notice: this SPoly will be clipped. " << std::endl;
+		returnStatus.sPolySurvived = false;
+	}
+	
 
 	// then, run the CoplanarAreaRasterizer (via new class?)
 
@@ -236,6 +305,9 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 	auto secondaryEnd = std::chrono::high_resolution_clock::now();		// optional, for performance testing only	
 	std::chrono::duration<double> secondaryElapsed = secondaryEnd - secondaryStart;
 	std::cout << "(CoplanarRelationships): secondary option elapsed time: " << secondaryElapsed.count() << std::endl;
+	std::cout << "(CoplanarRelationships): holding for secondary wait: " << std::endl;
+	int secondaryWait = 3;
+	std::cin >> secondaryWait;
 	return returnStatus;
 }
 

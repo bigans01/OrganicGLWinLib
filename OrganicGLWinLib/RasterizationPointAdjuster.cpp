@@ -5,10 +5,31 @@ void RasterizationPointAdjuster::runFitScans()
 {
 	runFitScanX();
 	runFitScanY();
+}
 
-	std::cout << "++++++++ adjsutment complete; points are: " << std::endl;
-	pointsRef->printPoints();
+void RasterizationPointAdjuster::applyDownsizeFactor()
+{
+	//std::cout << "applying downsize factor, having a value of: " << downsizeFactor << std::endl;
 
+	auto pointsToScaleBegin = pointsRef->getPointsVectorBegin();
+	auto pointsToScaleEnd = pointsRef->getPointsVectorEnd();
+	for (; pointsToScaleBegin != pointsToScaleEnd; pointsToScaleBegin++)
+	{
+		(*pointsToScaleBegin)->x *= downsizeFactor;
+		(*pointsToScaleBegin)->y *= downsizeFactor;
+	}
+}
+
+void RasterizationPointAdjuster::translatePointsBackToRasterizationBox()
+{
+	auto pointsToScaleBegin = pointsRef->getPointsVectorBegin();
+	auto pointsToScaleEnd = pointsRef->getPointsVectorEnd();
+	for (; pointsToScaleBegin != pointsToScaleEnd; pointsToScaleBegin++)
+	{
+		//(*pointsToScaleBegin)->x += rasterizationPlaneCenterPoint.x;
+		//(*pointsToScaleBegin)->y += rasterizationPlaneCenterPoint.y;
+		**pointsToScaleBegin += rasterizationPlaneCenterPoint;
+	}
 }
 	
 void RasterizationPointAdjuster::runFitScanX()
@@ -43,7 +64,7 @@ void RasterizationPointAdjuster::runFitScanX()
 
 	// check if we need to scale, and if we do, find the downsizingScaleValue
 	float downsizingScaleValue = 0.0f;
-	bool isScalingNeeded = false;
+	isScalingNeeded = false;
 
 	// CASE 1: both minBorderActivatedFlag and maxBorderActivatedFlag are true
 
@@ -93,7 +114,7 @@ void RasterizationPointAdjuster::runFitScanX()
 	// if the isScalingNeeded flag is true, it means we need to multiply all X values in each point by the downsizingScaleValue.
 	if (isScalingNeeded == true)
 	{
-		std::cout << "!!! Scaling on X needed..." << std::endl;
+		//std::cout << "!!! Scaling on X needed..." << std::endl;
 
 		// first pass: multiply all X values by downsizingScaleValue
 		auto pointsToScaleBegin = pointsRef->getPointsVectorBegin();
@@ -160,7 +181,7 @@ void RasterizationPointAdjuster::runFitScanY()
 
 	// check if we need to scale, and if we do, find the downsizingScaleValue
 	float downsizingScaleValue = 0.0f;
-	bool isScalingNeeded = false;
+	isScalingNeeded = false;
 
 	// CASE 1: both minBorderActivatedFlag and maxBorderActivatedFlag are true
 
@@ -210,7 +231,7 @@ void RasterizationPointAdjuster::runFitScanY()
 	// if the isScalingNeeded flag is true, it means we need to multiply all X values in each point by the downsizingScaleValue.
 	if (isScalingNeeded == true)
 	{
-		std::cout << "!!! Scaling on Y needed..." << std::endl;
+		//std::cout << "!!! Scaling on Y needed..." << std::endl;
 
 		// first pass: multiply all X values by downsizingScaleValue
 		auto pointsToScaleBegin = pointsRef->getPointsVectorBegin();

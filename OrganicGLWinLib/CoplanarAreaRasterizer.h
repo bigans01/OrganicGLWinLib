@@ -33,6 +33,12 @@ class CoplanarAreaRasterizer
 
 			short x = 0;
 			short y = 0;
+
+			void reset()
+			{
+				x = 0;
+				y = 0;
+			};
 		};
 		TileLocation determinePointTileLocation(glm::vec3 in_point);
 		void printRemainingCuttableTiles();
@@ -158,6 +164,8 @@ class CoplanarAreaRasterizer
 			{
 				wasFirstLocationInserted = false;
 				wasSecondLocationInserted = false;
+				locationA.reset();
+				locationB.reset();
 			}
 		};
 

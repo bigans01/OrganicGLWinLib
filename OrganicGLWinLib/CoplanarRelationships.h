@@ -18,6 +18,8 @@
 #include "DebugOptionSet.h"
 #include "CuttingSequenceRunStatus.h"
 #include "MassZoneBoxType.h"
+#include "RasterizationPointAdjuster.h"
+#include "CoplanarAreaRasterizer.h"
 
 class CoplanarRelationships
 {

@@ -24,37 +24,49 @@ class RasterizationPointAdjuster
 			{
 				case MassZoneBoxType::BLOCK: 
 				{ 
-					rasterizationPlaneCenterPoint = glm::vec3(0.5, 0.5, 0.5); 
+					rasterizationPlaneCenterPoint = glm::vec3(0.5, 0.5, 0); 
 					currentMaxNegPosBorder = maxNegPosBorderBase;
+					downsizeFactor = 0.5f / currentMaxNegPosBorder;
 					break; 
 				}
 				case MassZoneBoxType::ENCLAVE: 
 				{ 
-					rasterizationPlaneCenterPoint = glm::vec3(2, 2, 2); 
+					rasterizationPlaneCenterPoint = glm::vec3(2, 2, 0); 
 					currentMaxNegPosBorder = maxNegPosBorderBase * 4;
+					downsizeFactor = 2 / currentMaxNegPosBorder;
 					break;
 				}
 				
 				case MassZoneBoxType::COLLECTION: 
 				{ 
-					rasterizationPlaneCenterPoint = glm::vec3(16,16,16); 
+					rasterizationPlaneCenterPoint = glm::vec3(16,16,0); 
 					currentMaxNegPosBorder = maxNegPosBorderBase * 32;
+					downsizeFactor = 16 / currentMaxNegPosBorder;
 					break; 
 				}
 			};
 
 			runFitScans();
+			applyDownsizeFactor();
+			translatePointsBackToRasterizationBox();
+
+			//std::cout << "++++++++ adjustment complete; points are: " << std::endl;
+			//pointsRef->printPoints();
 		};
 	private:
 		QuatRotationPoints* pointsRef = nullptr;
 		MassZoneBoxType rasterizationPlaneSize = MassZoneBoxType::NOVAL;
 		glm::vec3 rasterizationPlaneCenterPoint;
-		const float maxNegPosBorderBase = 1.732052 / 2;
-		float currentMaxNegPosBorder = 0.0f;	
+		const float maxNegPosBorderBase = 1.732052f / 2.0f;
+		float currentMaxNegPosBorder = 0.0f;
+		float downsizeFactor = 0.0f;			
+		bool isScalingNeeded = false;
 
 		void runFitScans();
 		void runFitScanX();
 		void runFitScanY();
+		void applyDownsizeFactor();
+		void translatePointsBackToRasterizationBox();
 };
 
 #endif
