@@ -242,7 +242,7 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 		case MassZoneBoxType::ENCLAVE: { gridDimensionWidth = 4.0f; break; }
 		case MassZoneBoxType::COLLECTION: { gridDimensionWidth = 32.0f; break; }
 	}
-	rasterizer.buildGrid(256, gridDimensionWidth);
+	rasterizer.buildGrid(128, gridDimensionWidth);
 
 	// load the cuttable mass
 	auto trackedSPolyTrianglesBegin = trackedSPoly.triangles.begin();

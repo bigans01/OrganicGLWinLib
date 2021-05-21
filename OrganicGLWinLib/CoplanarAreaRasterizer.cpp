@@ -18,6 +18,10 @@ void CoplanarAreaRasterizer::insertCuttableTriangleMass(glm::vec3 in_point0, glm
 	TileLocation point1Location = determinePointTileLocation(in_point1);
 	TileLocation point2Location = determinePointTileLocation(in_point2);
 
+	//std::cout << "(CoplanarAreaRasterizer): cuttable triangle mass, point0Location: (" << point0Location.x << ", " << point0Location.y << ") " << std::endl;
+	//std::cout << "(CoplanarAreaRasterizer): cuttable triangle mass, point1Location: (" << point1Location.x << ", " << point1Location.y << ") " << std::endl;
+	//std::cout << "(CoplanarAreaRasterizer): cuttable triangle mass, point2Location: (" << point2Location.x << ", " << point2Location.y << ") " << std::endl;
+
 	BrasenhamLineData brasenhamLines[3];
 	brasenhamLines[0] = BrasenhamLineData(point0Location, point1Location);
 	brasenhamLines[1] = BrasenhamLineData(point1Location, point2Location);
@@ -30,6 +34,11 @@ void CoplanarAreaRasterizer::insertCuttableTriangleMass(glm::vec3 in_point0, glm
 		BrasenhamLineData currentLine = brasenhamLines[x];
 		runLinePlotting(currentLine, RasterizedMassType::CUTTABLE);
 	}
+
+	//std::cout << "HARDCODED TEST: printing out line data at x = 2: " << std::endl;
+	//printCuttableLineScanAtIndex(2);
+
+	//printRemainingCuttableTiles();
 }
 
 void CoplanarAreaRasterizer::printCuttableLineScanAtIndex(int in_index)
@@ -218,21 +227,29 @@ void CoplanarAreaRasterizer::plotLineLow(BrasenhamLineData in_brasenhamLine, Ras
 		// update tile
 		TileLocation currentLocation(x, y);
 		updateTile(currentLocation, in_massType, specialDebugFlag);
+		//std::cout << "plotLineLow, tile location to insert is: " << currentLocation.x << ", " << currentLocation.y << std::endl;
+
 		if (D > 0)
 		{
 			// be sure to fill previous tile location
-
 			int previous_y = y;
 			y = y + yi;
 			D = D + (2 * (dy - dx));
 
-			TileLocation previousTileLocation(previous_x, y);
-			updateTile(previousTileLocation, in_massType, specialDebugFlag);
-
-			if (x < (numberOfTilesPerDimension - 1))
+			// Line fattening -- can only do these operations if we aren't on the last iteration
+			if (x < in_brasenhamLine.x1)
 			{
-				TileLocation previousTileLocation2(x+1, previous_y);
-				updateTile(previousTileLocation2, in_massType, specialDebugFlag);
+
+				TileLocation previousTileLocation(previous_x, y);
+				updateTile(previousTileLocation, in_massType, specialDebugFlag);
+				//std::cout << "plotLineLow, option #2 insert: " << previousTileLocation.x << ", " << previousTileLocation.y << std::endl;
+
+				if (x < (numberOfTilesPerDimension - 1))
+				{
+					TileLocation previousTileLocation2(x + 1, previous_y);
+					updateTile(previousTileLocation2, in_massType, specialDebugFlag);
+					//std::cout << "plotLineLow, option #3 insert: " << previousTileLocation2.x << ", " << previousTileLocation2.y << std::endl;
+				}
 			}
 		}
 		else
@@ -270,22 +287,10 @@ void CoplanarAreaRasterizer::plotLineHigh(BrasenhamLineData in_brasenhamLine, Ra
 	int previous_y = in_brasenhamLine.y0;
 	for (int y = in_brasenhamLine.y0; y < in_brasenhamLine.y1 + 1; y++)
 	{
-		specialFlagSecondary = false;
-		if (specialDebug == true && (y == 44))
-		{
-			specialFlagSecondary = true;
-			std::cout << "High plot: location (" << x << ", " << y << ") | scan line values at this location: (";
-			if (in_massType == RasterizedMassType::CUTTABLE)
-			{
-			}
-			else
-			{
-				std::cout << cuttingHorizontalScanLineRegister[y].locationA.x << ", " << cuttingHorizontalScanLineRegister[y].locationA.y << ") | (";
-				std::cout << cuttingHorizontalScanLineRegister[y].locationB.x << ", " << cuttingHorizontalScanLineRegister[y].locationB.y << ") |";
-			}
-		}
 		TileLocation currentLocation(x, y);
 		updateTile(currentLocation, in_massType, specialDebug);
+		//std::cout << "plotLineHigh, tile location to insert is: " << currentLocation.x << ", " << currentLocation.y << std::endl;
+
 		if (D > 0)
 		{
 			// be sure to fill previous tile location
@@ -298,16 +303,20 @@ void CoplanarAreaRasterizer::plotLineHigh(BrasenhamLineData in_brasenhamLine, Ra
 			//std::cout << "new x: " << x << std::endl;
 			//std::cout << "previous y: " << previous_y << std::endl;
 
-			TileLocation previousTileLocation(x, previous_y);
-			updateTile(previousTileLocation, in_massType, specialFlagSecondary);
-
-			//std::cout << "previous X: " << previous_x << std::endl;
-			//std::cout << "current y: " << y << std::endl;
 			
-			if (y < (numberOfTilesPerDimension - 1))
+			// Line fattening -- can only do these operations if we aren't on the last iteration
+			if (y < in_brasenhamLine.y1)
 			{
-					TileLocation previousTileLocation2(previous_x, y+1);
+				TileLocation previousTileLocation(x, previous_y);
+				updateTile(previousTileLocation, in_massType, specialFlagSecondary);
+				//std::cout << "plotLineHigh, option #2 insert: " << previousTileLocation.x << ", " << previousTileLocation.y << " | current y value: " << y << " | y-max: " << in_brasenhamLine.y1 + 1 << std::endl;
+
+				if (y < (numberOfTilesPerDimension - 1))
+				{
+					TileLocation previousTileLocation2(previous_x, y + 1);
 					updateTile(previousTileLocation2, in_massType, specialFlagSecondary);
+					//std::cout << "plotLineHigh, option #3 insert: " << previousTileLocation2.x << ", " << previousTileLocation2.y << std::endl;
+				}
 			}
 		}
 		else
