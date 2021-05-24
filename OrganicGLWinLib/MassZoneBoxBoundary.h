@@ -19,7 +19,7 @@ class MassZoneBoxBoundary
 		friend class MassZone;
 		friend class MassZoneBox;
 		MassZoneBoxBoundary() {};
-		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal)
+		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal, glm::vec3 in_faceCenterPoint)
 		{
 			insertCornerPoint(in_corner1);
 			insertCornerPoint(in_corner2);
@@ -28,6 +28,7 @@ class MassZoneBoxBoundary
 			emptyNormal = in_emptyNormal;
 			boundarySPoly.polyEmptyNormal = in_emptyNormal;
 			buildBoundarySPoly();
+			boundaryPolySet.boundaryFaceCenterPoint = in_faceCenterPoint;
 		};
 		MassZoneBoxBoundaryState boundaryCurrentState = MassZoneBoxBoundaryState::INACTIVE;	// the boundary always starts as inactive.
 		std::map<int, glm::vec3> cornerPointMap;

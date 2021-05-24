@@ -236,6 +236,13 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	)
 	{
 		std::cout << "!!! Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
+
+		std::cout << "Face center point is: " << boundaryFaceCenterPoint.x << ", " << boundaryFaceCenterPoint.y << ", " << boundaryFaceCenterPoint.z << std::endl;
+		auto firstContestedLine = contestables.contestableBorderLineChallengersMap.begin()->second.begin();
+		std::cout << "First contested categorized line points are: " << firstContestedLine->line.pointA.x << ", " << firstContestedLine->line.pointA.y << ", " << firstContestedLine->line.pointA.z << " | "
+																	<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
+		std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
+
 		requiresContestedAnalysis = true;
 	}
 	

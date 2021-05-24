@@ -33,7 +33,8 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 	// be sure to pass any tertiary extraction options.
 	productionMassZone.createMassZoneShell(MassZoneType::COHERENT_ZONE);
 
-	// produce the extractable shell SPolys.
+	// produce the extractable shell SPolys; this would also produce any SPolys that are produced as a result of a contestation where it is determined that 
+	// a SPoly needs to take up an entire boundary's face.
 	productionMassZone.produceExtractableMassZoneShellSPolys();
 
 

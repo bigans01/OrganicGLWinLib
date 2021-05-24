@@ -16,7 +16,7 @@ class BorderSPolyProducer
 		void setBoxFaceProductionPermit(FirstMassZoneBoxBoundaryOrientation && firstOption, RemainingMassZoneBoxBoundaryOrientation && ...remainingOptions)
 		{
 			productionMassZone.boxFaceProductionPermits.insert(std::forward<FirstMassZoneBoxBoundaryOrientation>(firstOption));
-			setBoxFaceProductionPermit(std::forward< RemainingMassZoneBoxBoundaryOrientation>(remainingOptions));
+			setBoxFaceProductionPermit(std::forward<RemainingMassZoneBoxBoundaryOrientation>(remainingOptions));
 		}
 		void setBoxFaceProductionPermit() {};
 
