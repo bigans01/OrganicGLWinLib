@@ -288,7 +288,8 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 	//rasterizer.printRemainingCuttableTiles();
 	std::cout << "!!!!! Remaining percentage is: " << remainingPercentage << std::endl;
 
-	if (remainingPercentage <= 0.001f)
+	//if (remainingPercentage <= 0.001f)
+	if (remainingPercentage == 0.0f)
 	{
 		std::cout << "++Notice: this SPoly will be clipped. " << std::endl;
 		returnStatus.sPolySurvived = false;
