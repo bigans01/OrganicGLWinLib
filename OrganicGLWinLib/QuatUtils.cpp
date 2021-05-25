@@ -216,3 +216,9 @@ void QuatUtils::rotatePointsForRasterization(QuatRotationPoints* in_quatRotation
 	QMVoidTranslatePointsForRasterization rasterizationAlignment;
 	rasterizationAlignment.solve(in_quatRotationPointsRef, in_polyDebugLevel);
 }
+
+void QuatUtils::resolveContestedCategorizedLine(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel)
+{
+	QMBoolResolveContestedCategorizedLine contestResolver;
+	contestResolver.solve(in_quatRotationPointsRef, in_polyDebugLevel);
+}

@@ -280,6 +280,7 @@
     <ClInclude Include="ImGuiSliderFloatPanel.h" />
     <ClInclude Include="ImGuiSliderFloatPanelContainer.h" />
     <ClInclude Include="ImGuiInputText.h" />
+    <ClInclude Include="QMBoolResolveContestedCategorizedLine.h" />
     <ClInclude Include="QMVoidAlignTriangleToXYPlane.h" />
     <ClInclude Include="QMVoidTranslatePointsForRasterization.h" />
     <ClInclude Include="RasterizationPointAdjuster.h" />
@@ -578,6 +579,7 @@
     <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp" />
     <ClCompile Include="QMBoolIsPointWithinPBZMassSide.cpp" />
     <ClCompile Include="QMBoolIsTJunctionCuttable.cpp" />
+    <ClCompile Include="QMBoolResolveContestedCategorizedLine.cpp" />
     <ClCompile Include="QMFindPointToMassRelationship.cpp" />
     <ClCompile Include="QMVec3FindCyclingDirection.cpp" />
     <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp" />

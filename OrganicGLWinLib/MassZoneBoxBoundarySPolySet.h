@@ -19,6 +19,7 @@
 #include "SPolyFracturer.h"
 #include "SPolyMorphTracker.h"
 #include "ContestableBorderLineMap.h"
+#include "QuatUtils.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -47,6 +48,8 @@ class MassZoneBoxBoundarySPolySet
 		bool requiresContestedAnalysis = false;						
 		ContestableBorderLineMap contestables;					// used only when isContestedCategorizedLineAnalysisEnabled is set to TRUE.
 		glm::vec3 boundaryFaceCenterPoint;
+
+		bool resolveContest(CategorizedLine in_categorizedLine);
 };
 
 #endif

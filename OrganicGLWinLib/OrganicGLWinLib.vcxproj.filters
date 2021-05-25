@@ -975,6 +975,9 @@
     <ClInclude Include="RasterizationPointAdjuster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QMBoolResolveContestedCategorizedLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1461,6 +1464,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RasterizationPointAdjuster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolResolveContestedCategorizedLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

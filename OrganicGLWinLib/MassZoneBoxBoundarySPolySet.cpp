@@ -243,7 +243,35 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 																	<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
 		std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
 
+		bool didCategorizedLineWinContest = resolveContest(*firstContestedLine);
+
 		requiresContestedAnalysis = true;
 	}
 	
+}
+
+bool MassZoneBoxBoundarySPolySet::resolveContest(CategorizedLine in_categorizedLine)
+{
+	bool didCategorizedLineWin = false;
+	CategorizedLine lineCopy = in_categorizedLine;
+	glm::vec3 boundaryCenterPointCopy = boundaryFaceCenterPoint;
+
+	// first step: insert the categorized line's points, plus the current center
+	QuatRotationPoints contestPoints;
+	contestPoints.insertPointRefs(&lineCopy.line.pointA, &lineCopy.line.pointB, &boundaryCenterPointCopy);
+
+	// second step: take point A of the CategorizedLine, translate by it
+	PointTranslationCheck pointTranslator;
+	pointTranslator.performCheck(lineCopy.line.pointA);
+	if (pointTranslator.requiresTranslation == 1)
+	{
+		contestPoints.applyTranslation(pointTranslator.getTranslationValue());
+	}
+
+	// third step: push the empty normal of the categorized line copy only AFTER translation
+	contestPoints.insertPointRefs(&lineCopy.emptyNormal);
+
+	QuatUtils::resolveContestedCategorizedLine(&contestPoints, PolyDebugLevel::NONE);
+
+	return didCategorizedLineWin;
 }
