@@ -11,6 +11,8 @@ class QMBoolResolveContestedCategorizedLine : public QMBoolBase
 		bool solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);
 	private:
 		void rotateContestedLineAroundXToPositiveY();
+		void rotateContestedLinePointBAroundZToPositiveX();
+		void rotateBoundaryCenterPointAlongXToPosOrNegY();
 		glm::vec3* contestedLinePointBRef = nullptr;
 		QuatRotationPoints* rotationPointsRefVector = nullptr;
 };

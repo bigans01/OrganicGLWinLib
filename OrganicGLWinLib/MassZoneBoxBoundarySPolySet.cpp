@@ -243,9 +243,12 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 																	<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
 		std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
 
-		bool didCategorizedLineWinContest = resolveContest(*firstContestedLine);
-
 		requiresContestedAnalysis = true;
+		didCategorizedLineWinContest = resolveContest(*firstContestedLine);
+		if (didCategorizedLineWinContest == true)
+		{
+			std::cout << "!! Notice: categorized lie won contest!" << std::endl;
+		}
 	}
 	
 }
@@ -271,7 +274,7 @@ bool MassZoneBoxBoundarySPolySet::resolveContest(CategorizedLine in_categorizedL
 	// third step: push the empty normal of the categorized line copy only AFTER translation
 	contestPoints.insertPointRefs(&lineCopy.emptyNormal);
 
-	QuatUtils::resolveContestedCategorizedLine(&contestPoints, PolyDebugLevel::NONE);
+	didCategorizedLineWin = QuatUtils::resolveContestedCategorizedLine(&contestPoints, PolyDebugLevel::NONE);
 
 	return didCategorizedLineWin;
 }

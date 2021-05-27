@@ -20,6 +20,38 @@ bool QMBoolResolveContestedCategorizedLine::solve(QuatRotationPoints* in_quatRot
 		rotateContestedLineAroundXToPositiveY();
 	}
 
+	// second, rotate the line to positive x, and y 0.
+	rotateContestedLinePointBAroundZToPositiveX();
+
+	// third, ensure that the center point of the boundary is aligned to the X/Y plane (will have a Z value of 0).
+	rotateBoundaryCenterPointAlongXToPosOrNegY();
+
+
+	// get a ref to the boundary center point
+	glm::vec3* boundaryCenterRef = in_quatRotationPointsRef->getPointRefByIndex(2);
+	glm::vec3* contestedLineEmptyNormalRef = in_quatRotationPointsRef->getPointRefByIndex(3);
+	if (boundaryCenterRef->y > 0)
+	{
+		if (contestedLineEmptyNormalRef->y < 0)
+		{
+			didCategorizedLineWinContest = true;
+			std::cout << "!! Categorized line won contest. " << std::endl;
+		}
+	}
+	else if (boundaryCenterRef->y < 0)
+	{
+		if (contestedLineEmptyNormalRef->y > 0)
+		{
+			didCategorizedLineWinContest = true;
+			std::cout << "!! Categorized line won contest. " << std::endl;
+		}
+	}
+
+	if (didCategorizedLineWinContest == false)
+	{
+		std::cout << "!! Categorized line did NOT win contest. " << std::endl;
+	}
+
 	return didCategorizedLineWinContest;
 }
 
@@ -52,5 +84,77 @@ void QMBoolResolveContestedCategorizedLine::rotateContestedLineAroundXToPositive
 	rotationPointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
 
 	std::cout << "++++++++++ printing points: " << std::endl;
+	rotationPointsRefVector->printPoints();
+}
+
+void QMBoolResolveContestedCategorizedLine::rotateContestedLinePointBAroundZToPositiveX()
+{
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+	float atan2result = atan2(contestedLinePointBRef->x, contestedLinePointBRef->y); // find the radians we'll need to rotate by
+	float firstPassRotateRadians = 0.0f;
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	// to get to pos z = 1.0f, add 1.57 radians.
+	//firstPassRotateRadians += ((fullRadian360 / 4) * 3);
+	firstPassRotateRadians += ((fullRadian360 / 4));
+
+	glm::vec3 rotationAroundZ;
+	rotationAroundZ.z = -1.0f;
+
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundZ);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationPointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+
+	std::cout << "++++++++++ printing points, after rotate around Z to positive X: " << std::endl;
+	rotationPointsRefVector->printPoints();
+}
+
+void QMBoolResolveContestedCategorizedLine::rotateBoundaryCenterPointAlongXToPosOrNegY()
+{
+	glm::vec3* boundaryCenterRef = rotationPointsRefVector->getPointRefByIndex(2);
+	float radians = 0.0f;
+	float fullRadian360 = 6.28319;
+	float atan2result = atan2(boundaryCenterRef->y, boundaryCenterRef->z); // find the radians we'll need to rotate by
+	float firstPassRotateRadians = 0.0f;
+	if (atan2result > 0.0)
+	{
+		//firstPassRotateRadians = fullRadian360 - atan2result;
+		firstPassRotateRadians = atan2result;
+	}
+	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+	{
+		//firstPassRotateRadians = abs(atan2result);
+		firstPassRotateRadians = fullRadian360 + atan2result;
+	}
+
+	std::cout << ">>> value of atan2result: " << atan2result << std::endl;
+
+	// to get to pos z = 1.0f, add 1.57 radians.
+	//firstPassRotateRadians += ((fullRadian360 / 4) * 3);
+	firstPassRotateRadians += ((fullRadian360 / 4));
+
+	std::cout << ">>> value of firstPassRotateRadians: " << firstPassRotateRadians << std::endl;
+
+	glm::vec3 rotationAroundX;
+	rotationAroundX.x = -1.0f;
+	QuatRotationRecord s1record(firstPassRotateRadians, rotationAroundX);
+
+	glm::quat originalQuat = s1record.returnOriginalRotation();
+	//*pointBRef = originalQuat * *pointBRef;	
+	rotationPointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
+
+	std::cout << "++++++++++ printing points, after rotate for boundary center: " << std::endl;
 	rotationPointsRefVector->printPoints();
 }

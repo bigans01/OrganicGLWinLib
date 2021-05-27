@@ -217,10 +217,10 @@ void MassZone::produceExtractableMassZoneShellSPolys()
 
 		else if
 		(
-			(zoneBoxBoundariesBegin->second.boundaryPolySet.requiresContestedAnalysis == true)
+			(zoneBoxBoundariesBegin->second.boundaryPolySet.didCategorizedLineWinContest == true)
 		)
 		{
-			std::cout << "-> contested. " << std::endl;
+			std::cout << "-> categorized line won contest " << std::endl;
 		}
 		else
 		{
