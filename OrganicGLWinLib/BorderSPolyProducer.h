@@ -25,6 +25,7 @@ class BorderSPolyProducer
 		void produceBorderSPolys(MassZoneBoxType in_massZoneBoxType);	// Step 3: produce the border SPolys
 	private:
 		std::map<int, SPoly> inputSPolys;
+		std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup> outputSPolySuperGroups;
 		int numberOfInputSPolys = 0;
 		MassZone productionMassZone;
 };

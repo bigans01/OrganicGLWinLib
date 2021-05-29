@@ -6,10 +6,11 @@ WeldedLinePool LineWelder::retrieveLinePool()
 	return weldedLines;
 }
 
-void LineWelder::insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal)
+void LineWelder::insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal, bool in_wasLineInsertedAslice)
 {
 	WeldedLine beginningWeldedLine(in_pointA, in_pointB, in_emptyNormal);
 	weldedLines.insertLineIntoPool(beginningWeldedLine);
+	wasLastWeldingLineInsertedASlice = in_wasLineInsertedAslice;
 }
 
 void LineWelder::updateLeadingPointAndInsertNewWeldingLineFromBorderLineData()
@@ -17,7 +18,7 @@ void LineWelder::updateLeadingPointAndInsertNewWeldingLineFromBorderLineData()
 	glm::vec3 newLineBeginPoint = currentLeadingPoint;
 	glm::vec3 newLineEmptyNormal = sPolyRef->borderLines[currentBorderLineID].planarVector;
 	currentLeadingPoint = sPolyRef->getBorderLineEndpoint(currentBorderLineID, foundDirection);
-	insertNewWeldingLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal);
+	insertNewWeldingLine(newLineBeginPoint, currentLeadingPoint, newLineEmptyNormal, false);
 }
 
 int LineWelder::getRemainingCandidateCount()
@@ -227,7 +228,7 @@ void LineWelder::startWelding()
 	//std::cout << "currentBorderLineID: " << currentBorderLineID << std::endl;
 	//std::cout << "endingBorderLineID: " << endingBorderLineID << std::endl;
 
-
+		
 
 	//	Run in CONTINUE mode until we end up at the endingBorderLineID
 	runMode = LineWelderRunMode::CONTINUE;
@@ -239,6 +240,7 @@ void LineWelder::startWelding()
 		// if we are not in a A_SLICE, do this
 		// if { size of cleave sequence != 1 AND != A_SLICE }
 		// { 
+		//int loopCount = 0;
 		while (currentBorderLineID != endingBorderLineID)
 		{
 			// pass in: the border line ID, the ID of the CleaveSequence in the CleaveMap, 
@@ -248,6 +250,15 @@ void LineWelder::startWelding()
 			//std::cout << "! endingBorderLineID: " << endingBorderLineID << std::endl;
 
 			//std::cout << "####  Begin and end border line differ..." << std::endl;
+			//if
+			//(
+				//(loopCount == 0)
+				//&&
+				//(slicedFlag == true)
+			//)
+			//{
+				//wasLastWeldingLineInsertedASlice = true;
+			//}
 
 			if (lineWelderLogger.isLoggingSet())
 			{
@@ -269,7 +280,7 @@ void LineWelder::startWelding()
 			//std::cout << "##!!! Iterating while... " << std::endl;
 			//int someVal = 5;
 			//std::cin >> someVal;
-
+			//loopCount++;
 		}
 
 		if (slicedFlag == true)
@@ -278,10 +289,10 @@ void LineWelder::startWelding()
 			lineWelderLogger.log("(LineWelder) slicedFlag found as true...; will insert this line and remove from candidate list.", "\n");
 			if (currentLeadingPoint != currentCategorizedLine.line.pointA)
 			{
-				insertNewWeldingLine(currentLeadingPoint, currentCategorizedLine.line.pointA, sPolyRef->borderLines[currentBorderLineID].planarVector);
+				insertNewWeldingLine(currentLeadingPoint, currentCategorizedLine.line.pointA, sPolyRef->borderLines[currentBorderLineID].planarVector, true);
 			}
 
-			
+
 	
 
 			candidateListMap.removeCandidateFromAllCandidateLists(beginningSequenceID);
@@ -406,13 +417,13 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 																in_unusableSet);
 		if (nextCleaveSequenceFinder.wasSequenceFound() == true)
 		{
-			//std::cout << "--> Next sequence was found! " << std::endl;
+			std::cout << "--> Next sequence was found! " << std::endl;
 			FoundCleaveSequence discoveredSequence = nextCleaveSequenceFinder.getSelectedCleaveSequenceMeta();
 			//std::cout << ":::::::: (Multiple Intersect Records) Leading point is: " << in_leadingPoint.x << ", " << in_leadingPoint.y << ", " << in_leadingPoint.z << std::endl;
 			//std::cout << "||||||||| neighboring cleave sequence was found, stats are: " << std::endl;
 			//std::cout << "| cleave sequence ID: " << discoveredSequence.cleaveSequenceID << std::endl;
-			//std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
-			//std::cout << "| point:              " << discoveredSequence.cleaveSequenceTracingBeginPoint.x << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.y << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.z << std::endl;
+			std::cout << "| distance:           " << discoveredSequence.distance << std::endl;
+			std::cout << "| point:              " << discoveredSequence.cleaveSequenceTracingBeginPoint.x << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.y << ", " << discoveredSequence.cleaveSequenceTracingBeginPoint.z << std::endl;
 
 			//std::cout << "(1) --> Next sequence was found! " << std::endl;
 
@@ -432,21 +443,34 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 
 			//std::cout << "!! Number of lines to crawl: " << numberOfLinesToCrawl << std::endl;
 
-			if (runMode == LineWelderRunMode::ENDING)
+			
+			// It is unknown why the below if statement was implemented; the distance check should always be done when transitioning
+			// between the current CleaveSequence and the next cleave sequence that was found. (5/29/2021). This code will probably be deleted
+			// upon further review.
+			/*
+			if 
+			(
+				(runMode == LineWelderRunMode::ENDING)
+				||
+				wasLastWeldingLineInsertedASlice == true
+			)
+			
 			{
-				//std::cout << "Performing special check for ending mode... " << std::endl;
-				lineWelderLogger.log("(LineWelder) Performing special check for ending mode...", "\n");
+			*/
+			
+				//std::cout << "Performing special check for ending / last slice inserted mode... " << std::endl;
+				lineWelderLogger.log("(LineWelder) Checking if line needs to be inserted between the two sequences...", "\n");
 				// before continuing with the next cleave sequence, check to see if there is a distance between the leadingPoint and cleaveSequenceTracingBeginPoint
 				if (discoveredSequence.distance != 0.0f)
 				{
 					//std::cout << "!!! Note, distance is NOT 0, need to insert a line. " << std::endl;
-					insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
+					insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector, false);
 					//WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
 
 
 					//weldedLinePoolRef->insertLineIntoPool(newLine);
 				}
-			}
+			//}
 			
 
 			for (int x = 0; x < numberOfLinesToCrawl; x++)
@@ -454,7 +478,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 				//std::cout << "| Crawling line... " << std::endl;
 				lineWelderLogger.log("(LineWelder) | Crawling line...", "\n");
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();	// fetch the next line, swapping the points of it if in REVERSE.
-				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal, false);
 
 				//std::cout << "| Current line, point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				//std::cout << "| Current line, point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;
@@ -545,7 +569,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 			if (discoveredSequence.distance != 0.0f)
 			{
 				//std::cout << "!!! Note, distance is NOT 0, need to insert a line. " << std::endl;
-				insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector);
+				insertNewWeldingLine(in_leadingPoint, discoveredSequence.cleaveSequenceTracingBeginPoint, sPolyRef->borderLines[currentBorderLineID].planarVector, false);
 				//WeldedLine newLine(sequenceFinderStartPoint, selectedSequence.cleaveSequenceTracingBeginPoint, borderLineRef->planarVector);
 
 
@@ -559,7 +583,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 				//std::cout << "| Crawling line... " << std::endl;
 				CategorizedLine currentCategorizedLine = fetchedCleaveSequenceMeta->fetchNextCategorizedLineInSequence();		// fetch the next line, swapping the points of it if in REVERSE.
 
-				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal);
+				insertNewWeldingLine(currentCategorizedLine.line.pointA, currentCategorizedLine.line.pointB, currentCategorizedLine.emptyNormal, false);
 
 				//std::cout << ":::: Next categorized line point A: " << currentCategorizedLine.line.pointA.x << ", " << currentCategorizedLine.line.pointA.y << ", " << currentCategorizedLine.line.pointA.z << std::endl;
 				//std::cout << ":::: Next categorized line point B: " << currentCategorizedLine.line.pointB.x << ", " << currentCategorizedLine.line.pointB.y << ", " << currentCategorizedLine.line.pointB.z << std::endl;

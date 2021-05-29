@@ -59,6 +59,7 @@ class WeldedTriangleProducer
 			{
 				//std::cout << "Checking against comparable line, having the ID: " << *comparablesBegin << std::endl;
 
+				// this code needs to be relooked/redone, (5/29/2021)
 				glm::vec3 pointToCheck = weldedLinePoolRef->fetchLineFromPoolViaIndex(*comparablesBegin).pointB;
 				bool wasWithinTriangle = candidateWeldedTriangle.checkIfPointIsWithinTriangle(pointToCheck);
 				if (wasWithinTriangle == true)

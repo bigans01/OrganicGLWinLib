@@ -64,13 +64,14 @@ private:
 									CleaveSequenceCandidateList* in_cleaveSequenceCandidateListRef, 
 									int in_finderStartingCleaveSequenceID,
 									OperableIntSet in_unusableSet);
-	void insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal);
+	void insertNewWeldingLine(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_emptyNormal, bool in_wasLineInsertedAslice);
 	void updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
 
 	PolyLogger lineWelderLogger;
 	PolyDebugLevel lineWelderLoggerDebugLevel = PolyDebugLevel::NONE;
 	int runIteration = 0;			// the ID of the run we are on; used to insert into ConsumedCleaveSequenceGroups
 	ConsumedCleaveSequenceGroups consumedSequenceGroups;
+	bool wasLastWeldingLineInsertedASlice = false;
 };
 
 #endif

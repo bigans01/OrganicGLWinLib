@@ -271,7 +271,8 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 	return generatedTouchedList;
 }
 
-void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet)
+void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet,
+												 std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
 {
 	auto orientationSetBegin = in_orientationSet.begin();
 	auto orientationSetEnd = in_orientationSet.end();
@@ -313,6 +314,9 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOri
 				}
 			}
 			std::cout << " needs to have its face produced (tertiary SPoly, 1st pass)" << std::endl;
+			SPolySupergroup tempGroup;
+			tempGroup.insertSPoly(*boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef);
+			(*in_outputSuperGroupsMapRef)[*orientationSetBegin] = tempGroup;
 		}
 	}
 }

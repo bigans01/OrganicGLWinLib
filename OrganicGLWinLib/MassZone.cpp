@@ -195,12 +195,13 @@ std::set<MassZoneBoxBoundaryOrientation> MassZone::getTouchedBoxFacesList(MassZo
 	return returnSet;
 }
 
-void MassZone::runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet)
+void MassZone::runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet, 
+													   std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
 {
-	zoneBox.runFirstTertiaryProductionPass(in_orientationSet);
+	zoneBox.runFirstTertiaryProductionPass(in_orientationSet, in_outputSuperGroupsMapRef);
 }
 
-void MassZone::produceExtractableMassZoneShellSPolys()
+void MassZone::produceExtractableMassZoneShellSPolys(std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
 {
 	auto zoneBoxBoundariesBegin = zoneBox.boxBoundaries.begin();
 	auto zoneBoxBoundariesEnd = zoneBox.boxBoundaries.end();
@@ -213,6 +214,7 @@ void MassZone::produceExtractableMassZoneShellSPolys()
 		)
 		{
 			std::cout << "-> uncontested, but contains produced SPolys. " << std::endl;
+			(*in_outputSuperGroupsMapRef)[zoneBoxBoundariesBegin->first] = zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolySG;
 		}
 
 		else if
@@ -220,6 +222,10 @@ void MassZone::produceExtractableMassZoneShellSPolys()
 			(zoneBoxBoundariesBegin->second.boundaryPolySet.didCategorizedLineWinContest == true)
 		)
 		{
+			// produce the SPoly that would be produced by the line winning the contest, put it into the ref'd map.
+			SPolySupergroup tempGroup;
+			tempGroup.insertSPoly(*zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolyRef);
+			(*in_outputSuperGroupsMapRef)[zoneBoxBoundariesBegin->first] = tempGroup;
 			std::cout << "-> categorized line won contest " << std::endl;
 		}
 		else
@@ -291,6 +297,7 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		tempCategorizedLineLogger.waitForDebugInput();
 	}
 
+	zoneBox.printCategorizedLinesInBoundaries();
 
 	// Step 3: When all comparisons have been made, go through each MassZoneBoxBoundary's MassZoneBosBoundarySPolySet, run the 
 	// SPolyFracturer for each MassZoneBoxBoundarySPolySet, to generate any SPolys.

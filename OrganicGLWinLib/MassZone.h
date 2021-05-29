@@ -53,8 +53,9 @@ private:
 	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);
 	void runClipper();
 	std::set<MassZoneBoxBoundaryOrientation> getTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
-	void runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet);
-	void produceExtractableMassZoneShellSPolys();
+	void runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet, 
+											     std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
+	void produceExtractableMassZoneShellSPolys(std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 };
 
 #endif

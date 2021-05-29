@@ -35,7 +35,7 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 
 	// produce the extractable shell SPolys; this would also produce any SPolys that are produced as a result of a contestation where it is determined that 
 	// a SPoly needs to take up an entire boundary's face.
-	productionMassZone.produceExtractableMassZoneShellSPolys();
+	productionMassZone.produceExtractableMassZoneShellSPolys(&outputSPolySuperGroups);
 
 
 	// have the MassZoneBox in the MassZone, produce a list of faces that were "touched";
@@ -65,6 +65,16 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 	// that MassZoneBoxBoundary has its boundarySPolySet::wasLineProducedByReactor set to TRUE. If it is set to FALSE, 
 	// we will return the boundary SPoly that takes up that face itself, as a new SPoly.
 	auto fetchedList = productionMassZone.getTouchedBoxFacesList(in_massZoneBoxType);
-	productionMassZone.runFirstTertiaryProductionPassInZoneBox(fetchedList);
+	productionMassZone.runFirstTertiaryProductionPassInZoneBox(fetchedList, &outputSPolySuperGroups);
+
+
+	auto outputsBegin = outputSPolySuperGroups.begin();
+	auto outputsEnd = outputSPolySuperGroups.end();
+	for (; outputsBegin != outputsEnd; outputsBegin++)
+	{
+		OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(outputsBegin->first);
+		std::cout << std::endl;
+		outputsBegin->second.printSPolys();
+	}
 
 }
