@@ -35,6 +35,7 @@ public:
 		getCleaveSequenceMetaTracker();			// builds the meta tracker, so that we may pass it to the NextCleaveSequenceFinder
 	};
 	void startWelding();
+	void purgeNegligibleLinesInPool();
 	int getRemainingCandidateCount();
 	WeldedLinePool retrieveLinePool();
 	void clearLinePool();

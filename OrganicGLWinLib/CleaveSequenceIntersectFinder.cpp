@@ -63,7 +63,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 		{
 			std::cout << "-->Begin welding iteration." << std::endl;
 			welder.startWelding();							// perform one welding run; this will update the total number of remaining CategorizedLines contained
-															// within the CleaveSequenceCandidateListMap when it is done. 
+			welder.purgeNegligibleLinesInPool();			// lines where the points are too close to each other need to be purged (added on 6/1/2021)
 			linePool = welder.retrieveLinePool();			// retrieve the linePool that was produced by the LineWelder, during this loop run.
 			if (intersectFinderLogger.isLoggingSet() == true)
 			{

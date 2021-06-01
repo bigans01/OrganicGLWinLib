@@ -36,6 +36,11 @@ void LineWelder::printConsumedSequenceGroups()
 	consumedSequenceGroups.printGroups();
 }
 
+void LineWelder::purgeNegligibleLinesInPool()
+{
+	weldedLines.purgeNegligibleLines();
+}
+
 void LineWelder::startWelding()
 {
 	//std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;

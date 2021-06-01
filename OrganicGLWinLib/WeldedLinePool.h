@@ -4,6 +4,7 @@
 #define WELDEDLINEPOOL_H
 
 #include "WeldedLine.h"
+#include <glm/glm.hpp>
 #include <iostream>
 #include <map>
 
@@ -145,6 +146,106 @@ class WeldedLinePool
 			//std::cout << ":::::::: Values of pool, post update: " << std::endl;
 			//printLines();
 		};
+
+		void purgeNegligibleLines()	
+		{
+			// number of purge attempts is equivalent to the number of short lines discovered
+			auto purgeScanPassBegin = pool.begin();
+			auto purgeScanPassEnd = pool.end();
+			int purgeAttemptCounter = 0;
+			for (; purgeScanPassBegin != purgeScanPassEnd; purgeScanPassBegin++)
+			{
+				glm::vec3 pointA = purgeScanPassBegin->second.pointA;
+				glm::vec3 pointB = purgeScanPassBegin->second.pointB;
+				float lineDist = glm::distance(pointA, pointB);
+				if (lineDist <= .01f)
+				{
+					purgeAttemptCounter++;
+				}
+			}
+
+			for (int x = 0; x < purgeAttemptCounter; x++)
+			{
+				runSingleLinePurgeAttempt();
+			}
+		}
+
+		void runSingleLinePurgeAttempt()
+		{
+			if (pool.size() > 3)
+			{
+				int currentLineIndex = 0;
+				int nextLineIndex = 0;
+				int endLineIndex = pool.rbegin()->first;
+
+				auto poolBegin = pool.begin();
+				auto poolEnd = pool.end();
+				bool wasShortLineFound = false;
+				int targetLineToRemove = 0;
+				for (; poolBegin != poolEnd; poolBegin++)
+				{
+					glm::vec3 pointA = poolBegin->second.pointA;
+					glm::vec3 pointB = poolBegin->second.pointB;
+					float lineDist = glm::distance(pointA, pointB);
+					if (lineDist <= .01f)
+					{
+						/*
+						std::cout << "!!! Notice, lines too close...continue? " << std::endl;
+						int waitVal = 3;
+						while (waitVal == 3)
+						{
+
+						}
+						*/
+						//std::cout << "++++++++++++++++++++++++ Prior to short line erase at index " << poolBegin->first << "  lines are: " << std::endl;
+						//printLines();
+
+
+						// take point A of the short line, and copy it into the next line's point A.
+						glm::vec3 pointCopy = pointA;
+						if (poolBegin->first == endLineIndex)	// the short line is the last line in the map; so replace point A at the beginning of the map.
+						{
+							auto poolStart = pool.begin();
+							poolStart->second.pointA = pointCopy;
+						}
+						else  // otherwise, the short line isn't at the end, so the point to replace is in the next line.
+						{
+							auto nextLineIter = poolBegin;
+							nextLineIter++;
+							nextLineIter->second.pointA = pointCopy;
+						}
+
+						targetLineToRemove = poolBegin->first;
+						wasShortLineFound = true;
+						break;
+					}
+				}
+
+				if (wasShortLineFound == true)
+				{
+					// erase the line
+					pool.erase(targetLineToRemove);
+
+					// rebuild the pool
+					std::map<int, WeldedLine> newPool;
+					auto oldPoolBegin = pool.begin();
+					auto oldPoolEnd = pool.end();
+					for (; oldPoolBegin != oldPoolEnd; oldPoolBegin++)
+					{
+						int currentNewPoolIndex = int(newPool.size());
+						newPool[currentNewPoolIndex] = oldPoolBegin->second;
+					}
+
+					// copy reformed pool back
+					pool = newPool;
+
+					//std::cout << "++++++++++++++ Erased a short line, remaining pool lines are: " << std::endl;
+					//printLines();
+					//int waitVal = 3;
+					//std::cin >> waitVal;
+				}
+			}
+		}
 
 		void clearPool()
 		{
