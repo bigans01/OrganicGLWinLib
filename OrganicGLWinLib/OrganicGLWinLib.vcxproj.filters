@@ -978,6 +978,9 @@
     <ClInclude Include="QMBoolResolveContestedCategorizedLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CleaveSequenceResolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1467,6 +1470,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QMBoolResolveContestedCategorizedLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

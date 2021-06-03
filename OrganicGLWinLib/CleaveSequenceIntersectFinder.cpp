@@ -74,8 +74,8 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 				intersectFinderLogger.waitForDebugInput();
 			}
 
-			std::cout << "++++ Debug only, printing lines: " << std::endl;
-			linePool.printLines();
+			//std::cout << "++++ Debug only, printing lines: " << std::endl;
+			//linePool.printLines();
 			WeldedTriangleGroupBuilder groupBuilder(intersectFinderLoggerDebugLevel);
 			groupBuilder.setWeldedLinePool(linePool);
 			groupBuilder.runTracingObservers();

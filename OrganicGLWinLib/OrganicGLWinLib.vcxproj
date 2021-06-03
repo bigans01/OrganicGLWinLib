@@ -202,6 +202,7 @@
     <ClInclude Include="CleaveSequenceMergeMode.h" />
     <ClInclude Include="CleaveSequenceMeta.h" />
     <ClInclude Include="CleaveSequenceMetaTracker.h" />
+    <ClInclude Include="CleaveSequenceResolver.h" />
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="CollectiveVerdictMachine.h" />
@@ -506,6 +507,7 @@
     <ClCompile Include="CleaveSequenceFactory.cpp" />
     <ClCompile Include="CleaveSequenceIntersectFinder.cpp" />
     <ClCompile Include="CleaveSequenceMeta.cpp" />
+    <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="ContestedBorderLineMap.cpp" />

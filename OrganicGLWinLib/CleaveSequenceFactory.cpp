@@ -485,8 +485,17 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
 				std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
+
 				hasBadProduction = true;
 				newSequence.printCategorizedLines();
+
+				std::cout << "+++++++++++++++ entering infinite while for debug testing (6/2/2021)" << std::endl;
+				//int infVal = 3;
+				//while (infVal == 3)
+				//{
+
+				//}
+
 
 				int someVal = 3;
 				std::cin >> someVal;
