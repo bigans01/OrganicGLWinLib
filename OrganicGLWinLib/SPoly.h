@@ -45,7 +45,9 @@ public:
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
 	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
+	void determineBorderLines();
 private:
+	friend class RPoly;
 	friend class SPolyScaler;
 	friend class SPolySet;
 	friend class BorderSPolyProducer;
@@ -89,7 +91,6 @@ private:
 
 
 	void determinePrimalPoints();
-	void determineBorderLines();
 	void buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);

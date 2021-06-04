@@ -981,6 +981,18 @@
     <ClInclude Include="CleaveSequenceResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RTriangleLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1473,6 +1485,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CleaveSequenceResolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RPoly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -285,6 +285,10 @@
     <ClInclude Include="QMVoidAlignTriangleToXYPlane.h" />
     <ClInclude Include="QMVoidTranslatePointsForRasterization.h" />
     <ClInclude Include="RasterizationPointAdjuster.h" />
+    <ClInclude Include="RPoly.h" />
+    <ClInclude Include="RTriangle.h" />
+    <ClInclude Include="RTriangleLine.h" />
+    <ClInclude Include="RUtils.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
     <ClInclude Include="InstancedHighlighterGearT1.h" />
@@ -599,6 +603,8 @@
     <ClCompile Include="RasterizationPointAdjuster.cpp" />
     <ClCompile Include="RaycastIntersectionTest.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
+    <ClCompile Include="RPoly.cpp" />
+    <ClCompile Include="RUtils.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SharedLineReactor.cpp" />
     <ClCompile Include="SimpleUnique.cpp" />
