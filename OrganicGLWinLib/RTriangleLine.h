@@ -7,6 +7,7 @@
 #include "EnclaveKeyDef.h"
 #include <glm/glm.hpp>
 #include "STriangleLine.h"
+#include "RasterCubeLookup.h"
 
 class RTriangleLine
 {
@@ -32,44 +33,17 @@ class RTriangleLine
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> findBlocksAtX(int in_x)
 		{
-			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> x_set;
-			auto rasterizedBlocksBegin = rasterizedBlocks.begin();
-			auto rasterizedBlocksEnd = rasterizedBlocks.end();
-			for (; rasterizedBlocksBegin != rasterizedBlocksEnd; rasterizedBlocksBegin++)
-			{
-				if (rasterizedBlocksBegin->x == in_x)
-				{
-					x_set.insert(*rasterizedBlocksBegin);
-				}
-			}
+			return rasterizedBlocks.fetchXSlice(in_x);
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> findBlocksAtY(int in_y)
 		{
-			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> y_set;
-			auto rasterizedBlocksBegin = rasterizedBlocks.begin();
-			auto rasterizedBlocksEnd = rasterizedBlocks.end();
-			for (; rasterizedBlocksBegin != rasterizedBlocksEnd; rasterizedBlocksBegin++)
-			{
-				if (rasterizedBlocksBegin->y == in_y)
-				{
-					y_set.insert(*rasterizedBlocksBegin);
-				}
-			}
+			return rasterizedBlocks.fetchYSlice(in_y);
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> findBlocksAtZ(int in_z)
 		{
-			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> z_set;
-			auto rasterizedBlocksBegin = rasterizedBlocks.begin();
-			auto rasterizedBlocksEnd = rasterizedBlocks.end();
-			for (; rasterizedBlocksBegin != rasterizedBlocksEnd; rasterizedBlocksBegin++)
-			{
-				if (rasterizedBlocksBegin->z == in_z)
-				{
-					z_set.insert(*rasterizedBlocksBegin);
-				}
-			}
+			return rasterizedBlocks.fetchZSlice(in_z);
 		}
 
 		glm::vec3 rLinePointA;	// the beginning of the line
@@ -82,7 +56,7 @@ class RTriangleLine
 		unsigned char isPointAOnBorderLine = 0;	// is point A on border line? (checked when borderLineID is 1)
 		unsigned char isPointBOnBorderLine = 0;	// is point B on border line? " " " 
 	private:
-		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> rasterizedBlocks;
+		RasterCubeLookup rasterizedBlocks;
 
 };
 

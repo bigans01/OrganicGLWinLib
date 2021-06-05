@@ -28,26 +28,23 @@ class RasterCubeLookup
 		{
 			std::cout << "Key found via X lookup." << std::endl;
 			return xLookup.doesKeyExist(in_lookupKey.x, in_lookupKey.y, in_lookupKey.z);
-			//return true;
 		}
 
 		bool lookupY(EnclaveKeyDef::EnclaveKey in_lookupKey)
 		{
 			std::cout << "Key found via Y lookup." << std::endl;
 			return yLookup.doesKeyExist(in_lookupKey.y, in_lookupKey.x, in_lookupKey.z);
-			//return true;
 		}
 
 		bool lookupZ(EnclaveKeyDef::EnclaveKey in_lookupKey)
 		{
 			std::cout << "Key found via Z lookup." << std::endl;
 			return zLookup.doesKeyExist(in_lookupKey.z, in_lookupKey.x, in_lookupKey.y);
-			//return true;
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> fetchXSlice(int in_xValue)
 		{
-			std::cout << "EnclaveKeys for slice at X of " << in_xValue << "are: " << std::endl;
+			//std::cout << "EnclaveKeys for slice at X of " << in_xValue << "are: " << std::endl;
 			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> returnKeys;
 			auto currentSlice = xLookup.lookup[in_xValue];
 			auto currentSliceBegin = currentSlice.begin();
@@ -56,14 +53,14 @@ class RasterCubeLookup
 			{
 				EnclaveKeyDef::EnclaveKey newKey(in_xValue, currentSliceBegin->a, currentSliceBegin->b);
 				returnKeys.insert(newKey);
-				std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
+				//std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
 			}
 			return returnKeys;
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> fetchYSlice(int in_yValue)
 		{
-			std::cout << "EnclaveKeys for slice at Y of " << in_yValue << "are: " << std::endl;
+			//std::cout << "EnclaveKeys for slice at Y of " << in_yValue << "are: " << std::endl;
 			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> returnKeys;
 			auto currentSlice = yLookup.lookup[in_yValue];
 			auto currentSliceBegin = currentSlice.begin();
@@ -72,14 +69,14 @@ class RasterCubeLookup
 			{
 				EnclaveKeyDef::EnclaveKey newKey(currentSliceBegin->a, in_yValue, currentSliceBegin->b);
 				returnKeys.insert(newKey);
-				std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
+				//std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
 			}
 			return returnKeys;
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> fetchZSlice(int in_zValue)
 		{
-			std::cout << "EnclaveKeys for slice at Z of " << in_zValue << "are: " << std::endl;
+			//std::cout << "EnclaveKeys for slice at Z of " << in_zValue << "are: " << std::endl;
 			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> returnKeys;
 			auto currentSlice = zLookup.lookup[in_zValue];
 			auto currentSliceBegin = currentSlice.begin();
@@ -88,15 +85,12 @@ class RasterCubeLookup
 			{
 				EnclaveKeyDef::EnclaveKey newKey(currentSliceBegin->a, currentSliceBegin->b, in_zValue);
 				returnKeys.insert(newKey);
-				std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
+				//std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
 			}
 			return returnKeys;
 		}
 
 	private:
-		//std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> keySet;
-
-		
 		struct KeyLookup
 		{
 			public:
@@ -140,9 +134,6 @@ class RasterCubeLookup
 		KeyLookup xLookup;
 		KeyLookup yLookup;
 		KeyLookup zLookup;
-		//std::map<int, std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher>> xKeyLookup;
-		//std::map<int, std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher>> yKeyLookup;
-		//std::map<int, std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher>> zKeyLookup;
 };
 
 #endif
