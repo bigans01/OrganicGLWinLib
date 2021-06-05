@@ -284,6 +284,7 @@
     <ClInclude Include="QMBoolResolveContestedCategorizedLine.h" />
     <ClInclude Include="QMVoidAlignTriangleToXYPlane.h" />
     <ClInclude Include="QMVoidTranslatePointsForRasterization.h" />
+    <ClInclude Include="RasterCubeLookup.h" />
     <ClInclude Include="RasterizationPointAdjuster.h" />
     <ClInclude Include="RPoly.h" />
     <ClInclude Include="RTriangle.h" />
