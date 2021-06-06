@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include "STriangleLine.h"
 #include "RasterCubeLookup.h"
+#include "RTriangleLineTracer.h"
 
 class RTriangleLine
 {
@@ -55,6 +56,20 @@ class RTriangleLine
 		unsigned char rLineBorderLineID = 0;		// indicates the borderLineID, if it is indeed a border line
 		unsigned char isPointAOnBorderLine = 0;	// is point A on border line? (checked when borderLineID is 1)
 		unsigned char isPointBOnBorderLine = 0;	// is point B on border line? " " " 
+
+		void runRasterTrace()
+		{
+			RTriangleLineTracer lineTracer;
+			if (debugFlag == true)
+			{
+				std::cout << "::::::::::: HALTING; for debug..." << std::endl;
+				int halt = 3;
+				std::cin >> halt;
+			}
+			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, debugFlag);
+			lineTracer.runTrace();
+		};
+		bool debugFlag = false;
 	private:
 		RasterCubeLookup rasterizedBlocks;
 

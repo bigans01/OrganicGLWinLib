@@ -49,9 +49,20 @@ class RPoly
 					std::cout << ":: point B cube coord: " << pointBRasterCubeCoord.x << ", " << pointBRasterCubeCoord.y << ", " << pointBRasterCubeCoord.z << std::endl;
 
 					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr);
+
+					// hard-coded debug
+					/*
+					if (x == 2)
+					{
+						builtLine.debugFlag = true;
+					}
+					*/
+
 					builtLineArray[x] = builtLine;
 				}
 				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2]);
+
+				builtRTriangle.traceRasterLines();
 				addRTriangle(builtRTriangle);
 			}
 

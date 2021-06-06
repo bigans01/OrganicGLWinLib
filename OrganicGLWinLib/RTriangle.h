@@ -23,6 +23,13 @@ class RTriangle
 				std::cout << "point " << x << ": " << rLines[x].rLinePointA.x << ", " << rLines[x].rLinePointA.y << ", " << rLines[x].rLinePointA.z << std::endl;
 			}
 		}
+		void traceRasterLines()
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				rLines[x].runRasterTrace();
+			}
+		}
 	private:
 		RTriangleLine rLines[3];
 };

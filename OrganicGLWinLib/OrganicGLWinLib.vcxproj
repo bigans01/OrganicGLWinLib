@@ -290,6 +290,7 @@
     <ClInclude Include="RTriangle.h" />
     <ClInclude Include="RTriangleLine.h" />
     <ClInclude Include="RasterCubeTracerBase.h" />
+    <ClInclude Include="RTriangleLineTracer.h" />
     <ClInclude Include="RUtils.h" />
     <ClInclude Include="ShaderMachineFeedback.h" />
     <ClInclude Include="IndividualVerdict.h" />
@@ -607,6 +608,7 @@
     <ClCompile Include="RaycastIntersectionTest.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="RPoly.cpp" />
+    <ClCompile Include="RTriangleLineTracer.cpp" />
     <ClCompile Include="RUtils.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
     <ClCompile Include="SharedLineReactor.cpp" />
