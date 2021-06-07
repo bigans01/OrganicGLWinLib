@@ -19,12 +19,14 @@ class RTriangleLine
 					  EnclaveKeyDef::EnclaveKey in_pointACubeKey,
 					  EnclaveKeyDef::EnclaveKey in_pointBCubeKey,
 					  float in_rPolyCubeDimLength,
-					  STriangleLine in_sTriangleLineToBuildFrom) :
+					  STriangleLine in_sTriangleLineToBuildFrom,
+			          float in_tileWeightRatio) :
 			rLinePointA(in_rasterGridPointA),
 			rLinePointB(in_rasterGridPointB),
 			rPolyCubeDimLength(in_rPolyCubeDimLength),
 			pointACubeKey(in_pointACubeKey),
-			pointBCubeKey(in_pointBCubeKey)
+			pointBCubeKey(in_pointBCubeKey),
+			tileWeightRatio(in_tileWeightRatio)
 		{
 			rLineIsBorderLine = in_sTriangleLineToBuildFrom.isBorderLine;
 			rLineBorderLineID = in_sTriangleLineToBuildFrom.borderLineID;
@@ -52,6 +54,7 @@ class RTriangleLine
 		EnclaveKeyDef::EnclaveKey pointACubeKey;	// the cubes that the points reside in
 		EnclaveKeyDef::EnclaveKey pointBCubeKey;	// ""
 		float rPolyCubeDimLength = 0.0f;			// the dimension length for xyz, for a rasterization cube.
+		float tileWeightRatio = 0.0f;
 		unsigned char rLineIsBorderLine = 0;		// indicates whether or not it is a border line of the STriangleSet this triangle belongs in
 		unsigned char rLineBorderLineID = 0;		// indicates the borderLineID, if it is indeed a border line
 		unsigned char isPointAOnBorderLine = 0;	// is point A on border line? (checked when borderLineID is 1)
@@ -66,7 +69,9 @@ class RTriangleLine
 				int halt = 3;
 				std::cin >> halt;
 			}
-			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, debugFlag);
+
+			lineTracer.setOptionalCubeLookupRef(&rasterizedBlocks);
+			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, tileWeightRatio, debugFlag);
 			lineTracer.runTrace();
 		};
 		bool debugFlag = false;

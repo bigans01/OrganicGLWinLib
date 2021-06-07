@@ -182,6 +182,54 @@ void RasterCubeTracerBase::iterateToNextBlock()
 
 }
 
+void RasterCubeTracerBase::setData(EnclaveKeyDef::EnclaveKey in_startCubeKey,
+	EnclaveKeyDef::EnclaveKey in_endCubeKey,
+	glm::vec3 in_startCubePoint,
+	glm::vec3 in_endCubePoint,
+	float in_rasterCubeDimLength,
+	float in_tileWeightRatio,
+	bool in_debugFlag)
+{
+	debugFlag = in_debugFlag;
+	rasterCubeDimLength = in_rasterCubeDimLength;
+	dynamicBorder.constructBorders(rasterCubeDimLength);
+	tileWeightRatio = in_tileWeightRatio;
+
+	setUpNextRun(in_startCubeKey, in_endCubeKey, in_startCubePoint, in_endCubePoint);
+
+
+}
+
+void RasterCubeTracerBase::setUpNextRun(EnclaveKeyDef::EnclaveKey in_startCubeKey,
+	EnclaveKeyDef::EnclaveKey in_endCubeKey,
+	glm::vec3 in_startCubePoint,
+	glm::vec3 in_endCubePoint)
+{
+	startCubeKey = in_startCubeKey;
+	currentCubeKey = in_startCubeKey;
+	endCubeKey = in_endCubeKey;
+	startCubePoint = in_startCubePoint;
+	endCubePoint = in_endCubePoint;
+
+	// the beginning tracing point is always equal to the center of a cube, which is equal to a point having half the value 
+	// for rasterCubeDimLength for x, y and z directions.
+	glm::vec3 tracingPoint(rasterCubeDimLength, rasterCubeDimLength, rasterCubeDimLength);
+	currentTracingPoint = tracingPoint;
+	currentTracingPoint /= 2;
+
+	tracerDirectionVector = endCubePoint - startCubePoint;
+	ECBPolyPoint convertedDirectionVector(tracerDirectionVector.x, tracerDirectionVector.y, tracerDirectionVector.z);
+	normalizedSlopeDirection = IndependentUtils::findNormalizedPoint(convertedDirectionVector);
+
+	lineLength = glm::distance(startCubePoint, endCubePoint) / 100;
+	remainingDistance = lineLength;
+}
+
+void RasterCubeTracerBase::setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef)
+{
+	optionalCubeLookup = in_optionalCubeLookupRef;
+}
+
 DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoint in_originPoint,
 	DynamicBorderLineList* in_blockBorderRef,
 	ECBPolyPoint in_distanceValues,

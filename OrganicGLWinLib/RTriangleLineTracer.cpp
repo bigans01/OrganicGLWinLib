@@ -13,7 +13,10 @@ void RTriangleLineTracer::runTrace()
 
 	std::cout << "Line length: " << lineLength << std::endl;
 
-	//while (currentCubeKey != endCubeKey)
+	auto traceAttemptBegin = std::chrono::high_resolution_clock::now();
+	optionalCubeLookup->insertCubeKey(currentCubeKey);
+	int numberOfInserts = 1;
+
 	while 
 	( 
 		(remainingDistance > 0.0f) 
@@ -22,6 +25,8 @@ void RTriangleLineTracer::runTrace()
 	)
 	{
 		iterateToNextBlock();
+		optionalCubeLookup->insertCubeKey(currentCubeKey);
+		numberOfInserts++;
 
 		if (debugFlag == true)
 		{
@@ -29,7 +34,43 @@ void RTriangleLineTracer::runTrace()
 			int debugWait = 3;
 			//std::cin >> debugWait;
 		}
+
+		// if the remaining distance goes negative, BEFORE the endCubeKey is hit, we've gone too far, and must attempt another pass.
+		if
+		(
+			(remainingDistance < 0.0f)
+			&&
+			(currentCubeKey != endCubeKey)
+		)
+		{
+			EnclaveKeyDef::EnclaveKey nextRunPointAKey = currentCubeKey;
+			EnclaveKeyDef::EnclaveKey nextRunPointBKey = endCubeKey;
+			glm::vec3 nextRunCubeAPoint(
+				(float(currentCubeKey.x) + 0.5f) * tileWeightRatio,
+				(float(currentCubeKey.y) + 0.5f) * tileWeightRatio,
+				(float(currentCubeKey.z) + 0.5f) * tileWeightRatio
+			);
+			glm::vec3 nextRunCubeBPoint(
+				(float(endCubeKey.x) + 0.5f) * tileWeightRatio,
+				(float(endCubeKey.y) + 0.5f) * tileWeightRatio,
+				(float(endCubeKey.z) + 0.5f) * tileWeightRatio
+			);
+
+			setUpNextRun(nextRunPointAKey, nextRunPointBKey, nextRunCubeAPoint, nextRunCubeBPoint);
+		}
 	}
 
+
+
+
+	auto traceAttemptEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> comparisonIterationsElapsed = traceAttemptEnd - traceAttemptBegin;
+	std::cout << "#-> Raster trace time  > " << comparisonIterationsElapsed.count() << std::endl;
+	std::cout << "#-> Number of inserts: " << numberOfInserts << std::endl;
+
 	std::cout << ":::::::::::: Final value of current cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+	if (currentCubeKey == endCubeKey)
+	{
+		isRunComplete = true;
+	}
 }

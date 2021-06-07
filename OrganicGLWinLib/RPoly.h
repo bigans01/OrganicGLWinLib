@@ -47,8 +47,9 @@ class RPoly
 
 					std::cout << ":: point A cube coord: " << pointARasterCubeCoord.x << ", " << pointARasterCubeCoord.y << ", " << pointARasterCubeCoord.z << std::endl;
 					std::cout << ":: point B cube coord: " << pointBRasterCubeCoord.x << ", " << pointBRasterCubeCoord.y << ", " << pointBRasterCubeCoord.z << std::endl;
+					std::cout << ":: float ratio: " << rPolyTileWeightToHundredthFloatRatio << std::endl;
 
-					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr);
+					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr, rPolyTileWeightToHundredthFloatRatio);
 
 					// hard-coded debug
 					/*

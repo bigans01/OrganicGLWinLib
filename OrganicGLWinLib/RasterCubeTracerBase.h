@@ -16,46 +16,23 @@ class RasterCubeTracerBase
 {
 	public:
 		void setData(EnclaveKeyDef::EnclaveKey in_startCubeKey,
-					 EnclaveKeyDef::EnclaveKey in_endCubeKey,
-					 glm::vec3 in_startCubePoint,
-					 glm::vec3 in_endCubePoint,
-					 float in_rasterCubeDimLength,
-					 bool in_debugFlag)
-		{
-			debugFlag = in_debugFlag;
+			EnclaveKeyDef::EnclaveKey in_endCubeKey,
+			glm::vec3 in_startCubePoint,
+			glm::vec3 in_endCubePoint,
+			float in_rasterCubeDimLength,
+			float in_tileWeightRatio,
+			bool in_debugFlag);
 
-			startCubeKey = in_startCubeKey;
-			currentCubeKey = in_startCubeKey;
-			endCubeKey = in_endCubeKey;
+		void setUpNextRun(EnclaveKeyDef::EnclaveKey in_startCubeKey,
+			EnclaveKeyDef::EnclaveKey in_endCubeKey,
+			glm::vec3 in_startCubePoint,
+			glm::vec3 in_endCubePoint);
 
-			startCubePoint = in_startCubePoint;
-			endCubePoint = in_endCubePoint;
-			rasterCubeDimLength = in_rasterCubeDimLength;
+		void setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef);
 
-			// the beginning tracing point is always equal to the center of a cube, which is equal to a point having half the value 
-			// for rasterCubeDimLength for x, y and z directions.
-			glm::vec3 tracingPoint(rasterCubeDimLength, rasterCubeDimLength, rasterCubeDimLength);
-			currentTracingPoint = tracingPoint;
-			currentTracingPoint /= 2;			
-
-			tracerDirectionVector = endCubePoint - startCubePoint;
-			ECBPolyPoint convertedDirectionVector(tracerDirectionVector.x, tracerDirectionVector.y, tracerDirectionVector.z);
-			normalizedSlopeDirection = IndependentUtils::findNormalizedPoint(convertedDirectionVector);
-
-			//lineLengthDownscaleValue = in_lineLengthDownscaleValue;
-			//lineLength = glm::distance(startCubePoint, endCubePoint) / lineLengthDownscaleValue;
-			//lineLength = glm::distance(startCubePoint, endCubePoint);
-			lineLength = glm::distance(startCubePoint, endCubePoint) / 100;
-			remainingDistance = lineLength;
-
-			dynamicBorder.constructBorders(rasterCubeDimLength);
-		}
 		virtual void runTrace() = 0;
 		void iterateToNextBlock();
-
-	protected:
-		DynamicBorderLineList dynamicBorder;
-
+		bool isRunComplete = false;
 		EnclaveKeyDef::EnclaveKey startCubeKey;
 		EnclaveKeyDef::EnclaveKey currentCubeKey;
 		EnclaveKeyDef::EnclaveKey endCubeKey;
@@ -65,13 +42,16 @@ class RasterCubeTracerBase
 		glm::vec3 endCubePoint;
 		glm::vec3 tracerDirectionVector;
 
+	protected:
+		DynamicBorderLineList dynamicBorder;
+
+
 		ECBPolyPoint normalizedSlopeDirection;
 
 		float rasterCubeDimLength = 0.0f;
 		float lineLength = 0.0f;
-		//float lineLengthDownscaleValue = 0.0f;
 		float remainingDistance = 0.0f;
-		bool isRunComplete = false;
+		float tileWeightRatio = 0.0f;
 
 		// optional values
 		RasterCubeLookup* optionalCubeLookup = nullptr;
