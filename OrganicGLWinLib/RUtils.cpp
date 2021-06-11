@@ -39,10 +39,11 @@ glm::vec3 RUtils::convertToRasterGridPoint(glm::vec3 in_pointToConvert,
 {
 	EnclaveKeyDef::EnclaveKey pointCellCoordinate = convertToRasterGridCell(in_pointToConvert, in_tileDimensionalWeight, in_numberOfTilesPerDimension);
 	float cellOffset = 0.5f;
-	float gridPointX = pointCellCoordinate.x + cellOffset;
-	float gridPointY = pointCellCoordinate.y + cellOffset;
-	float gridPointZ = pointCellCoordinate.z + cellOffset;
+	float gridPointX = (pointCellCoordinate.x * in_tileDimensionalWeight) + ( in_tileDimensionalWeight/2);
+	float gridPointY = (pointCellCoordinate.y * in_tileDimensionalWeight) + ( in_tileDimensionalWeight/2);
+	float gridPointZ = (pointCellCoordinate.z * in_tileDimensionalWeight) + ( in_tileDimensionalWeight/2);
 	glm::vec3 returnPoint(gridPointX, gridPointY, gridPointZ);
-	returnPoint *= in_tileDimWeightToHundredthRatio;
+	//returnPoint *= in_tileDimWeightToHundredthRatio;
+	//returnPoint /= in_tileDimWeightToHundredthRatio;
 	return returnPoint;
 }

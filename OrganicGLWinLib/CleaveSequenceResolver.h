@@ -21,6 +21,7 @@ class CleaveSequenceResolver
 																				// dimensionLimit = 4.0f
 																				// numberOfTilesPerDiemnsion = 400
 																				// tileGridWith = 0.01f	
+			std::cout << "Rcube dimensional length: " << rCubeDimensionalLength << std::endl;
 			tileDimWeightToHundredthFloatRatio = 100.0f / (numberOfTilesPerDimension / dimensionLimit);
 			std::cout << "tile weight to hundredth float ratio: " << tileDimWeightToHundredthFloatRatio << std::endl;
 		};

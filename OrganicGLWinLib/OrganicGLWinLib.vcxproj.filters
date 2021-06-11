@@ -1002,6 +1002,15 @@
     <ClInclude Include="RTriangleLineTracer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionPointArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionPointSearchResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1506,6 +1515,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RTriangleLineTracer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionPointArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

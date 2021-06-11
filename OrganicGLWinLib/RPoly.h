@@ -41,6 +41,10 @@ class RPoly
 					glm::vec3 currentLinePointA = RUtils::convertToRasterGridPoint(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
 					glm::vec3 currentLinePointB = RUtils::convertToRasterGridPoint(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
 
+					std::cout << ">> original currentLinePointA: " << currentLinePtr->pointA.x << ", " << currentLinePtr->pointA.y << ", " << currentLinePtr->pointA.z << std::endl;
+					std::cout << ">> original currentLinePointB: " << currentLinePtr->pointB.x << ", " << currentLinePtr->pointB.y << ", " << currentLinePtr->pointB.z << std::endl;
+					std::cout << ">> currentLinePointB: " << currentLinePointB.x << ", " << currentLinePointB.y << ", " << currentLinePointB.z << std::endl;
+
 					// get raster cube cooridnates
 					EnclaveKeyDef::EnclaveKey pointARasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim);
 					EnclaveKeyDef::EnclaveKey pointBRasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim);

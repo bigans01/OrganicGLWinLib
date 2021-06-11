@@ -206,6 +206,9 @@
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="CollectiveVerdictMachine.h" />
+    <ClInclude Include="CollisionPoint.h" />
+    <ClInclude Include="CollisionPointArray.h" />
+    <ClInclude Include="CollisionPointSearchResult.h" />
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
@@ -516,6 +519,7 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
+    <ClCompile Include="CollisionPointArray.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="ContestedBorderLineMap.cpp" />
     <ClCompile Include="CoplanarAreaRasterizer.cpp" />

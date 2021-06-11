@@ -23,6 +23,8 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "CategorizedLineManager.h"
+#include "ECBPolyPoint.h"
+#include "IndependentUtils.h"
 
 class CleaveSequenceFactory
 {

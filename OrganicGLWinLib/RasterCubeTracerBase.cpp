@@ -221,7 +221,8 @@ void RasterCubeTracerBase::setUpNextRun(EnclaveKeyDef::EnclaveKey in_startCubeKe
 	ECBPolyPoint convertedDirectionVector(tracerDirectionVector.x, tracerDirectionVector.y, tracerDirectionVector.z);
 	normalizedSlopeDirection = IndependentUtils::findNormalizedPoint(convertedDirectionVector);
 
-	lineLength = glm::distance(startCubePoint, endCubePoint) / 100;
+	//lineLength = glm::distance(startCubePoint, endCubePoint) / 100;
+	lineLength = glm::distance(startCubePoint, endCubePoint);
 	remainingDistance = lineLength;
 }
 

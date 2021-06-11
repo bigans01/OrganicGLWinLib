@@ -67,6 +67,7 @@ void RTriangleLineTracer::runTrace()
 	std::chrono::duration<double> comparisonIterationsElapsed = traceAttemptEnd - traceAttemptBegin;
 	std::cout << "#-> Raster trace time  > " << comparisonIterationsElapsed.count() << std::endl;
 	std::cout << "#-> Number of inserts: " << numberOfInserts << std::endl;
+	std::cout << "#-> Remaining distance to travel after run is done: " << remainingDistance << std::endl;
 
 	std::cout << ":::::::::::: Final value of current cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
 	if (currentCubeKey == endCubeKey)
