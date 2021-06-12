@@ -12,6 +12,7 @@ void CleaveSequenceResolver::addRPolyToCompare(SPoly in_comparingSPoly)
 
 }
 
+/*
 unsigned short CleaveSequenceResolver::convertBlockCoordsToUShort(int in_x, int in_y, int in_z)
 {
 	int x = in_x * (numberOfTilesPerDimension*numberOfTilesPerDimension);
@@ -23,6 +24,7 @@ EnclaveKeyDef::EnclaveKey CleaveSequenceResolver::convertSPolyPointToBlockCoord(
 {
 	return RUtils::convertToRasterGridCell(in_pointToConvert, rCubeDimensionalLength, numberOfTilesPerDimension);
 }
+*/
 
 void CleaveSequenceResolver::printRPolyToResolvePoints()
 {

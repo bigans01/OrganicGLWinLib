@@ -1,20 +1,18 @@
 #pragma once
 
-#ifndef CLEAVESEQUENCERESOLVER_H
-#define CLEAVESEQUENCERESOLVER_H
+#ifndef RASTERIZED3DMASSGRID_H
+#define RASTERIZED3DMASSGRID_H
 
-#include "EnclaveKeyDef.h"
-#include <iostream>
-#include "SPoly.h"
-#include "RUtils.h"
-#include "RPoly.h"
 #include "RasterGrid3dBase.h"
+#include <map>
+#include "RPoly.h"
+#include "MassGridArray.h"
 
-class CleaveSequenceResolver : public RasterGrid3dBase
+class Rasterized3DMassGrid : public RasterGrid3dBase
 {
-	public:
-		CleaveSequenceResolver() {};
-		CleaveSequenceResolver(int in_tilesPerDimension, float in_dimensionLimit)
+	public:	
+		Rasterized3DMassGrid() {};
+		void setGridParameters(int in_tilesPerDimension, float in_dimensionLimit)
 		{
 			dimensionLimit = in_dimensionLimit;
 			numberOfTilesPerDimension = in_tilesPerDimension;
@@ -25,14 +23,15 @@ class CleaveSequenceResolver : public RasterGrid3dBase
 			std::cout << "Rcube dimensional length: " << rCubeDimensionalLength << std::endl;
 			tileDimWeightToHundredthFloatRatio = 100.0f / (numberOfTilesPerDimension / dimensionLimit);
 			std::cout << "tile weight to hundredth float ratio: " << tileDimWeightToHundredthFloatRatio << std::endl;
+
+			dataArray.buildArray(in_dimensionLimit);
 		};
-
-		void addRPolyToResolve(SPoly in_sPolyToResolve);
-		void addRPolyToCompare(SPoly in_comparingSPoly);
-		void printRPolyToResolvePoints();
+		void addGridRPoly(SPoly in_sPolyToResolve);
+		void buildShell();				// the shell that must be constructed, so that we can fill the mass inside of the shell.
+		void fillMass();				// fills the mass of the grid; must be called only after buildShell() has been run.
 	private:
-		RPoly rPolyToResolve;
-
+		std::map<int, RPoly> rPolyMap;
+		int gridRPolyCount = 0;
+		MassGridArray dataArray;
 };
-
 #endif

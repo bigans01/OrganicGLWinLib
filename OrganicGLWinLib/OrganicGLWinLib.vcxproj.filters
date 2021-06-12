@@ -1002,13 +1002,40 @@
     <ClInclude Include="RTriangleLineTracer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionPoint.h">
+    <ClInclude Include="RCollisionPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionPointArray.h">
+    <ClInclude Include="RCollisionPointArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionPointSearchResult.h">
+    <ClInclude Include="RCollisionPointSearchResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCubeAreaDefiner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCorners.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshGroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableAreaScanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterGrid3dBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Rasterized3DMassGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridArrayCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1517,7 +1544,22 @@
     <ClCompile Include="RTriangleLineTracer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionPointArray.cpp">
+    <ClCompile Include="RCollisionPointArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RMorphableMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RMorphableMeshGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RasterGrid3dBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rasterized3DMassGrid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RMorphableAreaScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

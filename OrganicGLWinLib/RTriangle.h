@@ -4,6 +4,7 @@
 #define RTRIANGLE_H
 
 #include "RTriangleLine.h"
+#include "MassGridArray.h"
 
 class RTriangle
 {
@@ -28,6 +29,13 @@ class RTriangle
 			for (int x = 0; x < 3; x++)
 			{
 				rLines[x].runRasterTrace();
+			}
+		}
+		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef)
+		{
+			for (int x = 0; x < 3; x++)
+			{
+				rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef);
 			}
 		}
 	private:

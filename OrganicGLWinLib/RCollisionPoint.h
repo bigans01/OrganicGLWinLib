@@ -1,16 +1,16 @@
 #pragma once
 
-#ifndef COLLISIONPOINT_H
-#define COLLISIONPOINT_H
+#ifndef RCOLLISIONPOINT_H
+#define RCOLLISIONPOINT_H
 
 #include <glm/glm.hpp>
 #include "ECBPPOrientations.h"
 
-class CollisionPoint
+class RCollisionPoint
 {
 	public:
-		CollisionPoint() {};
-		CollisionPoint(ECBPPOrientations in_originalGridOrientation, glm::vec3 in_originalPoint) :
+		RCollisionPoint() {};
+		RCollisionPoint(ECBPPOrientations in_originalGridOrientation, glm::vec3 in_originalPoint) :
 			originalGridOrientation(in_originalGridOrientation),
 			originalValue(in_originalPoint),
 			currentValue(in_originalPoint)

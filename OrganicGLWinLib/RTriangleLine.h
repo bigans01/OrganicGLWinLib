@@ -9,6 +9,7 @@
 #include "STriangleLine.h"
 #include "RasterCubeLookup.h"
 #include "RTriangleLineTracer.h"
+#include "MassGridArray.h"
 
 class RTriangleLine
 {
@@ -74,6 +75,12 @@ class RTriangleLine
 			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, tileWeightRatio, debugFlag);
 			lineTracer.runTrace();
 		};
+
+		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef)
+		{
+
+		}
+
 		bool debugFlag = false;
 	private:
 		RasterCubeLookup rasterizedBlocks;
