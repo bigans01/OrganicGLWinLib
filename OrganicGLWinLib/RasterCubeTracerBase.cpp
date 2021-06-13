@@ -162,8 +162,10 @@ void RasterCubeTracerBase::iterateToNextBlock()
 	currentCubeKey.y += dynamicPointMeta.moveDirectionValues.y;
 	currentCubeKey.z += dynamicPointMeta.moveDirectionValues.z;
 
-	if (debugFlag == true)
-	{
+	//std::cout << "current key is now: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+
+	//if (debugFlag == true)
+	//{
 		if (dynamicPointMeta.dimensionResetValues.isAllZero() == true)
 		{
 			std::cout << "!!! WARNING: is all zero detected..." << std::endl;
@@ -177,7 +179,7 @@ void RasterCubeTracerBase::iterateToNextBlock()
 			int waitVal = 3;
 			std::cin >> waitVal;
 		}
-	}
+	//}
 	//std::cout << "new cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
 
 }
@@ -242,6 +244,9 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 													//float dist_to_X = in_distanceValues.x;			// get distance for x
 													//float dist_to_Y = in_distanceValues.y;			// ... for y
 													//float dist_to_Z = in_distanceValues.z;			// ... for z
+
+	//std::cout << "Original dist values: " << in_distanceValues.x << ", " << in_distanceValues.y << ", " << in_distanceValues.z << std::endl;
+
 	ECBPolyPoint calibratedDistances = roundXYZInterceptDistancesToAppropriatePrecision(in_distanceValues.x, in_distanceValues.y, in_distanceValues.z);
 	float dist_to_X = calibratedDistances.x;
 	float dist_to_Y = calibratedDistances.y;
@@ -260,6 +265,11 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		//std::cout << "::::::::: Y-intercept coords: " << y_intercept_coords.x << ", " << y_intercept_coords.y << ", " << y_intercept_coords.z << std::endl;
 		//std::cout << "::::::::: Z-intercept coords: " << z_intercept_coords.x << ", " << z_intercept_coords.y << ", " << z_intercept_coords.z << std::endl;
 	}
+	//std::cout << "Original distance values: " << calibratedDistances.x << ", " << calibratedDistances.y << ", " << calibratedDistances.z << std::endl;
+	//std::cout << "Dim distance values: " << dist_to_X << ", " << dist_to_Y << ", " << dist_to_Z << std::endl;
+	//std::cout << "::::::::: X-intercept coords: " << x_intercept_coords.x << ", " << x_intercept_coords.y << ", " << x_intercept_coords.z << std::endl;
+	//std::cout << "::::::::: Y-intercept coords: " << y_intercept_coords.x << ", " << y_intercept_coords.y << ", " << y_intercept_coords.z << std::endl;
+	//std::cout << "::::::::: Z-intercept coords: " << z_intercept_coords.x << ", " << z_intercept_coords.y << ", " << z_intercept_coords.z << std::endl;
 
 	// We must determine if any distances are equal: It is a corner when:
 	// A: X/Y/Z distances are equal
@@ -290,7 +300,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			(dist_to_X == dist_to_Y) &&
 				(dist_to_Z == 0.0f) &&
 				(
-				(in_originPoint.z == 1.0f)
+				(in_originPoint.z == rasterCubeDimLength)
 					||
 					(in_originPoint.z == 0.0f)
 					)
@@ -300,7 +310,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			(dist_to_Y == dist_to_Z) &&
 				(dist_to_X == 0.0f) &&
 				(
-				(in_originPoint.x == 1.0f)
+				(in_originPoint.x == rasterCubeDimLength)
 					||
 					(in_originPoint.x == 0.0f)
 					)
@@ -310,7 +320,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			(dist_to_X == dist_to_Z) &&
 				(dist_to_Y == 0.0f) &&
 				(
-				(in_originPoint.y == 1.0f)
+				(in_originPoint.y == rasterCubeDimLength)
 					||
 					(in_originPoint.y == 0.0f)
 					)
@@ -359,7 +369,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		(														//	Condition 2: dist_to_X equals dist_to_Y -AND- the z value for the origin point is at the north or the south face -AND- the z slope is 0
 		(dist_to_X == dist_to_Y)
 			&&
-			((in_originPoint.z == 1.0f) || (in_originPoint.z == 0.0f))
+			((in_originPoint.z == rasterCubeDimLength) || (in_originPoint.z == 0.0f))
 			&&
 			in_slopeDirection.z == 0.0f
 			)
@@ -369,7 +379,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		(														//	Condition 3: dist_to_X equals dist_to_Z -AND- the y value for the origin point is at the top or bottom face -AND- the y slope is 0
 		(dist_to_X == dist_to_Z)
 			&&
-			((in_originPoint.y == 1.0f) || (in_originPoint.y == 0.0f))
+			((in_originPoint.y == rasterCubeDimLength) || (in_originPoint.y == 0.0f))
 			&&
 			in_slopeDirection.y == 0.0f
 			)
@@ -379,7 +389,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		(														//	Condition 4: dist_to_Y equals dist_to_Z -AND- the x value for the origin point is at the east or west face -AND- the x slope is 0
 		(dist_to_Y == dist_to_Z)
 			&&
-			((in_originPoint.x == 1.0f) || (in_originPoint.x == 0.0f))
+			((in_originPoint.x == rasterCubeDimLength) || (in_originPoint.x == 0.0f))
 			&&
 			in_slopeDirection.x == 0.0f
 			)
@@ -513,6 +523,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 	// Step 2: check if the resulting point is a border line intercept
 	else if ((dist_to_X == dist_to_Y) || (dist_to_Y == dist_to_Z) || (dist_to_X == dist_to_Z))
 	{
+		//std::cout << "++++++++++++++++++++++++++++++++++++++++ entered LINE logic if statement..." << std::endl;
 		if (debugFlag == true)
 		{
 			//std::cout << "++++++++++++++++++++++++++++++++++++++++ entered LINE logic if statement..." << std::endl;
@@ -521,7 +532,11 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		// ||||||||||||||||||||||||||||||||||||||||| condition 1 (Z-lines): check for Z line intercepts, when X and Y are equal but neither are 0 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 		if ((dist_to_X == dist_to_Y) && (dist_to_X != 0.0f))							// condition 1: X equals Y, but neither X or Y are 0 (0 would indicate their distances are not used)	
 		{
-			pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);	// parameters: 0 = round other points to x, use x-intercept coords, corner type
+			//********DO NOT put pointToCheck before the if statements below; this is because of the updated logic for 
+			// DynamicLinePointSynchronizer on 6/13/2021
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// check if Z distance, which is not one of the twins of X/Y, is greater than X or Y...if it is, X and Y hit first, and they are on a line.
 			if (
 				(dist_to_Z > dist_to_X) && (in_slopeDirection.z != 0.0f)		//     condition 1: if Z's distance is greater  than X (could also be y here), AND it's slope is not 0, we go with x/y distance point
 				||																//		-- OR --
@@ -529,13 +544,11 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 				)	// we can compare to either x or y, since they are both the same value; if Z is greater, it will not hit a Z-face before X and Y does
 			{
 				//std::cout << "X equals Y, Non-face entry" << std::endl;
-
 				// use x_intercept coords
-				// old: pointToCheck = x_intercept_coords (first parameter value of 0, for x)
-				//pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);	// make the pointToCheck equal to either x or y intercept coords
-																											//std::cout << "entry check" << std::endl;
-																											//perform comparisons to Zaxis borders -- lowerWest, lowerEast, upperWest, upperEast
-																											// Lower West line check-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+				pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);	// parameters: 0 = round other points to x, use x-intercept coords, line or corner type
+				//perform comparisons to Zaxis borders -- lowerWest, lowerEast, upperWest, upperEast
+				// Lower West line check-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 				if ((pointToCheck.x == in_blockBorderRef->corner_LowerNW.pointXYZ.x)
 					&&
 					(pointToCheck.y == in_blockBorderRef->corner_LowerNW.pointXYZ.y)
@@ -592,6 +605,9 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 				}
 
 			}
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// otherwise, the non-twin of Z is the closest intercept. So just use it's coords, and don't round any points to line or corner.
 			else if ((dist_to_Z < dist_to_X) && (in_slopeDirection.z != 0.0f))	// Z-face gets intersected before X/Y, so it's a face hit and we don't need to edit the points.
 
 			{
@@ -618,21 +634,20 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			{
 				//std::cout << "++++++++++++++++++++++++++++++++++++++++ entered LINE > : dist_to_X ==  dist_to_Z : " << std::endl;
 			}
+			//std::cout << "++++++++++++++++++++++++++++++++++++++++ entered LINE > : dist_to_X ==  dist_to_Z : " << std::endl;
 
-			pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);	// parameters: 0 = round other points to x, use x-intercept coords, corner type
-			// check if y distance is greater than x and z
+			//********DO NOT put pointToCheck before the if statements below; this is because of the updated logic for 
+			// DynamicLinePointSynchronizer on 6/13/2021
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// check if Y distance, which is not one of the twins of X/Z, is greater than X or Z...if it is, X and Z hit first, and they are on a line.
 			if (
 				(dist_to_Y > dist_to_X) && (in_slopeDirection.y != 0.0f)			// condition 1:	if Y's distance is greater  than X (could also be z here), AND it's slope is not 0, we go with x/z distance point
-				//||																	// --OR-- 
-				//((dist_to_X != 0.0f) && (dist_to_Y == dist_to_Z) && (dist_to_Y == 0.0f))	// condition 2: X distance is not 0, but Y and Z are both 0.0f	(a straight line along the x-axis, with no y/z slope, so NORTH or SOUTH face)
-				//||																			// -- OR --
-				//((dist_to_Z != 0.0f) && (dist_to_X == dist_to_Y) && (dist_to_X == 0.0f))	// condition 3:	Z distance is not 0, but X and Y are both 0.0f	(a straight line along the z-axis, with no x/y slope, so WEST or EAST face)
 				||
 				(in_slopeDirection.y == 0.0f)										// condition 2: Y's slope is 0, check x and y	
 				)
 			{
-			
-				// pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);
+				pointToCheck = roundToNearestDynamicLineOrCorner(0, x_intercept_coords, isPointOnALine);	// parameters: 0 = round other points to x, use x-intercept coords, corner type			
 				if ((pointToCheck.x == in_blockBorderRef->corner_LowerNE.pointXYZ.x)
 					&&
 					(pointToCheck.z == in_blockBorderRef->corner_LowerNE.pointXYZ.z)
@@ -692,6 +707,9 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 
 
 			}
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// otherwise, the non-twin of Y is the closest intercept. So just use it's coords, and don't round any points to line or corner.
 			else if ((dist_to_Y < dist_to_X) && (in_slopeDirection.y != 0.0f))
 			{
 				pointToCheck = y_intercept_coords;
@@ -717,7 +735,13 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			//std::cout << "Slope direction x: " << in_slopeDirection.x << std::endl;
 			//std::cout << "is point on a line>: " << isPointOnALine << std::endl;
 			//std::cout << "Z-int coourds, before modification: " << z_intercept_coords.x << ", " << z_intercept_coords.y << ", " << z_intercept_coords.z << " | Distance to z-intercept: " << dist_to_Z << std::endl;
-			pointToCheck = roundToNearestDynamicLineOrCorner(2, z_intercept_coords, isPointOnALine);
+			//pointToCheck = roundToNearestDynamicLineOrCorner(2, z_intercept_coords, isPointOnALine);
+
+			//********DO NOT put pointToCheck before the if statements below; this is because of the updated logic for 
+			// DynamicLinePointSynchronizer on 6/13/2021
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// check if X distance, which is not one of the twins of Y/Z, is greater than Y or Z...if it is, Y and Z hit first, and they are on a line.
 			if (
 				(dist_to_X > dist_to_Y) && (in_slopeDirection.x != 0.0f)	// condition 1:	if X's distance is greater  than Y (could also be Z here), AND it's slope is not 0, we go with y/z distance point
 				||															// --OR-- 
@@ -776,6 +800,9 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 					calculatedEndpointData.applyBlockBorder(in_blockBorderRef->Xaxis_upperNorth);
 				}
 			}
+
+			// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+			// otherwise, the non-twin of X is the closest intercept. So just use it's coords, and don't round any points to line or corner.
 			else if ((dist_to_X < dist_to_Y) && (in_slopeDirection.x != 0.0f))
 			{
 				//std::cout << " >>>> Y equals Z (branch 2) " << std::endl;
@@ -1176,6 +1203,9 @@ ECBPolyPoint RasterCubeTracerBase::roundToNearestDynamicLineOrCorner(int in_xory
 	// correct for any over shot between 0.0f and rasterCubeDimLength (i.e., if x y or z value is -0.00005f , make it 0.0f
 	// corrections for X
 	//std::cout << "original point: " << in_polyPoint.x << ", " << in_polyPoint.y << ", " << in_polyPoint.z << std::endl;
+	//std::cout << "In line or corner value: " << in_lineOrCorner << std::endl;
+	//std::cout << "In xoryorz value: " << in_xoryorz << std::endl;
+
 	if (calibratedPoint.x < 0.0f)
 	{
 		calibratedPoint.x = 0.0f;
@@ -1358,6 +1388,8 @@ ECBPolyPoint RasterCubeTracerBase::roundToNearestDynamicLineOrCorner(int in_xory
 		// check for x
 		else if (in_xoryorz == 2)
 		{
+			//std::cout << "Checking for X and Y. " << std::endl;
+
 			/*
 			if (in_polyPoint.x > 0.9999f)
 			{
