@@ -63,7 +63,9 @@ class RasterCubeTracerBase
 			                                           ECBPolyPoint in_slopeDirection, 
 			                                           ECBPolyPointTri in_XYZinterceptCoords);
 		ECBPolyPoint roundXYZInterceptDistancesToAppropriatePrecision(float in_distX, float in_distY, float in_distZ);
-		ECBPolyPoint roundToNearestDynamicLineOrCorner(int in_xoryorz, ECBPolyPoint in_polyPoint, int in_lineOrCorner);
+		ECBPolyPoint bindToNearestCorner(int in_xoryorz, ECBPolyPoint in_polyPoint);
+		ECBPolyPoint bindToNearestLine(int in_xoryorz, ECBPolyPoint in_polyPoint);
+		ECBPolyPoint getTrimmedPoint(ECBPolyPoint in_polyPoint);
 
 		bool debugFlag = false;
 };
