@@ -24,7 +24,7 @@ class Rasterized3DMassGrid : public RasterGrid3dBase
 			tileDimWeightToHundredthFloatRatio = 100.0f / (numberOfTilesPerDimension / dimensionLimit);
 			std::cout << "tile weight to hundredth float ratio: " << tileDimWeightToHundredthFloatRatio << std::endl;
 
-			dataArray.buildArray(in_dimensionLimit);
+			dataArray.buildArray(in_tilesPerDimension);
 		};
 		void addGridRPoly(SPoly in_sPolyToResolve);
 		void buildShell();				// the shell that must be constructed, so that we can fill the mass inside of the shell.

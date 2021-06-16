@@ -20,6 +20,9 @@ class RCollisionPoint
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
 	private:
 		bool massHit = false;		// would determine if the point collided with some form of matter during a trace by a MorphableMesh
+		bool xMovementPermitted = true;
+		bool yMovementPermitted = true;
+		bool zMovementPermitted = true;
 		ECBPPOrientations originalGridOrientation; // the point's original orientation, in relation to the grid it belongs in.
 };
 

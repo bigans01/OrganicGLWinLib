@@ -15,12 +15,7 @@ void Rasterized3DMassGrid::buildShell()
 	auto rPolysEnd = rPolyMap.end();
 	for (; rPolysBegin != rPolysEnd; rPolysBegin++)
 	{
-		auto rTrianglesBegin = rPolysBegin->second.rTriangleMap.begin();
-		auto rTrianglesEnd = rPolysBegin->second.rTriangleMap.end();
-		for (; rTrianglesBegin != rTrianglesEnd; rTrianglesBegin++)
-		{
-			rTrianglesBegin->second.traceRasterLinesIntoGrid(&dataArray);
-		}
+		rPolysBegin->second.traceTriangleAreaIntoGrid(&dataArray);
 	}
 }
 

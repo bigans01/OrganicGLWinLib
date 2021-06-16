@@ -1038,6 +1038,15 @@
     <ClInclude Include="MassGridArrayCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MassGridSearchResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassCellBitFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterKeyLookupByDim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

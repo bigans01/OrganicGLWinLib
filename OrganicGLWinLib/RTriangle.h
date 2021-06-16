@@ -31,11 +31,12 @@ class RTriangle
 				rLines[x].runRasterTrace();
 			}
 		}
-		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef)
+
+		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal)
 		{
 			for (int x = 0; x < 3; x++)
 			{
-				rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef);
+				rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef, in_triangleEmptyNormal);
 			}
 		}
 	private:

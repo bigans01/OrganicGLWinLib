@@ -6,6 +6,16 @@ void RPoly::addRTriangle(RTriangle in_rTriangleToAdd)
 	rTriangleMap[numberOfRTriangles++] = in_rTriangleToAdd;
 }
 
+void RPoly::traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef)
+{
+	auto rTrianglesBegin = rTriangleMap.begin();
+	auto rTrianglesEnd = rTriangleMap.end();
+	for (; rTrianglesBegin != rTrianglesEnd; rTrianglesBegin++)
+	{
+		rTrianglesBegin->second.traceRasterLinesIntoGrid(in_massGridArrayRef, rPolyEmptyNormal);
+	}
+}
+
 void RPoly::printRPoints()
 {
 	for (int x = 0; x < numberOfRBorderLines; x++)

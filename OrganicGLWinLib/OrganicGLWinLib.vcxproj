@@ -206,10 +206,13 @@
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="CollectiveVerdictMachine.h" />
+    <ClInclude Include="MassCellBitFlags.h" />
     <ClInclude Include="MassGridArray.h" />
     <ClInclude Include="MassGridArrayCell.h" />
+    <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="RasterGrid3dBase.h" />
     <ClInclude Include="Rasterized3DMassGrid.h" />
+    <ClInclude Include="RasterKeyLookupByDim.h" />
     <ClInclude Include="RCollisionPoint.h" />
     <ClInclude Include="RCollisionPointArray.h" />
     <ClInclude Include="RCollisionPointSearchResult.h" />

@@ -76,8 +76,42 @@ class RTriangleLine
 			lineTracer.runTrace();
 		};
 
-		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef)
+		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal)
 		{
+			// run a tracer, just as in runRasterTrace(); but populate each traced block from that line in the array when we are done.
+			RTriangleLineTracer lineTracer;
+			lineTracer.setOptionalCubeLookupRef(&rasterizedBlocks);
+			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, tileWeightRatio, debugFlag);
+			lineTracer.runTrace();
+
+			// use the values rasterizedBlocks set to populate the massGridArray with the appropriate flags.
+			auto gridUpdateBegin = std::chrono::high_resolution_clock::now();
+			int gridUpdateCount = 0;
+			auto fetchedLookup = rasterizedBlocks.fetchRawXLookup();
+			auto fetchedIntBegin = (*fetchedLookup).lookup.begin();
+			auto fetchedIntEnd = (*fetchedLookup).lookup.end();
+			for (; fetchedIntBegin != fetchedIntEnd; fetchedIntBegin++)
+			{
+				auto currentFetchedSetBegin = fetchedIntBegin->second.begin();
+				auto currentFetchedSetEnd = fetchedIntBegin->second.end();
+				for (; currentFetchedSetBegin != currentFetchedSetEnd; currentFetchedSetBegin++)
+				{
+					EnclaveKeyDef::EnclaveKey currentKey(fetchedIntBegin->first, currentFetchedSetBegin->a, currentFetchedSetBegin->b);
+					MassGridSearchResult currentSearchResult = in_massGridArrayRef->searchForCell(currentKey.x, currentKey.y, currentKey.z);
+					if (currentSearchResult.wasSearchKeyValid == true)
+					{
+						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
+
+						gridUpdateCount++;
+					}
+				}
+			}
+
+			auto gridUpdateEnd = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> gridUpdateElapsed = gridUpdateEnd - gridUpdateBegin;
+
+			std::cout << "Number of grid updates: " << gridUpdateCount << std::endl;
+			std::cout << "Grid update time: " << gridUpdateElapsed.count() << std::endl;
 
 		}
 

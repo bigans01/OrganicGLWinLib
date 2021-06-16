@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <map>
 #include <iostream>
+#include "RasterKeyLookupByDim.h"
 
 class RasterCubeLookup
 {
@@ -90,7 +91,13 @@ class RasterCubeLookup
 			return returnKeys;
 		}
 
+		RasterKeyLookupByDim* fetchRawXLookup()
+		{
+			return &xLookup;
+		}
+
 	private:
+		/*
 		struct KeyLookup
 		{
 			public:
@@ -130,10 +137,11 @@ class RasterCubeLookup
 				friend class RasterCubeLookup;
 				std::map<int, std::unordered_set<EnclaveKeyDef::Enclave2DKey, EnclaveKeyDef::KeyHasher>> lookup;
 		};
+		*/
 		
-		KeyLookup xLookup;
-		KeyLookup yLookup;
-		KeyLookup zLookup;
+		RasterKeyLookupByDim xLookup;
+		RasterKeyLookupByDim yLookup;
+		RasterKeyLookupByDim zLookup;
 };
 
 #endif
