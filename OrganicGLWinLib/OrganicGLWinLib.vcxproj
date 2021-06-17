@@ -209,6 +209,7 @@
     <ClInclude Include="MassCellBitFlags.h" />
     <ClInclude Include="MassGridArray.h" />
     <ClInclude Include="MassGridArrayCell.h" />
+    <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="RasterGrid3dBase.h" />
     <ClInclude Include="Rasterized3DMassGrid.h" />

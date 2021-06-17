@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "Rasterized3DMassGrid.h"
 #include "RMorphableMesh.h"
+#include "MassGridArrayCellScanArea.h"
 
 class RMorphableAreaScanner
 {
@@ -35,6 +36,8 @@ class RMorphableAreaScanner
 
 	private:
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
+		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;
+		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
 		Rasterized3DMassGrid massGrid;
 		int scannerCellsPerDimension = 0;

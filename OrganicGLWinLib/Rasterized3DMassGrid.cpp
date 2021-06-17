@@ -23,3 +23,8 @@ void Rasterized3DMassGrid::fillMass()
 {
 
 }
+
+bool Rasterized3DMassGrid::wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea)
+{
+	return dataArray.wereCellsDiscoveredInArea(in_scanArea);
+}

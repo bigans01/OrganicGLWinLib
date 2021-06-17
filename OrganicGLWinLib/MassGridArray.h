@@ -6,6 +6,7 @@
 #include <mutex>
 #include "MassGridArrayCell.h"
 #include "MassGridSearchResult.h"
+#include "MassGridArrayCellScanArea.h"
 
 class MassGridArray
 {
@@ -47,6 +48,44 @@ class MassGridArray
 				std::cout << "!!! Warning, key NOT VALID; key was " << in_x << ", " << in_y << ", " << in_z << " | dim size was: " << dimensionSize << std::endl;
 			}
 			return searchResult;
+		}
+
+		bool wereCellsDiscoveredInArea(MassGridArrayCellScanArea in_scanArea)
+		{
+			bool wereCellsDiscovered = false;
+
+			//std::cout << "Start scan point: " << in_scanArea.scanKeyA.x << ", " << in_scanArea.scanKeyA.y << ", " << in_scanArea.scanKeyA.z << std::endl;
+			//std::cout << "End scan point: " << in_scanArea.scanKeyB.x << ", " << in_scanArea.scanKeyB.y << ", " << in_scanArea.scanKeyB.z << std::endl;
+		
+			int start_x = in_scanArea.scanKeyA.x;
+			int start_y = in_scanArea.scanKeyA.y;
+			int start_z = in_scanArea.scanKeyA.z;
+
+			int end_x = in_scanArea.scanKeyB.x;
+			int end_y = in_scanArea.scanKeyB.y;
+			int end_z = in_scanArea.scanKeyB.z;
+
+			for (int x = start_x; x < end_x; x++)
+			{
+				for (int y = start_y; y < end_y; y++)
+				{
+					for (int z = start_z; z < end_z; z++)
+					{
+						MassGridSearchResult currentSearchResult = searchForCell(x, y, z);
+						if (currentSearchResult.wasSearchKeyValid == true)
+						{
+							MassGridArrayCell* currentRef = currentSearchResult.cellRef;
+							if (currentRef->isFlagSet(MassCellBitFlags::LINE_MASS))
+							{
+								std::cout << "!!! Notice: cell discovered. " << std::endl;
+								wereCellsDiscovered = true;
+								goto END;
+							}
+						}
+					}
+				}
+			}
+			END:return wereCellsDiscovered;
 		}
 		
 	private:

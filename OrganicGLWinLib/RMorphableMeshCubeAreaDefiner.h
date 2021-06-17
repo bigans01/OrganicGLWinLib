@@ -13,10 +13,10 @@ class RMorphableMeshCubeAreaDefiner
 		{
 			float cubeHalfDiameter = in_cubeDiameter / 2;
 			definingPointA = in_cubeCenterPoint;
-			definingPointA += in_cubeDiameter;
+			definingPointA -= cubeHalfDiameter;
 
 			definingPointB = in_cubeCenterPoint;
-			definingPointB -= in_cubeDiameter;
+			definingPointB += cubeHalfDiameter;
 		}
 		glm::vec3 definingPointA, definingPointB;
 };

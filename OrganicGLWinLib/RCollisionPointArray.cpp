@@ -5,7 +5,7 @@ void RCollisionPointArray::createArray(int in_arraySize)
 {
 	arraySize = in_arraySize;	// would be equal to the number of points per MorphableMesh x the the number of MorphableMeshes; ie., for an Enclave Collection
 								// where the morphable meshes each contain 8 points, the value would be 4096
-	RCollisionPoints.reset(new RCollisionPoint[arraySize]);
+	collisionPoints.reset(new RCollisionPoint[arraySize]);
 	isArraySet = true;
 }
 
@@ -14,7 +14,7 @@ RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::
 	RCollisionPointSearchResult searchResult;
 	for (int x = 0; x < currentArrayIndex; x++)
 	{
-		if (RCollisionPoints[x].originalValue == in_pointToSearch)
+		if (collisionPoints[x].originalValue == in_pointToSearch)
 		{
 			searchResult.wasPointFound = true;
 			searchResult.point = in_pointToSearch;
@@ -27,5 +27,5 @@ RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::
 void RCollisionPointArray::insertRCollisionPoint(ECBPPOrientations in_orientation, glm::vec3 in_pointToFind)
 {
 	RCollisionPoint newPoint(in_orientation, in_pointToFind);
-	RCollisionPoints[currentArrayIndex++] = newPoint;
+	collisionPoints[currentArrayIndex++] = newPoint;
 }

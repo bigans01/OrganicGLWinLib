@@ -13,8 +13,8 @@ class RMorphableMeshGroup
 {
 	public:
 		void insertMeshIntoGroup(EnclaveKeyDef::EnclaveKey in_meshKey, RMorphableMesh in_mesh);
-	private:
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
+	private:
 		RCollisionPointArray meshGroupPointArray;
 };
 
