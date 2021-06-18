@@ -84,8 +84,8 @@ void RMorphableAreaScanner::scanGridMass()
 					EnclaveKeyDef::EnclaveKey candidateKey = remainingMeshesBegin->first;
 					EnclaveKeyDef::EnclaveKey currentMeshGroupMeshKey = currentMeshGroupMeshesBegin->first;
 					
-					std::cout << "Comparing keys: keyA (" << candidateKey.x << ", " << candidateKey.y << ", " << candidateKey.z
-						<< ") | keyB: (" << currentMeshGroupMeshKey.x << ", " << currentMeshGroupMeshKey.y << ", " << currentMeshGroupMeshKey.z << std::endl;
+					//std::cout << "Comparing keys: keyA (" << candidateKey.x << ", " << candidateKey.y << ", " << candidateKey.z
+						//<< ") | keyB: (" << currentMeshGroupMeshKey.x << ", " << currentMeshGroupMeshKey.y << ", " << currentMeshGroupMeshKey.z << std::endl;
 
 					bool neighborsFound = checkIfKeysAreNeighbors(candidateKey, currentMeshGroupMeshKey);
 					if (neighborsFound == true)

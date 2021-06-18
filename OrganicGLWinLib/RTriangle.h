@@ -34,10 +34,24 @@ class RTriangle
 
 		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal)
 		{
+			// step 1: determine the value of the DOWNFILL_CRUST bit
+			int downFillCrustBit = 0;
+			if (in_triangleEmptyNormal.y > 0.0f)
+			{
+				downFillCrustBit = 1;
+			}
+
+
+			// step 2: trace the lines of the triangle into the grid.
 			for (int x = 0; x < 3; x++)
 			{
-				rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef, in_triangleEmptyNormal);
+				rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef, downFillCrustBit);
 			}
+
+			// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interor of the RTriangle
+			// into the MassGridArray. Each line pair should do X, Y, and Z scans.
+
+
 		}
 	private:
 		RTriangleLine rLines[3];

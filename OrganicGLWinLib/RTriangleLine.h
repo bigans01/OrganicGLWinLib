@@ -76,8 +76,9 @@ class RTriangleLine
 			lineTracer.runTrace();
 		};
 
-		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal)
+		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, int in_downFillCrustBit)
 		{
+			
 			// run a tracer, just as in runRasterTrace(); but populate each traced block from that line in the array when we are done.
 			RTriangleLineTracer lineTracer;
 			lineTracer.setOptionalCubeLookupRef(&rasterizedBlocks);
@@ -100,6 +101,8 @@ class RTriangleLine
 					MassGridSearchResult currentSearchResult = in_massGridArrayRef->searchForCell(currentKey.x, currentKey.y, currentKey.z);
 					if (currentSearchResult.wasSearchKeyValid == true)
 					{
+						currentSearchResult.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
+						currentSearchResult.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, in_downFillCrustBit);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
 
 						gridUpdateCount++;
