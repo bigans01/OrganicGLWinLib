@@ -12,7 +12,7 @@ class RCollisionPointArray
 {
 	public:
 		RCollisionPointArray() {};
-		RCollisionPointArray(const RCollisionPointArray& in_arrayB)
+		RCollisionPointArray& operator=(const RCollisionPointArray& in_arrayB)
 		{
 			isArraySet = in_arrayB.isArraySet;
 			arraySize = in_arrayB.arraySize;
@@ -25,6 +25,7 @@ class RCollisionPointArray
 					collisionPoints[x] = in_arrayB.collisionPoints[x];
 				}
 			}
+			return *this;
 		};
 
 		void createArray(int in_arraySize);

@@ -206,6 +206,7 @@
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="CollectiveVerdictMachine.h" />
+    <ClInclude Include="LookupByDimRegister.h" />
     <ClInclude Include="MassCellBitFlags.h" />
     <ClInclude Include="MassGridArray.h" />
     <ClInclude Include="MassGridArrayCell.h" />
@@ -630,6 +631,7 @@
     <ClCompile Include="RMorphableMesh.cpp" />
     <ClCompile Include="RMorphableMeshGroup.cpp" />
     <ClCompile Include="RPoly.cpp" />
+    <ClCompile Include="RTriangle.cpp" />
     <ClCompile Include="RTriangleLineTracer.cpp" />
     <ClCompile Include="RUtils.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />
