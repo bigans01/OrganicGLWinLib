@@ -18,8 +18,128 @@ RTriangle::RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLi
 
 void RTriangle::buildRegisters()
 {
-	// find the greatest difference in x,y,z
+	EnclaveKeyDef::EnclaveKey pointAKey = rLines[0].pointACubeKey;
+	EnclaveKeyDef::EnclaveKey pointBKey = rLines[1].pointACubeKey;
+	EnclaveKeyDef::EnclaveKey pointCKey = rLines[2].pointACubeKey;
 
+	// find the greatest difference in x,y,z
+	xScanMeta = determineScanMeta(pointAKey.x, pointBKey.x, pointCKey.x);
+	yScanMeta = determineScanMeta(pointAKey.y, pointBKey.y, pointCKey.y);
+	zScanMeta = determineScanMeta(pointAKey.z, pointBKey.z, pointCKey.z);
+
+	std::cout << ">>>> X scan, greatest dist: " << xScanMeta.numberOfScans << std::endl;
+	std::cout << ">>>> X scan, scan coords -- begin: " << xScanMeta.dimStartValue << " | end: " << xScanMeta.dimEndValue << std::endl;
+
+	std::cout << ">>>> Y scan, greatest dist: " << yScanMeta.numberOfScans << std::endl;
+	std::cout << ">>>> Y scan, scan coords -- begin: " << yScanMeta.dimStartValue << " | end: " << yScanMeta.dimEndValue << std::endl;
+
+	std::cout << ">>>> Z scan, greatest dist: " << zScanMeta.numberOfScans << std::endl;
+	std::cout << ">>>> Z scan, scan coords -- begin: " << zScanMeta.dimStartValue << " | end: " << zScanMeta.dimEndValue << std::endl;
+
+	// set the unique_ptrs for the dim registers;
+	xDimRegister.reset(new LookupByDimRegister[xScanMeta.numberOfScans]);
+	yDimRegister.reset(new LookupByDimRegister[yScanMeta.numberOfScans]);
+	zDimRegister.reset(new LookupByDimRegister[zScanMeta.numberOfScans]);
+
+	// set the unique_ptr arrays-being-set flag
+	areRegistersSet = true;
+
+	int buildWait = 3;
+	std::cin >> buildWait;
+}
+
+RTriangle::DimScanMeta RTriangle::determineScanMeta(int in_pointADimValue, int in_pointBDimValue, int in_pointCDimValue)
+{
+	DimScanMeta returnMeta;
+
+	// build the candidate for point A
+	bool a_match_to_b = false;
+	bool a_match_to_c = false;
+	int a_begin_scan_coord, a_end_scan_coord;
+	int a_a_to_b = abs(in_pointBDimValue - in_pointADimValue);	// should be b - a 
+	int a_a_to_c = abs(in_pointCDimValue - in_pointADimValue);	// "" c - a
+	int a_greatestDist = std::max(a_a_to_b, a_a_to_c);
+	int a_count = a_greatestDist + 1;
+	if (a_greatestDist == a_a_to_b)
+	{
+		a_match_to_b = true;
+		a_begin_scan_coord = in_pointADimValue;		// was rLines[0].pointACubeKey.x;
+		a_end_scan_coord = in_pointBDimValue;		// was rLines[1].pointACubeKey.x;
+	}
+	else if (a_greatestDist == a_a_to_c)
+	{
+		a_match_to_c = true;
+		a_begin_scan_coord = in_pointADimValue;	// was rLines[0].pointACubeKey.x;
+		a_end_scan_coord = in_pointCDimValue;	// was rLines[2].pointACubeKey.x;
+	}
+	DimScanMeta a_candidate(a_count, a_begin_scan_coord, a_end_scan_coord);
+	a_candidate.swapToMin();
+
+
+	// build the candidate for point B
+	bool b_match_to_a = false;
+	bool b_match_to_c = false;
+	int b_begin_scan_coord, b_end_scan_coord;
+	int b_b_to_a = abs(in_pointADimValue - in_pointBDimValue); // "" a - b
+	int b_b_to_c = abs(in_pointCDimValue - in_pointBDimValue); // "" a - c
+	int b_greatestDist = std::max(b_b_to_a, b_b_to_c);
+	int b_count = b_greatestDist + 1;
+	if (b_greatestDist == b_b_to_a)
+	{
+		b_match_to_a = true;
+		b_begin_scan_coord = in_pointBDimValue;		// was rLines[1].pointACubeKey.x
+		b_end_scan_coord = in_pointADimValue;		// was rLines[0].pointACubeKey.x
+	}
+	else if (b_greatestDist == b_b_to_c)
+	{
+		b_match_to_c = true;
+		b_begin_scan_coord = in_pointBDimValue;	// was rLines[1].pointACubeKey.x;
+		b_end_scan_coord = in_pointCDimValue;	// was rLines[2].pointACubeKey.x;
+	}
+	DimScanMeta b_candidate(b_count, b_begin_scan_coord, b_end_scan_coord);
+	b_candidate.swapToMin();
+
+
+	// build the candidate for point C
+	bool c_match_to_a = false;
+	bool c_match_to_b = false;
+	int c_begin_scan_coord, c_end_scan_coord;
+	int c_c_to_a = abs(in_pointADimValue - in_pointCDimValue);
+	int c_c_to_b = abs(in_pointBDimValue - in_pointCDimValue);
+	int c_greatestDist = std::max(c_c_to_a, c_c_to_b);
+	int c_count = c_greatestDist + 1;
+	if (c_greatestDist == c_c_to_a)
+	{
+		c_match_to_a = true;
+		c_begin_scan_coord = in_pointCDimValue;		// was rLines[2].pointACubeKey.x
+		c_end_scan_coord = in_pointADimValue;		// was rLines[0].pointACubeKey.x
+	}
+	else if (c_greatestDist == c_c_to_b)
+	{
+		c_match_to_a = true;
+		c_begin_scan_coord = in_pointCDimValue;	// was rLines[2].pointACubeKey.x
+		c_end_scan_coord = in_pointBDimValue;   // was rLines[1].pointACubeKey.x
+	}
+	DimScanMeta c_candidate(c_count, c_begin_scan_coord, c_end_scan_coord);
+	c_candidate.swapToMin();
+
+	// find whichever candidate had the greatest distance.
+	int greatestOfAAndB = std::max(a_candidate.numberOfScans, b_candidate.numberOfScans);
+	int greatestOfAll = std::max(greatestOfAAndB, c_candidate.numberOfScans);
+
+	if (greatestOfAll == a_candidate.numberOfScans)
+	{
+		returnMeta = a_candidate;
+	}
+	else if (greatestOfAll == b_candidate.numberOfScans)
+	{
+		returnMeta = b_candidate;
+	}
+	else if (greatestOfAll == c_candidate.numberOfScans)
+	{
+		returnMeta = c_candidate;
+	}
+	return returnMeta;
 }
 
 RTriangle::RTriangle(const RTriangle& in_triangleB)
@@ -30,32 +150,35 @@ RTriangle::RTriangle(const RTriangle& in_triangleB)
 	}
 
 	areRegistersSet = in_triangleB.areRegistersSet;
+
 	if (areRegistersSet == true)
 	{
-		xDimRegisterSize = in_triangleB.xDimRegisterSize;
-		yDimRegisterSize = in_triangleB.yDimRegisterSize;
-		zDimRegisterSize = in_triangleB.zDimRegisterSize;
+		
+		xScanMeta.numberOfScans = in_triangleB.xScanMeta.numberOfScans;
+		yScanMeta.numberOfScans = in_triangleB.yScanMeta.numberOfScans;
+		zScanMeta.numberOfScans = in_triangleB.zScanMeta.numberOfScans;
 
 		// copy data for the X dim
-		xDimRegister.reset(new LookupByDimRegister[xDimRegisterSize]);
-		for (int x = 0; x < xDimRegisterSize; x++)
+		xDimRegister.reset(new LookupByDimRegister[xScanMeta.numberOfScans]);
+		for (int x = 0; x < xScanMeta.numberOfScans; x++)
 		{
 			xDimRegister[x] = in_triangleB.xDimRegister[x];
 		}
 
 		// "" Y dim 
-		yDimRegister.reset(new LookupByDimRegister[yDimRegisterSize]);
-		for (int x = 0; x < yDimRegisterSize; x++)
+		yDimRegister.reset(new LookupByDimRegister[yScanMeta.numberOfScans]);
+		for (int x = 0; x < yScanMeta.numberOfScans; x++)
 		{
 			yDimRegister[x] = in_triangleB.yDimRegister[x];
 		}
 
 		// "" Z dim
-		zDimRegister.reset(new LookupByDimRegister[zDimRegisterSize]);
-		for (int x = 0; x < zDimRegisterSize; x++)
+		zDimRegister.reset(new LookupByDimRegister[zScanMeta.numberOfScans]);
+		for (int x = 0; x < zScanMeta.numberOfScans; x++)
 		{
-			zDimRegister[x] = in_triangleB.zDimRegister[x];
+			//zDimRegister[x] = in_triangleB.zDimRegister[x];
 		}
+		
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "MassGridArray.h"
 #include "LookupByDimRegister.h"
 #include <mutex>
+#include <algorithm>
 
 class RTriangle
 {
@@ -24,30 +25,32 @@ class RTriangle
 			areRegistersSet = in_triangleB.areRegistersSet;
 			if (areRegistersSet == true)
 			{
-				xDimRegisterSize = in_triangleB.xDimRegisterSize;
-				yDimRegisterSize = in_triangleB.yDimRegisterSize;
-				zDimRegisterSize = in_triangleB.zDimRegisterSize;
+				
+				xScanMeta.numberOfScans = in_triangleB.xScanMeta.numberOfScans;
+				yScanMeta.numberOfScans = in_triangleB.yScanMeta.numberOfScans;
+				zScanMeta.numberOfScans = in_triangleB.zScanMeta.numberOfScans;
 
 				// copy data for the X dim
-				xDimRegister.reset(new LookupByDimRegister[xDimRegisterSize]);
-				for (int x = 0; x < xDimRegisterSize; x++)
+				xDimRegister.reset(new LookupByDimRegister[xScanMeta.numberOfScans]);
+				for (int x = 0; x < xScanMeta.numberOfScans; x++)
 				{
 					xDimRegister[x] = in_triangleB.xDimRegister[x];
 				}
 
 				// "" Y dim 
-				yDimRegister.reset(new LookupByDimRegister[yDimRegisterSize]);
-				for (int x = 0; x < yDimRegisterSize; x++)
+				yDimRegister.reset(new LookupByDimRegister[yScanMeta.numberOfScans]);
+				for (int x = 0; x < yScanMeta.numberOfScans; x++)
 				{
 					yDimRegister[x] = in_triangleB.yDimRegister[x];
 				}
 
 				// "" Z dim
-				zDimRegister.reset(new LookupByDimRegister[zDimRegisterSize]);
-				for (int x = 0; x < zDimRegisterSize; x++)
+				zDimRegister.reset(new LookupByDimRegister[zScanMeta.numberOfScans]);
+				for (int x = 0; x < zScanMeta.numberOfScans; x++)
 				{
 					zDimRegister[x] = in_triangleB.zDimRegister[x];
 				}
+				
 			}
 			return *this;
 		}
@@ -56,11 +59,38 @@ class RTriangle
 		void traceRasterLines();
 		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal);
 	private:
+		struct DimScanMeta
+		{
+			DimScanMeta() {};
+			DimScanMeta(int in_numberOfScans, int in_dimStartvalue, int in_dimEndValue) :
+				numberOfScans(in_numberOfScans),
+				dimStartValue(in_dimStartvalue),
+				dimEndValue(in_dimEndValue)
+			{};
+
+			int numberOfScans = 0;
+			int dimStartValue = 0;
+			int dimEndValue = 0;
+
+			void swapToMin()	// the start value must always be less than the end value, for proper iteration.
+			{
+				if (dimStartValue > dimEndValue)
+				{
+					int tempDim = dimEndValue;
+					dimEndValue = dimStartValue;
+					dimStartValue = tempDim;
+				}
+			}
+		};
+
+
+		DimScanMeta xScanMeta, yScanMeta, zScanMeta;
+		DimScanMeta determineScanMeta(int in_point0DimValue, int in_point1DimValue, int in_point2DimValue);
+
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;
 		std::unique_ptr<LookupByDimRegister[]> yDimRegister;
 		std::unique_ptr<LookupByDimRegister[]> zDimRegister;
-		int xDimRegisterSize, yDimRegisterSize, zDimRegisterSize = 0;
 		bool areRegistersSet = false;
 
 		void buildRegisters();
