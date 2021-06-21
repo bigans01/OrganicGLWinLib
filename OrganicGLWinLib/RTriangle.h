@@ -86,6 +86,7 @@ class RTriangle
 
 		DimScanMeta xScanMeta, yScanMeta, zScanMeta;
 		DimScanMeta determineScanMeta(int in_point0DimValue, int in_point1DimValue, int in_point2DimValue);
+		void initializeXYZDimRegisters();
 
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;

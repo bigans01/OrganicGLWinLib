@@ -215,8 +215,33 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm
 		rLines[x].runRasterTraceIntoGrid(in_massGridArrayRef, downFillCrustBit);
 	}
 
-	// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interor of the RTriangle
+	// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interior of the RTriangle
 	// into the MassGridArray. Each line pair should do X, Y, and Z scans.
+	initializeXYZDimRegisters();
 
 
+}
+
+void RTriangle::initializeXYZDimRegisters()
+{
+	int xScanMetaBeginValue = xScanMeta.dimStartValue;
+	for (int x = 0; x < xScanMeta.numberOfScans; x++)
+	{
+		LookupByDimRegister newXRegister(xScanMetaBeginValue++);
+		xDimRegister[x] = newXRegister;
+	}
+
+	int yScanMetaBeginValue = yScanMeta.dimStartValue;
+	for (int y = 0; y < yScanMeta.numberOfScans; y++)
+	{
+		LookupByDimRegister newYRegister(yScanMetaBeginValue++);
+		yDimRegister[y] = newYRegister;
+	}
+
+	int zScanMetaBeginValue = zScanMeta.dimStartValue;
+	for (int z = 0; z < zScanMeta.numberOfScans; z++)
+	{
+		LookupByDimRegister newZRegister(zScanMetaBeginValue++);
+		zDimRegister[z] = newZRegister;
+	}
 }
