@@ -12,7 +12,11 @@ void RPoly::traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef)
 	auto rTrianglesEnd = rTriangleMap.end();
 	for (; rTrianglesBegin != rTrianglesEnd; rTrianglesBegin++)
 	{
-		rTrianglesBegin->second.traceRasterLinesIntoGrid(in_massGridArrayRef, rPolyEmptyNormal);
+		rTrianglesBegin->second.traceRasterLinesIntoGrid(in_massGridArrayRef, 
+														 rPolyEmptyNormal,
+			                                             rPolyRCubeDimLength,
+			                                             rPolyTilesPerDim,
+			                                             rPolyTileWeightToHundredthFloatRatio);
 	}
 }
 

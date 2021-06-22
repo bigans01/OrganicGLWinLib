@@ -305,6 +305,7 @@
     <ClInclude Include="RMorphableMeshGroup.h" />
     <ClInclude Include="RPoly.h" />
     <ClInclude Include="RTriangle.h" />
+    <ClInclude Include="RTriangleInteriorAreaTracer.h" />
     <ClInclude Include="RTriangleLine.h" />
     <ClInclude Include="RasterCubeTracerBase.h" />
     <ClInclude Include="RTriangleLineTracer.h" />
@@ -632,6 +633,7 @@
     <ClCompile Include="RMorphableMeshGroup.cpp" />
     <ClCompile Include="RPoly.cpp" />
     <ClCompile Include="RTriangle.cpp" />
+    <ClCompile Include="RTriangleInteriorAreaTracer.cpp" />
     <ClCompile Include="RTriangleLineTracer.cpp" />
     <ClCompile Include="RUtils.cpp" />
     <ClCompile Include="ShaderMachineBase.cpp" />

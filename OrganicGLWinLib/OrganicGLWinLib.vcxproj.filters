@@ -1053,6 +1053,9 @@
     <ClInclude Include="LookupByDimRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RTriangleInteriorAreaTracer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1578,6 +1581,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RTriangleInteriorAreaTracer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

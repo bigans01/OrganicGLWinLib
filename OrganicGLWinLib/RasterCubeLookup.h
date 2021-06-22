@@ -97,7 +97,7 @@ class RasterCubeLookup
 		}
 
 	private:
-
+		friend class RTriangle;
 		RasterKeyLookupByDim xLookup;
 		RasterKeyLookupByDim yLookup;
 		RasterKeyLookupByDim zLookup;

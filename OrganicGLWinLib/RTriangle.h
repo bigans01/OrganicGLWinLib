@@ -57,7 +57,11 @@ class RTriangle
 
 		void printRPoints();
 		void traceRasterLines();
-		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal);
+		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
+			glm::vec3 in_triangleEmptyNormal,
+			float in_rPolyRCubeDimLength,
+			float in_rPolyTilesPerDim,
+			float in_rPolyTileWeightToHundredthFloatRatio);
 	private:
 		struct DimScanMeta
 		{
@@ -87,6 +91,18 @@ class RTriangle
 		DimScanMeta xScanMeta, yScanMeta, zScanMeta;
 		DimScanMeta determineScanMeta(int in_point0DimValue, int in_point1DimValue, int in_point2DimValue);
 		void initializeXYZDimRegisters();
+		void runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
+								float in_rPolyRCubeDimLength,
+								float in_rPolyTilesPerDim,
+								float in_rPolyTileWeightToHundredthFloatRatio);
+		void runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
+								float in_rPolyRCubeDimLength,
+								float in_rPolyTilesPerDim,
+								float in_rPolyTileWeightToHundredthFloatRatio);
+		void runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
+								float in_rPolyRCubeDimLength,
+								float in_rPolyTilesPerDim,
+								float in_rPolyTileWeightToHundredthFloatRatio);
 
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;

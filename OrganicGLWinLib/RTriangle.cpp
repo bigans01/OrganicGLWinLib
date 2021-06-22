@@ -199,7 +199,11 @@ void RTriangle::traceRasterLines()
 	}
 }
 
-void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm::vec3 in_triangleEmptyNormal)
+void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, 
+	                                     glm::vec3 in_triangleEmptyNormal,
+	                                     float in_rPolyRCubeDimLength,
+	                                     float in_rPolyTilesPerDim,
+	                                     float in_rPolyTileWeightToHundredthFloatRatio)
 {
 	// step 1: determine the value of the DOWNFILL_CRUST bit
 	int downFillCrustBit = 0;
@@ -218,8 +222,9 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef, glm
 	// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interior of the RTriangle
 	// into the MassGridArray. Each line pair should do X, Y, and Z scans.
 	initializeXYZDimRegisters();
-
-
+	runXDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
+	runYDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
+	runZDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
 }
 
 void RTriangle::initializeXYZDimRegisters()
@@ -243,5 +248,97 @@ void RTriangle::initializeXYZDimRegisters()
 	{
 		LookupByDimRegister newZRegister(zScanMetaBeginValue++);
 		zDimRegister[z] = newZRegister;
+	}
+}
+
+void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef, 
+									float in_rPolyRCubeDimLength,
+									float in_rPolyTilesPerDim,
+									float in_rPolyTileWeightToHundredthFloatRatio)
+{
+	for (int x = 0; x < xScanMeta.numberOfScans; x++)
+	{
+		// check all lines for entries
+		int currentXValue = xDimRegister[x].dimValue;
+		for (int currentLine = 0; currentLine < 3; currentLine++)
+		{
+			auto currentLineTouchedBlocks = rLines[currentLine].findBlocksAtX(currentXValue);
+			if (!currentLineTouchedBlocks.empty())
+			{
+				/*
+				std::cout << "!! Found entries at line " << currentLine << ", for " << currentXValue << ": " << std::endl;
+				auto line0PrintablesBegin = rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue].begin();
+				auto line0PrintablesEnd = rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue].end();
+				for (; line0PrintablesBegin != line0PrintablesEnd; line0PrintablesBegin++)
+				{
+					std::cout << "(" << currentXValue << ", " << line0PrintablesBegin->a << ", " << line0PrintablesBegin->b << ") " << std::endl;
+				}
+				*/
+				xDimRegister[x].insertLineSetRef(currentLine, &rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue]);
+			}
+		}
+		//int scanWait = 3; 
+		//std::cin >> scanWait;
+
+		// build the scans in each register, then execute them
+		xDimRegister[x].buildScanRuns();
+		xDimRegister[x].executeScanRuns(in_massGridArrayRef,
+			                            in_rPolyRCubeDimLength,
+			                            in_rPolyTilesPerDim,
+			                            in_rPolyTileWeightToHundredthFloatRatio);
+	}
+}
+
+void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
+									float in_rPolyRCubeDimLength,
+									float in_rPolyTilesPerDim,
+									float in_rPolyTileWeightToHundredthFloatRatio)
+{
+	for (int y = 0; y < yScanMeta.numberOfScans; y++)
+	{
+		// check all lines for entries
+		int currentYValue = yDimRegister[y].dimValue;
+		for (int currentLine = 0; currentLine < 3; currentLine++)
+		{
+			auto currentLineTouchedBlocks = rLines[currentLine].findBlocksAtY(currentYValue);
+			if (!currentLineTouchedBlocks.empty())
+			{
+				yDimRegister[y].insertLineSetRef(currentLine, &rLines[currentLine].rasterizedBlocks.yLookup.lookup[currentYValue]);
+			}
+		}
+
+		// build the scans in each register, then execute them
+		yDimRegister[y].buildScanRuns();
+		yDimRegister[y].executeScanRuns(in_massGridArrayRef,
+										in_rPolyRCubeDimLength,
+										in_rPolyTilesPerDim,
+										in_rPolyTileWeightToHundredthFloatRatio);
+	}
+}
+
+void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
+									float in_rPolyRCubeDimLength,
+									float in_rPolyTilesPerDim,
+									float in_rPolyTileWeightToHundredthFloatRatio)
+{
+	for (int z = 0; z < zScanMeta.numberOfScans; z++)
+	{
+		// check all lines for entries
+		int currentZValue = zDimRegister[z].dimValue;
+		for (int currentLine = 0; currentLine < 3; currentLine++)
+		{
+			auto currentLineTouchedBlocks = rLines[currentLine].findBlocksAtZ(currentZValue);
+			if (!currentLineTouchedBlocks.empty())
+			{
+				zDimRegister[z].insertLineSetRef(currentLine, &rLines[currentLine].rasterizedBlocks.zLookup.lookup[currentZValue]);
+			}
+		}
+
+		// build the scans in each register then execute them
+		zDimRegister[z].buildScanRuns();
+		zDimRegister[z].executeScanRuns(in_massGridArrayRef,
+										in_rPolyRCubeDimLength,
+										in_rPolyTilesPerDim,
+										in_rPolyTileWeightToHundredthFloatRatio);
 	}
 }

@@ -120,6 +120,7 @@ class RTriangleLine
 
 		bool debugFlag = false;
 	private:
+		friend class RTriangle;
 		RasterCubeLookup rasterizedBlocks;
 
 };
