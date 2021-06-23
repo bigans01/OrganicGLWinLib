@@ -222,9 +222,9 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 	// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interior of the RTriangle
 	// into the MassGridArray. Each line pair should do X, Y, and Z scans.
 	initializeXYZDimRegisters();
-	runXDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
-	runYDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
-	runZDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio);
+	runXDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit);
+	runYDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit);
+	runZDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit);
 }
 
 void RTriangle::initializeXYZDimRegisters()
@@ -232,21 +232,21 @@ void RTriangle::initializeXYZDimRegisters()
 	int xScanMetaBeginValue = xScanMeta.dimStartValue;
 	for (int x = 0; x < xScanMeta.numberOfScans; x++)
 	{
-		LookupByDimRegister newXRegister(xScanMetaBeginValue++);
+		LookupByDimRegister newXRegister(xScanMetaBeginValue++, RScanDim::X);
 		xDimRegister[x] = newXRegister;
 	}
 
 	int yScanMetaBeginValue = yScanMeta.dimStartValue;
 	for (int y = 0; y < yScanMeta.numberOfScans; y++)
 	{
-		LookupByDimRegister newYRegister(yScanMetaBeginValue++);
+		LookupByDimRegister newYRegister(yScanMetaBeginValue++, RScanDim::Y);
 		yDimRegister[y] = newYRegister;
 	}
 
 	int zScanMetaBeginValue = zScanMeta.dimStartValue;
 	for (int z = 0; z < zScanMeta.numberOfScans; z++)
 	{
-		LookupByDimRegister newZRegister(zScanMetaBeginValue++);
+		LookupByDimRegister newZRegister(zScanMetaBeginValue++, RScanDim::Z);
 		zDimRegister[z] = newZRegister;
 	}
 }
@@ -254,7 +254,8 @@ void RTriangle::initializeXYZDimRegisters()
 void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef, 
 									float in_rPolyRCubeDimLength,
 									float in_rPolyTilesPerDim,
-									float in_rPolyTileWeightToHundredthFloatRatio)
+									float in_rPolyTileWeightToHundredthFloatRatio,
+									int in_downfillCrustBitValue)
 {
 	for (int x = 0; x < xScanMeta.numberOfScans; x++)
 	{
@@ -285,14 +286,16 @@ void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 		xDimRegister[x].executeScanRuns(in_massGridArrayRef,
 			                            in_rPolyRCubeDimLength,
 			                            in_rPolyTilesPerDim,
-			                            in_rPolyTileWeightToHundredthFloatRatio);
+			                            in_rPolyTileWeightToHundredthFloatRatio, 
+										in_downfillCrustBitValue);
 	}
 }
 
 void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyRCubeDimLength,
 									float in_rPolyTilesPerDim,
-									float in_rPolyTileWeightToHundredthFloatRatio)
+									float in_rPolyTileWeightToHundredthFloatRatio,
+									int in_downfillCrustBitValue)
 {
 	for (int y = 0; y < yScanMeta.numberOfScans; y++)
 	{
@@ -312,14 +315,16 @@ void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 		yDimRegister[y].executeScanRuns(in_massGridArrayRef,
 										in_rPolyRCubeDimLength,
 										in_rPolyTilesPerDim,
-										in_rPolyTileWeightToHundredthFloatRatio);
+										in_rPolyTileWeightToHundredthFloatRatio,
+										in_downfillCrustBitValue);
 	}
 }
 
 void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyRCubeDimLength,
 									float in_rPolyTilesPerDim,
-									float in_rPolyTileWeightToHundredthFloatRatio)
+									float in_rPolyTileWeightToHundredthFloatRatio,
+									int in_downfillCrustBitValue)
 {
 	for (int z = 0; z < zScanMeta.numberOfScans; z++)
 	{
@@ -339,6 +344,7 @@ void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 		zDimRegister[z].executeScanRuns(in_massGridArrayRef,
 										in_rPolyRCubeDimLength,
 										in_rPolyTilesPerDim,
-										in_rPolyTileWeightToHundredthFloatRatio);
+										in_rPolyTileWeightToHundredthFloatRatio,
+										in_downfillCrustBitValue);
 	}
 }

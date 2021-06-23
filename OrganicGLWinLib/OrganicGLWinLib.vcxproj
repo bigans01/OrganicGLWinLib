@@ -304,6 +304,7 @@
     <ClInclude Include="RMorphableMeshCubeAreaDefiner.h" />
     <ClInclude Include="RMorphableMeshGroup.h" />
     <ClInclude Include="RPoly.h" />
+    <ClInclude Include="RScanDim.h" />
     <ClInclude Include="RTriangle.h" />
     <ClInclude Include="RTriangleInteriorAreaTracer.h" />
     <ClInclude Include="RTriangleLine.h" />
@@ -534,6 +535,7 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
+    <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="RasterGrid3dBase.cpp" />
     <ClCompile Include="Rasterized3DMassGrid.cpp" />
     <ClCompile Include="RCollisionPointArray.cpp" />

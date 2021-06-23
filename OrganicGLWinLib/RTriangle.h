@@ -8,6 +8,7 @@
 #include "LookupByDimRegister.h"
 #include <mutex>
 #include <algorithm>
+#include "RScanDim.h"
 
 class RTriangle
 {
@@ -94,15 +95,18 @@ class RTriangle
 		void runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio);
+								float in_rPolyTileWeightToHundredthFloatRatio,
+								int in_downfillCrustBitValue);
 		void runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio);
+								float in_rPolyTileWeightToHundredthFloatRatio,
+								int in_downfillCrustBitValue);
 		void runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio);
+								float in_rPolyTileWeightToHundredthFloatRatio,
+								int in_downfillCrustBitValue);
 
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;
