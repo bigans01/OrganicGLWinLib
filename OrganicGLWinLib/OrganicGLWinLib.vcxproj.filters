@@ -13,6 +13,60 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\RasterizedMass">
+      <UniqueIdentifier>{ac30e352-46f5-4551-af03-aab3ce93db78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RasterizedMass">
+      <UniqueIdentifier>{45d62af0-b47d-4c44-9287-7900b3f722ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Atlas">
+      <UniqueIdentifier>{efb8aae0-ff9a-4163-823a-3a8e69c1353c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Atlas">
+      <UniqueIdentifier>{9a36f338-7a40-4d29-aaee-5fedc3a772aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Coplanar">
+      <UniqueIdentifier>{a4a08d1c-0ae2-4aee-9876-3ff46289b248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coplanar">
+      <UniqueIdentifier>{cf71070a-78f5-4f01-ac9d-1d18e16e2771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SolublePoly">
+      <UniqueIdentifier>{61d7a015-2ae4-4923-beaa-6ba6ac89abd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly">
+      <UniqueIdentifier>{1269e5eb-0b5e-443b-ad99-37687506acb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MassZone">
+      <UniqueIdentifier>{13889b7f-1cf8-4dd7-8231-a32941aa1fb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MassZone">
+      <UniqueIdentifier>{a9ca4dd0-5e2a-4296-994f-1003d0404791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines">
+      <UniqueIdentifier>{58d2721e-9b49-4f8b-9241-00957e3bfb74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines">
+      <UniqueIdentifier>{ffc63e21-22fa-4ec0-bef9-ec3e2f3a6e2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears">
+      <UniqueIdentifier>{b23d351f-391c-4ab0-8e4b-ac8ff603b893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears">
+      <UniqueIdentifier>{eb90b541-3e9f-491f-b418-443eff23d65f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SolublePoly\Fusion">
+      <UniqueIdentifier>{1e58a462-4e05-45e9-a740-bd6c58315bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly\Fusion">
+      <UniqueIdentifier>{198f4cec-5773-4ca1-8ba3-3927039f0ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Quaternions">
+      <UniqueIdentifier>{e4463c5c-a567-4d0c-9691-dc9d0a8013f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Quaternions">
+      <UniqueIdentifier>{1d2dc3f0-bc6d-4d6d-bc1c-46e6154aa7eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -30,15 +84,6 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AtlasMetaData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TileMeta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -49,9 +94,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TexturePoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasPropertiesGL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TileDataGLWIN.h">
@@ -105,16 +147,7 @@
     <ClInclude Include="ShaderManagerDeferred2Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderMachineBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMDeferredV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Gear.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLDataType.h">
@@ -135,21 +168,6 @@
     <ClInclude Include="HighlighterGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SMDeferredV2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMDeferredComputeV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredComputeGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainComputeGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredComputeResultsGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OrientedQuad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -157,9 +175,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OrientedQuadQuadrant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuadPointOrientation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OrientedQuadPanel.h">
@@ -174,61 +189,13 @@
     <ClInclude Include="OctantCorner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTriangles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Triangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMForwardV2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainForwardGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMForwardV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainSimpleGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMDebugV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainDebugGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMPrimitiveV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainPrimitiveGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationPoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PointTranslationCheck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EmptyNormalFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STriangleLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyBorderLines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IntersectionResult.h">
@@ -243,12 +210,6 @@
     <ClInclude Include="IRPointType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CategorizedLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IRLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -258,55 +219,16 @@
     <ClInclude Include="InterceptRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SPoly.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IntersectionLineGroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SliceFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CleaveSequenceIntersectFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyMorphTracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyFracturer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolySet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineCycler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CyclingDirectionFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CyclingDirection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineCycle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineIntersectRecorder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineIntersectRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineIntersectRecordType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineSearchResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceStatus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TileCoordinateProducer.h">
@@ -330,28 +252,13 @@
     <ClInclude Include="TerrainMemoryTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InstancedHighlighterGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLDrawElementsInstancedJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLInstancedCoordinateContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainLightingComputeGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SMDeferredLightingComputeV1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredLightingComputeGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WorldLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ComputeResolution.h">
@@ -387,37 +294,13 @@
     <ClInclude Include="LineWelder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BorderLineIDPair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MassManipulationMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLinePointPair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceCandidateList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceCandidateListMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceMetaTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DistanceToPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FoundCleaveSequence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceCrawlDirection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LineWelderHierarchyPosition.h">
@@ -429,12 +312,6 @@
     <ClInclude Include="LineWelderRunMode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WeldedLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedLinePool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NextCleaveSequenceFinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -444,64 +321,10 @@
     <ClInclude Include="TracingObserverState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WeldedLinePoolGuide.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangleGroupBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangleProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangleProductionResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarChecker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarComparisonCandidatePoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyRefMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarRelationships.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarRelationshipTracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SelfComparePermit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PermitType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangleContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyHierarchyLocation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyHierarchyLocationMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolySupergroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolySupergroupManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarMassManipulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarMassCreator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarCategorizedLineProducer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TwoDPoint.h">
@@ -531,58 +354,13 @@
     <ClInclude Include="TwoDSPolyIntersectionRecord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CategorizedLinePool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyFracturerOptionEnum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UnsolvedPreciseSolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineColinearTester.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzerOptionEnum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IntersectAnalyzerOption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineInsertionRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineGroupMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineMergeType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineMergeMachineBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLinePartialBoundMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineASliceMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLinePlaceboMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceMergeMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineGroupLocation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshMatterMeta.h">
@@ -594,88 +372,10 @@
     <ClInclude Include="MassSubZone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MassZone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneMaster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBoxBoundary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBoxBoundaryState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBoxBoundaryOrientation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBoxType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneBoxBoundarySPolySet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FusedIntersectionLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FusionAnalysisResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionAnalysis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionCandidate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionAnalysisPrimaryClassification.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionAnalysisPointsClassification.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionAnalysisCoplanarLineType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointSubData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineOptionals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionCandidateProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RayIntersectionResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusionCandidateOrigin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointReactor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointSubdataLineType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointMetaPair.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedPointSummary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LineReactorBase.h">
@@ -693,97 +393,7 @@
     <ClInclude Include="GuestLineReactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FusedPointReactorResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyDO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyDOSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVoidBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVoidFindCyclingDirection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZonePointClipper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToMassRelationshipType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToMassRelationship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToMassRelationshipMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToSPolyRelationshipTracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToSPolyRelationship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToSTriangleRelationship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolPointWithinTrianglePBZ.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineLink.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineLinkContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BorderLineLinkPointState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STriangleCutter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttableTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttingTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttingTriangleManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttableTriangleContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="STriangleOutputContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttableTriangleLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVec3Base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttingTriangleLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolAreLinesColinear.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolDoLinesIntersect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TwoDIntersectionRecordManager.h">
@@ -793,27 +403,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TwoDCrawlingAttempt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutLinePool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVec3FindCyclingDirectionPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutLinePoolGuide.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutTriangleGroupBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutLineWelder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolIsTJunctionCuttable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiInputText.h">
@@ -828,40 +417,7 @@
     <ClInclude Include="ImGuiInputTextResponse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CutTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutTriangleContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutLineTraceObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutTriangleProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CutTriangleProductionResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WeldedTriangleSuperGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVec3FindOrientatedLineNormal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVec3ResultBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vec3Result.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarRelationshipDebugFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UsableCleaveSequenceCalculator.h">
@@ -873,22 +429,7 @@
     <ClInclude Include="NonBoundMerger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QMBoolIsPointWithinPBZMassSide.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IntersectionFindingAttempt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassZoneShellSlice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMFindPointToMassRelationship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToMassRelationshipJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointToMassTrial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MappableJudge.h">
@@ -906,30 +447,6 @@
     <ClInclude Include="MappableIndividualVerdict.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollectiveVerdictMachine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyScaler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPolyScalingOps.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarFusionMachine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarFusionType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderMachineFeedback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TimeBasedWaveBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -945,91 +462,10 @@
     <ClInclude Include="DynamicBufferManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WaveHighlighterGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVoidAlignTriangleToXYPlane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLMultiDrawArrayParams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BorderSPolyProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ContestableBorderLineMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CategorizedLineInterceptsPreciseToPartialMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoplanarAreaRasterizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CuttingSequenceRunStatus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMVoidTranslatePointsForRasterization.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RasterizationPointAdjuster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QMBoolResolveContestedCategorizedLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CleaveSequenceResolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RTriangleLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RPoly.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RasterCubeLookup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RasterCubeTracerBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RTriangleLineTracer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RCollisionPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RCollisionPointArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RCollisionPointSearchResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMeshCubeAreaDefiner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMeshCorners.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMeshGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableAreaScanner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RasterGrid3dBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rasterized3DMassGrid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MassGridArray.h">
@@ -1044,20 +480,638 @@
     <ClInclude Include="MassCellBitFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RasterKeyLookupByDim.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MassGridArrayCellScanArea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LookupByDimRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RTriangleInteriorAreaTracer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="RCollisionPoint.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointArray.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointSearchResult.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableAreaScanner.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMesh.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCorners.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCubeAreaDefiner.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshGroup.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RPoly.h">
+      <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
     <ClInclude Include="RScanDim.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RTriangle.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RTriangleInteriorAreaTracer.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RTriangleLine.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RTriangleLineTracer.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RUtils.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterKeyLookupByDim.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterCubeLookup.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterCubeTracerBase.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterGrid3dBase.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterizationPointAdjuster.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="Rasterized3DMassGrid.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasMap.h">
+      <Filter>Header Files\Atlas</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasMetaData.h">
+      <Filter>Header Files\Atlas</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasPropertiesGL.h">
+      <Filter>Header Files\Atlas</Filter>
+    </ClInclude>
+    <ClInclude Include="AtlasTile.h">
+      <Filter>Header Files\Atlas</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarRelationshipTracker.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarAreaRasterizer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarCategorizedLineProducer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarChecker.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarComparisonCandidatePoints.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarFusionMachine.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarFusionType.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarMassCreator.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarMassManipulator.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarRelationshipDebugFlags.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CoplanarRelationships.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="SPoly.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyBorderLines.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyDO.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyDOSet.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyFracturer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyFracturerOptionEnum.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyHierarchyLocation.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyHierarchyLocationMap.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyMorphTracker.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyRefMap.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyScaler.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyScalingOps.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolySet.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolySupergroup.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolySupergroupManager.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="STriangle.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="STriangleCutter.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="STriangleLine.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="STriangleOutputContainer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLine.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineASliceMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineColinearTester.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineContainer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineGroup.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineGroupLocation.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineGroupMap.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineInsertionRecord.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineInterceptsPointPreciseMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineInterceptsPreciseToPartialMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineManager.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineMergeMachineBase.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineMergeType.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineOptionals.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLinePartialBoundMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLinePlaceboMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLinePool.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CategorizedLineSearchResult.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequence.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceCandidateList.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceCandidateListMap.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceCrawlDirection.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceFactory.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceIntersectFinder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceMergeMode.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceMeta.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceMetaTracker.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceResolver.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceStatus.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="CleaveSequenceType.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineCycle.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineCycler.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineData.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIDPair.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecord.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecorder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineIntersectRecordType.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineLink.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineLinkContainer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLineLinkPointState.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLinePointPair.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZone.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBox.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundary.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundaryOrientation.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundarySPolySet.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxBoundaryState.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneBoxType.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneMaster.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZonePointClipper.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneShellSlice.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassZoneType.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationship.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationshipJudge.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationshipMap.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassRelationshipType.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToMassTrial.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSPolyRelationship.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSPolyRelationshipTracker.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSPolyRelationshipTrackerContainer.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="PointToSTriangleRelationship.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="CollectiveVerdictMachine.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="CutLine.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutLinePool.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutLinePoolGuide.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutLineTraceObserver.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutLineWelder.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttableTriangle.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttableTriangleContainer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttableTriangleLine.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingSequenceRunStatus.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingTriangle.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingTriangleLine.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CuttingTriangleManager.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutTriangle.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutTriangleContainer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutTriangleGroupBuilder.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutTriangleProducer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="CutTriangleProductionResult.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedLine.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedLinePool.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedLinePoolGuide.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangle.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleContainer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleGroupBuilder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleProducer.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleProductionResult.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="WeldedTriangleSuperGroup.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMachineBase.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMachineFeedback.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDebugV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredComputeV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredLightingComputeV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMDeferredV2.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMForwardV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMForwardV2.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SMPrimitiveV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeResultsGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredLightingComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancedHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainSimpleGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainPrimitiveGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLightingComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainForwardGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainDebugGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPoint.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointContainer.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointMeta.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointMetaPair.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointReactor.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointReactorResult.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSubData.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSubdataLineType.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedPointSummary.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysis.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisCoplanarLineType.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisPointsClassification.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisPrimaryClassification.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionAnalysisResult.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionCandidate.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionCandidateOrigin.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="FusionCandidateProducer.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="Gear.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolAreLinesColinear.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolBase.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolDoLinesIntersect.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolIsColinearLineAContainedWithinB.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolIsPointWithinPBZMassSide.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolIsTJunctionCuttable.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolPointWithinTrianglePBZ.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMBoolResolveContestedCategorizedLine.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMFindPointToMassRelationship.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVec3Base.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVec3FindCyclingDirectionPoint.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVec3FindOrientatedLineNormal.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVec3ResultBase.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVoidAlignTriangleToXYPlane.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVoidBase.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVoidFindCyclingDirection.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QMVoidTranslatePointsForRasterization.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadPointOrientation.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTriangles.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationManager.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationPoints.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationRecord.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatRotationType.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="QuatUtils.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderSPolyProducer.h">
+      <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1068,9 +1122,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OrganicShaderLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AtlasMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
@@ -1115,16 +1166,7 @@
     <ClCompile Include="ShaderManagerDeferred2Debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SMDeferredV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Gear.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderMachineBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLUniformRegistry.cpp">
@@ -1142,58 +1184,10 @@
     <ClCompile Include="HighlighterGearT1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SMDeferredV2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMDeferredComputeV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredComputeGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainComputeGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredComputeResultsGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OrientedQuadPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OrientedQuad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMForwardV2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainForwardGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMForwardV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainSimpleGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMDebugV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainDebugGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMPrimitiveV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainPrimitiveGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatRotationRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatRotationPoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatRotationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PointTranslationCheck.cpp">
@@ -1202,22 +1196,13 @@
     <ClCompile Include="EmptyNormalFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="STriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IntersectionResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntersectionLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CategorizedLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="InterceptRegister.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SPoly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntersectionLineGroup.cpp">
@@ -1226,34 +1211,7 @@
     <ClCompile Include="SliceFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CleaveSequenceIntersectFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SPolyFracturer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SPolySet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BorderLineCycler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CyclingDirectionFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BorderLineCycle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BorderLineIntersectRecorder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BorderLineInterceptRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CleaveSequenceFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CleaveSequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TileCoordinateProducer.cpp">
@@ -1262,52 +1220,16 @@
     <ClCompile Include="TerrainMemoryTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InstancedHighlighterGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainLightingComputeGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SMDeferredLightingComputeV1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredLightingComputeGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WorldLightContainerMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LineWelder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CleaveSequenceMeta.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NextCleaveSequenceFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TracingObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WeldedTriangleGroupBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarChecker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarRelationshipTracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarRelationships.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarMassCreator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarMassManipulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LineSegmentIntersectAnalyzer.cpp">
@@ -1322,58 +1244,7 @@
     <ClCompile Include="UnsolvedPreciseSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CategorizedLineColinearTester.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLineMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLinePartialBoundMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLineASliceMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLinePlaceboMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLineMergeMachineBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MeshMatterMeta.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZone.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZoneMaster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZoneBox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FusionAnalysis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FusedPoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FusedPointContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FusionCandidateProducer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RayIntersectionResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FusedPointReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HostLineReactor.cpp">
@@ -1385,85 +1256,10 @@
     <ClCompile Include="GuestLineReactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QMVoidFindCyclingDirection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVoidBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZonePointClipper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="STriangleCutter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CuttableTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CuttableTriangleContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CuttingTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVec3Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CuttingTriangleManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolAreLinesColinear.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QMBoolDoLinesIntersect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVec3FindCyclingDirection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CutLineWelder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolIsTJunctionCuttable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ImGuiInputText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CutLineTraceObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CutTriangleGroupBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVec3ResultBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarRelationshipDebugFlags.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarCategorizedLineProducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp">
@@ -1472,43 +1268,7 @@
     <ClCompile Include="NonBoundMerger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QMBoolIsPointWithinPBZMassSide.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TwoDIntersectionRecordManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CuttableTriangleLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MassZoneShellSlice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMFindPointToMassRelationship.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointToMassRelationshipJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointToMassTrial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RaycastIntersectionTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CollectiveVerdictMachine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CategorizedLineManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SPolyScaler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SPolyScalingOps.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarFusionMachine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TimeBasedWaveBase.cpp">
@@ -1523,74 +1283,368 @@
     <ClCompile Include="DynamicBufferManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WaveHighlighterGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVoidAlignTriangleToXYPlane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BorderSPolyProducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ContestedBorderLineMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CategorizedLineInterceptsPreciseToPartialMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoplanarAreaRasterizer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMVoidTranslatePointsForRasterization.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RasterizationPointAdjuster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QMBoolResolveContestedCategorizedLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CleaveSequenceResolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RPoly.cpp">
+    <ClCompile Include="LookupByDimRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RasterCubeTracerBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RTriangleLineTracer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RCollisionPointArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RMorphableMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RMorphableMeshGroup.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RasterGrid3dBase.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RasterizationPointAdjuster.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="Rasterized3DMassGrid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RaycastIntersectionTest.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RayIntersectionResult.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RCollisionPointArray.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RMorphableAreaScanner.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RMorphableMesh.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RMorphableMeshGroup.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RPoly.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RTriangle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RTriangleInteriorAreaTracer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
-    <ClCompile Include="LookupByDimRegister.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="RTriangleLineTracer.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RUtils.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="AtlasMap.cpp">
+      <Filter>Source Files\Atlas</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarAreaRasterizer.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarCategorizedLineProducer.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarChecker.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarFusionMachine.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarMassCreator.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarMassManipulator.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarRelationshipDebugFlags.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarRelationships.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CoplanarRelationshipTracker.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="SPoly.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyFracturer.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyScaler.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyScalingOps.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolySet.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="STriangle.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="STriangleCutter.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLine.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineASliceMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineColinearTester.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineInterceptsPointPreciseMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineInterceptsPreciseToPartialMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineManager.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineMergeMachineBase.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLineMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLinePartialBoundMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CategorizedLinePlaceboMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequence.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceFactory.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceIntersectFinder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceMeta.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="CleaveSequenceResolver.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineIntersectRecorder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineCycle.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineCycler.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="BorderLineInterceptRecord.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZone.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneBox.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneBoxBoundarySPolySet.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneMaster.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZonePointClipper.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="MassZoneShellSlice.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="PointToMassRelationshipJudge.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="PointToMassTrial.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="CollectiveVerdictMachine.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="CutLineTraceObserver.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CutLineWelder.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangle.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangleContainer.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttableTriangleLine.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttingTriangle.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CuttingTriangleManager.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="CutTriangleGroupBuilder.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="WeldedTriangleGroupBuilder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMachineBase.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDebugV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredComputeV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredLightingComputeV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredV2.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMForwardV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMForwardV2.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="SMPrimitiveV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredComputeResultsGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredLightingComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancedHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainDebugGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainForwardGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLightingComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSimpleGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainPrimitiveGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPoint.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPointContainer.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="FusedPointReactor.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="FusionAnalysis.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="FusionCandidateProducer.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="Gear.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolAreLinesColinear.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolBase.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolDoLinesIntersect.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolIsColinearLineAContainedWithinB.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolIsPointWithinPBZMassSide.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolIsTJunctionCuttable.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolPointWithinTrianglePBZ.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMBoolResolveContestedCategorizedLine.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMFindPointToMassRelationship.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3Base.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3FindCyclingDirection.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3FindOrientatedLineNormal.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVec3ResultBase.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVoidAlignTriangleToXYPlane.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVoidBase.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVoidFindCyclingDirection.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QMVoidTranslatePointsForRasterization.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationManager.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationPoints.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatRotationRecord.cpp">
+      <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="QuatUtils.cpp">
+      <Filter>Source Files\Quaternions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

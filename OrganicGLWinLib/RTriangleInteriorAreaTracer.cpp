@@ -6,9 +6,14 @@ void RTriangleInteriorAreaTracer::setGridArrayRef(MassGridArray* in_massGridArra
 	gridArrayRef = in_massGridArrayRef;
 }
 
-void RTriangleInteriorAreaTracer::setDownfillCrustBit(int in_downfillCrustBitValue)
+void RTriangleInteriorAreaTracer::setDownfillCrustBit(short in_downfillCrustBitValue)
 {
 	downfillCrustBitValue = in_downfillCrustBitValue;
+}
+
+void RTriangleInteriorAreaTracer::setUpfillCrustBit(short in_upfillCrustBitValue)
+{
+	upfillCrustBitValue = in_upfillCrustBitValue;
 }
 
 void RTriangleInteriorAreaTracer::runTrace()
@@ -40,6 +45,7 @@ void RTriangleInteriorAreaTracer::runTrace()
 			result.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
 			result.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
 			result.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
+			result.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
 		}
 		numberOfInserts++;
 

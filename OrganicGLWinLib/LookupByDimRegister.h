@@ -60,6 +60,7 @@ private:
 		float in_rPolyRCubeDimLength,
 		float in_rPolyTilesPerDim,
 		float in_rPolyTileWeightToHundredthFloatRatio,
-		int in_downfillCrustBitValue);
+		short in_downfillCrustBitValue,
+		short in_upfillCrustBitValue);
 };
 #endif

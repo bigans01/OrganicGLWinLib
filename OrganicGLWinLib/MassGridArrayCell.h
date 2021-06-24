@@ -18,6 +18,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::CRUST_MASS): { bitToSet = 7; break; }
 				case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
+				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
 			}
 
 			int exponent = bitToSet - 1;
@@ -42,6 +43,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::CRUST_MASS): { bitToSet = 7; break; }
 				case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
+				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
 			}
 			int bitShiftcount = bitToSet - 1;
 			int resultValue = (cellData >> bitShiftcount) & 1;
@@ -56,6 +58,23 @@ class MassGridArrayCell
 				//std::cout << "Bit " << bitToSet << " was NOT set!" << std::endl;
 			//}
 			return wasSet;
+		}
+
+		bool isDownfillRunnable()
+		{
+			bool isRunnable = false;
+
+			// it's only runnable, ONLY if the DOWNFILL_CRUST is set.
+			if
+			(
+				(isFlagSet(MassCellBitFlags::DOWNFILL_CRUST) == true)
+				&&
+				(isFlagSet(MassCellBitFlags::UPFILL_CRUST) == false)
+			)
+			{
+				isRunnable = true;
+			}
+			return isRunnable;
 		}
 };
 

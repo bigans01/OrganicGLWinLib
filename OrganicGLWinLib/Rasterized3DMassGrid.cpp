@@ -21,7 +21,7 @@ void Rasterized3DMassGrid::buildShell()
 
 void Rasterized3DMassGrid::fillMass()
 {
-
+	dataArray.executeDownfills();
 }
 
 bool Rasterized3DMassGrid::wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea)

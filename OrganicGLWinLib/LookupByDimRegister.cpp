@@ -58,7 +58,8 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 	float in_rPolyRCubeDimLength,
 	float in_rPolyTilesPerDim,
 	float in_rPolyTileWeightToHundredthFloatRatio,
-	int in_downfillCrustBitValue)
+	short in_downfillCrustBitValue,
+	short in_upfillCrustBitValue)
 {
 	auto scansBegin = scanRuns.begin();
 	auto scansEnd = scanRuns.end();
@@ -117,6 +118,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 			                   in_rPolyTileWeightToHundredthFloatRatio, 
 			                   false);
 		interiorTracer.setDownfillCrustBit(in_downfillCrustBitValue);
+		interiorTracer.setUpfillCrustBit(in_upfillCrustBitValue);
 		interiorTracer.runTrace();
 	}
 

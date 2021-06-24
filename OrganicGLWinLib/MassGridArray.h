@@ -7,10 +7,81 @@
 #include "MassGridArrayCell.h"
 #include "MassGridSearchResult.h"
 #include "MassGridArrayCellScanArea.h"
+#include "EnclaveKeyDef.h"
+#include <chrono>
 
 class MassGridArray
 {
 	public:
+		void executeDownfills()
+		{
+			auto downfillExecutionBegin = std::chrono::high_resolution_clock::now();
+			int arraySize = dimensionSize * dimensionSize* dimensionSize;
+			int sillyCount = 0;
+			for (int x = 0; x < arraySize; x++)
+			{
+				//if (massCellArray[x].isFlagSet(MassCellBitFlags::DOWNFILL_CRUST) == true)
+				//{
+					//sillyCount++;
+				//}
+
+				if (massCellArray[x].isDownfillRunnable() == true)
+				{
+
+					EnclaveKeyDef::EnclaveKey cellLocation = convertIndexToBlockKey(x);
+					//std::cout << "!!! found down fill to run; location is: (" << cellLocation.x << ", " << cellLocation.y << ", " << cellLocation.z << ") " << std::endl;
+					//int foundDownfill = 3;
+					//std::cin >> foundDownfill;
+
+					// don't bother doing a downfill if the y is at 0.
+					if (cellLocation.y != 0)
+					{
+						EnclaveKeyDef::EnclaveKey lastFilledCell(cellLocation.x, cellLocation.y - 1, cellLocation.z);
+						MassGridSearchResult currentSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
+						bool continueDownfillProcess = true;
+						if (currentSearchResult.wasSearchKeyValid == true)
+						{
+							currentSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
+							if (currentSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
+							{
+								continueDownfillProcess = false;
+							}
+						}
+
+						// decrement the y value of the lastFilledCell
+						lastFilledCell.y--;
+
+						// keep running until either the lastFilledCell.y becomes 0, or the run terminates.
+						while
+						(
+							(lastFilledCell.y >= 0)
+							&&
+							(continueDownfillProcess == true)
+						)
+						{
+							MassGridSearchResult fillSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
+							if (fillSearchResult.wasSearchKeyValid == true)
+							{
+								currentSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
+								if (currentSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
+								{
+									continueDownfillProcess = false;
+								}
+							}
+							lastFilledCell.y--;	// decrement for next loop.
+						}
+					}
+				}
+			}
+			auto downfillExecutionEnd = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double> downfillElapsed = downfillExecutionEnd - downfillExecutionBegin;
+
+			//std::cout << "!!! Downfill runtime: " << downfillElapsed.count() << std::endl;
+			//std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;
+			//int downfillSillyWait = 3;
+			//std::cin >> downfillSillyWait;
+		}
+
 		void buildArray(int in_dimensionSize)
 		{
 			dimensionSize = in_dimensionSize;
@@ -75,7 +146,7 @@ class MassGridArray
 						if (currentSearchResult.wasSearchKeyValid == true)
 						{
 							MassGridArrayCell* currentRef = currentSearchResult.cellRef;
-							if (currentRef->isFlagSet(MassCellBitFlags::LINE_MASS))
+							if (currentRef->isFlagSet(MassCellBitFlags::INNER_MASS))
 							{
 								std::cout << "!!! Notice: cell discovered. " << std::endl;
 								wereCellsDiscovered = true;
@@ -96,6 +167,20 @@ class MassGridArray
 			int x = in_x * (dimensionSize * dimensionSize);
 			int y = in_y * (dimensionSize);
 			return &massCellArray[x + y + in_z];
+		}
+
+		EnclaveKeyDef::EnclaveKey convertIndexToBlockKey(int in_index)
+		{
+			int x = in_index / (dimensionSize * dimensionSize);
+			int remainder_x = in_index % (dimensionSize * dimensionSize);
+
+			int y = remainder_x / dimensionSize;
+			int remainder_y = remainder_x % dimensionSize;
+
+			int z = remainder_y;
+
+			EnclaveKeyDef::EnclaveKey returnKey(x,y,z);
+			return returnKey;
 		}
 };
 
