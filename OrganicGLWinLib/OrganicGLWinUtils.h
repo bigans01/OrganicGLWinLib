@@ -38,6 +38,11 @@
 #include "TwoDPoint.h"
 #include "ThreeDLineSegment.h"
 #include "MassZoneBoxBoundaryOrientation.h"
+#include "TerrainTriangle.h"
+#include "OrganicRawEnclave.h"
+#include "TertiaryTriangleProducer.h"
+#include "UVCoordProducer.h"
+#include "UVTriangleCoords.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -102,6 +107,15 @@ public:
 	static void IMGuiRenderAndDraw();	// render and draw (all?) the IMGui stuff
 	static void IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// will prepare data and run imgui calls for displaying world location
 	static void IMGuiPrepBlockLocation(int world_organicLoc[9]);
+
+	// TerrainTriangle functions
+	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
+																	  EnclaveKeyDef::EnclaveKey in_oreKey, 
+																	  EnclaveKeyDef::EnclaveKey in_blueprintKey, 
+																	  AtlasMap* atlasMapRef);
+																			
+
+
 };
 
 #endif

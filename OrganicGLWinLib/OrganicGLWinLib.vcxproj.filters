@@ -1113,6 +1113,21 @@
     <ClInclude Include="BorderSPolyProducer.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainTrianglePoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UVTriangleCoords.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OrganicPolygon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UVCoordProducer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1645,6 +1660,12 @@
     </ClCompile>
     <ClCompile Include="QuatUtils.cpp">
       <Filter>Source Files\Quaternions</Filter>
+    </ClCompile>
+    <ClCompile Include="OrganicPolygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

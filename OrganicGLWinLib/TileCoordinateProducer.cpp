@@ -228,6 +228,9 @@ void TileCoordinateProducer::translateByMaximumDimensionValue()
 	else if (containerType == ContainerType::ENCLAVE)
 	{
 		// calculate max dimension value for an Enclave and put it here later
+		translationValue.x = (1.41421f * 4) / 2;
+		translationValue.y = (1.41421f * 4) / 2;
+		translationValue.z = (1.41421f * 4) / 2;
 	}
 	else if (containerType == ContainerType::COLLECTION)
 	{
@@ -253,6 +256,7 @@ void TileCoordinateProducer::normalizeToTileCoordinates()
 	else if (containerType == ContainerType::ENCLAVE)
 	{
 		// calculate max dimension value for an Enclave and put it here later
+		normalizationValue = 1.41421f * 4;
 	}
 	else if (containerType == ContainerType::COLLECTION)
 	{

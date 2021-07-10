@@ -35,6 +35,11 @@
 #include "SPolyDOSet.h"
 #include "MassManipulationMode.h"
 
+// test only
+//#include "FanManager.h"
+//#include "EnclaveBlock.h"
+//#include "OrganicRawEnclave.h"
+
 class SPolySet
 {
 public:
@@ -137,6 +142,10 @@ private:
 	std::map<int, SPoly> secondaryPolys;							// stores instances of SPoly that have been added to the SPolySet, via addPoly.
 	SPolyMorphTracker polyMorphTracker;				// NOTE: potentially unused; needs review.
 	int numberOfPolys = 0;							// the number of polys
+
+	//FanManager testManager;
+	//EnclaveBlock testBlock;
+	//OrganicRawEnclave testORE;
 
 
 	void applyDebugOptionsToSpecificSPolys();

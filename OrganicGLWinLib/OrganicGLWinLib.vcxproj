@@ -212,6 +212,7 @@
     <ClInclude Include="MassGridArrayCell.h" />
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
+    <ClInclude Include="OrganicPolygon.h" />
     <ClInclude Include="RasterGrid3dBase.h" />
     <ClInclude Include="Rasterized3DMassGrid.h" />
     <ClInclude Include="RasterKeyLookupByDim.h" />
@@ -380,6 +381,8 @@
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
+    <ClInclude Include="TerrainTriangle.h" />
+    <ClInclude Include="TerrainTrianglePoint.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TimeBasedWaveBase.h" />
     <ClInclude Include="TimeBasedWaveManager.h" />
@@ -496,6 +499,8 @@
     <ClInclude Include="TwoDSPolyIntersectionType.h" />
     <ClInclude Include="UnsolvedPreciseSolver.h" />
     <ClInclude Include="UsableCleaveSequenceCalculator.h" />
+    <ClInclude Include="UVCoordProducer.h" />
+    <ClInclude Include="UVTriangleCoords.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="Vec3Result.h" />
     <ClInclude Include="WaveHighlighterGearT1.h" />
@@ -536,6 +541,7 @@
     <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
+    <ClCompile Include="OrganicPolygon.cpp" />
     <ClCompile Include="RasterGrid3dBase.cpp" />
     <ClCompile Include="Rasterized3DMassGrid.cpp" />
     <ClCompile Include="RCollisionPointArray.cpp" />
@@ -692,6 +698,7 @@
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="UnsolvedPreciseSolver.cpp" />
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp" />
+    <ClCompile Include="UVCoordProducer.cpp" />
     <ClCompile Include="WaveHighlighterGearT1.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />

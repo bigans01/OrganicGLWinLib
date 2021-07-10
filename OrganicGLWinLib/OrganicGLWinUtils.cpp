@@ -1220,3 +1220,56 @@ void OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(MassZoneBoxBound
 		case MassZoneBoxBoundaryOrientation::NEG_Y: { std::cout << "NEG_Y"; break; }
 	};
 }
+
+std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
+																					EnclaveKeyDef::EnclaveKey in_oreKey, 
+																					EnclaveKeyDef::EnclaveKey in_blueprintKey, 
+																					AtlasMap* atlasMapRef)
+{
+	std::vector<TerrainTriangle> returnVector;
+	auto blockMapBegin = in_orePointer->blockMap.begin();
+	auto blockMapEnd = in_orePointer->blockMap.end();
+	for (; blockMapBegin != blockMapEnd; blockMapBegin++)
+	{
+		EnclaveKeyDef::EnclaveKey blockKey = PolyUtils::convertSingleToBlockKey(blockMapBegin->first);	// get the block key of whatever block we are looking at.
+		EnclaveBlock* blockRef = &in_orePointer->blockMap[blockMapBegin->first];				// get a pointer to the block
+		int numberOfSecondariesToRead = int(blockRef->getNumberOfBBFans());
+		for (int z = 0; z < numberOfSecondariesToRead; z++)
+		{
+			int numberOfTertiariesInSecondary = blockRef->getNumberOfTertiariesInTriangleAtIndex(z);
+			TertiaryTriangleProducer triangleProducer(blockRef, blockRef->retrieveSecondaryFromIndex(z));
+			UVCoordProducer textureCoordProducer;
+			UVTriangleCoords testCoords;
+			textureCoordProducer.setAsActive(blockRef, blockRef->retrieveSecondaryFromIndex(z), atlasMapRef, 0);
+
+			// create the empty normal
+			ECBPolyPoint fetchedEmptyNormal = blockRef->getEmptyNormalFromTriangle(z);
+			
+			for (int a = 0; a < numberOfTertiariesInSecondary; a++)
+			{
+				EnclaveBlockVertexTri currentVertexTri = triangleProducer.getTrianglePointsAndIterateToNext();
+				ECBPolyPointTri currentPolyPointTri = IndependentUtils::convertEnclaveBlockVertexesToFloats(currentVertexTri);
+				ECBPolyPointTri preciseCoords = IndependentUtils::combineClampedCoordsWithPrecise(currentPolyPointTri, blockKey, in_oreKey, in_blueprintKey);
+				testCoords = textureCoordProducer.getUVPointsAndIterateToNext();
+
+				TerrainTrianglePoint trianglePointArray[3];
+				for (int b = 0; b < 3; b++)		// cycle through all 3 points; index 0 = point A, 1 = point B, 2 = point C
+				{
+					TerrainTrianglePoint pointToInsert(preciseCoords.triPoints[b],	// 3D coordinate
+						                               fetchedEmptyNormal,
+						                               testCoords.UVpoint[b].x,
+													   testCoords.UVpoint[b].y,
+						                               testCoords.U_tile_coord,
+						                               testCoords.V_tile_coord
+													   );
+					trianglePointArray[b] = pointToInsert;
+				}
+
+				TerrainTriangle currentTriangle(trianglePointArray[0], trianglePointArray[1], trianglePointArray[2]);
+				returnVector.push_back(currentTriangle);
+			}
+		}
+	}
+	return returnVector;
+
+}
