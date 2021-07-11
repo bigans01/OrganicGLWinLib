@@ -1224,7 +1224,7 @@ void OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(MassZoneBoxBound
 std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
 																					EnclaveKeyDef::EnclaveKey in_oreKey, 
 																					EnclaveKeyDef::EnclaveKey in_blueprintKey, 
-																					AtlasMap* atlasMapRef)
+																					AtlasMap* in_atlasMapRef)
 {
 	std::vector<TerrainTriangle> returnVector;
 	auto blockMapBegin = in_orePointer->blockMap.begin();
@@ -1240,7 +1240,7 @@ std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBl
 			TertiaryTriangleProducer triangleProducer(blockRef, blockRef->retrieveSecondaryFromIndex(z));
 			UVCoordProducer textureCoordProducer;
 			UVTriangleCoords testCoords;
-			textureCoordProducer.setAsActive(blockRef, blockRef->retrieveSecondaryFromIndex(z), atlasMapRef, 0);
+			textureCoordProducer.setAsActive(blockRef, blockRef->retrieveSecondaryFromIndex(z), in_atlasMapRef, 0);
 
 			// create the empty normal
 			ECBPolyPoint fetchedEmptyNormal = blockRef->getEmptyNormalFromTriangle(z);
@@ -1272,4 +1272,58 @@ std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBl
 	}
 	return returnVector;
 
+}
+
+std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREEnclaveTriangles(OrganicRawEnclave* in_orePointer,
+	EnclaveKeyDef::EnclaveKey in_oreKey,
+	EnclaveKeyDef::EnclaveKey in_blueprintKey,
+	AtlasMap* in_atlasMapRef)
+{
+	std::vector<TerrainTriangle> returnVector;
+	auto skeletonSGMBegin = in_orePointer->skeletonSGM.triangleSkeletonSupergroups.begin();
+	auto skeletonSGMEnd = in_orePointer->skeletonSGM.triangleSkeletonSupergroups.end();
+	for (skeletonSGMBegin; skeletonSGMBegin != skeletonSGMEnd; skeletonSGMBegin++)
+	{
+		auto currentSkeletonContainerBegin = skeletonSGMBegin->second.skeletonMap.begin();
+		auto currentSkeletonContainerEnd = skeletonSGMBegin->second.skeletonMap.end();
+		for (; currentSkeletonContainerBegin != currentSkeletonContainerEnd; currentSkeletonContainerBegin++)
+		{
+			auto currentSkeletonBegin = currentSkeletonContainerBegin->second.skeletons.begin();
+			auto currentSkeletonEnd = currentSkeletonContainerBegin->second.skeletons.end();
+			for (; currentSkeletonBegin != currentSkeletonEnd; currentSkeletonBegin++)
+			{
+				ECBPolyPoint fetchedEmptyNormal = currentSkeletonBegin->second.emptyNormal;
+				ECBPolyPointTri currentPolyPointTri;
+				currentPolyPointTri.triPoints[0] = currentSkeletonBegin->second.points[0];
+				currentPolyPointTri.triPoints[1] = currentSkeletonBegin->second.points[1];
+				currentPolyPointTri.triPoints[2] = currentSkeletonBegin->second.points[2];
+				ECBPolyPointTri preciseCoords = IndependentUtils::adjustEnclaveTriangleCoordsToWorldSpace(currentPolyPointTri, in_oreKey, in_blueprintKey);
+
+				UVCoordProducerEnclaveTriangle enclaveTriangleCoords(currentSkeletonBegin->second.materialID,
+																	currentSkeletonBegin->second.points[0],
+																	currentSkeletonBegin->second.points[1],
+																	currentSkeletonBegin->second.points[2],
+																	in_atlasMapRef,
+																	0, 
+																	in_blueprintKey);
+				UVTriangleCoords testCoords = enclaveTriangleCoords.getCoords();
+
+				TerrainTrianglePoint trianglePointArray[3];
+				for (int b = 0; b < 3; b++)
+				{
+					TerrainTrianglePoint pointToInsert(preciseCoords.triPoints[b],
+														fetchedEmptyNormal,
+														testCoords.UVpoint[b].x,
+														testCoords.UVpoint[b].y,
+														testCoords.U_tile_coord,
+														testCoords.V_tile_coord);
+					trianglePointArray[b] = pointToInsert;
+				}
+				TerrainTriangle currentTriangle(trianglePointArray[0], trianglePointArray[1], trianglePointArray[2]);
+				returnVector.push_back(currentTriangle);
+			}
+		}
+	}
+
+	return returnVector;
 }

@@ -43,6 +43,7 @@
 #include "TertiaryTriangleProducer.h"
 #include "UVCoordProducer.h"
 #include "UVTriangleCoords.h"
+#include "UVCoordProducerEnclaveTriangle.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -112,6 +113,10 @@ public:
 	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
 																	  EnclaveKeyDef::EnclaveKey in_oreKey, 
 																	  EnclaveKeyDef::EnclaveKey in_blueprintKey, 
+																	  AtlasMap* atlasMapRef);
+	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREEnclaveTriangles(OrganicRawEnclave* in_orePointer,
+																	  EnclaveKeyDef::EnclaveKey in_oreKey,
+																	  EnclaveKeyDef::EnclaveKey in_blueprintKey,
 																	  AtlasMap* atlasMapRef);
 																			
 

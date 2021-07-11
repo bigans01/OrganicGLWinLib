@@ -1128,6 +1128,12 @@
     <ClInclude Include="UVCoordProducer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UVCoordProducerECBPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UVCoordProducerEnclaveTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1665,6 +1671,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UVCoordProducer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducerECBPoly.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
