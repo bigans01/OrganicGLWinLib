@@ -117,7 +117,8 @@ public:
 	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREEnclaveTriangles(OrganicRawEnclave* in_orePointer,
 																	  EnclaveKeyDef::EnclaveKey in_oreKey,
 																	  EnclaveKeyDef::EnclaveKey in_blueprintKey,
-																	  AtlasMap* atlasMapRef);
+																	  AtlasMap* atlasMapRef,
+																	  bool in_debugFlag);
 																			
 
 

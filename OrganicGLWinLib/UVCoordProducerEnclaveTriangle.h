@@ -21,6 +21,7 @@ private:
 	AtlasMap* atlasMapRef;
 	short atlasTileID = 0;		// the ID of the atlas tile to look up -- equivalent to polyMaterialID
 	EnclaveKeyDef::EnclaveKey blueprintKey;
+	int debugflag = 0;
 };
 
 #endif

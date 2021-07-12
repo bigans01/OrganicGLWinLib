@@ -1277,7 +1277,8 @@ std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBl
 std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREEnclaveTriangles(OrganicRawEnclave* in_orePointer,
 	EnclaveKeyDef::EnclaveKey in_oreKey,
 	EnclaveKeyDef::EnclaveKey in_blueprintKey,
-	AtlasMap* in_atlasMapRef)
+	AtlasMap* in_atlasMapRef,
+	bool in_debugFlag)
 {
 	std::vector<TerrainTriangle> returnVector;
 	auto skeletonSGMBegin = in_orePointer->skeletonSGM.triangleSkeletonSupergroups.begin();
@@ -1299,26 +1300,48 @@ std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREEn
 				currentPolyPointTri.triPoints[2] = currentSkeletonBegin->second.points[2];
 				ECBPolyPointTri preciseCoords = IndependentUtils::adjustEnclaveTriangleCoordsToWorldSpace(currentPolyPointTri, in_oreKey, in_blueprintKey);
 
+				int debugFlagValue = 0;
+				if (in_debugFlag == true)
+				{
+					std::cout << "|||||||||||||| Start of TerrainTrianglePoint data: " << std::endl;
+					debugFlagValue = 1;
+				}
 				UVCoordProducerEnclaveTriangle enclaveTriangleCoords(currentSkeletonBegin->second.materialID,
 																	currentSkeletonBegin->second.points[0],
 																	currentSkeletonBegin->second.points[1],
 																	currentSkeletonBegin->second.points[2],
 																	in_atlasMapRef,
-																	0, 
+																	debugFlagValue, 
 																	in_blueprintKey);
 				UVTriangleCoords testCoords = enclaveTriangleCoords.getCoords();
+
 
 				TerrainTrianglePoint trianglePointArray[3];
 				for (int b = 0; b < 3; b++)
 				{
+
 					TerrainTrianglePoint pointToInsert(preciseCoords.triPoints[b],
 														fetchedEmptyNormal,
 														testCoords.UVpoint[b].x,
 														testCoords.UVpoint[b].y,
 														testCoords.U_tile_coord,
 														testCoords.V_tile_coord);
+					if (in_debugFlag == true)
+					{
+						std::cout << "Point " << b << ": " << std::endl;
+						std::cout << "Point coords: " << preciseCoords.triPoints[b].x << ", " << preciseCoords.triPoints[b].y << ", " << preciseCoords.triPoints[b].z << std::endl;
+						std::cout << "UV coords: UVPoint.x->" << testCoords.UVpoint[b].x << " | UVPoint.y-> " << testCoords.UVpoint[b].y << std::endl;
+					}
+
+
 					trianglePointArray[b] = pointToInsert;
 				}
+
+				if (in_debugFlag == true)
+				{
+					std::cout << "|||||||||||||| End of TerrainTrianglePoint data: " << std::endl;
+				}
+
 				TerrainTriangle currentTriangle(trianglePointArray[0], trianglePointArray[1], trianglePointArray[2]);
 				returnVector.push_back(currentTriangle);
 			}

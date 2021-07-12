@@ -72,6 +72,8 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 	quatPoints.clearPoints();
 	quatPoints.insertPointRefs(&point0, &point1, &point2);
 
+
+
 	// apply the planar sliding vector
 	applyPlanarSlidingVector();
 
@@ -87,6 +89,119 @@ TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in
 
 	// normalize the points to tile coordinates
 	normalizeToTileCoordinates();
+
+	// apply dimension corrections (if below 0, go to 0...if above 1, go to 1)
+	applyCorrectionsToNormalizedCoordinates();
+
+	// store the UV coords
+	loadUVCoords();
+
+}
+
+TileCoordinateProducer::TileCoordinateProducer(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, ContainerType in_containerType, int in_blueprintKeyX, int in_blueprintKeyY, int in_blueprintKeyZ, bool in_debugFlag)
+{
+	debugFlag = in_debugFlag;
+
+	// load point values
+	point0 = in_point0;
+	point1 = in_point1;
+	point2 = in_point2;
+
+	blueprintKey_x = in_blueprintKeyX;
+	blueprintKey_y = in_blueprintKeyY;
+	blueprintKey_z = in_blueprintKeyZ;
+
+	containerType = in_containerType;
+
+	// find the triangle centroid
+	triangleCentroid = OrganicGLWinUtils::findTriangleCentroid(point0, point1, point2);
+
+	// find the triangle normal
+	triangleNormal = OrganicGLWinUtils::findTriangleNormal(point0, point1, point2);
+
+	// use the container type value to determine the container's center point to get
+	containerCenter = determineContainerCenter(in_containerType);
+
+	// create copies of the calculated values;
+
+	/*
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "********* Original points, before translation/modification: " << std::endl;
+		//std::cout << "[0]: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+		//std::cout << "[1]: " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+		//std::cout << "[2]: " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+
+		//std::cout << "********* Blueprint key is: " << std::endl;
+		//std::cout << blueprintKey_x << ", " << blueprintKey_y << ", " << blueprintKey_z << std::endl;
+
+		//OrganicGLWinUtils::findTriangleCentroidDebug(point0, point1, point2);
+	}
+	*/
+
+	glm::vec3 point0Copy = point0;
+	glm::vec3 point1Copy = point1;
+	glm::vec3 point2Copy = point2;
+	glm::vec3 triangleCentroidCopy = triangleCentroid;
+	triangleNormalCopy = triangleNormal;
+	glm::vec3 containerCenterCopy = containerCenter;
+
+	//std::cout << "!!! centroid, prior to translation: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
+	//std::cout << "!!! container center, prior to translation: " << containerCenterCopy.x << ", " << containerCenterCopy.y << ", " << containerCenterCopy.z << std::endl;
+
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "!! Planar sliding vector will be: " << tempVec.x << ", " << tempVec.y << ", " << tempVec.z << std::endl;
+		//std::cout << "!! (1) Centroid is: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
+	}
+
+
+	// push back the copied values into the quat points
+	quatPoints.insertPointRefs(&point0Copy, &point1Copy, &point2Copy, &triangleCentroidCopy, &containerCenterCopy);
+
+	// find the planar sliding vector
+	glm::vec3 tempVec = findPlanarSlidingVector(triangleNormalCopy, blueprintKey_x, blueprintKey_y, blueprintKey_z);
+	if (containerType == ContainerType::COLLECTION)
+	{
+		//std::cout << "!! Planar sliding vector will be: " << tempVec.x << ", " << tempVec.y << ", " << tempVec.z << std::endl;
+		//std::cout << "!! (2) Centroid is: " << triangleCentroidCopy.x << ", " << triangleCentroidCopy.y << ", " << triangleCentroidCopy.z << std::endl;
+	}
+
+	// clear out the quat points; load them with the original points of the triangle
+	quatPoints.clearPoints();
+	quatPoints.insertPointRefs(&point0, &point1, &point2);
+
+	if (debugFlag == true)
+	{
+		std::cout << "| -------------- prior to modification: " << std::endl;
+		std::cout << "!!! Point0 " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+		std::cout << "!!! Point1 " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+		std::cout << "!!! Point2 " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+	}
+
+	// apply the planar sliding vector
+	applyPlanarSlidingVector();
+
+	// add the container's center as the next point
+	containerCenterCopy = containerCenter;
+	quatPoints.insertPointRefs(&containerCenterCopy);
+
+	// move the plane that slid so that Z is 0.
+	alignToZPlane();
+
+	// translate according to the container type's maximum dimension values
+	translateByMaximumDimensionValue();
+
+	// normalize the points to tile coordinates
+	normalizeToTileCoordinates();
+
+	if (debugFlag == true)
+	{
+		std::cout << "| -------------- post modification: " << std::endl;
+		std::cout << "!!! Point0 " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
+		std::cout << "!!! Point1 " << point1.x << ", " << point1.y << ", " << point1.z << std::endl;
+		std::cout << "!!! Point2 " << point2.x << ", " << point2.y << ", " << point2.z << std::endl;
+	}
 
 	// apply dimension corrections (if below 0, go to 0...if above 1, go to 1)
 	applyCorrectionsToNormalizedCoordinates();

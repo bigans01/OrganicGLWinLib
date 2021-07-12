@@ -9,6 +9,7 @@ UVCoordProducerEnclaveTriangle::UVCoordProducerEnclaveTriangle(int in_materialID
 	atlasMapRef = in_mapRef;
 	atlasTileID = in_materialID;		// set the materialID
 	blueprintKey = in_blueprintKey;
+	debugflag = in_debugFlag;
 }
 
 UVTriangleCoords UVCoordProducerEnclaveTriangle::getCoords()
@@ -28,7 +29,7 @@ UVTriangleCoords UVCoordProducerEnclaveTriangle::getCoords()
 	glPoint2.y = point2.y;
 	glPoint2.z = point2.z;
 
-	TileCoordinateProducer producer(glPoint0, glPoint1, glPoint2, ContainerType::ENCLAVE, blueprintKey.x, blueprintKey.y, blueprintKey.z);
+	TileCoordinateProducer producer(glPoint0, glPoint1, glPoint2, ContainerType::ENCLAVE, 0, 0, 0, debugflag);
 	TexturePoints UV = producer.getTexturePoints();
 	TexturePoints TranslatedPoints = atlasMapRef->getUVPointsForTerrainTile(atlasTileID, UV);
 
