@@ -14,6 +14,8 @@ class RMorphableMeshGroup
 	public:
 		void insertMeshIntoGroup(EnclaveKeyDef::EnclaveKey in_meshKey, RMorphableMesh in_mesh);
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
+		void generatePoints();
+		void hollowOutInterior();
 	private:
 		RCollisionPointArray meshGroupPointArray;
 };

@@ -304,6 +304,7 @@
     <ClInclude Include="RMorphableMeshCorners.h" />
     <ClInclude Include="RMorphableMeshCubeAreaDefiner.h" />
     <ClInclude Include="RMorphableMeshGroup.h" />
+    <ClInclude Include="RMorphableMeshPointRequests.h" />
     <ClInclude Include="RPoly.h" />
     <ClInclude Include="RScanDim.h" />
     <ClInclude Include="RTriangle.h" />

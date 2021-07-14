@@ -18,6 +18,7 @@ class RCollisionPoint
 
 		glm::vec3 originalValue;	// will always stay the same after it has been set
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
+		int usageCount = 0;			// the number of times this point is used by instance(s) of RMorphableMesh; a value of 8 means the point should go unused (the point would be completely surrounded and not visible at all)
 	private:
 		bool massHit = false;		// would determine if the point collided with some form of matter during a trace by a MorphableMesh
 		bool xMovementPermitted = true;

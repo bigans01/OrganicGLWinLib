@@ -484,6 +484,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
 				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+				std::cout << ":(CleaveSequenceFactory) Last point to search was: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 				std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
 
 				hasBadProduction = true;

@@ -121,7 +121,7 @@ void RMorphableAreaScanner::scanGridMass()
 		meshGroupMap[currentMeshGroupID++].keyedMorphables = currentMeshGroup;	// move over the final group
 	}
 	
-
+	// OPTIONAL: for debug output only.
 	auto meshGroupsBegin = meshGroupMap.begin();
 	auto meshGroupsEnd = meshGroupMap.end();
 	for (; meshGroupsBegin != meshGroupsEnd; meshGroupsBegin++)
@@ -133,6 +133,15 @@ void RMorphableAreaScanner::scanGridMass()
 		{
 			std::cout << "Mesh with key (" << meshGroupEntriesBegin->first.x << ", " << meshGroupEntriesBegin->first.y << ", " << meshGroupEntriesBegin->first.z << ") " << std::endl;
 		}
+	}
+
+	// Phase 3: for each RMorphableMeshGroup, generate its points and hollow out its interiors, aka non-visible points.
+	auto hollowingOutBegin = meshGroupMap.begin();
+	auto hollowingOutEnd = meshGroupMap.end();
+	for (; hollowingOutBegin != hollowingOutEnd; hollowingOutBegin++)
+	{
+		hollowingOutBegin->second.generatePoints();
+		hollowingOutBegin->second.hollowOutInterior();
 	}
 }
 
