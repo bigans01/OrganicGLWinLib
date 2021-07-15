@@ -9,6 +9,22 @@ void RCollisionPointArray::createArray(int in_arraySize)
 	isArraySet = true;
 }
 
+RCollisionPoint* RCollisionPointArray::attemptPointInsert(glm::vec3 in_pointToSearch, ECBPPOrientationResults in_orientationResults)
+{
+	RCollisionPoint* returnPoint = nullptr;
+	RCollisionPointSearchResult searchResult = doesRCollisionPointExist(in_pointToSearch);
+	if (searchResult.wasPointFound == true)
+	{
+		returnPoint = &collisionPoints[searchResult.arrayIndex];
+	}
+	else if (searchResult.wasPointFound == false)
+	{
+		int insertedIndex = insertRCollisionPoint(in_orientationResults.osubtype, in_pointToSearch);
+		returnPoint = &collisionPoints[insertedIndex];
+	}
+	return returnPoint;
+}
+
 RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::vec3 in_pointToSearch)
 {
 	RCollisionPointSearchResult searchResult;
@@ -17,6 +33,7 @@ RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::
 		if (collisionPoints[x].originalValue == in_pointToSearch)
 		{
 			searchResult.wasPointFound = true;
+			searchResult.arrayIndex = x;
 			searchResult.point = in_pointToSearch;
 			break;
 		}
@@ -24,8 +41,10 @@ RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::
 	return searchResult;
 }
 
-void RCollisionPointArray::insertRCollisionPoint(ECBPPOrientations in_orientation, glm::vec3 in_pointToFind)
+int RCollisionPointArray::insertRCollisionPoint(ECBPPOrientations in_orientation, glm::vec3 in_pointToFind)
 {
 	RCollisionPoint newPoint(in_orientation, in_pointToFind);
+	int returnIndex = currentArrayIndex;
 	collisionPoints[currentArrayIndex++] = newPoint;
+	return returnIndex;
 }

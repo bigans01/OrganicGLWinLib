@@ -18,6 +18,8 @@ void RMorphableAreaScanner::fillGridMass()
 
 void RMorphableAreaScanner::scanGridMass()
 {
+	// Generate the dynamic border line list, that all mesh groups will need to have a reference to.
+
 	// Phase 1: determine which morphable mesh areas will be used, and put them into the ungrouped meshes map.
 	for (int x = 0; x < meshesPerDimension; x++)
 	{
@@ -140,8 +142,10 @@ void RMorphableAreaScanner::scanGridMass()
 	auto hollowingOutEnd = meshGroupMap.end();
 	for (; hollowingOutBegin != hollowingOutEnd; hollowingOutBegin++)
 	{
-		hollowingOutBegin->second.generatePoints();
-		hollowingOutBegin->second.hollowOutInterior();
+		hollowingOutBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
+		hollowingOutBegin->second.generatePointArray();				// size of array is equal to the number of RMorphableMeshes * 8
+		hollowingOutBegin->second.generatePoints();					// generate all possible points
+		hollowingOutBegin->second.removeInteriorLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are not used (they are "landlocked")
 	}
 }
 

@@ -9,6 +9,7 @@
 #include "Rasterized3DMassGrid.h"
 #include "RMorphableMesh.h"
 #include "MassGridArrayCellScanArea.h"
+#include "DynamicBorderLineList.h"
 
 class RMorphableAreaScanner
 {
@@ -26,6 +27,8 @@ class RMorphableAreaScanner
 			massGrid.setGridParameters(in_tilesPerDimension, in_dimensionLimit);	// Step 1: initialization of grid
 			meshesPerDimension = in_meshesPerDimension;
 			morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f.
+
+			scannerDynamicBorderLineList.constructBorders(in_dimensionLimit);
 		}
 
 		void addSPolyToGrid(SPoly in_sPolyToAdd);		// Step 2: add all SPolys that will be converted to RPolys, to the grid.
@@ -42,6 +45,7 @@ class RMorphableAreaScanner
 		Rasterized3DMassGrid massGrid;
 		int scannerCellsPerDimension = 0;
 		float scannerDimLimit = 0.0f;
+		DynamicBorderLineList scannerDynamicBorderLineList;
 
 		int meshesPerDimension = 1;		// default value is 1; number of meshes that go in the x/y/z dimension
 		float morphableMeshDimension = 0.0f;

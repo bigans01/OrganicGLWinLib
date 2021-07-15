@@ -7,6 +7,8 @@
 #include "RCollisionPoint.h"
 #include "RCollisionPointSearchResult.h"
 #include "ECBPPOrientations.h"
+#include "DynamicBorderLineList.h"
+#include "ECBPPOrientationResults.h"
 
 class RCollisionPointArray
 {
@@ -30,13 +32,14 @@ class RCollisionPointArray
 
 		void createArray(int in_arraySize);
 		RCollisionPointSearchResult doesRCollisionPointExist(glm::vec3 in_pointToSearch);
-		void insertRCollisionPoint(ECBPPOrientations in_orientation, glm::vec3 in_pointToFind);
+		RCollisionPoint* attemptPointInsert(glm::vec3 in_pointToSearch, ECBPPOrientationResults in_orientationResults);
 
 	private:
 		bool isArraySet = false;
 		std::unique_ptr<RCollisionPoint[]> collisionPoints;
 		int arraySize = 0;
 		int currentArrayIndex = 0;
+		int insertRCollisionPoint(ECBPPOrientations in_orientation, glm::vec3 in_pointToFind);	// insert a point, return the index it was inserted at
 };
 
 #endif

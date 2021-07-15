@@ -19,16 +19,24 @@ class RMorphableMeshCorners
 			RCollisionPoint* in_upperNE
 		)
 		{
-
+			lowerNW = in_lowerNW;
+			lowerSW = in_lowerSW;
+			lowerSE = in_lowerSE;
+			lowerNE = in_lowerNE;
+			upperNW = in_upperNW;
+			upperSW = in_upperSW;
+			upperSE = in_upperSE;
+			upperNE = in_upperNE;
 		};
 
-		RCollisionPoint* in_lowerSW = nullptr;
-		RCollisionPoint* in_lowerSE = nullptr;
-		RCollisionPoint* in_lowerNE = nullptr;
-		RCollisionPoint* in_upperNW = nullptr;
-		RCollisionPoint* in_upperSW = nullptr;
-		RCollisionPoint* in_upperSE = nullptr;
-		RCollisionPoint* in_upperNE = nullptr;
+		RCollisionPoint* lowerNW = nullptr;
+		RCollisionPoint* lowerSW = nullptr;
+		RCollisionPoint* lowerSE = nullptr;
+		RCollisionPoint* lowerNE = nullptr;
+		RCollisionPoint* upperNW = nullptr;
+		RCollisionPoint* upperSW = nullptr;
+		RCollisionPoint* upperSE = nullptr;
+		RCollisionPoint* upperNE = nullptr;
 };
 
 #endif
