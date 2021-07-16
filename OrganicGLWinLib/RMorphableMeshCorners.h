@@ -4,6 +4,7 @@
 #define RMORPHABLEMESHCORNERS_H
 
 #include "RCollisionPoint.h"
+#include <iostream>
 
 class RMorphableMeshCorners
 {
@@ -28,6 +29,31 @@ class RMorphableMeshCorners
 			upperSE = in_upperSE;
 			upperNE = in_upperNE;
 		};
+
+		void updateUsageCounts()
+		{
+			lowerNW->incrementUsageCount();
+			lowerSW->incrementUsageCount();
+			lowerSE->incrementUsageCount();
+			lowerNE->incrementUsageCount();
+			lowerNW->incrementUsageCount();
+			lowerSW->incrementUsageCount();
+			lowerSE->incrementUsageCount();
+			upperNE->incrementUsageCount();
+		}
+
+		void printCornerData()
+		{
+			std::cout << "(RMorphableMeshCorners): printing corner points and orientations: " << std::endl;
+			std::cout << "Lower NW: "; lowerNW->printPointAndOrientation();
+			std::cout << "Lower SW: "; lowerSW->printPointAndOrientation();
+			std::cout << "Lower SE: "; lowerSE->printPointAndOrientation();
+			std::cout << "Lower NE: "; lowerNE->printPointAndOrientation();
+			std::cout << "Upper NW: "; upperNW->printPointAndOrientation();
+			std::cout << "Upper SW: "; upperSW->printPointAndOrientation();
+			std::cout << "Upper SE: "; upperSE->printPointAndOrientation();
+			std::cout << "Upper NE: "; upperNE->printPointAndOrientation();
+		}
 
 		RCollisionPoint* lowerNW = nullptr;
 		RCollisionPoint* lowerSW = nullptr;

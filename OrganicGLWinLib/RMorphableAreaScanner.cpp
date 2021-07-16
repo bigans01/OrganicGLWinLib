@@ -142,10 +142,22 @@ void RMorphableAreaScanner::scanGridMass()
 	auto hollowingOutEnd = meshGroupMap.end();
 	for (; hollowingOutBegin != hollowingOutEnd; hollowingOutBegin++)
 	{
-		hollowingOutBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
+		hollowingOutBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);	
 		hollowingOutBegin->second.generatePointArray();				// size of array is equal to the number of RMorphableMeshes * 8
 		hollowingOutBegin->second.generatePoints();					// generate all possible points
+		hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
 		hollowingOutBegin->second.removeInteriorLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are not used (they are "landlocked")
+
+		/*
+		EnclaveKeyDef::EnclaveKey testFinderKey(0, 1, 0);
+		if (hollowingOutBegin->second.doesGroupContainKey(testFinderKey) == true)
+		{
+			hollowingOutBegin->second.keyedMorphables.find(testFinderKey)->second.printCornerPoints();
+		}
+
+		std::cout << "!!! Checking which points in this group are landlocked: " << std::endl;
+		hollowingOutBegin->second.printLandlockedPoints();
+		*/
 	}
 }
 

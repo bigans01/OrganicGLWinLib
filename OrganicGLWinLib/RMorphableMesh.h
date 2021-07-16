@@ -20,7 +20,9 @@ class RMorphableMesh
 		};
 
 		RMorphableMeshCubeAreaDefiner getAreaDefiner();		// Step 1: the calling function needs to get this Mesh's cube area to scan.
-
+		void setMeshCorners(RMorphableMeshCorners in_meshCorners);
+		void printCornerPoints();
+		void updatePointUsageCounts();
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
 		glm::vec3 meshCenter;

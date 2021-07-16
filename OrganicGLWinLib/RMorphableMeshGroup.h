@@ -21,7 +21,10 @@ class RMorphableMeshGroup
 		void setDynamicBorderRef(DynamicBorderLineList* in_dynamicBorderLineListRef);
 		void removeInteriorLandlockedMeshes();		// Step 1
 		void generatePointArray();					// Step 2
-		void generatePoints();						// Step 3
+		void updatePointLandlockStats();			// Step 3
+		void generatePoints();						// Step 4
+		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
+		void printLandlockedPoints();
 	private:
 		RCollisionPointArray meshGroupPointArray;
 		DynamicBorderLineList* dynamicBorderRef = nullptr;

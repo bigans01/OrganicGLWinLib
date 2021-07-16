@@ -35,6 +35,7 @@ class RCollisionPointArray
 		RCollisionPoint* attemptPointInsert(glm::vec3 in_pointToSearch, ECBPPOrientationResults in_orientationResults);
 
 	private:
+		friend class RMorphableMeshGroup;
 		bool isArraySet = false;
 		std::unique_ptr<RCollisionPoint[]> collisionPoints;
 		int arraySize = 0;

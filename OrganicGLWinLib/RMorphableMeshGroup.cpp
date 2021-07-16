@@ -124,6 +124,7 @@ void RMorphableMeshGroup::generatePoints()
 	{
 		RMorphableMeshCubeAreaDefiner currentAreaDefiner = keyedMorphablesBegin->second.getAreaDefiner();
 		auto pointsToSearch = currentAreaDefiner.getPointRequests();
+		RCollisionPoint* collisionPointRefs[8];
 		for (int x = 0; x < 8; x++)
 		{
 			ECBPolyPoint glmConverted(pointsToSearch.points[x].x, 
@@ -131,6 +132,50 @@ void RMorphableMeshGroup::generatePoints()
 									pointsToSearch.points[x].z);
 			ECBPPOrientationResults currentPointOrientation = IndependentUtils::getDynamicPointOrientation(glmConverted, dynamicBorderRef);
 			RCollisionPoint* currentIndexPointRef = meshGroupPointArray.attemptPointInsert(pointsToSearch.points[x], currentPointOrientation);
+			collisionPointRefs[x] = currentIndexPointRef;
+		}
+		RMorphableMeshCorners currentMeshCorners;
+		currentMeshCorners.setCorners(collisionPointRefs[0],
+			collisionPointRefs[1],
+			collisionPointRefs[2],
+			collisionPointRefs[3],
+			collisionPointRefs[4],
+			collisionPointRefs[5],
+			collisionPointRefs[6],
+			collisionPointRefs[7]);
+		keyedMorphablesBegin->second.setMeshCorners(currentMeshCorners);
+	}
+}
+
+void RMorphableMeshGroup::updatePointLandlockStats()
+{
+	auto keyedMorphablesBegin = keyedMorphables.begin();
+	auto keyedMorphablesEnd = keyedMorphables.end();
+	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
+	{
+		keyedMorphablesBegin->second.updatePointUsageCounts();
+	}
+}
+
+bool RMorphableMeshGroup::doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey)
+{
+	bool wasFound;
+	auto keyFinder = keyedMorphables.find(in_enclaveKey);
+	if (keyFinder != keyedMorphables.end())
+	{
+		wasFound = true;
+	}
+	return wasFound;
+}
+
+void RMorphableMeshGroup::printLandlockedPoints()
+{
+	for (int x = 0; x < meshGroupPointArray.arraySize; x++)
+	{
+		if (meshGroupPointArray.collisionPoints[x].isPointLandlocked() == true)
+		{
+			auto currentPoint = meshGroupPointArray.collisionPoints[x].originalValue;
+			std::cout << "!! Notice, point " << currentPoint.x << ", " << currentPoint.y << ", " << currentPoint.z << " is landlocked. " << std::endl;
 		}
 	}
 }

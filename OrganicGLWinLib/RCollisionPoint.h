@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 #include "ECBPPOrientations.h"
+#include <iostream>
+#include "IndependentUtils.h"
 
 class RCollisionPoint
 {
@@ -16,10 +18,31 @@ class RCollisionPoint
 			currentValue(in_originalPoint)
 		{};
 
+		void printPointAndOrientation()
+		{
+			std::cout << originalValue.x << ", " << originalValue.y << ", " << originalValue.z << " | Orientation: ";
+			IndependentUtils::printOrientationEnum(originalGridOrientation);
+		}
+
+		void incrementUsageCount()
+		{
+			usageCount++;
+		};
+
+		bool isPointLandlocked()
+		{
+			bool isLandlocked = false;
+			if (usageCount == 8)
+			{
+				isLandlocked = true;
+			}
+			return isLandlocked;
+		}
+
 		glm::vec3 originalValue;	// will always stay the same after it has been set
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
-		int usageCount = 0;			// the number of times this point is used by instance(s) of RMorphableMesh; a value of 8 means the point should go unused (the point would be completely surrounded and not visible at all)
 	private:
+		int usageCount = 0;			// the number of times this point is used by instance(s) of RMorphableMesh; a value of 8 means the point should go unused (the point would be completely surrounded and not visible at all)
 		bool massHit = false;		// would determine if the point collided with some form of matter during a trace by a MorphableMesh
 		bool xMovementPermitted = true;
 		bool yMovementPermitted = true;

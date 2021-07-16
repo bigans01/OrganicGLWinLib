@@ -26,6 +26,12 @@ class RMorphableMeshCubeAreaDefiner
 		{
 			RMorphableMeshPointRequests returnRequests;
 
+			// initialize all points to contain definingPointA, before any changes occur.
+			for (int x = 0; x < 8; x++)
+			{
+				returnRequests.points[x] = definingPointA;
+			}
+
 															// lower NW (no changes)
 
 			returnRequests.points[1].z += cubeDiameter;		// lower SW
