@@ -16,6 +16,11 @@ void RTriangleInteriorAreaTracer::setUpfillCrustBit(short in_upfillCrustBitValue
 	upfillCrustBitValue = in_upfillCrustBitValue;
 }
 
+void RTriangleInteriorAreaTracer::setEmptyNormal(glm::vec3 in_emptyNormal)
+{
+	tracerEmptyNormal = in_emptyNormal;
+}
+
 void RTriangleInteriorAreaTracer::runTrace()
 {
 	//std::cout << ">>> begin trace run: start key (" << startCubeKey.x << ", " << startCubeKey.y << "," << startCubeKey.z 
@@ -46,6 +51,8 @@ void RTriangleInteriorAreaTracer::runTrace()
 			result.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
 			result.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
 			result.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
+
+			result.cellRef->insertEmptyNormal(tracerEmptyNormal);
 		}
 		numberOfInserts++;
 

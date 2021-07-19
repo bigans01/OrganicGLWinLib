@@ -76,7 +76,7 @@ class RTriangleLine
 			lineTracer.runTrace();
 		};
 
-		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, short in_downFillCrustBit, short in_upfillCrustBit)
+		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, short in_downFillCrustBit, short in_upfillCrustBit, glm::vec3 in_emptyNormal)
 		{
 			
 			// run a tracer, just as in runRasterTrace(); but populate each traced block from that line in the array when we are done.
@@ -107,6 +107,8 @@ class RTriangleLine
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
 
+						currentSearchResult.cellRef->insertEmptyNormal(in_emptyNormal);
+
 						gridUpdateCount++;
 					}
 				}
@@ -115,8 +117,8 @@ class RTriangleLine
 			auto gridUpdateEnd = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> gridUpdateElapsed = gridUpdateEnd - gridUpdateBegin;
 
-			std::cout << "Number of grid updates: " << gridUpdateCount << std::endl;
-			std::cout << "Grid update time: " << gridUpdateElapsed.count() << std::endl;
+			//std::cout << "Number of grid updates: " << gridUpdateCount << std::endl;
+			//std::cout << "Grid update time: " << gridUpdateElapsed.count() << std::endl;
 
 		}
 

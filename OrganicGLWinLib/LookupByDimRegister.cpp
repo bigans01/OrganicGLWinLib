@@ -59,7 +59,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 	float in_rPolyTilesPerDim,
 	float in_rPolyTileWeightToHundredthFloatRatio,
 	short in_downfillCrustBitValue,
-	short in_upfillCrustBitValue)
+	short in_upfillCrustBitValue, glm::vec3 in_emptyNormal)
 {
 	auto scansBegin = scanRuns.begin();
 	auto scansEnd = scanRuns.end();
@@ -119,6 +119,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 			                   false);
 		interiorTracer.setDownfillCrustBit(in_downfillCrustBitValue);
 		interiorTracer.setUpfillCrustBit(in_upfillCrustBitValue);
+		interiorTracer.setEmptyNormal(in_emptyNormal);
 		interiorTracer.runTrace();
 	}
 

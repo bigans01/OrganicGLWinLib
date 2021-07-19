@@ -96,17 +96,17 @@ class RTriangle
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
 		void runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
 		void runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
 
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;

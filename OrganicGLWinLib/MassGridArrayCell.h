@@ -4,6 +4,8 @@
 #define MASSGRIDARRAYCELL_H
 
 #include "MassCellBitFlags.h"
+#include <glm/glm.hpp>
+#include <vector>
 
 class MassGridArrayCell
 {
@@ -76,6 +78,13 @@ class MassGridArrayCell
 			}
 			return isRunnable;
 		}
+
+		void insertEmptyNormal(glm::vec3 in_emptyNormal)
+		{
+			emptyNormalVector.push_back(in_emptyNormal);
+		}
+	private:
+		std::vector<glm::vec3> emptyNormalVector;
 };
 
 #endif

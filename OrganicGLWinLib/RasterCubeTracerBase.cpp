@@ -450,7 +450,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 		{
 			std::cout << "++++++++++++++++++++++++++++++++++++++++ entered CORNER logic if statement..." << std::endl;
 		}
-		std::cout << ":::: corner point hit! " << std::endl;
+		//std::cout << ":::: corner point hit! " << std::endl;
 		/**/
 		if (in_slopeDirection.x != 0.0f)
 		{

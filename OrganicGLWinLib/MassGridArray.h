@@ -76,10 +76,10 @@ class MassGridArray
 			auto downfillExecutionEnd = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> downfillElapsed = downfillExecutionEnd - downfillExecutionBegin;
 
-			//std::cout << "!!! Downfill runtime: " << downfillElapsed.count() << std::endl;
-			//std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;
-			//int downfillSillyWait = 3;
-			//std::cin >> downfillSillyWait;
+			std::cout << "!!! Downfill runtime: " << downfillElapsed.count() << std::endl;
+			std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;
+			int downfillSillyWait = 3;
+			std::cin >> downfillSillyWait;
 		}
 
 		void buildArray(int in_dimensionSize)

@@ -8,6 +8,7 @@
 #include "MassGridArray.h"
 #include "RTriangleInteriorAreaTracer.h"
 #include "RScanDim.h"
+#include <glm/glm.hpp>
 
 class LookupByDimRegister
 {
@@ -61,6 +62,6 @@ private:
 		float in_rPolyTilesPerDim,
 		float in_rPolyTileWeightToHundredthFloatRatio,
 		short in_downfillCrustBitValue,
-		short in_upfillCrustBitValue);
+		short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
 };
 #endif

@@ -8,7 +8,13 @@ void RMorphableAreaScanner::addSPolyToGrid(SPoly in_sPolyToAdd)
 
 void RMorphableAreaScanner::buildGridMassShell()
 {
+	auto shellBuildStart = std::chrono::high_resolution_clock::now();
+	std::cout << "##################### Build shell START" << std::endl;
 	massGrid.buildShell();
+	std::cout << "##################### Build shell END" << std::endl;
+	auto shellBuildEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> comparisonIterationsElapsed = shellBuildEnd - shellBuildStart;
+	std::cout << "Shell build time: " << comparisonIterationsElapsed.count() << std::endl;
 }
 
 void RMorphableAreaScanner::fillGridMass()

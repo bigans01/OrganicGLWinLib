@@ -3,6 +3,7 @@
 
 void RTriangleLineTracer::runTrace()
 {
+	/*
 	std::cout << "======== stats for RTriangleLineTracer, prior to call of iterate to next block: " << std::endl;
 	std::cout << "Point A Cube Key: " << startCubeKey.x << ", " << startCubeKey.y << ", " << startCubeKey.z << std::endl;
 	std::cout << "Point B Cube Key: " << endCubeKey.x << ", " << endCubeKey.y << ", " << endCubeKey.z << std::endl;
@@ -12,6 +13,7 @@ void RTriangleLineTracer::runTrace()
 	std::cout << "Normalized slope: " << normalizedSlopeDirection.x << ", " << normalizedSlopeDirection.y << ", " << normalizedSlopeDirection.z << std::endl;
 
 	std::cout << "Line length: " << lineLength << std::endl;
+	*/
 
 	auto traceAttemptBegin = std::chrono::high_resolution_clock::now();
 	optionalCubeLookup->insertCubeKey(currentCubeKey);
@@ -65,11 +67,13 @@ void RTriangleLineTracer::runTrace()
 
 	auto traceAttemptEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> comparisonIterationsElapsed = traceAttemptEnd - traceAttemptBegin;
+	/*
 	std::cout << "#-> Raster trace time  > " << comparisonIterationsElapsed.count() << std::endl;
 	std::cout << "#-> Number of inserts: " << numberOfInserts << std::endl;
 	std::cout << "#-> Remaining distance to travel after run is done: " << remainingDistance << std::endl;
 
 	std::cout << ":::::::::::: Final value of current cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+	*/
 	if (currentCubeKey == endCubeKey)
 	{
 		isRunComplete = true;
