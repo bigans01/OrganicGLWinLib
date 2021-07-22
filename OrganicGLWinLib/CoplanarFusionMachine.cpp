@@ -144,6 +144,7 @@ void CoplanarFusionMachine::determineFusionType()
 		(group1Count > 0)
 	)
 	{
+		coplanarFusionMachineLogger.log("(CoplanarFusionMachine): Type would be: HYBRID", "\n");
 
 	}
 

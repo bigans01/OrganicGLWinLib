@@ -148,6 +148,32 @@ glm::vec3 FusionCandidateProducer::roundPointToTenThousandths(glm::vec3 in_point
 	return returnPoint;
 }
 
+glm::vec3 FusionCandidateProducer::clampToGridCoord(glm::vec3 in_point)
+{
+	glm::vec3 returnPoint;
+
+	// Step 1: multiply by 100
+	float floorable_x = in_point.x * 100.0f;
+	float floorable_y = in_point.y * 100.0f;
+	float floorable_z = in_point.z * 100.0f;
+
+	// round
+	float floored_x = floor(floorable_x);
+	float floored_y = floor(floorable_y);
+	float floored_z = floor(floorable_z);
+
+	// divide by 100.0f
+	floored_x /= 100.0f;
+	floored_y /= 100.0f;
+	floored_z /= 100.0f;
+
+	returnPoint.x = floored_x;
+	returnPoint.y = floored_y;
+	returnPoint.z = floored_z;
+
+	return returnPoint;
+}
+
 double FusionCandidateProducer::doubledot(glm::vec3 in_A, glm::vec3 in_B)
 {
 	double x_multiplied = in_A.x * in_B.x;
@@ -510,6 +536,8 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		//returnResult.intersectedPoint = roundPointToHundredths(intersect_candidate);					// the intercept point should be rounded to hundredths!
 		//returnResult.intersectedPoint = roundPointToThousandths(intersect_candidate);
 		returnResult.intersectedPoint = roundPointToTenThousandths(intersect_candidate);					// the intercept point should be rounded to hundredths!
+		//returnResult.intersectedPoint = clampToGridCoord(intersect_candidate);
+
 		//returnResult.intersectedPoint = intersect_candidate;					// the intercept point should be rounded to hundredths!
 
 

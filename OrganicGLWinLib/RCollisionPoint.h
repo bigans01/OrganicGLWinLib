@@ -7,6 +7,7 @@
 #include "ECBPPOrientations.h"
 #include <iostream>
 #include "IndependentUtils.h"
+#include "RCollisionPointState.h"
 
 class RCollisionPoint
 {
@@ -34,6 +35,7 @@ class RCollisionPoint
 			bool isLandlocked = false;
 			if (usageCount == 8)
 			{
+				pointState = RCollisionPointState::IMMUTABLE;
 				isLandlocked = true;
 			}
 			return isLandlocked;
@@ -43,6 +45,7 @@ class RCollisionPoint
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
 	private:
 		int usageCount = 0;			// the number of times this point is used by instance(s) of RMorphableMesh; a value of 8 means the point should go unused (the point would be completely surrounded and not visible at all)
+		RCollisionPointState pointState = RCollisionPointState::FREE;	// the point can be freely moved; all points start out as this
 		bool massHit = false;		// would determine if the point collided with some form of matter during a trace by a MorphableMesh
 		bool xMovementPermitted = true;
 		bool yMovementPermitted = true;

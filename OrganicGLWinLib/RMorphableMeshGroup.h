@@ -12,6 +12,7 @@
 #include "DynamicBorderLineList.h"
 #include "IndependentUtils.h"
 #include "ECBPPOrientationResults.h"
+#include <algorithm>
 
 class RMorphableMeshGroup
 {
@@ -25,6 +26,8 @@ class RMorphableMeshGroup
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
+
+		void buildMeshByXScan();
 	private:
 		RCollisionPointArray meshGroupPointArray;
 		DynamicBorderLineList* dynamicBorderRef = nullptr;

@@ -179,3 +179,17 @@ void RMorphableMeshGroup::printLandlockedPoints()
 		}
 	}
 }
+
+void RMorphableMeshGroup::buildMeshByXScan()
+{
+	// find the lowest/highest x values, by using min and max
+	int minX = 1000;	// should always start high 
+	int maxX = 0;		// should always start low
+	auto keyedMorphablesBegin = keyedMorphables.begin();
+	auto keyedMorphablesEnd = keyedMorphables.end();
+	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
+	{
+		minX = std::min(minX, keyedMorphablesBegin->first.x);
+		maxX = std::max(maxX, keyedMorphablesBegin->first.x);
+	}
+}
