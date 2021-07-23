@@ -5,6 +5,7 @@
 
 #include "RCollisionPoint.h"
 #include <iostream>
+#include "RMorphableMeshCornerArray.h"
 
 class RMorphableMeshCorners
 {
@@ -53,6 +54,20 @@ class RMorphableMeshCorners
 			std::cout << "Upper SW: "; upperSW->printPointAndOrientation();
 			std::cout << "Upper SE: "; upperSE->printPointAndOrientation();
 			std::cout << "Upper NE: "; upperNE->printPointAndOrientation();
+		}
+
+		RMorphableMeshCornerArray getPointArray()
+		{
+			RMorphableMeshCornerArray returnArray(lowerNW,
+												lowerSW,
+												lowerSE,
+												lowerNE,
+												upperNW,
+												upperSW,
+												upperSE,
+												upperNE);
+			return returnArray;
+
 		}
 
 		RCollisionPoint* lowerNW = nullptr;

@@ -192,4 +192,35 @@ void RMorphableMeshGroup::buildMeshByXScan()
 		minX = std::min(minX, keyedMorphablesBegin->first.x);
 		maxX = std::max(maxX, keyedMorphablesBegin->first.x);
 	}
+
+	// print values
+	std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
+	std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;
+
+	// iterate from min to max
+	for (int currentXSlice = minX; currentXSlice < maxX + 1; currentXSlice++)	// maxX + 1 because we must include  maxX.
+	{
+		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> currentXSliceSet;
+		auto currentKeyedScanForXBegin = keyedMorphables.begin();
+		auto currentKeyedScanForXEnd = keyedMorphables.end();
+		for (; currentKeyedScanForXBegin != currentKeyedScanForXEnd; currentKeyedScanForXBegin++)
+		{
+			if (currentKeyedScanForXBegin->first.x == currentXSlice)
+			{
+				currentXSliceSet.insert(currentKeyedScanForXBegin->first);
+			}
+		}
+
+		// run "suction" on each morphable mesh.
+		auto xSliceSetBegin = currentXSliceSet.begin();
+		auto xSliceSetEnd = currentXSliceSet.end();
+		for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
+		{
+			std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
+			keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+
+			int suctionWait = 3;
+			std::cin >> suctionWait;
+		}
+	}
 }

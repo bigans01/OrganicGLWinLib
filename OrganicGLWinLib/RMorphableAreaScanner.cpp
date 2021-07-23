@@ -38,7 +38,7 @@ void RMorphableAreaScanner::scanGridMass()
 				float currentMeshCenterY = (y * morphableMeshDimension) + (morphableMeshDimension / 2);
 				float currentMeshCenterZ = (z * morphableMeshDimension) + (morphableMeshDimension / 2);
 				glm::vec3 currentMeshCenter(currentMeshCenterX, currentMeshCenterY, currentMeshCenterZ);
-				RMorphableMesh currentCandidateMesh(2, currentMeshCenter, morphableMeshDimension);
+				RMorphableMesh currentCandidateMesh(2, currentMeshCenter, morphableMeshDimension, &gridTranslator, &massGrid);
 
 				
 				RMorphableMeshCubeAreaDefiner currentMeshAreaScanner = currentCandidateMesh.getAreaDefiner();
@@ -164,6 +164,14 @@ void RMorphableAreaScanner::scanGridMass()
 		std::cout << "!!! Checking which points in this group are landlocked: " << std::endl;
 		hollowingOutBegin->second.printLandlockedPoints();
 		*/
+	}
+
+	// Phase 4: run suction for each mesh group
+	auto suctionBegin = meshGroupMap.begin();
+	auto suctionEnd = meshGroupMap.end();
+	for (; suctionBegin != suctionEnd; suctionBegin++)
+	{
+		suctionBegin->second.buildMeshByXScan();
 	}
 }
 

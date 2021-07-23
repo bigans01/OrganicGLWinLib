@@ -1140,6 +1140,12 @@
     <ClInclude Include="RCollisionPointState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RPointToGridTranslator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCornerArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

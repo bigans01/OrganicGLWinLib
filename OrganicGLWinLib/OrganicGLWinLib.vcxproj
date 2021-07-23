@@ -300,6 +300,8 @@
     <ClInclude Include="RasterCubeLookup.h" />
     <ClInclude Include="RasterizationPointAdjuster.h" />
     <ClInclude Include="RCollisionPointState.h" />
+    <ClInclude Include="RMorphableMeshCornerArray.h" />
+    <ClInclude Include="RPointToGridTranslator.h" />
     <ClInclude Include="RMorphableAreaScanner.h" />
     <ClInclude Include="RMorphableMesh.h" />
     <ClInclude Include="RMorphableMeshCorners.h" />

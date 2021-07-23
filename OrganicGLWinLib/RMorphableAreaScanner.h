@@ -10,6 +10,7 @@
 #include "RMorphableMesh.h"
 #include "MassGridArrayCellScanArea.h"
 #include "DynamicBorderLineList.h"
+#include "RPointToGridTranslator.h"
 
 class RMorphableAreaScanner
 {
@@ -29,6 +30,8 @@ class RMorphableAreaScanner
 			morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f.
 
 			scannerDynamicBorderLineList.constructBorders(in_dimensionLimit);
+
+			gridTranslator.setTranslationParameters(scannerCellsPerDimension, scannerDimLimit);
 		}
 
 		void addSPolyToGrid(SPoly in_sPolyToAdd);		// Step 2: add all SPolys that will be converted to RPolys, to the grid.
@@ -49,6 +52,7 @@ class RMorphableAreaScanner
 
 		int meshesPerDimension = 1;		// default value is 1; number of meshes that go in the x/y/z dimension
 		float morphableMeshDimension = 0.0f;
+		RPointToGridTranslator gridTranslator;
 };
 
 #endif
