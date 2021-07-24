@@ -8,6 +8,7 @@
 #include "RPoly.h"
 #include "MassGridArray.h"
 #include "MassGridArrayCellScanArea.h"
+#include "EnclaveKeyDef.h"
 
 class Rasterized3DMassGrid : public RasterGrid3dBase
 {
@@ -31,6 +32,7 @@ class Rasterized3DMassGrid : public RasterGrid3dBase
 		void buildShell();				// the shell that must be constructed, so that we can fill the mass inside of the shell.
 		void fillMass();				// fills the mass of the grid; must be called only after buildShell() has been run.
 		bool wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea);
+		MassGridSearchResult fetchCell(EnclaveKeyDef::EnclaveKey in_key);
 	private:
 		std::map<int, RPoly> rPolyMap;
 		int gridRPolyCount = 0;

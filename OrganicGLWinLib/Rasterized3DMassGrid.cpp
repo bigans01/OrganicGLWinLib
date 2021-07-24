@@ -28,3 +28,8 @@ bool Rasterized3DMassGrid::wasMassFoundInAreaScan(MassGridArrayCellScanArea in_s
 {
 	return dataArray.wereCellsDiscoveredInArea(in_scanArea);
 }
+
+MassGridSearchResult Rasterized3DMassGrid::fetchCell(EnclaveKeyDef::EnclaveKey in_key)
+{
+	return dataArray.searchForCell(in_key.x, in_key.y, in_key.z);
+}

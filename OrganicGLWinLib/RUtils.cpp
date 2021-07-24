@@ -4,7 +4,7 @@
 EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToConvert, float in_tileGridWidth, int in_numberOfTilesPerDimension)
 {
 	// find the coordinates; check to ensure that the values of each aren't equal to the end of the dimension
-
+	/*
 	int x_block_value = in_pointToConvert.x / in_tileGridWidth;
 	if (x_block_value == in_numberOfTilesPerDimension)
 	{
@@ -22,6 +22,36 @@ EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToCo
 	{
 		z_block_value--;
 	}
+	*/
+
+	
+	int x_block_value = in_pointToConvert.x / in_tileGridWidth;
+	if
+	(
+		(x_block_value != 0)
+	)
+	{
+		x_block_value--;
+	}
+
+	int y_block_value = in_pointToConvert.y / in_tileGridWidth;
+	if
+	(
+		(y_block_value != 0)
+	)
+	{
+		y_block_value--;
+	}
+
+	int z_block_value = in_pointToConvert.z / in_tileGridWidth;
+	if
+	(
+		(z_block_value != 0)
+	)
+	{
+		z_block_value--;
+	}
+	
 
 	//std::cout << "Original coordinate: " << in_pointToConvert.x << ", " << in_pointToConvert.y << ", " << in_pointToConvert.z << std::endl;
 	//std::cout << ">> Raster grid x coord: " << x_block_value << std::endl;

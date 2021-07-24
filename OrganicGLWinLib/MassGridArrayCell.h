@@ -83,6 +83,32 @@ class MassGridArrayCell
 		{
 			emptyNormalVector.push_back(in_emptyNormal);
 		}
+
+		int getNumberOfFlagsSet()
+		{
+			int numberOfFlagsSet = 0;
+			if (isFlagSet(MassCellBitFlags::DOWNFILL_CRUST) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			if (isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			if (isFlagSet(MassCellBitFlags::CRUST_MASS) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			if (isFlagSet(MassCellBitFlags::INNER_MASS) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			if (isFlagSet(MassCellBitFlags::LINE_MASS) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			return numberOfFlagsSet;
+		}
 	private:
 		std::vector<glm::vec3> emptyNormalVector;
 };

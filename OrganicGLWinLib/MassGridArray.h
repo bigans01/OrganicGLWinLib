@@ -62,8 +62,8 @@ class MassGridArray
 							MassGridSearchResult fillSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
 							if (fillSearchResult.wasSearchKeyValid == true)
 							{
-								currentSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
-								if (currentSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
+								fillSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
+								if (fillSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
 								{
 									continueDownfillProcess = false;
 								}
