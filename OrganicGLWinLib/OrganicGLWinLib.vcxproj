@@ -309,6 +309,8 @@
     <ClInclude Include="RMorphableMeshGroup.h" />
     <ClInclude Include="RMorphableMeshPointRequests.h" />
     <ClInclude Include="RPoly.h" />
+    <ClInclude Include="RProductFace.h" />
+    <ClInclude Include="RProductFaceRootPoints.h" />
     <ClInclude Include="RScanDim.h" />
     <ClInclude Include="RTriangle.h" />
     <ClInclude Include="RTriangleInteriorAreaTracer.h" />

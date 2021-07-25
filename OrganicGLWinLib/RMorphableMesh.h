@@ -9,6 +9,9 @@
 #include "RPointToGridTranslator.h"
 #include "Rasterized3DMassGrid.h"
 #include "RMorphableMeshCornerArray.h"
+#include <map>
+#include "ECBPPOrientations.h"
+#include "RProductFace.h"
 
 class RMorphableMesh
 {
@@ -33,6 +36,7 @@ class RMorphableMesh
 		void printCornerPoints();
 		void updatePointUsageCounts();
 		void runSuctionByXSlice();
+		void generateRProductFaces();
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
 		glm::vec3 meshCenter;
@@ -42,7 +46,7 @@ class RMorphableMesh
 		RMorphableMeshCorners meshCorners;
 		RPointToGridTranslator* translatorRef = nullptr;
 		Rasterized3DMassGrid* gridRef = nullptr;
-
+		std::map<ECBPPOrientations, RProductFace> rProductFaceMap;
 };
 
 #endif

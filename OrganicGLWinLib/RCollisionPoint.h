@@ -28,17 +28,25 @@ class RCollisionPoint
 		void incrementUsageCount()
 		{
 			usageCount++;
+			if (usageCount == 8)
+			{
+				pointState = RCollisionPointState::IMMUTABLE;
+			}
 		};
 
 		bool isPointLandlocked()
 		{
 			bool isLandlocked = false;
-			if (usageCount == 8)
+			if (pointState == RCollisionPointState::IMMUTABLE)
 			{
-				pointState = RCollisionPointState::IMMUTABLE;
 				isLandlocked = true;
 			}
 			return isLandlocked;
+		}
+
+		RCollisionPointState getCollisionPointState()
+		{
+			return pointState;
 		}
 
 		glm::vec3 originalValue;	// will always stay the same after it has been set

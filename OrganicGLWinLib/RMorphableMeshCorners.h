@@ -6,6 +6,7 @@
 #include "RCollisionPoint.h"
 #include <iostream>
 #include "RMorphableMeshCornerArray.h"
+#include "RProductFaceRootPoints.h"
 
 class RMorphableMeshCorners
 {
@@ -70,6 +71,65 @@ class RMorphableMeshCorners
 
 		}
 
+		bool checkIfFaceIsUsable(ECBPPOrientations in_point0Orientation,
+			ECBPPOrientations in_point1Orientation,
+			ECBPPOrientations in_point2Orientation,
+			ECBPPOrientations in_point3Orientation)
+		{
+			bool isUsable = false;
+
+			bool point0Landlocked = isPointImmutable(in_point0Orientation);
+			bool point1Landlocked = isPointImmutable(in_point1Orientation);
+			bool point2Landlocked = isPointImmutable(in_point2Orientation);
+			bool point3Landlocked = isPointImmutable(in_point3Orientation);
+
+			if
+			(
+				(point0Landlocked == false)
+				&&
+				(point1Landlocked == false)
+				&&
+				(point2Landlocked == false)
+				&&
+				(point3Landlocked == false)
+			)
+			{
+				isUsable = true;
+			}
+			return isUsable;
+		}
+
+		bool isPointImmutable(ECBPPOrientations in_pointOrientation)
+		{
+			bool isImmutable = false;
+			switch (in_pointOrientation)
+			{
+				case ECBPPOrientations::CORNER_LOWERNW: { isImmutable = lowerNW->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_LOWERSW: { isImmutable = lowerSW->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_LOWERSE: { isImmutable = lowerSE->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_LOWERNE: { isImmutable = lowerNE->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_UPPERNW: { isImmutable = upperNW->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_UPPERSW: { isImmutable = upperSW->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_UPPERSE: { isImmutable = upperSE->isPointLandlocked(); break; }
+				case ECBPPOrientations::CORNER_UPPERNE: { isImmutable = upperNE->isPointLandlocked(); break; }
+			}
+			return isImmutable;
+		};
+
+
+		RProductFaceRootPoints fetchRootPoints(ECBPPOrientations in_point0Orientation,
+			ECBPPOrientations in_point1Orientation,
+			ECBPPOrientations in_point2Orientation,
+			ECBPPOrientations in_point3Orientation)
+		{
+			RCollisionPoint* point0Ref = fetchPointRefViaOrientation(in_point0Orientation);
+			RCollisionPoint* point1Ref = fetchPointRefViaOrientation(in_point1Orientation);
+			RCollisionPoint* point2Ref = fetchPointRefViaOrientation(in_point2Orientation);
+			RCollisionPoint* point3Ref = fetchPointRefViaOrientation(in_point3Orientation);
+			RProductFaceRootPoints returnRootPoints(point0Ref, point1Ref, point2Ref, point3Ref);
+			return returnRootPoints;
+		}
+
 		RCollisionPoint* lowerNW = nullptr;
 		RCollisionPoint* lowerSW = nullptr;
 		RCollisionPoint* lowerSE = nullptr;
@@ -78,6 +138,25 @@ class RMorphableMeshCorners
 		RCollisionPoint* upperSW = nullptr;
 		RCollisionPoint* upperSE = nullptr;
 		RCollisionPoint* upperNE = nullptr;
+
+	private:
+		RCollisionPoint* fetchPointRefViaOrientation(ECBPPOrientations in_pointOrientation)
+		{
+			RCollisionPoint* pointRef = nullptr;
+			switch (in_pointOrientation)
+			{
+				case ECBPPOrientations::CORNER_LOWERNW: { pointRef = lowerNW; break; }
+				case ECBPPOrientations::CORNER_LOWERSW: { pointRef = lowerSW; break; }
+				case ECBPPOrientations::CORNER_LOWERSE: { pointRef = lowerSE; break; }
+				case ECBPPOrientations::CORNER_LOWERNE: { pointRef = lowerNE; break; }
+				case ECBPPOrientations::CORNER_UPPERNW: { pointRef = upperNW; break; }
+				case ECBPPOrientations::CORNER_UPPERSW: { pointRef = upperSW; break; }
+				case ECBPPOrientations::CORNER_UPPERSE: { pointRef = upperSE; break; }
+				case ECBPPOrientations::CORNER_UPPERNE: { pointRef = upperNE; break; }
+			}
+			return pointRef;
+		};
+
 };
 
 #endif

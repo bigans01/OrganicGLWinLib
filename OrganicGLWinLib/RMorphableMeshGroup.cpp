@@ -180,6 +180,16 @@ void RMorphableMeshGroup::printLandlockedPoints()
 	}
 }
 
+void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
+{
+	auto generationRunBegin = keyedMorphables.begin();
+	auto generationRunEnd = keyedMorphables.end();
+	for (; generationRunBegin != generationRunEnd; generationRunBegin++)
+	{
+		generationRunBegin->second.generateRProductFaces();
+	}
+}
+
 void RMorphableMeshGroup::buildMeshByXScan()
 {
 	// find the lowest/highest x values, by using min and max

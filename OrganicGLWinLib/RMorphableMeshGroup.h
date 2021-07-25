@@ -18,7 +18,6 @@ class RMorphableMeshGroup
 {
 	public:
 		void insertMeshIntoGroup(EnclaveKeyDef::EnclaveKey in_meshKey, RMorphableMesh in_mesh);
-		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
 		void setDynamicBorderRef(DynamicBorderLineList* in_dynamicBorderLineListRef);
 		void removeInteriorLandlockedMeshes();		// Step 1
 		void generatePointArray();					// Step 2
@@ -26,9 +25,11 @@ class RMorphableMeshGroup
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
-
+		void generateRProductFacesInRemainingMeshes();
 		void buildMeshByXScan();
 	private:
+		friend class RMorphableAreaScanner;
+		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
 		RCollisionPointArray meshGroupPointArray;
 		DynamicBorderLineList* dynamicBorderRef = nullptr;
 };

@@ -153,7 +153,7 @@ void RMorphableAreaScanner::scanGridMass()
 		hollowingOutBegin->second.generatePoints();					// generate all possible points
 		hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
 		hollowingOutBegin->second.removeInteriorLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are not used (they are "landlocked")
-
+		hollowingOutBegin->second.generateRProductFacesInRemainingMeshes();
 		/*
 		EnclaveKeyDef::EnclaveKey testFinderKey(0, 1, 0);
 		if (hollowingOutBegin->second.doesGroupContainKey(testFinderKey) == true)
@@ -164,6 +164,7 @@ void RMorphableAreaScanner::scanGridMass()
 		std::cout << "!!! Checking which points in this group are landlocked: " << std::endl;
 		hollowingOutBegin->second.printLandlockedPoints();
 		*/
+		//hollowingOutBegin->second.printLandlockedPoints();
 	}
 
 	// Phase 4: run suction for each mesh group

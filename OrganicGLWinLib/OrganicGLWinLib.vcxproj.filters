@@ -1146,6 +1146,12 @@
     <ClInclude Include="RMorphableMeshCornerArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RProductFace.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RProductFaceRootPoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
