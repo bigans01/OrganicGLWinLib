@@ -21,6 +21,11 @@ void RMorphableMesh::updatePointUsageCounts()
 	meshCorners.updateUsageCounts();
 }
 
+void RMorphableMesh::updatePointState(RMorphableMeshState in_pointState)
+{
+	pointState = in_pointState;
+}
+
 void RMorphableMesh::generateRProductFaces()
 {
 	// check north face.
@@ -36,6 +41,36 @@ void RMorphableMesh::generateRProductFaces()
 																			ECBPPOrientations::CORNER_LOWERNW);
 		RProductFace northProductFace(northRootPoints);
 		rProductFaceMap[ECBPPOrientations::NORTHFACE] = northProductFace;
+	}
+
+	// check east face.
+	bool isEastUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERNE,
+														ECBPPOrientations::CORNER_UPPERSE,
+														ECBPPOrientations::CORNER_LOWERSE,
+														ECBPPOrientations::CORNER_LOWERNE);
+	if (isEastUsable == true)
+	{
+		RProductFaceRootPoints eastRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERNE,
+																			ECBPPOrientations::CORNER_UPPERSE,
+																			ECBPPOrientations::CORNER_LOWERSE,
+																			ECBPPOrientations::CORNER_LOWERNE);
+		RProductFace eastProductFace(eastRootPoints);
+		rProductFaceMap[ECBPPOrientations::EASTFACE] = eastProductFace;
+	}
+
+	// check south face
+	bool isSouthUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERSE,
+														ECBPPOrientations::CORNER_UPPERSW,
+														ECBPPOrientations::CORNER_LOWERSW,
+														ECBPPOrientations::CORNER_LOWERSE);
+	if (isSouthUsable == true)
+	{
+		RProductFaceRootPoints southRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERSE,
+																			ECBPPOrientations::CORNER_UPPERSW,
+																			ECBPPOrientations::CORNER_LOWERSW,
+																			ECBPPOrientations::CORNER_LOWERSE);
+		RProductFace southProductFace(southRootPoints);
+		rProductFaceMap[ECBPPOrientations::SOUTHFACE] = southProductFace;
 	}
 }
 

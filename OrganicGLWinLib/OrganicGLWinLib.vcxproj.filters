@@ -67,6 +67,9 @@
     <Filter Include="Source Files\Quaternions">
       <UniqueIdentifier>{1d2dc3f0-bc6d-4d6d-bc1c-46e6154aa7eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SliceScanner">
+      <UniqueIdentifier>{8825d415-0315-496d-9854-9a5366dfcd72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1151,6 +1154,9 @@
     </ClInclude>
     <ClInclude Include="RProductFaceRootPoints.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshState.h">
+      <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

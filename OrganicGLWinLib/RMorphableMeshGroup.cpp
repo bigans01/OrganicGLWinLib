@@ -11,7 +11,7 @@ void RMorphableMeshGroup::insertMeshIntoGroup(EnclaveKeyDef::EnclaveKey in_meshK
 	keyedMorphables[in_meshKey] = in_mesh;
 }
 
-void RMorphableMeshGroup::removeInteriorLandlockedMeshes()
+void RMorphableMeshGroup::flagLandlockedMeshes()
 {
 	std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> keysToRemove;
 	auto removalScanBegin = keyedMorphables.begin();
@@ -106,7 +106,8 @@ void RMorphableMeshGroup::removeInteriorLandlockedMeshes()
 	auto keysToRemoveEnd = keysToRemove.end();
 	for (; keysToRemoveBegin != keysToRemoveEnd; keysToRemoveBegin++)
 	{
-		keyedMorphables.erase(*keysToRemoveBegin);
+		//keyedMorphables.erase(*keysToRemoveBegin);
+		keyedMorphables[*keysToRemoveBegin].updatePointState(RMorphableMeshState::LANDLOCKED);
 	}
 }
 

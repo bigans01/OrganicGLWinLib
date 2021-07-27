@@ -12,6 +12,7 @@
 #include <map>
 #include "ECBPPOrientations.h"
 #include "RProductFace.h"
+#include "RMorphableMeshState.h"
 
 class RMorphableMesh
 {
@@ -37,6 +38,7 @@ class RMorphableMesh
 		void updatePointUsageCounts();
 		void runSuctionByXSlice();
 		void generateRProductFaces();
+		void updatePointState(RMorphableMeshState in_pointState);
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
 		glm::vec3 meshCenter;
@@ -47,6 +49,8 @@ class RMorphableMesh
 		RPointToGridTranslator* translatorRef = nullptr;
 		Rasterized3DMassGrid* gridRef = nullptr;
 		std::map<ECBPPOrientations, RProductFace> rProductFaceMap;
+		RMorphableMeshState pointState = RMorphableMeshState::EXPOSED;	// a morphable mesh should always be assumed EXPOSED, until it is determined to be LANDLOCKED.
+
 };
 
 #endif
