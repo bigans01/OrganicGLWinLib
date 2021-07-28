@@ -13,6 +13,10 @@
 #include "IndependentUtils.h"
 #include "ECBPPOrientationResults.h"
 #include <algorithm>
+#include "RAdditiveSliceBase.h"
+#include "RAdditiveXSlice.h"
+#include <mutex>
+#include <map>
 
 class RMorphableMeshGroup
 {

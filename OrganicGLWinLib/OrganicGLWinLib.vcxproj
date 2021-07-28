@@ -213,6 +213,9 @@
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="OrganicPolygon.h" />
+    <ClInclude Include="RAdditiveSliceBase.h" />
+    <ClInclude Include="RAdditiveSliceType.h" />
+    <ClInclude Include="RAdditiveXSlice.h" />
     <ClInclude Include="RasterGrid3dBase.h" />
     <ClInclude Include="Rasterized3DMassGrid.h" />
     <ClInclude Include="RasterKeyLookupByDim.h" />
@@ -551,6 +554,8 @@
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="OrganicPolygon.cpp" />
+    <ClCompile Include="RAdditiveSliceBase.cpp" />
+    <ClCompile Include="RAdditiveXSlice.cpp" />
     <ClCompile Include="RasterGrid3dBase.cpp" />
     <ClCompile Include="Rasterized3DMassGrid.cpp" />
     <ClCompile Include="RCollisionPointArray.cpp" />

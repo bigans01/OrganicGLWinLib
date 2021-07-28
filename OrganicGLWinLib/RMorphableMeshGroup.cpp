@@ -193,6 +193,9 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 
 void RMorphableMeshGroup::buildMeshByXScan()
 {
+	// a map of additive slice base pointers.
+	std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;
+
 	// find the lowest/highest x values, by using min and max
 	int minX = 1000;	// should always start high 
 	int maxX = 0;		// should always start low
@@ -221,6 +224,11 @@ void RMorphableMeshGroup::buildMeshByXScan()
 				currentXSliceSet.insert(currentKeyedScanForXBegin->first);
 			}
 		}
+
+		// set the RAdditiveSliceBase(s)
+		sliceMap[currentXSlice].reset(new RAdditiveXSlice());
+		sliceMap[currentXSlice]->initialize(RAdditiveSliceType::X_SLICE, 8);
+		sliceMap[currentXSlice]->buildPointSets();
 
 		// run "suction" on each morphable mesh.
 		auto xSliceSetBegin = currentXSliceSet.begin();

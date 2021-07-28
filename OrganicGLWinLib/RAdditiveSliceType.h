@@ -1,0 +1,20 @@
+#pragma once
+
+#ifndef RADDITIVESLICETYPE_H
+#define RADDITIVESLICETYPE_H
+
+enum class RAdditiveSliceType
+{
+	NOVAL,
+	X_SLICE_EAST_END,
+	X_SLICE,
+	X_SLICE_WEST_END,
+	Y_SLICE_ABOVE_END,
+	Y_SLICE,
+	Y_SLICE_BELOW_END,
+	Z_SLICE_NORTH_END,
+	Z_SLICE,
+	Z_SLICE_SOUTH_END
+};
+
+#endif

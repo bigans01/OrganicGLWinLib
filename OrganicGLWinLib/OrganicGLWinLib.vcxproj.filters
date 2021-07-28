@@ -1158,6 +1158,15 @@
     <ClInclude Include="RMorphableMeshState.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="RAdditiveSliceBase.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RAdditiveSliceType.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RAdditiveXSlice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1701,6 +1710,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RAdditiveSliceBase.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RAdditiveXSlice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
