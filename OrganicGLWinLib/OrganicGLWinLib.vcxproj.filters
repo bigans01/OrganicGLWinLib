@@ -1164,8 +1164,17 @@
     <ClInclude Include="RAdditiveSliceType.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="RAdditiveXSliceWestEnd.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RAdditiveXSliceEastEnd.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
     <ClInclude Include="RAdditiveXSlice.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RAdditiveXSliceStandalone.h">
+      <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1716,7 +1725,16 @@
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RAdditiveXSlice.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RAdditiveXSliceEastEnd.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RAdditiveXSliceWestEnd.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RAdditiveXSliceStandalone.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

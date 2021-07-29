@@ -27,7 +27,7 @@ class RMorphableAreaScanner
 
 			massGrid.setGridParameters(in_tilesPerDimension, in_dimensionLimit);	// Step 1: initialization of grid
 			meshesPerDimension = in_meshesPerDimension;
-			morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f.
+			morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f; also passed as the "thickness" of additive slices.
 
 			scannerDynamicBorderLineList.constructBorders(in_dimensionLimit);
 

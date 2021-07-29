@@ -191,11 +191,8 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 	}
 }
 
-void RMorphableMeshGroup::buildMeshByXScan()
+void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness)
 {
-	// a map of additive slice base pointers.
-	std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;
-
 	// find the lowest/highest x values, by using min and max
 	int minX = 1000;	// should always start high 
 	int maxX = 0;		// should always start low
@@ -211,35 +208,92 @@ void RMorphableMeshGroup::buildMeshByXScan()
 	std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
 	std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;
 
-	// iterate from min to max
-	for (int currentXSlice = minX; currentXSlice < maxX + 1; currentXSlice++)	// maxX + 1 because we must include  maxX.
+	// for when there is more than one slice
+	if (minX != maxX)
 	{
-		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> currentXSliceSet;
-		auto currentKeyedScanForXBegin = keyedMorphables.begin();
-		auto currentKeyedScanForXEnd = keyedMorphables.end();
-		for (; currentKeyedScanForXBegin != currentKeyedScanForXEnd; currentKeyedScanForXBegin++)
+		// iterate from min to max; slicing goes from west (x = 0) towards east (x > 0)
+		for (int currentXSlice = minX; currentXSlice < maxX + 1; currentXSlice++)	// maxX + 1 because we must include  maxX.
 		{
-			if (currentKeyedScanForXBegin->first.x == currentXSlice)
+			std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> currentXSliceSet;
+			auto currentKeyedScanForXBegin = keyedMorphables.begin();
+			auto currentKeyedScanForXEnd = keyedMorphables.end();
+			for (; currentKeyedScanForXBegin != currentKeyedScanForXEnd; currentKeyedScanForXBegin++)
 			{
-				currentXSliceSet.insert(currentKeyedScanForXBegin->first);
+				if (currentKeyedScanForXBegin->first.x == currentXSlice)
+				{
+					currentXSliceSet.insert(currentKeyedScanForXBegin->first);
+				}
+			}
+
+			// west slice goes first:
+			if (currentXSlice == minX)
+			{
+				sliceMap[currentXSlice].reset(new RAdditiveXSliceWestEnd());
+				sliceMap[currentXSlice]->initialize(RAdditiveSliceType::X_SLICE_WEST_END, 
+													8, 
+													in_massGridArrayRef, 
+													&meshGroupPointArray, 
+													in_sliceThickness);
+				sliceMap[currentXSlice]->buildPointSets();
+			}
+
+			// east slice goes last:
+			else if (currentXSlice == maxX)
+			{
+				sliceMap[currentXSlice].reset(new RAdditiveXSliceEastEnd());
+				sliceMap[currentXSlice]->initialize(RAdditiveSliceType::X_SLICE_EAST_END, 
+													8, 
+													in_massGridArrayRef, 
+													&meshGroupPointArray,
+													in_sliceThickness);
+				sliceMap[currentXSlice]->buildPointSets();
+			}
+
+			// all other slices
+			else
+			{
+				sliceMap[currentXSlice].reset(new RAdditiveXSlice());
+				sliceMap[currentXSlice]->initialize(RAdditiveSliceType::X_SLICE, 
+													8, 
+													in_massGridArrayRef, 
+													&meshGroupPointArray, 
+													in_sliceThickness);
+				sliceMap[currentXSlice]->buildPointSets();
+			}
+			// set the RAdditiveSliceBase(s)
+
+			/*
+			// run "suction" on each morphable mesh.
+			auto xSliceSetBegin = currentXSliceSet.begin();
+			auto xSliceSetEnd = currentXSliceSet.end();
+			for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
+			{
+				std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+
+				int suctionWait = 3;
+				std::cin >> suctionWait;
+			}
+			*/
+
+			// do the following for all but the first slice; that current slice must inherit the point B set from the previous slice.
+			if (currentXSlice != minX)
+			{
+				RAdditiveSliceBase* previousSliceRef = sliceMap[currentXSlice - 1].get();
+				sliceMap[currentXSlice]->copySetBRefsFromPreviousSlice(previousSliceRef);
 			}
 		}
+	}
 
-		// set the RAdditiveSliceBase(s)
-		sliceMap[currentXSlice].reset(new RAdditiveXSlice());
-		sliceMap[currentXSlice]->initialize(RAdditiveSliceType::X_SLICE, 8);
-		sliceMap[currentXSlice]->buildPointSets();
-
-		// run "suction" on each morphable mesh.
-		auto xSliceSetBegin = currentXSliceSet.begin();
-		auto xSliceSetEnd = currentXSliceSet.end();
-		for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
-		{
-			std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-			keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
-
-			int suctionWait = 3;
-			std::cin >> suctionWait;
-		}
+	// there is only one slice.
+	else if (minX == maxX)
+	{
+		sliceMap[0].reset(new RAdditiveSliceStandalone());
+		sliceMap[0]->initialize(RAdditiveSliceType::X_SLICE_STANDALONE, 
+								8, 
+								in_massGridArrayRef, 
+								&meshGroupPointArray,
+								in_sliceThickness);
+		sliceMap[0]->buildPointSets();
 	}
 }

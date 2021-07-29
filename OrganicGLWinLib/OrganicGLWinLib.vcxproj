@@ -216,6 +216,9 @@
     <ClInclude Include="RAdditiveSliceBase.h" />
     <ClInclude Include="RAdditiveSliceType.h" />
     <ClInclude Include="RAdditiveXSlice.h" />
+    <ClInclude Include="RAdditiveXSliceEastEnd.h" />
+    <ClInclude Include="RAdditiveXSliceStandalone.h" />
+    <ClInclude Include="RAdditiveXSliceWestEnd.h" />
     <ClInclude Include="RasterGrid3dBase.h" />
     <ClInclude Include="Rasterized3DMassGrid.h" />
     <ClInclude Include="RasterKeyLookupByDim.h" />
@@ -556,6 +559,9 @@
     <ClCompile Include="OrganicPolygon.cpp" />
     <ClCompile Include="RAdditiveSliceBase.cpp" />
     <ClCompile Include="RAdditiveXSlice.cpp" />
+    <ClCompile Include="RAdditiveXSliceEastEnd.cpp" />
+    <ClCompile Include="RAdditiveXSliceStandalone.cpp" />
+    <ClCompile Include="RAdditiveXSliceWestEnd.cpp" />
     <ClCompile Include="RasterGrid3dBase.cpp" />
     <ClCompile Include="Rasterized3DMassGrid.cpp" />
     <ClCompile Include="RCollisionPointArray.cpp" />

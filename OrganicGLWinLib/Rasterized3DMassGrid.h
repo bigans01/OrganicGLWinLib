@@ -33,6 +33,7 @@ class Rasterized3DMassGrid : public RasterGrid3dBase
 		void fillMass();				// fills the mass of the grid; must be called only after buildShell() has been run.
 		bool wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea);
 		MassGridSearchResult fetchCell(EnclaveKeyDef::EnclaveKey in_key);
+		MassGridArray* fetchDataArrayRef();
 	private:
 		std::map<int, RPoly> rPolyMap;
 		int gridRPolyCount = 0;

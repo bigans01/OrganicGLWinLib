@@ -33,3 +33,8 @@ MassGridSearchResult Rasterized3DMassGrid::fetchCell(EnclaveKeyDef::EnclaveKey i
 {
 	return dataArray.searchForCell(in_key.x, in_key.y, in_key.z);
 }
+
+MassGridArray* Rasterized3DMassGrid::fetchDataArrayRef()
+{
+	return &dataArray;
+}

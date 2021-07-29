@@ -15,8 +15,12 @@
 #include <algorithm>
 #include "RAdditiveSliceBase.h"
 #include "RAdditiveXSlice.h"
+#include "RAdditiveXSliceWestEnd.h"
+#include "RAdditiveXSliceEastEnd.h"
+#include "RAdditiveXSliceStandalone.h"
 #include <mutex>
 #include <map>
+#include "MassGridArray.h"
 
 class RMorphableMeshGroup
 {
@@ -30,12 +34,14 @@ class RMorphableMeshGroup
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
 		void generateRProductFacesInRemainingMeshes();
-		void buildMeshByXScan();
+		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness);
 	private:
 		friend class RMorphableAreaScanner;
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
 		RCollisionPointArray meshGroupPointArray;
 		DynamicBorderLineList* dynamicBorderRef = nullptr;
+
+		std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;	// stores the slices produced during the mesh group's chosen scan function
 };
 
 #endif
