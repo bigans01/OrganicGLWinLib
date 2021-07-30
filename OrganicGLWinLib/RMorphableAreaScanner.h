@@ -20,8 +20,10 @@ class RMorphableAreaScanner
 		// setupScanner must be called before adding any SPolys that are converted to RPolys.
 		void setupScanner(int in_tilesPerDimension, 
 						  float in_dimensionLimit,
-			              int in_meshesPerDimension)		
+			              int in_meshesPerDimension,
+			              int in_pointsPerSlicePointArray)		
 		{
+			pointsPerSlicePointArray = in_pointsPerSlicePointArray;
 			scannerCellsPerDimension = in_tilesPerDimension;
 			scannerDimLimit = in_dimensionLimit;
 
@@ -47,6 +49,7 @@ class RMorphableAreaScanner
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
 		Rasterized3DMassGrid massGrid;
 		int scannerCellsPerDimension = 0;
+		int pointsPerSlicePointArray = 0;
 		float scannerDimLimit = 0.0f;
 		DynamicBorderLineList scannerDynamicBorderLineList;
 

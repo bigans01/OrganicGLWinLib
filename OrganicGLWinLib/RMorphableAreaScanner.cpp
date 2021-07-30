@@ -149,11 +149,11 @@ void RMorphableAreaScanner::scanGridMass()
 	for (; hollowingOutBegin != hollowingOutEnd; hollowingOutBegin++)
 	{
 		hollowingOutBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);	
-		hollowingOutBegin->second.generatePointArray();				// size of array is equal to the number of RMorphableMeshes * 8
-		hollowingOutBegin->second.generatePoints();					// generate all possible points
-		hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
-		hollowingOutBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
-		hollowingOutBegin->second.generateRProductFacesInRemainingMeshes();
+		hollowingOutBegin->second.generatePointArray(pointsPerSlicePointArray);				// size of array is equal to the number of RMorphableMeshes * 8
+		//hollowingOutBegin->second.generatePoints();					// generate all possible points
+		//hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
+		//hollowingOutBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
+		//hollowingOutBegin->second.generateRProductFacesInRemainingMeshes();
 		/*
 		EnclaveKeyDef::EnclaveKey testFinderKey(0, 1, 0);
 		if (hollowingOutBegin->second.doesGroupContainKey(testFinderKey) == true)
@@ -172,7 +172,7 @@ void RMorphableAreaScanner::scanGridMass()
 	auto suctionEnd = meshGroupMap.end();
 	for (; suctionBegin != suctionEnd; suctionBegin++)
 	{
-		suctionBegin->second.buildMeshByXScan(massGrid.fetchDataArrayRef(), morphableMeshDimension);
+		suctionBegin->second.buildMeshByXScan(massGrid.fetchDataArrayRef(), morphableMeshDimension, pointsPerSlicePointArray);
 	}
 }
 
