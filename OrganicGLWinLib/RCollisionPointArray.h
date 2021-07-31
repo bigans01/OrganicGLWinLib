@@ -33,6 +33,7 @@ class RCollisionPointArray
 		void createArray(int in_arraySize);
 		RCollisionPointSearchResult doesRCollisionPointExist(glm::vec3 in_pointToSearch);
 		RCollisionPoint* attemptPointInsert(glm::vec3 in_pointToSearch, ECBPPOrientationResults in_orientationResults);
+		RCollisionPoint* fetchPointRef(glm::vec3 in_pointToSearch);
 
 	private:
 		friend class RMorphableMeshGroup;

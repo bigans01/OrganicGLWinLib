@@ -1176,6 +1176,27 @@
     <ClInclude Include="RAdditiveXSliceStandalone.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="RCollisionPointToPTriangleMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PTriangleRCPointToIndexLink.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="PTrianglePointLinkArray.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="PTriangleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PTriangleMapperUpdate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointToPTriangleMapContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

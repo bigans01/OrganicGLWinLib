@@ -8,7 +8,9 @@
 class RAdditiveXSliceStandalone : public RAdditiveSliceBase
 {
 	public:
+		void buildInitialPointSets();
 		void buildPointSets();
+		void buildPTriangles();
 	private:
 		int yLimitMin = 1000;
 		int yLimitMax = 0;

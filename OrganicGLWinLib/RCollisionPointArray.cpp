@@ -25,6 +25,17 @@ RCollisionPoint* RCollisionPointArray::attemptPointInsert(glm::vec3 in_pointToSe
 	return returnPoint;
 }
 
+RCollisionPoint* RCollisionPointArray::fetchPointRef(glm::vec3 in_pointToSearch)
+{
+	RCollisionPoint* returnPointRef = nullptr;
+	RCollisionPointSearchResult searchResult = doesRCollisionPointExist(in_pointToSearch);
+	if (searchResult.wasPointFound == true)
+	{
+		returnPointRef = &collisionPoints[searchResult.arrayIndex];
+	}
+	return returnPointRef;
+}
+
 RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::vec3 in_pointToSearch)
 {
 	RCollisionPointSearchResult searchResult;

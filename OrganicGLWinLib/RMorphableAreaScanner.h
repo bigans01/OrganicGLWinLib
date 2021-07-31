@@ -11,6 +11,7 @@
 #include "MassGridArrayCellScanArea.h"
 #include "DynamicBorderLineList.h"
 #include "RPointToGridTranslator.h"
+#include "RCollisionPointToPTriangleMapContainer.h"
 
 class RMorphableAreaScanner
 {
@@ -56,6 +57,7 @@ class RMorphableAreaScanner
 		int meshesPerDimension = 1;		// default value is 1; number of meshes that go in the x/y/z dimension
 		float morphableMeshDimension = 0.0f;
 		RPointToGridTranslator gridTranslator;
+		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
 };
 
 #endif

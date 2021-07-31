@@ -213,6 +213,11 @@
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="OrganicPolygon.h" />
+    <ClInclude Include="PTriangle.h" />
+    <ClInclude Include="PTriangleManager.h" />
+    <ClInclude Include="PTriangleMapperUpdate.h" />
+    <ClInclude Include="PTrianglePointLinkArray.h" />
+    <ClInclude Include="PTriangleRCPointToIndexLink.h" />
     <ClInclude Include="RAdditiveSliceBase.h" />
     <ClInclude Include="RAdditiveSliceType.h" />
     <ClInclude Include="RAdditiveXSlice.h" />
@@ -306,6 +311,8 @@
     <ClInclude Include="RasterCubeLookup.h" />
     <ClInclude Include="RasterizationPointAdjuster.h" />
     <ClInclude Include="RCollisionPointState.h" />
+    <ClInclude Include="RCollisionPointToPTriangleMapper.h" />
+    <ClInclude Include="RCollisionPointToPTriangleMapContainer.h" />
     <ClInclude Include="RMorphableMeshCornerArray.h" />
     <ClInclude Include="RMorphableMeshState.h" />
     <ClInclude Include="RPointToGridTranslator.h" />

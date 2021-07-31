@@ -1,6 +1,43 @@
 #include "stdafx.h"
 #include "RAdditiveXSliceEastEnd.h"
 
+void RAdditiveXSliceEastEnd::buildInitialPointSets()
+{
+	// order of points for X slice is: 
+	// first corner	 = 4, 0
+	// second corner = 0, 0
+	// third corner  = 0, 4
+	// fourth corner = 4, 4
+
+	// Value of X for the setA is always equal to sliceIndex * sliceThickness
+	float currentSliceSetX = sliceIndex * sliceThickness;
+	glm::vec3 setACorner0(currentSliceSetX, 4 * sliceThickness, 0 * sliceThickness);
+	glm::vec3 setACorner1(currentSliceSetX, 0 * sliceThickness, 0 * sliceThickness);
+	glm::vec3 setACorner2(currentSliceSetX, 0 * sliceThickness, 4 * sliceThickness);
+	glm::vec3 setACorner3(currentSliceSetX, 4 * sliceThickness, 4 * sliceThickness);
+
+	std::cout << "---- Set A corners for this slice: " << std::endl;
+	std::cout << "corner 0: " << setACorner0.x << ", " << setACorner0.y << ", " << setACorner0.z << std::endl;
+	std::cout << "corner 1: " << setACorner1.x << ", " << setACorner1.y << ", " << setACorner1.z << std::endl;
+	std::cout << "corner 2: " << setACorner2.x << ", " << setACorner2.y << ", " << setACorner2.z << std::endl;
+	std::cout << "corner 3: " << setACorner3.x << ", " << setACorner3.y << ", " << setACorner3.z << std::endl;
+
+	int numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;	// i.e, when numberOfPointsPerTypicalSet = 12, 
+																				// this would be 2 points between each corner.
+
+	glm::vec3 setBCorner0(currentSliceSetX + sliceThickness, 4 * sliceThickness, 0 * sliceThickness);
+	glm::vec3 setBCorner1(currentSliceSetX + sliceThickness, 0 * sliceThickness, 0 * sliceThickness);
+	glm::vec3 setBCorner2(currentSliceSetX + sliceThickness, 0 * sliceThickness, 4 * sliceThickness);
+	glm::vec3 setBCorner3(currentSliceSetX + sliceThickness, 4 * sliceThickness, 4 * sliceThickness);
+
+	std::cout << "---- Set B corners for this slice: " << std::endl;
+	std::cout << "corner 0: " << setBCorner0.x << ", " << setBCorner0.y << ", " << setBCorner0.z << std::endl;
+	std::cout << "corner 1: " << setBCorner1.x << ", " << setBCorner1.y << ", " << setBCorner1.z << std::endl;
+	std::cout << "corner 2: " << setBCorner2.x << ", " << setBCorner2.y << ", " << setBCorner2.z << std::endl;
+	std::cout << "corner 3: " << setBCorner3.x << ", " << setBCorner3.y << ", " << setBCorner3.z << std::endl;
+	generateSetBRCollisionPoints(numberOfPointsBetweenCorners, setBCorner0, setBCorner1, setBCorner2, setBCorner3);
+}
+
 void RAdditiveXSliceEastEnd::buildPointSets()
 {
 	// find the min/max values for y and z.
@@ -75,7 +112,8 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	// any points between corner 0 and corner 1 (difference in points between these corners is -y)
 	float corner0BasedCurrentY = in_corner0.y;
 	float corner0PointZ = in_corner0.z;
-	float corner0YDecrementValue = float(yLimitMax - yLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	//float corner0YDecrementValue = float(yLimitMax - yLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	float corner0YDecrementValue = dimLimit / float(in_numberOfPointsBetweenCorners + 1);
 	for (int x = 0; x < in_numberOfPointsBetweenCorners; x++)
 	{
 		corner0BasedCurrentY -= corner0YDecrementValue;
@@ -97,7 +135,8 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	// any points between corner 1 and corner 2 (difference in points between these corners is +z)
 	float corner1BasedCurrentZ = in_corner1.z;
 	float corner1PointY = in_corner1.y;
-	float corner1ZIncrementValue = float(zLimitMax - zLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	//float corner1ZIncrementValue = float(zLimitMax - zLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	float corner1ZIncrementValue = dimLimit / float(in_numberOfPointsBetweenCorners + 1);
 	for (int x = 0; x < in_numberOfPointsBetweenCorners; x++)
 	{
 		corner1BasedCurrentZ += corner1ZIncrementValue;
@@ -119,7 +158,8 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	// any points between corner 2 and corner corner 3 (difference in poinst between these corners is +y)
 	float corner2BasedCurrentY = in_corner2.y;
 	float corner2PointZ = in_corner2.z;
-	float corner2YIncrementValue = float(yLimitMax - yLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	//float corner2YIncrementValue = float(yLimitMax - yLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	float corner2YIncrementValue = dimLimit / float(in_numberOfPointsBetweenCorners + 1);
 	for (int x = 0; x < in_numberOfPointsBetweenCorners; x++)
 	{
 		corner2BasedCurrentY += corner2YIncrementValue;
@@ -141,7 +181,8 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	// any points between corner 3 and corner 0 (difference in points beween these corners is -z)
 	float corner3BasedCurrentZ = in_corner3.z;
 	float corner3PointY = in_corner3.y;
-	float corner3ZDecrementValue = float(zLimitMax - zLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	//float corner3ZDecrementValue = float(zLimitMax - zLimitMin) / float(in_numberOfPointsBetweenCorners + 1);
+	float corner3ZDecrementValue = dimLimit / float(in_numberOfPointsBetweenCorners + 1);
 	for (int x = 0; x < in_numberOfPointsBetweenCorners; x++)
 	{
 		corner3BasedCurrentZ -= corner3ZDecrementValue;
@@ -152,4 +193,9 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 		typicalPointSetB[currentPointIndex++] = currentPointRef;
 		std::cout << "!! Inserted new point: " << newPoint.x << ", " << newPoint.y << ", " << newPoint.z << std::endl;
 	}
+}
+
+void RAdditiveXSliceEastEnd::buildPTriangles()
+{
+
 }

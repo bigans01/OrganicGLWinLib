@@ -21,6 +21,7 @@
 #include <mutex>
 #include <map>
 #include "MassGridArray.h"
+#include "RCollisionPointToPTriangleMapContainer.h"
 
 class RMorphableMeshGroup
 {
@@ -34,7 +35,7 @@ class RMorphableMeshGroup
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
 		void generateRProductFacesInRemainingMeshes();
-		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray);
+		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
 	private:
 		friend class RMorphableAreaScanner;
 		int slicePointArraySize = 0;

@@ -9,7 +9,8 @@ void RAdditiveSliceBase::initialize(RAdditiveSliceType in_sliceType,
 									int in_sliceIndexID, 
 									std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher>* in_keyedMorphablesRef,
 									std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> in_sliceMorphableKeys,
-									DynamicBorderLineList* in_sliceDynBorderRef)
+									DynamicBorderLineList* in_sliceDynBorderRef,
+									RCollisionPointToPTriangleMapContainer* in_pTriangleMapContainerRef)
 {
 	sliceType = in_sliceType;
 	numberOfPointsPerTypicalSet = in_numberofTypicalSetPoints;
@@ -23,6 +24,7 @@ void RAdditiveSliceBase::initialize(RAdditiveSliceType in_sliceType,
 	keyedMorphablesRef = in_keyedMorphablesRef;
 	sliceMorphableKeys = in_sliceMorphableKeys;
 	sliceDynBorderRef = in_sliceDynBorderRef;
+	pTriangleMapContainerRef = in_pTriangleMapContainerRef;
 }
 
 void RAdditiveSliceBase::copySetBRefsFromPreviousSlice(RAdditiveSliceBase* in_otherSliceRef)

@@ -192,7 +192,7 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 	}
 }
 
-void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray)
+void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef)
 {
 	// find the lowest/highest x values, by using min and max
 	int minX = 1000;	// should always start high 
@@ -239,8 +239,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													currentXSliceIndex, 
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet), 
-													dynamicBorderRef);
-				sliceMap[currentXSliceIndex]->buildPointSets();
+													dynamicBorderRef, in_pointToTriangleMapContainerRef);
+				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
 
 			// east slice goes last:
@@ -255,8 +255,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													currentXSliceIndex, 
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet),
-													dynamicBorderRef);
-				sliceMap[currentXSliceIndex]->buildPointSets();
+													dynamicBorderRef, in_pointToTriangleMapContainerRef);
+				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
 
 			// all other slices
@@ -271,8 +271,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													currentXSliceIndex, 
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet),
-													dynamicBorderRef);
-				sliceMap[currentXSliceIndex]->buildPointSets();
+													dynamicBorderRef, in_pointToTriangleMapContainerRef);
+				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
 			// set the RAdditiveSliceBase(s)
 
@@ -306,6 +306,14 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			std::cout << "~~~~~~~ Printing out points for slice at index " << sliceMapBegin->first << ": " << std::endl;
 			sliceMapBegin->second.get()->printAllSetPoints();
 		}
+
+		// produce the PTriangles for each slice.
+		auto pTriangleProductionBegin = sliceMap.begin();
+		auto pTriangleProductionEnd = sliceMap.end();
+		for (; pTriangleProductionBegin != pTriangleProductionEnd; pTriangleProductionBegin++)
+		{
+			pTriangleProductionBegin->second.get()->buildPTriangles();
+		}
 	}
 
 	// there is only one slice.
@@ -332,7 +340,7 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 								0, 
 								&keyedMorphables,
 								std::move(currentXSliceIndexSet),
-								dynamicBorderRef);
-		sliceMap[0]->buildPointSets();
+								dynamicBorderRef, in_pointToTriangleMapContainerRef);
+		sliceMap[0]->buildInitialPointSets();
 	}
 }
