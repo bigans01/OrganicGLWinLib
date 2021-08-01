@@ -192,6 +192,11 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 	}
 }
 
+void RMorphableMeshGroup::determineBestPointCount(int in_potentialPointCount)
+{
+	setPointCount = in_potentialPointCount;
+}
+
 void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef)
 {
 	// find the lowest/highest x values, by using min and max
@@ -213,6 +218,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 	if (minX != maxX)
 	{
 		// iterate from min to max; slicing goes from west (x = 0) towards east (x > 0)
+
+		// First pass: build slices, without initializing their arrays.
 		for (int currentXSliceIndex = minX; currentXSliceIndex < maxX + 1; currentXSliceIndex++)	// maxX + 1 because we must include  maxX.
 		{
 
@@ -232,7 +239,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			{
 				sliceMap[currentXSliceIndex].reset(new RAdditiveXSliceWestEnd());
 				sliceMap[currentXSliceIndex]->initialize(RAdditiveSliceType::X_SLICE_WEST_END, 
-													in_pointsPerSliceArray,
 													in_massGridArrayRef, 
 													&meshGroupPointArray, 
 													in_sliceThickness,
@@ -240,7 +246,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet), 
 													dynamicBorderRef, in_pointToTriangleMapContainerRef);
-				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
 
 			// east slice goes last:
@@ -248,7 +253,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			{
 				sliceMap[currentXSliceIndex].reset(new RAdditiveXSliceEastEnd());
 				sliceMap[currentXSliceIndex]->initialize(RAdditiveSliceType::X_SLICE_EAST_END, 
-													in_pointsPerSliceArray,
 													in_massGridArrayRef, 
 													&meshGroupPointArray,
 													in_sliceThickness,
@@ -256,7 +260,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet),
 													dynamicBorderRef, in_pointToTriangleMapContainerRef);
-				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
 
 			// all other slices
@@ -264,7 +267,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			{
 				sliceMap[currentXSliceIndex].reset(new RAdditiveXSlice());
 				sliceMap[currentXSliceIndex]->initialize(RAdditiveSliceType::X_SLICE, 
-													in_pointsPerSliceArray,
 													in_massGridArrayRef, 
 													&meshGroupPointArray, 
 													in_sliceThickness,
@@ -272,9 +274,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 													&keyedMorphables,
 													std::move(currentXSliceIndexSet),
 													dynamicBorderRef, in_pointToTriangleMapContainerRef);
-				sliceMap[currentXSliceIndex]->buildInitialPointSets();
 			}
-			// set the RAdditiveSliceBase(s)
+
 
 			/*
 			// run "suction" on each morphable mesh.
@@ -290,7 +291,26 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			}
 			*/
 
-			// do the following for all but the first slice; that current slice must inherit the point B set from the previous slice.
+		}
+
+
+		// Step 2: find the best point count, by analyzing all slices and their keyed morphables; the resulting value is stored into setPointCount.
+		determineBestPointCount(in_pointsPerSliceArray);
+
+		// Step 3 (Second Pass): set the "best" value for array size in each slice, and initialize the point sets.
+		auto pass2Begin = sliceMap.begin();
+		auto pass2End = sliceMap.end();
+		for (; pass2Begin != pass2End; pass2Begin++)
+		{
+			pass2Begin->second->initializeSetArrays(setPointCount);
+			pass2Begin->second->buildInitialPointSets();
+		}
+
+
+		// Step 4 (Third Pass): copy set refs from previous slices.
+		// do the following for all but the first slice; that current slice must inherit the point B set from the previous slice.
+		for (int currentXSliceIndex = minX; currentXSliceIndex < maxX + 1; currentXSliceIndex++)	// maxX + 1 because we must include  maxX.
+		{
 			if (currentXSliceIndex != minX)
 			{
 				RAdditiveSliceBase* previousSliceRef = sliceMap[currentXSliceIndex - 1].get();
@@ -306,6 +326,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 			std::cout << "~~~~~~~ Printing out points for slice at index " << sliceMapBegin->first << ": " << std::endl;
 			sliceMapBegin->second.get()->printAllSetPoints();
 		}
+
+
 
 		// produce the PTriangles for each slice.
 		auto pTriangleProductionBegin = sliceMap.begin();
@@ -333,7 +355,6 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 
 		sliceMap[0].reset(new RAdditiveXSliceStandalone());
 		sliceMap[0]->initialize(RAdditiveSliceType::X_SLICE_STANDALONE, 
-								in_pointsPerSliceArray,
 								in_massGridArrayRef, 
 								&meshGroupPointArray,
 								in_sliceThickness,
@@ -341,6 +362,8 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 								&keyedMorphables,
 								std::move(currentXSliceIndexSet),
 								dynamicBorderRef, in_pointToTriangleMapContainerRef);
+		determineBestPointCount(in_pointsPerSliceArray);
+		sliceMap[0]->initializeSetArrays(setPointCount);
 		sliceMap[0]->buildInitialPointSets();
 	}
 }

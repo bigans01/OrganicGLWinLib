@@ -22,8 +22,6 @@ void RAdditiveXSliceStandalone::buildInitialPointSets()
 	std::cout << "corner 2: " << setACorner2.x << ", " << setACorner2.y << ", " << setACorner2.z << std::endl;
 	std::cout << "corner 3: " << setACorner3.x << ", " << setACorner3.y << ", " << setACorner3.z << std::endl;
 
-	int numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;	// i.e, when numberOfPointsPerTypicalSet = 12, 
-																				// this would be 2 points between each corner.
 	generateSetARCollisionPoints(numberOfPointsBetweenCorners, setACorner0, setACorner1, setACorner2, setACorner3);
 
 	glm::vec3 setBCorner0(currentSliceSetX + sliceThickness, 4 * sliceThickness, 0 * sliceThickness);
@@ -77,8 +75,6 @@ void RAdditiveXSliceStandalone::buildPointSets()
 	std::cout << "corner 2: " << setACorner2.x << ", " << setACorner2.y << ", " << setACorner2.z << std::endl;
 	std::cout << "corner 3: " << setACorner3.x << ", " << setACorner3.y << ", " << setACorner3.z << std::endl;
 
-	int numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;	// i.e, when numberOfPointsPerTypicalSet = 12, 
-																				// this would be 2 points between each corner.
 	generateSetARCollisionPoints(numberOfPointsBetweenCorners, setACorner0, setACorner1, setACorner2, setACorner3);
 
 	glm::vec3 setBCorner0(currentSliceSetX + sliceThickness, yLimitMax * sliceThickness, zLimitMin * sliceThickness);

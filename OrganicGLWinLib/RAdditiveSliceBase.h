@@ -27,8 +27,7 @@ class RAdditiveSliceBase
 		virtual void buildPTriangles() = 0;
 
 		// non virtual functions
-		void initialize(RAdditiveSliceType in_sliceType, 
-						int in_numberofTypicalSetPoints, 
+		void initialize(RAdditiveSliceType in_sliceType,		// initializes all variables, except the set arrays (typicalPointSetA and typicalPointSetB) and numberOfPointsPerTypicalSet
 						MassGridArray* in_gridArrayRef, 
 						RCollisionPointArray* in_pointArrayRef, 
 						float in_sliceThickness,
@@ -37,8 +36,10 @@ class RAdditiveSliceBase
 						std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> in_sliceMorphableKeys,
 			            DynamicBorderLineList* in_sliceDynBorderRef,
 						RCollisionPointToPTriangleMapContainer* in_pTriangleMapContainerRef);
+		void initializeSetArrays(int in_arraySize);
 		void copySetBRefsFromPreviousSlice(RAdditiveSliceBase* in_otherSliceRef);
 		void printAllSetPoints();
+
 
 	protected:
 		RAdditiveSliceType sliceType = RAdditiveSliceType::NOVAL;
@@ -46,6 +47,9 @@ class RAdditiveSliceBase
 		float sliceThickness; // how "thick" a slice is, measured in float.
 		float dimLimit = 4.0f;
 		int sliceIndex = 0;	// the slice index
+		int numberOfPointsBetweenCorners = 0;	// the number of points between corners; 
+											    // used to determine how the ribbons produce pTriangles, and how the collision points 
+												// are generated for typicalPointSetA and typicalPointSetB.
 		bool areSetsInitialized = false;
 		std::unique_ptr<RCollisionPoint*[]> typicalPointSetA;
 		std::unique_ptr<RCollisionPoint*[]> typicalPointSetB;

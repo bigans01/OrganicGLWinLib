@@ -44,6 +44,8 @@ class RMorphableMeshGroup
 		DynamicBorderLineList* dynamicBorderRef = nullptr;
 
 		std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;	// stores the slices produced during the mesh group's chosen scan function
+		void determineBestPointCount(int in_potentialPointCount);
+		int setPointCount = 0;
 };
 
 #endif

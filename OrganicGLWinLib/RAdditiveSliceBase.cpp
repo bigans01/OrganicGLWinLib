@@ -2,7 +2,6 @@
 #include "RAdditiveSliceBase.h"
 
 void RAdditiveSliceBase::initialize(RAdditiveSliceType in_sliceType, 
-									int in_numberofTypicalSetPoints, 
 									MassGridArray* in_gridArrayRef, 
 									RCollisionPointArray* in_pointArrayRef,
 									float in_sliceThickness,
@@ -13,10 +12,7 @@ void RAdditiveSliceBase::initialize(RAdditiveSliceType in_sliceType,
 									RCollisionPointToPTriangleMapContainer* in_pTriangleMapContainerRef)
 {
 	sliceType = in_sliceType;
-	numberOfPointsPerTypicalSet = in_numberofTypicalSetPoints;
 	areSetsInitialized = true;
-	typicalPointSetA.reset(new RCollisionPoint*[in_numberofTypicalSetPoints]);
-	typicalPointSetB.reset(new RCollisionPoint*[in_numberofTypicalSetPoints]);
 	gridArrayRef = in_gridArrayRef;
 	pointArrayRef = in_pointArrayRef;
 	sliceThickness = in_sliceThickness;
@@ -25,6 +21,14 @@ void RAdditiveSliceBase::initialize(RAdditiveSliceType in_sliceType,
 	sliceMorphableKeys = in_sliceMorphableKeys;
 	sliceDynBorderRef = in_sliceDynBorderRef;
 	pTriangleMapContainerRef = in_pTriangleMapContainerRef;
+}
+
+void RAdditiveSliceBase::initializeSetArrays(int in_arraySize)
+{
+	numberOfPointsPerTypicalSet = in_arraySize;
+	numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;
+	typicalPointSetA.reset(new RCollisionPoint*[numberOfPointsPerTypicalSet]);
+	typicalPointSetB.reset(new RCollisionPoint*[numberOfPointsPerTypicalSet]);
 }
 
 void RAdditiveSliceBase::copySetBRefsFromPreviousSlice(RAdditiveSliceBase* in_otherSliceRef)

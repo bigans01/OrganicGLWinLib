@@ -22,8 +22,6 @@ void RAdditiveXSliceWestEnd::buildInitialPointSets()
 	std::cout << "corner 2: " << setACorner2.x << ", " << setACorner2.y << ", " << setACorner2.z << std::endl;
 	std::cout << "corner 3: " << setACorner3.x << ", " << setACorner3.y << ", " << setACorner3.z << std::endl;
 
-	int numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;	// i.e, when numberOfPointsPerTypicalSet = 12, 
-																				// this would be 2 points between each corner.
 	generateSetARCollisionPoints(numberOfPointsBetweenCorners, setACorner0, setACorner1, setACorner2, setACorner3);
 
 	glm::vec3 setBCorner0(currentSliceSetX + sliceThickness, 4 * sliceThickness, 0 * sliceThickness);
@@ -77,8 +75,6 @@ void RAdditiveXSliceWestEnd::buildPointSets()
 	std::cout << "corner 2: " << setACorner2.x << ", " << setACorner2.y << ", " << setACorner2.z << std::endl;
 	std::cout << "corner 3: " << setACorner3.x << ", " << setACorner3.y << ", " << setACorner3.z << std::endl;
 
-	int numberOfPointsBetweenCorners = (numberOfPointsPerTypicalSet - 4) / 4;	// i.e, when numberOfPointsPerTypicalSet = 12, 
-																	            // this would be 2 points between each corner.
 	generateSetARCollisionPoints(numberOfPointsBetweenCorners, setACorner0, setACorner1, setACorner2, setACorner3);
 
 	glm::vec3 setBCorner0(currentSliceSetX + sliceThickness, yLimitMax * sliceThickness, zLimitMin * sliceThickness);
@@ -306,21 +302,184 @@ void RAdditiveXSliceWestEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 void RAdditiveXSliceWestEnd::buildPTriangles()
 {
 	// first "ribbon" of triangles, goes from 4, 0 (corner 0) to 0, 0 (corner 1):
-	int currentSetAIndex = 0;
-	int currentSetBIndex = 0;
-	glm::vec3 targetEmptyNormal(0, 0, -1.0f);
 
-	std::cout << "!!!! buildPTriangles start..." << std::endl;
-	RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAIndex++]->originalValue);
-	RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAIndex++]->originalValue);
+	int pTrianglesPerRibbon = numberOfPointsBetweenCorners + 1;
+	int currentSetAWindowIndex = 0;
+	int currentSetBWindowIndex = 0;
 
-	RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBIndex++]->originalValue);
-	RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBIndex++]->originalValue);
-	std::cout << "!!!! buildPTriangles...(1)" << std::endl;
+	int firstThreeRibbonsLength = pTrianglesPerRibbon;
+	int lastRibbonLength = pTrianglesPerRibbon - 1;
+
+	// first ribbon production
+	glm::vec3 firstRibbonEmptyNormal(0, 0, -1.0f);
+	for (int x = 0; x < firstThreeRibbonsLength; x++)
+	{
+
+		//std::cout << "!!!! buildPTriangles start..." << std::endl;
+		RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex]->originalValue);
+		RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex + 1]->originalValue);
+
+		RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex]->originalValue);
+		RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex + 1]->originalValue);
+		//std::cout << "!!!! buildPTriangles...(1)" << std::endl;
+
+		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
+		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, firstRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleA;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleALinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleALinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, firstRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleB;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleBLinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleBLinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		currentSetAWindowIndex++;
+		currentSetBWindowIndex++;
+	}
+
+	// second ribbon
+	glm::vec3 secondRibbonEmptyNormal(0, -1.0f, 0.0f);
+	for (int x = 0; x < firstThreeRibbonsLength; x++)
+	{
+		//std::cout << "!!!! buildPTriangles start..." << std::endl;
+		RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex]->originalValue);
+		RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex + 1]->originalValue);
+
+		RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex]->originalValue);
+		RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex + 1]->originalValue);
+		//std::cout << "!!!! buildPTriangles...(1)" << std::endl;
+
+		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
+		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, secondRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleA;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleALinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleALinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, secondRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleB;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleBLinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleBLinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		currentSetAWindowIndex++;
+		currentSetBWindowIndex++;
+	}
+
+	// third ribbon
+	glm::vec3 thirdRibbonEmptyNormal(0, 0, 1.0f);
+	for (int x = 0; x < firstThreeRibbonsLength; x++)
+	{
+
+		//std::cout << "!!!! buildPTriangles start..." << std::endl;
+		RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex]->originalValue);
+		RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex + 1]->originalValue);
+
+		RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex]->originalValue);
+		RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex + 1]->originalValue);
+		//std::cout << "!!!! buildPTriangles...(1)" << std::endl;
+
+		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
+		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, thirdRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleA;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleALinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleALinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, thirdRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleB;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleBLinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleBLinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		currentSetAWindowIndex++;
+		currentSetBWindowIndex++;
+	}
+
+	// fourth ribbon (doesn't include last two triangles in the loop; that is done after)
+	glm::vec3 fourthRibbonEmptyNormal(0, 1.0f, 0.0f);
+	for (int x = 0; x < lastRibbonLength; x++)
+	{
+
+		//std::cout << "!!!! buildPTriangles start..." << std::endl;
+		RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex]->originalValue);
+		RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex + 1]->originalValue);
+
+		RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex]->originalValue);
+		RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex + 1]->originalValue);
+		//std::cout << "!!!! buildPTriangles...(1)" << std::endl;
+
+		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
+		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleA;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleALinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleALinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal);
+		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
+		pTriangleMap[pTriangleMapIndex] = triangleB;
+		for (int x = 0; x < 3; x++)
+		{
+			PTriangleMapperUpdate triangleAPointUpdate(triangleBLinks.linkArray[x].linkPointRef, pTriangleMapIndex, triangleBLinks.linkArray[x].indexOfPointInPTriangle);
+			pTriangleMapContainerRef->insertMapperUpdate(triangleAPointUpdate);
+		}
+		pTriangleMapIndex++;
+
+		currentSetAWindowIndex++;
+		currentSetBWindowIndex++;
+	}
+
+	//std::cout << "!!!! Last two pTrianglesStart" << std::endl;
+	RCollisionPoint* point0Ref = pointArrayRef->fetchPointRef(typicalPointSetA[currentSetAWindowIndex]->originalValue);
+	RCollisionPoint* point1Ref = pointArrayRef->fetchPointRef(typicalPointSetA[0]->originalValue);
+
+	RCollisionPoint* point2Ref = pointArrayRef->fetchPointRef(typicalPointSetB[currentSetBWindowIndex]->originalValue);
+	RCollisionPoint* point3Ref = pointArrayRef->fetchPointRef(typicalPointSetB[0]->originalValue);
+	//std::cout << "!!!! buildPTriangles...(1)" << std::endl;
 
 	// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
-	std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-	PTriangle triangleA(point0Ref, point1Ref, point2Ref, targetEmptyNormal);
+	//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
+	PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal);
 	PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 	pTriangleMap[pTriangleMapIndex] = triangleA;
 	for (int x = 0; x < 3; x++)
@@ -330,8 +489,8 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 	}
 	pTriangleMapIndex++;
 
-	std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-	PTriangle triangleB(point2Ref, point1Ref, point3Ref, targetEmptyNormal);
+	//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
+	PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal);
 	PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 	pTriangleMap[pTriangleMapIndex] = triangleB;
 	for (int x = 0; x < 3; x++)
@@ -341,8 +500,10 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 	}
 	pTriangleMapIndex++;
 
+
+
+	std::cout << "number of produced PTriangles is: " << pTriangleMapIndex - 1 << std::endl;
 	pTriangleMapContainerRef->printMapperStats();
-	
 	std::cout << "Print stats complete..." << std::endl;
 	int donePrinting = 3;
 	std::cin >> donePrinting;
