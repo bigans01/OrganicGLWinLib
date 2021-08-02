@@ -22,9 +22,10 @@ class RAdditiveSliceBase
 {
 	public:
 		// virtual functions
-		virtual void buildInitialPointSets() = 0;
+		virtual void buildInitialPointSets() = 0;	// spawns points for typicalPointSetA and typicalPointSetB; assumes that these arrays have already been initialized.
+		virtual void runInitialPointAdjustments() = 0;	// adjust points to make them "tighter" around the existing mass; does not perform suction.
 		virtual void buildPointSets() = 0;
-		virtual void buildPTriangles() = 0;
+		virtual void buildPTriangles() = 0;			// builds the PTriangles; must be called prior to suction.
 
 		// non virtual functions
 		void initialize(RAdditiveSliceType in_sliceType,		// initializes all variables, except the set arrays (typicalPointSetA and typicalPointSetB) and numberOfPointsPerTypicalSet

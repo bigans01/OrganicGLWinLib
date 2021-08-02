@@ -304,6 +304,7 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 		{
 			pass2Begin->second->initializeSetArrays(setPointCount);
 			pass2Begin->second->buildInitialPointSets();
+			pass2Begin->second->runInitialPointAdjustments();
 		}
 
 
@@ -365,5 +366,54 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 		determineBestPointCount(in_pointsPerSliceArray);
 		sliceMap[0]->initializeSetArrays(setPointCount);
 		sliceMap[0]->buildInitialPointSets();
+	}
+}
+
+void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef)
+{
+	// find the lowest/highest x values, by using min and max
+	int minX = 1000;	// should always start high 
+	int maxX = 0;		// should always start low
+
+
+	// print values
+	std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
+	std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;auto keyedMorphablesBegin = keyedMorphables.begin();
+	auto keyedMorphablesEnd = keyedMorphables.end();
+	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
+	{
+		minX = std::min(minX, keyedMorphablesBegin->first.x);
+		maxX = std::max(maxX, keyedMorphablesBegin->first.x);
+	}
+
+	for (int currentXSliceIndex = minX; currentXSliceIndex < maxX + 1; currentXSliceIndex++)	// maxX + 1 because we must include  maxX.
+	{
+		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> currentXSliceIndexSet;
+		auto currentKeyedScanForXBegin = keyedMorphables.begin();
+		auto currentKeyedScanForXEnd = keyedMorphables.end();
+		for (; currentKeyedScanForXBegin != currentKeyedScanForXEnd; currentKeyedScanForXBegin++)
+		{
+			if (currentKeyedScanForXBegin->first.x == currentXSliceIndex)
+			{
+				currentXSliceIndexSet.insert(currentKeyedScanForXBegin->first);
+			}
+		}
+
+		//sliceMap[currentXSliceIndex].reset(new RAdditiveXSlice());
+
+		
+		// run "suction" on each morphable mesh.
+		auto xSliceSetBegin = currentXSliceIndexSet.begin();
+		auto xSliceSetEnd = currentXSliceIndexSet.end();
+		for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
+		{
+			std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
+			keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+
+			int suctionWait = 3;
+			std::cin >> suctionWait;
+		}
+			
+
 	}
 }

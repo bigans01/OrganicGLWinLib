@@ -143,7 +143,9 @@ void RMorphableAreaScanner::scanGridMass()
 		}
 	}
 
+	// OPTION 1: ----------------------------------------------------------
 	// Phase 3: for each RMorphableMeshGroup, generate its points and hollow out its interiors, aka non-visible points.
+	/*
 	auto hollowingOutBegin = meshGroupMap.begin();
 	auto hollowingOutEnd = meshGroupMap.end();
 	for (; hollowingOutBegin != hollowingOutEnd; hollowingOutBegin++)
@@ -154,16 +156,6 @@ void RMorphableAreaScanner::scanGridMass()
 		//hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
 		//hollowingOutBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
 		//hollowingOutBegin->second.generateRProductFacesInRemainingMeshes();
-		/*
-		EnclaveKeyDef::EnclaveKey testFinderKey(0, 1, 0);
-		if (hollowingOutBegin->second.doesGroupContainKey(testFinderKey) == true)
-		{
-			hollowingOutBegin->second.keyedMorphables.find(testFinderKey)->second.printCornerPoints();
-		}
-
-		std::cout << "!!! Checking which points in this group are landlocked: " << std::endl;
-		hollowingOutBegin->second.printLandlockedPoints();
-		*/
 		//hollowingOutBegin->second.printLandlockedPoints();
 	}
 
@@ -173,6 +165,29 @@ void RMorphableAreaScanner::scanGridMass()
 	for (; suctionBegin != suctionEnd; suctionBegin++)
 	{
 		suctionBegin->second.buildMeshByXScan(massGrid.fetchDataArrayRef(), morphableMeshDimension, pointsPerSlicePointArray, &scannerPointToTriangleMapper);
+	}
+	*/
+
+	// OPTION 2: ---------------------------------------------------------
+
+	auto originalMeshRunBegin = meshGroupMap.begin();
+	auto origianlMeshRunEnd = meshGroupMap.end();
+	for (; originalMeshRunBegin != origianlMeshRunEnd; originalMeshRunBegin++)
+	{
+		originalMeshRunBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
+		originalMeshRunBegin->second.generatePointArray(8);
+		originalMeshRunBegin->second.generatePoints();					// generate all possible points
+		originalMeshRunBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
+		originalMeshRunBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
+		originalMeshRunBegin->second.generateRProductFacesInRemainingMeshes();
+		originalMeshRunBegin->second.printLandlockedPoints();
+
+	}
+	auto originalSuctionBegin = meshGroupMap.begin();
+	auto originalSuctionEnd = meshGroupMap.end();
+	for (; originalSuctionBegin != originalSuctionEnd; originalSuctionBegin++)
+	{
+		originalSuctionBegin->second.buildMeshByXScanV2(massGrid.fetchDataArrayRef(), morphableMeshDimension, pointsPerSlicePointArray, &scannerPointToTriangleMapper);
 	}
 }
 

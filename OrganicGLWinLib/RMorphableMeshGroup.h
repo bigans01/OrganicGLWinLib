@@ -35,7 +35,13 @@ class RMorphableMeshGroup
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
 		void generateRProductFacesInRemainingMeshes();
+
+		// For "Option 1"
 		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
+
+		// For "Option 2"
+		void buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
+
 	private:
 		friend class RMorphableAreaScanner;
 		int slicePointArraySize = 0;

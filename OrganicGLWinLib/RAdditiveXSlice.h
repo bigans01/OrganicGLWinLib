@@ -9,6 +9,7 @@ class RAdditiveXSlice : public RAdditiveSliceBase
 {
 	public:
 		void buildInitialPointSets();
+		void runInitialPointAdjustments();
 		void buildPointSets();
 		void buildPTriangles();
 	private:

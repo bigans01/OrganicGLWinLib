@@ -37,6 +37,11 @@ void RAdditiveXSliceStandalone::buildInitialPointSets()
 	generateSetBRCollisionPoints(numberOfPointsBetweenCorners, setBCorner0, setBCorner1, setBCorner2, setBCorner3);
 }
 
+void RAdditiveXSliceStandalone::runInitialPointAdjustments()
+{
+
+}
+
 void RAdditiveXSliceStandalone::buildPointSets()
 {
 	// find the min/max values for y and z.
