@@ -188,7 +188,17 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 	auto generationRunEnd = keyedMorphables.end();
 	for (; generationRunBegin != generationRunEnd; generationRunBegin++)
 	{
-		generationRunBegin->second.generateRProductFaces();
+		if (generationRunBegin->second.getMeshState() == RMorphableMeshState::EXPOSED)
+		{
+			std::cout << "Generating associated faces and PTriangles for RMorphableMesh with key: " << generationRunBegin->first.x << ", " << generationRunBegin->first.y << ", " << generationRunBegin->first.z << std::endl;
+			generationRunBegin->second.generateRProductFaces();
+			int finishedGeneration = 3;
+			std::cin >> finishedGeneration;
+		}
+		else
+		{
+			std::cout << "Mesh with key " << generationRunBegin->first.x << ", " << generationRunBegin->first.y << ", " << generationRunBegin->first.z << " is landlocked. Ignoring face production. " << std::endl;
+		}
 	}
 }
 
@@ -407,8 +417,15 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 		auto xSliceSetEnd = currentXSliceIndexSet.end();
 		for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
 		{
-			std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-			keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+			if (keyedMorphables[*xSliceSetBegin].getMeshState() == RMorphableMeshState::EXPOSED)
+			{
+				std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+			}
+			else
+			{
+				std::cout << "!! Mesh with key " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << "is landlocked; will not run suction. " << std::endl;
+			}
 
 			int suctionWait = 3;
 			std::cin >> suctionWait;

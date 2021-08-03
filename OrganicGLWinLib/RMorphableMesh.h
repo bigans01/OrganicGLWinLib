@@ -39,6 +39,7 @@ class RMorphableMesh
 		void runSuctionByXSlice();
 		void generateRProductFaces();
 		void updatePointState(RMorphableMeshState in_pointState);
+		RMorphableMeshState getMeshState();
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
 		glm::vec3 meshCenter;

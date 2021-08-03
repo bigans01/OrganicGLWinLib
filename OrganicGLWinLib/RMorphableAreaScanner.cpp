@@ -176,10 +176,10 @@ void RMorphableAreaScanner::scanGridMass()
 	{
 		originalMeshRunBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
 		originalMeshRunBegin->second.generatePointArray(8);
-		originalMeshRunBegin->second.generatePoints();					// generate all possible points
-		originalMeshRunBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
-		originalMeshRunBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
-		originalMeshRunBegin->second.generateRProductFacesInRemainingMeshes();
+		originalMeshRunBegin->second.generatePoints();							// generate all possible points
+		originalMeshRunBegin->second.updatePointLandlockStats();				// determine which points in the mesh are landlocked.
+		originalMeshRunBegin->second.flagLandlockedMeshes();					// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
+		originalMeshRunBegin->second.generateRProductFacesInRemainingMeshes();	// build the exposed faces in each mesh, and build the pTriangles in those faces.
 		originalMeshRunBegin->second.printLandlockedPoints();
 
 	}
