@@ -13,6 +13,7 @@
 #include "ECBPPOrientations.h"
 #include "RProductFace.h"
 #include "RMorphableMeshState.h"
+#include "RCollisionPointModifier.h"
 
 class RMorphableMesh
 {

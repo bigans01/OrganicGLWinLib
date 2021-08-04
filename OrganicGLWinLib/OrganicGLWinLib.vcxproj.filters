@@ -1197,6 +1197,9 @@
     <ClInclude Include="RCollisionPointToPTriangleMapContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RCollisionPointModifier.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1755,6 +1758,9 @@
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RAdditiveXSliceStandalone.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RCollisionPointModifier.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
   </ItemGroup>

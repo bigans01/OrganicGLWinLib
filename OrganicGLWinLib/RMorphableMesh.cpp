@@ -145,6 +145,8 @@ void RMorphableMesh::generateRProductFaces()
 void RMorphableMesh::runSuctionByXSlice()
 {
 	RMorphableMeshCornerArray fetchedArray = meshCorners.getPointArray();
+
+	// the following loop is for diagnostic testing only
 	for (int x = 0; x < 8; x++)
 	{
 		RCollisionPoint* currentPointRef = fetchedArray.pointRefArray[x];
@@ -184,4 +186,7 @@ void RMorphableMesh::runSuctionByXSlice()
 													        << ", and has a " 
 															<< massValue << " mass; totalFlagsFound = " << totalFlagsFound << "; landlocked = " << wasLandlocked << std::endl;
 	}
+
+	// attempt to run the point modifier on all 8 points of this mesh
+	RCollisionPointModifier pointModifier(&fetchedArray, translatorRef);
 }

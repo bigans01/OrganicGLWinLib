@@ -229,6 +229,7 @@
     <ClInclude Include="RasterKeyLookupByDim.h" />
     <ClInclude Include="RCollisionPoint.h" />
     <ClInclude Include="RCollisionPointArray.h" />
+    <ClInclude Include="RCollisionPointModifier.h" />
     <ClInclude Include="RCollisionPointSearchResult.h" />
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
@@ -663,6 +664,7 @@
     <ClCompile Include="RasterizationPointAdjuster.cpp" />
     <ClCompile Include="RaycastIntersectionTest.cpp" />
     <ClCompile Include="RayIntersectionResult.cpp" />
+    <ClCompile Include="RCollisionPointModifier.cpp" />
     <ClCompile Include="RMorphableAreaScanner.cpp" />
     <ClCompile Include="RMorphableMesh.cpp" />
     <ClCompile Include="RMorphableMeshGroup.cpp" />
