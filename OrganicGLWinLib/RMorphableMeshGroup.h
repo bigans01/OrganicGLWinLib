@@ -40,7 +40,14 @@ class RMorphableMeshGroup
 		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
 
 		// For "Option 2"
-		void buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
+		void buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, 
+								float in_sliceThickness, 
+								int in_pointsPerSliceArray, 
+								RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef,
+								float in_cubeDimLength,
+								float in_tileDimWeightRatio,
+								int in_tilesPerDim
+								);
 
 	private:
 		friend class RMorphableAreaScanner;

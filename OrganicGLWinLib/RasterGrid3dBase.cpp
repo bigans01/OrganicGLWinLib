@@ -12,3 +12,13 @@ EnclaveKeyDef::EnclaveKey RasterGrid3dBase::convertSPolyPointToBlockCoord(glm::v
 {
 	return RUtils::convertToRasterGridCell(in_pointToConvert, rCubeDimensionalLength, numberOfTilesPerDimension);
 }
+
+float RasterGrid3dBase::getRCubeDimLength()
+{
+	return rCubeDimensionalLength;
+}
+
+float RasterGrid3dBase::getTileDimWeightRatio()
+{
+	return tileDimWeightToHundredthFloatRatio;
+}

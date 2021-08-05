@@ -379,7 +379,14 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 	}
 }
 
-void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef)
+void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef, 
+											float in_sliceThickness, 
+											int in_pointsPerSliceArray, 
+											RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef,
+											float in_cubeDimLength,
+											float in_tileDimWeightRatio,
+											int in_tilesPerDim
+											)
 {
 	// find the lowest/highest x values, by using min and max
 	int minX = 1000;	// should always start high 
@@ -420,7 +427,7 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 			if (keyedMorphables[*xSliceSetBegin].getMeshState() == RMorphableMeshState::EXPOSED)
 			{
 				std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice();
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, in_tileDimWeightRatio, in_tilesPerDim);
 			}
 			else
 			{

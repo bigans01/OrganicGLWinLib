@@ -187,7 +187,14 @@ void RMorphableAreaScanner::scanGridMass()
 	auto originalSuctionEnd = meshGroupMap.end();
 	for (; originalSuctionBegin != originalSuctionEnd; originalSuctionBegin++)
 	{
-		originalSuctionBegin->second.buildMeshByXScanV2(massGrid.fetchDataArrayRef(), morphableMeshDimension, pointsPerSlicePointArray, &scannerPointToTriangleMapper);
+		originalSuctionBegin->second.buildMeshByXScanV2(massGrid.fetchDataArrayRef(), 
+													    morphableMeshDimension, 
+														pointsPerSlicePointArray, 
+														&scannerPointToTriangleMapper, 
+														massGrid.getRCubeDimLength(), 
+														massGrid.getTileDimWeightRatio(),
+														scannerCellsPerDimension
+														);
 	}
 }
 

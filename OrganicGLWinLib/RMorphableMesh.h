@@ -37,7 +37,7 @@ class RMorphableMesh
 		void setMeshCorners(RMorphableMeshCorners in_meshCorners);
 		void printCornerPoints();
 		void updatePointUsageCounts();
-		void runSuctionByXSlice();
+		void runSuctionByXSlice(float in_cubeDimLength, float in_tileDimWeightRatio, int in_tilesPerDim);
 		void generateRProductFaces();
 		void updatePointState(RMorphableMeshState in_pointState);
 		RMorphableMeshState getMeshState();

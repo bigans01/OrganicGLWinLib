@@ -142,7 +142,7 @@ void RMorphableMesh::generateRProductFaces()
 	}
 }
 
-void RMorphableMesh::runSuctionByXSlice()
+void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDimWeightRatio, int in_tilesPerDim)
 {
 	RMorphableMeshCornerArray fetchedArray = meshCorners.getPointArray();
 
@@ -188,5 +188,5 @@ void RMorphableMesh::runSuctionByXSlice()
 	}
 
 	// attempt to run the point modifier on all 8 points of this mesh
-	RCollisionPointModifier pointModifier(&fetchedArray, translatorRef);
+	RCollisionPointModifier pointModifier(&fetchedArray, translatorRef, in_cubeDimLength, in_tileDimWeightRatio, in_tilesPerDim);
 }
