@@ -15,6 +15,8 @@
 #include "RUtils.h"
 #include "EnclaveKeyDef.h"
 #include <algorithm>
+#include "RCollisionPointCaster.h"
+#include "MassGridArray.h"
 
 class RCollisionPointModifier
 {
@@ -24,18 +26,21 @@ class RCollisionPointModifier
 								RPointToGridTranslator* in_gridTranslatorRef, 
 								float in_calculatedCubeDimLength,
 								float in_calculatedTileDimWeightRatio, 
-								int in_tilesPerDim) :
+								int in_tilesPerDim,
+								MassGridArray* in_modifierMassGridArrayRef) :
 			meshCornerArrayRef(in_meshCornerArrayRef),
 			gridTranslatorRef(in_gridTranslatorRef),
 			calculatedCubeDimLength(in_calculatedCubeDimLength),
 			calculatedTileDimWeightRatio(in_calculatedTileDimWeightRatio),
-			tilesPerDim(in_tilesPerDim)
+			tilesPerDim(in_tilesPerDim),
+			modifierMassGridArrayRef(in_modifierMassGridArrayRef)
 		{
 			runPointScan();	// use the meshCornerArrayRef to determine the point types and put each one into its appropriate map (immutablePoints, freePoints, etc)
 		};
 	private:
 		RMorphableMeshCornerArray* meshCornerArrayRef = nullptr;
 		RPointToGridTranslator* gridTranslatorRef = nullptr;
+		MassGridArray* modifierMassGridArrayRef = nullptr;
 
 		// NOTES:
 		// --immutable points are "landlocked"; they are also "anchor" points that free points can move to.
@@ -61,13 +66,15 @@ class RCollisionPointModifier
 									RCollisionPoint* in_destinationPoint, 
 									float in_itineraryCubeDimLength, 
 									float in_itineraryTileDimWeightRatio,
-									int in_itineraryTilesPerDim
+									int in_itineraryTilesPerDim,
+									MassGridArray* in_itineraryMassGridArrayRef
 									) :
 				pointToMove(in_pointToMove),
 				destinationPoint(in_destinationPoint),
 				itineraryCubeDimLength(in_itineraryCubeDimLength),
 				itineraryTileDimWeightRatio(in_itineraryTileDimWeightRatio),
-				itineraryTilesPerDim(in_itineraryTilesPerDim)
+				itineraryTilesPerDim(in_itineraryTilesPerDim),
+				itineraryMassGridArrayRef(in_itineraryMassGridArrayRef)
 			{};
 
 			void runJourney()
@@ -83,10 +90,16 @@ class RCollisionPointModifier
 
 				std::cout << ">> Journey Point B, rasterCubePointB: " << rasterCubePointB.x << ", " << rasterCubePointB.y << ", " << rasterCubePointB.z
 										<< " | pointARasterCubeKey: " << pointBRasterCubeKey.x << ", " << pointBRasterCubeKey.y << ", " << pointBRasterCubeKey.z << std::endl;
+
+				RCollisionPointCaster journeyPointCaster;
+				journeyPointCaster.setData(pointARasterCubeKey, pointBRasterCubeKey, rasterCubePointA, rasterCubePointB, itineraryCubeDimLength, itineraryTileDimWeightRatio, false);
+				journeyPointCaster.setGridArrayRef(itineraryMassGridArrayRef);
+				journeyPointCaster.runTrace();
 			};
 
 			RCollisionPoint* pointToMove = nullptr;
 			RCollisionPoint* destinationPoint = nullptr;
+			MassGridArray* itineraryMassGridArrayRef = nullptr;
 			float itineraryCubeDimLength = 0.0f;
 			float itineraryTileDimWeightRatio = 0.0f;
 			int itineraryTilesPerDim = 0;

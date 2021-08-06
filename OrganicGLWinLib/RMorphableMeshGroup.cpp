@@ -427,7 +427,7 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 			if (keyedMorphables[*xSliceSetBegin].getMeshState() == RMorphableMeshState::EXPOSED)
 			{
 				std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, in_tileDimWeightRatio, in_tilesPerDim);
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, in_tileDimWeightRatio, in_tilesPerDim, in_massGridArrayRef);
 			}
 			else
 			{

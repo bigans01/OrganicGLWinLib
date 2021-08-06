@@ -65,7 +65,7 @@ void RCollisionPointModifier::runPointScan()
 												immutablePoints[currentMinLinkedIndex], 
 												calculatedCubeDimLength, 
 												calculatedTileDimWeightRatio, 
-												tilesPerDim);
+												tilesPerDim, modifierMassGridArrayRef);
 			collisionPointItineraryMap[collisionPointItineraryMapIndex] = newItinerary;
 			collisionPointItineraryMap[collisionPointItineraryMapIndex].runJourney();
 			collisionPointItineraryMapIndex++;
