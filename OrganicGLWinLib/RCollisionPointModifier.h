@@ -36,11 +36,27 @@ class RCollisionPointModifier
 			modifierMassGridArrayRef(in_modifierMassGridArrayRef)
 		{
 			runPointScan();	// use the meshCornerArrayRef to determine the point types and put each one into its appropriate map (immutablePoints, freePoints, etc)
+
+			// optional, can comment out when done
+			auto movedPointsBegin = movedPointMap.begin();
+			auto movedPointsEnd = movedPointMap.end();
+			for (; movedPointsBegin != movedPointsEnd; movedPointsBegin++)
+			{
+				std::cout << "!!! Moved point, original value: " << movedPointsBegin->second->originalValue.x << ", "
+					<< movedPointsBegin->second->originalValue.y << ", "
+					<< movedPointsBegin->second->originalValue.z << " | current value: "
+					<< movedPointsBegin->second->currentValue.x << " , "
+					<< movedPointsBegin->second->currentValue.y << " , "
+					<< movedPointsBegin->second->currentValue.z << std::endl;
+			}
 		};
 	private:
 		RMorphableMeshCornerArray* meshCornerArrayRef = nullptr;
 		RPointToGridTranslator* gridTranslatorRef = nullptr;
 		MassGridArray* modifierMassGridArrayRef = nullptr;
+		std::map<int, RCollisionPoint*> movedPointMap;		// will store any moved points that this modifier produced; it is optional, and being used for temporary
+															// debug/observation purposes
+		int movedPointMapCurrentIndex = 0;
 
 		// NOTES:
 		// --immutable points are "landlocked"; they are also "anchor" points that free points can move to.
@@ -77,7 +93,7 @@ class RCollisionPointModifier
 				itineraryMassGridArrayRef(in_itineraryMassGridArrayRef)
 			{};
 
-			void runJourney()
+			void runJourney(std::map<int, RCollisionPoint*>* in_pointMapRef, int* in_pointMapCurrentIndex)
 			{
 				glm::vec3 rasterCubePointA = RUtils::convertToRasterGridPoint(pointToMove->currentValue, itineraryCubeDimLength, itineraryTilesPerDim, itineraryTileDimWeightRatio);
 				glm::vec3 rasterCubePointB = RUtils::convertToRasterGridPoint(destinationPoint->currentValue, itineraryCubeDimLength, itineraryTilesPerDim, itineraryTileDimWeightRatio);
@@ -91,10 +107,17 @@ class RCollisionPointModifier
 				std::cout << ">> Journey Point B, rasterCubePointB: " << rasterCubePointB.x << ", " << rasterCubePointB.y << ", " << rasterCubePointB.z
 										<< " | pointARasterCubeKey: " << pointBRasterCubeKey.x << ", " << pointBRasterCubeKey.y << ", " << pointBRasterCubeKey.z << std::endl;
 
+				std::cout << "Cube dim length: " << itineraryCubeDimLength << std::endl;
+
 				RCollisionPointCaster journeyPointCaster;
 				journeyPointCaster.setData(pointARasterCubeKey, pointBRasterCubeKey, rasterCubePointA, rasterCubePointB, itineraryCubeDimLength, itineraryTileDimWeightRatio, false);
 				journeyPointCaster.setGridArrayRef(itineraryMassGridArrayRef);
+				journeyPointCaster.setPointToMoveRef(pointToMove);
 				journeyPointCaster.runTrace();
+				glm::vec3 convertedPoint = journeyPointCaster.getConvertedTraceEndPoint();
+				std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
+
+				(*in_pointMapRef)[(*in_pointMapCurrentIndex)++] = pointToMove;	// testing only
 			};
 
 			RCollisionPoint* pointToMove = nullptr;

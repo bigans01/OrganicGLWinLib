@@ -216,6 +216,7 @@
     <ClInclude Include="PTriangle.h" />
     <ClInclude Include="PTriangleManager.h" />
     <ClInclude Include="PTriangleMapperUpdate.h" />
+    <ClInclude Include="PTriangleMesh.h" />
     <ClInclude Include="PTrianglePointLinkArray.h" />
     <ClInclude Include="PTriangleRCPointToIndexLink.h" />
     <ClInclude Include="RAdditiveSliceBase.h" />

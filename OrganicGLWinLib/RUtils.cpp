@@ -62,6 +62,15 @@ EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToCo
 	return returnKey;
 }
 
+glm::vec3 RUtils::convertGridCellLocationToVec3(int in_locationX, int in_locationY, int in_locationZ, float in_cubeDimLength)
+{
+	float pointX = (in_locationX * in_cubeDimLength) + (in_cubeDimLength / 2);
+	float pointY = (in_locationY * in_cubeDimLength) + (in_cubeDimLength / 2);
+	float pointZ = (in_locationZ * in_cubeDimLength) + (in_cubeDimLength / 2);
+	glm::vec3 returnVec(pointX, pointY, pointZ);
+	return returnVec;
+}
+
 glm::vec3 RUtils::convertToRasterGridPoint(glm::vec3 in_pointToConvert, 
 										   float in_tileDimensionalWeight, 
 										   int in_numberOfTilesPerDimension,

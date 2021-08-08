@@ -14,6 +14,7 @@
 #include "RProductFace.h"
 #include "RMorphableMeshState.h"
 #include "RCollisionPointModifier.h"
+#include "PTriangleMesh.h"
 
 class RMorphableMesh
 {
@@ -41,6 +42,8 @@ class RMorphableMesh
 		void generateRProductFaces();
 		void updatePointState(RMorphableMeshState in_pointState);
 		RMorphableMeshState getMeshState();
+		void insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef);
+
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
 		glm::vec3 meshCenter;

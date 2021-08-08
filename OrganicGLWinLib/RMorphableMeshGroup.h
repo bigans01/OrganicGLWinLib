@@ -22,6 +22,7 @@
 #include <map>
 #include "MassGridArray.h"
 #include "RCollisionPointToPTriangleMapContainer.h"
+#include "PTriangleMesh.h"
 
 class RMorphableMeshGroup
 {
@@ -48,6 +49,7 @@ class RMorphableMeshGroup
 								float in_tileDimWeightRatio,
 								int in_tilesPerDim
 								);
+		void produceSolution();
 
 	private:
 		friend class RMorphableAreaScanner;
@@ -59,6 +61,8 @@ class RMorphableMeshGroup
 		std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;	// stores the slices produced during the mesh group's chosen scan function
 		void determineBestPointCount(int in_potentialPointCount);
 		int setPointCount = 0;
+
+		PTriangleMesh groupMesh;
 };
 
 #endif

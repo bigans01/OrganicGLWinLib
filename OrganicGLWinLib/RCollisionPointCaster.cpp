@@ -13,7 +13,14 @@ void RCollisionPointCaster::runTrace()
 		if (initialBlockSearchResult.cellRef->getNumberOfFlagsSet() > 0)
 		{
 			std::cout << "### Notice: very first currentCubeKey value has mass; discarding while loop. " << std::endl;
+
+			// even if found initially as being with mass, update it as being moved.
+
+
 			casterContinuationFlag = false;
+			glm::vec3 convertedDestinationPointVec3 = RUtils::convertGridCellLocationToVec3(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z, rasterCubeDimLength);
+			pointToMoveRef->currentValue = convertedDestinationPointVec3;
+			pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
 		}
 	}
 
@@ -33,7 +40,13 @@ void RCollisionPointCaster::runTrace()
 			if (currentBlockSearchResult.cellRef->getNumberOfFlagsSet() > 0)
 			{
 				std::cout << "!! Notice, point caster attempt found flags at block having key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+
+				// if found, update the point as being moved.
+
 				casterContinuationFlag = false;
+				glm::vec3 convertedDestinationPointVec3 = RUtils::convertGridCellLocationToVec3(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z, rasterCubeDimLength);
+				pointToMoveRef->currentValue = convertedDestinationPointVec3;
+				pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
 			}
 		}
 	}
@@ -45,4 +58,14 @@ void RCollisionPointCaster::runTrace()
 void RCollisionPointCaster::setGridArrayRef(MassGridArray* in_optionalMassGridArrayRef)
 {
 	casterMassGridArrayRef = in_optionalMassGridArrayRef;
+}
+
+void RCollisionPointCaster::setPointToMoveRef(RCollisionPoint* in_destinationPointRef)
+{
+	pointToMoveRef = in_destinationPointRef;
+}
+
+glm::vec3 RCollisionPointCaster::getConvertedTraceEndPoint()
+{
+	return RUtils::convertGridCellLocationToVec3(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z, rasterCubeDimLength);
 }

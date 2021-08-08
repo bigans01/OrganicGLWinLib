@@ -441,3 +441,21 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 
 	}
 }
+
+void RMorphableMeshGroup::produceSolution()
+{
+	int faceCount = 0;
+	auto faceScanBegin = keyedMorphables.begin();
+	auto faceScanEnd = keyedMorphables.end();
+	for (; faceScanBegin != faceScanEnd; faceScanBegin++)
+	{
+		if (faceScanBegin->second.getMeshState() == RMorphableMeshState::EXPOSED)
+		{
+			faceScanBegin->second.insertPTrianglesIntoMesh(&groupMesh);
+		}
+	}
+
+	groupMesh.rebuildPTriangleNormals();
+
+	std::cout << "!!!!######################### Number of PTriangles in this solution: " << groupMesh.getMeshPTriangleCount() << std::endl;
+}

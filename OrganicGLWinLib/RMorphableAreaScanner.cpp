@@ -196,6 +196,19 @@ void RMorphableAreaScanner::scanGridMass()
 														scannerCellsPerDimension
 														);
 	}
+
+	acquireProducedSolutions();
+}
+
+void RMorphableAreaScanner::acquireProducedSolutions()
+{
+	// for each mesh group, have it produce its solutions.
+	auto solutionProductionBegin = meshGroupMap.begin();
+	auto solutionProductionEnd = meshGroupMap.end();
+	for (; solutionProductionBegin != solutionProductionEnd; solutionProductionBegin++)
+	{
+		solutionProductionBegin->second.produceSolution();
+	}
 }
 
 bool RMorphableAreaScanner::checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB)

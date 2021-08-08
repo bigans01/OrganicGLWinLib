@@ -49,6 +49,11 @@ class RCollisionPoint
 			return pointState;
 		}
 
+		void setCollisionPointState(RCollisionPointState in_pointState)
+		{
+			pointState = in_pointState;
+		}
+
 		glm::vec3 originalValue;	// will always stay the same after it has been set
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
 	private:

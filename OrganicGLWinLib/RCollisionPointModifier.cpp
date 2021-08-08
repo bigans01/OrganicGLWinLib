@@ -21,6 +21,12 @@ void RCollisionPointModifier::runPointScan()
 				immutablePoints[immutablePointCounter++] = currentPointRef;
 				break;	// don't break my code, my achey breaky code, I just can't take it anymore (no really, you need to break, Mike)
 			};
+			case RCollisionPointState::MOVED:
+			{
+
+				std::cout << "----~~~~ Point " << currentPointRef->currentValue.x << ", " << currentPointRef->currentValue.y << ", " << currentPointRef->currentValue.z << " was already moved; ignoring. " << std::endl;
+				break;
+			}
 		}
 	}
 
@@ -65,9 +71,10 @@ void RCollisionPointModifier::runPointScan()
 												immutablePoints[currentMinLinkedIndex], 
 												calculatedCubeDimLength, 
 												calculatedTileDimWeightRatio, 
-												tilesPerDim, modifierMassGridArrayRef);
+												tilesPerDim, 
+												modifierMassGridArrayRef);
 			collisionPointItineraryMap[collisionPointItineraryMapIndex] = newItinerary;
-			collisionPointItineraryMap[collisionPointItineraryMapIndex].runJourney();
+			collisionPointItineraryMap[collisionPointItineraryMapIndex].runJourney(&movedPointMap, &movedPointMapCurrentIndex);
 			collisionPointItineraryMapIndex++;
 			
 		}

@@ -31,6 +31,16 @@ RMorphableMeshState RMorphableMesh::getMeshState()
 	return pointState;
 }
 
+void RMorphableMesh::insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef)
+{
+	auto existingFacesBegin = rProductFaceMap.begin();
+	auto existingFacesEnd = rProductFaceMap.end();
+	for (; existingFacesBegin != existingFacesEnd; existingFacesBegin++)
+	{
+		existingFacesBegin->second.copyPTrianglesIntoMesh(in_pTriangleMeshRef);
+	}
+}
+
 void RMorphableMesh::generateRProductFaces()
 {
 	// check north face.
@@ -151,6 +161,7 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 	{
 		RCollisionPoint* currentPointRef = fetchedArray.pointRefArray[x];
 		glm::vec3 currentRefedPointOriginalValue = currentPointRef->originalValue;
+		glm::vec3 currentRefedPointCurrentValue = currentPointRef->currentValue;
 		EnclaveKeyDef::EnclaveKey translatedPoint = translatorRef->translatePointToGrid(currentRefedPointOriginalValue);
 		MassGridSearchResult searchResult = gridRef->fetchCell(translatedPoint);
 		std::string massValue = "EMPTY";
@@ -159,8 +170,13 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 		int totalFlagsFound = 0;
 		if (currentPointRef->getCollisionPointState() == RCollisionPointState::IMMUTABLE)
 		{
-			wasLandlocked = "Yes";
+			wasLandlocked = "IMMUTABLE";
 		}
+		if (currentPointRef->getCollisionPointState() == RCollisionPointState::MOVED)
+		{
+			wasLandlocked = "MOVED";
+		}
+
 		if (searchResult.wasSearchKeyValid == true)
 		{
 			wasFound = "Yes";
@@ -179,12 +195,15 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 
 		}
 		
-		std::cout << ":: Point at array index " << x << "( " << currentRefedPointOriginalValue.x << "," 
+		std::cout << ":: Point at array index " << x << "having original value of ( " << currentRefedPointOriginalValue.x << "," 
 															 << currentRefedPointOriginalValue.y << ", " << 
-																currentRefedPointOriginalValue.z << ") translates to array value: " << translatedPoint.x << ", " << translatedPoint.y << ", " << translatedPoint.z 
+																currentRefedPointOriginalValue.z << ") translates to array value: (" << translatedPoint.x << ", " << translatedPoint.y << ", " << translatedPoint.z 
+															<< " and has a current value of (" <<  currentRefedPointCurrentValue.x << ", " 
+															<< currentRefedPointCurrentValue.y << ", "
+															<< currentRefedPointCurrentValue.z 
 														    << "), wasFound = " << wasFound 
 													        << ", and has a " 
-															<< massValue << " mass; totalFlagsFound = " << totalFlagsFound << "; landlocked = " << wasLandlocked << std::endl;
+															<< massValue << " mass; totalFlagsFound = " << totalFlagsFound << "; state = " << wasLandlocked << std::endl;
 	}
 
 	// attempt to run the point modifier on all 8 points of this mesh

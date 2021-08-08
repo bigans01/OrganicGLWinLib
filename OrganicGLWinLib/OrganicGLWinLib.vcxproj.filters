@@ -1203,6 +1203,9 @@
     <ClInclude Include="RCollisionPointCaster.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="PTriangleMesh.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
