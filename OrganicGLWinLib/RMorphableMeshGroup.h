@@ -50,6 +50,7 @@ class RMorphableMeshGroup
 								int in_tilesPerDim
 								);
 		void produceSolution();
+		PTriangleMesh groupMesh;
 
 	private:
 		friend class RMorphableAreaScanner;
@@ -62,7 +63,6 @@ class RMorphableMeshGroup
 		void determineBestPointCount(int in_potentialPointCount);
 		int setPointCount = 0;
 
-		PTriangleMesh groupMesh;
 };
 
 #endif

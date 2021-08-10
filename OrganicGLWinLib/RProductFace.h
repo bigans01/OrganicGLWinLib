@@ -8,6 +8,7 @@
 #include "PTriangle.h"
 #include <glm/glm.hpp>
 #include "PTriangleMesh.h"
+#include <iostream>
 
 class RProductFace
 {
@@ -33,8 +34,16 @@ class RProductFace
 		void copyPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMesh)
 		{
 			in_pTriangleMesh->insertPTriangle(facePTriangles[0]);
-			in_pTriangleMesh->insertPTriangle(facePTriangles[1]);
+			in_pTriangleMesh->insertPTriangle(facePTriangles[1]);	
 		};
+
+		void printPTrianglePoints()
+		{
+			for (int x = 0; x < 2; x++)
+			{
+				facePTriangles[x].printPTrianglePoints();
+			}
+		}
 
 	private:
 		RCollisionPoint* rootPointArray[4];

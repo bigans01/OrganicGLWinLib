@@ -42,13 +42,11 @@ class RMorphableAreaScanner
 		void fillGridMass();							// Step 4: fill the mass inside the mass shell
 		void scanGridMass();							// Step 5: scan the grid mass, to determine all RMorphableMesh's that have at least one MassGridArrayCell within the mass; 
 														// if the "at least one" condition is met, save the RMorphableMesh into a list.
-		void acquireProducedSolutions();
-
+		std::map<int, RMorphableMeshGroup> meshGroupMap;
 	private:
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;
 		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
-		std::map<int, RMorphableMeshGroup> meshGroupMap;
 		Rasterized3DMassGrid massGrid;
 		int scannerCellsPerDimension = 0;
 		int pointsPerSlicePointArray = 0;
@@ -59,6 +57,8 @@ class RMorphableAreaScanner
 		float morphableMeshDimension = 0.0f;
 		RPointToGridTranslator gridTranslator;
 		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
+
+		void acquireProducedSolutions();
 };
 
 #endif

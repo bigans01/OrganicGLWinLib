@@ -39,9 +39,8 @@ class PTriangleMesh
 				trianglesBegin->second.rebuildEmptyNormal();
 			}
 		}
-
-	private:
 		std::map<int, PTriangle> meshPTriangles;
+	private:
 		int currentPTriangleIndex = 0;
 
 

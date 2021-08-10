@@ -60,8 +60,18 @@ class PTriangle
 
 		}
 
-	private:
+		void printPTrianglePoints()
+		{
+			std::cout << "=== Printing PTriangle points: " << std::endl;
+			for (int x = 0; x < 3; x++)
+			{
+				std::cout << x << ": " << collisionPointRefArray[x]->currentValue.x << ", " << collisionPointRefArray[x]->currentValue.y << ", " << collisionPointRefArray[x]->currentValue.z << std::endl;
+			}
+		}
+
 		RCollisionPoint* collisionPointRefArray[3] = { nullptr };
+
+	private:
 		glm::vec3 currentEmptyNormal;
 
 		bool runInitialEmptyNormalTest()

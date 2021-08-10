@@ -20,6 +20,14 @@ class RProductFaceRootPoints
 			pointArray[3] = in_point3Ref;
 		};
 		RCollisionPoint* pointArray[4];	// one index per corner (for the 4 corners of the RProductFace)
+
+		void printPointValues()
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				std::cout << "Point: " << pointArray[x]->currentValue.x << ", " << pointArray[x]->currentValue.y << ", " << pointArray[x]->currentValue.z << std::endl;
+			}
+		}
 };
 
 #endif

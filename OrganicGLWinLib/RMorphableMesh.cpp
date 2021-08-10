@@ -60,7 +60,7 @@ void RMorphableMesh::generateRProductFaces()
 		rProductFaceMap[ECBPPOrientations::NORTHFACE] = northProductFace;
 		rProductFaceMap[ECBPPOrientations::NORTHFACE].generateFacePTriangles(northFaceTargetEmptyNormal);
 	}
-
+	
 	// check east face.
 	bool isEastUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERNE,
 														ECBPPOrientations::CORNER_UPPERSE,
@@ -78,7 +78,7 @@ void RMorphableMesh::generateRProductFaces()
 		rProductFaceMap[ECBPPOrientations::EASTFACE] = eastProductFace;
 		rProductFaceMap[ECBPPOrientations::EASTFACE].generateFacePTriangles(eastFaceTargetEmptyNormal);
 	}
-
+	
 	// check south face
 	bool isSouthUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERSE,
 														ECBPPOrientations::CORNER_UPPERSW,
@@ -96,7 +96,7 @@ void RMorphableMesh::generateRProductFaces()
 		rProductFaceMap[ECBPPOrientations::SOUTHFACE] = southProductFace;
 		rProductFaceMap[ECBPPOrientations::SOUTHFACE].generateFacePTriangles(southFaceTargetEmptyNormal);
 	}
-
+	
 	// check west face
 	bool isWestUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERSW,
 														ECBPPOrientations::CORNER_UPPERNW,
@@ -132,7 +132,7 @@ void RMorphableMesh::generateRProductFaces()
 		rProductFaceMap[ECBPPOrientations::TOPFACE] = topProductFace;
 		rProductFaceMap[ECBPPOrientations::TOPFACE].generateFacePTriangles(topFaceTargetEmptyNormal);
 	}
-
+	
 	// check bottom face
 	bool isBottomUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_LOWERNW,
 														ECBPPOrientations::CORNER_LOWERNE,
