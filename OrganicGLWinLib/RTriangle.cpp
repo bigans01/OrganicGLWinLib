@@ -6,35 +6,33 @@ RTriangle::RTriangle()
 
 };
 
-RTriangle::RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2)
+RTriangle::RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2, PolyDebugLevel in_rTriangleDebugLevel)
 {
 	rLines[0] = in_line0;
 	rLines[1] = in_line1;
 	rLines[2] = in_line2;
 
 	// once lines are set up, initialize the dim registers (xDimRegister, yDimRegister, zDimRegister)
-	buildRegisters();
+	buildRegisters(in_rTriangleDebugLevel);
 };
 
-void RTriangle::buildRegisters()
+void RTriangle::buildRegisters(PolyDebugLevel in_rTriangleDebugLevel)
 {
+	PolyLogger registerLogger;
+	registerLogger.setDebugLevel(in_rTriangleDebugLevel);
+
 	EnclaveKeyDef::EnclaveKey pointAKey = rLines[0].pointACubeKey;
 	EnclaveKeyDef::EnclaveKey pointBKey = rLines[1].pointACubeKey;
 	EnclaveKeyDef::EnclaveKey pointCKey = rLines[2].pointACubeKey;
 
-	// find the greatest difference in x,y,z
+	// find the greatest difference in x,y,z, between all 3 points.
 	xScanMeta = determineScanMeta(pointAKey.x, pointBKey.x, pointCKey.x);
 	yScanMeta = determineScanMeta(pointAKey.y, pointBKey.y, pointCKey.y);
 	zScanMeta = determineScanMeta(pointAKey.z, pointBKey.z, pointCKey.z);
 
-	std::cout << ">>>> X scan, greatest dist: " << xScanMeta.numberOfScans << std::endl;
-	std::cout << ">>>> X scan, scan coords -- begin: " << xScanMeta.dimStartValue << " | end: " << xScanMeta.dimEndValue << std::endl;
-
-	std::cout << ">>>> Y scan, greatest dist: " << yScanMeta.numberOfScans << std::endl;
-	std::cout << ">>>> Y scan, scan coords -- begin: " << yScanMeta.dimStartValue << " | end: " << yScanMeta.dimEndValue << std::endl;
-
-	std::cout << ">>>> Z scan, greatest dist: " << zScanMeta.numberOfScans << std::endl;
-	std::cout << ">>>> Z scan, scan coords -- begin: " << zScanMeta.dimStartValue << " | end: " << zScanMeta.dimEndValue << std::endl;
+	registerLogger.log("(RTriangle): xScanMeta will have ", xScanMeta.numberOfScans, "scan iterations, beginning at ", xScanMeta.dimStartValue, " and ending at ", xScanMeta.dimEndValue, "\n");
+	registerLogger.log("(RTriangle): yScanMeta will have ", yScanMeta.numberOfScans, "scan iterations, beginning at ", yScanMeta.dimStartValue, " and ending at ", yScanMeta.dimEndValue, "\n");
+	registerLogger.log("(RTriangle): zScanMeta will have ", zScanMeta.numberOfScans, "scan iterations, beginning at ", zScanMeta.dimStartValue, " and ending at ", zScanMeta.dimEndValue, "\n");
 
 	// set the unique_ptrs for the dim registers;
 	xDimRegister.reset(new LookupByDimRegister[xScanMeta.numberOfScans]);
@@ -44,8 +42,11 @@ void RTriangle::buildRegisters()
 	// set the unique_ptr arrays-being-set flag
 	areRegistersSet = true;
 
-	int buildWait = 3;
-	std::cin >> buildWait;
+	if (registerLogger.isLoggingSet())
+	{
+		int buildWait = 3;
+		std::cin >> buildWait;
+	}
 }
 
 RTriangle::DimScanMeta RTriangle::determineScanMeta(int in_pointADimValue, int in_pointBDimValue, int in_pointCDimValue)

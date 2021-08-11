@@ -9,12 +9,14 @@
 #include <mutex>
 #include <algorithm>
 #include "RScanDim.h"
+#include "DebugOption.h"
+#include "PolyLogger.h"
 
 class RTriangle
 {
 	public:
 		RTriangle();
-		RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2);
+		RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2, PolyDebugLevel in_rTriangleDebugLevel);
 		RTriangle(const RTriangle& in_triangleB);
 		RTriangle& operator=(const RTriangle& in_triangleB)
 		{
@@ -107,6 +109,7 @@ class RTriangle
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
 			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
+		void buildRegisters(PolyDebugLevel in_rTriangleDebugLevel);
 
 		RTriangleLine rLines[3];
 		std::unique_ptr<LookupByDimRegister[]> xDimRegister;
@@ -114,7 +117,6 @@ class RTriangle
 		std::unique_ptr<LookupByDimRegister[]> zDimRegister;
 		bool areRegistersSet = false;
 
-		void buildRegisters();
 };
 
 #endif

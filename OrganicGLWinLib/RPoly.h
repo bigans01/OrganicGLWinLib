@@ -9,6 +9,8 @@
 #include "RTriangleLine.h"
 #include "EnclaveKeyDef.h"
 #include <map>
+#include "DebugOption.h"
+#include "PolyLogger.h"
 
 class RPoly
 {
@@ -18,7 +20,8 @@ class RPoly
 			  int in_rPolyDimTiles, 
 			  float in_rPolyDimLimit, 
 			  float in_rPolyRCubeDimLength,
-			  float in_rPolyTileWeightToHundredthFloatRatio) 
+			  float in_rPolyTileWeightToHundredthFloatRatio,
+			  PolyDebugLevel in_rTriangleDebugLevel) 
 		{
 			rPolyTilesPerDim = in_rPolyDimTiles;
 			rPolyDimLimit = in_rPolyDimLimit;
@@ -33,6 +36,8 @@ class RPoly
 			{
 				// build each RTriangleLine from each STriangleLine, then build the RTriangle from those.
 				RTriangleLine builtLineArray[3];
+				PolyLogger rTriangleLogger;
+				rTriangleLogger.setDebugLevel(in_rTriangleDebugLevel);
 				for (int x = 0; x < 3; x++)
 				{
 					STriangleLine* currentLinePtr = &sTrianglesBegin->second.triangleLines[x];
@@ -41,31 +46,23 @@ class RPoly
 					glm::vec3 currentLinePointA = RUtils::convertToRasterGridPoint(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
 					glm::vec3 currentLinePointB = RUtils::convertToRasterGridPoint(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
 
-					std::cout << ">> original currentLinePointA: " << currentLinePtr->pointA.x << ", " << currentLinePtr->pointA.y << ", " << currentLinePtr->pointA.z << std::endl;
-					std::cout << ">> original currentLinePointB: " << currentLinePtr->pointB.x << ", " << currentLinePtr->pointB.y << ", " << currentLinePtr->pointB.z << std::endl;
-					std::cout << ">> currentLinePointB: " << currentLinePointB.x << ", " << currentLinePointB.y << ", " << currentLinePointB.z << std::endl;
-
 					// get raster cube cooridnates
 					EnclaveKeyDef::EnclaveKey pointARasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim);
 					EnclaveKeyDef::EnclaveKey pointBRasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim);
 
-					std::cout << ":: point A cube coord: " << pointARasterCubeCoord.x << ", " << pointARasterCubeCoord.y << ", " << pointARasterCubeCoord.z << std::endl;
-					std::cout << ":: point B cube coord: " << pointBRasterCubeCoord.x << ", " << pointBRasterCubeCoord.y << ", " << pointBRasterCubeCoord.z << std::endl;
-					std::cout << ":: float ratio: " << rPolyTileWeightToHundredthFloatRatio << std::endl;
+					rTriangleLogger.log("(RPoly): rPolyTileWeightToHundredthFloatRatio value: ", rPolyTileWeightToHundredthFloatRatio, "\n");
+					rTriangleLogger.log("(RPoly): current line, point A: ", currentLinePtr->pointA.x, ", ", currentLinePtr->pointA.y, ", ", currentLinePtr->pointA.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point B: ", currentLinePtr->pointB.x, ", ", currentLinePtr->pointB.y, ", ", currentLinePtr->pointB.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point A 3d raster grid point: ", currentLinePointA.x, ", ", currentLinePointA.y, ", ", currentLinePointA.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point B 3d raster grid point: ", currentLinePointB.x, ", ", currentLinePointB.y, ", ", currentLinePointB.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point A cube coordinate: ", pointARasterCubeCoord.x, ", ", pointARasterCubeCoord.y, ", ", pointARasterCubeCoord.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point B cube coordinate: ", pointBRasterCubeCoord.x, ", ", pointBRasterCubeCoord.y, ", ", pointBRasterCubeCoord.z, "\n");
+
 
 					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr, rPolyTileWeightToHundredthFloatRatio);
-
-					// hard-coded debug
-					/*
-					if (x == 2)
-					{
-						builtLine.debugFlag = true;
-					}
-					*/
-
 					builtLineArray[x] = builtLine;
 				}
-				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2]);
+				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel);
 
 				builtRTriangle.traceRasterLines();
 				addRTriangle(builtRTriangle);

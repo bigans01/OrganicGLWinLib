@@ -3,7 +3,12 @@
 
 void Rasterized3DMassGrid::addGridRPoly(SPoly in_sPolyToResolve)
 {
-	RPoly polyToResolve(in_sPolyToResolve, numberOfTilesPerDimension, dimensionLimit, rCubeDimensionalLength, tileDimWeightToHundredthFloatRatio);
+	RPoly polyToResolve(in_sPolyToResolve, 
+						numberOfTilesPerDimension,
+						dimensionLimit, 
+						rCubeDimensionalLength, 
+						tileDimWeightToHundredthFloatRatio, 
+						massGridLogLevel);
 	rPolyMap[gridRPolyCount++] = polyToResolve;
 }
 
@@ -22,6 +27,30 @@ void Rasterized3DMassGrid::buildShell()
 void Rasterized3DMassGrid::fillMass()
 {
 	dataArray.executeDownfills();
+}
+
+void Rasterized3DMassGrid::setGridParameters(int in_tilesPerDimension, float in_dimensionLimit)
+{
+	dimensionLimit = in_dimensionLimit;
+	numberOfTilesPerDimension = in_tilesPerDimension;
+	rCubeDimensionalLength = dimensionLimit / numberOfTilesPerDimension;	//  i.e., for Enclave resolution, this would be:
+																		// dimensionLimit = 4.0f
+																		// numberOfTilesPerDiemnsion = 400
+																		// tileGridWith = 0.01f	
+	//std::cout << "Rcube dimensional length: " << rCubeDimensionalLength << std::endl;
+	massGridLogger.log("(Rasterized3DMassGrid): Rcube dimensional length: ", rCubeDimensionalLength, "\n");
+
+	tileDimWeightToHundredthFloatRatio = 100.0f / (numberOfTilesPerDimension / dimensionLimit);
+	//std::cout << "tile weight to hundredth float ratio: " << tileDimWeightToHundredthFloatRatio << std::endl;
+	massGridLogger.log("(Rasterized3DMassGrid): tile weight to hundredth float ratio: ", tileDimWeightToHundredthFloatRatio, "\n");
+
+	dataArray.buildArray(in_tilesPerDimension);
+}
+
+void Rasterized3DMassGrid::setLoggerDebugLevel(PolyDebugLevel in_logLevel)
+{
+	massGridLogger.setDebugLevel(in_logLevel);
+	massGridLogLevel = in_logLevel;
 }
 
 bool Rasterized3DMassGrid::wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea)

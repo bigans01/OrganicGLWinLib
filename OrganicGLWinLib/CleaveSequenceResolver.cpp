@@ -3,7 +3,7 @@
 
 void CleaveSequenceResolver::addRPolyToResolve(SPoly in_sPolyToResolve)
 {
-	RPoly polyToResolve(in_sPolyToResolve, numberOfTilesPerDimension, dimensionLimit, rCubeDimensionalLength, tileDimWeightToHundredthFloatRatio);
+	RPoly polyToResolve(in_sPolyToResolve, numberOfTilesPerDimension, dimensionLimit, rCubeDimensionalLength, tileDimWeightToHundredthFloatRatio, PolyDebugLevel::NONE);
 	rPolyToResolve = polyToResolve;
 }
 

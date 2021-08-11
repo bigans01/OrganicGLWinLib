@@ -12,11 +12,22 @@
 #include "DynamicBorderLineList.h"
 #include "RPointToGridTranslator.h"
 #include "RCollisionPointToPTriangleMapContainer.h"
+#include "DebugOption.h"
+#include "DebugOptionSet.h"
+#include "PolyLogger.h"
 
 class RMorphableAreaScanner
 {
 	public:
 		RMorphableAreaScanner() {};
+
+		template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setScannerDOGeneric(FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+		{
+			scannerDebugOptions += firstOption;
+			handleGenericDO(std::forward<FirstDebugOption>(firstOption));
+			setScannerDOGeneric(std::forward<RemainingDebugOptions>(optionParams)...);
+		}
+		void setScannerDOGeneric() {};
 
 		// setupScanner must be called before adding any SPolys that are converted to RPolys.
 		void setupScanner(int in_tilesPerDimension, 
@@ -44,9 +55,12 @@ class RMorphableAreaScanner
 														// if the "at least one" condition is met, save the RMorphableMesh into a list.
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
 	private:
+		void acquireProducedSolutions();
+		void handleGenericDO(DebugOption in_debugOption);
+		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
+
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;
-		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
 		Rasterized3DMassGrid massGrid;
 		int scannerCellsPerDimension = 0;
 		int pointsPerSlicePointArray = 0;
@@ -58,7 +72,7 @@ class RMorphableAreaScanner
 		RPointToGridTranslator gridTranslator;
 		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
 
-		void acquireProducedSolutions();
+		DebugOptionSet scannerDebugOptions;
 };
 
 #endif

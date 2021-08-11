@@ -6,6 +6,14 @@ void RMorphableAreaScanner::addSPolyToGrid(SPoly in_sPolyToAdd)
 	massGrid.addGridRPoly(in_sPolyToAdd);
 }
 
+void RMorphableAreaScanner::handleGenericDO(DebugOption in_debugOption)
+{
+	switch (in_debugOption)
+	{
+		case DebugOption::RPOLY_RTRIANGLE_TRACING: { massGrid.setLoggerDebugLevel(PolyDebugLevel::DEBUG); break;}
+	}
+}
+
 void RMorphableAreaScanner::buildGridMassShell()
 {
 	auto shellBuildStart = std::chrono::high_resolution_clock::now();
@@ -130,16 +138,23 @@ void RMorphableAreaScanner::scanGridMass()
 	}
 	
 	// OPTIONAL: for debug output only.
-	auto meshGroupsBegin = meshGroupMap.begin();
-	auto meshGroupsEnd = meshGroupMap.end();
-	for (; meshGroupsBegin != meshGroupsEnd; meshGroupsBegin++)
+	if (scannerDebugOptions.containsOption(DebugOption::RPOLY_PRINT_RMORPHABLEMESHGROUP_MESH_KEYS))
 	{
-		std::cout << "Printing out contents for mesh group with ID " << meshGroupsBegin->first << ": " << std::endl;
-		auto meshGroupEntriesBegin = meshGroupsBegin->second.keyedMorphables.begin();
-		auto meshGroupEntriesEnd = meshGroupsBegin->second.keyedMorphables.end();
-		for (; meshGroupEntriesBegin != meshGroupEntriesEnd; meshGroupEntriesBegin++)
+		PolyLogger meshKeyOutputLogger;
+		meshKeyOutputLogger.setDebugLevel(PolyDebugLevel::DEBUG);
+		auto meshGroupsBegin = meshGroupMap.begin();
+		auto meshGroupsEnd = meshGroupMap.end();
+		for (; meshGroupsBegin != meshGroupsEnd; meshGroupsBegin++)
 		{
-			std::cout << "Mesh with key (" << meshGroupEntriesBegin->first.x << ", " << meshGroupEntriesBegin->first.y << ", " << meshGroupEntriesBegin->first.z << ") " << std::endl;
+			//std::cout << "Printing out contents for mesh group with ID " << meshGroupsBegin->first << ": " << std::endl;
+			meshKeyOutputLogger.log("(RMorphableAreaScanner): Printing out EnclaveKey values for RMorphableMesh in each RMorphableMeshGroup...", "\n");
+			auto meshGroupEntriesBegin = meshGroupsBegin->second.keyedMorphables.begin();
+			auto meshGroupEntriesEnd = meshGroupsBegin->second.keyedMorphables.end();
+			for (; meshGroupEntriesBegin != meshGroupEntriesEnd; meshGroupEntriesBegin++)
+			{
+				//std::cout << "Mesh with key (" << meshGroupEntriesBegin->first.x << ", " << meshGroupEntriesBegin->first.y << ", " << meshGroupEntriesBegin->first.z << ") " << std::endl;
+				meshKeyOutputLogger.log("(RMorphableAreaScanner): Key value found -> (", meshGroupEntriesBegin->first.x, ", ", meshGroupEntriesBegin->first.y, ", ", meshGroupEntriesBegin->first.z, ") ", "\n");
+			}
 		}
 	}
 
