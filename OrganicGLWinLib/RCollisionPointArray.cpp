@@ -36,6 +36,23 @@ RCollisionPoint* RCollisionPointArray::fetchPointRef(glm::vec3 in_pointToSearch)
 	return returnPointRef;
 }
 
+void RCollisionPointArray::updatePointsFoundWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef)
+{
+	for (int x = 0; x < currentArrayIndex; x++)
+	{
+		glm::vec3 currentPointValue = collisionPoints[x].currentValue;
+		EnclaveKeyDef::EnclaveKey currentPointKey = in_translatorRef->translatePointToGrid(currentPointValue);
+		MassGridSearchResult currentSearchResult = in_massGridArrayRef->searchForCell(currentPointKey.x, currentPointKey.y, currentPointKey.z);
+		if (currentSearchResult.wasSearchKeyValid == true)
+		{
+			if (currentSearchResult.cellRef->getNumberOfFlagsSet() > 0)
+			{
+				collisionPoints[x].setPointAsBeingWithinMass();
+			}
+		}
+	}
+}
+
 RCollisionPointSearchResult RCollisionPointArray::doesRCollisionPointExist(glm::vec3 in_pointToSearch)
 {
 	RCollisionPointSearchResult searchResult;

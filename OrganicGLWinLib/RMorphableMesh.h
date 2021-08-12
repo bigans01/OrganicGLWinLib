@@ -15,6 +15,7 @@
 #include "RMorphableMeshState.h"
 #include "RCollisionPointModifier.h"
 #include "PTriangleMesh.h"
+#include "PolyLogger.h"
 
 class RMorphableMesh
 {
@@ -38,8 +39,12 @@ class RMorphableMesh
 		void setMeshCorners(RMorphableMeshCorners in_meshCorners);
 		void printCornerPoints();
 		void updatePointUsageCounts();
-		void runSuctionByXSlice(float in_cubeDimLength, float in_tileDimWeightRatio, int in_tilesPerDim, MassGridArray* in_massGridArrayRef);
-		void generateRProductFaces();
+		void runSuctionByXSlice(float in_cubeDimLength, 
+								float in_tileDimWeightRatio, 
+								int in_tilesPerDim, 
+								MassGridArray* in_massGridArrayRef,
+								PolyLogger* in_suctionPolyLoggerRef);
+		void generateRProductFaces(bool in_debugOutputValue);
 		void updatePointState(RMorphableMeshState in_pointState);
 		RMorphableMeshState getMeshState();
 		void insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef);

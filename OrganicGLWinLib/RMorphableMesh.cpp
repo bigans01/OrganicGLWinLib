@@ -41,7 +41,7 @@ void RMorphableMesh::insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef
 	}
 }
 
-void RMorphableMesh::generateRProductFaces()
+void RMorphableMesh::generateRProductFaces(bool in_debugOutputValue)
 {
 	// check north face.
 	bool isNorthUsable = meshCorners.checkIfFaceIsUsable(ECBPPOrientations::CORNER_UPPERNW,
@@ -50,7 +50,10 @@ void RMorphableMesh::generateRProductFaces()
 														 ECBPPOrientations::CORNER_LOWERNW);
 	if (isNorthUsable == true)
 	{
-		std::cout << "Generating NORTHFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating NORTHFACE..." << std::endl;
+		}
 		RProductFaceRootPoints northRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERNW,
 																			ECBPPOrientations::CORNER_UPPERNE,
 																			ECBPPOrientations::CORNER_LOWERNE,
@@ -58,7 +61,7 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace northProductFace(northRootPoints);
 		glm::vec3 northFaceTargetEmptyNormal(0, 0, -1.0f);
 		rProductFaceMap[ECBPPOrientations::NORTHFACE] = northProductFace;
-		rProductFaceMap[ECBPPOrientations::NORTHFACE].generateFacePTriangles(northFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::NORTHFACE].generateFacePTriangles(northFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 	
 	// check east face.
@@ -68,7 +71,10 @@ void RMorphableMesh::generateRProductFaces()
 														ECBPPOrientations::CORNER_LOWERNE);
 	if (isEastUsable == true)
 	{
-		std::cout << "Generating EASTFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating EASTFACE..." << std::endl;
+		}
 		RProductFaceRootPoints eastRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERNE,
 																			ECBPPOrientations::CORNER_UPPERSE,
 																			ECBPPOrientations::CORNER_LOWERSE,
@@ -76,7 +82,7 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace eastProductFace(eastRootPoints);
 		glm::vec3 eastFaceTargetEmptyNormal(1.0f, 0, 0);
 		rProductFaceMap[ECBPPOrientations::EASTFACE] = eastProductFace;
-		rProductFaceMap[ECBPPOrientations::EASTFACE].generateFacePTriangles(eastFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::EASTFACE].generateFacePTriangles(eastFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 	
 	// check south face
@@ -86,7 +92,10 @@ void RMorphableMesh::generateRProductFaces()
 														ECBPPOrientations::CORNER_LOWERSE);
 	if (isSouthUsable == true)
 	{
-		std::cout << "Generating SOUTHFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating SOUTHFACE..." << std::endl;
+		}
 		RProductFaceRootPoints southRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERSE,
 																			ECBPPOrientations::CORNER_UPPERSW,
 																			ECBPPOrientations::CORNER_LOWERSW,
@@ -94,7 +103,7 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace southProductFace(southRootPoints);
 		glm::vec3 southFaceTargetEmptyNormal(0, 0, 1.0f);
 		rProductFaceMap[ECBPPOrientations::SOUTHFACE] = southProductFace;
-		rProductFaceMap[ECBPPOrientations::SOUTHFACE].generateFacePTriangles(southFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::SOUTHFACE].generateFacePTriangles(southFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 	
 	// check west face
@@ -104,7 +113,10 @@ void RMorphableMesh::generateRProductFaces()
 														ECBPPOrientations::CORNER_LOWERSW);
 	if (isWestUsable == true)
 	{
-		std::cout << "Generating WESTFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating WESTFACE..." << std::endl;
+		}
 		RProductFaceRootPoints westRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERSW,
 																			ECBPPOrientations::CORNER_UPPERNW,
 																			ECBPPOrientations::CORNER_LOWERNW,
@@ -112,7 +124,7 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace westProductFace(westRootPoints);
 		glm::vec3 westFaceTargetEmptyNormal(-1.0f, 0, 0);
 		rProductFaceMap[ECBPPOrientations::WESTFACE] = westProductFace;
-		rProductFaceMap[ECBPPOrientations::WESTFACE].generateFacePTriangles(westFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::WESTFACE].generateFacePTriangles(westFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 
 	// check top face
@@ -122,7 +134,10 @@ void RMorphableMesh::generateRProductFaces()
 														ECBPPOrientations::CORNER_UPPERNW);
 	if (isTopUsable == true)
 	{
-		std::cout << "Generating TOPFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating TOPFACE..." << std::endl;
+		}
 		RProductFaceRootPoints topRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_UPPERSW,
 																			ECBPPOrientations::CORNER_UPPERSE,
 																			ECBPPOrientations::CORNER_UPPERNE,
@@ -130,7 +145,7 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace topProductFace(topRootPoints);
 		glm::vec3 topFaceTargetEmptyNormal(0, 1.0f, 0);
 		rProductFaceMap[ECBPPOrientations::TOPFACE] = topProductFace;
-		rProductFaceMap[ECBPPOrientations::TOPFACE].generateFacePTriangles(topFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::TOPFACE].generateFacePTriangles(topFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 	
 	// check bottom face
@@ -140,7 +155,10 @@ void RMorphableMesh::generateRProductFaces()
 														ECBPPOrientations::CORNER_LOWERSW);
 	if (isBottomUsable == true)
 	{
-		std::cout << "Generating BOTTOMFACE..." << std::endl;
+		if (in_debugOutputValue == true)
+		{
+			std::cout << "Generating BOTTOMFACE..." << std::endl;
+		}
 		RProductFaceRootPoints bottomRootPoints = meshCorners.fetchRootPoints(ECBPPOrientations::CORNER_LOWERNW,
 																			ECBPPOrientations::CORNER_LOWERNE,
 																			ECBPPOrientations::CORNER_LOWERSE,
@@ -148,11 +166,15 @@ void RMorphableMesh::generateRProductFaces()
 		RProductFace bottomProductFace(bottomRootPoints);
 		glm::vec3 bottomFaceTargetEmptyNormal(0, -1.0f, 0);
 		rProductFaceMap[ECBPPOrientations::BOTTOMFACE] = bottomProductFace;
-		rProductFaceMap[ECBPPOrientations::BOTTOMFACE].generateFacePTriangles(bottomFaceTargetEmptyNormal);
+		rProductFaceMap[ECBPPOrientations::BOTTOMFACE].generateFacePTriangles(bottomFaceTargetEmptyNormal, in_debugOutputValue);
 	}
 }
 
-void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDimWeightRatio, int in_tilesPerDim, MassGridArray* in_massGridArrayRef)
+void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, 
+										float in_tileDimWeightRatio, 
+										int in_tilesPerDim, 
+										MassGridArray* in_massGridArrayRef,
+										PolyLogger* in_suctionPolyLoggerRef)
 {
 	RMorphableMeshCornerArray fetchedArray = meshCorners.getPointArray();
 
@@ -195,6 +217,7 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 
 		}
 		
+		/*
 		std::cout << ":: Point at array index " << x << "having original value of ( " << currentRefedPointOriginalValue.x << "," 
 															 << currentRefedPointOriginalValue.y << ", " << 
 																currentRefedPointOriginalValue.z << ") translates to array value: (" << translatedPoint.x << ", " << translatedPoint.y << ", " << translatedPoint.z 
@@ -204,6 +227,17 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 														    << "), wasFound = " << wasFound 
 													        << ", and has a " 
 															<< massValue << " mass; totalFlagsFound = " << totalFlagsFound << "; state = " << wasLandlocked << std::endl;
+		*/
+		in_suctionPolyLoggerRef->log("(RMorphableMesh) :: Point at array index ", x, " having original value of ( ", currentRefedPointOriginalValue.x, ", ",
+			currentRefedPointOriginalValue.y, ", ",
+			currentRefedPointOriginalValue.z, ") translated to array value: (", translatedPoint.x, ", ", translatedPoint.y, ", ", translatedPoint.z,
+			" and has a current value of (", currentRefedPointCurrentValue.x, ", ",
+			currentRefedPointCurrentValue.y, ", ",
+			currentRefedPointCurrentValue.z,
+			"), wasFound = ", wasFound,
+			", and has a ",
+			massValue, " mass; totalFlagsFound =  ", totalFlagsFound, "; state = ", wasLandlocked, "\n");
+
 	}
 
 	// attempt to run the point modifier on all 8 points of this mesh
@@ -212,5 +246,6 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength, float in_tileDim
 										in_cubeDimLength, 
 										in_tileDimWeightRatio, 
 										in_tilesPerDim, 
-										in_massGridArrayRef);
+										in_massGridArrayRef, 
+										in_suctionPolyLoggerRef);
 }

@@ -9,6 +9,8 @@
 #include "ECBPPOrientations.h"
 #include "DynamicBorderLineList.h"
 #include "ECBPPOrientationResults.h"
+#include "MassGridArray.h"
+#include "RPointToGridTranslator.h"
 
 class RCollisionPointArray
 {
@@ -34,6 +36,7 @@ class RCollisionPointArray
 		RCollisionPointSearchResult doesRCollisionPointExist(glm::vec3 in_pointToSearch);
 		RCollisionPoint* attemptPointInsert(glm::vec3 in_pointToSearch, ECBPPOrientationResults in_orientationResults);
 		RCollisionPoint* fetchPointRef(glm::vec3 in_pointToSearch);
+		void updatePointsFoundWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef);
 
 	private:
 		friend class RMorphableMeshGroup;

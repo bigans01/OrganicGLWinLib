@@ -11,7 +11,7 @@ class RAdditiveXSliceEastEnd : public RAdditiveSliceBase
 		void buildInitialPointSets();
 		void runInitialPointAdjustments();
 		void buildPointSets();
-		void buildPTriangles();
+		void buildPTriangles(bool in_buildDebugFlag);
 	private:
 		int yLimitMin = 1000;
 		int yLimitMax = 0;

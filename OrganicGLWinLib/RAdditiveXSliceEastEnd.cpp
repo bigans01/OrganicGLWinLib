@@ -196,7 +196,7 @@ void RAdditiveXSliceEastEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	}
 }
 
-void RAdditiveXSliceEastEnd::buildPTriangles()
+void RAdditiveXSliceEastEnd::buildPTriangles(bool in_buildDebugFlag)
 {
 
 }

@@ -23,6 +23,7 @@
 #include "MassGridArray.h"
 #include "RCollisionPointToPTriangleMapContainer.h"
 #include "PTriangleMesh.h"
+#include "DebugOptionSet.h"
 
 class RMorphableMeshGroup
 {
@@ -32,10 +33,12 @@ class RMorphableMeshGroup
 		void flagLandlockedMeshes();		// Step 1
 		void generatePointArray(int in_slicePointArraySize);					// Step 2
 		void updatePointLandlockStats();			// Step 3
+		void updatePointsWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef);
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
 		void generateRProductFacesInRemainingMeshes();
+		void insertMorphableMeshDebugOptions(std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> in_rMorphableMeshDebugOptions);
 
 		// For "Option 1"
 		void buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef);
@@ -54,14 +57,18 @@ class RMorphableMeshGroup
 
 	private:
 		friend class RMorphableAreaScanner;
+
+		void determineBestPointCount(int in_potentialPointCount);
+		bool checkForMorphableMeshDebugOption(EnclaveKeyDef::EnclaveKey in_morphableMeshKey, DebugOption in_optionToCheck);
+
 		int slicePointArraySize = 0;
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> keyedMorphables;
 		RCollisionPointArray meshGroupPointArray;
 		DynamicBorderLineList* dynamicBorderRef = nullptr;
 
 		std::map<int, std::unique_ptr<RAdditiveSliceBase>> sliceMap;	// stores the slices produced during the mesh group's chosen scan function
-		void determineBestPointCount(int in_potentialPointCount);
 		int setPointCount = 0;
+		std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> rMorphableMeshDebugOptions;
 
 };
 

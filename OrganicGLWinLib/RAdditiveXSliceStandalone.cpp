@@ -303,7 +303,7 @@ void RAdditiveXSliceStandalone::generateSetBRCollisionPoints(int in_numberOfPoin
 	}
 }
 
-void RAdditiveXSliceStandalone::buildPTriangles()
+void RAdditiveXSliceStandalone::buildPTriangles(bool in_buildDebugFlag)
 {
 
 }

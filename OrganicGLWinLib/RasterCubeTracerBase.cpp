@@ -233,6 +233,11 @@ void RasterCubeTracerBase::setOptionalCubeLookupRef(RasterCubeLookup* in_optiona
 	optionalCubeLookup = in_optionalCubeLookupRef;
 }
 
+void RasterCubeTracerBase::setOptionalPolyLoggerRef(PolyLogger* in_optionalLoggerRef)
+{
+	optionalLoggerRef = in_optionalLoggerRef;
+}
+
 DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoint in_originPoint,
 	DynamicBorderLineList* in_blockBorderRef,
 	ECBPolyPoint in_distanceValues,

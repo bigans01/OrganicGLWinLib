@@ -96,7 +96,7 @@ void RMorphableMeshGroup::flagLandlockedMeshes()
 			(belowKeyFound == true)
 		)
 		{
-			std::cout << "!! RMorphableMesh identified by key (" << removalScanBegin->first.x << ", " << removalScanBegin->first.y << ", " << removalScanBegin->first.z << ")" << std::endl;
+			//std::cout << "!! RMorphableMesh identified by key (" << removalScanBegin->first.x << ", " << removalScanBegin->first.y << ", " << removalScanBegin->first.z << ")" << std::endl;
 			keysToRemove.insert(removalScanBegin->first);
 		}
 	}
@@ -159,6 +159,11 @@ void RMorphableMeshGroup::updatePointLandlockStats()
 	}
 }
 
+void RMorphableMeshGroup::updatePointsWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef)
+{
+	meshGroupPointArray.updatePointsFoundWithinMass(in_massGridArrayRef, in_translatorRef);
+}
+
 bool RMorphableMeshGroup::doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey)
 {
 	bool wasFound;
@@ -188,23 +193,43 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 	auto generationRunEnd = keyedMorphables.end();
 	for (; generationRunBegin != generationRunEnd; generationRunBegin++)
 	{
+		PolyLogger currentKeyGenerationLogger;
+		currentKeyGenerationLogger.setDebugLevel(rMorphableMeshDebugOptions[generationRunBegin->first].returnDebugLevelIfFound(DebugOption::RMORPHABLEMESHGROUP_SPECIFIC_MESH_FACE_GENERATION));
+		bool debugValueCheck = currentKeyGenerationLogger.isLoggingSet();
 		if (generationRunBegin->second.getMeshState() == RMorphableMeshState::EXPOSED)
 		{
-			std::cout << "Generating associated faces and PTriangles for RMorphableMesh with key: " << generationRunBegin->first.x << ", " << generationRunBegin->first.y << ", " << generationRunBegin->first.z << std::endl;
-			generationRunBegin->second.generateRProductFaces();
-			int finishedGeneration = 3;
-			std::cin >> finishedGeneration;
+			currentKeyGenerationLogger.log("(RMorphableMeshGroup): Generating associated faces and PTriangles for RMorphableMesh with key: ", generationRunBegin->first.x, ", ", generationRunBegin->first.y, ", ", generationRunBegin->first.z, "\n");
+			generationRunBegin->second.generateRProductFaces(debugValueCheck);
+			currentKeyGenerationLogger.waitForDebugInput();
 		}
-		else
+
+		// if the value of getMeshState() is LANDLOCKED, we won't produce anything.
+		else if (generationRunBegin->second.getMeshState() == RMorphableMeshState::LANDLOCKED)
 		{
-			std::cout << "Mesh with key " << generationRunBegin->first.x << ", " << generationRunBegin->first.y << ", " << generationRunBegin->first.z << " is landlocked. Ignoring face production. " << std::endl;
+			currentKeyGenerationLogger.log("(RMorphableMeshGroup): Mesh with key ", generationRunBegin->first.x, ", ", generationRunBegin->first.y, ", ", generationRunBegin->first.z, " is landlocked. Ignoring face production. ", "\n");
 		}
 	}
+}
+
+void RMorphableMeshGroup::insertMorphableMeshDebugOptions(std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> in_rMorphableMeshDebugOptions)
+{
+	rMorphableMeshDebugOptions = in_rMorphableMeshDebugOptions;
 }
 
 void RMorphableMeshGroup::determineBestPointCount(int in_potentialPointCount)
 {
 	setPointCount = in_potentialPointCount;
+}
+
+bool RMorphableMeshGroup::checkForMorphableMeshDebugOption(EnclaveKeyDef::EnclaveKey in_morphableMeshKey, DebugOption in_optionToCheck)
+{
+	bool wasOptionFound = false;
+	auto keyFinder = rMorphableMeshDebugOptions.find(in_morphableMeshKey);
+	if (keyFinder != rMorphableMeshDebugOptions.end())
+	{
+		return keyFinder->second.containsOption(in_optionToCheck);
+	}
+	return wasOptionFound;
 }
 
 void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, float in_sliceThickness, int in_pointsPerSliceArray, RCollisionPointToPTriangleMapContainer* in_pointToTriangleMapContainerRef)
@@ -345,7 +370,7 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 		auto pTriangleProductionEnd = sliceMap.end();
 		for (; pTriangleProductionBegin != pTriangleProductionEnd; pTriangleProductionBegin++)
 		{
-			pTriangleProductionBegin->second.get()->buildPTriangles();
+			pTriangleProductionBegin->second.get()->buildPTriangles(false);
 		}
 	}
 
@@ -424,18 +449,27 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 		auto xSliceSetEnd = currentXSliceIndexSet.end();
 		for (; xSliceSetBegin != xSliceSetEnd; xSliceSetBegin++)
 		{
+			PolyLogger currentKeySuctionLogger;
+			currentKeySuctionLogger.setDebugLevel(rMorphableMeshDebugOptions[*xSliceSetBegin].returnDebugLevelIfFound(DebugOption::RMORPHABLEMESHGROUP_SPECIFIC_MESH_SUCTION));
 			if (keyedMorphables[*xSliceSetBegin].getMeshState() == RMorphableMeshState::EXPOSED)
 			{
-				std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, in_tileDimWeightRatio, in_tilesPerDim, in_massGridArrayRef);
+				//std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
+				currentKeySuctionLogger.log("(RMorphableMeshGroup): Running suction for mesh at key: ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "\n");
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, 
+																	in_tileDimWeightRatio, 
+																	in_tilesPerDim, 
+																	in_massGridArrayRef, 
+																	&currentKeySuctionLogger);
 			}
 			else
 			{
-				std::cout << "!! Mesh with key " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << "is landlocked; will not run suction. " << std::endl;
+				//std::cout << "!! Mesh with key " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << "is landlocked; will not run suction. " << std::endl;
+				currentKeySuctionLogger.log("(RMorphableMeshGroup): !! Mesh with key ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "is landlocked; will not run suction. \n");
 			}
 
-			int suctionWait = 3;
-			std::cin >> suctionWait;
+			//int suctionWait = 3;
+			//std::cin >> suctionWait;
+			currentKeySuctionLogger.waitForDebugInput();
 		}
 			
 

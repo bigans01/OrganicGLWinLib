@@ -58,7 +58,11 @@ void RMorphableAreaScanner::scanGridMass()
 				bool wasMassFound = massGrid.wasMassFoundInAreaScan(scanArea);
 				if (wasMassFound == true)
 				{
-					std::cout << "!! Notice: morphable mesh at mesh coord " << x << ", " << y << ", " << z << " contains mass. " << std::endl;
+					PolyLogger tempMassLogger;
+					tempMassLogger.setDebugLevel(scannerDebugOptions.returnDebugLevelIfFound(DebugOption::RMORPHABLEAREASCANNER_PRINT_MESHES_CONTAINING_MASS));
+					//std::cout << "!! Notice: morphable mesh at mesh coord " << x << ", " << y << ", " << z << " contains mass. " << std::endl;
+					tempMassLogger.log("(RMorphableAreaScanner): !! Notice: morphable mesh at mesh coord ", x, ", ", y, ", ", z, " contains mass. ", "\n");
+					
 					EnclaveKeyDef::EnclaveKey currentMeshKey(x, y, z);
 					ungroupedMeshes[currentMeshKey] = currentCandidateMesh;
 				}
@@ -70,7 +74,9 @@ void RMorphableAreaScanner::scanGridMass()
 	// Phase 2: run the code for building each group of keys.
 	if (!ungroupedMeshes.empty())
 	{
-		std::cout << "current size of ungrouped mesh, before move: " << ungroupedMeshes.size() << std::endl;
+		PolyLogger meshGroupBuildingLogger;
+		meshGroupBuildingLogger.setDebugLevel(scannerDebugOptions.returnDebugLevelIfFound(DebugOption::RMORPHABLEAREASCANNER_MESH_GROUP_CONSTRUCTION));
+		meshGroupBuildingLogger.log("(RMorphableAreaScanner): current size of ungrouped mesh, before move: ", ungroupedMeshes.size(), "\n");
 
 		// move the very first ungrouped mesh into the candidateMesh map; because we must start somewhere.
 		auto firstUngroupedMesh = ungroupedMeshes.begin();
@@ -78,8 +84,8 @@ void RMorphableAreaScanner::scanGridMass()
 		currentMeshGroup[firstKey] = std::move(firstUngroupedMesh->second);
 		ungroupedMeshes.erase(firstKey);
 
-		std::cout << "current size of ungrouped mesh, after move: " << ungroupedMeshes.size() << std::endl;
-		std::cout << "current size of currentMeshGroup: " << currentMeshGroup.size() << std::endl;
+		meshGroupBuildingLogger.log("(RMorphableAreaScanner): current size of ungrouped mesh, after move: ", ungroupedMeshes.size(), "\n");
+		meshGroupBuildingLogger.log("(RMorphableAreaScanner): current size of currentMeshGroup: ", currentMeshGroup.size(), "\n");
 
 		int remainingMeshesToHandle = ungroupedMeshes.size();
 		int currentMeshGroupID = 0;
@@ -89,6 +95,7 @@ void RMorphableAreaScanner::scanGridMass()
 
 			// compare each mesh to all meshes in the currentMeshGroup; 
 			EnclaveKeyDef::EnclaveKey foundKey;
+			EnclaveKeyDef::EnclaveKey candidateKey;
 			auto remainingMeshesBegin = ungroupedMeshes.begin();
 			auto remainingMeshesEnd = ungroupedMeshes.end();
 			for (; remainingMeshesBegin != remainingMeshesEnd; remainingMeshesBegin++)
@@ -97,18 +104,15 @@ void RMorphableAreaScanner::scanGridMass()
 				auto currentMeshGroupMeshesEnd = currentMeshGroup.end();
 				for (; currentMeshGroupMeshesBegin != currentMeshGroupMeshesEnd; currentMeshGroupMeshesBegin++)
 				{
-					EnclaveKeyDef::EnclaveKey candidateKey = remainingMeshesBegin->first;
+					candidateKey = remainingMeshesBegin->first;
 					EnclaveKeyDef::EnclaveKey currentMeshGroupMeshKey = currentMeshGroupMeshesBegin->first;
 					
-					//std::cout << "Comparing keys: keyA (" << candidateKey.x << ", " << candidateKey.y << ", " << candidateKey.z
-						//<< ") | keyB: (" << currentMeshGroupMeshKey.x << ", " << currentMeshGroupMeshKey.y << ", " << currentMeshGroupMeshKey.z << std::endl;
-
 					bool neighborsFound = checkIfKeysAreNeighbors(candidateKey, currentMeshGroupMeshKey);
 					if (neighborsFound == true)
 					{
 						foundKey = candidateKey;
 						wasMeshToStickToFound = true;
-						std::cout << ">>>> Mesh to stick was found; flagging for move. Key (" << foundKey.x << ", " << foundKey.y << ", " << foundKey.z << ") " << std::endl;
+						meshGroupBuildingLogger.log("(RMorphableAreaScanner): >>>> Mesh to stick was found; flagging for move. Key(", foundKey.x, ", ", foundKey.y, ", ", foundKey.z, "\n");
 						goto NEXTACTION;
 					}
 				}
@@ -123,7 +127,7 @@ void RMorphableAreaScanner::scanGridMass()
 			}
 			else if (wasMeshToStickToFound == false)
 			{
-				std::cout << "!! No stick found. " << std::endl;
+				meshGroupBuildingLogger.log("(RMorphableAreaScanner): No stick found, for key: ", candidateKey.x, ", ", candidateKey.y, ", ", candidateKey.z, "\n");
 				meshGroupMap[currentMeshGroupID++].keyedMorphables = currentMeshGroup;		// move over the current mesh group, because it didn't match to anything
 				currentMeshGroup.clear();													// clear it out
 
@@ -138,7 +142,7 @@ void RMorphableAreaScanner::scanGridMass()
 	}
 	
 	// OPTIONAL: for debug output only.
-	if (scannerDebugOptions.containsOption(DebugOption::RPOLY_PRINT_RMORPHABLEMESHGROUP_MESH_KEYS))
+	if (scannerDebugOptions.containsOption(DebugOption::RMORPHABLEAREASCANNER_PRINT_RMORPHABLEMESHGROUP_MESH_KEYS))
 	{
 		PolyLogger meshKeyOutputLogger;
 		meshKeyOutputLogger.setDebugLevel(PolyDebugLevel::DEBUG);
@@ -189,14 +193,15 @@ void RMorphableAreaScanner::scanGridMass()
 	auto origianlMeshRunEnd = meshGroupMap.end();
 	for (; originalMeshRunBegin != origianlMeshRunEnd; originalMeshRunBegin++)
 	{
+		originalMeshRunBegin->second.insertMorphableMeshDebugOptions(scannerStoredMeshDebugOptions);
 		originalMeshRunBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
 		originalMeshRunBegin->second.generatePointArray(8);
 		originalMeshRunBegin->second.generatePoints();							// generate all possible points
 		originalMeshRunBegin->second.updatePointLandlockStats();				// determine which points in the mesh are landlocked.
+		originalMeshRunBegin->second.updatePointsWithinMass(massGrid.fetchDataArrayRef(), &gridTranslator);
 		originalMeshRunBegin->second.flagLandlockedMeshes();					// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
 		originalMeshRunBegin->second.generateRProductFacesInRemainingMeshes();	// build the exposed faces in each mesh, and build the pTriangles in those faces.
-		originalMeshRunBegin->second.printLandlockedPoints();
-
+		//originalMeshRunBegin->second.printLandlockedPoints();
 	}
 	auto originalSuctionBegin = meshGroupMap.begin();
 	auto originalSuctionEnd = meshGroupMap.end();

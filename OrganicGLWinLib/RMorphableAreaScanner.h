@@ -20,6 +20,14 @@ class RMorphableAreaScanner
 {
 	public:
 		RMorphableAreaScanner() {};
+		template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setScannerDOSpecificRMorphableMesh(EnclaveKeyDef::EnclaveKey in_rMorphableMeshKey,
+																														FirstDebugOption && firstOption,
+																														RemainingDebugOptions && ...optionParams)
+		{
+			scannerStoredMeshDebugOptions[in_rMorphableMeshKey] += std::forward<FirstDebugOption>(firstOption);
+			setScannerDOSpecificRMorphableMesh(in_rMorphableMeshKey, std::forward<RemainingDebugOptions>(optionParams)...);
+		}
+		void setScannerDOSpecificRMorphableMesh(EnclaveKeyDef::EnclaveKey in_rMorphableMeshKey) {};
 
 		template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setScannerDOGeneric(FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
 		{
@@ -73,6 +81,9 @@ class RMorphableAreaScanner
 		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
 
 		DebugOptionSet scannerDebugOptions;
+
+		std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> scannerStoredMeshDebugOptions;	// debug option sets that may be used per RMorphableMesh; 
+																																// should be copied to each RMorphableMeshGroup
 };
 
 #endif

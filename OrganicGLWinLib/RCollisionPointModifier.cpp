@@ -21,18 +21,27 @@ void RCollisionPointModifier::runPointScan()
 				immutablePoints[immutablePointCounter++] = currentPointRef;
 				break;	// don't break my code, my achey breaky code, I just can't take it anymore (no really, you need to break, Mike)
 			};
+			case RCollisionPointState::WITHIN_MASS:
+			{
+				immutablePoints[immutablePointCounter++] = currentPointRef;
+				break;	// don't break my code, my achey breaky code, I just can't take it anymore (no really, you need to break, Mike)
+			}
 			case RCollisionPointState::MOVED:
 			{
 
-				std::cout << "----~~~~ Point " << currentPointRef->currentValue.x << ", " << currentPointRef->currentValue.y << ", " << currentPointRef->currentValue.z << " was already moved; ignoring. " << std::endl;
+				//std::cout << "----~~~~ Point " << currentPointRef->currentValue.x << ", " << currentPointRef->currentValue.y << ", " << currentPointRef->currentValue.z << " was already moved; ignoring. " << std::endl;
+				suctionPolyLoggerRef->log("(RCollisionPointModifier): ----~~~~ Point ", currentPointRef->currentValue.x, ", ", currentPointRef->currentValue.y, ", ", currentPointRef->currentValue.z, " was already moved; ignoring. ", "\n");
 				break;
 			}
 		}
 	}
 
 	// test: print point counts
-	std::cout << "Number of free points: " << freePointsCounter << std::endl;
-	std::cout << "Number of immutable points: " << immutablePointCounter << std::endl;
+	//std::cout << "Number of free points: " << freePointsCounter << std::endl;
+	//std::cout << "Number of immutable points: " << immutablePointCounter << std::endl;
+	suctionPolyLoggerRef->log("(RCollisionPointModifier): Number of free points: ", freePointsCounter, "\n");
+	suctionPolyLoggerRef->log("(RCollisionPointModifier): Number of immutable points: ", immutablePointCounter, "\n");
+
 
 	// for each free point, find it's nearest immutable point.
 	auto freePointItineraryGeneratorBegin = freePoints.begin();
@@ -72,7 +81,8 @@ void RCollisionPointModifier::runPointScan()
 												calculatedCubeDimLength, 
 												calculatedTileDimWeightRatio, 
 												tilesPerDim, 
-												modifierMassGridArrayRef);
+												modifierMassGridArrayRef, 
+												suctionPolyLoggerRef);
 			collisionPointItineraryMap[collisionPointItineraryMapIndex] = newItinerary;
 			collisionPointItineraryMap[collisionPointItineraryMapIndex].runJourney(&movedPointMap, &movedPointMapCurrentIndex);
 			collisionPointItineraryMapIndex++;

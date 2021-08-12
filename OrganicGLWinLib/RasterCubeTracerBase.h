@@ -11,6 +11,7 @@
 #include "ECBPolyPointTri.h"
 #include "DynamicEndpointMeta.h"
 #include "DynamicLinePointSynchronizer.h"
+#include "PolyLogger.h"
 
 class RasterCubeTracerBase
 {
@@ -29,6 +30,7 @@ class RasterCubeTracerBase
 			glm::vec3 in_endCubePoint);
 
 		void setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef);
+		void setOptionalPolyLoggerRef(PolyLogger* in_optionalLoggerRef);
 
 		virtual void runTrace() = 0;
 		void iterateToNextBlock();
@@ -43,20 +45,6 @@ class RasterCubeTracerBase
 		glm::vec3 tracerDirectionVector;
 
 	protected:
-		DynamicBorderLineList dynamicBorder;
-
-
-		ECBPolyPoint normalizedSlopeDirection;
-
-		float rasterCubeDimLength = 0.0f;
-		float lineLength = 0.0f;
-		float remainingDistance = 0.0f;
-		float tileWeightRatio = 0.0f;
-
-		// optional values
-		RasterCubeLookup* optionalCubeLookup = nullptr;
-		bool optionalMatchingBool = false;
-
 		DynamicEndpointMeta getDynamicEndpointMetaData(ECBPolyPoint in_originPoint, 
 													   DynamicBorderLineList* in_blockBorderRef, 
 			                                           ECBPolyPoint in_distanceValues, 
@@ -66,6 +54,22 @@ class RasterCubeTracerBase
 		ECBPolyPoint bindToNearestCorner(int in_xoryorz, ECBPolyPoint in_polyPoint);
 		ECBPolyPoint bindToNearestLine(int in_xoryorz, ECBPolyPoint in_polyPoint);
 		ECBPolyPoint getTrimmedPoint(ECBPolyPoint in_polyPoint);
+
+		DynamicBorderLineList dynamicBorder;
+
+
+		ECBPolyPoint normalizedSlopeDirection;
+
+		float rasterCubeDimLength = 0.0f;
+		float lineLength = 0.0f;
+		float remainingDistance = 0.0f;
+		float tileWeightRatio = 0.0f;
+		PolyLogger* optionalLoggerRef = nullptr;
+
+		// optional values
+		RasterCubeLookup* optionalCubeLookup = nullptr;
+		bool optionalMatchingBool = false;
+
 
 		bool debugFlag = false;
 };

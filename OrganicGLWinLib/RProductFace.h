@@ -21,11 +21,11 @@ class RProductFace
 				rootPointArray[x] = in_rootPoints.pointArray[x];
 			}
 		};
-		void generateFacePTriangles(glm::vec3 in_targetEmptyNormal)
+		void generateFacePTriangles(glm::vec3 in_targetEmptyNormal, bool in_faceDebugFlag)
 		{
 			// PTriangle for index 0
-			PTriangle pTriangle0(rootPointArray[0], rootPointArray[1], rootPointArray[2], in_targetEmptyNormal);
-			PTriangle pTriangle1(rootPointArray[2], rootPointArray[3], rootPointArray[0], in_targetEmptyNormal);
+			PTriangle pTriangle0(rootPointArray[0], rootPointArray[1], rootPointArray[2], in_targetEmptyNormal, in_faceDebugFlag);
+			PTriangle pTriangle1(rootPointArray[2], rootPointArray[3], rootPointArray[0], in_targetEmptyNormal, in_faceDebugFlag);
 
 			facePTriangles[0] = pTriangle0;
 			facePTriangles[1] = pTriangle1;

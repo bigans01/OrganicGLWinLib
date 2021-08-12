@@ -44,6 +44,14 @@ class RCollisionPoint
 			return isLandlocked;
 		}
 
+		void setPointAsBeingWithinMass()
+		{
+			if (pointState != RCollisionPointState::IMMUTABLE)
+			{
+				pointState = RCollisionPointState::WITHIN_MASS;
+			}
+		}
+
 		RCollisionPointState getCollisionPointState()
 		{
 			return pointState;

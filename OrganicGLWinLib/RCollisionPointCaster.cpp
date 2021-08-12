@@ -3,7 +3,8 @@
 
 void RCollisionPointCaster::runTrace()
 {
-	std::cout << ">>>> attempting RCollisionPointCaster trace..." << std::endl;
+	//std::cout << ">>>> attempting RCollisionPointCaster trace..." << std::endl;
+	optionalLoggerRef->log("(RCollisionPointCaster): >>>> attempting RCollisionPointCaster trace...", "\n");
 	bool casterContinuationFlag = true;
 
 	// check if the very first initial block has mass; don't bother continuing if it does
@@ -12,8 +13,8 @@ void RCollisionPointCaster::runTrace()
 	{
 		if (initialBlockSearchResult.cellRef->getNumberOfFlagsSet() > 0)
 		{
-			std::cout << "### Notice: very first currentCubeKey value has mass; discarding while loop. " << std::endl;
-
+			//std::cout << "### Notice: very first currentCubeKey value has mass; discarding while loop. " << std::endl;
+			optionalLoggerRef->log("(RCollisionPointCaster): ### Notice: very first currentCubeKey value has mass; discarding while loop, ", "\n");
 			// even if found initially as being with mass, update it as being moved.
 
 
@@ -39,7 +40,9 @@ void RCollisionPointCaster::runTrace()
 		{
 			if (currentBlockSearchResult.cellRef->getNumberOfFlagsSet() > 0)
 			{
-				std::cout << "!! Notice, point caster attempt found flags at block having key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+				//std::cout << "!! Notice, point caster attempt found flags at block having key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+				optionalLoggerRef->log("(RCollisionPointCaster): !! Notice, point caster attempt found flags at block having key: ", currentCubeKey.x, ", ", currentCubeKey.y, ", ", currentCubeKey.z, "\n");
+
 
 				// if found, update the point as being moved.
 
@@ -51,8 +54,11 @@ void RCollisionPointCaster::runTrace()
 		}
 	}
 
-	std::cout << ">>>> finished RCollisionPointCaster trace..." << std::endl;
-	std::cout << ":::::::::::: Final value of current cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+	//std::cout << ">>>> finished RCollisionPointCaster trace..." << std::endl;
+	//std::cout << ":::::::::::: Final value of current cube key: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
+
+	optionalLoggerRef->log("(RCollisionPointCaster): >>>> finished RCollisionPointCaster trace...", "\n");
+	optionalLoggerRef->log("(RCollisionPointCaster): :::::::::::: Final value of current cube key: ", currentCubeKey.x, ", ", currentCubeKey.y, ", ", currentCubeKey.z, "\n");
 }
 
 void RCollisionPointCaster::setGridArrayRef(MassGridArray* in_optionalMassGridArrayRef)

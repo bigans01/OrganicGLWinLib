@@ -148,7 +148,6 @@ class MassGridArray
 							MassGridArrayCell* currentRef = currentSearchResult.cellRef;
 							if (currentRef->isFlagSet(MassCellBitFlags::INNER_MASS))
 							{
-								std::cout << "!!! Notice: cell discovered. " << std::endl;
 								wereCellsDiscovered = true;
 								goto END;
 							}
@@ -160,6 +159,7 @@ class MassGridArray
 		}
 		
 	private:
+		friend class RCollisionPointArray;
 		std::unique_ptr<MassGridArrayCell[]> massCellArray;
 		int dimensionSize = 0;
 		MassGridArrayCell* getMassArrayDataRef(int in_x, int in_y, int in_z)

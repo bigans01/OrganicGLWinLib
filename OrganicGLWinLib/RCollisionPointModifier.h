@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "RCollisionPointCaster.h"
 #include "MassGridArray.h"
+#include "PolyLogger.h"
 
 class RCollisionPointModifier
 {
@@ -27,33 +28,47 @@ class RCollisionPointModifier
 								float in_calculatedCubeDimLength,
 								float in_calculatedTileDimWeightRatio, 
 								int in_tilesPerDim,
-								MassGridArray* in_modifierMassGridArrayRef) :
+								MassGridArray* in_modifierMassGridArrayRef,
+								PolyLogger* in_suctionPolyLoggerRef) :
 			meshCornerArrayRef(in_meshCornerArrayRef),
 			gridTranslatorRef(in_gridTranslatorRef),
 			calculatedCubeDimLength(in_calculatedCubeDimLength),
 			calculatedTileDimWeightRatio(in_calculatedTileDimWeightRatio),
 			tilesPerDim(in_tilesPerDim),
-			modifierMassGridArrayRef(in_modifierMassGridArrayRef)
+			modifierMassGridArrayRef(in_modifierMassGridArrayRef),
+			suctionPolyLoggerRef(in_suctionPolyLoggerRef)
 		{
 			runPointScan();	// use the meshCornerArrayRef to determine the point types and put each one into its appropriate map (immutablePoints, freePoints, etc)
 
 			// optional, can comment out when done
-			auto movedPointsBegin = movedPointMap.begin();
-			auto movedPointsEnd = movedPointMap.end();
-			for (; movedPointsBegin != movedPointsEnd; movedPointsBegin++)
+			if (suctionPolyLoggerRef->isLoggingSet())
 			{
-				std::cout << "!!! Moved point, original value: " << movedPointsBegin->second->originalValue.x << ", "
-					<< movedPointsBegin->second->originalValue.y << ", "
-					<< movedPointsBegin->second->originalValue.z << " | current value: "
-					<< movedPointsBegin->second->currentValue.x << " , "
-					<< movedPointsBegin->second->currentValue.y << " , "
-					<< movedPointsBegin->second->currentValue.z << std::endl;
+				auto movedPointsBegin = movedPointMap.begin();
+				auto movedPointsEnd = movedPointMap.end();
+				for (; movedPointsBegin != movedPointsEnd; movedPointsBegin++)
+				{
+					/*
+					std::cout << "!!! Moved point, original value: " << movedPointsBegin->second->originalValue.x << ", "
+						<< movedPointsBegin->second->originalValue.y << ", "
+						<< movedPointsBegin->second->originalValue.z << " | current value: "
+						<< movedPointsBegin->second->currentValue.x << " , "
+						<< movedPointsBegin->second->currentValue.y << " , "
+						<< movedPointsBegin->second->currentValue.z << std::endl;
+					*/
+					suctionPolyLoggerRef->log("(RCollisionPointModifier): !!! Moved point, original value: ", movedPointsBegin->second->originalValue.x, ", ",
+						movedPointsBegin->second->originalValue.y, ", ",
+						movedPointsBegin->second->originalValue.z, " | current value: ",
+						movedPointsBegin->second->currentValue.x, ", ",
+						movedPointsBegin->second->currentValue.y, ", ",
+						movedPointsBegin->second->currentValue.z, "\n");
+				}
 			}
 		};
 	private:
 		RMorphableMeshCornerArray* meshCornerArrayRef = nullptr;
 		RPointToGridTranslator* gridTranslatorRef = nullptr;
 		MassGridArray* modifierMassGridArrayRef = nullptr;
+		PolyLogger* suctionPolyLoggerRef = nullptr;
 		std::map<int, RCollisionPoint*> movedPointMap;		// will store any moved points that this modifier produced; it is optional, and being used for temporary
 															// debug/observation purposes
 		int movedPointMapCurrentIndex = 0;
@@ -83,14 +98,16 @@ class RCollisionPointModifier
 									float in_itineraryCubeDimLength, 
 									float in_itineraryTileDimWeightRatio,
 									int in_itineraryTilesPerDim,
-									MassGridArray* in_itineraryMassGridArrayRef
+									MassGridArray* in_itineraryMassGridArrayRef,
+									PolyLogger* in_suctionPolyLoggerRef
 									) :
 				pointToMove(in_pointToMove),
 				destinationPoint(in_destinationPoint),
 				itineraryCubeDimLength(in_itineraryCubeDimLength),
 				itineraryTileDimWeightRatio(in_itineraryTileDimWeightRatio),
 				itineraryTilesPerDim(in_itineraryTilesPerDim),
-				itineraryMassGridArrayRef(in_itineraryMassGridArrayRef)
+				itineraryMassGridArrayRef(in_itineraryMassGridArrayRef),
+				itineraryPolyLoggerRef(in_suctionPolyLoggerRef)
 			{};
 
 			void runJourney(std::map<int, RCollisionPoint*>* in_pointMapRef, int* in_pointMapCurrentIndex)
@@ -101,21 +118,34 @@ class RCollisionPointModifier
 				EnclaveKeyDef::EnclaveKey pointARasterCubeKey = RUtils::convertToRasterGridCell(pointToMove->currentValue, itineraryCubeDimLength, itineraryTilesPerDim);
 				EnclaveKeyDef::EnclaveKey pointBRasterCubeKey = RUtils::convertToRasterGridCell(destinationPoint->currentValue, itineraryCubeDimLength, itineraryTilesPerDim);
 
-				std::cout << ">> Journey Point A, rasterCubePointA: " << rasterCubePointA.x << ", " << rasterCubePointA.y << ", " << rasterCubePointA.z
-										<< " | pointARasterCubeKey: " << pointARasterCubeKey.x << ", " << pointARasterCubeKey.y << ", " << pointARasterCubeKey.z << std::endl;
+				//std::cout << ">> Journey Point A, rasterCubePointA: " << rasterCubePointA.x << ", " << rasterCubePointA.y << ", " << rasterCubePointA.z
+					//					<< " | pointARasterCubeKey: " << pointARasterCubeKey.x << ", " << pointARasterCubeKey.y << ", " << pointARasterCubeKey.z << std::endl;
+				itineraryPolyLoggerRef->log("(RCollisionPointModifier): >> Journey Point A, rasterCubePointA: ", rasterCubePointA.x, ", ", rasterCubePointA.y, ", ", rasterCubePointA.z,
+										   " | pointARasterCubeKey: ", pointARasterCubeKey.x, ", ", pointARasterCubeKey.y, ", ", pointARasterCubeKey.z, "\n");
 
-				std::cout << ">> Journey Point B, rasterCubePointB: " << rasterCubePointB.x << ", " << rasterCubePointB.y << ", " << rasterCubePointB.z
-										<< " | pointARasterCubeKey: " << pointBRasterCubeKey.x << ", " << pointBRasterCubeKey.y << ", " << pointBRasterCubeKey.z << std::endl;
+				//std::cout << ">> Journey Point B, rasterCubePointB: " << rasterCubePointB.x << ", " << rasterCubePointB.y << ", " << rasterCubePointB.z
+					//					<< " | pointARasterCubeKey: " << pointBRasterCubeKey.x << ", " << pointBRasterCubeKey.y << ", " << pointBRasterCubeKey.z << std::endl;
+				itineraryPolyLoggerRef->log("(RCollisionPointModifier): >> Journey Point B, rasterCubePointB: ", rasterCubePointB.x, ", ", rasterCubePointB.y, ", ", rasterCubePointB.z,
+										" | pointBRasterCubeKey: ", pointBRasterCubeKey.x, ", ", pointBRasterCubeKey.y, ", ", pointBRasterCubeKey.z, "\n");
 
-				std::cout << "Cube dim length: " << itineraryCubeDimLength << std::endl;
+				//std::cout << "Cube dim length: " << itineraryCubeDimLength << std::endl;
+				itineraryPolyLoggerRef->log("(RCollisionPointModifier): Cube dim length: ", itineraryCubeDimLength, "\n");
 
 				RCollisionPointCaster journeyPointCaster;
-				journeyPointCaster.setData(pointARasterCubeKey, pointBRasterCubeKey, rasterCubePointA, rasterCubePointB, itineraryCubeDimLength, itineraryTileDimWeightRatio, false);
+				journeyPointCaster.setData(pointARasterCubeKey, 
+										   pointBRasterCubeKey, 
+										   rasterCubePointA, 
+										   rasterCubePointB, 
+										   itineraryCubeDimLength, 
+										   itineraryTileDimWeightRatio, 
+										   false);
+				journeyPointCaster.setOptionalPolyLoggerRef(itineraryPolyLoggerRef);
 				journeyPointCaster.setGridArrayRef(itineraryMassGridArrayRef);
 				journeyPointCaster.setPointToMoveRef(pointToMove);
 				journeyPointCaster.runTrace();
 				glm::vec3 convertedPoint = journeyPointCaster.getConvertedTraceEndPoint();
-				std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
+				//std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
+				itineraryPolyLoggerRef->log("(RCollisionPointModifier): Converted point is: ", convertedPoint.x, ", ", convertedPoint.y, ", ", convertedPoint.z, "\n");
 
 				(*in_pointMapRef)[(*in_pointMapCurrentIndex)++] = pointToMove;	// testing only
 			};
@@ -123,6 +153,7 @@ class RCollisionPointModifier
 			RCollisionPoint* pointToMove = nullptr;
 			RCollisionPoint* destinationPoint = nullptr;
 			MassGridArray* itineraryMassGridArrayRef = nullptr;
+			PolyLogger* itineraryPolyLoggerRef = nullptr;
 			float itineraryCubeDimLength = 0.0f;
 			float itineraryTileDimWeightRatio = 0.0f;
 			int itineraryTilesPerDim = 0;

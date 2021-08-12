@@ -304,7 +304,7 @@ void RAdditiveXSliceWestEnd::generateSetBRCollisionPoints(int in_numberOfPointsB
 	}
 }
 
-void RAdditiveXSliceWestEnd::buildPTriangles()
+void RAdditiveXSliceWestEnd::buildPTriangles(bool in_buildDebugFlag)
 {
 	// first "ribbon" of triangles, goes from 4, 0 (corner 0) to 0, 0 (corner 1):
 
@@ -330,7 +330,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 
 		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
 		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-		PTriangle triangleA(point0Ref, point1Ref, point2Ref, firstRibbonEmptyNormal);
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, firstRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleA;
 		for (int x = 0; x < 3; x++)
@@ -341,7 +341,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 		pTriangleMapIndex++;
 
 		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-		PTriangle triangleB(point2Ref, point1Ref, point3Ref, firstRibbonEmptyNormal);
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, firstRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleB;
 		for (int x = 0; x < 3; x++)
@@ -369,7 +369,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 
 		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
 		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-		PTriangle triangleA(point0Ref, point1Ref, point2Ref, secondRibbonEmptyNormal);
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, secondRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleA;
 		for (int x = 0; x < 3; x++)
@@ -380,7 +380,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 		pTriangleMapIndex++;
 
 		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-		PTriangle triangleB(point2Ref, point1Ref, point3Ref, secondRibbonEmptyNormal);
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, secondRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleB;
 		for (int x = 0; x < 3; x++)
@@ -409,7 +409,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 
 		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
 		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-		PTriangle triangleA(point0Ref, point1Ref, point2Ref, thirdRibbonEmptyNormal);
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, thirdRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleA;
 		for (int x = 0; x < 3; x++)
@@ -420,7 +420,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 		pTriangleMapIndex++;
 
 		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-		PTriangle triangleB(point2Ref, point1Ref, point3Ref, thirdRibbonEmptyNormal);
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, thirdRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleB;
 		for (int x = 0; x < 3; x++)
@@ -449,7 +449,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 
 		// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
 		//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-		PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal);
+		PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleA;
 		for (int x = 0; x < 3; x++)
@@ -460,7 +460,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 		pTriangleMapIndex++;
 
 		//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-		PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal);
+		PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal, in_buildDebugFlag);
 		PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 		pTriangleMap[pTriangleMapIndex] = triangleB;
 		for (int x = 0; x < 3; x++)
@@ -484,7 +484,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 
 	// triangle 1 in current ribbon tile = point0Ref, point1Ref, point2Ref
 	//std::cout << "||::::::::::::::: building triangle 0" << std::endl;
-	PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal);
+	PTriangle triangleA(point0Ref, point1Ref, point2Ref, fourthRibbonEmptyNormal, in_buildDebugFlag);
 	PTrianglePointLinkArray triangleALinks = triangleA.fetchLinkArray();
 	pTriangleMap[pTriangleMapIndex] = triangleA;
 	for (int x = 0; x < 3; x++)
@@ -495,7 +495,7 @@ void RAdditiveXSliceWestEnd::buildPTriangles()
 	pTriangleMapIndex++;
 
 	//std::cout << "||::::::::::::::: building triangle 1" << std::endl;
-	PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal);
+	PTriangle triangleB(point2Ref, point1Ref, point3Ref, fourthRibbonEmptyNormal, in_buildDebugFlag);
 	PTrianglePointLinkArray triangleBLinks = triangleB.fetchLinkArray();
 	pTriangleMap[pTriangleMapIndex] = triangleB;
 	for (int x = 0; x < 3; x++)
