@@ -6,11 +6,17 @@ RTriangle::RTriangle()
 
 };
 
-RTriangle::RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2, PolyDebugLevel in_rTriangleDebugLevel)
+RTriangle::RTriangle(RTriangleLine in_line0, 
+					RTriangleLine in_line1, 
+					RTriangleLine in_line2, 
+					PolyDebugLevel in_rTriangleDebugLevel,
+					short in_rTriangleMaterialID)
 {
 	rLines[0] = in_line0;
 	rLines[1] = in_line1;
 	rLines[2] = in_line2;
+
+	rTriangleMaterialID = in_rTriangleMaterialID;
 
 	// once lines are set up, initialize the dim registers (xDimRegister, yDimRegister, zDimRegister)
 	buildRegisters(in_rTriangleDebugLevel);

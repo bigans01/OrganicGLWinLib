@@ -39,6 +39,7 @@ public:
 	void addTriangle(STriangle in_triangle);
 	void setMRP(glm::vec3 in_mrp);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
+	void setSPolyMaterial(short in_sPolyMaterialID);
 	void calculateEmptyNormal();
 	bool isSPolyValid();
 	int groupID = 0;				// the ID of the group that this poly belongs to
@@ -76,6 +77,7 @@ private:
 	int numberOfBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
+	short sPolyMaterialID = 0;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
 	glm::vec3 primePoint0, primePoint1, primePoint2;	// the very first points of the polygon
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
 	short numberOfTriangles = 0;	// the number of triangles

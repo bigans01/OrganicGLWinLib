@@ -28,6 +28,7 @@ class RPoly
 			rPolyRCubeDimLength = in_rPolyRCubeDimLength;
 			rPolyTileWeightToHundredthFloatRatio = in_rPolyTileWeightToHundredthFloatRatio;
 			rPolyEmptyNormal = in_sPolyToBuildFrom.polyEmptyNormal;
+			rPolyMaterialID = in_sPolyToBuildFrom.sPolyMaterialID;
 
 			// read each STriangle to create an RTriangle
 			auto sTrianglesBegin = in_sPolyToBuildFrom.triangles.begin();
@@ -62,7 +63,7 @@ class RPoly
 					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr, rPolyTileWeightToHundredthFloatRatio);
 					builtLineArray[x] = builtLine;
 				}
-				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel);
+				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel, rPolyMaterialID);
 
 				builtRTriangle.traceRasterLines();
 				addRTriangle(builtRTriangle);
@@ -96,6 +97,7 @@ class RPoly
 		float rPolyTileWidth = 0.0f;
 		float rPolyRCubeDimLength = 0.0f;
 		float rPolyTileWeightToHundredthFloatRatio = 0.0f;
+		short rPolyMaterialID = 0;
 		short numberOfRTriangles = 0;
 		short numberOfRBorderLines = 0;
 		glm::vec3 rPolyEmptyNormal;

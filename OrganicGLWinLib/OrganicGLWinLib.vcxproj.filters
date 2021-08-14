@@ -1206,6 +1206,15 @@
     <ClInclude Include="PTriangleMesh.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="RMatterGenerator.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMatterCollider.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMatterAge.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1770,6 +1779,12 @@
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="RCollisionPointCaster.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RMatterGenerator.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="RMatterCollider.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
   </ItemGroup>

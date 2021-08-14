@@ -8,6 +8,7 @@
 #include "MassZoneBoxType.h"
 #include <map>
 #include "MassZoneBoxBoundaryOrientation.h"
+#include <vector>
 
 class BorderSPolyProducer
 {
@@ -23,6 +24,7 @@ class BorderSPolyProducer
 		void addInputSPoly(SPoly in_inputSPoly);						// Step 1: add all input SPolys
 		void configurePolysWithoutNormalCalcs();						// Step 2: configure empty normals
 		void produceBorderSPolys(MassZoneBoxType in_massZoneBoxType);	// Step 3: produce the border SPolys
+		std::vector<SPoly> fetchAllSPolys();
 	private:
 		std::map<int, SPoly> inputSPolys;
 		std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup> outputSPolySuperGroups;

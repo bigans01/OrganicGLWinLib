@@ -12,6 +12,11 @@ void SPoly::setEmptyNormal(float in_x, float in_y, float in_z)
 	polyEmptyNormal = glm::normalize(rawEmptyNormal);
 }
 
+void SPoly::setSPolyMaterial(short in_sPolyMaterialID)
+{
+	sPolyMaterialID = in_sPolyMaterialID;
+}
+
 bool SPoly::isSPolyValid()
 {
 	bool isValid = true;

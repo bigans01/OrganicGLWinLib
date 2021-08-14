@@ -16,7 +16,11 @@ class RTriangle
 {
 	public:
 		RTriangle();
-		RTriangle(RTriangleLine in_line0, RTriangleLine in_line1, RTriangleLine in_line2, PolyDebugLevel in_rTriangleDebugLevel);
+		RTriangle(RTriangleLine in_line0, 
+				RTriangleLine in_line1, 
+				RTriangleLine in_line2, 
+				PolyDebugLevel in_rTriangleDebugLevel,
+				short in_rTriangleMaterialID);
 		RTriangle(const RTriangle& in_triangleB);
 		RTriangle& operator=(const RTriangle& in_triangleB)
 		{
@@ -116,6 +120,7 @@ class RTriangle
 		std::unique_ptr<LookupByDimRegister[]> yDimRegister;
 		std::unique_ptr<LookupByDimRegister[]> zDimRegister;
 		bool areRegistersSet = false;
+		short rTriangleMaterialID = 0;
 
 };
 

@@ -30,6 +30,11 @@ void RMorphableAreaScanner::fillGridMass()
 	massGrid.fillMass();
 }
 
+MassGridArray* RMorphableAreaScanner::fetchMassGridArrayRef()
+{
+	return &massGrid.dataArray;
+}
+
 void RMorphableAreaScanner::scanGridMass()
 {
 	// Generate the dynamic border line list, that all mesh groups will need to have a reference to.

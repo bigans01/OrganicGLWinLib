@@ -13,6 +13,11 @@
 class MassGridArray
 {
 	public:
+		int getArraySize()
+		{
+			return dimensionSize * dimensionSize * dimensionSize;
+		}
+
 		void executeDownfills()
 		{
 			auto downfillExecutionBegin = std::chrono::high_resolution_clock::now();
@@ -86,6 +91,11 @@ class MassGridArray
 		{
 			dimensionSize = in_dimensionSize;
 			massCellArray.reset(new MassGridArrayCell[dimensionSize*dimensionSize*dimensionSize]);
+		}
+
+		MassGridArrayCell* getArrayRef()
+		{
+			return massCellArray.get();
 		}
 
 		MassGridSearchResult searchForCell(int in_x, int in_y, int in_z)

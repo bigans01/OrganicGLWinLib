@@ -61,8 +61,10 @@ class RMorphableAreaScanner
 		void fillGridMass();							// Step 4: fill the mass inside the mass shell
 		void scanGridMass();							// Step 5: scan the grid mass, to determine all RMorphableMesh's that have at least one MassGridArrayCell within the mass; 
 														// if the "at least one" condition is met, save the RMorphableMesh into a list.
+		MassGridArray* fetchMassGridArrayRef();
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
 	private:
+		friend class RMatterCollider;
 		void acquireProducedSolutions();
 		void handleGenericDO(DebugOption in_debugOption);
 		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);

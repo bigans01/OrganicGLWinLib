@@ -78,3 +78,30 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 	}
 
 }
+
+std::vector<SPoly> BorderSPolyProducer::fetchAllSPolys()
+{
+	std::vector<SPoly> returnVector;
+
+	// push back all SPolys that were inserted to produce the bordering SPolys (from the call to addInputSPoly)
+	auto addedSPolysBegin = inputSPolys.begin();
+	auto addedSPolysEnd = inputSPolys.end();
+	for (; addedSPolysBegin != addedSPolysEnd; addedSPolysBegin++)
+	{
+		returnVector.push_back(addedSPolysBegin->second);
+	}
+
+	// push back all SPolys from each generated SPoly super group.
+	auto generatedSPolysBegin = outputSPolySuperGroups.begin();
+	auto generatedSPolysEnd = outputSPolySuperGroups.end();
+	for (; generatedSPolysBegin != generatedSPolysEnd; generatedSPolysBegin++)
+	{
+		auto currentGroupSPolysBegin = generatedSPolysBegin->second.sPolyMap.begin();
+		auto currentGroupSPolysEnd = generatedSPolysBegin->second.sPolyMap.end();
+		for (; currentGroupSPolysBegin != currentGroupSPolysEnd; currentGroupSPolysBegin++)
+		{
+			returnVector.push_back(currentGroupSPolysBegin->second);
+		}
+	}
+	return returnVector;
+}

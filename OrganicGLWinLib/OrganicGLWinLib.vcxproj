@@ -316,6 +316,9 @@
     <ClInclude Include="RCollisionPointState.h" />
     <ClInclude Include="RCollisionPointToPTriangleMapper.h" />
     <ClInclude Include="RCollisionPointToPTriangleMapContainer.h" />
+    <ClInclude Include="RMatterAge.h" />
+    <ClInclude Include="RMatterCollider.h" />
+    <ClInclude Include="RMatterGenerator.h" />
     <ClInclude Include="RMorphableMeshCornerArray.h" />
     <ClInclude Include="RMorphableMeshState.h" />
     <ClInclude Include="RPointToGridTranslator.h" />
@@ -668,6 +671,8 @@
     <ClCompile Include="RayIntersectionResult.cpp" />
     <ClCompile Include="RCollisionPointCaster.cpp" />
     <ClCompile Include="RCollisionPointModifier.cpp" />
+    <ClCompile Include="RMatterCollider.cpp" />
+    <ClCompile Include="RMatterGenerator.cpp" />
     <ClCompile Include="RMorphableAreaScanner.cpp" />
     <ClCompile Include="RMorphableMesh.cpp" />
     <ClCompile Include="RMorphableMeshGroup.cpp" />
