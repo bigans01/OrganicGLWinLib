@@ -6,6 +6,7 @@
 #include "RMatterGenerator.h"
 #include "RMatterAge.h"
 #include "MassZoneBoxType.h"
+#include "RMatterCollisionMode.h"
 
 class RMatterCollider
 {
@@ -15,7 +16,8 @@ class RMatterCollider
 								float in_colliderDimensionLimit,
 								int in_colliderMeshesPerDimension,
 								int in_colliderPointsPerSlicePointArray,
-								MassZoneBoxType in_colliderMassZoneBoxType);
+								MassZoneBoxType in_colliderMassZoneBoxType,
+								RMatterCollisionMode in_colliderMode);
 		void addSPolyToMatterGenerator(SPoly in_sPolyToAdd, RMatterAge in_rMatterAge);		// Step 1: run this function for each SPoly that needs to be added to the collider
 		void generateAndMoveSPolyResultsToScanners();										// Step 2: once all SPolys have been added, run the BorderSPolyProducer in each RMatterGenerator, 
 																							// and move the results of that producer to the scanner in each RMatterGenerator.
@@ -29,7 +31,13 @@ class RMatterCollider
 		// Step 5: Produce the PTriangleMesh that exists in the collidableScanner, by running 
 		void generateCollidedMatterResult();
 
+		RMorphableAreaScanner* getOldMatterScannerRef();
+		RMorphableAreaScanner* getNewMatterScannerRef();
+
+		RMorphableAreaScanner collidableScanner;
 	private:
+		RMatterCollisionMode colliderMode = RMatterCollisionMode::NOVAL;
+
 		int colliderTilesPerDimension = 0;
 		float colliderDimensionLimit = 0.0f;
 		int colliderMeshesPerDimension = 0;
@@ -39,7 +47,6 @@ class RMatterCollider
 		RMatterGenerator oldMatterGenerator;
 		RMatterGenerator newMatterGenerator;
 		
-		RMorphableAreaScanner collidableScanner;
 
 };
 

@@ -5,13 +5,15 @@ void RMatterCollider::initializeCollider(int in_colliderTilesPerDimension,
 	float in_colliderDimensionLimit,
 	int in_colliderMeshesPerDimension,
 	int in_colliderPointsPerSlicePointArray,
-	MassZoneBoxType in_colliderMassZoneBoxType)
+	MassZoneBoxType in_colliderMassZoneBoxType,
+	RMatterCollisionMode in_colliderMode)
 {
 	colliderTilesPerDimension = in_colliderTilesPerDimension;
 	colliderDimensionLimit = in_colliderDimensionLimit;
 	colliderMeshesPerDimension = in_colliderMeshesPerDimension;
 	colliderPointsPerSlicePointArray = in_colliderPointsPerSlicePointArray;
 	colliderMassZoneBoxType = in_colliderMassZoneBoxType;
+	colliderMode = in_colliderMode;
 
 	// initialize both RMatterGenerators, once collider values are initialized
 	oldMatterGenerator.initializeGenerator(colliderTilesPerDimension,
@@ -77,7 +79,19 @@ void RMatterCollider::appendOldMatterToScanner()
 
 void RMatterCollider::appendNewMatterToScanner()
 {
-
+	if (newMatterGenerator.containsMass == true)
+	{
+		if (colliderMode == RMatterCollisionMode::MATTER)
+		{
+			std::cout << "~~~~ Beginning append of new matter to scanner..." << std::endl;
+			collidableScanner.massGrid.appendMatterFromOtherArray(newMatterGenerator.generatorAreaScanner.fetchMassGridArrayRef());
+		}
+		else if (colliderMode == RMatterCollisionMode::ANTIMATTER)
+		{
+			std::cout << "~~~~ Beginning append of new antimatter to scanner..." << std::endl;
+			collidableScanner.massGrid.appendAntiMatterFromOtherArray(newMatterGenerator.generatorAreaScanner.fetchMassGridArrayRef());
+		}
+	}
 }
 
 void RMatterCollider::generateCollidedMatterResult()
@@ -93,4 +107,15 @@ void RMatterCollider::generateCollidedMatterResult()
 		totalTriangleCount += currentMeshBegin->second.groupMesh.getMeshPTriangleCount();
 	}
 	std::cout << "+++++++ collidableScanner, totalTriangleCount: " << totalTriangleCount << std::endl;
+	std::cout << "+++++++ Number of populated grid cells: " << collidableScanner.fetchMassGridArrayRef()->getNumberOfPopulatedCells() << std::endl;
+}
+
+RMorphableAreaScanner* RMatterCollider::getOldMatterScannerRef()
+{
+	return &oldMatterGenerator.generatorAreaScanner;
+}
+
+RMorphableAreaScanner* RMatterCollider::getNewMatterScannerRef()
+{
+	return &newMatterGenerator.generatorAreaScanner;
 }

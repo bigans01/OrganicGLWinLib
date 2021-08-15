@@ -318,6 +318,7 @@
     <ClInclude Include="RCollisionPointToPTriangleMapContainer.h" />
     <ClInclude Include="RMatterAge.h" />
     <ClInclude Include="RMatterCollider.h" />
+    <ClInclude Include="RMatterCollisionMode.h" />
     <ClInclude Include="RMatterGenerator.h" />
     <ClInclude Include="RMorphableMeshCornerArray.h" />
     <ClInclude Include="RMorphableMeshState.h" />

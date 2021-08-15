@@ -483,10 +483,15 @@ void RMorphableMeshGroup::produceSolution()
 	auto faceScanEnd = keyedMorphables.end();
 	for (; faceScanBegin != faceScanEnd; faceScanBegin++)
 	{
-		if (faceScanBegin->second.getMeshState() == RMorphableMeshState::EXPOSED)
-		{
-			faceScanBegin->second.insertPTrianglesIntoMesh(&groupMesh);
-		}
+		//EnclaveKeyDef::EnclaveKey currentKey = faceScanBegin->first;
+		//if (currentKey.equals(2, 0, 0))
+		//{
+
+			if (faceScanBegin->second.getMeshState() == RMorphableMeshState::EXPOSED)
+			{
+				faceScanBegin->second.insertPTrianglesIntoMesh(&groupMesh);
+			}
+		//}
 	}
 
 	groupMesh.rebuildPTriangleNormals();

@@ -103,8 +103,10 @@ class RTriangleLine
 					{
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
-						currentSearchResult.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, in_downFillCrustBit);
-						currentSearchResult.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
+						//currentSearchResult.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, in_downFillCrustBit);
+						//currentSearchResult.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
+						currentSearchResult.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::DOWNFILL_CRUST, in_downFillCrustBit);
+						currentSearchResult.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
 
 						currentSearchResult.cellRef->insertEmptyNormal(in_emptyNormal);

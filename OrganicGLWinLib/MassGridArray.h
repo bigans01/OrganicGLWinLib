@@ -167,6 +167,20 @@ class MassGridArray
 			}
 			END:return wereCellsDiscovered;
 		}
+
+		int getNumberOfPopulatedCells()
+		{
+			int arraySize = dimensionSize * dimensionSize * dimensionSize;
+			int count = 0;
+			for (int x = 0; x < arraySize; x++)
+			{
+				if (massCellArray[x].getNumberOfFlagsSet() > 0)
+				{
+					count++;
+				}
+			}
+			return count;
+		}
 		
 	private:
 		friend class RCollisionPointArray;

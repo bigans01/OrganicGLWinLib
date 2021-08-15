@@ -49,8 +49,10 @@ void RTriangleInteriorAreaTracer::runTrace()
 		{
 			result.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
 			result.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
-			result.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
-			result.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
+			//result.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
+			//result.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
+			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
+			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
 
 			result.cellRef->insertEmptyNormal(tracerEmptyNormal);
 		}

@@ -1215,6 +1215,9 @@
     <ClInclude Include="RMatterAge.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="RMatterCollisionMode.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

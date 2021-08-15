@@ -11,6 +11,31 @@ class MassGridArrayCell
 {
 	public:
 		unsigned char cellData = 0;
+		void resetCell()
+		{
+			cellData = 0;
+		}
+
+		void setFlagNoOverrideIfActive(MassCellBitFlags in_flagToSet, int in_bitValue)
+		{
+			int bitToSet = 0;
+			switch (in_flagToSet)
+			{
+			case(MassCellBitFlags::LINE_MASS): { bitToSet = 8; break; }
+			case(MassCellBitFlags::CRUST_MASS): { bitToSet = 7; break; }
+			case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
+			case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
+			case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
+			}
+
+			int exponent = bitToSet - 1;
+			int bitValue = int(pow(2, exponent));
+			if (in_bitValue == 1)
+			{
+				cellData |= (1 << exponent);
+			}
+		}
+
 		void setFlag(MassCellBitFlags in_flagToSet, int in_bitValue)
 		{
 			int bitToSet = 0;

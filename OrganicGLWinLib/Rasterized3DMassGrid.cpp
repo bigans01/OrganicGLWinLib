@@ -42,6 +42,34 @@ void Rasterized3DMassGrid::appendMatterFromOtherArray(MassGridArray* in_otherDat
 	}
 }
 
+void Rasterized3DMassGrid::appendAntiMatterFromOtherArray(MassGridArray* in_otherDataArrayRef)
+{
+	int dataArraySize = dataArray.getArraySize();
+	std::cout << "~~~~ dataArraySize: " << dataArraySize << std::endl;
+
+	int otherDataArraySize = in_otherDataArrayRef->getArraySize();
+	if
+	(
+		(dataArraySize == otherDataArraySize) // will only append if the arrays are equal in size.
+		&&
+		(dataArraySize > 0)					  // array must be initialized; initialized arrays won't have this value == 0.
+	)
+	{
+		MassGridArrayCell* thisInstanceArrayRef = dataArray.getArrayRef();
+		MassGridArrayCell* otherInstanceArrayRef = in_otherDataArrayRef->getArrayRef();
+		int updateCount = 0;
+		for (int x = 0; x < dataArraySize; x++)
+		{
+			if (otherInstanceArrayRef[x].getNumberOfFlagsSet() > 0)
+			{
+				thisInstanceArrayRef[x].resetCell();	// anti-matter wipes out any matter
+				updateCount++;
+			}
+		}
+		std::cout << "Total number of appends: " << updateCount << std::endl;
+	}
+}
+
 void Rasterized3DMassGrid::buildShell()
 {
 	// cycle through each RTriangle in each RPoly; trace the interior for each, 
