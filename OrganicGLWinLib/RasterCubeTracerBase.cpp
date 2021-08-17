@@ -238,6 +238,11 @@ void RasterCubeTracerBase::setOptionalPolyLoggerRef(PolyLogger* in_optionalLogge
 	optionalLoggerRef = in_optionalLoggerRef;
 }
 
+void RasterCubeTracerBase::setOptionalMaterialID(short in_materialID)
+{
+	optionalTracerMaterialID = in_materialID;
+}
+
 DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoint in_originPoint,
 	DynamicBorderLineList* in_blockBorderRef,
 	ECBPolyPoint in_distanceValues,

@@ -31,6 +31,7 @@ class RasterCubeTracerBase
 
 		void setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef);
 		void setOptionalPolyLoggerRef(PolyLogger* in_optionalLoggerRef);
+		void setOptionalMaterialID(short in_materialID);
 
 		virtual void runTrace() = 0;
 		void iterateToNextBlock();
@@ -69,7 +70,7 @@ class RasterCubeTracerBase
 		// optional values
 		RasterCubeLookup* optionalCubeLookup = nullptr;
 		bool optionalMatchingBool = false;
-
+		short optionalTracerMaterialID = 0;
 
 		bool debugFlag = false;
 };

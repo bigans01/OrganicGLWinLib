@@ -60,7 +60,14 @@ class RPoly
 					rTriangleLogger.log("(RPoly): current line, point B cube coordinate: ", pointBRasterCubeCoord.x, ", ", pointBRasterCubeCoord.y, ", ", pointBRasterCubeCoord.z, "\n");
 
 
-					RTriangleLine builtLine(currentLinePointA, currentLinePointB, pointARasterCubeCoord, pointBRasterCubeCoord, rPolyRCubeDimLength, *currentLinePtr, rPolyTileWeightToHundredthFloatRatio);
+					RTriangleLine builtLine(currentLinePointA, 
+											currentLinePointB, 
+											pointARasterCubeCoord, 
+											pointBRasterCubeCoord, 
+											rPolyRCubeDimLength, 
+											*currentLinePtr, 
+											rPolyTileWeightToHundredthFloatRatio,
+											rPolyMaterialID);
 					builtLineArray[x] = builtLine;
 				}
 				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel, rPolyMaterialID);

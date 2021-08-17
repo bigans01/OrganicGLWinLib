@@ -102,17 +102,17 @@ class RTriangle
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
 		void runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
 		void runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
 								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal);
+			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
 		void buildRegisters(PolyDebugLevel in_rTriangleDebugLevel);
 
 		RTriangleLine rLines[3];

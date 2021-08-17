@@ -16,6 +16,11 @@ class MassGridArrayCell
 			cellData = 0;
 		}
 
+		void setCellMaterialID(short in_cellMaterialID)
+		{
+			cellMaterialID = in_cellMaterialID;
+		}
+
 		void setFlagNoOverrideIfActive(MassCellBitFlags in_flagToSet, int in_bitValue)
 		{
 			int bitToSet = 0;
@@ -135,7 +140,8 @@ class MassGridArrayCell
 			return numberOfFlagsSet;
 		}
 	private:
-		std::vector<glm::vec3> emptyNormalVector;
+		std::vector<glm::vec3> emptyNormalVector;	// deprecated, flagged for removal at a later date (commented on 8/16/2021)
+		short cellMaterialID = 0;
 };
 
 #endif

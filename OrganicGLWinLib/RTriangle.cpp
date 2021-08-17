@@ -232,9 +232,9 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 	// step 3: use the rasterizedBlocks from each line, to create line pairs that are used to trace the interior of the RTriangle
 	// into the MassGridArray. Each line pair should do X, Y, and Z scans.
 	initializeXYZDimRegisters();
-	runXDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal);
-	runYDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal);
-	runZDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal);
+	runXDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal, rTriangleMaterialID);
+	runYDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal, rTriangleMaterialID);
+	runZDimRegisterScan(in_massGridArrayRef, in_rPolyRCubeDimLength, in_rPolyTilesPerDim, in_rPolyTileWeightToHundredthFloatRatio, downFillCrustBit, upfillCrustBit, in_triangleEmptyNormal, rTriangleMaterialID);
 }
 
 void RTriangle::initializeXYZDimRegisters()
@@ -266,7 +266,7 @@ void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-	                                short in_upfillCrustBitValue, glm::vec3 in_emptyNormal)
+	                                short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
 {
 	for (int x = 0; x < xScanMeta.numberOfScans; x++)
 	{
@@ -299,7 +299,8 @@ void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 			                            in_rPolyTilesPerDim,
 			                            in_rPolyTileWeightToHundredthFloatRatio, 
 										in_downfillCrustBitValue, 
-										in_upfillCrustBitValue, in_emptyNormal);
+										in_upfillCrustBitValue, 
+										in_emptyNormal, in_scanMaterialID);
 	}
 }
 
@@ -308,7 +309,7 @@ void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal)
+									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
 {
 	for (int y = 0; y < yScanMeta.numberOfScans; y++)
 	{
@@ -330,7 +331,7 @@ void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 										in_rPolyTilesPerDim,
 										in_rPolyTileWeightToHundredthFloatRatio,
 										in_downfillCrustBitValue,
-										in_upfillCrustBitValue, in_emptyNormal);
+										in_upfillCrustBitValue, in_emptyNormal, in_scanMaterialID);
 	}
 }
 
@@ -339,7 +340,7 @@ void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal)
+									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
 {
 	for (int z = 0; z < zScanMeta.numberOfScans; z++)
 	{
@@ -361,6 +362,6 @@ void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 										in_rPolyTilesPerDim,
 										in_rPolyTileWeightToHundredthFloatRatio,
 										in_downfillCrustBitValue,
-										in_upfillCrustBitValue, in_emptyNormal);
+										in_upfillCrustBitValue, in_emptyNormal, in_scanMaterialID);
 	}
 }

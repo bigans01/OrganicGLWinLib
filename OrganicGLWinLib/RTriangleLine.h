@@ -21,13 +21,15 @@ class RTriangleLine
 					  EnclaveKeyDef::EnclaveKey in_pointBCubeKey,
 					  float in_rPolyCubeDimLength,
 					  STriangleLine in_sTriangleLineToBuildFrom,
-			          float in_tileWeightRatio) :
+			          float in_tileWeightRatio, 
+					  short in_rTriangleMaterialID) :
 			rLinePointA(in_rasterGridPointA),
 			rLinePointB(in_rasterGridPointB),
 			rPolyCubeDimLength(in_rPolyCubeDimLength),
 			pointACubeKey(in_pointACubeKey),
 			pointBCubeKey(in_pointBCubeKey),
-			tileWeightRatio(in_tileWeightRatio)
+			tileWeightRatio(in_tileWeightRatio),
+			rTriangleLineMaterialID(in_rTriangleMaterialID)
 		{
 			rLineIsBorderLine = in_sTriangleLineToBuildFrom.isBorderLine;
 			rLineBorderLineID = in_sTriangleLineToBuildFrom.borderLineID;
@@ -109,7 +111,8 @@ class RTriangleLine
 						currentSearchResult.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
 
-						currentSearchResult.cellRef->insertEmptyNormal(in_emptyNormal);
+						//currentSearchResult.cellRef->insertEmptyNormal(in_emptyNormal);
+						currentSearchResult.cellRef->setCellMaterialID(rTriangleLineMaterialID);
 
 						gridUpdateCount++;
 					}
@@ -128,6 +131,7 @@ class RTriangleLine
 	private:
 		friend class RTriangle;
 		RasterCubeLookup rasterizedBlocks;
+		short rTriangleLineMaterialID = 0;
 
 };
 

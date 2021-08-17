@@ -54,7 +54,9 @@ void RTriangleInteriorAreaTracer::runTrace()
 			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
 			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
 
-			result.cellRef->insertEmptyNormal(tracerEmptyNormal);
+			//result.cellRef->insertEmptyNormal(tracerEmptyNormal);
+			result.cellRef->setCellMaterialID(optionalTracerMaterialID);
+
 		}
 		numberOfInserts++;
 
