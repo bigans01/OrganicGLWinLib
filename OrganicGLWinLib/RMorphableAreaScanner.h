@@ -15,6 +15,8 @@
 #include "DebugOption.h"
 #include "DebugOptionSet.h"
 #include "PolyLogger.h"
+#include "SPoly.h"
+#include <vector>
 
 class RMorphableAreaScanner
 {
@@ -63,11 +65,13 @@ class RMorphableAreaScanner
 														// if the "at least one" condition is met, save the RMorphableMesh into a list.
 		MassGridArray* fetchMassGridArrayRef();
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
+		std::vector<SPoly> produceSPolysFromPTriangleMeshes();
 	private:
 		friend class RMatterCollider;
 		void acquireProducedSolutions();
 		void handleGenericDO(DebugOption in_debugOption);
 		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
+		SPoly convertPTriangleToSPoly(PTriangle in_pTriangle);
 
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;

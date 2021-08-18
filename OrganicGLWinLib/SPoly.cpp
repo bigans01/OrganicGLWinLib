@@ -12,9 +12,24 @@ void SPoly::setEmptyNormal(float in_x, float in_y, float in_z)
 	polyEmptyNormal = glm::normalize(rawEmptyNormal);
 }
 
+void SPoly::setEmptyNormal(glm::vec3 in_normalVec3)
+{
+	polyEmptyNormal = glm::normalize(in_normalVec3);
+}
+
 void SPoly::setSPolyMaterial(short in_sPolyMaterialID)
 {
 	sPolyMaterialID = in_sPolyMaterialID;
+}
+
+short SPoly::getSPolyMaterial()
+{
+	return sPolyMaterialID;
+}
+
+glm::vec3 SPoly::getEmptyNormal()
+{
+	return polyEmptyNormal;
 }
 
 bool SPoly::isSPolyValid()
@@ -144,6 +159,16 @@ void SPoly::calculateEmptyNormal()
 	EmptyNormalFinder finder(point0, point1, point2, massOriginPoint);
 	//std::cout << "!!!#####: Value of Empty Normal for this Poly is: " << finder.calculatedNormal.x << ", " << finder.calculatedNormal.y << ", " << finder.calculatedNormal.z << std::endl;
 	polyEmptyNormal = finder.calculatedNormal;
+}
+
+int SPoly::calculateAndGetPerfectClampingValue()
+{
+	int returnValue = 0;
+	if (triangles.size() != 0)	// will only run if there is at least one triangle to verify.
+	{
+		returnValue = triangles[0].getPerfectClampingValue();
+	}
+	return returnValue;
 }
 
 void SPoly::determinePlanarVectors()

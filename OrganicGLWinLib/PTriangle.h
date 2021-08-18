@@ -60,6 +60,12 @@ class PTriangle
 
 		}
 
+
+		glm::vec3 getEmptyNormal()
+		{
+			return currentEmptyNormal;
+		}
+
 		void printPTrianglePoints()
 		{
 			std::cout << "=== Printing PTriangle points: " << std::endl;
@@ -71,8 +77,14 @@ class PTriangle
 
 		RCollisionPoint* collisionPointRefArray[3] = { nullptr };
 
+		short getMaterialID()
+		{
+			return pTriangleMaterialID;
+		}
+
 	private:
 		glm::vec3 currentEmptyNormal;
+		short pTriangleMaterialID = 0;		// needs to be calculated by analyzing the materials in all 3 collision points
 
 		bool runInitialEmptyNormalTest(bool in_pTriangleDebugFlag)
 		{

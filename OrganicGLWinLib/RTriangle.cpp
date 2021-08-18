@@ -213,7 +213,8 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 	                                     float in_rPolyTileWeightToHundredthFloatRatio)
 {
 	// step 1: determine the value of the DOWNFILL_CRUST and UPFILL_CRUST bits
-	short downFillCrustBit, upfillCrustBit = 0;
+	short downFillCrustBit = 0;
+	short upfillCrustBit = 0;
 	if (in_triangleEmptyNormal.y > 0.0f)
 	{
 		downFillCrustBit = 1;

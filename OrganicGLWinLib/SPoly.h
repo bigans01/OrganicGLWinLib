@@ -39,8 +39,12 @@ public:
 	void addTriangle(STriangle in_triangle);
 	void setMRP(glm::vec3 in_mrp);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
+	void setEmptyNormal(glm::vec3 in_normalVec3);
 	void setSPolyMaterial(short in_sPolyMaterialID);
+	short getSPolyMaterial();
+	glm::vec3 getEmptyNormal();
 	void calculateEmptyNormal();
+	int calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
 	bool isSPolyValid();
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only

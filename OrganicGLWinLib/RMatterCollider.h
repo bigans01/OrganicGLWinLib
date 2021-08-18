@@ -7,6 +7,8 @@
 #include "RMatterAge.h"
 #include "MassZoneBoxType.h"
 #include "RMatterCollisionMode.h"
+#include <vector>
+#include "SPoly.h"
 
 class RMatterCollider
 {
@@ -35,6 +37,7 @@ class RMatterCollider
 		RMorphableAreaScanner* getNewMatterScannerRef();
 
 		RMorphableAreaScanner collidableScanner;
+		std::vector<SPoly> fetchProducedSPolys();
 	private:
 		RMatterCollisionMode colliderMode = RMatterCollisionMode::NOVAL;
 

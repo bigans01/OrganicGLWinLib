@@ -32,14 +32,22 @@ class MassGridArray
 
 				if (massCellArray[x].isDownfillRunnable() == true)
 				{
+					bool debugDownfillFlag = false;
 
 					EnclaveKeyDef::EnclaveKey cellLocation = convertIndexToBlockKey(x);
 					//std::cout << "!!! found down fill to run; location is: (" << cellLocation.x << ", " << cellLocation.y << ", " << cellLocation.z << ") " << std::endl;
 					//int foundDownfill = 3;
 					//std::cin >> foundDownfill;
 
-					// don't bother doing a downfill if the y is at 0.
-					if (cellLocation.y != 0)
+					// In order for a downfill to execute, the cellLocation can't be at the bottom value, 
+					// AND 
+					// there must be a terminiating upfill value in this same X/Z column.
+					if 
+					(
+						(cellLocation.y != 0)
+						&&
+						(doesCellLocationHaveTerminatingUpfill(cellLocation) == true)
+					)
 					{
 						EnclaveKeyDef::EnclaveKey lastFilledCell(cellLocation.x, cellLocation.y - 1, cellLocation.z);
 						MassGridSearchResult currentSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
@@ -77,9 +85,13 @@ class MassGridArray
 						}
 					}
 				}
+
+
+					
 			}
 			auto downfillExecutionEnd = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double> downfillElapsed = downfillExecutionEnd - downfillExecutionBegin;
+			std::cout << "--------------" << std::endl;
 
 			std::cout << "!!! Downfill runtime: " << downfillElapsed.count() << std::endl;
 			std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;
@@ -96,6 +108,27 @@ class MassGridArray
 		MassGridArrayCell* getArrayRef()
 		{
 			return massCellArray.get();
+		}
+
+		bool doesCellLocationHaveTerminatingUpfill(EnclaveKeyDef::EnclaveKey in_keyToScan)
+		{
+			bool hasTerminatingUpfill = false;
+			int startX = in_keyToScan.x;
+			int startY = in_keyToScan.y;
+			int startZ = in_keyToScan.z;
+
+			for (int y = startY; y > 0; y--)
+			{
+				MassGridSearchResult attemptedSearch = searchForCell(startX, y, startZ);
+				if (attemptedSearch.wasSearchKeyValid == true)
+				{
+					if (attemptedSearch.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)
+					{
+						hasTerminatingUpfill = true;
+					}
+				}
+			}
+			return hasTerminatingUpfill;
 		}
 
 		MassGridSearchResult searchForCell(int in_x, int in_y, int in_z)

@@ -48,6 +48,47 @@ public:
 		}
 	};
 
+	int getPerfectClampingValue()
+	{
+		int perfectClampValue = 0;
+		// x clamp check
+		if
+		(
+			(triangleLines[0].pointA.x == triangleLines[1].pointA.x)
+			&&
+			(triangleLines[1].pointA.x == triangleLines[2].pointA.x)
+		)
+		{
+			//std::cout << "Perfect X-clamp detected! " << std::endl;
+			perfectClampValue = 1;			// 1 == clamped to X
+		}
+
+		// y clamp check
+		if
+		(
+			(triangleLines[0].pointA.y == triangleLines[1].pointA.y)
+			&&
+			(triangleLines[1].pointA.y == triangleLines[2].pointA.y)
+		)
+		{
+			//std::cout << "Perfect Y-clamp detected! " << std::endl;
+			perfectClampValue = 2;			// 2 == clamped to X
+		}
+
+		// z clamp check
+		if
+		(
+			(triangleLines[0].pointA.z == triangleLines[1].pointA.z)
+			&&
+			(triangleLines[1].pointA.z == triangleLines[2].pointA.z)
+		)
+		{
+			//std::cout << "Perfect Z-clamp detected! " << std::endl;
+			perfectClampValue = 3;			// 3 == clamped to X
+		}
+		return perfectClampValue;
+	}
+
 	bool isSTriangleValid()	// an STriangle may only be valid if all 3 points of it are unique.
 	{
 		bool validityMaintained = true;

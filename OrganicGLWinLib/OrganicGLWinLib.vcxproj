@@ -214,7 +214,6 @@
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="OrganicPolygon.h" />
     <ClInclude Include="PTriangle.h" />
-    <ClInclude Include="PTriangleManager.h" />
     <ClInclude Include="PTriangleMapperUpdate.h" />
     <ClInclude Include="PTriangleMesh.h" />
     <ClInclude Include="PTrianglePointLinkArray.h" />

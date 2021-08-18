@@ -295,3 +295,37 @@ bool RMorphableAreaScanner::checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in
 	}
 	return areKeysNeighbors;
 }
+
+SPoly RMorphableAreaScanner::convertPTriangleToSPoly(PTriangle in_pTriangle)
+{
+	SPoly returnSPoly;
+	
+	returnSPoly.setEmptyNormal(in_pTriangle.getEmptyNormal());
+	returnSPoly.setSPolyMaterial(in_pTriangle.getMaterialID());
+
+	STriangle currentSTriangle(in_pTriangle.collisionPointRefArray[0]->currentValue, 
+							in_pTriangle.collisionPointRefArray[1]->currentValue, 
+							in_pTriangle.collisionPointRefArray[2]->currentValue);
+	currentSTriangle.setSTriangleMaterialID(in_pTriangle.getMaterialID());
+	returnSPoly.addTriangle(currentSTriangle);
+	
+	return returnSPoly;
+}
+
+std::vector<SPoly> RMorphableAreaScanner::produceSPolysFromPTriangleMeshes()
+{
+	std::vector<SPoly> returnVector;
+	auto currentMeshGroupBegin = meshGroupMap.begin();
+	auto currentMeshGroupEnd = meshGroupMap.end();
+	for (; currentMeshGroupBegin != currentMeshGroupEnd; currentMeshGroupBegin++)
+	{
+		auto currentMeshGroupPTrianglesBegin = currentMeshGroupBegin->second.groupMesh.meshPTriangles.begin();
+		auto currentMeshGroupPTrianglesEnd = currentMeshGroupBegin->second.groupMesh.meshPTriangles.end();
+		for (; currentMeshGroupPTrianglesBegin != currentMeshGroupPTrianglesEnd; currentMeshGroupPTrianglesBegin++)
+		{
+			SPoly currentConvertedSPoly = convertPTriangleToSPoly(currentMeshGroupPTrianglesBegin->second);
+			returnVector.push_back(currentConvertedSPoly);
+		}
+	}
+	return returnVector;
+}

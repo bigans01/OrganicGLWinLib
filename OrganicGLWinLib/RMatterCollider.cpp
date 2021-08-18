@@ -119,3 +119,8 @@ RMorphableAreaScanner* RMatterCollider::getNewMatterScannerRef()
 {
 	return &newMatterGenerator.generatorAreaScanner;
 }
+
+std::vector<SPoly> RMatterCollider::fetchProducedSPolys()
+{
+	return collidableScanner.produceSPolysFromPTriangleMeshes();
+}
