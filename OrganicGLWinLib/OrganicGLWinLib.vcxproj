@@ -216,6 +216,7 @@
     <ClInclude Include="PTriangle.h" />
     <ClInclude Include="PTriangleMapperUpdate.h" />
     <ClInclude Include="PTriangleMesh.h" />
+    <ClInclude Include="PTriangleMeshPointCalibrator.h" />
     <ClInclude Include="PTrianglePointLinkArray.h" />
     <ClInclude Include="PTriangleRCPointToIndexLink.h" />
     <ClInclude Include="RAdditiveSliceBase.h" />
@@ -319,6 +320,7 @@
     <ClInclude Include="RMatterCollider.h" />
     <ClInclude Include="RMatterCollisionMode.h" />
     <ClInclude Include="RMatterGenerator.h" />
+    <ClInclude Include="RMatterManipulationOption.h" />
     <ClInclude Include="RMorphableMeshCornerArray.h" />
     <ClInclude Include="RMorphableMeshState.h" />
     <ClInclude Include="RPointToGridTranslator.h" />
@@ -570,6 +572,7 @@
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="OrganicPolygon.cpp" />
+    <ClCompile Include="PTriangleMeshPointCalibrator.cpp" />
     <ClCompile Include="RAdditiveSliceBase.cpp" />
     <ClCompile Include="RAdditiveXSlice.cpp" />
     <ClCompile Include="RAdditiveXSliceEastEnd.cpp" />

@@ -1,0 +1,12 @@
+#pragma once
+
+#ifndef RMATTERMANIPULATIONOPTION_H
+#define RMATTERMANIPULATIONOPTION_H
+
+enum class RMatterManipulationOption
+{
+	NOVAL,
+	CLAMP_NONFREE_GRID_POINTS_TO_NATURAL_LIMITS
+};
+
+#endif

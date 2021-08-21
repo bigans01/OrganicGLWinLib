@@ -96,7 +96,8 @@ void RMatterCollider::appendNewMatterToScanner()
 
 void RMatterCollider::generateCollidedMatterResult()
 {
-	collidableScanner.scanGridMass();
+	collidableScanner.scanGridMass();					// generate each RMorphableMeshGroup
+	applyRMatterManipulationOptions();					// apply options to each RMorphableMeshGroup, if any exist
 	
 	// the folloing block is test output; remove when needed.
 	int totalTriangleCount = 0;
@@ -123,4 +124,21 @@ RMorphableAreaScanner* RMatterCollider::getNewMatterScannerRef()
 std::vector<SPoly> RMatterCollider::fetchProducedSPolys()
 {
 	return collidableScanner.produceSPolysFromPTriangleMeshes();
+}
+
+void RMatterCollider::applyRMatterManipulationOptions()
+{
+	auto optionsBegin = matterManipulationOptions.begin();
+	auto optionsEnd = matterManipulationOptions.end();
+	for (; optionsBegin != optionsEnd; optionsBegin++)
+	{
+		switch (*optionsBegin)
+		{
+			case RMatterManipulationOption::CLAMP_NONFREE_GRID_POINTS_TO_NATURAL_LIMITS:	
+			{
+				collidableScanner.clampNonFreeMeshPointsToNaturalLimits();
+				break;
+			};
+		}
+	}
 }

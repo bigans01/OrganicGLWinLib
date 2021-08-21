@@ -225,6 +225,16 @@ void RMorphableAreaScanner::scanGridMass()
 	acquireProducedSolutions();
 }
 
+void RMorphableAreaScanner::clampNonFreeMeshPointsToNaturalLimits()
+{
+	auto currentMeshGroupBegin = meshGroupMap.begin();
+	auto currentMeshGroupEnd = meshGroupMap.end();
+	for (; currentMeshGroupBegin != currentMeshGroupEnd; currentMeshGroupBegin++)
+	{
+		currentMeshGroupBegin->second.calibratePTriangleMeshPoints(&gridTranslator);
+	}
+}
+
 void RMorphableAreaScanner::acquireProducedSolutions()
 {
 	// for each mesh group, have it produce its solutions.

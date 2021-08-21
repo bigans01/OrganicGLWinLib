@@ -67,6 +67,7 @@ class RPointToGridTranslator
 		}
 
 	private:
+		friend class PTriangleMeshPointCalibrator;
 		int numberOfTilesPerDimension = 0;
 		float dimensionLimit = 0.0f;
 		float dimPerTile = 0.0f;

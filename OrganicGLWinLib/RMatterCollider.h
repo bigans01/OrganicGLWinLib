@@ -9,11 +9,22 @@
 #include "RMatterCollisionMode.h"
 #include <vector>
 #include "SPoly.h"
+#include <set>
+#include "RMatterManipulationOption.h"
 
 class RMatterCollider
 {
 	public:
 		RMatterCollider() {};
+
+		template<typename FirstManipulationOption, typename ...RemainingManipulationOptions> void setRMatterManipulationOption(FirstManipulationOption && firstOption,
+																														RemainingManipulationOptions && ...remainingOptions)
+		{
+			matterManipulationOptions.insert(firstOption);
+			setRMatterManipulationOption(std::forward<RemainingManipulationOptions>(remainingOptions)...);
+		};
+		void setRMatterManipulationOption() {};
+
 		void initializeCollider(int in_colliderTilesPerDimension,
 								float in_colliderDimensionLimit,
 								int in_colliderMeshesPerDimension,
@@ -37,8 +48,11 @@ class RMatterCollider
 		RMorphableAreaScanner* getNewMatterScannerRef();
 
 		RMorphableAreaScanner collidableScanner;
-		std::vector<SPoly> fetchProducedSPolys();
+		std::vector<SPoly> fetchProducedSPolys();	// used by OrganicCoreLib to get the resulting SPolys produced by the collider
 	private:
+		void applyRMatterManipulationOptions();	// iterates through each member of matterManipulationOptions, if there are any, 
+												// and applies it to the collidableScanner. collidableScanner.scanGridMass() must be called before this is called.
+
 		RMatterCollisionMode colliderMode = RMatterCollisionMode::NOVAL;
 
 		int colliderTilesPerDimension = 0;
@@ -49,6 +63,7 @@ class RMatterCollider
 
 		RMatterGenerator oldMatterGenerator;
 		RMatterGenerator newMatterGenerator;
+		std::set<RMatterManipulationOption> matterManipulationOptions;
 		
 
 };

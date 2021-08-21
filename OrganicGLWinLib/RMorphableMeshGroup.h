@@ -24,6 +24,7 @@
 #include "RCollisionPointToPTriangleMapContainer.h"
 #include "PTriangleMesh.h"
 #include "DebugOptionSet.h"
+#include "PTriangleMeshPointCalibrator.h"
 
 class RMorphableMeshGroup
 {
@@ -53,6 +54,10 @@ class RMorphableMeshGroup
 								int in_tilesPerDim
 								);
 		void produceSolution();
+
+		// optional manipulation functions
+		void calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef);
+
 		PTriangleMesh groupMesh;
 
 	private:

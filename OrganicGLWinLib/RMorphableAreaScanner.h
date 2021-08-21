@@ -73,6 +73,9 @@ class RMorphableAreaScanner
 		bool checkIfKeysAreNeighbors(EnclaveKeyDef::EnclaveKey in_keyA, EnclaveKeyDef::EnclaveKey in_keyB);
 		SPoly convertPTriangleToSPoly(PTriangle in_pTriangle);
 
+		// optional manipulation function calls
+		void clampNonFreeMeshPointsToNaturalLimits();
+
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;
 		Rasterized3DMassGrid massGrid;
@@ -90,6 +93,8 @@ class RMorphableAreaScanner
 
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> scannerStoredMeshDebugOptions;	// debug option sets that may be used per RMorphableMesh; 
 																																// should be copied to each RMorphableMeshGroup
-};
+
+};		
+	
 
 #endif

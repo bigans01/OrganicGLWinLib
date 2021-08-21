@@ -498,3 +498,9 @@ void RMorphableMeshGroup::produceSolution()
 
 	std::cout << "!!!!######################### Number of PTriangles in this solution: " << groupMesh.getMeshPTriangleCount() << std::endl;
 }
+
+void RMorphableMeshGroup::calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef)
+{
+	PTriangleMeshPointCalibrator calibrator(&meshGroupPointArray, in_translatorRef);
+	groupMesh.rebuildPTriangleNormals();	// should always rebuild normals after any modification to points.
+}
