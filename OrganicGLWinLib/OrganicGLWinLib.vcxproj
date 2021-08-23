@@ -206,6 +206,7 @@
     <ClInclude Include="CleaveSequenceStatus.h" />
     <ClInclude Include="CleaveSequenceType.h" />
     <ClInclude Include="CollectiveVerdictMachine.h" />
+    <ClInclude Include="DynamicRasterGridCellBorders.h" />
     <ClInclude Include="LookupByDimRegister.h" />
     <ClInclude Include="MassCellBitFlags.h" />
     <ClInclude Include="MassGridArray.h" />
@@ -570,6 +571,7 @@
     <ClCompile Include="CleaveSequenceMeta.cpp" />
     <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
+    <ClCompile Include="DynamicRasterGridCellBorders.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="OrganicPolygon.cpp" />
     <ClCompile Include="PTriangleMeshPointCalibrator.cpp" />
