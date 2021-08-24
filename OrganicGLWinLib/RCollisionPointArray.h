@@ -40,6 +40,7 @@ class RCollisionPointArray
 
 	private:
 		friend class RMorphableMeshGroup;
+		friend class PTriangleMeshPointCalibrator;
 		bool isArraySet = false;
 		std::unique_ptr<RCollisionPoint[]> collisionPoints;
 		int arraySize = 0;

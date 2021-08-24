@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECBPolyPoint.h"
+#include "MassGridArrayCellLimit.h"
 
 #ifndef DYNAMICRASTERGRIDCELLBORDERS_H
 #define DYNAMICRASTERGRIDCELLBORDERS_H
@@ -17,42 +18,41 @@ class DynamicRasterGridCellBorders
 		}
 
 		// Type 1 borders (corners)
-		ECBPolyPoint  corner_UpperNW;
-		ECBPolyPoint  corner_UpperSW;
-		ECBPolyPoint  corner_UpperSE;
-		ECBPolyPoint  corner_UpperNE;
-
-		ECBPolyPoint  corner_LowerNW;
-		ECBPolyPoint  corner_LowerSW;
-		ECBPolyPoint  corner_LowerSE;
-		ECBPolyPoint  corner_LowerNE;
-
+		MassGridArrayCellLimit  corner_UpperNW;
+		MassGridArrayCellLimit  corner_UpperSW;
+		MassGridArrayCellLimit  corner_UpperSE;
+		MassGridArrayCellLimit  corner_UpperNE;
+		
+		MassGridArrayCellLimit  corner_LowerNW;
+		MassGridArrayCellLimit  corner_LowerSW;
+		MassGridArrayCellLimit  corner_LowerSE;
+		MassGridArrayCellLimit  corner_LowerNE;
+		
 		// Type 2 borders (lines)
-		ECBPolyPoint Zaxis_lowerWest;
-		ECBPolyPoint Zaxis_lowerEast;
-		ECBPolyPoint Zaxis_upperWest;
-		ECBPolyPoint Zaxis_upperEast;
-
-		ECBPolyPoint Xaxis_lowerNorth;
-		ECBPolyPoint Xaxis_lowerSouth;
-		ECBPolyPoint Xaxis_upperNorth;
-		ECBPolyPoint Xaxis_upperSouth;
-
-		ECBPolyPoint Yaxis_northWest;
-		ECBPolyPoint Yaxis_northEast;
-		ECBPolyPoint Yaxis_southWest;
-		ECBPolyPoint Yaxis_southEast;
-
-		// Type 1 borders (faces)
-		ECBPolyPoint WestFace;
-		ECBPolyPoint NorthFace;
-		ECBPolyPoint EastFace;
-		ECBPolyPoint SouthFace;
-		ECBPolyPoint TopFace;
-		ECBPolyPoint BottomFace;
+		MassGridArrayCellLimit Zaxis_lowerWest;
+		MassGridArrayCellLimit Zaxis_lowerEast;
+		MassGridArrayCellLimit Zaxis_upperWest;
+		MassGridArrayCellLimit Zaxis_upperEast;
+		
+		MassGridArrayCellLimit Xaxis_lowerNorth;
+		MassGridArrayCellLimit Xaxis_lowerSouth;
+		MassGridArrayCellLimit Xaxis_upperNorth;
+		MassGridArrayCellLimit Xaxis_upperSouth;
+		
+		MassGridArrayCellLimit Yaxis_northWest;
+		MassGridArrayCellLimit Yaxis_northEast;
+		MassGridArrayCellLimit Yaxis_southWest;
+		MassGridArrayCellLimit Yaxis_southEast;
+		
+		// Type 3 borders (faces)
+		MassGridArrayCellLimit WestFace;
+		MassGridArrayCellLimit NorthFace;
+		MassGridArrayCellLimit EastFace;
+		MassGridArrayCellLimit SouthFace;
+		MassGridArrayCellLimit TopFace;
+		MassGridArrayCellLimit BottomFace;
 
 	private:
-
 		void setRasterGridCellBorders();
 
 		float minBorder = 0.0f;

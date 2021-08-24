@@ -211,6 +211,7 @@
     <ClInclude Include="MassCellBitFlags.h" />
     <ClInclude Include="MassGridArray.h" />
     <ClInclude Include="MassGridArrayCell.h" />
+    <ClInclude Include="MassGridArrayCellLimit.h" />
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="OrganicPolygon.h" />

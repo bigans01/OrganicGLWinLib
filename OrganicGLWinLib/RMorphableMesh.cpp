@@ -41,6 +41,16 @@ void RMorphableMesh::insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef
 	}
 }
 
+void RMorphableMesh::printPTrianglePoints()
+{
+	auto facesBegin = rProductFaceMap.begin();
+	auto facesEnd = rProductFaceMap.end();
+	for (; facesBegin != facesEnd; facesBegin++)
+	{
+		facesBegin->second.printPTrianglePoints();
+	}
+}
+
 void RMorphableMesh::generateRProductFaces(bool in_debugOutputValue)
 {
 	// check north face.
@@ -241,6 +251,7 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength,
 	}
 
 	// attempt to run the point modifier on all 8 points of this mesh
+	
 	RCollisionPointModifier pointModifier(&fetchedArray, 
 										translatorRef, 
 										in_cubeDimLength, 
@@ -248,4 +259,5 @@ void RMorphableMesh::runSuctionByXSlice(float in_cubeDimLength,
 										in_tilesPerDim, 
 										in_massGridArrayRef, 
 										in_suctionPolyLoggerRef);
+										
 }

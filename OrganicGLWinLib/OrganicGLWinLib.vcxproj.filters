@@ -1224,6 +1224,9 @@
     <ClInclude Include="DynamicRasterGridCellBorders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MassGridArrayCellLimit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
