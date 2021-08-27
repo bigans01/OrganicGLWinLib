@@ -13,10 +13,6 @@ void PTriangleMeshPointCalibrator::calibratePointsInArray()
 {
 	for (int x = 0; x < translatorPointArrayRef->arraySize; x++)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): calibrating RCollisionPoint having a currentValue of: ";
-		std::cout << translatorPointArrayRef->collisionPoints[x].currentValue.x << ", "
-			<< translatorPointArrayRef->collisionPoints[x].currentValue.y << ", "
-			<< translatorPointArrayRef->collisionPoints[x].currentValue.z << std::endl;
 		calibratePoint(&translatorPointArrayRef->collisionPoints[x]);
 	}
 }

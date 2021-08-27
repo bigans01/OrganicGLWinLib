@@ -15,11 +15,13 @@ class RTriangleInteriorAreaTracer : public RasterCubeTracerBase
 		void setUpfillCrustBit(short in_upfillCrustBitValue);
 		void setEmptyNormal(glm::vec3 in_emptyNormal);
 		void runTrace();
+		int getTotalInserts();
 	private:
 		short downfillCrustBitValue = 0;
 		short upfillCrustBitValue = 0;
 		MassGridArray* gridArrayRef = nullptr;
 		glm::vec3 tracerEmptyNormal;
+		int totalInserts = 0;
 
 };
 

@@ -49,7 +49,7 @@ void LookupByDimRegister::buildScanRuns()
 	// .... three lines
 	else if (numberOfInvolvedLines == 3)
 	{
-
+		//std::cout << "!!!! Notice: 3 involved lines detected during build of scan run..... " << std::endl;
 	}
 
 }
@@ -63,10 +63,28 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 	glm::vec3 in_emptyNormal,
 	short in_scanRunMaterialID)
 {
+	int totalScansRan = 0;
 	auto scansBegin = scanRuns.begin();
 	auto scansEnd = scanRuns.end();
 	for (; scansBegin != scansEnd; scansBegin++)
 	{
+		//std::cout << "---> Running scan... for key: " << std::endl;
+		/*
+		if
+		(
+			(scansBegin->twoDKeyA.a < 0)
+			||
+			(scansBegin->twoDKeyA.b < 0)
+			||
+			(scansBegin->twoDKeyB.a < 0)
+			|| 
+			(scansBegin->twoDKeyB.b < 0)
+		)
+		{
+			std::cout << "!!! Warning, value < 0 detected! " << std::endl;
+		}
+		*/
+
 		// use the new class derived from RasterCubeTracerBase.h here 
 		RTriangleInteriorAreaTracer interiorTracer;
 		interiorTracer.setGridArrayRef(in_massGridArrayRef);
@@ -124,7 +142,9 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 		interiorTracer.setOptionalMaterialID(in_scanRunMaterialID);
 		interiorTracer.setEmptyNormal(in_emptyNormal);
 		interiorTracer.runTrace();
+		registerTotalIntetiorFills += interiorTracer.getTotalInserts();
+		totalScansRan++;
 	}
-
-
+	
+	//std::cout << "!! total scans ran: " << totalScansRan << std::endl;
 }

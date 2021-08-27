@@ -12,6 +12,8 @@
 #include "DynamicEndpointMeta.h"
 #include "DynamicLinePointSynchronizer.h"
 #include "PolyLogger.h"
+#include "StringTracer.h"
+#include "DynamicLinePointSyncExclusionFlags.h"
 
 class RasterCubeTracerBase
 {
@@ -53,7 +55,9 @@ class RasterCubeTracerBase
 			                                           ECBPolyPointTri in_XYZinterceptCoords);
 		ECBPolyPoint roundXYZInterceptDistancesToAppropriatePrecision(float in_distX, float in_distY, float in_distZ);
 		ECBPolyPoint bindToNearestCorner(int in_xoryorz, ECBPolyPoint in_polyPoint);
-		ECBPolyPoint bindToNearestLine(int in_xoryorz, ECBPolyPoint in_polyPoint);
+		ECBPolyPoint bindToNearestLine(int in_xoryorz, 
+									   ECBPolyPoint in_polyPoint,
+									   DynamicLinePointSyncExclusionFlags in_exclusionFlag);
 		ECBPolyPoint getTrimmedPoint(ECBPolyPoint in_polyPoint);
 
 		DynamicBorderLineList dynamicBorder;

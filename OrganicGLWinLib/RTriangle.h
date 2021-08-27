@@ -32,10 +32,9 @@ class RTriangle
 			areRegistersSet = in_triangleB.areRegistersSet;
 			if (areRegistersSet == true)
 			{
-				
-				xScanMeta.numberOfScans = in_triangleB.xScanMeta.numberOfScans;
-				yScanMeta.numberOfScans = in_triangleB.yScanMeta.numberOfScans;
-				zScanMeta.numberOfScans = in_triangleB.zScanMeta.numberOfScans;
+				xScanMeta = in_triangleB.xScanMeta;
+				yScanMeta = in_triangleB.yScanMeta;
+				zScanMeta = in_triangleB.zScanMeta;
 
 				// copy data for the X dim
 				xDimRegister.reset(new LookupByDimRegister[xScanMeta.numberOfScans]);
@@ -121,6 +120,10 @@ class RTriangle
 		std::unique_ptr<LookupByDimRegister[]> zDimRegister;
 		bool areRegistersSet = false;
 		short rTriangleMaterialID = 0;
+
+		int totalXInteriorInserts = 0;
+		int totalYInteriorInserts = 0;
+		int totalZInteriorInserts = 0;
 
 };
 

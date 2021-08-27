@@ -109,11 +109,6 @@ class MassGridArrayCell
 			return isRunnable;
 		}
 
-		void insertEmptyNormal(glm::vec3 in_emptyNormal)
-		{
-			emptyNormalVector.push_back(in_emptyNormal);
-		}
-
 		int getNumberOfFlagsSet()
 		{
 			int numberOfFlagsSet = 0;
@@ -140,7 +135,6 @@ class MassGridArrayCell
 			return numberOfFlagsSet;
 		}
 	private:
-		std::vector<glm::vec3> emptyNormalVector;	// deprecated, flagged for removal at a later date (commented on 8/16/2021)
 		short cellMaterialID = 0;
 };
 

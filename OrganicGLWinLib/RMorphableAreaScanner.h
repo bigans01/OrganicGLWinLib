@@ -63,6 +63,8 @@ class RMorphableAreaScanner
 		void fillGridMass();							// Step 4: fill the mass inside the mass shell
 		void scanGridMass();							// Step 5: scan the grid mass, to determine all RMorphableMesh's that have at least one MassGridArrayCell within the mass; 
 														// if the "at least one" condition is met, save the RMorphableMesh into a list.
+		bool checkIfKeyedMorphableMeshExistsAnywhere(EnclaveKeyDef::EnclaveKey in_keyToSearch);
+
 		MassGridArray* fetchMassGridArrayRef();
 		std::map<int, RMorphableMeshGroup> meshGroupMap;
 		std::vector<SPoly> produceSPolysFromPTriangleMeshes();

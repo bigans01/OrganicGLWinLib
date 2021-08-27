@@ -369,9 +369,6 @@
     <ClInclude Include="MeshMatterMeta.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MassComparisonResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MassSubZone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -469,21 +466,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContestableBorderLineMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassGridArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassGridArrayCell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassGridSearchResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassCellBitFlags.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassGridArrayCellScanArea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LookupByDimRegister.h">
@@ -1224,8 +1206,26 @@
     <ClInclude Include="DynamicRasterGridCellBorders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MassCellBitFlags.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MassComparisonResult.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridArray.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridArrayCell.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
     <ClInclude Include="MassGridArrayCellLimit.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridArrayCellScanArea.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MassGridSearchResult.h">
+      <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1803,6 +1803,9 @@
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="DynamicRasterGridCellBorders.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="MassGridArray.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
   </ItemGroup>

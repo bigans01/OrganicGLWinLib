@@ -52,6 +52,21 @@ void RMatterGenerator::moveBorderSPolyResultsToScanner()
 	}
 }
 
+void RMatterGenerator::printFetchableSPolys()
+{
+	auto fetchedSPolyVector = generatorBorderProducer.fetchAllSPolys();
+	auto fetchedSPolysBegin = fetchedSPolyVector.begin();
+	auto fetchedSPolysEnd = fetchedSPolyVector.end();
+	int currentSPoly = 0; 
+	for (; fetchedSPolysBegin != fetchedSPolysEnd; fetchedSPolysBegin++)
+	{
+		std::cout << ":: SPoly " << currentSPoly++ << std::endl;
+		fetchedSPolysBegin->printPoints();
+		glm::vec3 currentSPolyNormal = fetchedSPolysBegin->getEmptyNormal();
+		std::cout << ":: current SPoly empty normal: " << currentSPolyNormal.x << ", " << currentSPolyNormal.y << ", " << currentSPolyNormal.z << std::endl;
+	}
+}
+
 void RMatterGenerator::generateMassInScanner()
 {
 	generatorAreaScanner.buildGridMassShell();

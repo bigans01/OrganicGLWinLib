@@ -455,18 +455,17 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 			{
 				//std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
 				currentKeySuctionLogger.log("(RMorphableMeshGroup): Running suction for mesh at key: ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "\n");
-				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength, 
-																	in_tileDimWeightRatio, 
-																	in_tilesPerDim, 
-																	in_massGridArrayRef, 
-																	&currentKeySuctionLogger);
+				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength,
+						in_tileDimWeightRatio,
+						in_tilesPerDim,
+						in_massGridArrayRef,
+						&currentKeySuctionLogger);
 			}
 			else
 			{
 				//std::cout << "!! Mesh with key " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << "is landlocked; will not run suction. " << std::endl;
 				currentKeySuctionLogger.log("(RMorphableMeshGroup): !! Mesh with key ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "is landlocked; will not run suction. \n");
 			}
-
 			//int suctionWait = 3;
 			//std::cin >> suctionWait;
 			currentKeySuctionLogger.waitForDebugInput();

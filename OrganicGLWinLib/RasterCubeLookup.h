@@ -43,6 +43,7 @@ class RasterCubeLookup
 			return zLookup.doesKeyExist(in_lookupKey.z, in_lookupKey.x, in_lookupKey.y);
 		}
 
+		// For X dimension
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> fetchXSlice(int in_xValue)
 		{
 			//std::cout << "EnclaveKeys for slice at X of " << in_xValue << "are: " << std::endl;
@@ -57,6 +58,23 @@ class RasterCubeLookup
 				//std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
 			}
 			return returnKeys;
+		}
+
+		void printXKeys()
+		{
+			auto xValueBegin = xLookup.lookup.begin();
+			auto xValueEnd = xLookup.lookup.end();
+			for (; xValueBegin != xValueEnd; xValueBegin++)
+			{
+				auto currentSlice = xValueBegin->second;
+				auto currentSliceBegin = currentSlice.begin();
+				auto currentSliceEnd = currentSlice.end();
+				for (; currentSliceBegin != currentSliceEnd; currentSliceBegin++)
+				{
+					EnclaveKeyDef::EnclaveKey newKey(xValueBegin->first, currentSliceBegin->a, currentSliceBegin->b);
+					std::cout << "(" << newKey.x << ", " << newKey.y << ", " << newKey.z << ") " << std::endl;
+				}
+			}
 		}
 
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> fetchYSlice(int in_yValue)

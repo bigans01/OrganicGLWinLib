@@ -25,6 +25,7 @@ class RMatterGenerator
 		void generateMassInScanner();								// Setp 5: Generate the mass in the scanner, but don't generate the PTriangleMesh; 
 																	// this would be used when the mass in this instance has to be collided with another generator's mass.
 		bool doesGeneratorContainMass();
+		void printFetchableSPolys();
 
 	private:
 		friend class RMatterCollider;

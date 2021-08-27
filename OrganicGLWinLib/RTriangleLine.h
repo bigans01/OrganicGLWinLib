@@ -42,6 +42,11 @@ class RTriangleLine
 			return rasterizedBlocks.fetchXSlice(in_x);
 		}
 
+		void printBlockXKeys()
+		{
+			rasterizedBlocks.printXKeys();
+		}
+
 		std::unordered_set<EnclaveKeyDef::EnclaveKey, EnclaveKeyDef::KeyHasher> findBlocksAtY(int in_y)
 		{
 			return rasterizedBlocks.fetchYSlice(in_y);
@@ -110,8 +115,6 @@ class RTriangleLine
 						currentSearchResult.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::DOWNFILL_CRUST, in_downFillCrustBit);
 						currentSearchResult.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, in_upfillCrustBit);
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::LINE_MASS, 1);
-
-						//currentSearchResult.cellRef->insertEmptyNormal(in_emptyNormal);
 						currentSearchResult.cellRef->setCellMaterialID(rTriangleLineMaterialID);
 
 						gridUpdateCount++;

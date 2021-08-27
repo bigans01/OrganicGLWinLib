@@ -16,11 +16,24 @@ void RMorphableAreaScanner::handleGenericDO(DebugOption in_debugOption)
 
 void RMorphableAreaScanner::buildGridMassShell()
 {
-	auto shellBuildStart = std::chrono::high_resolution_clock::now();
 	std::cout << "##################### Build shell START" << std::endl;
+	auto shellBuildStart = std::chrono::high_resolution_clock::now();
 	massGrid.buildShell();
-	std::cout << "##################### Build shell END" << std::endl;
+	/*
+	MassGridArrayCellScanArea testArea(EnclaveKeyDef::EnclaveKey(39, 39, 19), EnclaveKeyDef::EnclaveKey(29, 29, 29));
+	bool wasTestAreaFound = massGrid.wasMassFoundInAreaScan(testArea);
+	if (wasTestAreaFound == true)
+	{
+		std::cout << "!!!! Test area was found as having some mass! " << std::endl;
+	}
+	else if (wasTestAreaFound == false)
+	{
+		std::cout<< "!!!! Test area was NOT found as having some mass! " << std::endl;
+	}
+	*/
+
 	auto shellBuildEnd = std::chrono::high_resolution_clock::now();
+	std::cout << "##################### Build shell END" << std::endl;
 	std::chrono::duration<double> comparisonIterationsElapsed = shellBuildEnd - shellBuildStart;
 	std::cout << "Shell build time: " << comparisonIterationsElapsed.count() << std::endl;
 }
@@ -223,6 +236,31 @@ void RMorphableAreaScanner::scanGridMass()
 	}
 
 	acquireProducedSolutions();
+}
+
+bool RMorphableAreaScanner::checkIfKeyedMorphableMeshExistsAnywhere(EnclaveKeyDef::EnclaveKey in_keyToSearch)
+{
+	bool wasFound = false;
+	auto currentMeshGroupBegin = meshGroupMap.begin();
+	auto currentMeshGroupEnd = meshGroupMap.end();
+	for (; currentMeshGroupBegin != currentMeshGroupEnd; currentMeshGroupBegin++)
+	{
+		if (currentMeshGroupBegin->second.doesGroupContainKey(in_keyToSearch) == true)
+		{
+			std::cout << "!! Key " << in_keyToSearch.x << ", " << in_keyToSearch.y << ", " << in_keyToSearch.z << " was found in Morphable mesh with ID " << currentMeshGroupBegin->first << std::endl;
+			wasFound = true;
+		};
+	}
+
+	if (wasFound == true)
+	{
+		std::cout << "!! Key " << in_keyToSearch.x << ", " << in_keyToSearch.y << ", " << in_keyToSearch.z << " was FOUND! " << std::endl;
+	}
+	else if (wasFound == false)
+	{
+		std::cout << "!! Key " << in_keyToSearch.x << ", " << in_keyToSearch.y << ", " << in_keyToSearch.z << " was NOT found. " << std::endl;
+	}
+	return wasFound;
 }
 
 void RMorphableAreaScanner::clampNonFreeMeshPointsToNaturalLimits()

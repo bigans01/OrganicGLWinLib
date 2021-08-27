@@ -53,6 +53,7 @@ class LookupByDimRegister
 		int numberOfInvolvedLines = 0;
 		Settable2DRef lineSetRefs[3];
 		std::vector<TwoDKeyPair> scanRuns;
+		int registerTotalIntetiorFills = 0;
 
 		void insertLineSetRef(int in_lineID,
 			std::unordered_set<EnclaveKeyDef::Enclave2DKey, EnclaveKeyDef::KeyHasher>* in_lineSetRef);

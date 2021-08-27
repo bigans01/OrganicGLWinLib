@@ -21,10 +21,15 @@ void RTriangleInteriorAreaTracer::setEmptyNormal(glm::vec3 in_emptyNormal)
 	tracerEmptyNormal = in_emptyNormal;
 }
 
+int RTriangleInteriorAreaTracer::getTotalInserts()
+{
+	return totalInserts;
+}
+
 void RTriangleInteriorAreaTracer::runTrace()
 {
 	//std::cout << ">>> begin trace run: start key (" << startCubeKey.x << ", " << startCubeKey.y << "," << startCubeKey.z 
-	//	                       << ") | end key: (" << endCubeKey.x << ", " << endCubeKey.y << ", " << endCubeKey.z << std::endl;
+		//                       << ") | end key: (" << endCubeKey.x << ", " << endCubeKey.y << ", " << endCubeKey.z << std::endl;
 	auto traceAttemptBegin = std::chrono::high_resolution_clock::now();
 	int numberOfInserts = 0;
 	/*
@@ -43,7 +48,9 @@ void RTriangleInteriorAreaTracer::runTrace()
 		(currentCubeKey != endCubeKey)
 	)
 	{
+		//std::cout << ">>>> Current cube key, pre-iterate: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
 		iterateToNextBlock();
+		//std::cout << ">>>> Current cube key, post-iterate: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
 		MassGridSearchResult result = gridArrayRef->searchForCell(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z);
 		if (result.wasSearchKeyValid == true)
 		{
@@ -53,10 +60,15 @@ void RTriangleInteriorAreaTracer::runTrace()
 			//result.cellRef->setFlag(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
 			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);
 			result.cellRef->setFlagNoOverrideIfActive(MassCellBitFlags::UPFILL_CRUST, upfillCrustBitValue);
-
-			//result.cellRef->insertEmptyNormal(tracerEmptyNormal);
 			result.cellRef->setCellMaterialID(optionalTracerMaterialID);
 
+			totalInserts++;
+		}
+		else
+		{
+			//std::cout << "!!! Interior trace failed! " << std::endl;
+			//int failWait = 3;
+			//std::cin >> failWait;
 		}
 		numberOfInserts++;
 
@@ -91,9 +103,6 @@ void RTriangleInteriorAreaTracer::runTrace()
 			setUpNextRun(nextRunPointAKey, nextRunPointBKey, nextRunCubeAPoint, nextRunCubeBPoint);
 		}
 	}
-
-
-
 
 	auto traceAttemptEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> comparisonIterationsElapsed = traceAttemptEnd - traceAttemptBegin;
