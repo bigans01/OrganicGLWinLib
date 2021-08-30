@@ -22,7 +22,7 @@ class PTriangleMeshPointCalibrator
 			determineCalibrationGridLimit(in_translatorGridRef->dimensionLimit, 
 										  in_translatorGridRef->dimPerTile, 
 										  in_translatorGridRef->numberOfTilesPerDimension);
-			std::cout << std::setprecision(8) << std::endl;
+			//std::cout << std::setprecision(8) << std::endl;
 
 			std::cout << ">>>> min limit: " << minCalibrationGridLimit << std::endl;
 			std::cout << ">>>> max limit: " << maxCalibrationGridLimit << std::endl;

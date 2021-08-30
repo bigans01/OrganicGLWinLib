@@ -41,11 +41,19 @@ void RMatterCollider::addSPolyToMatterGenerator(SPoly in_sPolyToAdd, RMatterAge 
 	}
 }
 
+void RMatterCollider::flagOldMatterAsRMatterWrapper()
+{
+	oldMatterGenerator.flagOldMatterAsRMatter();
+}
+
 void RMatterCollider::generateAndMoveSPolyResultsToScanners()
 {
 	if (oldMatterGenerator.containsMass == true)
 	{
-		oldMatterGenerator.generateBorderSPolys();
+		if (oldMatterGenerator.isOldMassRMatter == false)
+		{
+			oldMatterGenerator.generateBorderSPolys();
+		}
 		oldMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 

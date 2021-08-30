@@ -53,7 +53,7 @@ class PTriangle
 			glm::vec3 collisionPoint1CurrentValue = collisionPointRefArray[1]->currentValue;
 			glm::vec3 collisionPoint2CurrentValue = collisionPointRefArray[2]->currentValue;
 
-			glm::vec3 u = collisionPoint0CurrentValue - collisionPoint0CurrentValue;
+			glm::vec3 u = collisionPoint1CurrentValue - collisionPoint0CurrentValue;
 			glm::vec3 v = collisionPoint2CurrentValue - collisionPoint0CurrentValue;
 
 			currentEmptyNormal = cross(u, v);

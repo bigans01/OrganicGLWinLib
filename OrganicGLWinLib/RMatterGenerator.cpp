@@ -72,3 +72,8 @@ void RMatterGenerator::generateMassInScanner()
 	generatorAreaScanner.buildGridMassShell();
 	generatorAreaScanner.fillGridMass();
 }
+
+void RMatterGenerator::flagOldMatterAsRMatter()
+{
+	isOldMassRMatter = true;
+}

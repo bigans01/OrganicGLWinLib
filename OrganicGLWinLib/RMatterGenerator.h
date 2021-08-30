@@ -26,6 +26,7 @@ class RMatterGenerator
 																	// this would be used when the mass in this instance has to be collided with another generator's mass.
 		bool doesGeneratorContainMass();
 		void printFetchableSPolys();
+		void flagOldMatterAsRMatter();
 
 	private:
 		friend class RMatterCollider;
@@ -37,6 +38,7 @@ class RMatterGenerator
 		int generatorPointsPerSlicePointArray = 0;
 		MassZoneBoxType generatorMassZoneBoxType = MassZoneBoxType::NOVAL;	
 		bool containsMass = false;	// set to true as soon as addSPolyToBorderProducer is called.
+		bool isOldMassRMatter = false;
 
 		BorderSPolyProducer generatorBorderProducer;		// a complete shell, resulting from the input SPolys + the produced polys of the border producer, 
 															// must be passed to the generatorAreaScanner.
