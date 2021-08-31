@@ -654,7 +654,7 @@ DynamicEndpointMeta RasterCubeTracerBase::getDynamicEndpointMetaData(ECBPolyPoin
 			else if ((dist_to_Z < dist_to_X) && (in_slopeDirection.z != 0.0f))	// Z-face gets intersected before X/Y, so it's a face hit and we don't need to edit the points.
 
 			{
-				std::cout << "X equals Y, Face entry" << std::endl;
+				//std::cout << "X equals Y, Face entry" << std::endl;
 				pointToCheck = z_intercept_coords;	// make pointToCheck equal to z coord, since it hits a z face before x/y
 				if (in_slopeDirection.z == 1.0f)
 				{

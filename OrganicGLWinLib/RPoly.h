@@ -88,8 +88,8 @@ class RPoly
 				numberOfRBorderLines++;
 			}
 
-			std::cout << "|||||||| RPoly constructor finished, size of RTriangles: " << rTriangleMap.size() << " | number of SPolyBorderLines: " << rBorderLines.size() << std::endl;
-			std::cout << "|||||||| RPoly RCube dimensional length: " << rPolyRCubeDimLength << std::endl;
+			//std::cout << "|||||||| RPoly constructor finished, size of RTriangles: " << rTriangleMap.size() << " | number of SPolyBorderLines: " << rBorderLines.size() << std::endl;
+			//std::cout << "|||||||| RPoly RCube dimensional length: " << rPolyRCubeDimLength << std::endl;
 		};
 
 		std::map<int, RTriangle> rTriangleMap;
