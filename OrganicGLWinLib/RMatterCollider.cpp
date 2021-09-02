@@ -80,7 +80,7 @@ void RMatterCollider::appendOldMatterToScanner()
 {
 	if (oldMatterGenerator.containsMass == true)
 	{
-		std::cout << "~~~~ Beginning append of old matter to scanner..." << std::endl;
+		//std::cout << "~~~~ Beginning append of old matter to scanner..." << std::endl;
 		collidableScanner.massGrid.appendMatterFromOtherArray(oldMatterGenerator.generatorAreaScanner.fetchMassGridArrayRef());
 	}
 }
@@ -91,12 +91,12 @@ void RMatterCollider::appendNewMatterToScanner()
 	{
 		if (colliderMode == RMatterCollisionMode::MATTER)
 		{
-			std::cout << "~~~~ Beginning append of new matter to scanner..." << std::endl;
+			//std::cout << "~~~~ Beginning append of new matter to scanner..." << std::endl;
 			collidableScanner.massGrid.appendMatterFromOtherArray(newMatterGenerator.generatorAreaScanner.fetchMassGridArrayRef());
 		}
 		else if (colliderMode == RMatterCollisionMode::ANTIMATTER)
 		{
-			std::cout << "~~~~ Beginning append of new antimatter to scanner..." << std::endl;
+			//std::cout << "~~~~ Beginning append of new antimatter to scanner..." << std::endl;
 			collidableScanner.massGrid.appendAntiMatterFromOtherArray(newMatterGenerator.generatorAreaScanner.fetchMassGridArrayRef());
 		}
 	}
@@ -115,8 +115,8 @@ void RMatterCollider::generateCollidedMatterResult()
 	{
 		totalTriangleCount += currentMeshBegin->second.groupMesh.getMeshPTriangleCount();
 	}
-	std::cout << "+++++++ collidableScanner, totalTriangleCount: " << totalTriangleCount << std::endl;
-	std::cout << "+++++++ Number of populated grid cells: " << collidableScanner.fetchMassGridArrayRef()->getNumberOfPopulatedCells() << std::endl;
+	//std::cout << "+++++++ collidableScanner, totalTriangleCount: " << totalTriangleCount << std::endl;
+	//std::cout << "+++++++ Number of populated grid cells: " << collidableScanner.fetchMassGridArrayRef()->getNumberOfPopulatedCells() << std::endl;
 }
 
 RMorphableAreaScanner* RMatterCollider::getOldMatterScannerRef()
@@ -127,6 +127,16 @@ RMorphableAreaScanner* RMatterCollider::getOldMatterScannerRef()
 RMorphableAreaScanner* RMatterCollider::getNewMatterScannerRef()
 {
 	return &newMatterGenerator.generatorAreaScanner;
+}
+
+RMatterGenerator* RMatterCollider::getOldGeneratorRef()
+{
+	return &oldMatterGenerator;
+}
+
+RMatterGenerator* RMatterCollider::getNewGeneratorRef()
+{
+	return &newMatterGenerator;
 }
 
 std::vector<SPoly> RMatterCollider::fetchProducedSPolys()

@@ -24,8 +24,8 @@ class PTriangleMeshPointCalibrator
 										  in_translatorGridRef->numberOfTilesPerDimension);
 			//std::cout << std::setprecision(8) << std::endl;
 
-			std::cout << ">>>> min limit: " << minCalibrationGridLimit << std::endl;
-			std::cout << ">>>> max limit: " << maxCalibrationGridLimit << std::endl;
+			//std::cout << ">>>> min limit: " << minCalibrationGridLimit << std::endl;
+			//std::cout << ">>>> max limit: " << maxCalibrationGridLimit << std::endl;
 
 			dynamicGridCellBorders.constructBorders(minCalibrationGridLimit, maxCalibrationGridLimit);
 			calibratePointsInArray();

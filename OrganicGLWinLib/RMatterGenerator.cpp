@@ -20,6 +20,33 @@ void RMatterGenerator::initializeGenerator(int in_generatorTilesPerDimension,
 									generatorPointsPerSlicePointArray);
 }
 
+void RMatterGenerator::handleGeneratorDebugOption(DebugOption in_firstOption)
+{
+	switch (in_firstOption)
+	{
+		case DebugOption::BORDERSPOLYPRODUCER_SHOW_EXTRACTABLE_SHELL_OUTPUT:
+		{
+			generatorBorderProducer.setBorderDebugOption(in_firstOption);
+			break;
+		}
+		case DebugOption::BORDERSPOLYPRODUCER_PRINT_OUTPUT_SPOLYS:
+		{
+			generatorBorderProducer.setBorderDebugOption(in_firstOption);
+			break;
+		}
+		case DebugOption::BORDERSPOLYPRODUCER_PRINT_MASSZONEBOX_TOUCHED_FACES:
+		{
+			generatorBorderProducer.setBorderDebugOption(in_firstOption);
+			break;
+		}
+		case DebugOption::RMATTERGENERATOR_PRINT_MASS_SHELL_BUILD_TIMES:
+		{
+			generatorAreaScanner.setScannerDOGeneric(in_firstOption);
+			break;
+		}
+	}
+}
+
 void RMatterGenerator::addSPolyToBorderProducer(SPoly in_sPolyForBorder)
 {
 	generatorBorderProducer.addInputSPoly(in_sPolyForBorder);

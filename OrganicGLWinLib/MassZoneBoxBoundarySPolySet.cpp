@@ -209,7 +209,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
 	if (boundarySPolyRef->cleaveMap.size() != 0)
 	{
-		std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
+		//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 		SPolyMorphTracker morphTracker;
 
 		//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
@@ -221,7 +221,7 @@ void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 		boundarySPolySG.roundAllSTrianglesToHundredths();
 		boundarySPolySG.buildSPolyBorderLines();
 
-		std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
+		//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
 
 		//boundarySPolySG.
 	}

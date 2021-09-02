@@ -17,7 +17,7 @@ void Rasterized3DMassGrid::appendMatterFromOtherArray(MassGridArray* in_otherDat
 
 	int dataArraySize = dataArray.getArraySize();
 
-	std::cout << "~~~~ dataArraySize: " << dataArraySize << std::endl;
+	//std::cout << "~~~~ dataArraySize: " << dataArraySize << std::endl;
 
 	int otherDataArraySize = in_otherDataArrayRef->getArraySize();
 	if 
@@ -38,14 +38,14 @@ void Rasterized3DMassGrid::appendMatterFromOtherArray(MassGridArray* in_otherDat
 				updateCount++;
 			}
 		}
-		std::cout << "Total number of appends: " << updateCount << std::endl;
+		//std::cout << "Total number of appends: " << updateCount << std::endl;
 	}
 }
 
 void Rasterized3DMassGrid::appendAntiMatterFromOtherArray(MassGridArray* in_otherDataArrayRef)
 {
 	int dataArraySize = dataArray.getArraySize();
-	std::cout << "~~~~ dataArraySize: " << dataArraySize << std::endl;
+	//std::cout << "~~~~ dataArraySize: " << dataArraySize << std::endl;
 
 	int otherDataArraySize = in_otherDataArrayRef->getArraySize();
 	if
@@ -66,7 +66,7 @@ void Rasterized3DMassGrid::appendAntiMatterFromOtherArray(MassGridArray* in_othe
 				updateCount++;
 			}
 		}
-		std::cout << "Total number of appends: " << updateCount << std::endl;
+		//std::cout << "Total number of appends: " << updateCount << std::endl;
 	}
 }
 

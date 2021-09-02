@@ -240,8 +240,10 @@ void RMorphableMeshGroup::buildMeshByXScan(MassGridArray* in_massGridArrayRef, f
 	
 
 	// print values
-	std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
-	std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;auto keyedMorphablesBegin = keyedMorphables.begin();
+	//std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
+	//std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;
+	
+	auto keyedMorphablesBegin = keyedMorphables.begin();
 	auto keyedMorphablesEnd = keyedMorphables.end();
 	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
 	{
@@ -419,8 +421,9 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 
 
 	// print values
-	std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
-	std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;auto keyedMorphablesBegin = keyedMorphables.begin();
+	//std::cout << ":::: buildMeshByXScan, minX: " << minX << std::endl;
+	//std::cout << ":::: buildMeshByXScan, maxX: " << maxX << std::endl;
+	auto keyedMorphablesBegin = keyedMorphables.begin();
 	auto keyedMorphablesEnd = keyedMorphables.end();
 	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
 	{

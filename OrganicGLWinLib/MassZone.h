@@ -33,6 +33,7 @@ private:
 	PolyDebugLevel printBoundaryLinesLogLevel = PolyDebugLevel::NONE;			// used for printing categorized lines in all SPolys of a MassZoneBox. (set via debug option, PRINT_BOUNDARY_CATEGORIZED_LINES)
 	PolyDebugLevel boundarySPolyConstructionLogLevel = PolyDebugLevel::NONE;	// used for halting and waiting for input, between the construction of boundary SPolys. (set via debug option, HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION)
 	PolyDebugLevel pointClippingLogLevel = PolyDebugLevel::NONE;				// used for output of pont clipping operations. (set via debug option, POINT_CLIPPING
+	PolyDebugLevel extractableShellDebugLevel = PolyDebugLevel::NONE;			// will show output of the calls in the function produceExtractableMassZoneShellSPolys
 	MassZonePointClipper clipper;
 	std::map<int, int> sPolyToSubZoneMap;
 	std::map<int, int> subZoneToSPolyMap;

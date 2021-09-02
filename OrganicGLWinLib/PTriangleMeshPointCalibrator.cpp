@@ -66,7 +66,7 @@ void PTriangleMeshPointCalibrator::applyCalibration(RCollisionPoint* in_collisio
 
 	//in_collisionPointRef->currentValue = testVec3;
 
-	std::cout << "(PTriangleMeshCalibrator): --> newly calibrated point is: " << in_collisionPointRef->currentValue.x << ", " << in_collisionPointRef->currentValue.y << ", " << in_collisionPointRef->currentValue.z << std::endl;
+	//std::cout << "(PTriangleMeshCalibrator): --> newly calibrated point is: " << in_collisionPointRef->currentValue.x << ", " << in_collisionPointRef->currentValue.y << ", " << in_collisionPointRef->currentValue.z << std::endl;
 }
 
 void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionPointRef)
@@ -79,56 +79,56 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 
 	if (currentValueRef->x == dynamicGridCellBorders.corner_LowerNW.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_LowerNW.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_LowerNW.limit.z)		// Lower NW
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Lower NW corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Lower NW corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_LOWERNW;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_LowerNW);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_LowerSW.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_LowerSW.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_LowerSW.limit.z)		// Lower SW
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Lower SW corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Lower SW corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_LOWERSW;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_LowerSW);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_LowerSE.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_LowerSE.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_LowerSE.limit.z)		// Lower SE
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Lower SE corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Lower SE corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_LOWERSE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_LowerSE);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_LowerNE.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_LowerNE.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_LowerNE.limit.z)		// Lower NE
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Lower NE corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Lower NE corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_LOWERNE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_LowerNE);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_UpperNW.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_UpperNW.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_UpperNW.limit.z)		// Upper NW
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Upper NW corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Upper NW corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_UPPERNW;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_UpperNW);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_UpperSW.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_UpperSW.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_UpperSW.limit.z)		// Upper SW
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Upper SW corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Upper SW corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_UPPERSW;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_UpperSW);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_UpperSE.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_UpperSE.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_UpperSE.limit.z)		// Upper SE
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Upper SE corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Upper SE corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_UPPERSE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_UpperSE);
 	}
 	else if (currentValueRef->x == dynamicGridCellBorders.corner_UpperNE.limit.x	&&		currentValueRef->y == dynamicGridCellBorders.corner_UpperNE.limit.y	&&		currentValueRef->z == dynamicGridCellBorders.corner_UpperNE.limit.z)		// Upper SE
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Upper NE corner hit" << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Upper NE corner hit" << std::endl;
 		//returnResults.otype = ECBPPOrientations::CORNER;
 		//returnResults.osubtype = ECBPPOrientations::CORNER_UPPERNE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.corner_UpperNE);
@@ -147,7 +147,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::ZAXIS_LOWERWEST;
-		std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at lower west line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at lower west line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Zaxis_lowerWest);
 	}
 
@@ -161,7 +161,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::ZAXIS_UPPERWEST;
-		std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at upper west line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at upper west line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Zaxis_upperWest);
 	}
 
@@ -175,7 +175,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::ZAXIS_UPPEREAST;
-		std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at upper east line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at upper east line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Zaxis_upperEast);
 	}
 	// >>>>> Lower East line check
@@ -188,7 +188,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::ZAXIS_LOWEREAST;
-		std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at lower east line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Z lines -- Point is at lower east line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Zaxis_lowerEast);
 	}
 
@@ -210,7 +210,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::YAXIS_NORTHEAST;
-		std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at north east line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at north east line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Yaxis_northEast);
 	}
 
@@ -224,7 +224,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::YAXIS_SOUTHEAST;
-		std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at south east line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at south east line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Yaxis_southEast);
 	}
 
@@ -238,7 +238,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::YAXIS_SOUTHWEST;
-		std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at south west line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at south west line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Yaxis_southWest);
 	}
 
@@ -252,7 +252,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 	{
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::YAXIS_NORTHWEST;
-		std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at north west line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Y lines -- Point is at north west line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Yaxis_northWest);
 	}
 
@@ -272,7 +272,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		//*in_KeyPtr = OrganicUtils::addEnclaveKeys(*in_KeyPtr, newKey);
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::XAXIS_LOWERNORTH;
-		std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at lower north line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at lower north line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Xaxis_lowerNorth);
 
 	}
@@ -289,7 +289,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		//*in_KeyPtr = OrganicUtils::addEnclaveKeys(*in_KeyPtr, newKey);
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::XAXIS_LOWERSOUTH;
-		std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at lower south line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at lower south line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Xaxis_lowerSouth);
 	}
 	// Upper South line check-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::XAXIS_UPPERSOUTH;
 		//std::cout << "Point is at upper south line....." << std::endl;
-		std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at upper south line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at upper south line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Xaxis_upperSouth);
 	}
 	// Upper North line check-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		//*in_KeyPtr = OrganicUtils::addEnclaveKeys(*in_KeyPtr, newKey);
 		//returnResults.otype = ECBPPOrientations::LINE;
 		//returnResults.osubtype = ECBPPOrientations::XAXIS_UPPERNORTH;
-		std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at upper north line " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): X lines -- Point is at upper north line " << std::endl;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.Xaxis_upperNorth);
 	}
 
@@ -340,7 +340,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): West face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): West face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::WESTFACE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.WestFace);
@@ -358,7 +358,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		(currentValueRef->y < dynamicGridCellBorders.corner_UpperNW.limit.y)
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): North face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): North face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::NORTHFACE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.NorthFace);
@@ -376,7 +376,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		(currentValueRef->z < dynamicGridCellBorders.corner_UpperSW.limit.z)
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): East face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): East face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::EASTFACE;
 		//std::cout << "EAST FACE hit! " << std::endl;
@@ -395,7 +395,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		(currentValueRef->y < dynamicGridCellBorders.corner_UpperNW.limit.y)
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): South face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): South face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::SOUTHFACE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.SouthFace);
@@ -413,7 +413,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		(currentValueRef->z < dynamicGridCellBorders.corner_UpperSW.limit.z)
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Top face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Top face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::TOPFACE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.TopFace);
@@ -431,7 +431,7 @@ void PTriangleMeshPointCalibrator::calibratePoint(RCollisionPoint* in_collisionP
 		(currentValueRef->z < dynamicGridCellBorders.corner_UpperSW.limit.z)
 	)
 	{
-		std::cout << "(PTriangleMeshPointCalibrator): Bottom face found. " << std::endl;
+		//std::cout << "(PTriangleMeshPointCalibrator): Bottom face found. " << std::endl;
 		//returnResults.otype = ECBPPOrientations::FACE;
 		//returnResults.osubtype = ECBPPOrientations::BOTTOMFACE;
 		applyCalibration(in_collisionPointRef, dynamicGridCellBorders.BottomFace);

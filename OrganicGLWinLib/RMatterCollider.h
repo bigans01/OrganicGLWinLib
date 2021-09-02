@@ -51,6 +51,9 @@ class RMatterCollider
 		RMorphableAreaScanner* getOldMatterScannerRef();
 		RMorphableAreaScanner* getNewMatterScannerRef();
 
+		RMatterGenerator* getOldGeneratorRef();
+		RMatterGenerator* getNewGeneratorRef();
+
 		RMorphableAreaScanner collidableScanner;
 		std::vector<SPoly> fetchProducedSPolys();	// used by OrganicCoreLib to get the resulting SPolys produced by the collider
 	private:

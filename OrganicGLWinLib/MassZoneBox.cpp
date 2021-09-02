@@ -125,43 +125,51 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType)
 {
 	std::set<MassZoneBoxBoundaryOrientation> generatedTouchedList;
+	PolyLogger touchedLogger;
+	touchedLogger.setDebugLevel(generatedTouchedFaceDebugLevel);
 	auto currentBoundaryBegin = boxBoundaries.begin();
 	auto currentBoundaryEnd = boxBoundaries.end();
 	for (; currentBoundaryBegin != currentBoundaryEnd; currentBoundaryBegin++)
 	{
 		// only continue if there's actually 
 		// an SPoly that was produced in the MassZoneBoxBoundarySPolySet.
-		std::cout << "!! Entering next boundary.." << std::endl;
+		// std::cout << "!! Entering next boundary.." << std::endl;
 		switch (currentBoundaryBegin->first)
 		{
 			case MassZoneBoxBoundaryOrientation::NEG_X:
 			{
-				std::cout << "Boundary NEG_X" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary NEG_X" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_X", "\n");
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::NEG_Z:
 			{
-				std::cout << "Boundary NEG_Z" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary NEG_Z" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_Z", "\n");
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_X:
 			{
-				std::cout << "Boundary POS_X" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary POS_X" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary POS_X", "\n");
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_Z:
 			{
-				std::cout << "Boundary POS_Z" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary POS_Z" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary POS_Z", "\n");
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_Y:
 			{
-				std::cout << "Boundary POS_Y" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary POS_Y" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary POS_Y", "\n");
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::NEG_Y:
 			{
-				std::cout << "Boundary NEG_Y" << std::endl;
+				//std::cout << "(MassZoneBox): Found box Boundary NEG_Y" << std::endl;
+				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_Y", "\n");
 				break;
 			}
 		}
@@ -198,7 +206,11 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 							pointOrientation = IndependentUtils::GetEnclavePointOrientation(convertedPoint, &enclaveBorders);
 							if (pointOrientation.otype == ECBPPOrientations::LINE)
 							{
-								IndependentUtils::printOrientationEnum(pointOrientation.osubtype);
+								if (touchedLogger.isLoggingSet())
+								{
+									std::cout << "(MassZoneBox): ";
+									IndependentUtils::printOrientationEnum(pointOrientation.osubtype);
+								}
 							}
 							break;
 						}
@@ -228,42 +240,45 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 		}
 	}
 
-	std::cout << "+++++++++++++ Printing out values of the generatedTouchedList (size is " << generatedTouchedList.size() << std::endl;
-	auto listBegin = generatedTouchedList.begin();
-	auto listEnd = generatedTouchedList.end();
-	for (; listBegin != listEnd; listBegin++)
+	if (touchedLogger.isLoggingSet())
 	{
-		switch (*listBegin)
+		std::cout << "(MassZoneBox): +++++++++++++ Printing out values of the generatedTouchedList (size is " << generatedTouchedList.size() << std::endl;
+		auto listBegin = generatedTouchedList.begin();
+		auto listEnd = generatedTouchedList.end();
+		for (; listBegin != listEnd; listBegin++)
 		{
+			switch (*listBegin)
+			{
 			case MassZoneBoxBoundaryOrientation::NEG_X:
 			{
-				std::cout << "NEG_X" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face NEG_X" << std::endl;
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::NEG_Z:
 			{
-				std::cout << "NEG_Z" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face NEG_Z" << std::endl;
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_X:
 			{
-				std::cout << "POS_X" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face POS_X" << std::endl;
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_Z:
 			{
-				std::cout << "POS_Z" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face POS_Z" << std::endl;
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::POS_Y:
 			{
-				std::cout << "POS_Y" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face POS_Y" << std::endl;
 				break;
 			}
 			case MassZoneBoxBoundaryOrientation::NEG_Y:
 			{
-				std::cout << "NEG_Y" << std::endl;
+				std::cout << "(MassZoneBox): Found touched face NEG_Y" << std::endl;
 				break;
+			}
 			}
 		}
 	}
@@ -284,36 +299,36 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOri
 			{
 				case MassZoneBoxBoundaryOrientation::NEG_X:
 				{
-					std::cout << "NEG_X";
+					//std::cout << "NEG_X";
 					break;
 				}
 				case MassZoneBoxBoundaryOrientation::NEG_Z:
 				{
-					std::cout << "NEG_Z";
+					//std::cout << "NEG_Z";
 					break;
 				}
 				case MassZoneBoxBoundaryOrientation::POS_X:
 				{
-					std::cout << "POS_X";
+					//std::cout << "POS_X";
 					break;
 				}
 				case MassZoneBoxBoundaryOrientation::POS_Z:
 				{
-					std::cout << "POS_Z";
+					//std::cout << "POS_Z";
 					break;
 				}
 				case MassZoneBoxBoundaryOrientation::POS_Y:
 				{
-					std::cout << "POS_Y";
+					//std::cout << "POS_Y";
 					break;
 				}
 				case MassZoneBoxBoundaryOrientation::NEG_Y:
 				{
-					std::cout << "NEG_Y";
+					//std::cout << "NEG_Y";
 					break;
 				}
 			}
-			std::cout << " needs to have its face produced (tertiary SPoly, 1st pass)" << std::endl;
+			//std::cout << " needs to have its face produced (tertiary SPoly, 1st pass)" << std::endl;
 			SPolySupergroup tempGroup;
 			tempGroup.insertSPoly(*boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef);
 			(*in_outputSuperGroupsMapRef)[*orientationSetBegin] = tempGroup;
@@ -329,6 +344,11 @@ void MassZoneBox::setContestedCategorizedLineAnalysisFlagInBoundaries()
 	{
 		boundariesBegin->second.boundaryPolySet.isContestedCategorizedLineAnalysisEnabled = true;
 	}
+}
+
+void MassZoneBox::setTouchedGenerationDebugLevel(PolyDebugLevel in_debugLevel)
+{
+	generatedTouchedFaceDebugLevel = in_debugLevel;
 }
 
 MassZoneBoxBoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)

@@ -552,10 +552,10 @@ int SPoly::checkForNewCleaves()
 
 void SPoly::moveLastCleave()
 {
-	std::cout << "Checking for last cleave..." << std::endl;
+	//std::cout << "Checking for last cleave..." << std::endl;
 	if (categorizedLineMap.size() != 0)	// are there any lines left?
 	{
-		std::cout << "!!!! Lines found to form into a final cleave. " << std::endl;
+		//std::cout << "!!!! Lines found to form into a final cleave. " << std::endl;
 		/*
 		organizeCurrentCleaveLines();	// make sure the lines are in the appropriate order, before moving the last cleave.
 		int numberOfLines = categorizedLineMap.size();
@@ -577,7 +577,7 @@ void SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeM
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
-		std::cout << "!! Constructing Cleave Sequences. " << std::endl;
+		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;
 		sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
 		//std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}

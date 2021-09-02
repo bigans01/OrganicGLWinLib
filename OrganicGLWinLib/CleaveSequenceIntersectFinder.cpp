@@ -61,7 +61,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 		LineWelder welder(in_sPolyRef, intersectFinderLoggerDebugLevel);
 		while (welder.getRemainingCandidateCount() > 0)
 		{
-			std::cout << "-->Begin welding iteration." << std::endl;
+			//std::cout << "-->Begin welding iteration." << std::endl;
 			welder.startWelding();							// perform one welding run; this will update the total number of remaining CategorizedLines contained
 			welder.purgeNegligibleLinesInPool();			// lines where the points are too close to each other need to be purged (added on 6/1/2021)
 			linePool = welder.retrieveLinePool();			// retrieve the linePool that was produced by the LineWelder, during this loop run.
@@ -87,7 +87,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 				triangleSupergroup.insertTriangleContainer(std::move(*containerVectorBegin));
 			}
 			welder.clearLinePool();
-			std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
+			//std::cout << ":::: Welding iteration complete; enter value to continue. " << std::endl;
 			//int someVal = 5;
 			//std::cin >> someVal;
 		}

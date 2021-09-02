@@ -11,6 +11,15 @@ class RMatterGenerator
 {
 	public:
 		RMatterGenerator() {};
+
+		// template function for debug options
+		template<typename FirstDebugOption, typename ...RemainingDebugOptions>
+		void setGeneratorDebugOption(FirstDebugOption && firstOption, RemainingDebugOptions && ...remainingOptions)
+		{
+			handleGeneratorDebugOption(std::forward<FirstDebugOption>(firstOption));
+			setGeneratorDebugOption(std::forward<RemainingDebugOptions>(remainingOptions)...);
+		}
+		void setGeneratorDebugOption() {};
 		
 		void initializeGenerator(int in_generatorTilesPerDimension,
 								 float in_generatorDimensionLimit,
@@ -30,6 +39,8 @@ class RMatterGenerator
 
 	private:
 		friend class RMatterCollider;
+
+		void handleGeneratorDebugOption(DebugOption in_firstOption);
 
 		// the following members are set by call to initializeGenerator
 		int generatorTilesPerDimension = 0;

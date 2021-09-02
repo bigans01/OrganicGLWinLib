@@ -16,7 +16,16 @@ void RMorphableAreaScanner::handleGenericDO(DebugOption in_debugOption)
 
 void RMorphableAreaScanner::buildGridMassShell()
 {
-	std::cout << "##################### Build shell START" << std::endl;
+	PolyLogger massGridShellLogger;
+	bool doesOptionExist = scannerDebugOptions.containsOption(DebugOption::RMATTERGENERATOR_PRINT_MASS_SHELL_BUILD_TIMES);
+	if (doesOptionExist == true)
+	{
+		massGridShellLogger.setDebugLevel(PolyDebugLevel::DEBUG);
+	}
+
+	//std::cout << "##################### Build shell START" << std::endl;
+	massGridShellLogger.log("(RMorphableAreaScanner): ##################### Build shell START", "\n");
+
 	auto shellBuildStart = std::chrono::high_resolution_clock::now();
 	massGrid.buildShell();
 	/*
@@ -33,9 +42,11 @@ void RMorphableAreaScanner::buildGridMassShell()
 	*/
 
 	auto shellBuildEnd = std::chrono::high_resolution_clock::now();
-	std::cout << "##################### Build shell END" << std::endl;
+	//std::cout << "##################### Build shell END" << std::endl;
+	massGridShellLogger.log("(RMorphableAreaScanner): ##################### Build shell END", "\n");
 	std::chrono::duration<double> comparisonIterationsElapsed = shellBuildEnd - shellBuildStart;
-	std::cout << "Shell build time: " << comparisonIterationsElapsed.count() << std::endl;
+	//std::cout << "Shell build time: " << comparisonIterationsElapsed.count() << std::endl;
+	massGridShellLogger.log("(RMorphableAreaScanner): Shell build time: ", comparisonIterationsElapsed.count(), "\n");
 }
 
 void RMorphableAreaScanner::fillGridMass()

@@ -161,7 +161,7 @@ void MassGridArray::executeDownfills()
 	}
 	auto downfillExecutionEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> downfillElapsed = downfillExecutionEnd - downfillExecutionBegin;
-	std::cout << "--------------" << std::endl;
+	//std::cout << "--------------" << std::endl;
 
 	//std::cout << "!!! Downfill runtime: " << downfillElapsed.count() << std::endl;
 	//std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;

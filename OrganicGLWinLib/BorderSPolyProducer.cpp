@@ -6,6 +6,28 @@ void BorderSPolyProducer::addInputSPoly(SPoly in_inputSPoly)
 	inputSPolys[numberOfInputSPolys++] = in_inputSPoly; // add the poly, and increment it
 }
 
+void BorderSPolyProducer::handleBorderDebugOption(DebugOption in_debugOption)
+{
+	switch (in_debugOption)
+	{
+		case DebugOption::BORDERSPOLYPRODUCER_SHOW_EXTRACTABLE_SHELL_OUTPUT:
+		{
+			productionMassZone.extractableShellDebugLevel = PolyDebugLevel::DEBUG;
+			break;
+		}
+		case DebugOption::BORDERSPOLYPRODUCER_PRINT_OUTPUT_SPOLYS:
+		{
+			printOutputSPolysDebugLevel = PolyDebugLevel::DEBUG;
+			break;
+		}
+		case DebugOption::BORDERSPOLYPRODUCER_PRINT_MASSZONEBOX_TOUCHED_FACES:
+		{
+			productionMassZone.zoneBox.setTouchedGenerationDebugLevel(PolyDebugLevel::DEBUG);
+			break;
+		}
+	}
+}
+
 void BorderSPolyProducer::configurePolysWithoutNormalCalcs()
 {
 	for (int x = 0; x < numberOfInputSPolys; x++)
@@ -68,15 +90,18 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 	productionMassZone.runFirstTertiaryProductionPassInZoneBox(fetchedList, &outputSPolySuperGroups);
 
 
-	auto outputsBegin = outputSPolySuperGroups.begin();
-	auto outputsEnd = outputSPolySuperGroups.end();
-	for (; outputsBegin != outputsEnd; outputsBegin++)
+	if (printOutputSPolysDebugLevel == PolyDebugLevel::DEBUG)
 	{
-		OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(outputsBegin->first);
-		std::cout << std::endl;
-		outputsBegin->second.printSPolys();
+		std::cout << "(BorderSPolyProducer): printing out produced SPolys in each mass zone box boundary..." << std::endl;
+		auto outputsBegin = outputSPolySuperGroups.begin();
+		auto outputsEnd = outputSPolySuperGroups.end();
+		for (; outputsBegin != outputsEnd; outputsBegin++)
+		{
+			OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(outputsBegin->first);
+			std::cout << std::endl;
+			outputsBegin->second.printSPolys();
+		}
 	}
-
 }
 
 std::vector<SPoly> BorderSPolyProducer::fetchAllSPolys()

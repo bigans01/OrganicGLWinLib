@@ -19,6 +19,8 @@
 #include "ECBBorderLineList.h"
 #include "BorderMDFaceList.h"
 #include "BorderDataMap.h"
+#include "PolyDebugLevel.h"
+#include "PolyLogger.h"
 
 class MassZoneBox
 {
@@ -33,8 +35,10 @@ class MassZoneBox
 		void runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet, 
 											std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 		void setContestedCategorizedLineAnalysisFlagInBoundaries();
+		void setTouchedGenerationDebugLevel(PolyDebugLevel in_debugLevel);
 	private:
 		MassZoneBoxBoundaryOrientation convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation);
+		PolyDebugLevel generatedTouchedFaceDebugLevel = PolyDebugLevel::NONE;
 };
 
 #endif
