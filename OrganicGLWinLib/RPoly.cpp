@@ -6,7 +6,7 @@ void RPoly::addRTriangle(RTriangle in_rTriangleToAdd)
 	rTriangleMap[numberOfRTriangles++] = in_rTriangleToAdd;
 }
 
-void RPoly::traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef)
+void RPoly::traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef, bool in_debugFlag)
 {
 	auto rTrianglesBegin = rTriangleMap.begin();
 	auto rTrianglesEnd = rTriangleMap.end();
@@ -16,7 +16,8 @@ void RPoly::traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef)
 														 rPolyEmptyNormal,
 			                                             rPolyRCubeDimLength,
 			                                             rPolyTilesPerDim,
-			                                             rPolyTileWeightToHundredthFloatRatio);
+			                                             rPolyTileWeightToHundredthFloatRatio,
+														 in_debugFlag);
 	}
 }
 

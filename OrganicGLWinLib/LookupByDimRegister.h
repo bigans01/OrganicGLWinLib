@@ -44,6 +44,19 @@ class LookupByDimRegister
 			EnclaveKeyDef::Enclave2DKey twoDKeyB;
 		};
 
+		void printScanRunKeys();
+		void insertLineSetRef(int in_lineID,
+			std::unordered_set<EnclaveKeyDef::Enclave2DKey, EnclaveKeyDef::KeyHasher>* in_lineSetRef);
+		void buildScanRuns(bool in_debugFlag);
+		void executeScanRuns(MassGridArray* in_massGridArrayRef,
+			float in_rPolyRCubeDimLength,
+			float in_rPolyTilesPerDim,
+			float in_rPolyTileWeightToHundredthFloatRatio,
+			short in_downfillCrustBitValue,
+			short in_upfillCrustBitValue, 
+			glm::vec3 in_emptyNormal,
+			short in_scanRunMaterialID);
+
 		int dimValue = 0;	// x,y,z or coordinate value that represents the slice to scan. 
 							// i.e, dimValue = 3 could mean:
 							// scan y and z at x = 3
@@ -55,16 +68,5 @@ class LookupByDimRegister
 		std::vector<TwoDKeyPair> scanRuns;
 		int registerTotalIntetiorFills = 0;
 
-		void insertLineSetRef(int in_lineID,
-			std::unordered_set<EnclaveKeyDef::Enclave2DKey, EnclaveKeyDef::KeyHasher>* in_lineSetRef);
-		void buildScanRuns();
-		void executeScanRuns(MassGridArray* in_massGridArrayRef,
-			float in_rPolyRCubeDimLength,
-			float in_rPolyTilesPerDim,
-			float in_rPolyTileWeightToHundredthFloatRatio,
-			short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, 
-			glm::vec3 in_emptyNormal,
-			short in_scanRunMaterialID);
 };
 #endif

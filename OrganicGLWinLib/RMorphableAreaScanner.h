@@ -22,6 +22,7 @@ class RMorphableAreaScanner
 {
 	public:
 		RMorphableAreaScanner() {};
+
 		template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setScannerDOSpecificRMorphableMesh(EnclaveKeyDef::EnclaveKey in_rMorphableMeshKey,
 																														FirstDebugOption && firstOption,
 																														RemainingDebugOptions && ...optionParams)
@@ -38,6 +39,13 @@ class RMorphableAreaScanner
 			setScannerDOGeneric(std::forward<RemainingDebugOptions>(optionParams)...);
 		}
 		void setScannerDOGeneric() {};
+
+		template<typename FirstDebugOption, typename ...RemainingDebugOptions> void setDOSpecificRPoly(int in_rPolyID, FirstDebugOption && firstOption, RemainingDebugOptions && ...optionParams)
+		{
+			setSpecificRPolyOption(in_rPolyID, std::forward<FirstDebugOption>(firstOption));
+			setDOSpecificRPoly(in_rPolyID, std::forward<RemainingDebugOptions>(optionParams)...);
+		}
+		void setDOSpecificRPoly(int in_rPolyID) {};
 
 		// setupScanner must be called before adding any SPolys that are converted to RPolys.
 		void setupScanner(int in_tilesPerDimension, 
@@ -77,6 +85,8 @@ class RMorphableAreaScanner
 
 		// optional manipulation function calls
 		void clampNonFreeMeshPointsToNaturalLimits();
+
+		void setSpecificRPolyOption(int in_rPolyID, DebugOption in_debugOption);
 
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> ungroupedMeshes;	// where all the meshes go initially, before doing the grouping pass.
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, RMorphableMesh, EnclaveKeyDef::KeyHasher> currentMeshGroup;

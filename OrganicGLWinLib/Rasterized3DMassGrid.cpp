@@ -12,6 +12,28 @@ void Rasterized3DMassGrid::addGridRPoly(SPoly in_sPolyToResolve)
 	rPolyMap[gridRPolyCount++] = polyToResolve;
 }
 
+void Rasterized3DMassGrid::printRPolyTriangles()
+{
+	std::cout << "(Rasterized3DMassGrid): printing out RPoly RTriangles in this mass grid. " << std::endl;
+	auto rPolysBegin = rPolyMap.begin();
+	auto rPolysEnd = rPolyMap.end();
+	for (; rPolysBegin != rPolysEnd; rPolysBegin++)
+	{
+		std::cout << "RPoly ID: " << rPolysBegin->first << std::endl;
+		auto currentRTriangleBegin = rPolysBegin->second.rTriangleMap.begin();
+		auto currentRTriangleEnd = rPolysBegin->second.rTriangleMap.end();
+		for (; currentRTriangleBegin != currentRTriangleEnd; currentRTriangleBegin++)
+		{
+			currentRTriangleBegin->second.printRPoints();
+		}
+	}
+}
+
+void Rasterized3DMassGrid::insertSpecificRPolyDO(int in_rPolyID, DebugOption in_debugOption)
+{
+	rPolyDebugOptionSets[in_rPolyID] += in_debugOption;
+}
+
 void Rasterized3DMassGrid::appendMatterFromOtherArray(MassGridArray* in_otherDataArrayRef)
 {
 
@@ -78,7 +100,13 @@ void Rasterized3DMassGrid::buildShell()
 	auto rPolysEnd = rPolyMap.end();
 	for (; rPolysBegin != rPolysEnd; rPolysBegin++)
 	{
-		rPolysBegin->second.traceTriangleAreaIntoGrid(&dataArray);
+		bool debugFlagForRPoly = false;
+		auto wasRPolyDebugFound = rPolyDebugOptionSets.find(rPolysBegin->first);
+		if (wasRPolyDebugFound != rPolyDebugOptionSets.end())
+		{
+			debugFlagForRPoly = true;
+		}
+		rPolysBegin->second.traceTriangleAreaIntoGrid(&dataArray, debugFlagForRPoly);
 	}
 }
 

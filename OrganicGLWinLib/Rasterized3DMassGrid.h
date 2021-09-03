@@ -11,6 +11,8 @@
 #include "EnclaveKeyDef.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
+#include "DebugOption.h"
+#include "DebugOptionSet.h"
 
 class Rasterized3DMassGrid : public RasterGrid3dBase
 {
@@ -21,6 +23,7 @@ class Rasterized3DMassGrid : public RasterGrid3dBase
 		friend class RMorphableAreaScanner;
 		friend class RMatterCollider;
 
+		void insertSpecificRPolyDO(int in_rPolyID, DebugOption in_debugOption);
 		void appendMatterFromOtherArray(MassGridArray* in_otherDataArrayRef);
 		void appendAntiMatterFromOtherArray(MassGridArray* in_otherDataArrayRef);
 		void addGridRPoly(SPoly in_sPolyToResolve);
@@ -29,10 +32,12 @@ class Rasterized3DMassGrid : public RasterGrid3dBase
 		void setGridParameters(int in_tilesPerDimension, float in_dimensionLimit);	// parameters to set before any RPolys are added
 		void setLoggerDebugLevel(PolyDebugLevel in_logLevel);	// optional debug output
 		bool wasMassFoundInAreaScan(MassGridArrayCellScanArea in_scanArea);		
+		void printRPolyTriangles();
 		MassGridSearchResult fetchCell(EnclaveKeyDef::EnclaveKey in_key);
 		MassGridArray* fetchDataArrayRef();
 
 		std::map<int, RPoly> rPolyMap;
+		std::map<int, DebugOptionSet> rPolyDebugOptionSets;
 		int gridRPolyCount = 0;
 		MassGridArray dataArray;
 		PolyDebugLevel massGridLogLevel = PolyDebugLevel::NONE;

@@ -209,8 +209,9 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 	                                     glm::vec3 in_triangleEmptyNormal,
 	                                     float in_rPolyRCubeDimLength,
 	                                     float in_rPolyTilesPerDim,
-	                                     float in_rPolyTileWeightToHundredthFloatRatio)
+	                                     float in_rPolyTileWeightToHundredthFloatRatio, bool in_rPolyDebugFlag)
 {
+
 	// step 1: determine the value of the DOWNFILL_CRUST and UPFILL_CRUST bits
 	short downFillCrustBit = 0;
 	short upfillCrustBit = 0;
@@ -221,6 +222,18 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 	else if (in_triangleEmptyNormal.y < 0.0f)
 	{
 		upfillCrustBit = 1;
+	}
+
+	// set debug, if needed
+	if (in_rPolyDebugFlag == true)
+	{
+		rTriangleDebugLogger.setDebugLevel(PolyDebugLevel::DEBUG);
+		rTriangleDebugLogger.log("(RTriangle): Notice, this RTriangle has been flagged for debugging! ", "\n");
+		rTriangleDebugLogger.log("(RTriangle): downFillCrustBit value: ", downFillCrustBit, "\n");
+		rTriangleDebugLogger.log("(RTriangle): upFillCrustBit value: ", upfillCrustBit, "\n");
+
+
+		rTriangleDebugLogger.waitForDebugInput();
 	}
 
 	// step 2: trace the lines of the triangle into the grid.
@@ -252,23 +265,23 @@ void RTriangle::traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 void RTriangle::initializeXYZDimRegisters()
 {
 	int xScanMetaBeginValue = xScanMeta.dimStartValue;
-	for (int x = 0; x < xScanMeta.numberOfScans; x++)
+	for (int x = xScanMeta.dimStartValue; x < xScanMeta.numberOfScans; x++)
 	{
-		LookupByDimRegister newXRegister(xScanMetaBeginValue++, RScanDim::X);
+		LookupByDimRegister newXRegister(x, RScanDim::X);
 		xDimRegister[x] = newXRegister;
 	}
 
 	int yScanMetaBeginValue = yScanMeta.dimStartValue;
-	for (int y = 0; y < yScanMeta.numberOfScans; y++)
+	for (int y = yScanMeta.dimStartValue; y < yScanMeta.numberOfScans; y++)
 	{
-		LookupByDimRegister newYRegister(yScanMetaBeginValue++, RScanDim::Y);
+		LookupByDimRegister newYRegister(y, RScanDim::Y);
 		yDimRegister[y] = newYRegister;
 	}
 
 	int zScanMetaBeginValue = zScanMeta.dimStartValue;
-	for (int z = 0; z < zScanMeta.numberOfScans; z++)
+	for (int z = zScanMeta.dimStartValue; z < zScanMeta.numberOfScans; z++)
 	{
-		LookupByDimRegister newZRegister(zScanMetaBeginValue++, RScanDim::Z);
+		LookupByDimRegister newZRegister(z, RScanDim::Z);
 		zDimRegister[z] = newZRegister;
 	}
 }
@@ -289,22 +302,12 @@ void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 			auto currentLineTouchedBlocks = rLines[currentLine].findBlocksAtX(currentXValue);
 			if (!currentLineTouchedBlocks.empty())
 			{
-				/*
-				std::cout << "!! Found entries at line " << currentLine << ", for " << currentXValue << ": " << std::endl;
-				auto line0PrintablesBegin = rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue].begin();
-				auto line0PrintablesEnd = rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue].end();
-				for (; line0PrintablesBegin != line0PrintablesEnd; line0PrintablesBegin++)
-				{
-					std::cout << "(" << currentXValue << ", " << line0PrintablesBegin->a << ", " << line0PrintablesBegin->b << ") " << std::endl;
-				}
-				*/
+				xDimRegister[x].insertLineSetRef(currentLine, &rLines[currentLine].rasterizedBlocks.xLookup.lookup[currentXValue]);
 			}
 		}
-		//int scanWait = 3; 
-		//std::cin >> scanWait;
-
 		// build the scans in each register, then execute them
-		xDimRegister[x].buildScanRuns();
+		bool scanRunDebugFlag = false;
+		xDimRegister[x].buildScanRuns(scanRunDebugFlag);
 		xDimRegister[x].executeScanRuns(in_massGridArrayRef,
 			                            in_rPolyRCubeDimLength,
 			                            in_rPolyTilesPerDim,
@@ -337,7 +340,8 @@ void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 		}
 
 		// build the scans in each register, then execute them
-		yDimRegister[y].buildScanRuns();
+		bool scanRunDebugFlag = false;
+		yDimRegister[y].buildScanRuns(scanRunDebugFlag);
 		yDimRegister[y].executeScanRuns(in_massGridArrayRef,
 										in_rPolyRCubeDimLength,
 										in_rPolyTilesPerDim,
@@ -369,7 +373,8 @@ void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 		}
 
 		// build the scans in each register then execute them
-		zDimRegister[z].buildScanRuns();
+		bool scanRunDebugFlag = false;
+		zDimRegister[z].buildScanRuns(scanRunDebugFlag);
 		zDimRegister[z].executeScanRuns(in_massGridArrayRef,
 										in_rPolyRCubeDimLength,
 										in_rPolyTilesPerDim,

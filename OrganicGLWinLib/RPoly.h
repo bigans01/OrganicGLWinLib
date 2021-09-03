@@ -95,7 +95,7 @@ class RPoly
 		std::map<int, RTriangle> rTriangleMap;
 		std::map<int, SPolyBorderLines> rBorderLines;
 		void addRTriangle(RTriangle in_rTriangleToAdd);
-		void traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef);
+		void traceTriangleAreaIntoGrid(MassGridArray* in_massGridArrayRef, bool in_debugFlag);
 		void printRPoints();
 
 	private:

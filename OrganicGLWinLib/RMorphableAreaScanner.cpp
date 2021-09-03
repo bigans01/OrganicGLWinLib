@@ -23,6 +23,14 @@ void RMorphableAreaScanner::buildGridMassShell()
 		massGridShellLogger.setDebugLevel(PolyDebugLevel::DEBUG);
 	}
 
+	bool doesRTrianglePrintExist = scannerDebugOptions.containsOption(DebugOption::RMORPHABLEAREASCANNER_PRINT_RTRIANGLE_POINTS);
+	if (doesRTrianglePrintExist == true)
+	{
+		massGrid.printRPolyTriangles();
+		int waitVal = 3;
+		std::cin >> waitVal;
+	}
+
 	//std::cout << "##################### Build shell START" << std::endl;
 	massGridShellLogger.log("(RMorphableAreaScanner): ##################### Build shell START", "\n");
 
@@ -282,6 +290,11 @@ void RMorphableAreaScanner::clampNonFreeMeshPointsToNaturalLimits()
 	{
 		currentMeshGroupBegin->second.calibratePTriangleMeshPoints(&gridTranslator);
 	}
+}
+
+void RMorphableAreaScanner::setSpecificRPolyOption(int in_rPolyID, DebugOption in_debugOption)
+{
+	massGrid.insertSpecificRPolyDO(in_rPolyID, in_debugOption);
 }
 
 void RMorphableAreaScanner::acquireProducedSolutions()

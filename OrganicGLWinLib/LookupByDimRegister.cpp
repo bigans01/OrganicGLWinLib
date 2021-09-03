@@ -8,7 +8,44 @@ void LookupByDimRegister::insertLineSetRef(int in_lineID,
 	lineSetRefs[in_lineID] = newRef;
 }
 
-void LookupByDimRegister::buildScanRuns()
+void LookupByDimRegister::printScanRunKeys()
+{
+	auto scansBegin = scanRuns.begin();
+	auto scansEnd = scanRuns.end();
+	int currentScan = 0;
+	for (; scansBegin != scansEnd; scansBegin++)
+	{
+		std::cout << "Scan " << currentScan << ":" << std::endl;
+
+		switch (scanDimension)
+		{
+		case RScanDim::X:
+		{
+			std::cout << "Key A: (" << dimValue << ", " << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
+			std::cout << "Key B: (" << dimValue << ", " << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
+			break;
+		};
+
+		case RScanDim::Y:
+		{
+			std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << dimValue << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
+			std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << dimValue << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
+			break;
+		}
+
+		case RScanDim::Z:
+		{
+			std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ", " << dimValue << ") " << std::endl;
+			std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ", " << dimValue << ") " << std::endl;
+			break;
+		}
+		}
+
+		currentScan++;
+	}
+}
+
+void LookupByDimRegister::buildScanRuns(bool in_debugFlag)
 {
 	int involvedLineIndexArray[3];
 	int currentInvolvedLineIndex = 0;
@@ -20,6 +57,11 @@ void LookupByDimRegister::buildScanRuns()
 			numberOfInvolvedLines++;
 			involvedLineIndexArray[currentInvolvedLineIndex++] = x;
 		}
+	}
+
+	if (in_debugFlag == true)
+	{
+		std::cout << "!! Number of involved lines for this scan run: " << numberOfInvolvedLines << std::endl;
 	}
 
 	// run logic for two involved lines
@@ -49,7 +91,10 @@ void LookupByDimRegister::buildScanRuns()
 	// .... three lines
 	else if (numberOfInvolvedLines == 3)
 	{
-		//std::cout << "!!!! Notice: 3 involved lines detected during build of scan run..... " << std::endl;
+		if (in_debugFlag == true)
+		{
+			std::cout << "!!!! Notice: 3 involved lines detected during build of scan run..... " << std::endl;
+		}
 	}
 
 }

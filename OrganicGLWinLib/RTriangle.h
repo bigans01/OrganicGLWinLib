@@ -67,7 +67,7 @@ class RTriangle
 			glm::vec3 in_triangleEmptyNormal,
 			float in_rPolyRCubeDimLength,
 			float in_rPolyTilesPerDim,
-			float in_rPolyTileWeightToHundredthFloatRatio);
+			float in_rPolyTileWeightToHundredthFloatRatio, bool in_rPolyDebugFlag);
 	private:
 		struct DimScanMeta
 		{
@@ -124,6 +124,9 @@ class RTriangle
 		int totalXInteriorInserts = 0;
 		int totalYInteriorInserts = 0;
 		int totalZInteriorInserts = 0;
+
+		PolyLogger rTriangleDebugLogger;
+		bool rTriangleDebugFlag = false;
 
 };
 
