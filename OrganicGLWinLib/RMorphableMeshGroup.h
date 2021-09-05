@@ -33,7 +33,7 @@ class RMorphableMeshGroup
 		void setDynamicBorderRef(DynamicBorderLineList* in_dynamicBorderLineListRef);
 		void flagLandlockedMeshes();		// Step 1
 		void generatePointArray(int in_slicePointArraySize);					// Step 2
-		void updatePointLandlockStats();			// Step 3
+		void flagImmutablePoints();			// Step 3
 		void updatePointsWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef);
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
@@ -53,7 +53,9 @@ class RMorphableMeshGroup
 								float in_tileDimWeightRatio,
 								int in_tilesPerDim
 								);
-		void produceSolution();
+		void produceSolution(MassGridArray* in_massGridArrayRef,
+			float in_tileGridWidth,
+			int in_numberOfTilesPerDimension);
 
 		// optional manipulation functions
 		void calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef);

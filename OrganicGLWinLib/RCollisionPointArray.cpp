@@ -48,6 +48,8 @@ void RCollisionPointArray::updatePointsFoundWithinMass(MassGridArray* in_massGri
 			if (currentSearchResult.cellRef->getNumberOfFlagsSet() > 0)
 			{
 				collisionPoints[x].setPointAsBeingWithinMass();
+				collisionPoints[x].setCollisionPointMaterial(currentSearchResult.cellRef->getCellMaterialID());	// for collision points that are already within mass, 
+																												// acquire the material from the MassGridArraycell that it is a part of			
 			}
 		}
 	}

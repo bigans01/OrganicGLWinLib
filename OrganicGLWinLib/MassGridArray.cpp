@@ -100,31 +100,56 @@ void MassGridArray::executeDownfills()
 			//sillyCount++;
 		//}
 
+		EnclaveKeyDef::EnclaveKey debugKey = convertIndexToBlockKey(x);
 		if (massCellArray[x].isDownfillRunnable() == true)
 		{
 			bool debugDownfillFlag = false;
 
 			EnclaveKeyDef::EnclaveKey cellLocation = convertIndexToBlockKey(x);
-			//std::cout << "!!! found down fill to run; location is: (" << cellLocation.x << ", " << cellLocation.y << ", " << cellLocation.z << ") " << std::endl;
-			//int foundDownfill = 3;
-			//std::cin >> foundDownfill;
+
+			
 
 			// In order for a downfill to execute, the cellLocation can't be at the bottom value, 
 			// AND 
 			// there must be a terminiating upfill value in this same X/Z column.
 			if
-				(
+			(
 				(cellLocation.y != 0)
-					&&
-					(doesCellLocationHaveTerminatingUpfill(cellLocation) == true)
-					)
+				&&
+				(doesCellLocationHaveTerminatingUpfill(cellLocation) == true)
+			)
 			{
+				short downfillMaterialID = massCellArray[x].getCellMaterialID();	// get the materialID that this downfill process will 
+																					// use to fill the cells it touches.
+
+				/*
+				if
+				(
+					cellLocation.x == 22
+					&&
+					cellLocation.z == 22
+				)
+				{
+					std::cout << "!!! found down fill to run; location is: (" << cellLocation.x << ", " << cellLocation.y << ", " << cellLocation.z << ") " << std::endl;
+					std::cout << "!!! material is: " << downfillMaterialID << std::endl;
+					int foundDownfill = 3;
+					std::cin >> foundDownfill;
+				}
+				*/
+
+				//std::cout << "!!! found down fill to run; location is: (" << cellLocation.x << ", " << cellLocation.y << ", " << cellLocation.z << ") " << std::endl;
+				//std::cout << "!!! material is: " << downfillMaterialID << std::endl;
+				//int foundDownfill = 3;
+				//std::cin >> foundDownfill;
+
 				EnclaveKeyDef::EnclaveKey lastFilledCell(cellLocation.x, cellLocation.y - 1, cellLocation.z);
 				MassGridSearchResult currentSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
 				bool continueDownfillProcess = true;
+
 				if (currentSearchResult.wasSearchKeyValid == true)
 				{
 					currentSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
+					currentSearchResult.cellRef->setCellMaterialID(downfillMaterialID);
 					if (currentSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
 					{
 						continueDownfillProcess = false;
@@ -136,16 +161,17 @@ void MassGridArray::executeDownfills()
 
 				// keep running until either the lastFilledCell.y becomes 0, or the run terminates.
 				while
-					(
+				(
 					(lastFilledCell.y >= 0)
-						&&
-						(continueDownfillProcess == true)
-						)
+					&&
+					(continueDownfillProcess == true)
+				)
 				{
 					MassGridSearchResult fillSearchResult = searchForCell(lastFilledCell.x, lastFilledCell.y, lastFilledCell.z);
 					if (fillSearchResult.wasSearchKeyValid == true)
 					{
 						fillSearchResult.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
+						fillSearchResult.cellRef->setCellMaterialID(downfillMaterialID);
 						if (fillSearchResult.cellRef->isFlagSet(MassCellBitFlags::UPFILL_CRUST) == true)	// stop running the downfill if we encounter the upfill crust bit.
 						{
 							continueDownfillProcess = false;
@@ -154,11 +180,12 @@ void MassGridArray::executeDownfills()
 					lastFilledCell.y--;	// decrement for next loop.
 				}
 			}
-		}
-
-
-
+		}	
 	}
+
+	EnclaveKeyDef::EnclaveKey debugKey2(22, 0, 22);
+	
+
 	auto downfillExecutionEnd = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> downfillElapsed = downfillExecutionEnd - downfillExecutionBegin;
 	//std::cout << "--------------" << std::endl;
@@ -167,6 +194,20 @@ void MassGridArray::executeDownfills()
 	//std::cout << "!!! Number of downfill crust bits set: " << sillyCount << std::endl;
 	//int downfillSillyWait = 3;
 	//std::cin >> downfillSillyWait;
+}
+
+void MassGridArray::printColumnMaterialValues(int in_x, int in_z)
+{
+	for (int y = 0; y < dimensionSize; y++)
+	{
+		MassGridSearchResult currentSearchResult = searchForCell(in_x, y, in_z);
+		if (currentSearchResult.wasSearchKeyValid == true)
+		{
+			std::cout << "Cell at (" << in_x << ", " << y << ", " << in_z << ") has "
+			<< currentSearchResult.cellRef->getNumberOfFlagsSet() << " cells set; it's material is: " << currentSearchResult.cellRef->getCellMaterialID() << std::endl;
+		}
+
+	}
 }
 
 void MassGridArray::buildArray(int in_dimensionSize)
@@ -223,6 +264,79 @@ void MassGridArray::getPercentAgeOfCellsWithDownfillAtTopYLayer()
 	float percentage = float(downfillCount) / float(totalCells);
 
 	std::cout << ">>>>>>> Percentage of downfill'ed cells at top Y: " << percentage << std::endl;
+}
+
+void MassGridArray::getStatsOfXZCellsWithValidDownfill()
+{
+	int totalCells = dimensionSize * dimensionSize;
+	int downfillCount = 0;
+
+	int totalColumns = dimensionSize * dimensionSize;
+	int totalValidCount = 0;
+
+	for (int x = 0; x < dimensionSize; x++)
+	{
+		for (int z = 0; z < dimensionSize; z++)
+		{
+			MassGridSearchResult currentYCell = searchForCell(x, dimensionSize - 1, z);
+			if (currentYCell.wasSearchKeyValid == true)
+			{
+				EnclaveKeyDef::EnclaveKey currentCellKey(x, dimensionSize - 1, z);
+				bool upfillCheck = doesCellLocationHaveTerminatingUpfill(currentCellKey);
+				if (upfillCheck == true)
+				{
+					totalValidCount++;
+				}
+			}
+
+		}
+
+	}
+
+	std::cout << "Total columns: " << totalColumns << std::endl;
+	std::cout << "Total columns with valid downfill: " << totalValidCount << std::endl;
+}
+
+void MassGridArray::getStatsOfXZCellsWithDownfillFlags()
+{
+	int totalDownfillAttemptCount = 0;
+	int totalCrustCount = 0;
+	for (int x = 0; x < dimensionSize; x++)
+	{
+		for (int z = 0; z < dimensionSize; z++)
+		{
+			MassGridSearchResult currentYCell = searchForCell(x, dimensionSize - 1, z);
+			if (currentYCell.wasSearchKeyValid == true)
+			{
+				/*
+				if (currentYCell.cellRef->isFlagSet(MassCellBitFlags::DOWNFILL_CRUST))
+				{
+					totalDownfillAttemptCount++;
+				}
+				if (currentYCell.cellRef->isFlagSet(MassCellBitFlags::INNER_MASS))
+				{
+
+				}
+				*/
+			}
+
+			for (int y = dimensionSize - 1; y > -1; y--)
+			{
+				MassGridSearchResult currentYCell = searchForCell(x, y, z);
+				if (currentYCell.wasSearchKeyValid == true)
+				{
+					if (currentYCell.cellRef->isFlagSet(MassCellBitFlags::DOWNFILL_CRUST))
+					{
+						totalDownfillAttemptCount++;
+						break;
+					}
+				}
+			}
+		}
+
+	}
+
+	std::cout << "Total downfill attempt columns: " << totalDownfillAttemptCount << std::endl;
 }
 
 MassGridSearchResult MassGridArray::searchForCell(int in_x, int in_y, int in_z)

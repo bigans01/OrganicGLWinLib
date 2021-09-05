@@ -22,6 +22,7 @@ void RCollisionPointCaster::runTrace()
 			glm::vec3 convertedDestinationPointVec3 = RUtils::convertGridCellLocationToVec3(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z, rasterCubeDimLength);
 			pointToMoveRef->currentValue = convertedDestinationPointVec3;
 			pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
+			pointToMoveRef->setCollisionPointMaterial(initialBlockSearchResult.cellRef->getCellMaterialID());
 		}
 	}
 
@@ -50,6 +51,7 @@ void RCollisionPointCaster::runTrace()
 				glm::vec3 convertedDestinationPointVec3 = RUtils::convertGridCellLocationToVec3(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z, rasterCubeDimLength);
 				pointToMoveRef->currentValue = convertedDestinationPointVec3;
 				pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
+				pointToMoveRef->setCollisionPointMaterial(currentBlockSearchResult.cellRef->getCellMaterialID());
 			}
 		}
 	}

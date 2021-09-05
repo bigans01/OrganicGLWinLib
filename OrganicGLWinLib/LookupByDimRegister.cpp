@@ -19,26 +19,26 @@ void LookupByDimRegister::printScanRunKeys()
 
 		switch (scanDimension)
 		{
-		case RScanDim::X:
-		{
-			std::cout << "Key A: (" << dimValue << ", " << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
-			std::cout << "Key B: (" << dimValue << ", " << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
-			break;
-		};
+			case RScanDim::X:
+			{
+				std::cout << "Key A: (" << dimValue << ", " << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
+				std::cout << "Key B: (" << dimValue << ", " << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
+				break;
+			};
 
-		case RScanDim::Y:
-		{
-			std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << dimValue << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
-			std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << dimValue << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
-			break;
-		}
+			case RScanDim::Y:
+			{
+				std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << dimValue << ", " << scansBegin->twoDKeyA.b << ") " << std::endl;
+				std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << dimValue << ", " << scansBegin->twoDKeyB.b << ") " << std::endl;
+				break;
+			}
 
-		case RScanDim::Z:
-		{
-			std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ", " << dimValue << ") " << std::endl;
-			std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ", " << dimValue << ") " << std::endl;
-			break;
-		}
+			case RScanDim::Z:
+			{
+				std::cout << "Key A: (" << scansBegin->twoDKeyA.a << ", " << scansBegin->twoDKeyA.b << ", " << dimValue << ") " << std::endl;
+				std::cout << "Key B: (" << scansBegin->twoDKeyB.a << ", " << scansBegin->twoDKeyB.b << ", " << dimValue << ") " << std::endl;
+				break;
+			}
 		}
 
 		currentScan++;
@@ -132,6 +132,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 
 		// use the new class derived from RasterCubeTracerBase.h here 
 		RTriangleInteriorAreaTracer interiorTracer;
+		//interiorTracer.setOptionalMassGridArrayRef(in_massGridArrayRef);
 		interiorTracer.setGridArrayRef(in_massGridArrayRef);
 
 		EnclaveKeyDef::EnclaveKey startKey;

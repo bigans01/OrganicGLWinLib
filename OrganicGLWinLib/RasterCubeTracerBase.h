@@ -14,6 +14,7 @@
 #include "PolyLogger.h"
 #include "StringTracer.h"
 #include "DynamicLinePointSyncExclusionFlags.h"
+#include "MassGridArray.h"
 
 class RasterCubeTracerBase
 {
@@ -34,6 +35,7 @@ class RasterCubeTracerBase
 		void setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef);
 		void setOptionalPolyLoggerRef(PolyLogger* in_optionalLoggerRef);
 		void setOptionalMaterialID(short in_materialID);
+		void setOptionalMassGridArrayRef(MassGridArray* in_massGridArrayRef);
 
 		virtual void runTrace() = 0;
 		void iterateToNextBlock();
@@ -73,6 +75,7 @@ class RasterCubeTracerBase
 
 		// optional values
 		RasterCubeLookup* optionalCubeLookup = nullptr;
+		MassGridArray* optionalMassGridArrayRef = nullptr;
 		bool optionalMatchingBool = false;
 		short optionalTracerMaterialID = 0;
 

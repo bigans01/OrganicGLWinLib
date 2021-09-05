@@ -18,7 +18,16 @@ class MassGridArrayCell
 
 		void setCellMaterialID(short in_cellMaterialID)
 		{
-			cellMaterialID = in_cellMaterialID;
+			if (isFlagSet(MassCellBitFlags::MATERIAL_SET) == false)
+			{
+				cellMaterialID = in_cellMaterialID;
+				setFlag(MassCellBitFlags::MATERIAL_SET, 1);
+			}
+		}
+
+		short getCellMaterialID()
+		{
+			return cellMaterialID;
 		}
 
 		void setFlagNoOverrideIfActive(MassCellBitFlags in_flagToSet, int in_bitValue)
@@ -26,11 +35,12 @@ class MassGridArrayCell
 			int bitToSet = 0;
 			switch (in_flagToSet)
 			{
-			case(MassCellBitFlags::LINE_MASS): { bitToSet = 8; break; }
-			case(MassCellBitFlags::CRUST_MASS): { bitToSet = 7; break; }
-			case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
-			case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
-			case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
+				case(MassCellBitFlags::LINE_MASS): { bitToSet = 8; break; }
+				case(MassCellBitFlags::CRUST_MASS): { bitToSet = 7; break; }
+				case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
+				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
+				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
+				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
 			}
 
 			int exponent = bitToSet - 1;
@@ -51,6 +61,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
 				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
+				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
 			}
 
 			int exponent = bitToSet - 1;
@@ -76,19 +87,14 @@ class MassGridArrayCell
 				case(MassCellBitFlags::INNER_MASS): { bitToSet = 6; break; }
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
 				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
+				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
 			}
 			int bitShiftcount = bitToSet - 1;
 			int resultValue = (cellData >> bitShiftcount) & 1;
 			if (resultValue == 1)
 			{
-				//std::cout << "Bit " << bitToSet << " was set!" << std::endl;
 				wasSet = true;
 			}
-
-			//else if (resultValue == 0)
-			//{
-				//std::cout << "Bit " << bitToSet << " was NOT set!" << std::endl;
-			//}
 			return wasSet;
 		}
 

@@ -72,7 +72,6 @@ class RPoly
 				}
 				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel, rPolyMaterialID);
 
-				builtRTriangle.traceRasterLines();
 				addRTriangle(builtRTriangle);
 			}
 

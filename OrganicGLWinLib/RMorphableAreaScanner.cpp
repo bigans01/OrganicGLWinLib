@@ -209,7 +209,7 @@ void RMorphableAreaScanner::scanGridMass()
 		hollowingOutBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);	
 		hollowingOutBegin->second.generatePointArray(pointsPerSlicePointArray);				// size of array is equal to the number of RMorphableMeshes * 8
 		//hollowingOutBegin->second.generatePoints();					// generate all possible points
-		//hollowingOutBegin->second.updatePointLandlockStats();		// determine which points in the mesh are landlocked.
+		//hollowingOutBegin->second.flagImmutablePoints();		// determine which points in the mesh are landlocked.
 		//hollowingOutBegin->second.flagLandlockedMeshes();	// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
 		//hollowingOutBegin->second.generateRProductFacesInRemainingMeshes();
 		//hollowingOutBegin->second.printLandlockedPoints();
@@ -234,8 +234,10 @@ void RMorphableAreaScanner::scanGridMass()
 		originalMeshRunBegin->second.setDynamicBorderRef(&scannerDynamicBorderLineList);
 		originalMeshRunBegin->second.generatePointArray(8);
 		originalMeshRunBegin->second.generatePoints();							// generate all possible points
-		originalMeshRunBegin->second.updatePointLandlockStats();				// determine which points in the mesh are landlocked.
-		originalMeshRunBegin->second.updatePointsWithinMass(massGrid.fetchDataArrayRef(), &gridTranslator);
+		originalMeshRunBegin->second.flagImmutablePoints();						// determine which points in the mesh are immutable; if the incrementUsageCount() results in a value of 8,
+																				// the collision point becomes immutable.
+		originalMeshRunBegin->second.updatePointsWithinMass(massGrid.fetchDataArrayRef(), &gridTranslator);	// update points within mass, but only if they aren't immutable already;
+																											// collision points within mass will also "absorb" the material of the MassGridArrayCell they are found in.
 		originalMeshRunBegin->second.flagLandlockedMeshes();					// remember, meshes that are completely surrounded on all 6 sides are considered to be "landlocked"
 		originalMeshRunBegin->second.generateRProductFacesInRemainingMeshes();	// build the exposed faces in each mesh, and build the pTriangles in those faces.
 		//originalMeshRunBegin->second.printLandlockedPoints();
@@ -304,7 +306,7 @@ void RMorphableAreaScanner::acquireProducedSolutions()
 	auto solutionProductionEnd = meshGroupMap.end();
 	for (; solutionProductionBegin != solutionProductionEnd; solutionProductionBegin++)
 	{
-		solutionProductionBegin->second.produceSolution();
+		solutionProductionBegin->second.produceSolution(fetchMassGridArrayRef(), massGrid.rCubeDimensionalLength, scannerCellsPerDimension);
 	}
 }
 

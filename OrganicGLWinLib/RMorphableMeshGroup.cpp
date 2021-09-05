@@ -149,7 +149,7 @@ void RMorphableMeshGroup::generatePoints()
 	}
 }
 
-void RMorphableMeshGroup::updatePointLandlockStats()
+void RMorphableMeshGroup::flagImmutablePoints()
 {
 	auto keyedMorphablesBegin = keyedMorphables.begin();
 	auto keyedMorphablesEnd = keyedMorphables.end();
@@ -478,7 +478,9 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 	}
 }
 
-void RMorphableMeshGroup::produceSolution()
+void RMorphableMeshGroup::produceSolution(MassGridArray* in_massGridArrayRef,
+	float in_tileGridWidth,
+	int in_numberOfTilesPerDimension)
 {
 	int faceCount = 0;
 	auto faceScanBegin = keyedMorphables.begin();
@@ -497,6 +499,8 @@ void RMorphableMeshGroup::produceSolution()
 	}
 
 	groupMesh.rebuildPTriangleNormals();
+	//groupMesh.calculatePTriangleMaterials();
+	groupMesh.samplePTriangleMaterials(in_massGridArrayRef, in_tileGridWidth, in_numberOfTilesPerDimension);
 
 	std::cout << "!!!!######################### Number of PTriangles in this solution: " << groupMesh.getMeshPTriangleCount() << std::endl;
 }

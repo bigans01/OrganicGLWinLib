@@ -9,7 +9,8 @@ enum class MassCellBitFlags
 	CRUST_MASS,
 	INNER_MASS,
 	DOWNFILL_CRUST,
-	UPFILL_CRUST
+	UPFILL_CRUST,
+	MATERIAL_SET
 };
 
 #endif

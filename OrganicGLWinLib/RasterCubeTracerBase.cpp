@@ -248,6 +248,11 @@ void RasterCubeTracerBase::setOptionalPolyLoggerRef(PolyLogger* in_optionalLogge
 	optionalLoggerRef = in_optionalLoggerRef;
 }
 
+void RasterCubeTracerBase::setOptionalMassGridArrayRef(MassGridArray* in_massGridArrayRef)
+{
+	optionalMassGridArrayRef = in_massGridArrayRef;
+}
+
 void RasterCubeTracerBase::setOptionalMaterialID(short in_materialID)
 {
 	optionalTracerMaterialID = in_materialID;

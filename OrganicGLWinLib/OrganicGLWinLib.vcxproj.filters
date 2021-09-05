@@ -1808,5 +1808,8 @@
     <ClCompile Include="MassGridArray.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
+    <ClCompile Include="PTriangle.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

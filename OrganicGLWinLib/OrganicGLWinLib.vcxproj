@@ -576,6 +576,7 @@
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="MassGridArray.cpp" />
     <ClCompile Include="OrganicPolygon.cpp" />
+    <ClCompile Include="PTriangle.cpp" />
     <ClCompile Include="PTriangleMeshPointCalibrator.cpp" />
     <ClCompile Include="RAdditiveSliceBase.cpp" />
     <ClCompile Include="RAdditiveXSlice.cpp" />

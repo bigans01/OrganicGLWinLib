@@ -157,6 +157,7 @@ RTriangle::RTriangle(const RTriangle& in_triangleB)
 	}
 
 	areRegistersSet = in_triangleB.areRegistersSet;
+	rTriangleMaterialID = in_triangleB.rTriangleMaterialID;
 
 	if (areRegistersSet == true)
 	{
@@ -194,14 +195,6 @@ void RTriangle::printRPoints()
 	for (int x = 0; x < 3; x++)
 	{
 		std::cout << "point " << x << ": " << rLines[x].rLinePointA.x << ", " << rLines[x].rLinePointA.y << ", " << rLines[x].rLinePointA.z << std::endl;
-	}
-}
-
-void RTriangle::traceRasterLines()
-{
-	for (int x = 0; x < 3; x++)
-	{
-		rLines[x].runRasterTrace();
 	}
 }
 

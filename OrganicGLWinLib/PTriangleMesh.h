@@ -5,6 +5,7 @@
 
 #include "PTriangle.h"
 #include <map>
+#include "MassGridArray.h"
 
 class PTriangleMesh
 {
@@ -39,6 +40,29 @@ class PTriangleMesh
 				trianglesBegin->second.rebuildEmptyNormal();
 			}
 		}
+
+		void calculatePTriangleMaterials()
+		{
+			auto trianglesBegin = meshPTriangles.begin();
+			auto trianglesEnd = meshPTriangles.end();
+			for (; trianglesBegin != trianglesEnd; trianglesBegin++)
+			{
+				trianglesBegin->second.calculateTriangleMaterial();
+			}
+		}
+
+		void samplePTriangleMaterials(MassGridArray* in_massGridArrayRef,
+			float in_tileGridWidth,
+			int in_numberOfTilesPerDimension)
+		{
+			auto trianglesBegin = meshPTriangles.begin();
+			auto trianglesEnd = meshPTriangles.end();
+			for (; trianglesBegin != trianglesEnd; trianglesBegin++)
+			{
+				trianglesBegin->second.sampleTriangleMaterial(in_massGridArrayRef, in_tileGridWidth, in_numberOfTilesPerDimension);
+			}
+		}
+
 		std::map<int, PTriangle> meshPTriangles;
 	private:
 		int currentPTriangleIndex = 0;

@@ -30,6 +30,7 @@ class RTriangle
 			}
 
 			areRegistersSet = in_triangleB.areRegistersSet;
+			rTriangleMaterialID = in_triangleB.rTriangleMaterialID;
 			if (areRegistersSet == true)
 			{
 				xScanMeta = in_triangleB.xScanMeta;
@@ -62,7 +63,6 @@ class RTriangle
 		}
 
 		void printRPoints();
-		void traceRasterLines();
 		void traceRasterLinesIntoGrid(MassGridArray* in_massGridArrayRef,
 			glm::vec3 in_triangleEmptyNormal,
 			float in_rPolyRCubeDimLength,

@@ -52,6 +52,11 @@ class RCollisionPoint
 			}
 		}
 
+		void setCollisionPointMaterial(short in_sampledMaterialID)
+		{
+			sampledMaterialID = in_sampledMaterialID;
+		}
+
 		RCollisionPointState getCollisionPointState()
 		{
 			return pointState;

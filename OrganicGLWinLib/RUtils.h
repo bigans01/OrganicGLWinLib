@@ -15,6 +15,11 @@ class RUtils
 											      float in_tileDimensionalWeight, 
 												  int in_numberOfTilesPerDimension,
 												  float in_tileDimWeightToHundredthRatio);
+		static EnclaveKeyDef::EnclaveKey findRasterGridCellCentroid(glm::vec3 in_point0, 
+																	glm::vec3 in_point1, 
+																	glm::vec3 in_point2, 
+																	float in_tileGridWidth, 
+																	int in_numberOfTilesPerDimension);
 };
 
 #endif

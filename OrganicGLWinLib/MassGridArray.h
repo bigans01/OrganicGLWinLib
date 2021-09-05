@@ -17,11 +17,17 @@ class MassGridArray
 		bool doesDownfillColumnHaveTermination(int in_x, int in_z);
 		void executeDownfills();
 		void buildArray(int in_dimensionSize);
-		MassGridArrayCell* getArrayRef();
-		void getPercentAgeOfCellsWithDownfillAtTopYLayer();
-		MassGridSearchResult searchForCell(int in_x, int in_y, int in_z);
 		bool wereCellsDiscoveredInArea(MassGridArrayCellScanArea in_scanArea);
 		int getNumberOfPopulatedCells();
+		void getPercentAgeOfCellsWithDownfillAtTopYLayer();
+
+		//debug functions
+		void printColumnMaterialValues(int in_x, int in_z);		// prints the materials of each cell in a x/z column, starting from y = 0 and going up.
+		void getStatsOfXZCellsWithValidDownfill();				// prints the total number of x/z columns with valid downfill.
+		void getStatsOfXZCellsWithDownfillFlags();				// prints the total number of x/z columns having the downfill flag set.
+
+		MassGridSearchResult searchForCell(int in_x, int in_y, int in_z);
+		MassGridArrayCell* getArrayRef();
 	private:
 		bool doesCellLocationHaveTerminatingUpfill(EnclaveKeyDef::EnclaveKey in_keyToScan);
 		MassGridArrayCell* getMassArrayDataRef(int in_x, int in_y, int in_z);

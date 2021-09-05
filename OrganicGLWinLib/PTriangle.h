@@ -9,126 +9,40 @@
 #include "ECBPolyPoint.h"
 #include <iostream>
 #include "PTrianglePointLinkArray.h"
+#include <map>
+#include "MassGridArray.h"
+#include "RUtils.h"
 
 class PTriangle
 {
 	public:
 		PTriangle() {};
-		PTriangle(RCollisionPoint* in_candidatePoint0Ref, RCollisionPoint* in_candidatePoint1Ref, RCollisionPoint* in_candidatePoint2Ref, glm::vec3 in_targetEmptyNormal, bool in_pTriangleDebugFlag)
-		{
-			currentEmptyNormal = in_targetEmptyNormal;	// the initial value of the normal calculated by all 3 points must equal this, when the resulting triangle's normal is normalized.
-														// if it isn't, points 1 and 2 of the triangle must be swapped.
-			collisionPointRefArray[0] = in_candidatePoint0Ref;
-			collisionPointRefArray[1] = in_candidatePoint1Ref;
-			collisionPointRefArray[2] = in_candidatePoint2Ref;
+		PTriangle(RCollisionPoint* in_candidatePoint0Ref, 
+				  RCollisionPoint* in_candidatePoint1Ref, 
+				  RCollisionPoint* in_candidatePoint2Ref, 
+				  glm::vec3 in_targetEmptyNormal, 
+				  bool in_pTriangleDebugFlag);
 
-			//std::cout << "target empty normal is: " << currentEmptyNormal.x << ", " << currentEmptyNormal.y << ", " << currentEmptyNormal.z << std::endl;
+		void rebuildEmptyNormal();					// uses cross-product calculation to generate the empty normal 
+		void printPTrianglePoints();		
+		short getMaterialID();			
+		void calculateTriangleMaterial();			// simple function for calculating the triangle's material.
+		void sampleTriangleMaterial(MassGridArray* in_massGridArrayRef, 
+									float in_tileGridWidth,
+									int in_numberOfTilesPerDimension);
+		PTrianglePointLinkArray fetchLinkArray();
 
-			bool didTestPass = runInitialEmptyNormalTest(in_pTriangleDebugFlag);
-			if (didTestPass == false)
-			{
-				// the test failed, so the order of points must be changed to produce the correct value of the empty normal.
-				RCollisionPoint* indexOneCopy = collisionPointRefArray[1];
-				collisionPointRefArray[1] = collisionPointRefArray[2];
-				collisionPointRefArray[2] = indexOneCopy;
-
-				runInitialEmptyNormalTest(in_pTriangleDebugFlag);
-			}
-		};
-
-		PTrianglePointLinkArray fetchLinkArray()
-		{
-			PTrianglePointLinkArray returnLinkArray;
-			for (int x = 0; x < 3; x++)
-			{
-				PTriangleRCPointToIndexLink currentLink(collisionPointRefArray[x], x);
-				returnLinkArray.linkArray[x] = currentLink;
-			}
-			return returnLinkArray;
-		}
-
-		void rebuildEmptyNormal()
-		{
-			glm::vec3 collisionPoint0CurrentValue = collisionPointRefArray[0]->currentValue;
-			glm::vec3 collisionPoint1CurrentValue = collisionPointRefArray[1]->currentValue;
-			glm::vec3 collisionPoint2CurrentValue = collisionPointRefArray[2]->currentValue;
-
-			glm::vec3 u = collisionPoint1CurrentValue - collisionPoint0CurrentValue;
-			glm::vec3 v = collisionPoint2CurrentValue - collisionPoint0CurrentValue;
-
-			currentEmptyNormal = cross(u, v);
-
-		}
-
-
-		glm::vec3 getEmptyNormal()
-		{
-			return currentEmptyNormal;
-		}
-
-		void printPTrianglePoints()
-		{
-			std::cout << "=== Printing PTriangle points: " << std::endl;
-			for (int x = 0; x < 3; x++)
-			{
-				std::cout << x << ": " << collisionPointRefArray[x]->currentValue.x << ", " << collisionPointRefArray[x]->currentValue.y << ", " << collisionPointRefArray[x]->currentValue.z << std::endl;
-			}
-		}
-
-		RCollisionPoint* collisionPointRefArray[3] = { nullptr };
-
-		short getMaterialID()
-		{
-			return pTriangleMaterialID;
-		}
-
+		glm::vec3 getEmptyNormal();
+		RCollisionPoint* collisionPointRefArray[3] = { nullptr };	// an array of references to the RCollisionPoints that make up the PTriangle.
 	private:
+		bool runInitialEmptyNormalTest(bool in_pTriangleDebugFlag);		// checks whether or not the normalized initial calculation of the empty normal -- which is the cross product
+																		// of the points of the PTriangle -- matches the normalized version of the initial value of currentEmptyNormal.
+																		// Returns false if the normalized values do not match, which indicates that points 1 and 2 in the PTriangle need to be swapped.
+																		// The swapping of the points is handled by the non-default constructor, if the value if false. See the constructor's definition for details.
+
 		glm::vec3 currentEmptyNormal;
-		short pTriangleMaterialID = 0;		// needs to be calculated by analyzing the materials in all 3 collision points
+		short pTriangleMaterialID = 2;		// needs to be calculated by analyzing the materials in all 3 collision points
 
-		bool runInitialEmptyNormalTest(bool in_pTriangleDebugFlag)
-		{
-			bool wasValid = true;
-
-			glm::vec3 currentCollisionPoint0Point = collisionPointRefArray[0]->originalValue;
-			glm::vec3 currentCollisionPoint1Point = collisionPointRefArray[1]->originalValue;
-			glm::vec3 currentCollisionPoint2Point = collisionPointRefArray[2]->originalValue;
-
-			glm::vec3 u = currentCollisionPoint1Point - currentCollisionPoint0Point;
-			glm::vec3 v = currentCollisionPoint2Point - currentCollisionPoint0Point;
-
-			glm::vec3 testNormal = cross(u, v);
-			ECBPolyPoint pointToNormalize(testNormal.x, testNormal.y, testNormal.z);
-
-			ECBPolyPoint normalizedNormal = IndependentUtils::findNormalizedPoint(pointToNormalize);
-			glm::vec3 normalizedNormalConverted(normalizedNormal.x, normalizedNormal.y, normalizedNormal.z);
-
-			if (in_pTriangleDebugFlag == true)
-			{
-				std::cout << "normalized normal converted: " << normalizedNormalConverted.x << ", " << normalizedNormalConverted.y << ", " << normalizedNormalConverted.z << std::endl;
-			}
-
-			if 
-			(
-				(normalizedNormalConverted == currentEmptyNormal)
-				&&
-				(in_pTriangleDebugFlag == true)
-			)
-			{
-				std::cout << "!!! test Normal matches target current Empty normal, no point swap required! " << std::endl;
-				std::cout << "Current empty normal is: " << currentEmptyNormal.x << ", " << currentEmptyNormal.y << ", " << currentEmptyNormal.z << std::endl;
-			}
-			else
-			{
-				wasValid = false;
-				if (in_pTriangleDebugFlag == true)
-				{
-					std::cout << "!!! test Normal DOESN't match target; swapping. " << std::endl;
-				}
-			}
-
-			return wasValid;
-		};
 };
 
 #endif

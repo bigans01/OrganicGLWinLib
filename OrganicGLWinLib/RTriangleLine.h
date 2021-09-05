@@ -68,26 +68,15 @@ class RTriangleLine
 		unsigned char isPointAOnBorderLine = 0;	// is point A on border line? (checked when borderLineID is 1)
 		unsigned char isPointBOnBorderLine = 0;	// is point B on border line? " " " 
 
-		void runRasterTrace()
-		{
-			RTriangleLineTracer lineTracer;
-			if (debugFlag == true)
-			{
-				std::cout << "::::::::::: HALTING; for debug..." << std::endl;
-				int halt = 3;
-				std::cin >> halt;
-			}
-
-			lineTracer.setOptionalCubeLookupRef(&rasterizedBlocks);
-			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, tileWeightRatio, debugFlag);
-			lineTracer.runTrace();
-		};
-
 		void runRasterTraceIntoGrid(MassGridArray* in_massGridArrayRef, short in_downFillCrustBit, short in_upfillCrustBit, glm::vec3 in_emptyNormal)
 		{
 			
 			// run a tracer, just as in runRasterTrace(); but populate each traced block from that line in the array when we are done.
 			RTriangleLineTracer lineTracer;
+			//lineTracer.setOptionalMassGridArrayRef(in_massGridArrayRef);		// be sure to un-comment this when testing/transitioning to new RTriangle tracing method,
+																				// not yet in-development as of (9/3/2021).
+																				
+
 			lineTracer.setOptionalCubeLookupRef(&rasterizedBlocks);
 			lineTracer.setData(pointACubeKey, pointBCubeKey, rLinePointA, rLinePointB, rPolyCubeDimLength, tileWeightRatio, debugFlag);
 			lineTracer.runTrace();
@@ -106,6 +95,7 @@ class RTriangleLine
 				{
 					EnclaveKeyDef::EnclaveKey currentKey(fetchedIntBegin->first, currentFetchedSetBegin->a, currentFetchedSetBegin->b);
 					MassGridSearchResult currentSearchResult = in_massGridArrayRef->searchForCell(currentKey.x, currentKey.y, currentKey.z);
+
 					if (currentSearchResult.wasSearchKeyValid == true)
 					{
 						currentSearchResult.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
