@@ -1230,6 +1230,18 @@
     <ClInclude Include="MassUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BrasenhamMassTracer.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="BrasenhamMassTracerDim.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="BrasenhamLineData.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="TileLocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1816,6 +1828,9 @@
     </ClCompile>
     <ClCompile Include="MassUtils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BrasenhamMassTracer.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include "TileLocation.h"
+#include "BrasenhamLineData.h"
 
 class CoplanarAreaRasterizer
 {
@@ -23,23 +25,7 @@ class CoplanarAreaRasterizer
 		void printCuttingLineScanAtIndex(int in_index);
 
 		float getRemainingCuttableAreaPercentage();
-		struct TileLocation
-		{
-			TileLocation() {};
-			TileLocation(short in_x, short in_y) :
-				x(in_x),
-				y(in_y)
-			{};
 
-			short x = 0;
-			short y = 0;
-
-			void reset()
-			{
-				x = 0;
-				y = 0;
-			};
-		};
 		TileLocation determinePointTileLocation(glm::vec3 in_point);
 		void printRemainingCuttableTiles();
 		void printCuttableXRegister();
@@ -51,34 +37,6 @@ class CoplanarAreaRasterizer
 			bool cuttingMassFlag = false;
 		};
 
-		struct BrasenhamLineData
-		{
-			BrasenhamLineData() {};
-			BrasenhamLineData(TileLocation in_point0Tile, TileLocation in_point1Tile) :
-				x0(in_point0Tile.x),
-				y0(in_point0Tile.y),
-				x1(in_point1Tile.x),
-				y1(in_point1Tile.y)
-			{};
-
-			void swapLine()
-			{
-				short tempX0 = x0;
-				short tempY0 = y0;
-
-				x0 = x1;
-				y0 = y1;
-
-				x1 = tempX0;
-				y1 = tempY0;
-			};
-
-			short x0 = 0;
-			short y0 = 0;
-
-			short x1 = 0;
-			short y1 = 0;
-		};
 
 		struct RasterizedScanLineEndpoints
 		{

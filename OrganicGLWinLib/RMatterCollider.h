@@ -32,6 +32,12 @@ class RMatterCollider
 								int in_colliderPointsPerSlicePointArray,
 								MassZoneBoxType in_colliderMassZoneBoxType,
 								RMatterCollisionMode in_colliderMode);
+
+		// "Smart" generation; will attempt to handle errors to produce a result; it also handles the 
+		// execution of Steps 1-5 in its own way, based on if there are matter production errors.
+		void produceColliderMatterWithHandling(bool in_ignoreOld, bool in_ignoreNew);
+
+
 		void addSPolyToMatterGenerator(SPoly in_sPolyToAdd, RMatterAge in_rMatterAge);		// Step 1: run this function for each SPoly that needs to be added to the collider
 		void generateAndMoveSPolyResultsToScanners();										// Step 2: once all SPolys have been added, run the BorderSPolyProducer in each RMatterGenerator, 
 																							// and move the results of that producer to the scanner in each RMatterGenerator.
@@ -48,6 +54,7 @@ class RMatterCollider
 
 		// Step 5: Produce the PTriangleMesh that exists in the collidableScanner, by running 
 		void generateCollidedMatterResult();
+
 
 		RMorphableAreaScanner* getOldMatterScannerRef();
 		RMorphableAreaScanner* getNewMatterScannerRef();

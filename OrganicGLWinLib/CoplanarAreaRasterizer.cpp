@@ -350,7 +350,7 @@ int CoplanarAreaRasterizer::determineTileLocationArrayIndex(TileLocation in_tile
 	return returnX + returnY;
 }
 
-CoplanarAreaRasterizer::TileLocation CoplanarAreaRasterizer::getTileLocationFromIndexValue(int in_indexValue)
+TileLocation CoplanarAreaRasterizer::getTileLocationFromIndexValue(int in_indexValue)
 {
 	int tileX = in_indexValue / numberOfTilesPerDimension;
 	int tileY = int(fmod(in_indexValue, numberOfTilesPerDimension));
@@ -399,7 +399,7 @@ void CoplanarAreaRasterizer::printCuttableXRegister()
 }
 
 
-CoplanarAreaRasterizer::TileLocation CoplanarAreaRasterizer::determinePointTileLocation(glm::vec3 in_point)
+TileLocation CoplanarAreaRasterizer::determinePointTileLocation(glm::vec3 in_point)
 {
 
 	int x_value = 0;

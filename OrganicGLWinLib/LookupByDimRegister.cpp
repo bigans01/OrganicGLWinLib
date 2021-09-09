@@ -135,37 +135,43 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 		//interiorTracer.setOptionalMassGridArrayRef(in_massGridArrayRef);
 		interiorTracer.setGridArrayRef(in_massGridArrayRef);
 
-		EnclaveKeyDef::EnclaveKey startKey;
-		EnclaveKeyDef::EnclaveKey endKey;
+		//EnclaveKeyDef::EnclaveKey startKey;
+		//EnclaveKeyDef::EnclaveKey endKey;
+
+		BrasenhamMassTracerDim selectedDim = BrasenhamMassTracerDim::NOVAL;
 
 		switch (scanDimension)
 		{
 			case RScanDim::X: 
 			{
-				EnclaveKeyDef::EnclaveKey beginXKey(dimValue, scansBegin->twoDKeyA.a, scansBegin->twoDKeyA.b);
-				EnclaveKeyDef::EnclaveKey endXKey(dimValue, scansBegin->twoDKeyB.a, scansBegin->twoDKeyB.b);
-				startKey = beginXKey;
-				endKey = endXKey;
+				//EnclaveKeyDef::EnclaveKey beginXKey(dimValue, scansBegin->twoDKeyA.a, scansBegin->twoDKeyA.b);
+				//EnclaveKeyDef::EnclaveKey endXKey(dimValue, scansBegin->twoDKeyB.a, scansBegin->twoDKeyB.b);
+				//startKey = beginXKey;
+				//endKey = endXKey;
+				selectedDim = BrasenhamMassTracerDim::X;
 				break;
 			};
 			case RScanDim::Y:
 			{
-				EnclaveKeyDef::EnclaveKey beginYKey(scansBegin->twoDKeyA.a, dimValue, scansBegin->twoDKeyA.b);
-				EnclaveKeyDef::EnclaveKey endYKey(scansBegin->twoDKeyB.a, dimValue, scansBegin->twoDKeyB.b);
-				startKey = beginYKey;
-				endKey = endYKey;
+				//EnclaveKeyDef::EnclaveKey beginYKey(scansBegin->twoDKeyA.a, dimValue, scansBegin->twoDKeyA.b);
+				//EnclaveKeyDef::EnclaveKey endYKey(scansBegin->twoDKeyB.a, dimValue, scansBegin->twoDKeyB.b);
+				//startKey = beginYKey;
+				//endKey = endYKey;
+				selectedDim = BrasenhamMassTracerDim::Y;
 				break;
 			}
 			case RScanDim::Z:
 			{
-				EnclaveKeyDef::EnclaveKey beginZKey(scansBegin->twoDKeyA.a, scansBegin->twoDKeyA.b, dimValue);
-				EnclaveKeyDef::EnclaveKey endZKey(scansBegin->twoDKeyB.a, scansBegin->twoDKeyB.b, dimValue);
-				startKey = beginZKey;
-				endKey = endZKey;
+				//EnclaveKeyDef::EnclaveKey beginZKey(scansBegin->twoDKeyA.a, scansBegin->twoDKeyA.b, dimValue);
+				//EnclaveKeyDef::EnclaveKey endZKey(scansBegin->twoDKeyB.a, scansBegin->twoDKeyB.b, dimValue);
+				//startKey = beginZKey;
+				//endKey = endZKey;
+				selectedDim = BrasenhamMassTracerDim::Z;
 				break;
 			}
 		}
 
+		/*
 		float pointA_x = (startKey.x * in_rPolyRCubeDimLength) + (in_rPolyRCubeDimLength / 2);
 		float pointA_y = (startKey.y * in_rPolyRCubeDimLength) + (in_rPolyRCubeDimLength / 2);
 		float pointA_z = (startKey.z * in_rPolyRCubeDimLength) + (in_rPolyRCubeDimLength / 2);
@@ -188,6 +194,21 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 		interiorTracer.setOptionalMaterialID(in_scanRunMaterialID);
 		interiorTracer.setEmptyNormal(in_emptyNormal);
 		interiorTracer.runTrace();
+		*/
+
+		BrasenhamMassTracer tracer(in_massGridArrayRef,
+									scansBegin->twoDKeyA,
+									scansBegin->twoDKeyB,
+									selectedDim,
+									in_rPolyTilesPerDim,
+									dimValue,
+									in_scanRunMaterialID);
+		tracer.setDownfillCrustBit(in_downfillCrustBitValue);
+		tracer.setUpfillCrustBit(in_upfillCrustBitValue);
+		tracer.executeRun();
+
+
+
 		registerTotalIntetiorFills += interiorTracer.getTotalInserts();
 		totalScansRan++;
 	}

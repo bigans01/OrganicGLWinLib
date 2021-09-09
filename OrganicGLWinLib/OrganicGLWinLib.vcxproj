@@ -175,6 +175,9 @@
     <ClInclude Include="BorderLineLinkPointState.h" />
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="BorderSPolyProducer.h" />
+    <ClInclude Include="BrasenhamLineData.h" />
+    <ClInclude Include="BrasenhamMassTracer.h" />
+    <ClInclude Include="BrasenhamMassTracerDim.h" />
     <ClInclude Include="CategorizedLine.h" />
     <ClInclude Include="CategorizedLineASliceMerger.h" />
     <ClInclude Include="CategorizedLineColinearTester.h" />
@@ -415,6 +418,7 @@
     <ClInclude Include="TerrainTriangle.h" />
     <ClInclude Include="TerrainTrianglePoint.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
+    <ClInclude Include="TileLocation.h" />
     <ClInclude Include="TimeBasedWaveBase.h" />
     <ClInclude Include="TimeBasedWaveManager.h" />
     <ClInclude Include="TimeBasedWaveType.h" />
@@ -557,6 +561,7 @@
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="BorderSPolyProducer.cpp" />
+    <ClCompile Include="BrasenhamMassTracer.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
     <ClCompile Include="CategorizedLineASliceMerger.cpp" />
     <ClCompile Include="CategorizedLineColinearTester.cpp" />

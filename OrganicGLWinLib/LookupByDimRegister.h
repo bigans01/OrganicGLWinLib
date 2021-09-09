@@ -9,6 +9,8 @@
 #include "RTriangleInteriorAreaTracer.h"
 #include "RScanDim.h"
 #include <glm/glm.hpp>
+#include "BrasenhamMassTracerDim.h"
+#include "BrasenhamMassTracer.h"
 
 class LookupByDimRegister
 {

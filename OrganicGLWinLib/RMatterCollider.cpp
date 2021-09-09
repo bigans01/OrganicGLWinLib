@@ -46,7 +46,7 @@ void RMatterCollider::flagOldMatterAsRMatterWrapper()
 	oldMatterGenerator.flagOldMatterAsRMatter();
 }
 
-void RMatterCollider::generateAndMoveSPolyResultsToScanners()
+void RMatterCollider::produceColliderMatterWithHandling(bool in_ignoreOld, bool in_ignoreNew)
 {
 	bool wasGenerationValid = true;
 	MessageContainer oldMatterErrors;
@@ -69,14 +69,44 @@ void RMatterCollider::generateAndMoveSPolyResultsToScanners()
 
 	// if either old or new errors aren't empty, then a mass shell construction failed.
 	if
-	(
-		!(oldMatterErrors.empty())
-		||
-		!(newMatterErrors.empty())
-	)
+		(
+			!(oldMatterErrors.empty())
+			||
+			!(newMatterErrors.empty())
+			)
 	{
 		wasGenerationValid = false;
 		std::cout << "(RMatterCollider): Notice, generation not found as valid. " << std::endl;
+	}
+
+	generateMassses();
+	if (in_ignoreOld == false)
+	{
+		appendOldMatterToScanner();
+	}
+	if (in_ignoreNew == false)
+	{
+		appendNewMatterToScanner();
+	}
+
+	generateCollidedMatterResult();
+}
+
+void RMatterCollider::generateAndMoveSPolyResultsToScanners()
+{
+	if (oldMatterGenerator.containsMass == true)
+	{
+		if (oldMatterGenerator.isOldMassRMatter == false)
+		{
+			oldMatterGenerator.generateBorderSPolys();
+		}
+		oldMatterGenerator.moveBorderSPolyResultsToScanner();
+	}
+
+	if (newMatterGenerator.containsMass == true)
+	{
+		newMatterGenerator.generateBorderSPolys();
+		newMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 }
 
