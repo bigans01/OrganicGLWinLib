@@ -1227,6 +1227,9 @@
     <ClInclude Include="MassGridSearchResult.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
+    <ClInclude Include="MassUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1810,6 +1813,9 @@
     </ClCompile>
     <ClCompile Include="PTriangle.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="MassUtils.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

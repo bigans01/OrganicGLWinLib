@@ -923,6 +923,75 @@ IRPointType CategorizedLine::checkIfPointIsInLine(glm::vec3 in_point)
 	return returnType;
 }
 
+IRPointType CategorizedLine::checkIfPointIsNearbyPointInLine(glm::vec3 in_point, float in_searchBoxHalfDiameter)
+{
+	IRPointType returnType = IRPointType::NEITHER;	// default value
+
+	float begin_x = in_point.x - in_searchBoxHalfDiameter;
+	float end_x = in_point.x + in_searchBoxHalfDiameter;
+
+	float begin_y = in_point.y - in_searchBoxHalfDiameter;
+	float end_y = in_point.y + in_searchBoxHalfDiameter;
+
+	float begin_z = in_point.z - in_searchBoxHalfDiameter;
+	float end_z = in_point.z + in_searchBoxHalfDiameter;
+
+	std::cout << "--------------" << std::endl;
+	std::cout << "begin_x = " << begin_x << " | end_x = " << end_x << std::endl;
+	std::cout << "begin_y = " << begin_y << " | end_y = " << end_y << std::endl;
+	std::cout << "begin_z = " << begin_z << " | end_x = " << end_z << std::endl;
+
+	std::cout << "line.pointA: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << std::endl;
+	std::cout << "line.pointB: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << std::endl;
+
+	if
+	(
+		(line.pointA.x >= begin_x)
+		&&
+		(line.pointA.x <= end_x)
+
+		&&
+
+		(line.pointA.y >= begin_y)
+		&&
+		(line.pointA.y <= end_y)
+
+		&&
+
+		(line.pointA.z >= begin_z)
+		&&
+		(line.pointA.z <= end_z)
+	)
+	{
+		returnType = IRPointType::POINT_A;
+	}
+
+	else if
+	(
+		(line.pointB.x >= begin_x)
+		&&		   
+		(line.pointB.x <= end_x)
+				   
+		&&		   
+				   
+		(line.pointB.y >= begin_y)
+		&&		   
+		(line.pointB.y <= end_y)
+				   
+		&&		   
+				   
+		(line.pointB.z >= begin_z)
+		&&		   
+		(line.pointB.z <= end_z)
+	)
+	{
+		returnType = IRPointType::POINT_B;
+	}
+
+
+	return returnType;
+}
+
 void CategorizedLine::setEmptyNormal(glm::vec3 in_emptyNormal)
 {
 	emptyNormal = in_emptyNormal;

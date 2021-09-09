@@ -214,6 +214,7 @@
     <ClInclude Include="MassGridArrayCellLimit.h" />
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
+    <ClInclude Include="MassUtils.h" />
     <ClInclude Include="OrganicPolygon.h" />
     <ClInclude Include="PTriangle.h" />
     <ClInclude Include="PTriangleMapperUpdate.h" />
@@ -575,6 +576,7 @@
     <ClCompile Include="DynamicRasterGridCellBorders.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="MassGridArray.cpp" />
+    <ClCompile Include="MassUtils.cpp" />
     <ClCompile Include="OrganicPolygon.cpp" />
     <ClCompile Include="PTriangle.cpp" />
     <ClCompile Include="PTriangleMeshPointCalibrator.cpp" />

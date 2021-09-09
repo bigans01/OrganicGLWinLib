@@ -54,6 +54,21 @@ void RTriangleInteriorAreaTracer::runTrace()
 		MassGridSearchResult result = gridArrayRef->searchForCell(currentCubeKey.x, currentCubeKey.y, currentCubeKey.z);
 		if (result.wasSearchKeyValid == true)
 		{
+			/*
+			if
+			(
+				(currentCubeKey.x == 5)
+				&&
+				(currentCubeKey.z == 21)
+			)
+			{
+				std::cout << "!!!! Target interior fill value of x = " << currentCubeKey.x << ", z = "  << currentCubeKey.z <<  " , found! " << std::endl;
+				std::cout << ">>> material ID is: " << optionalTracerMaterialID << std::endl;
+				int interiorFillWait = 3;
+				std::cin >> interiorFillWait;
+			}
+			*/
+
 			result.cellRef->setFlag(MassCellBitFlags::CRUST_MASS, 1);
 			result.cellRef->setFlag(MassCellBitFlags::INNER_MASS, 1);
 			//result.cellRef->setFlag(MassCellBitFlags::DOWNFILL_CRUST, downfillCrustBitValue);

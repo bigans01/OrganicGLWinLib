@@ -11,6 +11,7 @@
 #include "SPoly.h"
 #include <set>
 #include "RMatterManipulationOption.h"
+#include "MessageContainer.h"
 
 class RMatterCollider
 {

@@ -202,55 +202,67 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 	currentComparableSPolyIndex++;	// this must be incremented, to set the appropriate index for the next SPoly (if there are any to compare against)
 }
 
-void MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
+MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 {
 	//std::cout << "(MassZoneBoxBoundarySPolySet): begin building cleave sequences..." << std::endl;
-	boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
+	//bool wasBuildSuccessful = true;
+	MessageContainer buildErrorMessages;
+
+	buildErrorMessages = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
+
+	//boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
-	if (boundarySPolyRef->cleaveMap.size() != 0)
+	if (buildErrorMessages.empty() == true)
 	{
-		//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
-		SPolyMorphTracker morphTracker;
-
-		//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
-		SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
-		//std::cout << "(MassZoneBoxBoundarySPolySet): end fracturing..." << std::endl;
-		//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
-		boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
-		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
-		boundarySPolySG.roundAllSTrianglesToHundredths();
-		boundarySPolySG.buildSPolyBorderLines();
-
-		//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
-
-		//boundarySPolySG.
-	}
-	//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
-	if
-	(
-		(boundarySPolyRef->cleaveMap.size() == 0)
-		&&
-		(isContestedCategorizedLineAnalysisEnabled == true)
-		&&
-		(contestables.contestableBorderLineChallengersMap.size() != 0)
-	)
-	{
-		std::cout << "!!! Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
-
-		std::cout << "Face center point is: " << boundaryFaceCenterPoint.x << ", " << boundaryFaceCenterPoint.y << ", " << boundaryFaceCenterPoint.z << std::endl;
-		auto firstContestedLine = contestables.contestableBorderLineChallengersMap.begin()->second.begin();
-		std::cout << "First contested categorized line points are: " << firstContestedLine->line.pointA.x << ", " << firstContestedLine->line.pointA.y << ", " << firstContestedLine->line.pointA.z << " | "
-																	<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
-		std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
-
-		requiresContestedAnalysis = true;
-		didCategorizedLineWinContest = resolveContest(*firstContestedLine);
-		if (didCategorizedLineWinContest == true)
+		if (boundarySPolyRef->cleaveMap.size() != 0)
 		{
-			std::cout << "!! Notice: categorized lie won contest!" << std::endl;
+			//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
+			SPolyMorphTracker morphTracker;
+
+			//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
+			SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
+			//std::cout << "(MassZoneBoxBoundarySPolySet): end fracturing..." << std::endl;
+			//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
+			boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
+			boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+			boundarySPolySG.roundAllSTrianglesToHundredths();
+			boundarySPolySG.buildSPolyBorderLines();
+
+			//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
+
+			//boundarySPolySG.
+		}
+		//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
+		if
+		(
+			(boundarySPolyRef->cleaveMap.size() == 0)
+			&&
+			(isContestedCategorizedLineAnalysisEnabled == true)
+			&&
+			(contestables.contestableBorderLineChallengersMap.size() != 0)
+		)
+		{
+			std::cout << "!!! Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
+
+			std::cout << "Face center point is: " << boundaryFaceCenterPoint.x << ", " << boundaryFaceCenterPoint.y << ", " << boundaryFaceCenterPoint.z << std::endl;
+			auto firstContestedLine = contestables.contestableBorderLineChallengersMap.begin()->second.begin();
+			std::cout << "First contested categorized line points are: " << firstContestedLine->line.pointA.x << ", " << firstContestedLine->line.pointA.y << ", " << firstContestedLine->line.pointA.z << " | "
+				<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
+			std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
+
+			requiresContestedAnalysis = true;
+			didCategorizedLineWinContest = resolveContest(*firstContestedLine);
+			if (didCategorizedLineWinContest == true)
+			{
+				std::cout << "!! Notice: categorized lie won contest!" << std::endl;
+			}
 		}
 	}
-	
+	else if (buildErrorMessages.empty() == false)
+	{
+		std::cout << "(MassZoneBoxBoundarySPolySet): detected buildCleaveSequence run as being unsuccesful..." << std::endl;
+	}
+	return buildErrorMessages;
 }
 
 bool MassZoneBoxBoundarySPolySet::resolveContest(CategorizedLine in_categorizedLine)

@@ -25,12 +25,14 @@
 #include "CategorizedLineManager.h"
 #include "ECBPolyPoint.h"
 #include "IndependentUtils.h"
+#include "MessageContainer.h"
+#include "Message.h"
 
 class CleaveSequenceFactory
 {
 	public:
 		void addCategorizedLine(CategorizedLine in_categorizedLine);
-		void constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
+		MessageContainer constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 		void printLinesInPool();
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 		void printLineCounts();
@@ -79,6 +81,7 @@ class CleaveSequenceFactory
 		//void insertInterceptsPointPrecise(CategorizedLine in_line);
 		
 		bool determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines>);
+		
 
 		// normal fetch functions.
 		//CategorizedLine fetchAndRemoveNonbound(int in_fetchIndex);
@@ -94,6 +97,7 @@ class CleaveSequenceFactory
 		CategorizedLine fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 		CategorizedLine fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef);
 
+		Message buildIncompleteSequenceMessage(int in_sequenceIndex, std::map<int, CategorizedLine> in_categorizedLines);
 
 
 		//void insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex);
@@ -108,9 +112,9 @@ class CleaveSequenceFactory
 		// scenario processing -- a scenario just describes different cases that occur, for instance the case in which there is at least
 		// one CategorizedLine with an IntersectionType of INTERCEPTS_POINT_PRECISE.
 
-		void handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
-		void handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef);
-		void handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef);
+		MessageContainer handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
+		MessageContainer handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef);
+		MessageContainer handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef);
 
 };
 

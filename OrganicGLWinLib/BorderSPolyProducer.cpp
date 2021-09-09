@@ -38,8 +38,9 @@ void BorderSPolyProducer::configurePolysWithoutNormalCalcs()
 	}
 }
 
-void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType)
+MessageContainer BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType)
 {
+	MessageContainer productionErrors;	
 	productionMassZone.createMassZoneBoxBoundary(in_massZoneBoxType);		// first, create the boundaries for the MassZone
 
 	// then, add each input SPoly to the production mass zone.
@@ -53,7 +54,7 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 
 	// now that the input SPolys have been added to the production zone, create the mass zone shell;
 	// be sure to pass any tertiary extraction options.
-	productionMassZone.createMassZoneShell(MassZoneType::COHERENT_ZONE);
+	productionErrors = productionMassZone.createMassZoneShell(MassZoneType::COHERENT_ZONE);
 
 	// produce the extractable shell SPolys; this would also produce any SPolys that are produced as a result of a contestation where it is determined that 
 	// a SPoly needs to take up an entire boundary's face.
@@ -102,6 +103,8 @@ void BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType
 			outputsBegin->second.printSPolys();
 		}
 	}
+
+	return productionErrors;
 }
 
 std::vector<SPoly> BorderSPolyProducer::fetchAllSPolys()

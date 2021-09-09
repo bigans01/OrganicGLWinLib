@@ -95,6 +95,20 @@ class RTriangleLine
 				{
 					EnclaveKeyDef::EnclaveKey currentKey(fetchedIntBegin->first, currentFetchedSetBegin->a, currentFetchedSetBegin->b);
 					MassGridSearchResult currentSearchResult = in_massGridArrayRef->searchForCell(currentKey.x, currentKey.y, currentKey.z);
+					
+					/*
+					if
+					(
+						(currentKey.x == 5)
+						&&
+						(currentKey.z == 21)
+					)
+					{
+						std::cout << "!!!! Target interior fill value of x = " << currentKey.x << ", z = " << currentKey.z << " , found! " << std::endl;
+						int interiorFillWait = 3;
+						std::cin >> interiorFillWait;
+					}
+					*/
 
 					if (currentSearchResult.wasSearchKeyValid == true)
 					{

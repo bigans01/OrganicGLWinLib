@@ -7,7 +7,7 @@ void BorderLineCycle::initialize(SPoly* in_sPolyRef, int in_borderLineStartIndex
 	startIndex = in_borderLineStartIndex;
 	endIndex = in_borderLineEndIndex;
 	direction = in_direction;
-	numberOfBorderLines = sPolyRef->numberOfBorderLines;
+	numberOfBorderLines = sPolyRef->numberOfSPolyBorderLines;
 	borderLineFinalIndex = numberOfBorderLines - 1;
 	calculateNumberOfIterations();
 

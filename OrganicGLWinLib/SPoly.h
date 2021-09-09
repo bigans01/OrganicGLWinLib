@@ -26,6 +26,7 @@
 #include "PointToMassRelationshipMap.h"
 #include "BorderLineLinkContainer.h"
 #include "QuatUtils.h"
+#include "MessageContainer.h"
 
 class SPoly
 {
@@ -78,7 +79,7 @@ private:
 	friend class CoplanarFusionMachine;
 
 	std::map<int, SPolyBorderLines> borderLines;
-	int numberOfBorderLines = 0;
+	int numberOfSPolyBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
 	short sPolyMaterialID = 0;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
@@ -97,7 +98,7 @@ private:
 
 
 	void determinePrimalPoints();
-	void buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
+	MessageContainer buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.

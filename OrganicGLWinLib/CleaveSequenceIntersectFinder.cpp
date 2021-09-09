@@ -160,7 +160,7 @@ void CleaveSequenceIntersectFinder::loadInterceptRecords()
 
 	// cycle through each border line; if it has any records, determine those record types.
 	
-	for (int x = 0; x < sPolyRef->numberOfBorderLines; x++)
+	for (int x = 0; x < sPolyRef->numberOfSPolyBorderLines; x++)
 	{
 		SPolyBorderLines* borderLineRef = &sPolyRef->borderLines[x];
 		if (borderLineRef->intersectRecorder.records.size() > 0)	// only do the following if there are actually intersect records in the line.

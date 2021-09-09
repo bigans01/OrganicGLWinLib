@@ -59,6 +59,73 @@ void MassZone::printMeshMatterMeta()
 	}
 }
 
+void MassZone::printSubZoneSPolys()
+{
+	std::cout << "Sub zone map size: " << subZoneMap.size() << std::endl;
+
+	/*
+	auto subZoneMapBegin = sPolyToSubZoneMap.begin();
+	auto subZoneMapEnd = sPolyToSubZoneMap.end();
+	for (; subZoneMapBegin != subZoneMapEnd; subZoneMapBegin++)
+	{
+		std::cout << "SPoly ID " << subZoneMapBegin->first << ": " << std::endl;
+		subZoneMap[subZoneMapBegin->second].sPolyCopy.printPoints();
+	}
+	*/
+
+	auto subZoneMap2Begin = subZoneMap.begin();
+	auto subZoneMap2End = subZoneMap.end();
+	for (; subZoneMap2Begin != subZoneMap2End; subZoneMap2Begin++)
+	{
+		std::cout << "! SPoly ID " << subZoneMap2Begin->first << ": " << std::endl;
+		std::cout << "! Number of triangles: " << subZoneMap2Begin->second.sPolyCopy.triangles.size() << std::endl;
+
+		SPoly currentCopy = subZoneMap2Begin->second.sPolyCopy;
+		currentCopy.determineBorderLines();
+		currentCopy.printPoints();
+
+		//subZoneMap2Begin->second.sPolyCopy.printPoints();
+	}
+}
+
+void MassZone::printBoundaryErrors(MessageContainer* in_messageContainerRef)
+{
+	auto messageContainerBegin = in_messageContainerRef->begin();
+	auto messageContainerEnd = in_messageContainerRef->end();
+	for (; messageContainerBegin != messageContainerEnd; messageContainerBegin++)
+	{
+		Message* currentMessageRef = &(*messageContainerBegin);
+		currentMessageRef->open();
+
+		auto currentIntIter = currentMessageRef->intVectorIter;
+
+		int currentSequenceID = currentMessageRef->readInt();
+
+		std::cout << "(MassZone): printing out lines for sequence with ID " << currentSequenceID << std::endl;
+
+		int currentNumberOfCategorizedLines = currentMessageRef->readInt();
+		for (int x = 0; x < currentNumberOfCategorizedLines; x++)
+		{
+			int currentLineID = currentMessageRef->readInt();
+			ECBPolyPoint currentLinePointA = currentMessageRef->readPoint();
+			ECBPolyPoint currentLinePointB = currentMessageRef->readPoint();
+			ECBPolyPoint currentLineEmptyNormal = currentMessageRef->readPoint();
+
+			std::cout << "Line " << currentLineID << "-> pointA: (" << currentLinePointA.x << ", " << currentLinePointA.y << ", " << currentLinePointA.z
+				<< ") | pointB: (" << currentLinePointB.x << ", " << currentLinePointB.y << ", " << currentLinePointB.z
+				<< ") | emptyNormal: (" << currentLineEmptyNormal.x << ", " << currentLineEmptyNormal.y << ", " << currentLineEmptyNormal.z << ") "
+				<< std::endl;
+																
+		}
+
+		//int faceID = currentMessageRef->readInt();
+		std::cout << "(MassZone): done printing out lines for face ID: ";
+		auto currentFaceEnum = MassUtils::getMassZoneOrientationEnumValue(currentMessageRef->readInt());
+		MassUtils::printEnumValue(currentFaceEnum);
+		std::cout << std::endl;
+	}
+}
+
 void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 {
 	// the 8 points representing the corners of a MassZoneBox.
@@ -255,9 +322,11 @@ void MassZone::produceExtractableMassZoneShellSPolys(std::map<MassZoneBoxBoundar
 	}
 }
 
-void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
+MessageContainer MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
 	// need to apply tertiary extraction options, to all boundaries that need them set.
+	//bool wasShellCreationSuccessful = true;
+	MessageContainer shellCreationErrors;
 
 	// build the log output prefix 
 	std::string prefixString;
@@ -359,13 +428,28 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 			tempSPolyBoundaryProductionLogger.log(prefixString, "(MassZone): |||| Attempting boundary artificial SPoly construction for NEG_Y...", "\n");
 		}
 
-		boxBoundariesBegin->second.generateSPolysFromPolySet();
+		MessageContainer currentBoundaryProducedMessages = boxBoundariesBegin->second.generateSPolysFromPolySet();
+		currentBoundaryProducedMessages.appendIntToAll(MassUtils::getMassZoneOrientationIntValue(boxBoundariesBegin->first));
+		shellCreationErrors += currentBoundaryProducedMessages;
+		
 
 		//std::cout << "Finished producing boundary SPoly...continue? " << std::endl;
 		//int prodSucceeded = 3;
 		//std::cin >> prodSucceeded;
 		tempSPolyBoundaryProductionLogger.log(prefixString, "Finished producing boundary SPoly...enter number to continue. ", "\n");
 		tempSPolyBoundaryProductionLogger.waitForDebugInput();
+	}
+
+	if (shellCreationErrors.empty() == false)
+	{
+		std::cout << "(MassZone): found shell creation as unsuccessful, preparing to handle..." << std::endl;
+
+		printBoundaryErrors(&shellCreationErrors);
+
+		std::cout << "(MassZone): printing out subzone SPoly IDs and points: " << std::endl;
+		printSubZoneSPolys();
+		int handle = 3;
+		std::cin >> handle;
 	}
 
 	// Step 4: put all super groups which actually contain data, into their own sub zone.
@@ -419,6 +503,8 @@ void MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 			tempBoundarySuperGroupLogger.log(prefixString, "Size of clipper SPoly map:", clipper.clippingShellMap.size(), "\n");
 		}
 	}
+
+	return shellCreationErrors;
 }
 
 void MassZone::enableContestedCategorizedLineAnalysis()

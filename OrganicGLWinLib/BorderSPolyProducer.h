@@ -11,6 +11,7 @@
 #include <vector>
 #include "DebugOption.h"
 #include "PolyDebugLevel.h"
+#include "MessageContainer.h"
 
 class BorderSPolyProducer
 {
@@ -37,7 +38,7 @@ class BorderSPolyProducer
 
 		void addInputSPoly(SPoly in_inputSPoly);						// Step 1: add all input SPolys
 		void configurePolysWithoutNormalCalcs();						// Step 2: configure empty normals
-		void produceBorderSPolys(MassZoneBoxType in_massZoneBoxType);	// Step 3: produce the border SPolys
+		MessageContainer produceBorderSPolys(MassZoneBoxType in_massZoneBoxType);	// Step 3: produce the border SPolys
 		std::vector<SPoly> fetchAllSPolys();
 	private:
 		void handleBorderDebugOption(DebugOption in_debugOption);

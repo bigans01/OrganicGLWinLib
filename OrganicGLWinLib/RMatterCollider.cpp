@@ -48,19 +48,35 @@ void RMatterCollider::flagOldMatterAsRMatterWrapper()
 
 void RMatterCollider::generateAndMoveSPolyResultsToScanners()
 {
+	bool wasGenerationValid = true;
+	MessageContainer oldMatterErrors;
+	MessageContainer newMatterErrors;
+
 	if (oldMatterGenerator.containsMass == true)
 	{
 		if (oldMatterGenerator.isOldMassRMatter == false)
 		{
-			oldMatterGenerator.generateBorderSPolys();
+			oldMatterErrors = oldMatterGenerator.generateBorderSPolys();
 		}
 		oldMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 
 	if (newMatterGenerator.containsMass == true)
 	{
-		newMatterGenerator.generateBorderSPolys();
+		newMatterErrors = newMatterGenerator.generateBorderSPolys();
 		newMatterGenerator.moveBorderSPolyResultsToScanner();
+	}
+
+	// if either old or new errors aren't empty, then a mass shell construction failed.
+	if
+	(
+		!(oldMatterErrors.empty())
+		||
+		!(newMatterErrors.empty())
+	)
+	{
+		wasGenerationValid = false;
+		std::cout << "(RMatterCollider): Notice, generation not found as valid. " << std::endl;
 	}
 }
 

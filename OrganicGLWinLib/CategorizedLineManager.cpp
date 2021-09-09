@@ -185,6 +185,10 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 {
 	categorizedLineManagerLogger.log("(CategorizedLineManager): Checking for next non-bound line, that has this point: ", in_pointToSearch.x, ",", in_pointToSearch.y, ", ", in_pointToSearch.z, "\n");
 	CategorizedLineSearchResult searchResult;
+
+	//std::cout << ">>>>>>>>>>>>>>>> Printing NON_BOUND lines...." << std::endl;
+	//containerMap[IntersectionType::NON_BOUND].printLines();
+
 	if (containerMap[IntersectionType::NON_BOUND].lineMap.size() > 0)	// search for NON_BOUND, categorized lines, but only if there are ones to search for.
 	{
 		// search through all the non bound lines.
@@ -195,6 +199,10 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 		IRPointType pointCheckResult = IRPointType::NEITHER;	// starts out as NEITHER
 		for (nonboundBegin; nonboundBegin != nonboundEnd; nonboundBegin++)
 		{
+			//std::cout << ">>>> printing NON-BOUND line.." << std::endl;
+			//std::cout << nonboundBegin->second.line.pointA.x << ", " << nonboundBegin->second.line.pointA.y << ", " << nonboundBegin->second.line.pointA.z << std::endl;
+			//std::cout << nonboundBegin->second.line.pointB.x << ", " << nonboundBegin->second.line.pointB.y << ", " << nonboundBegin->second.line.pointB.z << std::endl;
+
 			categorizedLineManagerLogger.log("(CategorizedLineManager): Checking non bound line. ", "\n");
 			pointCheckResult = nonboundBegin->second.checkIfPointIsInLine(in_pointToSearch);
 			if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
@@ -224,6 +232,28 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 			//std::cout << "!! Point (next line) was found! " << std::endl;
 			//std::cout << "Point A: " << foundLine.line.pointA.x << ", " << foundLine.line.pointA.y << ", " << foundLine.line.pointA.z << " | Point B: " << foundLine.line.pointB.x << ", " << foundLine.line.pointB.y << ", " << foundLine.line.pointB.z << std::endl;
 			//std::cout << "Number of remaining nonbounds: " << nonboundCount << std::endl;
+		}
+
+		// error/bad calculation handling; 9/6/2021 -- expand the point search "radius" by .2f 
+		else if (wasFound == false)
+		{
+			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
+			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+
+			auto nonBoundSecondPassBegin = containerMap[IntersectionType::NON_BOUND].lineMap.begin();
+			auto nonBoundSecondPassEnd = containerMap[IntersectionType::NON_BOUND].lineMap.end();
+			for (; nonBoundSecondPassBegin != nonBoundSecondPassEnd; nonBoundSecondPassBegin++)
+			{
+				
+
+				pointCheckResult = nonBoundSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
+				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
+				{
+					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					int nearbyFound = 3;
+					std::cin >> nearbyFound;
+				}
+			}
 		}
 
 	}

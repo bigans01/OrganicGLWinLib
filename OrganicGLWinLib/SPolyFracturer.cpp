@@ -226,7 +226,7 @@ void SPolyFracturer::applyTranslationToAllPoints(glm::vec3 in_translationOffset)
 	}
 
 	// apply to the border lines
-	int totalBorderLines = polyRef->numberOfBorderLines;
+	int totalBorderLines = polyRef->numberOfSPolyBorderLines;
 	for (int x = 0; x < totalBorderLines; x++)
 	{
 		polyRef->borderLines[x].pointA += in_translationOffset;
@@ -266,7 +266,7 @@ void SPolyFracturer::populatePointsForQuaternions()
 	}
 
 	// insert the border line points
-	int totalBorderLines = polyRef->numberOfBorderLines;
+	int totalBorderLines = polyRef->numberOfSPolyBorderLines;
 	for (int x = 0; x < totalBorderLines; x++)
 	{
 		quatPoints.insertPointRefs(&polyRef->borderLines[x].pointA, &polyRef->borderLines[x].pointB, &polyRef->borderLines[x].planarVector);
@@ -312,7 +312,7 @@ void SPolyFracturer::printPointMetaData()
 
 		// ptint the border line points
 		std::cout << "|| Border line points " << std::endl;
-		int totalBorderLines = polyRef->numberOfBorderLines;
+		int totalBorderLines = polyRef->numberOfSPolyBorderLines;
 		for (int x = 0; x < totalBorderLines; x++)
 		{
 			std::cout << "---Border line at " << x << " --- " << std::endl;

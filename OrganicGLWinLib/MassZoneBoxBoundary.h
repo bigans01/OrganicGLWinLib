@@ -12,6 +12,7 @@
 #include "STriangle.h"
 #include "PolyDebugLevel.h"
 #include "SPolyDOSet.h"
+#include "MessageContainer.h"
 
 class MassZoneBoxBoundary
 {
@@ -66,9 +67,9 @@ class MassZoneBoxBoundary
 			boundarySPoly.sequenceFactory.printLinesInPool();
 		}
 
-		void generateSPolysFromPolySet()
+		MessageContainer generateSPolysFromPolySet()
 		{
-			boundaryPolySet.buildBoundarySPolyFromFactory();
+			return boundaryPolySet.buildBoundarySPolyFromFactory();
 		}
 		void setDebugOptionsInSPoly(SPolyDOSet in_sPolyDOSet)
 		{

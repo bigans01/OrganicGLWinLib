@@ -15,7 +15,8 @@
 #include "MassZoneType.h"
 #include "MassZonePointClipper.h"
 #include "DebugOption.h"
-
+#include "MessageContainer.h"
+#include "MassUtils.h"
 
 
 class MassZone
@@ -47,8 +48,11 @@ private:
 	void insertMeshMatterMeta(int in_sPolyID, SPoly* in_massSPolyRef, MassManipulationMode in_originMassManipulationMode);
 	void removeMeshMatterMeta(int in_sPolyID);
 	void printMeshMatterMeta();
+	void printSubZoneSPolys();
+	void printBoundaryErrors(MessageContainer* in_messageContainerRef);
+
 	void createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType);
-	void createMassZoneShell(MassZoneType in_massZoneType);
+	MessageContainer createMassZoneShell(MassZoneType in_massZoneType);
 	void enableContestedCategorizedLineAnalysis();
 	void wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);
 	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);

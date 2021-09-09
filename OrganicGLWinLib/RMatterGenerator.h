@@ -6,6 +6,7 @@
 #include "BorderSPolyProducer.h"
 #include "RMorphableAreaScanner.h"
 #include "MassZoneBoxType.h"
+#include "MessageContainer.h"
 
 class RMatterGenerator
 {
@@ -29,7 +30,7 @@ class RMatterGenerator
 		void addSPolyToBorderProducer(SPoly in_sPolyForBorder);		// Step 1: note, the SPoly to be added must have its empty normal and materialID set/defined already before inserting.
 
 		void configureInputSPolys();								// Step 2: produce the border lines and primal points for each SPoly.
-		void generateBorderSPolys();								// Step 3: call BorderSPolyProducer::producerBorderSPolys in generatorBorderProducer.
+		MessageContainer generateBorderSPolys();								// Step 3: call BorderSPolyProducer::producerBorderSPolys in generatorBorderProducer.
 		void moveBorderSPolyResultsToScanner();						// Step 4: take all the SPolys from the producer and move them into the generatorAreaScanner.
 		void generateMassInScanner();								// Setp 5: Generate the mass in the scanner, but don't generate the PTriangleMesh; 
 																	// this would be used when the mass in this instance has to be collided with another generator's mass.

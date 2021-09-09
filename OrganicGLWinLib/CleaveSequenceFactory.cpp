@@ -150,8 +150,11 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 
 
 
-void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
+MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {
+	//bool wasConstructionSuccessful = true;
+
+	MessageContainer constructionErrorMessages;
 	// NEWW
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
@@ -257,7 +260,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 				lineManager.printLineCountsForEachType();
 			}
 
-			handleScenarioTypical(in_cleaveMapRef);
+			constructionErrorMessages = handleScenarioTypical(in_cleaveMapRef);
 		}
 
 		// Special case 1: there is 1 line with a value of INTERCEPTS_POINT_PRECISE.
@@ -270,7 +273,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 			//std::cout << ">>> Handling precise scenario" << std::endl;
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling precise scenario", "\n");
-			handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
+			constructionErrorMessages = handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
 		}
 		else if
 			(
@@ -278,7 +281,7 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 				)
 		{
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling multiple precise scenario", "\n");
-			handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
+			constructionErrorMessages = handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
 			//int stopVal = 3;
 			//std::cin >> stopVal;
 			cleaveSequenceFactoryLogger.waitForDebugInput();
@@ -298,6 +301,8 @@ void CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, Clea
 			cleaveSequenceFactoryLogger.waitForDebugInput();
 		}
 	}
+
+	return constructionErrorMessages;
 }
 
 bool CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
@@ -374,8 +379,48 @@ void CleaveSequenceFactory::clearLinePools()
 	lineManager.clearAllLines();
 }
 
-void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
+Message CleaveSequenceFactory::buildIncompleteSequenceMessage(int in_sequenceIndex, std::map<int, CategorizedLine> in_categorizedLines)
 {
+	Message returnMessage(MessageType::CLEAVESEQUENCEFACTORY_SEQUENCE_INCOMPLETE);
+	auto incompleteLinesBegin = in_categorizedLines.begin();
+	auto incompleteLinesEnd = in_categorizedLines.end();
+	int numberOfLines = in_categorizedLines.size();
+
+	returnMessage.insertInt(in_sequenceIndex);	// the first value should represent the sequence index, since multiple sequence attempts can/would be done.
+	returnMessage.insertInt(numberOfLines);		// the second int value for a message of this type should be the number of incomplete lines.
+
+	for (; incompleteLinesBegin != incompleteLinesEnd; incompleteLinesBegin++)
+	{
+		int currentLineID = incompleteLinesBegin->first;
+		ECBPolyPoint currentLinePointA(incompleteLinesBegin->second.line.pointA.x,
+									   incompleteLinesBegin->second.line.pointA.y, 
+									   incompleteLinesBegin->second.line.pointA.z);
+		ECBPolyPoint currentLinePointB(incompleteLinesBegin->second.line.pointB.x,
+										incompleteLinesBegin->second.line.pointB.y,
+										incompleteLinesBegin->second.line.pointB.z);
+		ECBPolyPoint currentLineEmptyNormal(incompleteLinesBegin->second.emptyNormal.x,
+											incompleteLinesBegin->second.emptyNormal.y,
+											incompleteLinesBegin->second.emptyNormal.z);
+
+		//std::cout << "!!! Incomplete sequence message, current empty normal is: " << currentLineEmptyNormal.x << ", " << currentLineEmptyNormal.y << ", " << currentLineEmptyNormal.z << std::endl;
+
+		returnMessage.insertInt(currentLineID);
+		returnMessage.insertPoint(currentLinePointA);
+		returnMessage.insertPoint(currentLinePointB);
+		returnMessage.insertPoint(currentLineEmptyNormal);
+	}
+	return returnMessage;
+}
+
+MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
+{
+	//bool wasSuccessful = true;
+	MessageContainer typicalErrorMessages;
+	int currentSequenceIndex = 0;
+
+	//std::cout << "!!! Running handleScenarioTypical...." << std::endl;
+	//lineManager.printAllLines();
+
 	// NEWW
 	// sliced checks.
 	bool areNormalsValid = true;
@@ -487,8 +532,15 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 				std::cout << ":(CleaveSequenceFactory) Last point to search was: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 				std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
 
+
 				hasBadProduction = true;
 				newSequence.printCategorizedLines();
+
+				Message sequenceErrorMessage = buildIncompleteSequenceMessage(currentSequenceIndex, newSequence.cleavingLines);
+
+				//wasSuccessful = false;
+				typicalErrorMessages.insertMessage(Message(sequenceErrorMessage));
+
 
 				std::cout << "+++++++++++++++ entering infinite while for debug testing (6/2/2021)" << std::endl;
 				//int infVal = 3;
@@ -515,6 +567,7 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Finished 1 pass of a CategorizedLine. ", "\n");
 
+			currentSequenceIndex++;
 		}
 
 		while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
@@ -561,10 +614,16 @@ void CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>*
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 		}
 	}
+
+	return typicalErrorMessages;
 }
 
-void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
+MessageContainer CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
+	std::cout << "!!! Running handleScenarioSingleInterceptsPointPreciseFound...." << std::endl;
+	//bool wasSuccessful = true;
+	MessageContainer preciseErrorMessages;
+
 	// NEWW
 	glm::vec3 lastPointToSearch;
 	while (lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)	// do this until all partial_bound lines have been accounted for. 
@@ -696,10 +755,16 @@ void CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std:
 	{
 		//std::cout << "(CleaveSequenceFactory): handling case of a single INTERCEPTS_POINT_PRECISE. " << std::endl;
 	}
+
+	return preciseErrorMessages;
 }
 
-void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)
+MessageContainer CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
+	std::cout << "!!! Running handleScenarioMultipleInterceptsPointPrecise..." << std::endl;
+	//bool wasSuccessful = true;
+	MessageContainer multiplePreciseErrorMessages;
+
 	// NEWW
 	glm::vec3 lastPointToSearch;
 	while (lineManager.getCountOfIntersectionType(IntersectionType::INTERCEPTS_POINT_PRECISE) > 0)
@@ -764,4 +829,5 @@ void CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::ma
 		std::cin >> endTest;
 	}
 
+	return multiplePreciseErrorMessages;
 }

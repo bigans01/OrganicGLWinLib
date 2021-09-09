@@ -97,6 +97,7 @@ public:
 
 	void convertLineToSlice(IntersectionLine in_slicingLine);
 	IRPointType checkIfPointIsInLine(glm::vec3 in_point);
+	IRPointType checkIfPointIsNearbyPointInLine(glm::vec3 in_point, float in_searchBoxHalfDiameter);
 	void setEmptyNormal(glm::vec3 in_emptyNormal);
 };
 

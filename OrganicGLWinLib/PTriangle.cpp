@@ -118,18 +118,29 @@ void PTriangle::sampleTriangleMaterial(MassGridArray* in_massGridArrayRef,
 	if (searchResult.wasSearchKeyValid == true)
 	{
 		//std::cout << "(PTriangle): found cell; number of flags in cell is: " << searchResult.cellRef->getNumberOfFlagsSet() << std::endl;
-		pTriangleMaterialID = searchResult.cellRef->getCellMaterialID();
-		//pTriangleMaterialID = 2;
 		if (searchResult.cellRef->getNumberOfFlagsSet() != 0)
+		{
+			pTriangleMaterialID = searchResult.cellRef->getCellMaterialID();
+		}
+		//pTriangleMaterialID = 2;
+		if (searchResult.cellRef->getNumberOfFlagsSet() == 0)
 		{
 			/*
 			std::cout << "!!! Notice, cell at (" << targetSamplingGridCell.x << ", " << targetSamplingGridCell.y << ", " << targetSamplingGridCell.z << ") had " << searchResult.cellRef->getNumberOfFlagsSet() << " flags set. " << std::endl;
 			for (int x = 0; x < 3; x++)
 			{
-				std::cout << "!!! Point " << x << " currentValue: " << collisionPointRefArray[x]->currentValue.x << ", " << collisionPointRefArray[x]->currentValue.y << ", " << collisionPointRefArray[x]->currentValue.z << std::endl;
-			}
+				std::cout << "!!! Point " << x << " currentValue: " << collisionPointRefArray[x]->currentValue.x 
+														<< ", " << collisionPointRefArray[x]->currentValue.y 
+														<< ", " << collisionPointRefArray[x]->currentValue.z << " | Grid cell coord: (";
+				EnclaveKeyDef::EnclaveKey currentPointGridCellCoord = RUtils::convertToRasterGridCell(collisionPointRefArray[x]->currentValue, in_tileGridWidth, in_numberOfTilesPerDimension);
+				
+				std::cout << currentPointGridCellCoord.x << ", " << currentPointGridCellCoord.y << ", " << currentPointGridCellCoord.z << ") " << std::endl;
 
+			}
+			int waitVal = 3;
+			std::cin >> waitVal;
 			*/
+			calculateTriangleMaterial();
 		}
 
 

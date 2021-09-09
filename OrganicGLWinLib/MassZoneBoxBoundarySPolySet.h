@@ -20,6 +20,7 @@
 #include "SPolyMorphTracker.h"
 #include "ContestableBorderLineMap.h"
 #include "QuatUtils.h"
+#include "MessageContainer.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -32,7 +33,7 @@ class MassZoneBoxBoundarySPolySet
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
-		void buildBoundarySPolyFromFactory();
+		MessageContainer buildBoundarySPolyFromFactory();
 		SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 	private:
 		glm::vec3 boundaryEmptyNormal;		// the empty normal applied to any SPolys that are generated as a result of fracturing.

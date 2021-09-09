@@ -118,7 +118,7 @@ void SPoly::determineBorderLines()
 			glm::vec3 currentPointB = triangles[x].triangleLines[y].pointB;
 
 			// cycle through each of the border lines
-			for (int z = 0; z < numberOfBorderLines; z++)
+			for (int z = 0; z < numberOfSPolyBorderLines; z++)
 			{
 				if
 					(
@@ -173,8 +173,8 @@ int SPoly::calculateAndGetPerfectClampingValue()
 
 void SPoly::determinePlanarVectors()
 {
-	//std::cout << "#- Planar Vectors       > Calculating planar vectors for the triangles in the SPoly, (" << numberOfBorderLines << " border lines)... "  << std::endl;
-	if (numberOfBorderLines == 3)
+	//std::cout << "#- Planar Vectors       > Calculating planar vectors for the triangles in the SPoly, (" << numberOfSPolyBorderLines << " border lines)... "  << std::endl;
+	if (numberOfSPolyBorderLines == 3)
 	{
 		//if (debugFlag == 1)
 		//{
@@ -182,13 +182,13 @@ void SPoly::determinePlanarVectors()
 		//}
 		findPlanarVectorsForThreeBorderLines(&borderLines[0], &borderLines[1], &borderLines[2]);
 	}
-	else if (numberOfBorderLines == 4)
+	else if (numberOfSPolyBorderLines == 4)
 	{
 		//if (debugFlag == 1)
 		//{
 		//std::cout << "(case 2) ~~~~~~~~~ Calculating planar vector for " << numberOfTriangles << " triangles~~~~~~~~~~~~ " << std::endl;
 		//}
-		//std::cout << "!!!! " << numberOfBorderLines << std::endl;
+		//std::cout << "!!!! " << numberOfSPolyBorderLines << std::endl;
 		findPlanarVectorsForTwoBorderLines(&borderLines[0], &borderLines[1]);
 		findPlanarVectorsForTwoBorderLines(&borderLines[2], &borderLines[3]);
 	}
@@ -386,8 +386,8 @@ void SPoly::addBorderLine(STriangleLine in_triangleLine)
 	SPolyBorderLines newBorderLine;
 	newBorderLine.pointA = in_triangleLine.pointA;
 	newBorderLine.pointB = in_triangleLine.pointB;
-	//std::cout << "!!! Added border line: (" << numberOfBorderLines << "): " << newBorderLine.pointA.x << ", " << newBorderLine.pointA.y << ", " << newBorderLine.pointA.z << " | " << newBorderLine.pointB.x << ", " << newBorderLine.pointB.y << ", " << newBorderLine.pointB.z << std::endl;
-	borderLines[numberOfBorderLines++] = newBorderLine;
+	//std::cout << "!!! Added border line: (" << numberOfSPolyBorderLines << "): " << newBorderLine.pointA.x << ", " << newBorderLine.pointA.y << ", " << newBorderLine.pointA.z << " | " << newBorderLine.pointB.x << ", " << newBorderLine.pointB.y << ", " << newBorderLine.pointB.z << std::endl;
+	borderLines[numberOfSPolyBorderLines++] = newBorderLine;
 }
 
 int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction)
@@ -399,7 +399,7 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 	if (in_direction == CyclingDirection::FORWARD)
 	{
 		//std::cout << "!! Entered  branch for forward. " << std::endl;
-		int lastIndex = numberOfBorderLines - 1;
+		int lastIndex = numberOfSPolyBorderLines - 1;
 		if (in_currentBorderLineID == lastIndex)
 		{
 			returnID = 0;
@@ -415,7 +415,7 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 		int firstIndex = 0;
 		if (in_currentBorderLineID == firstIndex)
 		{
-			returnID = (numberOfBorderLines - 1);
+			returnID = (numberOfSPolyBorderLines - 1);
 		}
 		else if (in_currentBorderLineID != firstIndex)
 		{
@@ -572,15 +572,28 @@ void SPoly::moveLastCleave()
 	}
 }
 
-void SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
+MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
+	//bool wasRunSuccessful = true;
+	MessageContainer buildErrorMessages;
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
 		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;
-		sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
+		buildErrorMessages = sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
+		if (buildErrorMessages.empty() == false)
+		{
+			std::cout << "!!! CleaveSequence construction unsuccessful; preparing to perform alternate action. " << std::endl;
+
+			std::cout << "!!! Points of this SPoly are: " << std::endl;
+			printPoints();
+
+			int alternateWait = 3;
+			std::cin >> alternateWait;
+		}
 		//std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}
+	return buildErrorMessages;
 }
 
 void SPoly::constructCleaveLine()
@@ -877,7 +890,7 @@ void SPoly::printLines()
 
 void SPoly::printPoints()
 {
-	for (int x = 0; x < numberOfBorderLines; x++)
+	for (int x = 0; x < numberOfSPolyBorderLines; x++)
 	{
 		std::cout << "Point " << x << ": " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
 	}
@@ -885,7 +898,7 @@ void SPoly::printPoints()
 
 void SPoly::printBorderLines()
 {
-	for (int x = 0; x < numberOfBorderLines; x++)
+	for (int x = 0; x < numberOfSPolyBorderLines; x++)
 	{
 		std::cout << "|||| Border Line " << x << std::endl;
 		std::cout << "| point A: " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
@@ -896,7 +909,7 @@ void SPoly::printBorderLines()
 void SPoly::printPlanarVectors()
 {
 	std::cout << "|||| Printing planar vectors for border lines... " << std::endl;
-	for (int x = 0; x < numberOfBorderLines; x++)
+	for (int x = 0; x < numberOfSPolyBorderLines; x++)
 	{
 		std::cout << "|||| Border Line " << x << std::endl;
 		//std::cout << "| point A: " << borderLines[x].pointA.x << ", " << borderLines[x].pointA.y << ", " << borderLines[x].pointA.z << std::endl;
@@ -965,7 +978,7 @@ void SPoly::setDebugFlag(int in_debugFlagValue)
 CleaveSequenceCandidateListMap SPoly::buildCleaveSequenceCandidateListMap()
 {
 	CleaveSequenceCandidateListMap returnMap;
-	for (int x = 0; x < numberOfBorderLines; x++)
+	for (int x = 0; x < numberOfSPolyBorderLines; x++)
 	{
 		//std::cout << "|||| Candidate list for border line " << x << ": " << std::endl;
 		SPolyBorderLines* borderLineRef = &borderLines[x];
