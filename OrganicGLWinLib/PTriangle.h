@@ -41,6 +41,7 @@ class PTriangle
 																		// The swapping of the points is handled by the non-default constructor, if the value if false. See the constructor's definition for details.
 
 		glm::vec3 currentEmptyNormal;
+
 		short pTriangleMaterialID = 2;		// needs to be calculated by analyzing the materials in all 3 collision points
 
 };

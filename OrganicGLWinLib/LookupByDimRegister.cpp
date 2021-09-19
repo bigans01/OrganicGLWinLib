@@ -131,9 +131,9 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 		*/
 
 		// use the new class derived from RasterCubeTracerBase.h here 
-		RTriangleInteriorAreaTracer interiorTracer;
+		//RTriangleInteriorAreaTracer interiorTracer;
 		//interiorTracer.setOptionalMassGridArrayRef(in_massGridArrayRef);
-		interiorTracer.setGridArrayRef(in_massGridArrayRef);
+		//interiorTracer.setGridArrayRef(in_massGridArrayRef);
 
 		//EnclaveKeyDef::EnclaveKey startKey;
 		//EnclaveKeyDef::EnclaveKey endKey;
@@ -209,7 +209,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 
 
 
-		registerTotalIntetiorFills += interiorTracer.getTotalInserts();
+		//registerTotalIntetiorFills += interiorTracer.getTotalInserts();
 		totalScansRan++;
 	}
 	

@@ -166,6 +166,14 @@ bool PTriangle::runInitialEmptyNormalTest(bool in_pTriangleDebugFlag)
 	ECBPolyPoint pointToNormalize(testNormal.x, testNormal.y, testNormal.z);
 
 	ECBPolyPoint normalizedNormal = IndependentUtils::findNormalizedPoint(pointToNormalize);
+
+	// debug: option 2 (9/19/2021)
+	ECBPolyPoint currentNormalPointed(currentEmptyNormal.x, currentEmptyNormal.y, currentEmptyNormal.z);
+	ECBPolyPoint normalizedCurrentNormal = IndependentUtils::findNormalizedPoint(currentNormalPointed);
+	glm::vec3 convertedNewNormal(normalizedNormal.x, normalizedNormal.y, normalizedNormal.z);
+	glm::vec3 convertedCurrentNormal(normalizedCurrentNormal.x, normalizedCurrentNormal.y, normalizedCurrentNormal.z);
+	
+
 	glm::vec3 normalizedNormalConverted(normalizedNormal.x, normalizedNormal.y, normalizedNormal.z);
 
 	if (in_pTriangleDebugFlag == true)
@@ -173,20 +181,23 @@ bool PTriangle::runInitialEmptyNormalTest(bool in_pTriangleDebugFlag)
 		std::cout << "normalized normal converted: " << normalizedNormalConverted.x << ", " << normalizedNormalConverted.y << ", " << normalizedNormalConverted.z << std::endl;
 	}
 
-	if
-		(
-		(normalizedNormalConverted == currentEmptyNormal)
-			&&
-			(in_pTriangleDebugFlag == true)
-			)
+	bool didNormalsMatch = true;
+	if (normalizedNormalConverted != currentEmptyNormal)
+	// if (convertedNewNormal == convertedCurrentNormal)	// for debug option 2 
 	{
-		std::cout << "!!! test Normal matches target current Empty normal, no point swap required! " << std::endl;
-		std::cout << "Current empty normal is: " << currentEmptyNormal.x << ", " << currentEmptyNormal.y << ", " << currentEmptyNormal.z << std::endl;
-	}
-	else
-	{
+		didNormalsMatch = false;
 		wasValid = false;
-		if (in_pTriangleDebugFlag == true)
+	}
+
+	// debug options
+	if (in_pTriangleDebugFlag == true)
+	{
+		if (didNormalsMatch == true)
+		{
+			std::cout << "!!! test Normal matches target current Empty normal, no point swap required! " << std::endl;
+			std::cout << "Current empty normal is: " << currentEmptyNormal.x << ", " << currentEmptyNormal.y << ", " << currentEmptyNormal.z << std::endl;
+		}
+		else
 		{
 			std::cout << "!!! test Normal DOESN't match target; swapping. " << std::endl;
 		}
