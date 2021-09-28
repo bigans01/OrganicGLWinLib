@@ -37,6 +37,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
 	glfwSetKeyCallback(window, keyCallBackWrapper);
+	glfwSetScrollCallback(window, mouseScrollCallBackWrapper);
 
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);

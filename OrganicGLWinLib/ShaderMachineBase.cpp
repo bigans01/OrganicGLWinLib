@@ -295,6 +295,17 @@ void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, 
 	}
 }
 
+void ShaderMachineBase::mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset)
+{
+	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->mouse_scroll_callback(window, xoffset, yoffset);
+}
+
+void ShaderMachineBase::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	std::cout << "!!! Scroll detected; yoffset is: " << yoffset << std::endl;
+}
+
+
 
 void ShaderMachineBase::updateMatricesAndDelta()
 {

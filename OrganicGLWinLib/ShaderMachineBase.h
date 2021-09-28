@@ -253,7 +253,9 @@ protected:
 
 		// test, call back function.
 		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset);
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 private:
 		struct GearFindResult
 		{
