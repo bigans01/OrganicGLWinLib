@@ -1242,6 +1242,9 @@
     <ClInclude Include="TileLocation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderMachineFeedbackType.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

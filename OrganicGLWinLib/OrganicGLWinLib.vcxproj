@@ -405,6 +405,7 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="RaycastIntersectionTest.h" />
     <ClInclude Include="RayIntersectionResult.h" />
+    <ClInclude Include="ShaderMachineFeedbackType.h" />
     <ClInclude Include="SharedLineReactor.h" />
     <ClInclude Include="SinTBW.h" />
     <ClInclude Include="SPolyDO.h" />

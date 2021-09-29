@@ -303,6 +303,7 @@ void ShaderMachineBase::mouseScrollCallBackWrapper(GLFWwindow* window, double xo
 void ShaderMachineBase::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	std::cout << "!!! Scroll detected; yoffset is: " << yoffset << std::endl;
+	machineFeedback.mouseFeedback[ShaderMachineFeedbackType::MOUSE_SCROLL] = yoffset;
 }
 
 

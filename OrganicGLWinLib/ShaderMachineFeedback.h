@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include "ImGuiInputTextResponse.h"
+#include "ShaderMachineFeedbackType.h"
 
 class ShaderMachineFeedback
 {
@@ -20,6 +21,15 @@ class ShaderMachineFeedback
 			{
 				feedbackStrings.push_back(*feedbackBStringsBegin);
 			}
+
+			// append mouse feedback
+			auto mouseFeedbackBegin = in_feedbackB.mouseFeedback.begin();
+			auto mouseFeedbackEnd = in_feedbackB.mouseFeedback.end();
+			for (; mouseFeedbackBegin != mouseFeedbackEnd; mouseFeedbackBegin++)
+			{
+				mouseFeedback[mouseFeedbackBegin->first] = mouseFeedbackBegin->second;
+			}
+
 			return *this;
 		}
 
@@ -35,6 +45,7 @@ class ShaderMachineFeedback
 		}
 
 		std::vector<std::string> feedbackStrings;
+		std::map<ShaderMachineFeedbackType, float> mouseFeedback;
 };
 
 #endif
