@@ -103,9 +103,11 @@ GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::s
 	return returnJob;
 }
 
-ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
+//ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
+void ShaderMachineBase::checkForClickedButtons()
 {
-	return buttonPanelContainer.checkAllPanelsForClickResults();
+	machineFeedback.loadButtonClickResults(buttonPanelContainer.checkAllPanelsForClickResults());
+	//return buttonPanelContainer.checkAllPanelsForClickResults();
 }
 
 void ShaderMachineBase::checkForTextInput()

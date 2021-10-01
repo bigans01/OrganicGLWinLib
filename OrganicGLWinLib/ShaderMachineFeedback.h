@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include "ImGuiInputTextResponse.h"
+#include "ImGuiButtonClickResult.h"
 #include "ShaderMachineFeedbackType.h"
 
 class ShaderMachineFeedback
@@ -30,6 +31,9 @@ class ShaderMachineFeedback
 				mouseFeedback[mouseFeedbackBegin->first] = mouseFeedbackBegin->second;
 			}
 
+			// NOTE: ImGuiButtonClickResult isn't appended; it is manually set by the
+			// call to ShaderMachineBase::checkForClickedButtons().
+
 			return *this;
 		}
 
@@ -44,8 +48,14 @@ class ShaderMachineFeedback
 			feedbackStrings.clear();
 		}
 
+		void loadButtonClickResults(ImGuiButtonClickResult in_clickResult)
+		{
+			buttonClickResult = in_clickResult;
+		}
+
 		std::vector<std::string> feedbackStrings;
 		std::map<ShaderMachineFeedbackType, float> mouseFeedback;
+		ImGuiButtonClickResult buttonClickResult;
 };
 
 #endif

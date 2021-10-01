@@ -120,7 +120,8 @@ public:
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
 
 		// imgui features
-		ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
+		//ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
+		void checkForClickedButtons();	// checks for any button that was clicked
 		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data.
 		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
 		void renderSliders();								// will render single float interactable sliders
