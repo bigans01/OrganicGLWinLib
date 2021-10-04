@@ -31,6 +31,7 @@
 #include "TimeBasedWaveManager.h"
 #include "TimeBasedWaveType.h"
 #include "DynamicBufferManager.h"
+#include "KeyPressTracker.h"
 
 class ShaderMachineBase
 {
@@ -125,9 +126,10 @@ public:
 		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data.
 		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
 		void renderSliders();								// will render single float interactable sliders
-
+		
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);
+		KeyPressTracker keyTracker;	// set back to private member when done testing on 10/3/2021.
 protected:
 		friend class Gear;
 		// misc

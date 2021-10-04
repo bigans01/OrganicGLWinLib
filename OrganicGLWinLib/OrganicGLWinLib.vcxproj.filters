@@ -1245,6 +1245,15 @@
     <ClInclude Include="ShaderMachineFeedbackType.h">
       <Filter>Header Files\ShaderMachines</Filter>
     </ClInclude>
+    <ClInclude Include="KeyPressCycle.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPressState.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPressTracker.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

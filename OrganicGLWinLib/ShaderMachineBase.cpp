@@ -295,6 +295,18 @@ void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, 
 	{
 		toggleCameraBoundToMousePointer();
 	}
+
+	// new, for KeyPressTracker keyTracker:
+	
+	if (action == GLFW_PRESS)
+	{
+		keyTracker.insertCycle(key);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		keyTracker.killCycle(key);
+	}
+	
 }
 
 void ShaderMachineBase::mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset)
