@@ -14,6 +14,34 @@
 class KeyPressTracker
 {
 	public:
+		template<typename FirstInput, typename ...RemainingInputs> bool doesInputCombinationExist(FirstInput && first, RemainingInputs && ...remaining)
+		{
+			bool doesExist = false;
+
+			// first, get the total number of inputs to match against.
+			int currentCount = 1;
+			int returnValue = incrementInputCount(currentCount, std::forward<RemainingInputs>(remaining)...);
+
+			// now, get the actual number of existing inputs.
+			int currentFoundInputs = 0;
+			auto inputFinder = cycleTracker.find(std::forward<FirstInput>(first));
+			if (inputFinder != cycleTracker.end())	// it was found.
+			{
+				currentFoundInputs += 1;
+			}
+			int updatedFoundInputs = getNumberOfFoundInputs(currentFoundInputs, std::forward<RemainingInputs>(remaining)...);
+			if (returnValue == updatedFoundInputs)
+			{
+				std::cout << "!!! Note, found input! " << std::endl;
+				doesExist = true;
+			}
+
+			return doesExist;
+		}
+		void doesInputCombinationExist() {};
+
+
+
 		void insertCycle(int in_glfwEnum)
 		{
 			KeyPressCycle newCycle;
@@ -74,6 +102,24 @@ class KeyPressTracker
 		}
 
 	private:
+		template<typename FirstInput, typename ...RemainingInputs> int incrementInputCount(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
+		{
+			int currentValue = in_incrementValue + 1;
+			return currentValue + incrementInputCount(currentValue, std::forward<RemainingInputs>(remaining)...);
+		}
+		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };
+
+		template<typename FirstInput, typename ...RemainingInputs> int getNumberOfFoundInputs(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
+		{
+			int totalFoundInputs = in_incrementValue;
+			auto inputFinder = cycleTracker.find(std::forward<FirstInput>(first));
+			if (inputFinder != cycleTracker.end())	// it was found.
+			{
+				totalFoundInputs += 1;
+			}
+			return totalFoundInputs + getNumberOfFoundInputs(totalFoundInputs, std::forward<RemainingInputs>(remaining)...);
+		}
+		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };
 		std::map<int, KeyPressCycle> cycleTracker;	// the int's of this map are specified by the GLFW_* enums in glfw.h.
 };
 
