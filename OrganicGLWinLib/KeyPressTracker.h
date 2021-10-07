@@ -18,11 +18,16 @@ class KeyPressTracker
 		{
 			bool doesExist = false;
 
-			// first, get the total number of inputs to match against.
-			int currentCount = 1;
-			int returnValue = incrementInputCount(currentCount, std::forward<RemainingInputs>(remaining)...);
+			// first, get the total number of inputs that were passed into this function;
+			// the number of existing inputs must match this in order to return true.
+			//int currentCount = 1;
+			//int totalNumberOfInputParams = incrementInputCount(currentCount, std::forward<RemainingInputs>(remaining)...);
+			int totalNumberOfInputParams = incrementInputCount(0, std::forward<FirstInput>(first), std::forward<RemainingInputs>(remaining)...);
 
-			// now, get the actual number of existing inputs.
+			// now, get the actual number of existing inputs;
+			// check the first value to see if it exist here, then call the recursive function, getNumberOfFoundInputs for the rest.
+			
+			/*
 			int currentFoundInputs = 0;
 			auto inputFinder = cycleTracker.find(std::forward<FirstInput>(first));
 			if (inputFinder != cycleTracker.end())	// it was found.
@@ -30,7 +35,14 @@ class KeyPressTracker
 				currentFoundInputs += 1;
 			}
 			int updatedFoundInputs = getNumberOfFoundInputs(currentFoundInputs, std::forward<RemainingInputs>(remaining)...);
-			if (returnValue == updatedFoundInputs)
+			*/
+			
+			//int currentFoundInputs = 0;
+			int updatedFoundInputs = getNumberOfFoundInputs(0, std::forward<FirstInput>(first), std::forward<RemainingInputs>(remaining)...);
+
+			//std::cout << "|> totalNumberofInputParams: " << totalNumberOfInputParams << " :||: updateFoundInputs: " << updatedFoundInputs << std::endl;
+
+			if (totalNumberOfInputParams == updatedFoundInputs)
 			{
 				std::cout << "!!! Note, found input! " << std::endl;
 				doesExist = true;
@@ -105,7 +117,7 @@ class KeyPressTracker
 		template<typename FirstInput, typename ...RemainingInputs> int incrementInputCount(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
 			int currentValue = in_incrementValue + 1;
-			return currentValue + incrementInputCount(currentValue, std::forward<RemainingInputs>(remaining)...);
+			return incrementInputCount(currentValue, std::forward<RemainingInputs>(remaining)...);
 		}
 		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };
 
@@ -117,7 +129,7 @@ class KeyPressTracker
 			{
 				totalFoundInputs += 1;
 			}
-			return totalFoundInputs + getNumberOfFoundInputs(totalFoundInputs, std::forward<RemainingInputs>(remaining)...);
+			return getNumberOfFoundInputs(totalFoundInputs, std::forward<RemainingInputs>(remaining)...);
 		}
 		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };
 		std::map<int, KeyPressCycle> cycleTracker;	// the int's of this map are specified by the GLFW_* enums in glfw.h.
