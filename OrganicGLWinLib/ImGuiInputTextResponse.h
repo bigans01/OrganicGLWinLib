@@ -15,6 +15,7 @@ class ImGuiInputTextResponse
 			containsResponse = true;
 		};
 		bool containsResponse = false;
+		bool wasInputReceived = false;	// set to true if the input was modified in any way.
 		std::string stringedArray;
 };
 

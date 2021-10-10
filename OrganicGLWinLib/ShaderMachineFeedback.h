@@ -33,7 +33,7 @@ class ShaderMachineFeedback
 
 			// NOTE: ImGuiButtonClickResult isn't appended; it is manually set by the
 			// call to ShaderMachineBase::checkForClickedButtons().
-
+			wasInputTextModified = in_feedbackB.wasInputTextModified;
 			return *this;
 		}
 
@@ -56,6 +56,7 @@ class ShaderMachineFeedback
 		std::vector<std::string> feedbackStrings;
 		std::map<ShaderMachineFeedbackType, float> mouseFeedback;
 		ImGuiButtonClickResult buttonClickResult;
+		bool wasInputTextModified = false;		// if any input text was modified, set this value to true.
 };
 
 #endif

@@ -289,24 +289,39 @@ void ShaderMachineBase::keyCallBackWrapper(GLFWwindow* window, int key, int scan
 	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->key_callback(window, key, scancode, action, mods);
 }
 
+void ShaderMachineBase::handleKeyPressInputs()
+{
+	bool voidOutKeyPresses = false;
+	if (machineFeedback.wasInputTextModified == true)
+	{
+		voidOutKeyPresses = true;	// void out key presses if any input text was received.
+	}
+	keyTracker.handleKeyPressTransfers(voidOutKeyPresses);
+}
+
 void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
-	{
-		toggleCameraBoundToMousePointer();
-	}
+	int isFocused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
 
-	// new, for KeyPressTracker keyTracker:
-	
-	if (action == GLFW_PRESS)
-	{
-		keyTracker.insertCycle(key);
-	}
-	else if (action == GLFW_RELEASE)
-	{
-		keyTracker.killCycle(key);
-	}
-	
+	// only listen for input from keyboard, when the GLFW window is focused.
+	//if (isFocused == 1)
+	//{
+		if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+		{
+			toggleCameraBoundToMousePointer();
+		}
+
+		// new, for KeyPressTracker keyTracker:
+
+		if (action == GLFW_PRESS)
+		{
+			keyTracker.insertCycle(key);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			keyTracker.killCycle(key);
+		}
+	//}
 }
 
 void ShaderMachineBase::mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset)

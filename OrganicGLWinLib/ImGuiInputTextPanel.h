@@ -61,6 +61,10 @@ class ImGuiInputTextPanel
 					foundMessage = currentPotentialResponse.stringedArray;
 					feedback += currentPotentialResponse;
 				}
+				if (currentPotentialResponse.wasInputReceived == true)
+				{
+					feedback.wasInputTextModified = true;
+				}
 			}
 
 			ImGui::End();

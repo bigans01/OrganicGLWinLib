@@ -23,6 +23,9 @@ class ImGuiInputText
 		char characterArray[256] = { 0 };
 	private:
 		void clearCharacterBuffer();
+		int getZeroCount();		// used to determine the number of array elements that contain no values (i.e, 0);
+								// call this function before and after ImGui::InputText to determine if changes have been made to
+								// characterArray.
 };
 
 #endif

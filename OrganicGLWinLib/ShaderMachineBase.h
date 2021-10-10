@@ -130,6 +130,14 @@ public:
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);
 		KeyPressTracker keyTracker;	// set back to private member when done testing on 10/3/2021.
+
+		void handleKeyPressInputs();	// analyzes the machineFeedback member to see if keyboard inputs were made 
+										// to any existing ImGui elements (i.e, text input box, button clicked); if they were,
+										// we do not want to modifiy/insert any existing keyPressCycles in the keyTracker,
+										// because those inputs were focused on a specific ImGui element at the time; if we do not do this,
+										// the ShaderMachineBase instance will incorrectly register input on the ImGui element AND
+										// register/modify a keyCycle at the same time. This function should be called right before the call to 
+		                                // retrieveShaderInputs().
 protected:
 		friend class Gear;
 		// misc

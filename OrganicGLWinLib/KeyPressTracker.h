@@ -20,31 +20,11 @@ class KeyPressTracker
 
 			// first, get the total number of inputs that were passed into this function;
 			// the number of existing inputs must match this in order to return true.
-			//int currentCount = 1;
-			//int totalNumberOfInputParams = incrementInputCount(currentCount, std::forward<RemainingInputs>(remaining)...);
 			int totalNumberOfInputParams = incrementInputCount(0, std::forward<FirstInput>(first), std::forward<RemainingInputs>(remaining)...);
-
-			// now, get the actual number of existing inputs;
-			// check the first value to see if it exist here, then call the recursive function, getNumberOfFoundInputs for the rest.
-			
-			/*
-			int currentFoundInputs = 0;
-			auto inputFinder = cycleTracker.find(std::forward<FirstInput>(first));
-			if (inputFinder != cycleTracker.end())	// it was found.
-			{
-				currentFoundInputs += 1;
-			}
-			int updatedFoundInputs = getNumberOfFoundInputs(currentFoundInputs, std::forward<RemainingInputs>(remaining)...);
-			*/
-			
-			//int currentFoundInputs = 0;
 			int updatedFoundInputs = getNumberOfFoundInputs(0, std::forward<FirstInput>(first), std::forward<RemainingInputs>(remaining)...);
-
-			//std::cout << "|> totalNumberofInputParams: " << totalNumberOfInputParams << " :||: updateFoundInputs: " << updatedFoundInputs << std::endl;
-
 			if (totalNumberOfInputParams == updatedFoundInputs)
 			{
-				std::cout << "!!! Note, found input! " << std::endl;
+				//std::cout << "!!! Note, found input! " << std::endl;
 				doesExist = true;
 			}
 
@@ -57,7 +37,8 @@ class KeyPressTracker
 		void insertCycle(int in_glfwEnum)
 		{
 			KeyPressCycle newCycle;
-			cycleTracker[in_glfwEnum] = newCycle;
+			KeyPressCycleRecord newRecord(in_glfwEnum, newCycle);
+			keyPressCycles.push_back(newRecord);
 		}
 
 		void flagStillPressedStates()
@@ -75,7 +56,7 @@ class KeyPressTracker
 
 		void killCycle(int in_glfwEnum)
 		{
-			cycleTracker[in_glfwEnum].updateAsReleased();
+			killCycleVector.push_back(in_glfwEnum);
 		}
 
 		void destroyCyclesAtEndOfLife()
@@ -114,6 +95,33 @@ class KeyPressTracker
 		}
 
 	private:
+		friend class ShaderMachineBase;
+		void handleKeyPressTransfers(bool in_shouldNotTransfer)
+		{
+			if (in_shouldNotTransfer == false)
+			{
+				auto cyclesPressedBegin = keyPressCycles.begin();
+				auto cyclesPressedEnd = keyPressCycles.end();
+				for (; cyclesPressedBegin != cyclesPressedEnd; cyclesPressedBegin++)
+				{
+					cycleTracker[cyclesPressedBegin->keyValue] = cyclesPressedBegin->cycle;
+				}
+
+				auto killCyclesBegin = killCycleVector.begin();
+				auto killCyclesEnd = killCycleVector.end();
+				for (; killCyclesBegin != killCyclesEnd; killCyclesBegin++)
+				{
+					auto findCycleToRelease = cycleTracker.find(*killCyclesBegin);
+					if (findCycleToRelease != cycleTracker.end())
+					{
+						cycleTracker[*killCyclesBegin].updateAsReleased();
+					}
+				}
+
+			}
+			keyPressCycles.clear();	// clear out the vector, regardless of what happened (even if it was empty to begin with)
+			killCycleVector.clear();
+		}
 		template<typename FirstInput, typename ...RemainingInputs> int incrementInputCount(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
 			int currentValue = in_incrementValue + 1;
@@ -133,6 +141,20 @@ class KeyPressTracker
 		}
 		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };
 		std::map<int, KeyPressCycle> cycleTracker;	// the int's of this map are specified by the GLFW_* enums in glfw.h.
+
+		struct KeyPressCycleRecord
+		{
+			KeyPressCycleRecord() {};
+			KeyPressCycleRecord(int in_keyValue, KeyPressCycle in_keyPressCycle) :
+				keyValue(in_keyValue),
+				cycle(in_keyPressCycle)
+			{};
+			int keyValue = 0;
+			KeyPressCycle cycle;
+		};
+
+		std::vector<KeyPressCycleRecord> keyPressCycles;
+		std::vector<int> killCycleVector;
 };
 
 #endif
