@@ -335,6 +335,22 @@ void ShaderMachineBase::mouse_scroll_callback(GLFWwindow* window, double xoffset
 	machineFeedback.mouseFeedback[ShaderMachineFeedbackType::MOUSE_SCROLL] = yoffset;
 }
 
+void ShaderMachineBase::mouseButtonCallBackWrapper(GLFWwindow* window, int button, int action, int mods)
+{
+	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->mouseButtonCallback(window, button, action, mods);
+}
+
+void ShaderMachineBase::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS)
+	{
+		keyTracker.insertCycle(button);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		keyTracker.killCycle(button);
+	}
+}
 
 
 void ShaderMachineBase::updateMatricesAndDelta()

@@ -114,6 +114,7 @@ class KeyPressTracker
 					auto findCycleToRelease = cycleTracker.find(*killCyclesBegin);
 					if (findCycleToRelease != cycleTracker.end())
 					{
+						std::cout << "!!! Key press " << *killCyclesBegin  << " was RELEASED; erasing..." << std::endl;
 						cycleTracker[*killCyclesBegin].updateAsReleased();
 					}
 				}
