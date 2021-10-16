@@ -30,105 +30,26 @@ class KeyPressTracker
 
 			return doesExist;
 		}
-		void doesInputCombinationExist() {};
+		void doesInputCombinationExist() {};	// required for above template function
 
-
-
-		void insertCycle(int in_glfwEnum)
-		{
-			KeyPressCycle newCycle;
-			KeyPressCycleRecord newRecord(in_glfwEnum, newCycle);
-			keyPressCycles.push_back(newRecord);
-		}
-
-		void flagStillPressedStates()
-		{
-			auto existingCyclesBegin = cycleTracker.begin();
-			auto existingCyclesEnd = cycleTracker.end();
-			for (; existingCyclesBegin != existingCyclesEnd; existingCyclesBegin++)
-			{
-				if (existingCyclesBegin->second.getCurrentState() == KeyPressState::NEWLY_PRESSED)
-				{
-					existingCyclesBegin->second.updateAsStillPressed();
-				}
-			}
-		}
-
-		void killCycle(int in_glfwEnum)
-		{
-			killCycleVector.push_back(in_glfwEnum);
-		}
-
-		void destroyCyclesAtEndOfLife()
-		{
-			std::vector<int> destroyableKeyVector;
-			auto cyclesBegin = cycleTracker.begin();
-			auto cyclesEnd = cycleTracker.end();
-			for (; cyclesBegin != cyclesEnd; cyclesBegin++)
-			{
-				if (cyclesBegin->second.getCurrentState() == KeyPressState::RELEASED)
-				{
-					destroyableKeyVector.push_back(cyclesBegin->first);
-				}
-			}
-
-			auto destroyablesBegin = destroyableKeyVector.begin();
-			auto destroyablesEnd = destroyableKeyVector.end();
-			for (; destroyablesBegin != destroyablesEnd; destroyablesBegin++)
-			{
-				cycleTracker.erase(*destroyablesBegin);
-			}
-		}
-
-		void printCycles()
-		{
-			if (!cycleTracker.empty())
-			{
-				auto cyclesBegin = cycleTracker.begin();
-				auto cyclesEnd = cycleTracker.end();
-				for (; cyclesBegin != cyclesEnd; cyclesBegin++)
-				{
-					std::cout << cyclesBegin->first << ", ";
-				}
-				std::cout << std::endl;
-			}
-		}
+		// non-template public functions
+		void resetChangeState();				// should be called before any attempted modification to keyPressCycles map (i.e., insertCycle, killCycle); 
+												// ie., at the beginning of the OpenGL rendering loop iteration (see code in OrganicGLManager::renderReadyArrays())
+		void insertCycle(int in_glfwEnum);		// attempts to insert a cycle with a particular GLFW enum value; the final decision is handled by the call to handleKeyPressTransfers
+		void flagStillPressedStates();			// flags any existing cycle marked as KeyPressState::NEWLY_PRESSED to KeyPressState::STILL_PRESSED
+		void killCycle(int in_glfwEnum);		// attempts to kill a cycle with a particular GLFW enum value; the final decision is handled by the call to handleKeyPressTransfers
+		void destroyCyclesAtEndOfLife();		// destroys any cycles flagged as KeyPressState::RELEASED; should be called at end of rendering loop iteration
+		void printCycles();						// print the GLFW enum value of all entries in the cycleTracker map.
+		bool getKeyStateChangeValue();			// returns current value of keyStateChange.
 
 	private:
 		friend class ShaderMachineBase;
-		void handleKeyPressTransfers(bool in_shouldNotTransfer)
-		{
-			if (in_shouldNotTransfer == false)
-			{
-				auto cyclesPressedBegin = keyPressCycles.begin();
-				auto cyclesPressedEnd = keyPressCycles.end();
-				for (; cyclesPressedBegin != cyclesPressedEnd; cyclesPressedBegin++)
-				{
-					cycleTracker[cyclesPressedBegin->keyValue] = cyclesPressedBegin->cycle;
-				}
-
-				auto killCyclesBegin = killCycleVector.begin();
-				auto killCyclesEnd = killCycleVector.end();
-				for (; killCyclesBegin != killCyclesEnd; killCyclesBegin++)
-				{
-					auto findCycleToRelease = cycleTracker.find(*killCyclesBegin);
-					if (findCycleToRelease != cycleTracker.end())
-					{
-						std::cout << "!!! Key press " << *killCyclesBegin  << " was RELEASED; erasing..." << std::endl;
-						cycleTracker[*killCyclesBegin].updateAsReleased();
-					}
-				}
-
-			}
-			keyPressCycles.clear();	// clear out the vector, regardless of what happened (even if it was empty to begin with)
-			killCycleVector.clear();
-		}
 		template<typename FirstInput, typename ...RemainingInputs> int incrementInputCount(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
 			int currentValue = in_incrementValue + 1;
 			return incrementInputCount(currentValue, std::forward<RemainingInputs>(remaining)...);
 		}
-		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };
+		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };	// required for above template function
 
 		template<typename FirstInput, typename ...RemainingInputs> int getNumberOfFoundInputs(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
@@ -140,7 +61,9 @@ class KeyPressTracker
 			}
 			return getNumberOfFoundInputs(totalFoundInputs, std::forward<RemainingInputs>(remaining)...);
 		}
-		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };
+		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };	// required for above template function
+
+		void handleKeyPressTransfers(bool in_shouldNotTransfer);
 		std::map<int, KeyPressCycle> cycleTracker;	// the int's of this map are specified by the GLFW_* enums in glfw.h.
 
 		struct KeyPressCycleRecord
@@ -156,6 +79,7 @@ class KeyPressTracker
 
 		std::vector<KeyPressCycleRecord> keyPressCycles;
 		std::vector<int> killCycleVector;
+		bool keyStateChange = false;	// indicates whether or not there was a key state change detected; 
 };
 
 #endif

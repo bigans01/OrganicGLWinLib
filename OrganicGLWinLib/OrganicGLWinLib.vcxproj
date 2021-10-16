@@ -583,6 +583,7 @@
     <ClCompile Include="CleaveSequenceResolver.cpp" />
     <ClCompile Include="CollectiveVerdictMachine.cpp" />
     <ClCompile Include="DynamicRasterGridCellBorders.cpp" />
+    <ClCompile Include="KeyPressTracker.cpp" />
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="MassGridArray.cpp" />
     <ClCompile Include="MassUtils.cpp" />

@@ -1844,5 +1844,8 @@
     <ClCompile Include="BrasenhamMassTracer.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
+    <ClCompile Include="KeyPressTracker.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
