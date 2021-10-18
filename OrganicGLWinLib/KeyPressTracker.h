@@ -31,6 +31,23 @@ class KeyPressTracker
 			return doesExist;
 		}
 		void doesInputCombinationExist() {};	// required for above template function
+		bool doesInputCombinationExist(std::vector<int> in_enums)	// functionally the same as the template function of the same name, but does logic via 
+																	// a vector of int.
+		{
+			bool exists = true;
+			auto enumsBegin = in_enums.begin();
+			auto enumsEnd = in_enums.end();
+			for (; enumsBegin != enumsEnd; enumsBegin++)
+			{
+				auto inputFinder = cycleTracker.find(*enumsBegin);
+				if (inputFinder == cycleTracker.end())	// it wasn't found; set the flag to false and break.
+				{
+					exists = false;
+					break;
+				}
+			}
+			return exists;
+		}
 
 		// non-template public functions
 		void resetChangeState();				// should be called before any attempted modification to keyPressCycles map (i.e., insertCycle, killCycle); 
