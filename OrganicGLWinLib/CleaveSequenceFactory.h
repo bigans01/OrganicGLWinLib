@@ -27,6 +27,7 @@
 #include "IndependentUtils.h"
 #include "MessageContainer.h"
 #include "Message.h"
+#include "MassZoneBoxBoundaryOrientation.h"
 
 class CleaveSequenceFactory
 {
@@ -42,6 +43,7 @@ class CleaveSequenceFactory
 		bool doesFactoryContainLines();
 		void setFactoryDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		void setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel);
+		void setFactoryBoundaryOrientationOption(MassZoneBoxBoundaryOrientation in_optionalFactoryOrientation);
 		bool hasBadProduction = false;
 	private:
 		friend class CategorizedLineMerger;
@@ -52,6 +54,7 @@ class CleaveSequenceFactory
 
 		PolyLogger cleaveSequenceFactoryLogger;
 		PolyDebugLevel mergerDebugLevel = PolyDebugLevel::NONE;
+		MassZoneBoxBoundaryOrientation optionalFactoryOrientation;
 
 		/*
 		std::map<int, CategorizedLine> nonboundMap;					// contains NON_BOUND categorized lines.

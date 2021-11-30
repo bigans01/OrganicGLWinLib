@@ -24,6 +24,7 @@ class CategorizedLineManager
 		void setCategorizedLineManagerDebugLevel(PolyDebugLevel in_polyDebugLevel);
 		int getCountOfIntersectionType(IntersectionType in_intersectionTypeToSearch);
 		int insertLineAndReturnInsertedIndex(CategorizedLine in_categorizedLine);
+		bool checkForDuplicateCategorizedLine(CategorizedLine in_duplicateToCheck);
 		CategorizedLine fetchAndRemoveLineAtIndex(IntersectionType in_intersectionType, int in_targetIndex);
 		CategorizedLine fetchAndRemoveWithGroupMapLocationPush(IntersectionType in_intersectionType,
 															  int in_fetchIndex,

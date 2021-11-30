@@ -94,6 +94,7 @@ public:
 	void testFunction();
 	void createCategorizedLineOptionals();
 	void insertOptionalDataForPoint(IRPointType in_irPointType, std::vector<FusedPointSubData> in_fusedPointSubDataVector);
+	std::string getIntersectionTypeString();
 
 	void convertLineToSlice(IntersectionLine in_slicingLine);
 	IRPointType checkIfPointIsInLine(glm::vec3 in_point);

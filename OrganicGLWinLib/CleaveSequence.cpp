@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CleaveSequence.h"
 #include "CategorizedLine.h"
+#include <string>
 
 void CleaveSequence::insertLineAtIndex(int in_index, CategorizedLine in_categorizedLine)
 {
@@ -112,6 +113,8 @@ void CleaveSequence::printCategorizedLines()
 	auto cleavingLinesEnd = cleavingLines.end();
 	for (; cleavingLinesBegin != cleavingLinesEnd; cleavingLinesBegin++)
 	{
+		
+		std::cout << "IntersectionType of line: " << cleavingLinesBegin->second.getIntersectionTypeString() << " ";
 		std::cout << "[" << cleavingLinesBegin->first << "] | pointA: " << cleavingLinesBegin->second.line.pointA.x << ", " << cleavingLinesBegin->second.line.pointA.y << ", " << cleavingLinesBegin->second.line.pointA.z
 													<< " | pointB: " << cleavingLinesBegin->second.line.pointB.x << ", " << cleavingLinesBegin->second.line.pointB.y << ", " << cleavingLinesBegin->second.line.pointB.z 
 													<< " | A border: (is on border)-> " << cleavingLinesBegin->second.line.isPointAOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointABorder

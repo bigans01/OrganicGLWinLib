@@ -5,6 +5,7 @@
 
 #include <map>
 #include "MassZoneBoxBoundaryState.h"
+#include "MassZoneBoxBoundaryOrientation.h"
 #include "MassZoneBoxBoundarySPolySet.h"
 #include <glm/glm.hpp>
 #include <iostream>
@@ -14,20 +15,30 @@
 #include "SPolyDOSet.h"
 #include "MessageContainer.h"
 
+
 class MassZoneBoxBoundary
 {
 	public:
 		friend class MassZone;
 		friend class MassZoneBox;
 		MassZoneBoxBoundary() {};
-		MassZoneBoxBoundary(glm::vec3 in_corner1, glm::vec3 in_corner2, glm::vec3 in_corner3, glm::vec3 in_corner4, glm::vec3 in_emptyNormal, glm::vec3 in_faceCenterPoint)
+		MassZoneBoxBoundary(
+			MassZoneBoxBoundaryOrientation in_boxOrientation,
+			glm::vec3 in_corner1, 
+			glm::vec3 in_corner2, 
+			glm::vec3 in_corner3, 
+			glm::vec3 in_corner4, 
+			glm::vec3 in_emptyNormal, 
+			glm::vec3 in_faceCenterPoint)
 		{
+			boxOrientation = in_boxOrientation;
 			insertCornerPoint(in_corner1);
 			insertCornerPoint(in_corner2);
 			insertCornerPoint(in_corner3);
 			insertCornerPoint(in_corner4);
 			emptyNormal = in_emptyNormal;
 			boundarySPoly.polyEmptyNormal = in_emptyNormal;
+			boundaryPolySet.boundarySPolySetOrientation = in_boxOrientation;
 			buildBoundarySPoly();
 			boundaryPolySet.boundaryFaceCenterPoint = in_faceCenterPoint;
 		};
@@ -141,8 +152,9 @@ class MassZoneBoxBoundary
 			
 		}
 
+		MassZoneBoxBoundaryOrientation boxOrientation = MassZoneBoxBoundaryOrientation::NONE; // needs to be set by constructor.
 		SPoly boundarySPoly;
-		MassZoneBoxBoundarySPolySet boundaryPolySet;
+		MassZoneBoxBoundarySPolySet boundaryPolySet;	
 		PolyDebugLevel massZoneBoxBoundaryLogLevel = PolyDebugLevel::NONE;
 		glm::vec3 emptyNormal;
 };

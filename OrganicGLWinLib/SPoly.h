@@ -27,6 +27,7 @@
 #include "BorderLineLinkContainer.h"
 #include "QuatUtils.h"
 #include "MessageContainer.h"
+#include "MassZoneBoxBoundaryOrientation.h"
 
 class SPoly
 {
@@ -98,7 +99,7 @@ private:
 
 
 	void determinePrimalPoints();
-	MessageContainer buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
+	MessageContainer buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation);
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.

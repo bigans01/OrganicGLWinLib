@@ -164,7 +164,7 @@ void CoplanarMassCreator::runMassManipulation()
 		
 
 		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
-		trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::NO_MERGE);		// merging cannot be done on coplanar comparisons.
+		trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::NO_MERGE, MassZoneBoxBoundaryOrientation::NONE);		// merging cannot be done on coplanar comparisons.
 
 		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
 

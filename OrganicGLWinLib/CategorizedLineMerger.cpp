@@ -204,7 +204,7 @@ CategorizedLineMergeType CategorizedLineMerger::determineMergeTypeForGroup(Categ
 		mergerLogger.log("(CategorizedLineMerger) ! Result is MERGE_TO_NON_BOUND. ", "\n");
 		returnType = CategorizedLineMergeType::MERGE_TO_NON_BOUND;
 	}
-	
+
 
 	return returnType;
 }

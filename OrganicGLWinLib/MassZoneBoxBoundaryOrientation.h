@@ -5,6 +5,7 @@
 
 enum class MassZoneBoxBoundaryOrientation
 {
+	NONE,
 	NEG_Z,
 	POS_X,
 	POS_Z,

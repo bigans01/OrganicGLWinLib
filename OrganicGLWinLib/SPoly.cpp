@@ -572,11 +572,12 @@ void SPoly::moveLastCleave()
 	}
 }
 
-MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
+MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	//bool wasRunSuccessful = true;
 	MessageContainer buildErrorMessages;
+	sequenceFactory.setFactoryBoundaryOrientationOption(in_optionalOrientation);
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
 		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;

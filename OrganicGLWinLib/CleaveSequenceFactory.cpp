@@ -3,7 +3,11 @@
 
 void CleaveSequenceFactory::addCategorizedLine(CategorizedLine in_categorizedLine)
 {
-	lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	bool duplicateFound = lineManager.checkForDuplicateCategorizedLine(in_categorizedLine);
+	if (duplicateFound == false)
+	{
+		lineManager.insertLineAndReturnInsertedIndex(in_categorizedLine); // new test for 4/2/2021, for refactor.
+	}
 }
 
 void CleaveSequenceFactory::copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef)
@@ -136,6 +140,11 @@ void CleaveSequenceFactory::setFactoryDebugLevel(PolyDebugLevel in_polyDebugLeve
 void CleaveSequenceFactory::setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel)
 {
 	mergerDebugLevel = in_polyDebugLevel;
+}
+
+void CleaveSequenceFactory::setFactoryBoundaryOrientationOption(MassZoneBoxBoundaryOrientation in_optionalFactoryOrientation)
+{
+	optionalFactoryOrientation = in_optionalFactoryOrientation;
 }
 
 void CleaveSequenceFactory::loadCategorizedLineMapReferencesIntoQuatPointsExcludeEmptyNormals(QuatRotationPoints* in_quatRotationPointsRef)
@@ -529,6 +538,21 @@ MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, Clea
 				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
 				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+
+				std::cout << "(CleaveSequenceFactory) Optional orientation value is: ";
+				switch (optionalFactoryOrientation)
+				{
+						case (MassZoneBoxBoundaryOrientation::NONE): { std::cout << "NONE"; break; };
+						case (MassZoneBoxBoundaryOrientation::NEG_X): { std::cout << "NEG_X"; break; };
+						case (MassZoneBoxBoundaryOrientation::NEG_Y): { std::cout << "NEG_Y"; break; };
+						case (MassZoneBoxBoundaryOrientation::NEG_Z): { std::cout << "NEG_Z"; break; };
+						case (MassZoneBoxBoundaryOrientation::POS_X): { std::cout << "POS_X"; break; };
+						case (MassZoneBoxBoundaryOrientation::POS_Y): { std::cout << "POS_Y"; break; };
+						case (MassZoneBoxBoundaryOrientation::POS_Z): { std::cout << "POS_Z"; break; };
+				}
+				std::cout << std::endl;
+
+
 				std::cout << ":(CleaveSequenceFactory) Last point to search was: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 				std::cout << "(CleaveSequenceFactory)  Lines are: " << std::endl;
 

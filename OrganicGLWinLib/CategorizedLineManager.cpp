@@ -12,6 +12,37 @@ int CategorizedLineManager::getCountOfIntersectionType(IntersectionType in_inter
 	return containerMap[in_intersectionTypeToSearch].getLineCount();
 }
 
+bool CategorizedLineManager::checkForDuplicateCategorizedLine(CategorizedLine in_duplicateToCheck)
+{
+	bool duplicateFound = false;
+	auto containerMapBegin = containerMap.begin();
+	auto containerMapEnd = containerMap.end();
+	for (; containerMapBegin != containerMapEnd; containerMapBegin++)
+	{
+		auto currentContainerLineBegin = containerMapBegin->second.lineMap.begin();
+		auto currentContainerLineEnd = containerMapBegin->second.lineMap.end();
+		for (; currentContainerLineBegin != currentContainerLineEnd; currentContainerLineBegin++)
+		{
+			if
+			(
+				(in_duplicateToCheck.line.pointA == currentContainerLineBegin->second.line.pointA)
+				&&
+				(in_duplicateToCheck.line.pointB == currentContainerLineBegin->second.line.pointB)
+			)
+			{
+				std::cout << "!! Duplicate line found; points are -> A: " << in_duplicateToCheck.line.pointA.x << ", "
+					<< in_duplicateToCheck.line.pointA.y << ", "
+					<< in_duplicateToCheck.line.pointA.z << "| B "
+					<< in_duplicateToCheck.line.pointB.x << ", "
+					<< in_duplicateToCheck.line.pointB.y << ", "
+					<< in_duplicateToCheck.line.pointB.z << std::endl;
+				duplicateFound = true;
+			}
+		}
+	}
+	return duplicateFound;
+}
+
 int CategorizedLineManager::insertLineAndReturnInsertedIndex(CategorizedLine in_categorizedLine)
 {
 	// use the type of the line to perform the insert.

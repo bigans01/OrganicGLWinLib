@@ -21,6 +21,7 @@
 #include "ContestableBorderLineMap.h"
 #include "QuatUtils.h"
 #include "MessageContainer.h"
+#include "MassZoneBoxBoundaryOrientation.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -50,6 +51,7 @@ class MassZoneBoxBoundarySPolySet
 		bool didCategorizedLineWinContest = false;
 		ContestableBorderLineMap contestables;					// used only when isContestedCategorizedLineAnalysisEnabled is set to TRUE.
 		glm::vec3 boundaryFaceCenterPoint;
+		MassZoneBoxBoundaryOrientation boundarySPolySetOrientation = MassZoneBoxBoundaryOrientation::NONE;	// needs to be set elsewhere.
 
 		bool resolveContest(CategorizedLine in_categorizedLine);
 };

@@ -362,7 +362,7 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
 		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
-		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE);		
+		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE, MassZoneBoxBoundaryOrientation::NONE);		
 		/*
 		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
 		{

@@ -208,7 +208,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	//bool wasBuildSuccessful = true;
 	MessageContainer buildErrorMessages;
 
-	buildErrorMessages = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
+	buildErrorMessages = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, boundarySPolySetOrientation);
 
 	//boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;

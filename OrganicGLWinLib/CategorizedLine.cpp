@@ -1007,3 +1007,19 @@ void CategorizedLine::insertOptionalDataForPoint(IRPointType in_irPointType, std
 {
 	extraData->insertFusedPointSubDataForPoint(in_irPointType, in_fusedPointSubDataVector);
 }
+
+std::string CategorizedLine::getIntersectionTypeString()
+{
+	std::string returnString;
+	switch (type)
+	{
+		case (IntersectionType::NONE): { returnString = "NONE"; break; }
+		case (IntersectionType::A_SLICE): { returnString = "A_SLICE"; break;}
+		case (IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE): { returnString = "A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE"; break; }
+		case (IntersectionType::INTERCEPTS_POINT_PRECISE): { returnString = "INTERCEPTS_POINT_PRECISE"; break;}
+		case (IntersectionType::INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR): { returnString = "INTERCEPTS_POINT_PRECISE_UNSOLVED_COPLANAR";  break;}
+		case (IntersectionType::NON_BOUND): { returnString = "NON_BOUND"; break; }
+		case (IntersectionType::PARTIAL_BOUND): { returnString = "PARTIAL_BOUND"; break; }
+	}
+	return returnString;
+}
