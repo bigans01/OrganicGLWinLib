@@ -202,7 +202,7 @@ void RMorphableMeshGroup::generateRProductFacesInRemainingMeshes()
 			generationRunBegin->second.generateRProductFaces(debugValueCheck);
 			currentKeyGenerationLogger.waitForDebugInput();
 		}
-
+		
 		// if the value of getMeshState() is LANDLOCKED, we won't produce anything.
 		else if (generationRunBegin->second.getMeshState() == RMorphableMeshState::LANDLOCKED)
 		{
@@ -457,12 +457,12 @@ void RMorphableMeshGroup::buildMeshByXScanV2(MassGridArray* in_massGridArrayRef,
 			if (keyedMorphables[*xSliceSetBegin].getMeshState() == RMorphableMeshState::EXPOSED)
 			{
 				//std::cout << "Running suction for mesh at key: " << xSliceSetBegin->x << ", " << xSliceSetBegin->y << ", " << xSliceSetBegin->z << std::endl;
-				currentKeySuctionLogger.log("(RMorphableMeshGroup): Running suction for mesh at key: ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "\n");
+				currentKeySuctionLogger.log("(RMorphableMeshGroup): Running suction for mesh at key: ", xSliceSetBegin->x, ", ", xSliceSetBegin->y, ", ", xSliceSetBegin->z, "\n");		
 				keyedMorphables[*xSliceSetBegin].runSuctionByXSlice(in_cubeDimLength,
 						in_tileDimWeightRatio,
 						in_tilesPerDim,
 						in_massGridArrayRef,
-						&currentKeySuctionLogger);
+						&currentKeySuctionLogger);				
 			}
 			else
 			{

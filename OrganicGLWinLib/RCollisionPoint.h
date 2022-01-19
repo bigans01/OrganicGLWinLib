@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "ECBPPOrientations.h"
 #include <iostream>
+#include <string>
 #include "IndependentUtils.h"
 #include "RCollisionPointState.h"
 
@@ -25,14 +26,7 @@ class RCollisionPoint
 			IndependentUtils::printOrientationEnum(originalGridOrientation);
 		}
 
-		void incrementUsageCount()
-		{
-			usageCount++;
-			if (usageCount == 8)
-			{
-				pointState = RCollisionPointState::IMMUTABLE;
-			}
-		};
+		void incrementUsageCount();
 
 		bool isPointLandlocked()
 		{

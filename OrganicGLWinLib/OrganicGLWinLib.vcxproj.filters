@@ -1847,5 +1847,8 @@
     <ClCompile Include="KeyPressTracker.cpp">
       <Filter>Source Files\ShaderMachines</Filter>
     </ClCompile>
+    <ClCompile Include="RCollisionPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -597,6 +597,7 @@
     <ClCompile Include="RAdditiveXSliceWestEnd.cpp" />
     <ClCompile Include="RasterGrid3dBase.cpp" />
     <ClCompile Include="Rasterized3DMassGrid.cpp" />
+    <ClCompile Include="RCollisionPoint.cpp" />
     <ClCompile Include="RCollisionPointArray.cpp" />
     <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp" />
     <ClCompile Include="ContestedBorderLineMap.cpp" />

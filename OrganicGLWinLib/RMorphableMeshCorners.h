@@ -38,9 +38,9 @@ class RMorphableMeshCorners
 			lowerSW->incrementUsageCount();
 			lowerSE->incrementUsageCount();
 			lowerNE->incrementUsageCount();
-			lowerNW->incrementUsageCount();
-			lowerSW->incrementUsageCount();
-			lowerSE->incrementUsageCount();
+			upperNW->incrementUsageCount();
+			upperSW->incrementUsageCount();
+			upperSE->incrementUsageCount();
 			upperNE->incrementUsageCount();
 		}
 
