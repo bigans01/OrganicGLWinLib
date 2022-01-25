@@ -25,9 +25,21 @@ bool CategorizedLineManager::checkForDuplicateCategorizedLine(CategorizedLine in
 		{
 			if
 			(
-				(in_duplicateToCheck.line.pointA == currentContainerLineBegin->second.line.pointA)
-				&&
-				(in_duplicateToCheck.line.pointB == currentContainerLineBegin->second.line.pointB)
+				(
+					(in_duplicateToCheck.line.pointA == currentContainerLineBegin->second.line.pointA)
+					&&
+					(in_duplicateToCheck.line.pointB == currentContainerLineBegin->second.line.pointB)
+				)
+
+				||
+
+				(
+					(in_duplicateToCheck.line.pointA == currentContainerLineBegin->second.line.pointB)
+					&&
+					(in_duplicateToCheck.line.pointB == currentContainerLineBegin->second.line.pointA)
+				)
+
+
 			)
 			{
 				std::cout << "!! Duplicate line found; points are -> A: " << in_duplicateToCheck.line.pointA.x << ", "
@@ -236,6 +248,7 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 
 			categorizedLineManagerLogger.log("(CategorizedLineManager): Checking non bound line. ", "\n");
 			pointCheckResult = nonboundBegin->second.checkIfPointIsInLine(in_pointToSearch);
+			//
 			if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 			{
 				wasFound = true;					// set the found flag.
@@ -265,7 +278,9 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 			//std::cout << "Number of remaining nonbounds: " << nonboundCount << std::endl;
 		}
 
-		// error/bad calculation handling; 9/6/2021 -- expand the point search "radius" by .2f 
+		// error/bad calculation handling; 9/6/2021 -- expand the point search "radius" by .2f;
+		// if we find a line nearby, return a "modified" version of that line, and remove the original line
+		// we based the altering off of from the corresponding pool.
 		else if (wasFound == false)
 		{
 			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
@@ -275,14 +290,51 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 			auto nonBoundSecondPassEnd = containerMap[IntersectionType::NON_BOUND].lineMap.end();
 			for (; nonBoundSecondPassBegin != nonBoundSecondPassEnd; nonBoundSecondPassBegin++)
 			{
-				
-
 				pointCheckResult = nonBoundSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
 				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 				{
 					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
 					int nearbyFound = 3;
 					std::cin >> nearbyFound;
+
+					// because we found a nearby non-bound line, we must 
+					// if we matched against point B of the non bound, then change point B of the line to be 
+					searchResult.returnLine = nonBoundSecondPassBegin->second;	// insert the line...
+					if (pointCheckResult == IRPointType::POINT_B)
+					{
+						searchResult.returnLine.line.pointB = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointA;	// next point to search should be A
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					else if (pointCheckResult == IRPointType::POINT_A)
+					{
+						std::cout << "!!!! Entering point A logic..." << std::endl;
+						searchResult.returnLine.line.pointA = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointB;	// next point to search should be B
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					searchResult.wasFound = true;
+
+					// remove the original line we altered from the pool
+					int foundIndexAlternate = nonBoundSecondPassBegin->first;
+					fetchAndRemoveLineAtIndex(IntersectionType::NON_BOUND, foundIndexAlternate); 
+
+					// break out, as we are done.
+					break;
 				}
 			}
 		}
@@ -334,6 +386,67 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForLastPartialB
 			}
 			searchResult.returnLine = foundLine;	// store the appropriate line
 			searchResult.nextPointToFind = foundLine.line.pointB;	// set the next point to find.
+		}
+
+		// error/bad calculation handling; 9/6/2021 -- expand the point search "radius" by .2f 
+		// if we find a line nearby, return a "modified" version of that line, and remove the original line
+		// we based the altering off of from the corresponding pool.
+		else if (wasFound == false)
+		{
+			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
+			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+
+			auto partialBoundSecondPassBegin = containerMap[IntersectionType::PARTIAL_BOUND].lineMap.begin();
+			auto partialBoundSecondPassEnd = containerMap[IntersectionType::PARTIAL_BOUND].lineMap.end();
+			for (; partialBoundSecondPassBegin != partialBoundSecondPassEnd; partialBoundSecondPassBegin++)
+			{
+				pointCheckResult = partialBoundSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
+				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
+				{
+					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					int nearbyFound = 3;
+					std::cin >> nearbyFound;
+
+					// because we found a nearby non-bound line, we must 
+					// if we matched against point B of the non bound, then change point B of the line to be 
+					searchResult.returnLine = partialBoundSecondPassBegin->second;	// insert the line...
+					if (pointCheckResult == IRPointType::POINT_B)
+					{
+						searchResult.returnLine.line.pointB = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointA;	// next point to search should be A
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					else if (pointCheckResult == IRPointType::POINT_A)
+					{
+						std::cout << "!!!! Entering point A logic..." << std::endl;
+						searchResult.returnLine.line.pointA = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointB;	// next point to search should be B
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					searchResult.wasFound = true;
+
+					// remove the original line we altered from the pool
+					int foundIndexAlternate = partialBoundSecondPassBegin->first;
+					fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, foundIndexAlternate);
+
+					// break out, as we are done.
+					break;
+				}
+			}
 		}
 	}
 	else
@@ -403,6 +516,67 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForInterceptPoi
 
 			searchResult.returnLine = foundLine;	// store the appropriate line
 			searchResult.nextPointToFind = foundLine.line.pointB;	// set the next point to find.
+		}
+
+		// error/bad calculation handling; 9/6/2021 -- expand the point search "radius" by .2f 
+		// if we find a line nearby, return a "modified" version of that line, and remove the original line
+		// we based the altering off of from the corresponding pool.
+		else if (wasFound == false)
+		{
+			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
+			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+
+			auto preciseSecondPassBegin = containerMap[IntersectionType::INTERCEPTS_POINT_PRECISE].lineMap.begin();
+			auto preciseSecondPassEnd = containerMap[IntersectionType::INTERCEPTS_POINT_PRECISE].lineMap.end();
+			for (; preciseSecondPassBegin != preciseSecondPassEnd; preciseSecondPassBegin++)
+			{
+				pointCheckResult = preciseSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
+				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
+				{
+					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					int nearbyFound = 3;
+					std::cin >> nearbyFound;
+
+					// because we found a nearby non-bound line, we must 
+					// if we matched against point B of the non bound, then change point B of the line to be 
+					searchResult.returnLine = preciseSecondPassBegin->second;	// insert the line...
+					if (pointCheckResult == IRPointType::POINT_B)
+					{
+						searchResult.returnLine.line.pointB = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointA;	// next point to search should be A
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					else if (pointCheckResult == IRPointType::POINT_A)
+					{
+						std::cout << "!!!! Entering point A logic..." << std::endl;
+						searchResult.returnLine.line.pointA = in_pointToSearch;
+						searchResult.nextPointToFind = searchResult.returnLine.line.pointB;	// next point to search should be B
+
+						std::cout << "!! Returning line has a value of: ("
+							<< searchResult.returnLine.line.pointA.x << ", "
+							<< searchResult.returnLine.line.pointA.y << ", "
+							<< searchResult.returnLine.line.pointA.z << ") | ("
+							<< searchResult.returnLine.line.pointB.x << ", "
+							<< searchResult.returnLine.line.pointB.y << ", "
+							<< searchResult.returnLine.line.pointB.z << ") " << std::endl;
+					}
+					searchResult.wasFound = true;
+
+					// remove the original line we altered from the pool
+					int foundIndexAlternate = preciseSecondPassBegin->first;
+					fetchAndRemoveLineAtIndex(IntersectionType::INTERCEPTS_POINT_PRECISE, foundIndexAlternate);
+
+					// break out, as we are done.
+					break;
+				}
+			}
 		}
 	}
 	else

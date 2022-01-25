@@ -538,6 +538,7 @@ MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, Clea
 				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
 				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+				std::cout << "(CleaveSequenceFactory) Last point to search value is: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 
 				std::cout << "(CleaveSequenceFactory) Optional orientation value is: ";
 				switch (optionalFactoryOrientation)
