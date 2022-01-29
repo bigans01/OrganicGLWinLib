@@ -56,14 +56,14 @@ void RMatterCollider::produceColliderMatterWithHandling(bool in_ignoreOld, bool 
 	{
 		if (oldMatterGenerator.isOldMassRMatter == false)
 		{
-			oldMatterErrors = oldMatterGenerator.generateBorderSPolys();
+			oldMatterErrors = oldMatterGenerator.generateRMatterShell();
 		}
 		oldMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 
 	if (newMatterGenerator.containsMass == true)
 	{
-		newMatterErrors = newMatterGenerator.generateBorderSPolys();
+		newMatterErrors = newMatterGenerator.generateRMatterShell();
 		newMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 
@@ -98,14 +98,14 @@ void RMatterCollider::generateAndMoveSPolyResultsToScanners()
 	{
 		if (oldMatterGenerator.isOldMassRMatter == false)
 		{
-			oldMatterGenerator.generateBorderSPolys();
+			oldMatterGenerator.generateRMatterShell();
 		}
 		oldMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 
 	if (newMatterGenerator.containsMass == true)
 	{
-		newMatterGenerator.generateBorderSPolys();
+		newMatterGenerator.generateRMatterShell();
 		newMatterGenerator.moveBorderSPolyResultsToScanner();
 	}
 }

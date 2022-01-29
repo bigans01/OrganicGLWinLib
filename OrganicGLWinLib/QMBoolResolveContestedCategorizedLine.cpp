@@ -11,7 +11,7 @@ bool QMBoolResolveContestedCategorizedLine::solve(QuatRotationPoints* in_quatRot
 	// 3: the empty normal of the contested line
 	rotationPointsRefVector = in_quatRotationPointsRef;
 
-	bool didCategorizedLineWinContest = false;
+	bool categorizedLineWonContest = false;
 
 	// first, check if the second point of the categorized line has a Z value of 0; if it doesn't, we need to rotate to positive y.
 	contestedLinePointBRef = in_quatRotationPointsRef->getPointRefByIndex(1);	// the point at index 1 = the second point of the contested line.
@@ -34,7 +34,7 @@ bool QMBoolResolveContestedCategorizedLine::solve(QuatRotationPoints* in_quatRot
 	{
 		if (contestedLineEmptyNormalRef->y < 0)
 		{
-			didCategorizedLineWinContest = true;
+			categorizedLineWonContest = true;
 			std::cout << "!! Categorized line won contest. " << std::endl;
 		}
 	}
@@ -42,17 +42,17 @@ bool QMBoolResolveContestedCategorizedLine::solve(QuatRotationPoints* in_quatRot
 	{
 		if (contestedLineEmptyNormalRef->y > 0)
 		{
-			didCategorizedLineWinContest = true;
+			categorizedLineWonContest = true;
 			std::cout << "!! Categorized line won contest. " << std::endl;
 		}
 	}
 
-	if (didCategorizedLineWinContest == false)
+	if (categorizedLineWonContest == false)
 	{
 		std::cout << "!! Categorized line did NOT win contest. " << std::endl;
 	}
 
-	return didCategorizedLineWinContest;
+	return categorizedLineWonContest;
 }
 
 void QMBoolResolveContestedCategorizedLine::rotateContestedLineAroundXToPositiveY()

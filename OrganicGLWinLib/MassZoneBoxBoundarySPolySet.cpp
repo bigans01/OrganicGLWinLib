@@ -261,6 +261,19 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 	else if (buildErrorMessages.empty() == false)
 	{
 		std::cout << "(MassZoneBoxBoundarySPolySet): detected buildCleaveSequence run as being unsuccesful..." << std::endl;
+		std::cout << "(MassZoneBoxBoundarySPolySet): unsuccessful run occurred at ";
+		std::string currentBoxBoundaryOrientation = "";
+		switch (boundarySPolySetOrientation)
+		{
+			case MassZoneBoxBoundaryOrientation::POS_X: { currentBoxBoundaryOrientation = "POS_X"; break; }
+			case MassZoneBoxBoundaryOrientation::NEG_X: { currentBoxBoundaryOrientation = "NEG_X"; break; }
+			case MassZoneBoxBoundaryOrientation::POS_Y: { currentBoxBoundaryOrientation = "POS_Y"; break; }
+			case MassZoneBoxBoundaryOrientation::NEG_Y: { currentBoxBoundaryOrientation = "NEG_Y"; break; }
+			case MassZoneBoxBoundaryOrientation::POS_Z: { currentBoxBoundaryOrientation = "POS_Z"; break; }
+			case MassZoneBoxBoundaryOrientation::NEG_Z: { currentBoxBoundaryOrientation = "NEG_Z"; break; }
+		}
+		std::cout << currentBoxBoundaryOrientation << std::endl;
+		
 	}
 	return buildErrorMessages;
 }

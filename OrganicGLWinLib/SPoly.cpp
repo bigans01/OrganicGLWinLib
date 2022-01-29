@@ -585,6 +585,8 @@ MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSe
 		if (buildErrorMessages.empty() == false)
 		{
 			std::cout << "!!! CleaveSequence construction unsuccessful; preparing to perform alternate action. " << std::endl;
+			std::cout << "!!! Border lines of this SPoly are: " << std::endl;
+			printBorderLines();
 
 			std::cout << "!!! Points of this SPoly are: " << std::endl;
 			printPoints();

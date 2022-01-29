@@ -174,7 +174,7 @@
     <ClInclude Include="BorderLineLinkContainer.h" />
     <ClInclude Include="BorderLineLinkPointState.h" />
     <ClInclude Include="BorderLinePointPair.h" />
-    <ClInclude Include="BorderSPolyProducer.h" />
+    <ClInclude Include="SPolyShellProducer.h" />
     <ClInclude Include="BrasenhamLineData.h" />
     <ClInclude Include="BrasenhamMassTracer.h" />
     <ClInclude Include="BrasenhamMassTracerDim.h" />
@@ -564,7 +564,7 @@
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
-    <ClCompile Include="BorderSPolyProducer.cpp" />
+    <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />
     <ClCompile Include="CategorizedLine.cpp" />
     <ClCompile Include="CategorizedLineASliceMerger.cpp" />

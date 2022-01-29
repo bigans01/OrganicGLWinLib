@@ -1095,9 +1095,6 @@
     <ClInclude Include="QuatUtils.h">
       <Filter>Header Files\Quaternions</Filter>
     </ClInclude>
-    <ClInclude Include="BorderSPolyProducer.h">
-      <Filter>Header Files\SolublePoly</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainTrianglePoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1253,6 +1250,9 @@
     </ClInclude>
     <ClInclude Include="KeyPressTracker.h">
       <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="SPolyShellProducer.h">
+      <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1422,9 +1422,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DynamicBufferManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BorderSPolyProducer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ContestedBorderLineMap.cpp">
@@ -1849,6 +1846,9 @@
     </ClCompile>
     <ClCompile Include="RCollisionPoint.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyShellProducer.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

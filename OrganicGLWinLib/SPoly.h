@@ -57,7 +57,7 @@ private:
 	friend class RPoly;
 	friend class SPolyScaler;
 	friend class SPolySet;
-	friend class BorderSPolyProducer;
+	friend class SPolyShellProducer;
 	friend class SPolySupergroup;
 	friend class SPolyFracturer;
 	friend class BorderLineCycle;

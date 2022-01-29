@@ -39,14 +39,14 @@ class RMatterCollider
 
 
 		void addSPolyToMatterGenerator(SPoly in_sPolyToAdd, RMatterAge in_rMatterAge);		// Step 1: run this function for each SPoly that needs to be added to the collider
-		void generateAndMoveSPolyResultsToScanners();										// Step 2: once all SPolys have been added, run the BorderSPolyProducer in each RMatterGenerator, 
+		void generateAndMoveSPolyResultsToScanners();										// Step 2: once all SPolys have been added, run the SPolyShellProducer in each RMatterGenerator, 
 																							// and move the results of that producer to the scanner in each RMatterGenerator.
 
 		void generateMassses();																// Step 3: call generateMassInScanner() in each RMatterGenerator
 		void flagOldMatterAsRMatterWrapper();	// signifies that the matter inserted into oldMatterGenerator 
 												// was actually produced by a call to OREMatterCollider::extractResultsAndSendToORE; 
-												// this means that the production of border SPolys in the oldMatterGenerator's instance of BorderSPolyProducer should be ignored
-												// (but input polys sent to the BorderSPolyProducer should remain)
+												// this means that the production of border SPolys in the oldMatterGenerator's instance of SPolyShellProducer should be ignored
+												// (but input polys sent to the SPolyShellProducer should remain)
 
 		// Step 4: append matter to the collidableScanner.
 		void appendOldMatterToScanner();					

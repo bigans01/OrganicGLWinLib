@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "BorderSPolyProducer.h"
+#include "SPolyShellProducer.h"
 
-void BorderSPolyProducer::addInputSPoly(SPoly in_inputSPoly)
+void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 {
 	inputSPolys[numberOfInputSPolys++] = in_inputSPoly; // add the poly, and increment it
 }
 
-void BorderSPolyProducer::handleBorderDebugOption(DebugOption in_debugOption)
+void SPolyShellProducer::handleBorderDebugOption(DebugOption in_debugOption)
 {
 	switch (in_debugOption)
 	{
@@ -28,7 +28,7 @@ void BorderSPolyProducer::handleBorderDebugOption(DebugOption in_debugOption)
 	}
 }
 
-void BorderSPolyProducer::configurePolysWithoutNormalCalcs()
+void SPolyShellProducer::configurePolysWithoutNormalCalcs()
 {
 	for (int x = 0; x < numberOfInputSPolys; x++)
 	{
@@ -38,7 +38,7 @@ void BorderSPolyProducer::configurePolysWithoutNormalCalcs()
 	}
 }
 
-MessageContainer BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_massZoneBoxType)
+MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType in_massZoneBoxType)
 {
 	MessageContainer productionErrors;	
 	productionMassZone.createMassZoneBoxBoundary(in_massZoneBoxType);		// first, create the boundaries for the MassZone
@@ -93,7 +93,7 @@ MessageContainer BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_mas
 
 	if (printOutputSPolysDebugLevel == PolyDebugLevel::DEBUG)
 	{
-		std::cout << "(BorderSPolyProducer): printing out produced SPolys in each mass zone box boundary..." << std::endl;
+		std::cout << "(SPolyShellProducer): printing out produced SPolys in each mass zone box boundary..." << std::endl;
 		auto outputsBegin = outputSPolySuperGroups.begin();
 		auto outputsEnd = outputSPolySuperGroups.end();
 		for (; outputsBegin != outputsEnd; outputsBegin++)
@@ -107,7 +107,7 @@ MessageContainer BorderSPolyProducer::produceBorderSPolys(MassZoneBoxType in_mas
 	return productionErrors;
 }
 
-std::vector<SPoly> BorderSPolyProducer::fetchAllSPolys()
+std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()
 {
 	std::vector<SPoly> returnVector;
 

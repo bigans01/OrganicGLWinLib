@@ -63,9 +63,9 @@ void RMatterGenerator::configureInputSPolys()
 	generatorBorderProducer.configurePolysWithoutNormalCalcs();
 }
 
-MessageContainer RMatterGenerator::generateBorderSPolys()
+MessageContainer RMatterGenerator::generateRMatterShell()
 {
-	return generatorBorderProducer.produceBorderSPolys(generatorMassZoneBoxType);
+	return generatorBorderProducer.runSPolyShellConstruction(generatorMassZoneBoxType);
 }
 
 void RMatterGenerator::moveBorderSPolyResultsToScanner()

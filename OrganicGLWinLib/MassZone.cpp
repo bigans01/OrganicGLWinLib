@@ -101,7 +101,7 @@ void MassZone::printBoundaryErrors(MessageContainer* in_messageContainerRef)
 
 		int currentSequenceID = currentMessageRef->readInt();
 
-		std::cout << "(MassZone): printing out lines for sequence with ID " << currentSequenceID << std::endl;
+		std::cout << "(MassZone): printBoundarytErrors -> printing out lines for sequence with ID " << currentSequenceID << std::endl;
 
 		int currentNumberOfCategorizedLines = currentMessageRef->readInt();
 		for (int x = 0; x < currentNumberOfCategorizedLines; x++)
@@ -128,6 +128,10 @@ void MassZone::printBoundaryErrors(MessageContainer* in_messageContainerRef)
 
 void MassZone::createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType)
 {
+	// required: set the boxType variable value; will need to be used later during Step 3 of the createMassZoneShell function in this class,
+	// if we must use the class that resolves badly malformed CleaveSequences.
+	boxType = in_massZoneBoxType;
+
 	// the 8 points representing the corners of a MassZoneBox.
 
 	// remember, lower_NW has no offsets applied; upper_SE has all 3 offsets applied.

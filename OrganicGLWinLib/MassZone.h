@@ -24,8 +24,12 @@ class MassZone
 private:
 	friend class MassZoneMaster;
 	friend class SPolySet;
-	friend class BorderSPolyProducer;
+	friend class SPolyShellProducer;
 	MassZoneBox zoneBox;
+	MassZoneBoxType boxType = MassZoneBoxType::NOVAL;	// the "format" or size of the zone; BLOCK, ENCLAVE, COLLECTION;
+														// must be set during the call to createMassZoneBoxBoundary; this value is needed
+														// when calling the class that will attempt to resolve bad CleaveSequence generation
+														// (this class hasn't been given a name, as of 1/29/2022)
 
 	std::map<int, MassSubZone> subZoneMap;
 	std::map<MassZoneBoxBoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
