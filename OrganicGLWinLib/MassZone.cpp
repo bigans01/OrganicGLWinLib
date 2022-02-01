@@ -107,13 +107,25 @@ void MassZone::printBoundaryErrors(MessageContainer* in_messageContainerRef)
 		for (int x = 0; x < currentNumberOfCategorizedLines; x++)
 		{
 			int currentLineID = currentMessageRef->readInt();
+			int currentLineType = currentMessageRef->readInt();
 			ECBPolyPoint currentLinePointA = currentMessageRef->readPoint();
 			ECBPolyPoint currentLinePointB = currentMessageRef->readPoint();
 			ECBPolyPoint currentLineEmptyNormal = currentMessageRef->readPoint();
 
-			std::cout << "Line " << currentLineID << "-> pointA: (" << currentLinePointA.x << ", " << currentLinePointA.y << ", " << currentLinePointA.z
+			int currentLineIsPointAOnBorder = currentMessageRef->readInt();
+			int currentLinePointABorderValue = currentMessageRef->readInt();
+			int currentLineIsPointBOnBorder = currentMessageRef->readInt();
+			int currentLinePointBBorderValue = currentMessageRef->readInt();
+			int currentLineParentPoly = currentMessageRef->readInt();
+
+			std::cout << "Line: " << currentLineID 
+				<< "-> type: " << currentLineType
+				<< "-> pointA: (" << currentLinePointA.x << ", " << currentLinePointA.y << ", " << currentLinePointA.z
 				<< ") | pointB: (" << currentLinePointB.x << ", " << currentLinePointB.y << ", " << currentLinePointB.z
 				<< ") | emptyNormal: (" << currentLineEmptyNormal.x << ", " << currentLineEmptyNormal.y << ", " << currentLineEmptyNormal.z << ") "
+				<< " | (A) onBorder: " << currentLineIsPointAOnBorder << " " << currentLinePointABorderValue
+				<< " | (B) onBorder: " << currentLineIsPointBOnBorder << " " << currentLinePointBBorderValue
+				<< " | Parent poly: " << currentLineParentPoly
 				<< std::endl;
 																
 		}
@@ -432,7 +444,7 @@ MessageContainer MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 			tempSPolyBoundaryProductionLogger.log(prefixString, "(MassZone): |||| Attempting boundary artificial SPoly construction for NEG_Y...", "\n");
 		}
 
-		MessageContainer currentBoundaryProducedMessages = boxBoundariesBegin->second.generateSPolysFromPolySet();
+		MessageContainer currentBoundaryProducedMessages = boxBoundariesBegin->second.generateSPolysFromPolySet(boxType);
 		currentBoundaryProducedMessages.appendIntToAll(MassUtils::getMassZoneOrientationIntValue(boxBoundariesBegin->first));
 		shellCreationErrors += currentBoundaryProducedMessages;
 		

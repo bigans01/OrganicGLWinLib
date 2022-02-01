@@ -14,6 +14,7 @@
 #include "PolyDebugLevel.h"
 #include "SPolyDOSet.h"
 #include "MessageContainer.h"
+#include "MassZoneBoxType.h"
 
 
 class MassZoneBoxBoundary
@@ -78,9 +79,9 @@ class MassZoneBoxBoundary
 			boundarySPoly.sequenceFactory.printLinesInPool();
 		}
 
-		MessageContainer generateSPolysFromPolySet()
+		MessageContainer generateSPolysFromPolySet(MassZoneBoxType in_boxTypeValue)
 		{
-			return boundaryPolySet.buildBoundarySPolyFromFactory();
+			return boundaryPolySet.buildBoundarySPolyFromFactory(in_boxTypeValue);
 		}
 		void setDebugOptionsInSPoly(SPolyDOSet in_sPolyDOSet)
 		{

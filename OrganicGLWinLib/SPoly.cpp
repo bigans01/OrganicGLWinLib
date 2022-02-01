@@ -572,17 +572,16 @@ void SPoly::moveLastCleave()
 	}
 }
 
-MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation)
+InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
-	//bool wasRunSuccessful = true;
-	MessageContainer buildErrorMessages;
+	InvalidCleaveSequences retrievedInvalids;
 	sequenceFactory.setFactoryBoundaryOrientationOption(in_optionalOrientation);
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
 		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;
-		buildErrorMessages = sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
-		if (buildErrorMessages.empty() == false)
+		retrievedInvalids = sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
+		if (retrievedInvalids.containsSequnces == true)
 		{
 			std::cout << "!!! CleaveSequence construction unsuccessful; preparing to perform alternate action. " << std::endl;
 			std::cout << "!!! Border lines of this SPoly are: " << std::endl;
@@ -596,7 +595,7 @@ MessageContainer SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSe
 		}
 		//std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}
-	return buildErrorMessages;
+	return retrievedInvalids;
 }
 
 void SPoly::constructCleaveLine()

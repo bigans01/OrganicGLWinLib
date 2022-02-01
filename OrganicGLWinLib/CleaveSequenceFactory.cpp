@@ -25,56 +25,11 @@ void CleaveSequenceFactory::insertNonboundLine(CategorizedLine in_line)
 	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
 }
 
-/*
-void CleaveSequenceFactory::insertPartialBoundLine(CategorizedLine in_line)
-{
-
-	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertAslicedLine(CategorizedLine in_line)
-{
-	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertAslicedSingleInterceptsPointPrecise(CategorizedLine in_line)
-{
-	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertInterceptsPointPrecise(CategorizedLine in_line)
-{
-	lineManager.insertLineAndReturnInsertedIndex(in_line); // new test for 4/2/2021, for refactor.
-}
-*/
-
-/*
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonbound(int in_fetchIndex)
-{
-	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::NON_BOUND, in_fetchIndex);
-	return fetchedLine;
-}
-*/
-
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveNonboundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveWithGroupMapLocationPush(IntersectionType::NON_BOUND, in_fetchIndex, in_categorizedLineGroupLocationVectorRef);
 	return fetchedLine;
 }
-
-/*
-CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBound(int in_fetchIndex)
-{
-	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::PARTIAL_BOUND, in_fetchIndex);
-	return fetchedLine;
-}
-*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBoundWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -82,42 +37,17 @@ CategorizedLine CleaveSequenceFactory::fetchAndRemovePartialBoundWithGroupMapLoc
 	return fetchedLine;
 }
 
-/*
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveASlice(int in_fetchIndex)
-{
-	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE, in_fetchIndex);
-	return fetchedLine;
-}
-*/
-
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveWithGroupMapLocationPush(IntersectionType::A_SLICE, in_fetchIndex, in_categorizedLineGroupLocationVectorRef);
 	return fetchedLine;
 }
 
-/*
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPrecise(int in_fetchIndex)
-{
-	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, in_fetchIndex);
-	return fetchedLine;
-}
-*/
-
-
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveASliceSingleInterceptsPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
 	CategorizedLine fetchedLine = lineManager.fetchAndRemoveWithGroupMapLocationPush(IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE, in_fetchIndex, in_categorizedLineGroupLocationVectorRef);
 	return fetchedLine;
 }
-
-/*
-CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPrecise(int in_fetchIndex)
-{
-	CategorizedLine fetchedLine = lineManager.fetchAndRemoveLineAtIndex(IntersectionType::INTERCEPTS_POINT_PRECISE, in_fetchIndex);
-	return fetchedLine;
-}
-*/
 
 CategorizedLine CleaveSequenceFactory::fetchAndRemoveInterceptPointPreciseWithGroupMapLocationPush(int in_fetchIndex, std::vector<CategorizedLineGroupLocation>* in_categorizedLineGroupLocationVectorRef)
 {
@@ -159,11 +89,9 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 
 
 
-MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
+InvalidCleaveSequences CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
 {
-	//bool wasConstructionSuccessful = true;
-
-	MessageContainer constructionErrorMessages;
+	InvalidCleaveSequences producedInvalids;
 	// NEWW
 	// first, check if we need to invert the normals of each CategorizedLine in each CleaveSequence, in the event that the massManipulationMode of the SPoly is 
 	// set to MassManipulationMode::DESTRUCTION
@@ -269,7 +197,7 @@ MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::m
 				lineManager.printLineCountsForEachType();
 			}
 
-			constructionErrorMessages = handleScenarioTypical(in_cleaveMapRef);
+			producedInvalids = handleScenarioTypical(in_cleaveMapRef);
 		}
 
 		// Special case 1: there is 1 line with a value of INTERCEPTS_POINT_PRECISE.
@@ -282,7 +210,7 @@ MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::m
 			//std::cout << ":::: test: " << in_borderLineArrayRef[0].
 			//std::cout << ">>> Handling precise scenario" << std::endl;
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling precise scenario", "\n");
-			constructionErrorMessages = handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
+			producedInvalids = handleScenarioSingleInterceptsPointPreciseFound(in_cleaveMapRef);
 		}
 		else if
 			(
@@ -290,7 +218,7 @@ MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::m
 				)
 		{
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>> Handling multiple precise scenario", "\n");
-			constructionErrorMessages = handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
+			producedInvalids = handleScenarioMultipleInterceptsPointPrecise(in_cleaveMapRef);
 			//int stopVal = 3;
 			//std::cin >> stopVal;
 			cleaveSequenceFactoryLogger.waitForDebugInput();
@@ -311,48 +239,14 @@ MessageContainer CleaveSequenceFactory::constructAndExportCleaveSequences(std::m
 		}
 	}
 
-	return constructionErrorMessages;
+	//return constructionErrorMessages;
+	return producedInvalids;
 }
 
 bool CleaveSequenceFactory::determineCyclingDirectionsForCategorizedLines(std::map<int, SPolyBorderLines> in_borderLineArrayRef)
 {
 	return lineManager.determineCyclingDirections(in_borderLineArrayRef, cleaveSequenceFactoryLogger.getLogLevel());
 }
-
-/*
-void CleaveSequenceFactory::insertFirstPartialBoundLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
-{
-	in_cleaveSequenceRef->insertFirstLine(fetchAndRemovePartialBound(in_lineIndex));
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertASliceLineForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
-{
-	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASlice(in_lineIndex));
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertASliceSingleInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
-{
-	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveASliceSingleInterceptsPointPrecise(in_lineIndex));
-}
-*/
-
-/*
-void CleaveSequenceFactory::insertFirstInterceptsPointPreciseForSequence(CleaveSequence* in_cleaveSequenceRef, int in_lineIndex)
-{
-	in_cleaveSequenceRef->insertFirstLine(fetchAndRemoveInterceptPointPrecise(in_lineIndex));
-}
-*/
-
-/*
-void CleaveSequenceFactory::invertAllEmptyNormals()
-{
-	lineManager.invertEmptyNormalsInContainers();
-}
-*/
 
 CategorizedLineSearchResult CleaveSequenceFactory::searchForLastPartialBoundLineForSequence(glm::vec3 in_pointToSearch)
 {
@@ -363,13 +257,6 @@ CategorizedLineSearchResult CleaveSequenceFactory::searchForInterceptPointPrecis
 {
 	return lineManager.searchManagerForInterceptPointPreciseCategorizedLine(in_pointToSearch);
 }
-
-/*
-CategorizedLineSearchResult CleaveSequenceFactory::checkForNextNonboundLine(glm::vec3 in_pointToSearch)
-{
-	return lineManager.checkManagerForNextNonboundLine(in_pointToSearch);
-}
-*/
 
 void CleaveSequenceFactory::printLinesInPool()
 {
@@ -388,43 +275,10 @@ void CleaveSequenceFactory::clearLinePools()
 	lineManager.clearAllLines();
 }
 
-Message CleaveSequenceFactory::buildIncompleteSequenceMessage(int in_sequenceIndex, std::map<int, CategorizedLine> in_categorizedLines)
-{
-	Message returnMessage(MessageType::CLEAVESEQUENCEFACTORY_SEQUENCE_INCOMPLETE);
-	auto incompleteLinesBegin = in_categorizedLines.begin();
-	auto incompleteLinesEnd = in_categorizedLines.end();
-	int numberOfLines = in_categorizedLines.size();
-
-	returnMessage.insertInt(in_sequenceIndex);	// the first value should represent the sequence index, since multiple sequence attempts can/would be done.
-	returnMessage.insertInt(numberOfLines);		// the second int value for a message of this type should be the number of incomplete lines.
-
-	for (; incompleteLinesBegin != incompleteLinesEnd; incompleteLinesBegin++)
-	{
-		int currentLineID = incompleteLinesBegin->first;
-		ECBPolyPoint currentLinePointA(incompleteLinesBegin->second.line.pointA.x,
-									   incompleteLinesBegin->second.line.pointA.y, 
-									   incompleteLinesBegin->second.line.pointA.z);
-		ECBPolyPoint currentLinePointB(incompleteLinesBegin->second.line.pointB.x,
-										incompleteLinesBegin->second.line.pointB.y,
-										incompleteLinesBegin->second.line.pointB.z);
-		ECBPolyPoint currentLineEmptyNormal(incompleteLinesBegin->second.emptyNormal.x,
-											incompleteLinesBegin->second.emptyNormal.y,
-											incompleteLinesBegin->second.emptyNormal.z);
-
-		//std::cout << "!!! Incomplete sequence message, current empty normal is: " << currentLineEmptyNormal.x << ", " << currentLineEmptyNormal.y << ", " << currentLineEmptyNormal.z << std::endl;
-
-		returnMessage.insertInt(currentLineID);
-		returnMessage.insertPoint(currentLinePointA);
-		returnMessage.insertPoint(currentLinePointB);
-		returnMessage.insertPoint(currentLineEmptyNormal);
-	}
-	return returnMessage;
-}
-
-MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
+InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
 	//bool wasSuccessful = true;
-	MessageContainer typicalErrorMessages;
+	InvalidCleaveSequences invalids;
 	int currentSequenceIndex = 0;
 
 	//std::cout << "!!! Running handleScenarioTypical...." << std::endl;
@@ -564,11 +418,7 @@ MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, Clea
 				hasBadProduction = true;
 				newSequence.printCategorizedLines();
 
-				Message sequenceErrorMessage = buildIncompleteSequenceMessage(currentSequenceIndex, newSequence.cleavingLines);
-
-				//wasSuccessful = false;
-				typicalErrorMessages.insertMessage(Message(sequenceErrorMessage));
-
+				invalids.insertCleaveSequenceAtKey(currentSequenceIndex, newSequence);
 
 				std::cout << "+++++++++++++++ entering infinite while for debug testing (6/2/2021)" << std::endl;
 				//int infVal = 3;
@@ -643,14 +493,16 @@ MessageContainer CleaveSequenceFactory::handleScenarioTypical(std::map<int, Clea
 		}
 	}
 
-	return typicalErrorMessages;
+	//return typicalErrorMessages;
+	return invalids;
 }
 
-MessageContainer CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
+InvalidCleaveSequences CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
 	std::cout << "!!! Running handleScenarioSingleInterceptsPointPreciseFound...." << std::endl;
 	//bool wasSuccessful = true;
-	MessageContainer preciseErrorMessages;
+	//MessageContainer preciseErrorMessages;
+	InvalidCleaveSequences invalids;
 
 	// NEWW
 	glm::vec3 lastPointToSearch;
@@ -784,14 +636,15 @@ MessageContainer CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreci
 		//std::cout << "(CleaveSequenceFactory): handling case of a single INTERCEPTS_POINT_PRECISE. " << std::endl;
 	}
 
-	return preciseErrorMessages;
+	return invalids;
 }
 
-MessageContainer CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)
+InvalidCleaveSequences CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef)
 {
 	std::cout << "!!! Running handleScenarioMultipleInterceptsPointPrecise..." << std::endl;
 	//bool wasSuccessful = true;
-	MessageContainer multiplePreciseErrorMessages;
+	//MessageContainer multiplePreciseErrorMessages;
+	InvalidCleaveSequences invalids;
 
 	// NEWW
 	glm::vec3 lastPointToSearch;
@@ -857,5 +710,6 @@ MessageContainer CleaveSequenceFactory::handleScenarioMultipleInterceptsPointPre
 		std::cin >> endTest;
 	}
 
-	return multiplePreciseErrorMessages;
+	//return multiplePreciseErrorMessages;
+	return invalids;
 }

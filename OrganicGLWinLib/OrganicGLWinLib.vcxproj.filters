@@ -70,6 +70,12 @@
     <Filter Include="Header Files\SliceScanner">
       <UniqueIdentifier>{8825d415-0315-496d-9854-9a5366dfcd72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SolublePoly\SPolyResolution">
+      <UniqueIdentifier>{8c0c029e-4c78-46d3-99d8-6efc60a43535}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly\SPolyResolution">
+      <UniqueIdentifier>{cd1067e0-024e-4694-9e65-9777c26a24a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1254,6 +1260,12 @@
     <ClInclude Include="SPolyShellProducer.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyResolution.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="InvalidCleaveSequences.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1849,6 +1861,9 @@
     </ClCompile>
     <ClCompile Include="SPolyShellProducer.cpp">
       <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyResolution.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

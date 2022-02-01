@@ -202,17 +202,14 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 	currentComparableSPolyIndex++;	// this must be incremented, to set the appropriate index for the next SPoly (if there are any to compare against)
 }
 
-MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
+MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(MassZoneBoxType in_boxTypeValue)
 {
 	//std::cout << "(MassZoneBoxBoundarySPolySet): begin building cleave sequences..." << std::endl;
-	//bool wasBuildSuccessful = true;
 	MessageContainer buildErrorMessages;
+	InvalidCleaveSequences invalids = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, boundarySPolySetOrientation);
 
-	buildErrorMessages = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, boundarySPolySetOrientation);
-
-	//boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE);
 	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
-	if (buildErrorMessages.empty() == true)
+	if (invalids.containsSequnces == false)
 	{
 		if (boundarySPolyRef->cleaveMap.size() != 0)
 		{
@@ -229,8 +226,6 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 			boundarySPolySG.buildSPolyBorderLines();
 
 			//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
-
-			//boundarySPolySG.
 		}
 		//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
 		if
@@ -258,7 +253,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 			}
 		}
 	}
-	else if (buildErrorMessages.empty() == false)
+	else if (invalids.containsSequnces == true)
 	{
 		std::cout << "(MassZoneBoxBoundarySPolySet): detected buildCleaveSequence run as being unsuccesful..." << std::endl;
 		std::cout << "(MassZoneBoxBoundarySPolySet): unsuccessful run occurred at ";
@@ -273,6 +268,9 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory()
 			case MassZoneBoxBoundaryOrientation::NEG_Z: { currentBoxBoundaryOrientation = "NEG_Z"; break; }
 		}
 		std::cout << currentBoxBoundaryOrientation << std::endl;
+
+		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
+		SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
 		
 	}
 	return buildErrorMessages;
