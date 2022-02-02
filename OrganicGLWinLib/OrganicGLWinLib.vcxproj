@@ -174,7 +174,10 @@
     <ClInclude Include="BorderLineLinkContainer.h" />
     <ClInclude Include="BorderLineLinkPointState.h" />
     <ClInclude Include="BorderLinePointPair.h" />
+    <ClInclude Include="FaceResolverBase.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
+    <ClInclude Include="OneDimLine.h" />
+    <ClInclude Include="PosXFaceResolver.h" />
     <ClInclude Include="SPolyResolution.h" />
     <ClInclude Include="SPolyShellProducer.h" />
     <ClInclude Include="BrasenhamLineData.h" />
@@ -566,6 +569,7 @@
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
+    <ClCompile Include="PosXFaceResolver.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />

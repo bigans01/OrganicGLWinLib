@@ -3,27 +3,21 @@
 
 void SPolyResolution::calculateResolution()
 {
-	// determine which set of methods to use (BLOCK, ENCLAVE, COLLECTION)
-	switch (resolutionBoxType)
+	// first, determine the resolver.
+	determineResolver();
+}
+
+void SPolyResolution::determineResolver()
+{
+	switch (resolutionOrientation)
 	{
-		case MassZoneBoxType::BLOCK: { runBlockMethodSets(); break;}
-		case MassZoneBoxType::ENCLAVE: { runEnclaveMethodSets(); break;}
-		case MassZoneBoxType::COLLECTION: { runCollectionMethodSets(); break;}
+		case MassZoneBoxBoundaryOrientation::POS_X:
+		{
+			selectedResolverPtr.reset(new PosXFaceResolver());
+			selectedResolverPtr->initialize(resolutionSPolyRef, sequencesToResolve, resolutionBoxType, resolutionOrientation);
+			break;
+		}
 	}
 }
 
-void SPolyResolution::runBlockMethodSets() 
-{
-
-}
-
-void SPolyResolution::runEnclaveMethodSets()
-{
-
-}
-
-void SPolyResolution::runCollectionMethodSets()
-{
-
-}
 

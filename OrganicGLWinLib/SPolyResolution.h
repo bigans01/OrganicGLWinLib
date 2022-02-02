@@ -14,6 +14,17 @@
 #include <map>
 #include "InvalidCleaveSequences.h"
 #include "CleaveSequence.h"
+#include <mutex>
+#include "FaceResolverBase.h"
+#include "PosXFaceResolver.h"
+
+/*
+
+quick notes:
+
+--the valid CleaveSequences that were already generated will be stored in the referenced SPoly's cleaveMap class member.
+
+*/
 
 class SPolyResolution
 {
@@ -43,10 +54,11 @@ class SPolyResolution
 		// resolution related functions
 		void calculateResolution();
 
-		// method sets
-		void runBlockMethodSets();
-		void runEnclaveMethodSets();
-		void runCollectionMethodSets();
+		// resolver set up
+		void determineResolver();
+
+		// unique ptr for the derivative class that is based on FaceResolverBase
+		std::unique_ptr<FaceResolverBase> selectedResolverPtr;
 };
 
 #endif

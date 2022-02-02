@@ -76,6 +76,12 @@
     <Filter Include="Source Files\SolublePoly\SPolyResolution">
       <UniqueIdentifier>{cd1067e0-024e-4694-9e65-9777c26a24a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SolublePoly\SPolyResolution\FaceResolvers">
+      <UniqueIdentifier>{11d51f94-bfb2-4d46-a89c-932d54b41a16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly\SPolyResolution\FaceResolvers">
+      <UniqueIdentifier>{fbff7dc5-ff47-4883-8642-b1e8bc695d82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1266,6 +1272,15 @@
     <ClInclude Include="InvalidCleaveSequences.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
+    <ClInclude Include="FaceResolverBase.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="PosXFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="OneDimLine.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1864,6 +1879,9 @@
     </ClCompile>
     <ClCompile Include="SPolyResolution.cpp">
       <Filter>Source Files\SolublePoly\SPolyResolution</Filter>
+    </ClCompile>
+    <ClCompile Include="PosXFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
