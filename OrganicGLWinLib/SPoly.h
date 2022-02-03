@@ -49,11 +49,13 @@ public:
 	void calculateEmptyNormal();
 	int calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
 	bool isSPolyValid();
+	void determineBorderLines();
+
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
+	std::map<int, SPolyBorderLines> borderLines;
 	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
-	void determineBorderLines();
 private:
 	friend class RPoly;
 	friend class SPolyScaler;
@@ -80,7 +82,6 @@ private:
 	friend class TwoDLineSegmentJudge;
 	friend class CoplanarFusionMachine;
 
-	std::map<int, SPolyBorderLines> borderLines;
 	int numberOfSPolyBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type

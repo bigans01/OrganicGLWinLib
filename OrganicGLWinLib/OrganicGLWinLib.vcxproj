@@ -176,8 +176,13 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="FaceResolverBase.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
+    <ClInclude Include="NegXFaceResolver.h" />
+    <ClInclude Include="NegYFaceResolver.h" />
+    <ClInclude Include="NegZFaceResolver.h" />
     <ClInclude Include="OneDimLine.h" />
     <ClInclude Include="PosXFaceResolver.h" />
+    <ClInclude Include="PosYFaceResolver.h" />
+    <ClInclude Include="PosZFaceResolver.h" />
     <ClInclude Include="SPolyResolution.h" />
     <ClInclude Include="SPolyShellProducer.h" />
     <ClInclude Include="BrasenhamLineData.h" />
@@ -569,7 +574,12 @@
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
+    <ClCompile Include="NegXFaceResolver.cpp" />
+    <ClCompile Include="NegYFaceResolver.cpp" />
+    <ClCompile Include="NegZFaceResolver.cpp" />
     <ClCompile Include="PosXFaceResolver.cpp" />
+    <ClCompile Include="PosYFaceResolver.cpp" />
+    <ClCompile Include="PosZFaceResolver.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />

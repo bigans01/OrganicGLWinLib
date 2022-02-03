@@ -17,6 +17,11 @@
 #include <mutex>
 #include "FaceResolverBase.h"
 #include "PosXFaceResolver.h"
+#include "NegXFaceResolver.h"
+#include "PosYFaceResolver.h"
+#include "NegYFaceResolver.h"
+#include "PosZFaceResolver.h"
+#include "NegZFaceResolver.h"
 
 /*
 

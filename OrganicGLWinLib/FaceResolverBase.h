@@ -10,6 +10,7 @@
 #include "OneDimLine.h"
 #include <map>
 #include <mutex>
+#include <iostream>
 
 class FaceResolverBase
 {
@@ -42,15 +43,15 @@ class FaceResolverBase
 			}
 		};
 
-		virtual void setupBorderLineRanges() = 0;	// each derivative of this base class will have 
+		virtual void setupBorderLineRangesAndDimLoc() = 0;	// each derivative of this base class will have 
 													// its own method for setting up the line ranges
 
-	private:
+	protected:
 		SPoly* sPolyPtr = nullptr;	
 		InvalidCleaveSequences invalidsCopy;
 		MassZoneBoxType boxType = MassZoneBoxType::NOVAL;
 		MassZoneBoxBoundaryOrientation faceOrientation = MassZoneBoxBoundaryOrientation::NONE;
-		float dimensionalLimit = 0.0f;		// should always be a 1.0f, 4.0f, or 32.0f, based on 
+		float dimensionalLimit = 0.0f;		// should always be a 1.0f, 4.0f, or 32.0f, based on whether or not the box type is BLOCK, ENCLAVE, or COLLECTION
 		std::map<MassZoneBoxBoundaryOrientation, std::unique_ptr<OneDimLine>> singleDimLines;
 };
 

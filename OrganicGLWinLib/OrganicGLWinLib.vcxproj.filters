@@ -1281,6 +1281,21 @@
     <ClInclude Include="OneDimLine.h">
       <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
     </ClInclude>
+    <ClInclude Include="NegXFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="PosYFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="NegYFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="PosZFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
+    <ClInclude Include="NegZFaceResolver.h">
+      <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1881,6 +1896,21 @@
       <Filter>Source Files\SolublePoly\SPolyResolution</Filter>
     </ClCompile>
     <ClCompile Include="PosXFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="NegXFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="PosYFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="NegYFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="PosZFaceResolver.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="NegZFaceResolver.cpp">
       <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
     </ClCompile>
   </ItemGroup>
