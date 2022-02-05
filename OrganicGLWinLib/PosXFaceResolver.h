@@ -4,6 +4,8 @@
 #define POSXFACERESOLVER_H
 
 #include "FaceResolverBase.h"
+#include "YDimLine.h"
+#include "ZDimLine.h"
 
 class PosXFaceResolver : public FaceResolverBase
 {

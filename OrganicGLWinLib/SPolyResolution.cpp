@@ -50,6 +50,7 @@ void SPolyResolution::determineResolver()
 	}
 	selectedResolverPtr->initialize(resolutionSPolyRef, sequencesToResolve, resolutionBoxType, resolutionOrientation);
 	selectedResolverPtr->setupBorderLineRangesAndDimLoc();
+	selectedResolverPtr->debugPrintOneDimLines(); // only needed for debugging, not always needed.
 }
 
 

@@ -179,7 +179,7 @@
     <ClInclude Include="NegXFaceResolver.h" />
     <ClInclude Include="NegYFaceResolver.h" />
     <ClInclude Include="NegZFaceResolver.h" />
-    <ClInclude Include="OneDimLine.h" />
+    <ClInclude Include="OneDimLineBase.h" />
     <ClInclude Include="PosXFaceResolver.h" />
     <ClInclude Include="PosYFaceResolver.h" />
     <ClInclude Include="PosZFaceResolver.h" />
@@ -567,6 +567,9 @@
     <ClInclude Include="WorldLight.h" />
     <ClInclude Include="WorldLightContainer.h" />
     <ClInclude Include="WorldLightContainerMap.h" />
+    <ClInclude Include="XDimLine.h" />
+    <ClInclude Include="YDimLine.h" />
+    <ClInclude Include="ZDimLine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AtlasMap.cpp" />
