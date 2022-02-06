@@ -48,3 +48,8 @@ void FaceResolverBase::debugPrintOneDimLines()	// for debug: print the values of
 			<< sPolyPtr->borderLines[singleDimLinesBegin->first].pointB.z << std::endl;
 	}
 }
+
+SPolySupergroup FaceResolverBase::fetchResolution()
+{
+	return resolution;
+}

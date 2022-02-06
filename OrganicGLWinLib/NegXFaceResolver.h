@@ -9,6 +9,8 @@ class NegXFaceResolver : public FaceResolverBase
 {
 	public:
 		void setupBorderLineRangesAndDimLoc();
+		void runResolutionAlgorithm();
+		void produceMalformedMitigation();
 	private:
 		float xLocation = 0.0f;		// since we're NEG_X, this doesn't ever need to change
 };

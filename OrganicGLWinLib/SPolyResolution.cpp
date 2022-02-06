@@ -5,6 +5,8 @@ void SPolyResolution::calculateResolution()
 {
 	// first, determine the resolver.
 	determineResolver();
+	selectedResolverPtr->runResolutionAlgorithm();	// run the algorithm
+	calculationResult = selectedResolverPtr->fetchResolution();	// fetch the resulting resolution
 }
 
 void SPolyResolution::determineResolver()
@@ -53,4 +55,7 @@ void SPolyResolution::determineResolver()
 	selectedResolverPtr->debugPrintOneDimLines(); // only needed for debugging, not always needed.
 }
 
-
+SPolySupergroup SPolyResolution::fetchResolution()
+{
+	return calculationResult;
+}

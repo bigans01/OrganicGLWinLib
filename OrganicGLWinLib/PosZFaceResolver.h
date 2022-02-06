@@ -9,6 +9,8 @@ class PosZFaceResolver : public FaceResolverBase
 {
 	public:
 		void setupBorderLineRangesAndDimLoc();
+		void runResolutionAlgorithm();
+		void produceMalformedMitigation();
 	private:
 		float zLocation = 0.0f;		// can be 1, 4, or 32; will be same as dimensionalLimit value, since we are at POS_Z
 };

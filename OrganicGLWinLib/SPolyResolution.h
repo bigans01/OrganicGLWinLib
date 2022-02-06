@@ -46,6 +46,7 @@ class SPolyResolution
 			calculateResolution();
 			sequencesToResolve.printInvalidSequenceData();	// debug/dev only; remove call at will
 		};
+		SPolySupergroup fetchResolution();
 	private:
 		// the following 4 values should be set by the constructor
 		SPoly* resolutionSPolyRef = nullptr;	// the SPolyResolution should reasonably assume that the SPoly has made it's call to determineBorderLines

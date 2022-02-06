@@ -7,3 +7,13 @@ void PosYFaceResolver::setupBorderLineRangesAndDimLoc()
 
 	// There will be two "X" and two "Z" instances of OneDimLine, for POS_Y.
 }
+
+void PosYFaceResolver::runResolutionAlgorithm()
+{
+
+}
+
+void PosYFaceResolver::produceMalformedMitigation()
+{
+
+}

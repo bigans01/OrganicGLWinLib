@@ -271,7 +271,11 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 
 		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
 		SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
-		
+		SPolySupergroup testResolvedSuperGroup = resolver.fetchResolution();
+		testResolvedSuperGroup.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+		testResolvedSuperGroup.buildSPolyBorderLines();
+		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
+		testResolvedSuperGroup.printSPolys();
 	}
 	return buildErrorMessages;
 }

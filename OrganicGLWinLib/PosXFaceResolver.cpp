@@ -73,3 +73,26 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 		}
 	}
 }
+
+void PosXFaceResolver::runResolutionAlgorithm()
+{
+	// logic for determining resolution would go here; return a malformed version just for testing.
+	produceMalformedMitigation();
+}
+
+void PosXFaceResolver::produceMalformedMitigation()
+{
+	glm::vec3 point0 = sPolyPtr->borderLines[0].pointA;
+	glm::vec3 point1 = sPolyPtr->borderLines[1].pointA;
+	glm::vec3 point2 = sPolyPtr->borderLines[2].pointA;
+	glm::vec3 point3 = sPolyPtr->borderLines[3].pointA;
+
+	STriangle triangleA(point0, point1, point2);
+	STriangle triangleB(point0, point2, point3);
+
+	SPoly malformedMitigationPoly;
+	malformedMitigationPoly.addTriangle(triangleA);
+	malformedMitigationPoly.addTriangle(triangleB);
+
+	resolution.insertSPoly(malformedMitigationPoly);
+}
