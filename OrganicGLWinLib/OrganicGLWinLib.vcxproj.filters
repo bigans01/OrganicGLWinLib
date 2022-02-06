@@ -82,6 +82,72 @@
     <Filter Include="Source Files\SolublePoly\SPolyResolution\FaceResolvers">
       <UniqueIdentifier>{fbff7dc5-ff47-4883-8642-b1e8bc695d82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Shader">
+      <UniqueIdentifier>{bf61597d-9196-4ac8-842b-da1a68db963d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shader">
+      <UniqueIdentifier>{40a4379a-8434-402f-be53-fb423f609b94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImGui">
+      <UniqueIdentifier>{4b9e6d72-114c-4857-881a-9ae3d9681b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImGui">
+      <UniqueIdentifier>{b673d85b-eadc-4980-bae8-5a1e9f2807cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TimeBased">
+      <UniqueIdentifier>{cb7ecd53-485d-4b1b-b690-4850d27a74ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TimeBased\Wave">
+      <UniqueIdentifier>{cfa09f02-28eb-4e1f-a3d8-c368abbd6697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TimeBased">
+      <UniqueIdentifier>{3eee0533-77bf-4bd2-bbd6-b1624efed394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TimeBased\Wave">
+      <UniqueIdentifier>{2f14ff99-738c-4315-8d29-6512bbfa48b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TimeBased\Wave\Sin">
+      <UniqueIdentifier>{ab865398-e3e4-4180-b331-d36fa60891d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TimeBased\Wave\Sin">
+      <UniqueIdentifier>{19ac836f-a1e9-46c0-9393-2d5026ea3b32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Misc">
+      <UniqueIdentifier>{537daab0-e0fe-4f5b-8e40-4455961e4766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Misc">
+      <UniqueIdentifier>{2604b065-4fd2-49a2-9a26-c1c00e821d22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UV">
+      <UniqueIdentifier>{d7eb27a6-16f3-4946-9bee-dc070adaa11e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UV">
+      <UniqueIdentifier>{39bf4d93-dc69-44f6-a407-7af27f4c2c79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\Generic">
+      <UniqueIdentifier>{5b037c69-7140-4fc4-9ed3-086e73fee9d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\Generic">
+      <UniqueIdentifier>{7457d546-1617-458f-af81-ab3ccbfa1c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\WorldLight">
+      <UniqueIdentifier>{ac9551da-55ff-461b-80ca-66682fa68645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WorldLight">
+      <UniqueIdentifier>{c4165778-6031-4898-8d21-048cf7cb889c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{1ae98bec-73eb-4a07-a64d-f85a3520ca69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{819c929e-e0f5-4210-a7b7-cd07a30dafd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\OrientedQuad">
+      <UniqueIdentifier>{a9b8dbec-6c81-412e-bee6-a59468e84ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OrientedQuad">
+      <UniqueIdentifier>{7cfe4170-697a-432b-ba79-c96dcda1983b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -90,397 +156,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OrganicGLWinUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrganicShaderLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileLoadData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureUV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturePoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileDataGLWIN.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_glfw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_opengl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerDeferred1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerMode0.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerMode1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerMode2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerMode3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerDeferred2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManagerDeferred2Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLDataType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLUniformRegistry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLUniformRequest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMultiDrawArrayJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimpleUnique.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HighlighterGearT1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuadPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuadQuadrant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuadPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuadPlane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrientedQuadType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OctantCorner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PointTranslationCheck.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EmptyNormalFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRPointType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InterceptRegister.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionLineGroup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SliceFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CyclingDirectionFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CyclingDirection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileCoordinateProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ContainerType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UVTriangleCoordsGL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainJobResults.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainMemoryMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainMemoryMoveMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainMemoryTracker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLDrawElementsInstancedJob.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLInstancedCoordinateContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComputeResolution.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldLightContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldLightContainerMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiButtonPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiButtonClickResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiButtonPanelContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiSliderFloat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiSliderFloatPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiSliderFloatPanelContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LineWelder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassManipulationMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DistanceToPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FoundCleaveSequence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LineWelderHierarchyPosition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionLineValidity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LineWelderRunMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NextCleaveSequenceFinder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TracingObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TracingObserverState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SelfComparePermit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PermitType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentIntersectResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentIntersectType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreeDLineSegment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDSPolyIntersectionType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDSPolyIntersectionRecord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnsolvedPreciseSolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerOptionEnum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectAnalyzerOption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshMatterMeta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MassSubZone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FusedIntersectionLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RayIntersectionResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LineReactorBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HostLineReactor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SummaryScanResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SharedLineReactor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GuestLineReactor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDIntersectionRecordManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDCrawlingType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TwoDCrawlingAttempt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiInputText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiInputTextPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiInputTextPanelContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiInputTextResponse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3Result.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UsableCleaveSequenceCalculator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsumedCleaveSequenceGroups.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NonBoundMerger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntersectionFindingAttempt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MappableJudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RaycastIntersectionTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IndividualVerdict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MappableIndividualVerdict.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeBasedWaveBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SinTBW.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeBasedWaveManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeBasedWaveType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicBufferManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMultiDrawArrayParams.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ContestableBorderLineMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LookupByDimRegister.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RCollisionPoint.h">
@@ -1107,44 +789,8 @@
     <ClInclude Include="QuatUtils.h">
       <Filter>Header Files\Quaternions</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainTrianglePoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UVTriangleCoords.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OrganicPolygon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UVCoordProducer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UVCoordProducerECBPoly.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UVCoordProducerEnclaveTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMeshPointRequests.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RCollisionPointState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RPointToGridTranslator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RMorphableMeshCornerArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RProductFace.h">
       <Filter>Header Files\RasterizedMass</Filter>
-    </ClInclude>
-    <ClInclude Include="RProductFaceRootPoints.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RMorphableMeshState.h">
       <Filter>Header Files\RasterizedMass</Filter>
@@ -1167,17 +813,11 @@
     <ClInclude Include="RAdditiveXSliceStandalone.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
-    <ClInclude Include="RCollisionPointToPTriangleMapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PTriangleRCPointToIndexLink.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
     <ClInclude Include="PTrianglePointLinkArray.h">
       <Filter>Header Files\RasterizedMass</Filter>
-    </ClInclude>
-    <ClInclude Include="RCollisionPointToPTriangleMapContainer.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RCollisionPointModifier.h">
       <Filter>Header Files\RasterizedMass</Filter>
@@ -1212,9 +852,6 @@
     <ClInclude Include="RMatterManipulationOption.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicRasterGridCellBorders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MassCellBitFlags.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
@@ -1236,9 +873,6 @@
     <ClInclude Include="MassGridSearchResult.h">
       <Filter>Header Files\RasterizedMass</Filter>
     </ClInclude>
-    <ClInclude Include="MassUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BrasenhamMassTracer.h">
       <Filter>Header Files\MassZone</Filter>
     </ClInclude>
@@ -1247,9 +881,6 @@
     </ClInclude>
     <ClInclude Include="BrasenhamLineData.h">
       <Filter>Header Files\MassZone</Filter>
-    </ClInclude>
-    <ClInclude Include="TileLocation.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShaderMachineFeedbackType.h">
       <Filter>Header Files\ShaderMachines</Filter>
@@ -1305,180 +936,450 @@
     <ClInclude Include="ZDimLine.h">
       <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
     </ClInclude>
+    <ClInclude Include="ComputeResolution.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="LineWelder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="LineWelderRunMode.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="LineWelderHierarchyPosition.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderBase.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerDeferred1.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerDeferred2.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerDeferred2Debug.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerMode0.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerMode1.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerMode2.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManagerMode3.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_glfw.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiButton.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiButtonClickResult.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiButtonPanel.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiButtonPanelContainer.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputText.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextPanel.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextPanelContainer.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiInputTextResponse.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSliderFloat.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSliderFloatPanel.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSliderFloatPanelContainer.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeBasedWaveBase.h">
+      <Filter>Header Files\TimeBased\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeBasedWaveManager.h">
+      <Filter>Header Files\TimeBased\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeBasedWaveType.h">
+      <Filter>Header Files\TimeBased\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="SinTBW.h">
+      <Filter>Header Files\TimeBased\Wave\Sin</Filter>
+    </ClInclude>
+    <ClInclude Include="SelfComparePermit.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDCrawlingAttempt.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDCrawlingType.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDIntersectionRecordManager.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegment.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzer.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerOptionEnum.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectAnalyzerV2.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectResult.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentIntersectType.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDLineSegmentJudge.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDPoint.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDSPolyIntersectionRecord.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoDSPolyIntersectionType.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionResult.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionLine.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionType.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointState.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointToPTriangleMapContainer.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RCollisionPointToPTriangleMapper.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastIntersectionTest.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="RayIntersectionResult.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="HostLineReactor.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="GuestLineReactor.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedLineReactor.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="MassUtils.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="CyclingDirection.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="CyclingDirectionFinder.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="HighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsumedCleaveSequenceGroups.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="UVCoordProducer.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="UVCoordProducerECBPoly.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="UVCoordProducerEnclaveTriangle.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="UVTriangleCoords.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="UVTriangleCoordsGL.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TileCoordinateProducer.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TileDataGLWIN.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TileLoadData.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TileLocation.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMeta.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyNormalFinder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="LineReactorBase.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="ContainerType.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="InterceptRegister.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="IRGroup.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="IRLine.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="IRPointType.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionLineGroup.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionLineValidity.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="GLDataType.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLDrawElementsInstancedJob.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLInstancedCoordinateContainer.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMultiDrawArrayJob.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMultiDrawArrayParams.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUniformRegistry.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUniformRequest.h">
+      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="ContestableBorderLineMap.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="DistanceToPoint.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="RProductFaceRootPoints.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshCornerArray.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RMorphableMeshPointRequests.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="RPointToGridTranslator.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="OctantCorner.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainJobResults.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMemoryMeta.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMemoryMoveMeta.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMemoryTracker.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldLight.h">
+      <Filter>Header Files\WorldLight</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldLightContainer.h">
+      <Filter>Header Files\WorldLight</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldLightContainerMap.h">
+      <Filter>Header Files\WorldLight</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicBufferManager.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicRasterGridCellBorders.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="OrganicGLWinUtils.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FoundCleaveSequence.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="OrganicPolygon.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="FusedIntersectionLine.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="MappableJudge.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="IndividualVerdict.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectAnalyzerOption.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="IntersectionFindingAttempt.h">
+      <Filter>Header Files\Coplanar</Filter>
+    </ClInclude>
+    <ClInclude Include="LookupByDimRegister.h">
+      <Filter>Header Files\RasterizedMass</Filter>
+    </ClInclude>
+    <ClInclude Include="MappableIndividualVerdict.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MassManipulationMode.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="MassSubZone.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshMatterMeta.h">
+      <Filter>Header Files\MassZone</Filter>
+    </ClInclude>
+    <ClInclude Include="NextCleaveSequenceFinder.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="NonBoundMerger.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="OrganicShaderLoader.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="PermitType.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuad.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadPanel.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadPlane.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadPoint.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadQuadrant.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="OrientedQuadType.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="PointTranslationCheck.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SummaryScanResult.h">
+      <Filter>Header Files\SolublePoly\Fusion</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainTriangle.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainTrianglePoint.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUV.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePoints.h">
+      <Filter>Header Files\UV</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreeDLineSegment.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TracingObserver.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="TracingObserverState.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files\OrientedQuad</Filter>
+    </ClInclude>
+    <ClInclude Include="UnsolvedPreciseSolver.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="UsableCleaveSequenceCalculator.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3Result.h">
+      <Filter>Header Files\Quaternions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OrganicGLWinUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OrganicShaderLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerDeferred1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerMode0.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerMode1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerMode2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerMode3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerDeferred2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderManagerDeferred2Debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLUniformRegistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLUniformRequest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLMultiDrawArrayJob.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SimpleUnique.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HighlighterGearT1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OrientedQuadPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OrientedQuad.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PointTranslationCheck.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EmptyNormalFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IntersectionResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IntersectionLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InterceptRegister.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IntersectionLineGroup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SliceFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CyclingDirectionFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TileCoordinateProducer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainMemoryTracker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldLightContainerMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LineWelder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NextCleaveSequenceFinder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TracingObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LineSegmentIntersectAnalyzer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TwoDLineSegmentJudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TwoDLineSegment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnsolvedPreciseSolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshMatterMeta.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HostLineReactor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SharedLineReactor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GuestLineReactor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGuiInputText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UsableCleaveSequenceCalculator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NonBoundMerger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TwoDIntersectionRecordManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeBasedWaveBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SinTBW.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeBasedWaveManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicBufferManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ContestedBorderLineMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LookupByDimRegister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RasterCubeTracerBase.cpp">
@@ -1835,18 +1736,6 @@
     <ClCompile Include="QuatUtils.cpp">
       <Filter>Source Files\Quaternions</Filter>
     </ClCompile>
-    <ClCompile Include="OrganicPolygon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducerECBPoly.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RAdditiveSliceBase.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
@@ -1886,17 +1775,11 @@
     <ClCompile Include="PTriangle.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
-    <ClCompile Include="MassUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BrasenhamMassTracer.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
     </ClCompile>
     <ClCompile Include="KeyPressTracker.cpp">
       <Filter>Source Files\ShaderMachines</Filter>
-    </ClCompile>
-    <ClCompile Include="RCollisionPoint.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SPolyShellProducer.cpp">
       <Filter>Source Files\SolublePoly</Filter>
@@ -1921,6 +1804,192 @@
     </ClCompile>
     <ClCompile Include="NegZFaceResolver.cpp">
       <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="FaceResolverBase.cpp">
+      <Filter>Source Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
+    </ClCompile>
+    <ClCompile Include="LineWelder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderBase.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerDeferred1.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerDeferred2.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerDeferred2Debug.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerMode0.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerMode1.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerMode2.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManagerMode3.cpp">
+      <Filter>Source Files\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiInputText.cpp">
+      <Filter>Source Files\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeBasedWaveBase.cpp">
+      <Filter>Source Files\TimeBased\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeBasedWaveManager.cpp">
+      <Filter>Source Files\TimeBased\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="SinTBW.cpp">
+      <Filter>Source Files\TimeBased\Wave\Sin</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDIntersectionRecordManager.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegment.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegmentIntersectAnalyzerV2.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegmentJudge.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="RCollisionPoint.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="GuestLineReactor.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedLineReactor.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="HostLineReactor.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="MassUtils.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="CyclingDirectionFinder.cpp">
+      <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="HighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="TileCoordinateProducer.cpp">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducer.cpp">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducerECBPoly.cpp">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="EmptyNormalFinder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="InterceptRegister.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="IntersectionLine.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="IntersectionLineGroup.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMultiDrawArrayJob.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="GLUniformRegistry.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="GLUniformRequest.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="ContestedBorderLineMap.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainMemoryTracker.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldLightContainerMap.cpp">
+      <Filter>Source Files\WorldLight</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicBufferManager.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="OrganicGLWinUtils.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="OrganicPolygon.cpp">
+      <Filter>Source Files\UV</Filter>
+    </ClCompile>
+    <ClCompile Include="IntersectionResult.cpp">
+      <Filter>Source Files\SolublePoly\Fusion</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshMatterMeta.cpp">
+      <Filter>Source Files\MassZone</Filter>
+    </ClCompile>
+    <ClCompile Include="TwoDLineSegmentIntersectAnalyzer.cpp">
+      <Filter>Source Files\Coplanar</Filter>
+    </ClCompile>
+    <ClCompile Include="LookupByDimRegister.cpp">
+      <Filter>Source Files\RasterizedMass</Filter>
+    </ClCompile>
+    <ClCompile Include="NextCleaveSequenceFinder.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="NonBoundMerger.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="OrganicShaderLoader.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="OrientedQuad.cpp">
+      <Filter>Source Files\OrientedQuad</Filter>
+    </ClCompile>
+    <ClCompile Include="OrientedQuadPanel.cpp">
+      <Filter>Source Files\OrientedQuad</Filter>
+    </ClCompile>
+    <ClCompile Include="PointTranslationCheck.cpp">
+      <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="TracingObserver.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="UnsolvedPreciseSolver.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="UsableCleaveSequenceCalculator.cpp">
+      <Filter>Source Files\SolublePoly</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

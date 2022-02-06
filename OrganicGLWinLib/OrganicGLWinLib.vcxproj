@@ -577,6 +577,7 @@
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
+    <ClCompile Include="FaceResolverBase.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />
@@ -668,7 +669,7 @@
     <ClCompile Include="IntersectionLine.cpp" />
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
-    <ClCompile Include="LineSegmentIntersectAnalyzer.cpp" />
+    <ClCompile Include="TwoDLineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="MassZone.cpp" />
     <ClCompile Include="MassZoneBox.cpp" />
