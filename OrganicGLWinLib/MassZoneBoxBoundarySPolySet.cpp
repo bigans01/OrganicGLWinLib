@@ -271,11 +271,22 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 
 		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
 		SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
+
+		/*
 		SPolySupergroup testResolvedSuperGroup = resolver.fetchResolution();
 		testResolvedSuperGroup.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 		testResolvedSuperGroup.buildSPolyBorderLines();
 		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
 		testResolvedSuperGroup.printSPolys();
+		*/
+
+		boundarySPolySG = resolver.fetchResolution();
+		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+		boundarySPolySG.roundAllSTrianglesToHundredths();
+		boundarySPolySG.buildSPolyBorderLines();
+		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
+		boundarySPolySG.printSPolys();
+		
 	}
 	return buildErrorMessages;
 }

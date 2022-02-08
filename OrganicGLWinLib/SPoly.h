@@ -29,6 +29,7 @@
 #include "MessageContainer.h"
 #include "MassZoneBoxBoundaryOrientation.h"
 #include "InvalidCleaveSequences.h"
+#include "SPolyMode.h"
 
 class SPoly
 {
@@ -50,7 +51,8 @@ public:
 	int calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
 	bool isSPolyValid();
 	void determineBorderLines();
-
+	void setMode(SPolyMode in_mode);
+	SPolyMode getMode();
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
@@ -82,6 +84,7 @@ private:
 	friend class TwoDLineSegmentJudge;
 	friend class CoplanarFusionMachine;
 
+	SPolyMode mode = SPolyMode::TYPICAL;	// always starts as TYPICAL (as that is whats assumed); however, due to mitigation, it could be MALFORMED_MITIGATION
 	int numberOfSPolyBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type

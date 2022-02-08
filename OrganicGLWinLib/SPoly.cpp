@@ -146,6 +146,16 @@ void SPoly::determineBorderLines()
 	}
 }
 
+void SPoly::setMode(SPolyMode in_mode)
+{
+	mode = in_mode;
+}
+
+SPolyMode SPoly::getMode()
+{
+	return mode;
+}
+
 void SPoly::setMRP(glm::vec3 in_mrp)
 {
 	massOriginPoint = in_mrp;

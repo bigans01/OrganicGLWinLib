@@ -183,6 +183,7 @@
     <ClInclude Include="PosXFaceResolver.h" />
     <ClInclude Include="PosYFaceResolver.h" />
     <ClInclude Include="PosZFaceResolver.h" />
+    <ClInclude Include="SPolyMode.h" />
     <ClInclude Include="SPolyResolution.h" />
     <ClInclude Include="SPolyShellProducer.h" />
     <ClInclude Include="BrasenhamLineData.h" />

@@ -182,18 +182,21 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 			auto producedBorderSPolysEnd = currentBoundaryBegin->second.boundaryPolySet.boundarySPolySG.sPolyMap.end();
 			for (; producedBorderSPolysBegin != producedBorderSPolysEnd; producedBorderSPolysBegin++)
 			{
-				auto currentLinesBegin = producedBorderSPolysBegin->second.borderLines.begin();
-				auto currentLinesEnd = producedBorderSPolysBegin->second.borderLines.end();
-				for (; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
+				auto currentSPolyMode = producedBorderSPolysBegin->second.getMode();
+				if (currentSPolyMode != SPolyMode::MALFORMED_MITIGATION)	// MALFORMED_MITIGATIONS shouldn't contribute to the generated "touched list"
 				{
-					glm::vec3 currentPoint = currentLinesBegin->second.pointA;
-					ECBPolyPoint convertedPoint(currentPoint.x, currentPoint.y, currentPoint.z);
-
-					//std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
-
-					ECBPPOrientationResults pointOrientation;
-					switch (in_massZoneBoxType)
+					auto currentLinesBegin = producedBorderSPolysBegin->second.borderLines.begin();
+					auto currentLinesEnd = producedBorderSPolysBegin->second.borderLines.end();
+					for (; currentLinesBegin != currentLinesEnd; currentLinesBegin++)
 					{
+						glm::vec3 currentPoint = currentLinesBegin->second.pointA;
+						ECBPolyPoint convertedPoint(currentPoint.x, currentPoint.y, currentPoint.z);
+
+						//std::cout << "Converted point is: " << convertedPoint.x << ", " << convertedPoint.y << ", " << convertedPoint.z << std::endl;
+
+						ECBPPOrientationResults pointOrientation;
+						switch (in_massZoneBoxType)
+						{
 						case MassZoneBoxType::BLOCK:
 						{
 							BlockBorderLineList blockBorders;
@@ -221,18 +224,19 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 							pointOrientation = IndependentUtils::GetBlueprintPointOrientation(convertedPoint, &collectionBorders);
 							break;
 						}
-					}
+						}
 
-					// get the face list
-					BorderDataMap bdMap;
-					BorderMDFaceList pointFaceList = IndependentUtils::getFaceList(pointOrientation, &bdMap);
+						// get the face list
+						BorderDataMap bdMap;
+						BorderMDFaceList pointFaceList = IndependentUtils::getFaceList(pointOrientation, &bdMap);
 
-					for (int x = 0; x < 3; x++)
-					{
-						if (pointFaceList.faceList[x] != ECBPPOrientations::NOVAL)
+						for (int x = 0; x < 3; x++)
 						{
-							MassZoneBoxBoundaryOrientation currentOrientation = convertPointOrientationToBoundaryOrientation(pointFaceList.faceList[x]);
-							generatedTouchedList.insert(currentOrientation);
+							if (pointFaceList.faceList[x] != ECBPPOrientations::NOVAL)
+							{
+								MassZoneBoxBoundaryOrientation currentOrientation = convertPointOrientationToBoundaryOrientation(pointFaceList.faceList[x]);
+								generatedTouchedList.insert(currentOrientation);
+							}
 						}
 					}
 				}

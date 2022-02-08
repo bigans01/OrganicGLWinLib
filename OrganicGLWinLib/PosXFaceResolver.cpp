@@ -82,17 +82,20 @@ void PosXFaceResolver::runResolutionAlgorithm()
 
 void PosXFaceResolver::produceMalformedMitigation()
 {
+	// This below code block is just a test; until this logic is fleshed out.
 	glm::vec3 point0 = sPolyPtr->borderLines[0].pointA;
 	glm::vec3 point1 = sPolyPtr->borderLines[1].pointA;
 	glm::vec3 point2 = sPolyPtr->borderLines[2].pointA;
 	glm::vec3 point3 = sPolyPtr->borderLines[3].pointA;
-
+	
 	STriangle triangleA(point0, point1, point2);
 	STriangle triangleB(point0, point2, point3);
 
 	SPoly malformedMitigationPoly;
 	malformedMitigationPoly.addTriangle(triangleA);
 	malformedMitigationPoly.addTriangle(triangleB);
-
+	malformedMitigationPoly.setMode(SPolyMode::MALFORMED_MITIGATION);	// when we can't solve and produce the "last resort" result,
+																		// we must flag the SPoly as MALFORMED_MITIGATION, so that it 
+																		// isn't counted in the call to MassZoneBox::generateTouchedBoxFacesList
 	resolution.insertSPoly(malformedMitigationPoly);
 }

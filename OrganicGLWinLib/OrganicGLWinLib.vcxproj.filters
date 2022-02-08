@@ -1371,6 +1371,9 @@
     <ClInclude Include="Vec3Result.h">
       <Filter>Header Files\Quaternions</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyMode.h">
+      <Filter>Header Files\SolublePoly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
