@@ -77,7 +77,71 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 void PosXFaceResolver::runResolutionAlgorithm()
 {
 	// logic for determining resolution would go here; return a malformed version just for testing.
-	produceMalformedMitigation();
+	bool wasResolutionFound = attemptSolveByInvalidCount();
+	if (wasResolutionFound == false)
+	{
+		produceMalformedMitigation();
+	}
+}
+
+bool PosXFaceResolver::attemptSolveByInvalidCount()
+{
+	bool wasResolved = false;
+	int numberOfInvalids = int(invalidsCopy.sequenceMap.size());
+	if (numberOfInvalids == 1)
+	{
+		std::cout << "(PosXFaceResolver): found 1 invalid CleaveSequence. " << std::endl;
+		checkCleaveSequenceLinesAgainstDimLines(&(invalidsCopy.sequenceMap[0]));
+	}
+	else if (numberOfInvalids == 2)
+	{
+		std::cout << "(PosXFaceResolver): found 2 invalid CleaveSequences. " << std::endl;
+
+	}
+
+	return wasResolved;
+}
+
+void PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(CleaveSequence* in_invalidPtr)
+{
+	// Part 1: grab all CSCorrectionCandidates.
+	std::vector<CSCorrectionCandidate> candidateVector;
+	auto invalidLinesBegin = in_invalidPtr->cleavingLines.begin();
+	auto invalidLinesEnd = in_invalidPtr->cleavingLines.end();
+	for (; invalidLinesBegin != invalidLinesEnd; invalidLinesBegin++)
+	{
+		auto dimLinesBegin = singleDimLines.begin();
+		auto dimLinesEnd = singleDimLines.end();
+		for (; dimLinesBegin != dimLinesEnd; dimLinesBegin++)
+		{
+			// compare both points of the current invalid line, against all dim lines.
+			auto pointA = invalidLinesBegin->second.line.pointA;
+			bool isPointAInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointA);
+			if (isPointAInCurrentDimLine == true)
+			{
+				std::cout << "(PosXFaceResolver): Found matching point A (" 
+							<< pointA.x << ", "
+							<< pointA.y << ", " 
+							<< pointA.z << "), in CategorizedLine with index " 
+							<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
+				CSCorrectionCandidate candidate(invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_A);
+				candidateVector.push_back(candidate);
+			}
+
+			auto pointB = invalidLinesBegin->second.line.pointB;
+			bool isPointBInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointB);
+			if (isPointBInCurrentDimLine == true)
+			{
+				std::cout << "(PosXFaceResolver): Found matching point B ("
+					<< pointB.x << ", "
+					<< pointB.y << ", "
+					<< pointB.z << "), in CategorizedLine with index "
+					<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
+				CSCorrectionCandidate candidate(invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_B);
+				candidateVector.push_back(candidate);
+			}
+		}
+	}
 }
 
 void PosXFaceResolver::produceMalformedMitigation()

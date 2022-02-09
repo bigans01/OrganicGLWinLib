@@ -23,7 +23,8 @@ class FaceResolverBase
 
 		virtual void setupBorderLineRangesAndDimLoc() = 0;	// each derivative of this base class will have 
 													// its own method for setting up the line ranges
-		virtual void runResolutionAlgorithm() = 0;	// the algorithm that would produce some output of SPolys (resolved, or unresolved)
+		virtual void runResolutionAlgorithm() = 0;	// the algorithm that would produce some output of SPolys (resolved, or unresolved);
+													// the child class derived from the base class can use its own functions for this.
 
 		virtual void produceMalformedMitigation() = 0;		// the malformed mitigation is produced when the resolver can't actually resolve anything;
 															// it produces SPolys and then puts them into the resolution (SPolySupergroup)
