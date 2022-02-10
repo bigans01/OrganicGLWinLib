@@ -53,3 +53,73 @@ SPolySupergroup FaceResolverBase::fetchResolution()
 {
 	return resolution;
 }
+
+void FaceResolverBase::compareCorrectionCandidatesAgainstSequence(std::vector<CSCorrectionCandidate> in_candidates, CleaveSequence* in_invalidPtr)
+{
+	// We will need a map of std::vector<CSCorrectionCandidate> vectors (this can be refactored later)
+
+	// Step 1: Load into the map, so we can see how many border line hits each CategorizeDLine ID has.
+	std::map<int, std::vector<CSCorrectionCandidate>> organizedCandidates;
+	auto candidateVectorBegin = in_candidates.begin();
+	auto candidateVectorEnd = in_candidates.end();
+	for (; candidateVectorBegin != candidateVectorEnd; candidateVectorBegin++)
+	{
+		organizedCandidates[candidateVectorBegin->lineID].push_back(*candidateVectorBegin);	// push back the current candidate into it's respective key;
+																							// the key value must equal the index of the CategorizedLine as it
+																							// is held within passed-in CleaveSequence (in_invalidPtr), which should be stored in the lineID value
+																							// of CSCorrectionCandidate.
+	}
+
+	// Step 2: The size of each std::vector in the organizedCandidates reflects the number of points in a CategorizedLine 
+	//		   technically fall on the border; in most cases, this should only be 1. We can cross-reference this count 
+	//		   against the CategorizedLines
+	auto organizedBegin = organizedCandidates.begin();
+	auto organizedEnd = organizedCandidates.end();
+	for (; organizedBegin != organizedEnd; organizedBegin++)
+	{
+		// Get the size of the vector of CSCorrectionCandidates for the current line
+		std::cout << "Analyzing size of CSCorrectionCandiate vector for the CategorizedLine having ID " << organizedBegin->first <<  "..." << std::endl;
+		int currentHitCount = organizedBegin->second.size();
+		std::cout << "Hit count is: " << currentHitCount << std::endl;
+
+		// 1 Hit, always a PARTIAL_BOUND.
+		if (currentHitCount == 1)
+		{
+			auto onlyCorrectionCandidate = organizedBegin->second.begin();
+			int targetCategorizedLineID = onlyCorrectionCandidate->lineID;
+			std::cout << "Target line ID is: " << targetCategorizedLineID << std::endl;
+
+			// check if the numberOfBorderLines in the target CategorizedLine matches the currentHitCount;
+			// if it isn't we need to alter that CategorizedLine to be a PARTIAL_BOUND, as that is technically
+			// the only ending bounding line type that this CategorizedLine could possibly be with 1 hit.
+			if (currentHitCount != in_invalidPtr->cleavingLines[targetCategorizedLineID].line.numberOfBorderLines)
+			{
+				std::cout << "!! Notice, the number of points that should hit a border line (based on OneLineDim checks) in this CategorizedLine's IntersectionLine " << std::endl;
+				std::cout << "   does not match the numberOfBorderLines; this line needs to be corrected." << std::endl;
+
+				// get a point to the CategorizedLine to alter
+				auto categorizedLinePtr = &in_invalidPtr->cleavingLines[targetCategorizedLineID];
+				if (onlyCorrectionCandidate->matchedType == IRPointType::POINT_A)
+				{
+					categorizedLinePtr->line.pointABorder = onlyCorrectionCandidate->dimLineID;
+					categorizedLinePtr->line.isPointAOnBorder = 1;
+					categorizedLinePtr->type = IntersectionType::PARTIAL_BOUND;
+
+					
+				}
+				else if (onlyCorrectionCandidate->matchedType == IRPointType::POINT_B)
+				{
+					categorizedLinePtr->line.pointBBorder = onlyCorrectionCandidate->dimLineID;
+					categorizedLinePtr->line.isPointBOnBorder = 1;
+					categorizedLinePtr->type = IntersectionType::PARTIAL_BOUND;
+				}
+				std::cout << "!!! Reformed CleaveSequence stats are: " << std::endl;
+				in_invalidPtr->printCategorizedLines();
+			}
+		}
+
+		// 2 Hits: A_SLICE, INTERCEPTS_POINT_PRECISE, A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE (rarer, but could still happen;
+		// not developed yet)
+	}
+
+}

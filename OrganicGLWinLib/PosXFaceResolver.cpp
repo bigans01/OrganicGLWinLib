@@ -142,6 +142,9 @@ void PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(CleaveSequence* i
 			}
 		}
 	}
+
+	// Part 2: Determine which of the CategorizedLines need editing.
+	compareCorrectionCandidatesAgainstSequence(candidateVector, in_invalidPtr);
 }
 
 void PosXFaceResolver::produceMalformedMitigation()

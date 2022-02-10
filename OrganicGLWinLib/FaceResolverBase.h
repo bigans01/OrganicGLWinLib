@@ -12,6 +12,8 @@
 #include <map>
 #include <mutex>
 #include <iostream>
+#include <vector>
+#include "CSCorrectionCandidate.h"
 
 class FaceResolverBase
 {
@@ -38,6 +40,8 @@ class FaceResolverBase
 		float dimensionalLimit = 0.0f;		// should always be a 1.0f, 4.0f, or 32.0f, based on whether or not the box type is BLOCK, ENCLAVE, or COLLECTION
 		std::map<int, std::unique_ptr<OneDimLineBase>> singleDimLines;	// the "int" int this map will correspond with the ID of each SPoly's border lines
 		SPolySupergroup resolution;		// the resolver's produced output (a set of one or more SPolys) after attempting to resolve the CleaveSequences
+
+		void compareCorrectionCandidatesAgainstSequence(std::vector<CSCorrectionCandidate> in_candidates, CleaveSequence* in_invalidPtr);
 };
 
 #endif
