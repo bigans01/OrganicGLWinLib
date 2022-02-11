@@ -101,6 +101,15 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 			welder.printConsumedSequenceGroups();
 		}
 
+		// check whether or not a fault was detected; if it wasn't, we're good.
+		if (welder.getFaultValue() == false)
+		{
+			wasWeldingSuccessful = true;
+		}
+		else
+		{
+			wasWeldingSuccessful = false;
+		}
 	}
 	
 }

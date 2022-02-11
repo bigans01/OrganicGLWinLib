@@ -7,6 +7,7 @@ void UsableCleaveSequenceCalculator::runJudgement()
 	usableLogger.log("(UsableCleaveSequenceCalculator): judging for the CleaveSequence ID of: ", judgingForCleaveSequenceID, "\n");
 	baseSet.intSet = cleaveSequenceCandidateListRef->getCandidateSet();	// load all of the candidates from the border line we're looking at.
 	baseSet.intSet.erase(judgingForCleaveSequenceID);					// remove the candidate that is the CleaveSequenceID we are judging for.
+	usableLogger.log("(UsableCleaveSequenceCalculator): size of baseSet.intSet, after erase: ", baseSet.intSet.size(), "\n");
 
 	
 	std::map<int, DistanceToPoint> distances;

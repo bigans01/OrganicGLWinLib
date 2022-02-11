@@ -41,7 +41,10 @@ class FaceResolverBase
 		std::map<int, std::unique_ptr<OneDimLineBase>> singleDimLines;	// the "int" int this map will correspond with the ID of each SPoly's border lines
 		SPolySupergroup resolution;		// the resolver's produced output (a set of one or more SPolys) after attempting to resolve the CleaveSequences
 
-		void compareCorrectionCandidatesAgainstSequence(std::vector<CSCorrectionCandidate> in_candidates, CleaveSequence* in_invalidPtr);
+		bool compareCorrectionCandidatesAgainstSequence(int in_invalidCleaveSequenceID, 
+														std::vector<CSCorrectionCandidate> in_candidates,
+														CleaveSequence* in_invalidPtr);
+		void moveFixedCleaveSequenceIntoSPoly(int in_invalidCleaveSequenceID);
 };
 
 #endif

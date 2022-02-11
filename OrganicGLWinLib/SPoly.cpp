@@ -22,6 +22,13 @@ void SPoly::setSPolyMaterial(short in_sPolyMaterialID)
 	sPolyMaterialID = in_sPolyMaterialID;
 }
 
+void SPoly::insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence)
+{
+	std::cout << "(SPoly): inserting CleaveSequence; size of CleaveSequences before insert is: " << cleaveMap.size() << std::endl;
+	cleaveMap[in_indexToInsertAt] = in_cleaveSequence;
+	std::cout << "(SPoly): Size of CleaveSequences, post insert: " << cleaveMap.size() << std::endl;
+}
+
 short SPoly::getSPolyMaterial()
 {
 	return sPolyMaterialID;
@@ -447,6 +454,13 @@ int SPoly::getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_d
 glm::vec3 SPoly::getBorderLineEndpoint(int in_currentBorderLineID, CyclingDirection in_direction)
 {
 	glm::vec3 returnPoint;
+
+	auto doesIDExist = borderLines.find(in_currentBorderLineID);
+	if (doesIDExist == borderLines.end())// wasn't found
+	{
+		std::cout << "(SPoly): Warning: current border Line ID of " << in_currentBorderLineID << " was not found. " << std::endl;
+	}
+
 	if (in_direction == CyclingDirection::FORWARD)
 	{
 		returnPoint = borderLines[in_currentBorderLineID].pointB;

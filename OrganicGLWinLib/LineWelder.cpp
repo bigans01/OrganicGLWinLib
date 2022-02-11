@@ -41,6 +41,11 @@ void LineWelder::purgeNegligibleLinesInPool()
 	weldedLines.purgeNegligibleLines();
 }
 
+bool LineWelder::getFaultValue()
+{
+	return wasFaultDetected;
+}
+
 void LineWelder::startWelding()
 {
 	//std::cout << "####### TESTING:######### cleave map size is: " << sPolyRef->cleaveMap.size() << std::endl;
@@ -80,6 +85,11 @@ void LineWelder::startWelding()
 	//std::cout << "Empty normal: " << endingCategorizedLine->second.emptyNormal.x << ", " << endingCategorizedLine->second.emptyNormal.y << ", " << endingCategorizedLine->second.emptyNormal.z << std::endl;
 
 	lineWelderLogger.log("(LineWelder) :::::::: Cleave Map size is: ", sPolyRef->cleaveMap.size(), "\n");
+	if (lineWelderLogger.isLoggingSet())
+	{
+		sPolyRef->printBorderLines();
+	}
+
 	lineWelderLogger.log("(LineWelder) :::::::: Number of lines in current cleave: ", cleaveBegin->second.cleavingLines.size(), "\n");
 
 	lineWelderLogger.log("(LineWelder) :::::::: Values of rbegin categorized line are: ", "\n");
@@ -107,7 +117,8 @@ void LineWelder::startWelding()
 	foundDirection = startingCategorizedLine->second.direction;			// remember, if the CategorizedLine's type is A_SLICE, the direction comes from pointA.
 	if (foundDirection == CyclingDirection::NOVAL)	// needs to be handled, in case it does happen.
 	{
-		std::cout << "(LineWelder): warning, no direction found; run should terminate IMMEDIATELY!" << std::endl;
+		std::cout << "(LineWelder): warning, no direction found; run should terminate IMMEDIATELY! (setting wasFaultDetected to true)" << std::endl;
+		wasFaultDetected = true;
 	}
 	BorderLinePointPair pointPair;		// point A of this pair is where the welding will begin from; point B of this pair is the beginning point of the WeldedLine, and point A is the end point of the WeldedLine.
 
@@ -634,6 +645,7 @@ void LineWelder::findRemainingWeldingLines(int in_currentBorderLineID,
 				}
 			}
 			updateLeadingPointAndInsertNewWeldingLineFromBorderLineData();
+			lineWelderLogger.log("(LineWelder): leading point value is now: ", currentLeadingPoint.x, ", ", currentLeadingPoint.y, ", ", currentLeadingPoint.z, "\n");
 
 			//std::cout << "Next border LINE id will be: " << nextBorderLineID << std::endl;
 			//std::cout << "Leading point is now: " << currentLeadingPoint.x << ", " << currentLeadingPoint.y << ", " << currentLeadingPoint.z << std::endl;

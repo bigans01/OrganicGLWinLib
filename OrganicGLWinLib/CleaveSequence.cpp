@@ -115,6 +115,15 @@ void CleaveSequence::printCategorizedLines()
 	{
 		
 		std::cout << "IntersectionType of line: " << cleavingLinesBegin->second.getIntersectionTypeString() << " ";
+
+		auto currentDirection = cleavingLinesBegin->second.direction;
+		switch (currentDirection)
+		{
+			case CyclingDirection::NOVAL: { std::cout << "CyclingDirection: NOVAL "; break; }
+			case CyclingDirection::FORWARD: { std::cout << "CyclingDirection: FORWARD "; break; }
+			case CyclingDirection::REVERSE: { std::cout << "CyclingDirection: REVERSE "; break; }
+		}
+
 		std::cout << "[" << cleavingLinesBegin->first << "] | pointA: " << cleavingLinesBegin->second.line.pointA.x << ", " << cleavingLinesBegin->second.line.pointA.y << ", " << cleavingLinesBegin->second.line.pointA.z
 													<< " | pointB: " << cleavingLinesBegin->second.line.pointB.x << ", " << cleavingLinesBegin->second.line.pointB.y << ", " << cleavingLinesBegin->second.line.pointB.z 
 													<< " | A border: (is on border)-> " << cleavingLinesBegin->second.line.isPointAOnBorder << ", (border value)-> " << cleavingLinesBegin->second.line.pointABorder
@@ -122,6 +131,8 @@ void CleaveSequence::printCategorizedLines()
 													<< " | parent poly: " << cleavingLinesBegin->second.parentPoly
 													<< std::endl;
 		std::cout << "Number of border lines: " << cleavingLinesBegin->second.line.numberOfBorderLines << std::endl;
+
+		
 	}
 }
 

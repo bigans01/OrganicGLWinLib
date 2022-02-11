@@ -35,9 +35,11 @@ public:
 	void generatePlanarNormalsForPoly();		// calls calculatePlanarNormal in the SPoly
 	void checkForCleaveIntersections();
 	void printPointMetaData();
+	bool getFractureValidity();
 private:
 	PolyLogger fracturerLogger;
 	PolyDebugLevel fracturerLoggerDebugLevel = PolyDebugLevel::NONE;
+	bool isFracturingValid = true;	// assumes the LineWelders did their job; set to false if a fault is detected in the LineWelder.
 };
 
 #endif

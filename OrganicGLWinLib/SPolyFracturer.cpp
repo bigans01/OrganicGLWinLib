@@ -116,6 +116,8 @@ void SPolyFracturer::checkForCleaveIntersections()
 	}
 	//sPolySG.printSPolys();
 
+	// check that the intersectFinder did OK, and had no faults.
+	isFracturingValid = intersectFinder.wasWeldingSuccessful;
 
 	//quatPoints.printPoints();
 	//std::cout << "####################### Poly fracturing complete..... " << std::endl;
@@ -131,6 +133,11 @@ void SPolyFracturer::checkForCleaveIntersections()
 		fracturerLogger.log("(SPolyFracturer) ####################### Poly fracturing complete.....  ", "\n");
 		fracturerLogger.waitForDebugInput();
 	}
+}
+
+bool SPolyFracturer::getFractureValidity()
+{
+	return isFracturingValid;
 }
 
 void SPolyFracturer::runFracturing()
@@ -326,3 +333,4 @@ void SPolyFracturer::printPointMetaData()
 		std::cout << std::endl;
 	}
 }
+

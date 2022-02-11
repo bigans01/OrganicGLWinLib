@@ -91,7 +91,29 @@ bool PosXFaceResolver::attemptSolveByInvalidCount()
 	if (numberOfInvalids == 1)
 	{
 		std::cout << "(PosXFaceResolver): found 1 invalid CleaveSequence. " << std::endl;
-		checkCleaveSequenceLinesAgainstDimLines(&(invalidsCopy.sequenceMap[0]));
+		auto invalidSequenceID = invalidsCopy.sequenceMap.begin()->first;
+
+		// be sure to determine the CyclingDirections for the sequence.
+		invalidsCopy.sequenceMap[invalidSequenceID].printCategorizedLines();
+
+		bool resolved = checkCleaveSequenceLinesAgainstDimLines(invalidSequenceID, &(invalidsCopy.sequenceMap[invalidSequenceID]));
+		if (resolved == true)
+		{
+			SPolyMorphTracker morphTracker;
+			SPolyFracturer fracturer(0, sPolyPtr, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, PolyDebugLevel::NONE);
+			std::cout << "(PosXFaceResolver): Fracturing successful." << std::endl;
+			wasResolved = true;
+
+			SPolySupergroup resolvedGroup = fracturer.sPolySG;
+			//resolvedGroup.printSPolys();
+
+			// set the resolution to be the result of the fracturer, as long as that was valid
+			if (fracturer.getFractureValidity())
+			{
+				std::cout << "(PosXFaceResolver): fracturing was valid, setting this as the resolution." << std::endl;
+				resolution = std::move(fracturer.sPolySG);
+			}
+		}
 	}
 	else if (numberOfInvalids == 2)
 	{
@@ -102,7 +124,7 @@ bool PosXFaceResolver::attemptSolveByInvalidCount()
 	return wasResolved;
 }
 
-void PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(CleaveSequence* in_invalidPtr)
+bool PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(int in_invalidCleaveSequenceID, CleaveSequence* in_invalidPtr)
 {
 	// Part 1: grab all CSCorrectionCandidates.
 	std::vector<CSCorrectionCandidate> candidateVector;
@@ -124,7 +146,7 @@ void PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(CleaveSequence* i
 							<< pointA.y << ", " 
 							<< pointA.z << "), in CategorizedLine with index " 
 							<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
-				CSCorrectionCandidate candidate(invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_A);
+				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_A);
 				candidateVector.push_back(candidate);
 			}
 
@@ -137,14 +159,14 @@ void PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(CleaveSequence* i
 					<< pointB.y << ", "
 					<< pointB.z << "), in CategorizedLine with index "
 					<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
-				CSCorrectionCandidate candidate(invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_B);
+				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_B);
 				candidateVector.push_back(candidate);
 			}
 		}
 	}
 
 	// Part 2: Determine which of the CategorizedLines need editing.
-	compareCorrectionCandidatesAgainstSequence(candidateVector, in_invalidPtr);
+	return compareCorrectionCandidatesAgainstSequence(in_invalidCleaveSequenceID, candidateVector, in_invalidPtr);
 }
 
 void PosXFaceResolver::produceMalformedMitigation()

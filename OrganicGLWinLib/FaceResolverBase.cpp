@@ -54,8 +54,11 @@ SPolySupergroup FaceResolverBase::fetchResolution()
 	return resolution;
 }
 
-void FaceResolverBase::compareCorrectionCandidatesAgainstSequence(std::vector<CSCorrectionCandidate> in_candidates, CleaveSequence* in_invalidPtr)
+bool FaceResolverBase::compareCorrectionCandidatesAgainstSequence(int in_invalidCleaveSequenceID, 
+																std::vector<CSCorrectionCandidate> in_candidates, 
+																CleaveSequence* in_invalidPtr)
 {
+	bool wasRepairSuccessful = false;
 	// We will need a map of std::vector<CSCorrectionCandidate> vectors (this can be refactored later)
 
 	// Step 1: Load into the map, so we can see how many border line hits each CategorizeDLine ID has.
@@ -75,6 +78,7 @@ void FaceResolverBase::compareCorrectionCandidatesAgainstSequence(std::vector<CS
 	//		   against the CategorizedLines
 	auto organizedBegin = organizedCandidates.begin();
 	auto organizedEnd = organizedCandidates.end();
+	bool isCleaveSequenceNowValid = false;
 	for (; organizedBegin != organizedEnd; organizedBegin++)
 	{
 		// Get the size of the vector of CSCorrectionCandidates for the current line
@@ -98,20 +102,30 @@ void FaceResolverBase::compareCorrectionCandidatesAgainstSequence(std::vector<CS
 				std::cout << "   does not match the numberOfBorderLines; this line needs to be corrected." << std::endl;
 
 				// get a point to the CategorizedLine to alter
+				
 				auto categorizedLinePtr = &in_invalidPtr->cleavingLines[targetCategorizedLineID];
 				if (onlyCorrectionCandidate->matchedType == IRPointType::POINT_A)
 				{
 					categorizedLinePtr->line.pointABorder = onlyCorrectionCandidate->dimLineID;
 					categorizedLinePtr->line.isPointAOnBorder = 1;
+					categorizedLinePtr->line.numberOfBorderLines = 1;
 					categorizedLinePtr->type = IntersectionType::PARTIAL_BOUND;
-
-					
+					categorizedLinePtr->determineCyclingDirection(sPolyPtr->borderLines, PolyDebugLevel::NONE);
+					sPolyPtr->borderLines[onlyCorrectionCandidate->dimLineID].intersectRecorder.insertNewRecord(in_invalidCleaveSequenceID, targetCategorizedLineID, categorizedLinePtr);
+					isCleaveSequenceNowValid = true;
 				}
 				else if (onlyCorrectionCandidate->matchedType == IRPointType::POINT_B)
 				{
+					// NOTE: we shouldn't have to call to swapToA(), as this would have been done during SPoly::organizeCurrentCleaveLines()
+					std::cout << "(FaceResolverBase): Matched against IRPointType::POINT_B" << std::endl;
+					std::cout << "(FaceResolverBase): Number of border lines in this line: " << categorizedLinePtr->line.numberOfBorderLines << std::endl;
 					categorizedLinePtr->line.pointBBorder = onlyCorrectionCandidate->dimLineID;
 					categorizedLinePtr->line.isPointBOnBorder = 1;
+					categorizedLinePtr->line.numberOfBorderLines = 1;
 					categorizedLinePtr->type = IntersectionType::PARTIAL_BOUND;
+					categorizedLinePtr->determineCyclingDirection(sPolyPtr->borderLines, PolyDebugLevel::NONE);
+					sPolyPtr->borderLines[onlyCorrectionCandidate->dimLineID].intersectRecorder.insertNewRecord(in_invalidCleaveSequenceID, targetCategorizedLineID, categorizedLinePtr);
+					isCleaveSequenceNowValid = true;
 				}
 				std::cout << "!!! Reformed CleaveSequence stats are: " << std::endl;
 				in_invalidPtr->printCategorizedLines();
@@ -122,4 +136,20 @@ void FaceResolverBase::compareCorrectionCandidatesAgainstSequence(std::vector<CS
 		// not developed yet)
 	}
 
+	// Step 3: If the CleaveSequence was repaired (isCleaveSequenceNowValid has a true value), then move it into the SPoly's CleaveMap.
+	if (isCleaveSequenceNowValid == true)
+	{
+		moveFixedCleaveSequenceIntoSPoly(in_invalidCleaveSequenceID);
+		wasRepairSuccessful = true;
+	}
+
+	return wasRepairSuccessful;
+}
+
+void FaceResolverBase::moveFixedCleaveSequenceIntoSPoly(int in_invalidCleaveSequenceID)
+{
+	std::cout << "(FaceResolverBase): Moving the following repaired CleaveSequence into the SPoly: " << std::endl;
+	invalidsCopy.sequenceMap[in_invalidCleaveSequenceID].printCategorizedLines();
+
+	sPolyPtr->insertCleaveSequenceAtIndex(in_invalidCleaveSequenceID, invalidsCopy.sequenceMap[in_invalidCleaveSequenceID]);
 }

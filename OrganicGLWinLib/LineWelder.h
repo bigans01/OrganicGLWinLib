@@ -40,6 +40,7 @@ public:
 	WeldedLinePool retrieveLinePool();
 	void clearLinePool();
 	void printConsumedSequenceGroups();
+	bool getFaultValue();		// used to check whether or not was a fault was detected wduring the LineWelder's run.
 private:
 	SPoly* sPolyRef = nullptr;	// a reference to the SPoly we will be operating on for this LineWelder.
 	MassManipulationMode currentManipulationMode = MassManipulationMode::CREATION;	// CREATION is default value, but will be overrriden by the SPoly's value when
@@ -73,6 +74,8 @@ private:
 	int runIteration = 0;			// the ID of the run we are on; used to insert into ConsumedCleaveSequenceGroups
 	ConsumedCleaveSequenceGroups consumedSequenceGroups;
 	bool wasLastWeldingLineInsertedASlice = false;
+	bool wasFaultDetected = false;	// set this to true at any point that the LineWelder detects a bad run; this can be passed back "up"
+									// to calling functions and classes.
 };
 
 #endif

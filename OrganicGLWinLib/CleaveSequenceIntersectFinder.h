@@ -25,6 +25,7 @@ public:
 	void printCurrentLineValuesInCleaveSequences();
 	WeldedLinePool linePool;
 	WeldedTriangleSuperGroup triangleSupergroup;
+	bool wasWeldingSuccessful = true;	// can be set to false if the LineWelder fails doing its thing
 private:
 	PolyLogger intersectFinderLogger;
 	PolyDebugLevel intersectFinderLoggerDebugLevel = PolyDebugLevel::NONE;
