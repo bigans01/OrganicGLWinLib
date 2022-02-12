@@ -146,6 +146,53 @@ bool FaceResolverBase::compareCorrectionCandidatesAgainstSequence(int in_invalid
 	return wasRepairSuccessful;
 }
 
+bool FaceResolverBase::checkCleaveSequenceLinesAgainstDimLines(int in_invalidCleaveSequenceID, CleaveSequence* in_invalidPtr)
+{
+	// Part 1: grab all CSCorrectionCandidates.
+	std::vector<CSCorrectionCandidate> candidateVector;
+	auto invalidLinesBegin = in_invalidPtr->cleavingLines.begin();
+	auto invalidLinesEnd = in_invalidPtr->cleavingLines.end();
+	for (; invalidLinesBegin != invalidLinesEnd; invalidLinesBegin++)
+	{
+		auto dimLinesBegin = singleDimLines.begin();
+		auto dimLinesEnd = singleDimLines.end();
+		for (; dimLinesBegin != dimLinesEnd; dimLinesBegin++)
+		{
+			// compare both points of the current invalid line, against all dim lines.
+			auto pointA = invalidLinesBegin->second.line.pointA;
+			std::cout << "(FaceResolverBase): Checking point A (" << pointA.x << ", " << pointA.y << ", " << pointA.z << ")" << std::endl;
+			bool isPointAInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointA);
+			if (isPointAInCurrentDimLine == true)
+			{
+				std::cout << "(FaceResolverBase): Found matching point A ("
+					<< pointA.x << ", "
+					<< pointA.y << ", "
+					<< pointA.z << "), in CategorizedLine with index "
+					<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
+				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_A);
+				candidateVector.push_back(candidate);
+			}
+
+			auto pointB = invalidLinesBegin->second.line.pointB;
+			std::cout << "(FaceResolverBase): Checking point B (" << pointB.x << ", " << pointB.y << ", " << pointB.z << ")" << std::endl;
+			bool isPointBInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointB);
+			if (isPointBInCurrentDimLine == true)
+			{
+				std::cout << "(FaceResolverBase): Found matching point B ("
+					<< pointB.x << ", "
+					<< pointB.y << ", "
+					<< pointB.z << "), in CategorizedLine with index "
+					<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
+				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_B);
+				candidateVector.push_back(candidate);
+			}
+		}
+	}
+
+	// Part 2: Determine which of the CategorizedLines need editing.
+	return compareCorrectionCandidatesAgainstSequence(in_invalidCleaveSequenceID, candidateVector, in_invalidPtr);
+}
+
 void FaceResolverBase::moveFixedCleaveSequenceIntoSPoly(int in_invalidCleaveSequenceID)
 {
 	std::cout << "(FaceResolverBase): Moving the following repaired CleaveSequence into the SPoly: " << std::endl;

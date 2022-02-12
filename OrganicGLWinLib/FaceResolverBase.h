@@ -44,6 +44,7 @@ class FaceResolverBase
 		bool compareCorrectionCandidatesAgainstSequence(int in_invalidCleaveSequenceID, 
 														std::vector<CSCorrectionCandidate> in_candidates,
 														CleaveSequence* in_invalidPtr);
+		bool checkCleaveSequenceLinesAgainstDimLines(int in_invalidCleaveSequenceID, CleaveSequence* in_invalidPtr);
 		void moveFixedCleaveSequenceIntoSPoly(int in_invalidCleaveSequenceID);
 };
 

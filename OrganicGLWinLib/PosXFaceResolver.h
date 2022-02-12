@@ -19,7 +19,6 @@ class PosXFaceResolver : public FaceResolverBase
 	private:
 		float xLocation = 0.0f;		// can be 1, 4, or 32; will be same as dimensionalLimit value, since we are at POS_X
 		bool attemptSolveByInvalidCount();	// the basis for solving will be based on the number of lines
-		bool checkCleaveSequenceLinesAgainstDimLines(int in_invalidCleaveSequenceID, CleaveSequence* in_invalidPtr);
 };
 
 #endif

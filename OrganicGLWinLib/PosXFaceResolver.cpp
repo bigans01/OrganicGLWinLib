@@ -24,7 +24,7 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 		{
 			std::cout << "(PosXFaceResolver): found a ZDimLine, at NEG_Y" << std::endl;
 			singleDimLines[borderLineID].reset(new ZDimLine);
-			singleDimLines[borderLineID]->setOneDimLimit(xLocation);
+			singleDimLines[borderLineID]->setOneDimLimit(dimensionalLimit);
 			singleDimLines[borderLineID]->setStaticDims(xLocation, 0.0f);	// X would be (1, 4, or 32), and Y would be 0, since we
 																					// are at the bottom of the limit.
 		}
@@ -39,7 +39,7 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 		{
 			std::cout << "(PosXFaceResolver): found a ZDimLine, at POS_Y " << std::endl;
 			singleDimLines[borderLineID].reset(new ZDimLine);
-			singleDimLines[borderLineID]->setOneDimLimit(xLocation);
+			singleDimLines[borderLineID]->setOneDimLimit(dimensionalLimit);
 			singleDimLines[borderLineID]->setStaticDims(xLocation, dimensionalLimit);	// X and Y would both be 1, 4 or 32.
 		}
 
@@ -53,7 +53,7 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 		{
 			std::cout << "(PosXFaceResolver): found a YDimLine, at NEG_Z" << std::endl;
 			singleDimLines[borderLineID].reset(new YDimLine);
-			singleDimLines[borderLineID]->setOneDimLimit(xLocation);
+			singleDimLines[borderLineID]->setOneDimLimit(dimensionalLimit);
 			singleDimLines[borderLineID]->setStaticDims(xLocation, 0.0f);	// X would be (1, 4, or 32), and Z would be 0, since we
 																			// are at the bottom of the limit
 		}
@@ -68,7 +68,7 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 		{
 			std::cout << "(PosXFaceResolver): found a YDimLine, at POS_Z" << std::endl;
 			singleDimLines[borderLineID].reset(new YDimLine);
-			singleDimLines[borderLineID]->setOneDimLimit(xLocation);
+			singleDimLines[borderLineID]->setOneDimLimit(dimensionalLimit);
 			singleDimLines[borderLineID]->setStaticDims(xLocation, dimensionalLimit);	// X would be whatever the xLocation is, and Z would be the limit.
 		}
 	}
@@ -122,51 +122,6 @@ bool PosXFaceResolver::attemptSolveByInvalidCount()
 	}
 
 	return wasResolved;
-}
-
-bool PosXFaceResolver::checkCleaveSequenceLinesAgainstDimLines(int in_invalidCleaveSequenceID, CleaveSequence* in_invalidPtr)
-{
-	// Part 1: grab all CSCorrectionCandidates.
-	std::vector<CSCorrectionCandidate> candidateVector;
-	auto invalidLinesBegin = in_invalidPtr->cleavingLines.begin();
-	auto invalidLinesEnd = in_invalidPtr->cleavingLines.end();
-	for (; invalidLinesBegin != invalidLinesEnd; invalidLinesBegin++)
-	{
-		auto dimLinesBegin = singleDimLines.begin();
-		auto dimLinesEnd = singleDimLines.end();
-		for (; dimLinesBegin != dimLinesEnd; dimLinesBegin++)
-		{
-			// compare both points of the current invalid line, against all dim lines.
-			auto pointA = invalidLinesBegin->second.line.pointA;
-			bool isPointAInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointA);
-			if (isPointAInCurrentDimLine == true)
-			{
-				std::cout << "(PosXFaceResolver): Found matching point A (" 
-							<< pointA.x << ", "
-							<< pointA.y << ", " 
-							<< pointA.z << "), in CategorizedLine with index " 
-							<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
-				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_A);
-				candidateVector.push_back(candidate);
-			}
-
-			auto pointB = invalidLinesBegin->second.line.pointB;
-			bool isPointBInCurrentDimLine = dimLinesBegin->second->isPointWithinLine(pointB);
-			if (isPointBInCurrentDimLine == true)
-			{
-				std::cout << "(PosXFaceResolver): Found matching point B ("
-					<< pointB.x << ", "
-					<< pointB.y << ", "
-					<< pointB.z << "), in CategorizedLine with index "
-					<< invalidLinesBegin->first << " in 1-dim line with ID " << dimLinesBegin->first << std::endl;
-				CSCorrectionCandidate candidate(in_invalidCleaveSequenceID, invalidLinesBegin->first, dimLinesBegin->first, IRPointType::POINT_B);
-				candidateVector.push_back(candidate);
-			}
-		}
-	}
-
-	// Part 2: Determine which of the CategorizedLines need editing.
-	return compareCorrectionCandidatesAgainstSequence(in_invalidCleaveSequenceID, candidateVector, in_invalidPtr);
 }
 
 void PosXFaceResolver::produceMalformedMitigation()
