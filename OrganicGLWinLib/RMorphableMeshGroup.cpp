@@ -164,6 +164,31 @@ void RMorphableMeshGroup::updatePointsWithinMass(MassGridArray* in_massGridArray
 	meshGroupPointArray.updatePointsFoundWithinMass(in_massGridArrayRef, in_translatorRef);
 }
 
+Operable3DEnclaveKeySet RMorphableMeshGroup::scanForSolidBlocks(MassGridArray* in_massGridArrayRef)
+{
+	// need to return an unordered_map of EnclaveKeys (maybe need a new class, like OperableIntSet?) (2/13/2022)
+	Operable3DEnclaveKeySet landlockedKeys;
+
+	auto keyedMorphablesBegin = keyedMorphables.begin();
+	auto keyedMorphablesEnd = keyedMorphables.end();
+	for (; keyedMorphablesBegin != keyedMorphablesEnd; keyedMorphablesBegin++)
+	{
+		// only LANDLOCKED blocks will ever be considered solid; so those are the only ones we need to look at.
+		if (keyedMorphablesBegin->second.getMeshState() == RMorphableMeshState::LANDLOCKED)
+		{
+			bool wasTraceBitFound = in_massGridArrayRef->wasFlagDiscoveredInArea(keyedMorphablesBegin->second.getScanArea(), MassCellBitFlags::TRACE_BIT);
+			// if there weren't any cells that had the TRACE_BIT set, it means that the LANDLOCKED mesh 
+			// never got "pierced" by a MOVED RCollisionPoint that was traced. Which means, it is truly landlocked.
+			if (wasTraceBitFound == false)
+			{
+				landlockedKeys += keyedMorphablesBegin->first;
+			}
+		}
+	}
+
+	return landlockedKeys;
+}
+
 bool RMorphableMeshGroup::doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey)
 {
 	bool wasFound;

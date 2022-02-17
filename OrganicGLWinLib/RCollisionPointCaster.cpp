@@ -24,6 +24,12 @@ void RCollisionPointCaster::runTrace()
 			pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
 			pointToMoveRef->setCollisionPointMaterial(initialBlockSearchResult.cellRef->getCellMaterialID());
 		}
+		else
+		{
+			// since we're continuing, go ahead and set the TRACE_BIT; we don't want to set this bit if the casterContinuationFlag is 
+			// set to false, because of the very first initialBlockSearchResult's metadata.
+			initialBlockSearchResult.cellRef->setFlag(MassCellBitFlags::TRACE_BIT, 1);
+		}
 	}
 
 	while
@@ -52,7 +58,13 @@ void RCollisionPointCaster::runTrace()
 				pointToMoveRef->currentValue = convertedDestinationPointVec3;
 				pointToMoveRef->setCollisionPointState(RCollisionPointState::MOVED);
 				pointToMoveRef->setCollisionPointMaterial(currentBlockSearchResult.cellRef->getCellMaterialID());
+
+
 			}
+		
+			// set the TRACE_BIT on all iterations of this while loop; will also set the TRACE_BIT in the very last run where casterContinuationFlag gets set to false.
+			currentBlockSearchResult.cellRef->setFlag(MassCellBitFlags::TRACE_BIT, 1);
+			
 		}
 	}
 

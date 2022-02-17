@@ -41,6 +41,16 @@ void RMorphableMesh::insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef
 	}
 }
 
+void RMorphableMesh::setScanArea(MassGridArrayCellScanArea in_massGridScanArea)
+{
+	meshScanArea = in_massGridScanArea;
+}
+
+MassGridArrayCellScanArea RMorphableMesh::getScanArea()
+{
+	return meshScanArea;
+}
+
 void RMorphableMesh::printPTrianglePoints()
 {
 	auto facesBegin = rProductFaceMap.begin();

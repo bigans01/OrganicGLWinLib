@@ -16,6 +16,7 @@
 #include "RCollisionPointModifier.h"
 #include "PTriangleMesh.h"
 #include "PolyLogger.h"
+#include "MassGridArrayCellScanArea.h"
 
 class RMorphableMesh
 {
@@ -49,6 +50,8 @@ class RMorphableMesh
 		RMorphableMeshState getMeshState();
 		void insertPTrianglesIntoMesh(PTriangleMesh* in_pTriangleMeshRef);
 		void printPTrianglePoints();
+		void setScanArea(MassGridArrayCellScanArea in_massGridScanArea);
+		MassGridArrayCellScanArea getScanArea();
 
 	private:
 		int pointsPerDim = 0;	// if this value is 2, only corner points would exist.
@@ -56,6 +59,7 @@ class RMorphableMesh
 		float meshDiameter = 0.0f;
 		RMorphableMeshCubeAreaDefiner morphAreaDefinition;	// called by other functions/classes outside of this one, 
 		                                                    // to determine the search area for existing mass
+		MassGridArrayCellScanArea meshScanArea;	// needed for later, when calling RMorphableMeshGroup::scanForSolidBlocks
 		RMorphableMeshCorners meshCorners;
 		RPointToGridTranslator* translatorRef = nullptr;
 		Rasterized3DMassGrid* gridRef = nullptr;

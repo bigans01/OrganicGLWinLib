@@ -1,6 +1,28 @@
 #include "stdafx.h"
 #include "RMorphableAreaScanner.h"
 
+void RMorphableAreaScanner::setupScanner(int in_tilesPerDimension,
+	float in_dimensionLimit,
+	int in_meshesPerDimension,
+	int in_pointsPerSlicePointArray,
+	MassZoneBoxType in_massZoneBoxType)
+{
+	pointsPerSlicePointArray = in_pointsPerSlicePointArray;
+	scannerCellsPerDimension = in_tilesPerDimension;
+	scannerDimLimit = in_dimensionLimit;
+	selectedBoxType = in_massZoneBoxType;
+
+	massGrid.setGridParameters(in_tilesPerDimension, in_dimensionLimit);	// Step 1: initialization of grid
+	meshesPerDimension = in_meshesPerDimension;
+	morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f; also passed as the "thickness" of additive slices.
+
+	scannerDynamicBorderLineList.constructBorders(in_dimensionLimit);
+
+	gridTranslator.setTranslationParameters(scannerCellsPerDimension, scannerDimLimit);
+
+
+}
+
 void RMorphableAreaScanner::addSPolyToGrid(SPoly in_sPolyToAdd)
 {
 	massGrid.addGridRPoly(in_sPolyToAdd);
@@ -90,7 +112,7 @@ void RMorphableAreaScanner::scanGridMass()
 				EnclaveKeyDef::EnclaveKey convertedPointA = massGrid.convertSPolyPointToBlockCoord(currentMeshAreaScanner.definingPointA);
 				EnclaveKeyDef::EnclaveKey convertedPointB = massGrid.convertSPolyPointToBlockCoord(currentMeshAreaScanner.definingPointB);
 				MassGridArrayCellScanArea scanArea(convertedPointA, convertedPointB);
-
+				currentCandidateMesh.setScanArea(scanArea);		// need to set this, for future use by RMorphableMeshGroup::scanForSolidBlocks.
 				
 				bool wasMassFound = massGrid.wasMassFoundInAreaScan(scanArea);
 				if (wasMassFound == true)
@@ -254,6 +276,29 @@ void RMorphableAreaScanner::scanGridMass()
 														massGrid.getTileDimWeightRatio(),
 														scannerCellsPerDimension
 														);
+	}
+
+	// For each mesh group, grab it's RCollisionPointArray. All RCollisionPoint instances in said array, that have a pointState of MOVED (i.e, they have a 
+	// pointState of RCollisionPointState::MOVED), should have set the TRACE_BIT flag set for each MassGridArrayCell that they touched, as they did their movement.
+	// We must then analyze which LANDLOCKED meshes do not have a TRACE_BIT set in them (by calling scanForSolidBlocks); this indicates that the LANDLOCKED mesh wasn't touched, 
+	// and that it could be considered a "solid" block.
+	// 
+	// However, we can only do this if the selectedBoxType is set to MassZoneBoxType::ENCLAVE.
+	//
+	// It should only be done if the meshes per dimension is 4 (this may be changed later to handle cases of >4, but not right now)
+	if (selectedBoxType == MassZoneBoxType::ENCLAVE)
+	{
+		if (meshesPerDimension == 4)
+		{
+			auto solidScanBegin = meshGroupMap.begin();
+			auto solidScanEnd = meshGroupMap.end();
+			for (; solidScanBegin != solidScanEnd; solidScanBegin++)
+			{
+				wholeBlocks += solidScanBegin->second.scanForSolidBlocks(massGrid.fetchDataArrayRef());
+				std::cout << "Size of solid blocks (wholeBlocks): " << wholeBlocks.size() << std::endl;
+				// remember, special logic will need to be done if this is an ORE box type, and the meshesPerDimension is NOT 4.
+			}
+		}
 	}
 
 	acquireProducedSolutions();

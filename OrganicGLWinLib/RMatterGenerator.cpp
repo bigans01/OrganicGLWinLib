@@ -17,7 +17,8 @@ void RMatterGenerator::initializeGenerator(int in_generatorTilesPerDimension,
 	generatorAreaScanner.setupScanner(generatorTilesPerDimension,
 									generatorDimensionLimit,
 									generatorMeshesPerDimension,
-									generatorPointsPerSlicePointArray);
+									generatorPointsPerSlicePointArray,
+									generatorMassZoneBoxType);
 }
 
 void RMatterGenerator::handleGeneratorDebugOption(DebugOption in_firstOption)

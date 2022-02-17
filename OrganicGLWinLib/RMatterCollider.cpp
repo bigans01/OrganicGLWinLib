@@ -29,7 +29,8 @@ void RMatterCollider::initializeCollider(int in_colliderTilesPerDimension,
 	collidableScanner.setupScanner(colliderTilesPerDimension,
 		colliderDimensionLimit,
 		colliderMeshesPerDimension,
-		colliderPointsPerSlicePointArray);
+		colliderPointsPerSlicePointArray,
+		in_colliderMassZoneBoxType);
 }
 
 void RMatterCollider::addSPolyToMatterGenerator(SPoly in_sPolyToAdd, RMatterAge in_rMatterAge)
@@ -188,6 +189,11 @@ RMatterGenerator* RMatterCollider::getNewGeneratorRef()
 std::vector<SPoly> RMatterCollider::fetchProducedSPolys()
 {
 	return collidableScanner.produceSPolysFromPTriangleMeshes();
+}
+
+Operable3DEnclaveKeySet RMatterCollider::fetchProducedWholeBlocks()
+{
+	return collidableScanner.wholeBlocks;
 }
 
 void RMatterCollider::applyRMatterManipulationOptions()

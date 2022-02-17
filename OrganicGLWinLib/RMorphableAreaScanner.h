@@ -17,6 +17,8 @@
 #include "PolyLogger.h"
 #include "SPoly.h"
 #include <vector>
+#include "Operable3DEnclaveKeySet.h"
+#include "MassZoneBoxType.h"
 
 class RMorphableAreaScanner
 {
@@ -47,24 +49,12 @@ class RMorphableAreaScanner
 		}
 		void setDOSpecificRPoly(int in_rPolyID) {};
 
-		// setupScanner must be called before adding any SPolys that are converted to RPolys.
-		void setupScanner(int in_tilesPerDimension, 
-						  float in_dimensionLimit,
-			              int in_meshesPerDimension,
-			              int in_pointsPerSlicePointArray)		
-		{
-			pointsPerSlicePointArray = in_pointsPerSlicePointArray;
-			scannerCellsPerDimension = in_tilesPerDimension;
-			scannerDimLimit = in_dimensionLimit;
-
-			massGrid.setGridParameters(in_tilesPerDimension, in_dimensionLimit);	// Step 1: initialization of grid
-			meshesPerDimension = in_meshesPerDimension;
-			morphableMeshDimension = scannerDimLimit / meshesPerDimension;	// i.e, 32.0f divided by 8 = 4.0f; also passed as the "thickness" of additive slices.
-
-			scannerDynamicBorderLineList.constructBorders(in_dimensionLimit);
-
-			gridTranslator.setTranslationParameters(scannerCellsPerDimension, scannerDimLimit);
-		}
+		// Step 1: setupScanner must be called before adding any SPolys that are converted to RPolys.
+		void setupScanner(int in_tilesPerDimension,
+			float in_dimensionLimit,
+			int in_meshesPerDimension,
+			int in_pointsPerSlicePointArray,
+			MassZoneBoxType in_massZoneBoxType);
 
 		void addSPolyToGrid(SPoly in_sPolyToAdd);		// Step 2: add all SPolys that will be converted to RPolys, to the grid.
 		void buildGridMassShell();						// Step 3: build the mass shell; that is, trace the interior mass of each RTriangle into the massGrid
@@ -100,8 +90,11 @@ class RMorphableAreaScanner
 		float morphableMeshDimension = 0.0f;
 		RPointToGridTranslator gridTranslator;
 		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
+		Operable3DEnclaveKeySet wholeBlocks;	// contains a list of blocks for an ORE that are "whole", as in, their entire mass is surrounded.
 
 		DebugOptionSet scannerDebugOptions;
+		MassZoneBoxType selectedBoxType = MassZoneBoxType::NOVAL;	// needs to be used when determining if we will be populationg wholeBlocks,
+																	// which shoudl only be done in when it is set to MassZoneBoxType::ENCLAVE
 
 		std::unordered_map<EnclaveKeyDef::EnclaveKey, DebugOptionSet, EnclaveKeyDef::KeyHasher> scannerStoredMeshDebugOptions;	// debug option sets that may be used per RMorphableMesh; 
 																																// should be copied to each RMorphableMeshGroup

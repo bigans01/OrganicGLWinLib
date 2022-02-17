@@ -411,6 +411,41 @@ bool MassGridArray::wereCellsDiscoveredInArea(MassGridArrayCellScanArea in_scanA
 	END:return wereCellsDiscovered;
 }
 
+bool MassGridArray::wasFlagDiscoveredInArea(MassGridArrayCellScanArea in_scanArea, MassCellBitFlags in_bitFlag)
+{
+	bool wasFlagDisovered = false;
+
+	int start_x = in_scanArea.scanKeyA.x;
+	int start_y = in_scanArea.scanKeyA.y;
+	int start_z = in_scanArea.scanKeyA.z;
+
+	int end_x = in_scanArea.scanKeyB.x;
+	int end_y = in_scanArea.scanKeyB.y;
+	int end_z = in_scanArea.scanKeyB.z;
+
+	// this was a nasty off-by-one error, corrected on 8/25/2021 (x/y/z end values weren't set as + 1).
+	for (int x = start_x; x < end_x + 1; x++)
+	{
+		for (int y = start_y; y < end_y + 1; y++)
+		{
+			for (int z = start_z; z < end_z + 1; z++)
+			{
+				MassGridSearchResult currentSearchResult = searchForCell(x, y, z);
+				if (currentSearchResult.wasSearchKeyValid == true)
+				{
+					MassGridArrayCell* currentRef = currentSearchResult.cellRef;
+					if (currentRef->isFlagSet(in_bitFlag) == true)
+					{
+						wasFlagDisovered = true;
+						goto END;
+					}
+				}
+			}
+		}
+	}
+	END:return wasFlagDisovered;
+}
+
 int MassGridArray::getNumberOfPopulatedCells()
 {
 	int arraySize = dimensionSize * dimensionSize * dimensionSize;

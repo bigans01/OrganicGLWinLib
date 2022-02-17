@@ -25,6 +25,7 @@
 #include "PTriangleMesh.h"
 #include "DebugOptionSet.h"
 #include "PTriangleMeshPointCalibrator.h"
+#include "Operable3DEnclaveKeySet.h"
 
 class RMorphableMeshGroup
 {
@@ -35,6 +36,7 @@ class RMorphableMeshGroup
 		void generatePointArray(int in_slicePointArraySize);					// Step 2
 		void flagImmutablePoints();			// Step 3
 		void updatePointsWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef);
+		Operable3DEnclaveKeySet scanForSolidBlocks(MassGridArray* in_massGridArrayRef);
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();

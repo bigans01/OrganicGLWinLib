@@ -18,6 +18,7 @@ class MassGridArray
 		void executeDownfills();
 		void buildArray(int in_dimensionSize);
 		bool wereCellsDiscoveredInArea(MassGridArrayCellScanArea in_scanArea);
+		bool wasFlagDiscoveredInArea(MassGridArrayCellScanArea in_scanArea, MassCellBitFlags in_bitFlag);
 		int getNumberOfPopulatedCells();
 		void getPercentAgeOfCellsWithDownfillAtTopYLayer();
 

@@ -41,6 +41,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
 				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
 				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
+				case(MassCellBitFlags::TRACE_BIT): {bitToSet = 2; break; }
 			}
 
 			int exponent = bitToSet - 1;
@@ -62,6 +63,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
 				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
 				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
+				case(MassCellBitFlags::TRACE_BIT): {bitToSet = 2; break; }
 			}
 
 			int exponent = bitToSet - 1;
@@ -88,6 +90,7 @@ class MassGridArrayCell
 				case(MassCellBitFlags::DOWNFILL_CRUST): { bitToSet = 5; break; }
 				case(MassCellBitFlags::UPFILL_CRUST): {bitToSet = 4; break; }
 				case(MassCellBitFlags::MATERIAL_SET): {bitToSet = 3; break; }
+				case(MassCellBitFlags::TRACE_BIT): {bitToSet = 2; break; }
 			}
 			int bitShiftcount = bitToSet - 1;
 			int resultValue = (cellData >> bitShiftcount) & 1;
@@ -135,6 +138,10 @@ class MassGridArrayCell
 				numberOfFlagsSet++;
 			}
 			if (isFlagSet(MassCellBitFlags::LINE_MASS) == true)
+			{
+				numberOfFlagsSet++;
+			}
+			if (isFlagSet(MassCellBitFlags::TRACE_BIT) == true)
 			{
 				numberOfFlagsSet++;
 			}

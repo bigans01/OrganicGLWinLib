@@ -12,6 +12,7 @@
 #include <set>
 #include "RMatterManipulationOption.h"
 #include "MessageContainer.h"
+#include "Operable3DEnclaveKeySet.h"
 
 class RMatterCollider
 {
@@ -64,6 +65,7 @@ class RMatterCollider
 
 		RMorphableAreaScanner collidableScanner;
 		std::vector<SPoly> fetchProducedSPolys();	// used by OrganicCoreLib to get the resulting SPolys produced by the collider
+		Operable3DEnclaveKeySet fetchProducedWholeBlocks();
 	private:
 		void applyRMatterManipulationOptions();	// iterates through each member of matterManipulationOptions, if there are any, 
 												// and applies it to the collidableScanner. collidableScanner.scanGridMass() must be called before this is called.
