@@ -25,7 +25,7 @@ void PosXFaceResolver::setupBorderLineRangesAndDimLoc()
 			std::cout << "(PosXFaceResolver): found a ZDimLine, at NEG_Y" << std::endl;
 			singleDimLines[borderLineID].reset(new ZDimLine);
 			singleDimLines[borderLineID]->setOneDimLimit(dimensionalLimit);
-			singleDimLines[borderLineID]->setStaticDims(xLocation, 0.0f);	// X would be (1, 4, or 32), and Y would be 0, since we
+			singleDimLines[borderLineID]->setStaticDims(xLocation, 0.0f);	// X would be (1, 4, or 32), and Y would be 0 (from negative Y), since we
 																					// are at the bottom of the limit.
 		}
 
