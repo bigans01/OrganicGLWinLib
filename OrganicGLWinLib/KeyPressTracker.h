@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <mutex>
 #include <iostream>
+#include <unordered_set>
 
 class KeyPressTracker
 {
@@ -53,10 +54,13 @@ class KeyPressTracker
 		void resetChangeState();				// should be called before any attempted modification to keyPressCycles map (i.e., insertCycle, killCycle); 
 												// ie., at the beginning of the OpenGL rendering loop iteration (see code in OrganicGLManager::renderReadyArrays())
 		void insertCycle(int in_glfwEnum);		// attempts to insert a cycle with a particular GLFW enum value; the final decision is handled by the call to handleKeyPressTransfers
+		void insertOneOffCycle(int in_glfwEnum);	// attempts to insert a cycle that is temporal, or "one-off", meaning it only lasts for that tick. An example
+													// of this is mouse scroll input, which has no press/release.
 		void flagStillPressedStates();			// flags any existing cycle marked as KeyPressState::NEWLY_PRESSED to KeyPressState::STILL_PRESSED
 		void killCycle(int in_glfwEnum);		// attempts to kill a cycle with a particular GLFW enum value; the final decision is handled by the call to handleKeyPressTransfers
 		void destroyCyclesAtEndOfLife();		// destroys any cycles flagged as KeyPressState::RELEASED; should be called at end of rendering loop iteration
 		void printCycles();						// print the GLFW enum value of all entries in the cycleTracker map.
+		void destroyOneoffs();			// ends any cycles and oneoffs (simply calls destroyCyclesatEndOfLife() and deleteOneOffInputs())
 		bool getKeyStateChangeValue();			// returns current value of keyStateChange.
 
 	private:
@@ -96,7 +100,10 @@ class KeyPressTracker
 
 		std::vector<KeyPressCycleRecord> keyPressCycles;
 		std::vector<int> killCycleVector;
-		bool keyStateChange = false;	// indicates whether or not there was a key state change detected; 
+		bool keyStateChange = false;			// indicates whether or not there was a key state change detected; 
+		std::unordered_set<int> oneOffCycles;	// contains keys any KeyPressCycles that would exist for only one tick; these would be removed 
+												// during the call to destroyOneOffs(). See usage in OrganicGLManager::renderReadyArrays(), in
+												// the OrganicCoreLib.
 };
 
 #endif

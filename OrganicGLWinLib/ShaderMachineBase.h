@@ -32,6 +32,7 @@
 #include "TimeBasedWaveType.h"
 #include "DynamicBufferManager.h"
 #include "KeyPressTracker.h"
+#include "OneOffMacros.h"
 
 class ShaderMachineBase
 {
@@ -263,13 +264,13 @@ protected:
 		GLDrawElementsInstancedJob getDrawElementsInstancedJob(std::string in_jobName);
 
 		// test, call back function.
-		static void keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
-		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void keyCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-		static void mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset);
-		void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+		static void mouseScrollCallbackWrapper(GLFWwindow* window, double xoffset, double yoffset);
+		void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-		static void mouseButtonCallBackWrapper(GLFWwindow* window, int button, int action, int mods);
+		static void mouseButtonCallbackWrapper(GLFWwindow* window, int button, int action, int mods);
 		void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 private:
 		struct GearFindResult

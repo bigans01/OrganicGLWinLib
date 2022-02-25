@@ -8,6 +8,12 @@ void KeyPressTracker::insertCycle(int in_glfwEnum)
 	keyPressCycles.push_back(newRecord);
 }
 
+void KeyPressTracker::insertOneOffCycle(int in_oneOffEnum)
+{
+	insertCycle(in_oneOffEnum);
+	oneOffCycles.insert(in_oneOffEnum);
+}
+
 void KeyPressTracker::resetChangeState()
 {
 	keyStateChange = false;
@@ -34,6 +40,16 @@ void KeyPressTracker::killCycle(int in_glfwEnum)
 bool KeyPressTracker::getKeyStateChangeValue()
 {
 	return keyStateChange;
+}
+void KeyPressTracker::destroyOneoffs()
+{
+	auto oneOffsBegin = oneOffCycles.begin();
+	auto oneOffsEnd = oneOffCycles.end();
+	for (; oneOffsBegin != oneOffsEnd; oneOffsBegin++)
+	{
+		// just flat out erase it
+		cycleTracker.erase(*oneOffsBegin);
+	}
 }
 
 void KeyPressTracker::destroyCyclesAtEndOfLife()

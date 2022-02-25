@@ -25,7 +25,7 @@ void SMForwardV1::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
-	glfwSetKeyCallback(window, keyCallBackWrapper);
+	glfwSetKeyCallback(window, keyCallbackWrapper);
 
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);

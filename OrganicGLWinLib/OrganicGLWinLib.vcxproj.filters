@@ -1377,6 +1377,9 @@
     <ClInclude Include="CSCorrectionCandidate.h">
       <Filter>Header Files\SolublePoly\SPolyResolution\FaceResolvers</Filter>
     </ClInclude>
+    <ClInclude Include="OneOffMacros.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

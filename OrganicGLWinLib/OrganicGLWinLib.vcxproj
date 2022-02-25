@@ -181,6 +181,7 @@
     <ClInclude Include="NegYFaceResolver.h" />
     <ClInclude Include="NegZFaceResolver.h" />
     <ClInclude Include="OneDimLineBase.h" />
+    <ClInclude Include="OneOffMacros.h" />
     <ClInclude Include="PosXFaceResolver.h" />
     <ClInclude Include="PosYFaceResolver.h" />
     <ClInclude Include="PosZFaceResolver.h" />

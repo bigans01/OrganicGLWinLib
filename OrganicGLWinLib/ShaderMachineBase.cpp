@@ -284,9 +284,9 @@ void ShaderMachineBase::computeMatricesFromInputs()
 	}
 }
 
-void ShaderMachineBase::keyCallBackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)
+void ShaderMachineBase::keyCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->key_callback(window, key, scancode, action, mods);
+	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->keyCallback(window, key, scancode, action, mods);
 }
 
 void ShaderMachineBase::handleKeyPressInputs()
@@ -299,7 +299,7 @@ void ShaderMachineBase::handleKeyPressInputs()
 	keyTracker.handleKeyPressTransfers(voidOutKeyPresses);
 }
 
-void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void ShaderMachineBase::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	int isFocused = glfwGetWindowAttrib(window, GLFW_FOCUSED);
 
@@ -324,18 +324,29 @@ void ShaderMachineBase::key_callback(GLFWwindow* window, int key, int scancode, 
 	//}
 }
 
-void ShaderMachineBase::mouseScrollCallBackWrapper(GLFWwindow* window, double xoffset, double yoffset)
+void ShaderMachineBase::mouseScrollCallbackWrapper(GLFWwindow* window, double xoffset, double yoffset)
 {
-	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->mouse_scroll_callback(window, xoffset, yoffset);
+	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->mouseScrollCallback(window, xoffset, yoffset);
 }
 
-void ShaderMachineBase::mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void ShaderMachineBase::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	std::cout << "!!! Scroll detected; yoffset is: " << yoffset << std::endl;
 	machineFeedback.mouseFeedback[ShaderMachineFeedbackType::MOUSE_SCROLL] = yoffset;
+	//Message scrollValue(MessageType::REQUEST_FROM_CLIENT_MOUSE_SCROLL_INPUT_GENERATED);
+	if (yoffset == 1.0f)
+	{
+		std::cout << "!!! Positive mouse scroll detected. " << std::endl;
+		keyTracker.insertOneOffCycle(GLFW_MOUSE_SCROLL_POSITIVE);
+	}
+	else if (yoffset == -1.0f)
+	{
+		std::cout << "!!! Negative mouse scroll detected. " << std::endl;
+		keyTracker.insertOneOffCycle(GLFW_MOUSE_SCROLL_NEGATIVE);
+	}
 }
 
-void ShaderMachineBase::mouseButtonCallBackWrapper(GLFWwindow* window, int button, int action, int mods)
+void ShaderMachineBase::mouseButtonCallbackWrapper(GLFWwindow* window, int button, int action, int mods)
 {
 	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->mouseButtonCallback(window, button, action, mods);
 }
