@@ -7,6 +7,7 @@
 #include "KeyPressState.h"
 #include <map>
 #include <vector>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <mutex>
 #include <iostream>
