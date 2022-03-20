@@ -24,13 +24,26 @@ class ImGuiSliderFloatPanelContainer
 
 		void runAllSliders()
 		{
+			// reset panel string and flag, for this tick
+			mouseInSliderPanelName = "";
+			mouseInSliderPanel = false;
+
 			auto panelsBegin = panels.begin();
 			auto panelsEnd = panels.end();
 			for (; panelsBegin != panelsEnd; panelsBegin++)
 			{
-				panelsBegin->second.renderSliderFloats();
+				bool isCursorInPanel = panelsBegin->second.renderSliderFloats();
+				if (isCursorInPanel == true)
+				{
+					mouseInSliderPanelName = panelsBegin->first;
+					mouseInSliderPanel = true;
+					break;
+				}
 			}
 		}
+
+		std::string mouseInSliderPanelName = "";
+		bool mouseInSliderPanel = false;
 };
 
 #endif

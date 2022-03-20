@@ -31,6 +31,13 @@ class ShaderMachineFeedback
 				mouseFeedback[mouseFeedbackBegin->first] = mouseFeedbackBegin->second;
 			}
 
+			// append mouse window flag
+			if (in_feedbackB.wasMouseInWindow == true)
+			{
+				wasMouseInWindow = true;
+				mouseHoveredPanelName = in_feedbackB.mouseHoveredPanelName;
+			}
+
 			// NOTE: ImGuiButtonClickResult isn't appended; it is manually set by the
 			// call to ShaderMachineBase::checkForClickedButtons().
 			wasInputTextModified = in_feedbackB.wasInputTextModified;
@@ -56,7 +63,9 @@ class ShaderMachineFeedback
 		std::vector<std::string> feedbackStrings;
 		std::map<ShaderMachineFeedbackType, float> mouseFeedback;
 		ImGuiButtonClickResult buttonClickResult;
+		std::string mouseHoveredPanelName = "";
 		bool wasInputTextModified = false;		// if any input text was modified, set this value to true.
+		bool wasMouseInWindow = false;			// if a mosue was ever in a ImGui panel, window, etc...this should be set to true.
 };
 
 #endif

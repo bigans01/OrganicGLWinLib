@@ -54,6 +54,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleBlockTargetHighlight");
 	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleCurrentEnclaveHighlighting");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "showSolidBlocks");
 
 	// create a test panel for input.
 	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 130);

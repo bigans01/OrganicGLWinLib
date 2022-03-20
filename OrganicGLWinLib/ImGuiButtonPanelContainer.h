@@ -25,28 +25,37 @@ class ImGuiButtonPanelContainer
 
 		ImGuiButtonClickResult checkAllPanelsForClickResults()
 		{
+			// reset name string and panel, for this tick
+			mouseInButtonPanelName = "";
+			mouseInButtonPanel = false;
+
 			ImGuiButtonClickResult returnResult;
 
 			auto panelsBegin = panels.begin();
 			auto panelsEnd = panels.end();
-			bool clickFound = false;
+			mouseInButtonPanel = false;
 			for (; panelsBegin != panelsEnd; panelsBegin++)
 			{
 				ImGuiButtonClickResult result = panelsBegin->second.getClickResult();
-				if	// always search for first available click.
+				if	// check if the current button panel is hovered.
 				(
-					(clickFound == false)
-					&&
-					(result.wasAButtonClicked == true)
+					(result.wasWindowHovered == true)
 				)
 				{
-					clickFound = true;
+					//clickFound = true;
 					returnResult = result;
+					returnResult.buttonPanelName = panelsBegin->first;
+					mouseInButtonPanelName = panelsBegin->first;
+					mouseInButtonPanel = true;
+					break;
 				}
 			}
+			
 			return returnResult;
 		}
 
+		std::string mouseInButtonPanelName = "";
+		bool mouseInButtonPanel = false;	// needs to be reset to false at beginning of call to checkAllPanelsForClickResults()
 };
 
 #endif

@@ -122,11 +122,15 @@ public:
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
 
 		// imgui features
-		//ImGuiButtonClickResult checkForClickedButtons();	// checks for any button that was clicked
-		void checkForClickedButtons();	// checks for any button that was clicked
-		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data.
+		void checkForClickedButtons();						// checks for any button that was clicked; notifies the returning ShaderMachineFeedback instance for this tick whether or not
+															// the mouse cursor was in a button panel.
+
+		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data;
+
 		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
-		void renderSliders();								// will render single float interactable sliders
+
+		void renderSliders();								// will render single float interactable sliders; notifies the returning ShaderMachineFeedback instance for this tick whether or not
+															// the mouse cursor was in a slider panel.
 		
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);
@@ -139,6 +143,7 @@ public:
 										// the ShaderMachineBase instance will incorrectly register input on the ImGui element AND
 										// register/modify a keyCycle at the same time. This function should be called right before the call to 
 		                                // retrieveShaderInputs().
+		void resetFeedback();
 protected:
 		friend class Gear;
 		// misc

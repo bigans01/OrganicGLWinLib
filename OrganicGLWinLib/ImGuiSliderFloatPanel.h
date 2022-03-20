@@ -34,8 +34,10 @@ class ImGuiSliderFloatPanel
 		float xSize = 0;
 		float ySize = 0;
 
-		void renderSliderFloats()
+		bool renderSliderFloats()
 		{
+			bool isMouseInSliderPanel = false;
+
 			auto slidersBegin = sliderMap.begin();
 			auto slidersEnd = sliderMap.end();
 
@@ -49,7 +51,20 @@ class ImGuiSliderFloatPanel
 				slidersBegin->second.render();
 			}
 
+			// need to return true if the mouse was discovered as being within
+			// this slider panel, so that we may ignore mouse clicks 
+			// meant for the OpenGL area outside of the panel.
+			if
+			(
+				(ImGui::IsWindowHovered() == true)
+				||
+				(ImGui::IsAnyItemHovered() == true)
+			)
+			{
+				isMouseInSliderPanel = true;
+			}
 			ImGui::End();
+			return isMouseInSliderPanel;
 		}
 
 		void insertNewSliderFloat(std::string in_sliderName, float* in_floatRef, float in_minValue, float in_maxValue)

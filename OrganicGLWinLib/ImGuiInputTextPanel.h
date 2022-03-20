@@ -67,6 +67,20 @@ class ImGuiInputTextPanel
 				}
 			}
 
+			// need to return true if the mouse was discovered as being within
+			// in this specific text panel, so that we may ignore mouse clicks 
+			// meant for the OpenGL area outside of the panel.
+
+			if
+			(
+				(ImGui::IsWindowHovered() == true)
+				||
+				(ImGui::IsAnyItemHovered() == true)
+			)
+			{
+				feedback.wasMouseInWindow = true;
+				feedback.mouseHoveredPanelName = panelName;
+			}
 			ImGui::End();
 
 			if (foundMessageResponse == true)

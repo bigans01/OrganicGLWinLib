@@ -103,11 +103,17 @@ GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::s
 	return returnJob;
 }
 
-//ImGuiButtonClickResult ShaderMachineBase::checkForClickedButtons()
 void ShaderMachineBase::checkForClickedButtons()
 {
 	machineFeedback.loadButtonClickResults(buttonPanelContainer.checkAllPanelsForClickResults());
-	//return buttonPanelContainer.checkAllPanelsForClickResults();
+
+	// If the OpenGL is focused, AND the cursor is in any of the button panels, return true,
+	// so that we may ignore mouse click inputs that would typically be recorded outside of the window/panels
+	if (buttonPanelContainer.mouseInButtonPanel == true)
+	{
+		machineFeedback.mouseHoveredPanelName = buttonPanelContainer.mouseInButtonPanelName;
+		machineFeedback.wasMouseInWindow = true;
+	}
 }
 
 void ShaderMachineBase::checkForTextInput()
@@ -123,6 +129,14 @@ ShaderMachineFeedback ShaderMachineBase::retrieveShaderInputs()
 void ShaderMachineBase::renderSliders()
 {
 	sliderPanelContainer.runAllSliders();
+
+	// If the OpenGL is focused, AND the cursor is in any of the button panels, return true,
+	// so that we may ignore mouse click inputs that would typically be recorded outside of the window/panels
+	if (sliderPanelContainer.mouseInSliderPanel == true)
+	{
+		machineFeedback.mouseHoveredPanelName = sliderPanelContainer.mouseInSliderPanelName;
+		machineFeedback.wasMouseInWindow = true;
+	}
 }
 
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
@@ -287,6 +301,12 @@ void ShaderMachineBase::computeMatricesFromInputs()
 void ShaderMachineBase::keyCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	static_cast<ShaderMachineBase*>(glfwGetWindowUserPointer(window))->keyCallback(window, key, scancode, action, mods);
+}
+
+void ShaderMachineBase::resetFeedback()
+{
+	ShaderMachineFeedback newFeedback;
+	machineFeedback = newFeedback;
 }
 
 void ShaderMachineBase::handleKeyPressInputs()

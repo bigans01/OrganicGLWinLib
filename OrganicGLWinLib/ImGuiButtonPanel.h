@@ -57,6 +57,21 @@ class ImGuiButtonPanel
 					result = foundResult;
 				}
 			}
+
+			// need to return true if the mouse was discovered as being within
+			// in this specific button panel, so that we may ignore mouse clicks 
+			// meant for the OpenGL area outside of the panel.
+
+			if
+			(
+				(ImGui::IsWindowHovered() == true)
+				||
+				(ImGui::IsAnyItemHovered() == true)
+			)
+			{
+				result.wasWindowHovered = true;
+			}
+
 			ImGui::End();
 			return result;
 		};
