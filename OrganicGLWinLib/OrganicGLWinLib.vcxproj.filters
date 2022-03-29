@@ -148,6 +148,12 @@
     <Filter Include="Source Files\OrientedQuad">
       <UniqueIdentifier>{7cfe4170-697a-432b-ba79-c96dcda1983b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ShaderMachines\RenderablePrimitives">
+      <UniqueIdentifier>{0b1be2ee-7c2a-4a20-9252-13d3134751e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\RenderablePrimitives">
+      <UniqueIdentifier>{2fe82f60-3fb5-4c93-ac4d-b5966613dc15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1380,6 +1386,9 @@
     <ClInclude Include="OneOffMacros.h">
       <Filter>Header Files\ShaderMachines</Filter>
     </ClInclude>
+    <ClInclude Include="RenderablePrimitiveBase.h">
+      <Filter>Header Files\ShaderMachines\RenderablePrimitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1999,6 +2008,9 @@
     </ClCompile>
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp">
       <Filter>Source Files\SolublePoly</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderablePrimitiveBase.cpp">
+      <Filter>Source Files\ShaderMachines\RenderablePrimitives</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
