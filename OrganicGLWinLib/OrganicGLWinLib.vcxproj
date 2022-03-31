@@ -185,6 +185,7 @@
     <ClInclude Include="PosXFaceResolver.h" />
     <ClInclude Include="PosYFaceResolver.h" />
     <ClInclude Include="PosZFaceResolver.h" />
+    <ClInclude Include="RenderableCube.h" />
     <ClInclude Include="RenderablePrimitiveBase.h" />
     <ClInclude Include="SPolyMode.h" />
     <ClInclude Include="SPolyResolution.h" />
@@ -588,6 +589,7 @@
     <ClCompile Include="PosXFaceResolver.cpp" />
     <ClCompile Include="PosYFaceResolver.cpp" />
     <ClCompile Include="PosZFaceResolver.cpp" />
+    <ClCompile Include="RenderableCube.cpp" />
     <ClCompile Include="RenderablePrimitiveBase.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />

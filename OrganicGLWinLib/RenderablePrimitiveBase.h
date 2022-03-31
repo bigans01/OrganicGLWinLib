@@ -10,17 +10,54 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <mutex>
+#include <iostream>
+#include "Triangle.h"
+#include <vector>
 
 class RenderablePrimitiveBase
 {
 	public:
-		// virtual methods
-		virtual void buildTriangles() = 0;
+		RenderablePrimitiveBase& operator=(const RenderablePrimitiveBase& primitive_b)
+		{
+			color = primitive_b.color;
+			totalTriangles = primitive_b.totalTriangles;
+			totalFloats = primitive_b.totalFloats;
+			if (primitive_b.totalFloats > 0)
+			{
+				pointArray.reset(new GLfloat[totalFloats]);
+				for (int x = 0; x < totalFloats; x++)
+				{
+					pointArray[x] = primitive_b.pointArray[x];
+				}
+			}
+			else if (primitive_b.totalFloats == 0)
+			{
+				pointArray.reset();
+			}
+			return *this;
+		}
+
+		// virtual methods that must be defined
+		virtual void buildTriangles() = 0;								// Step 2: build the mesh, and the corresponding data
+
+		// optional virtual methods (printing triangles, etc)
 
 		// base methods
-		void setColor(float in_red, float in_green, float in_blue);
+		void setColor(float in_red, float in_green, float in_blue);		// Step 1: (optional) set color; default is white
+		void setColor(glm::vec3 in_color);
 		void buildGLData();
 		void setPosition(float in_x, float in_y, float in_z);
+		void printTriangles();
+	protected:
+		glm::vec3 center = glm::vec3(0.5f, 0.5f, 0.5f);	// the center of the primitive, may be changed at will
+		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);								// the primitive's color used for OpenGL rendering
+		float distFromCenter = 0.5f;	// how far each triangle should be from the "center"
+		int totalTriangles = 0;		// the total number of triangles in the primitive; i.e, 12 for a cuboid
+		int totalFloats = 0;	// the total floats (for the unique_ptr)
+		std::vector<Triangle> triangleVector;	// all the triangles that make up the mesh
+		std::unique_ptr<GLfloat[]> pointArray;
 
 };
 
