@@ -20,7 +20,7 @@ class RenderableCube : public RenderablePrimitiveBase
 		glm::vec3 upperNW;
 
 		void setupCorners();
-
+		void applyDistScaling();
 };
 
 #endif

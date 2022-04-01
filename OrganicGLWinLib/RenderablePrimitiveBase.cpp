@@ -18,9 +18,21 @@ void RenderablePrimitiveBase::buildGLData()
 
 }
 
-void RenderablePrimitiveBase::setPosition(float in_x, float in_y, float in_z)
+void RenderablePrimitiveBase::setCenter(float in_x, float in_y, float in_z)
 {
+	center.x = in_x;
+	center.y = in_y;
+	center.z = in_z;
+}
 
+void RenderablePrimitiveBase::setDistanceFromCenter(float in_distance)
+{
+	distFromCenter = in_distance;
+}
+
+void RenderablePrimitiveBase::setDistanceScaling(float in_scalingValue)
+{
+	distScale = in_scalingValue;
 }
 
 void RenderablePrimitiveBase::printTriangles()

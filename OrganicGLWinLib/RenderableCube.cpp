@@ -6,7 +6,10 @@ void RenderableCube::buildTriangles()
 	// part 1: set up the corners.
 	setupCorners();
 
-	// part 2: build triangles.
+	// part 2: apply scaling to corners
+	applyDistScaling();
+
+	// part 3: build triangles.
 	// clear the vector first.
 	triangleVector.clear();
 
@@ -72,6 +75,7 @@ void RenderableCube::buildTriangles()
 
 void RenderableCube::setupCorners()
 {
+	std::cout << "Setting up corners; center is at: " << center.x << ", " << center.y << ", " << center.z << std::endl;
 	// set lower NE
 	lowerNE = center;
 	lowerNE.x += distFromCenter;
@@ -121,4 +125,52 @@ void RenderableCube::setupCorners()
 	upperNW.z -= distFromCenter;
 
 
+}
+
+void RenderableCube::applyDistScaling()
+{
+	// scale lower NE corner
+	glm::vec3 lowerNEDiff = lowerNE - center;
+
+	std::cout << "> lowerNE: " << lowerNE.x << ", " << lowerNE.y << ", " << lowerNE.z << std::endl;
+	std::cout << "> lowerNEDiff: " << lowerNEDiff.x << ", " << lowerNEDiff.y << ", " << lowerNEDiff.z << std::endl;
+	std::cout << "> Center: " << center.x << ", " << center.y << ", " << center.z << std::endl;
+
+	lowerNEDiff *= distScale;
+	lowerNE = center + lowerNEDiff;
+
+	// scale lower SE corner
+	glm::vec3 lowerSEDiff = lowerSE - center;
+	lowerSEDiff *= distScale;
+	lowerSE = center + lowerSEDiff;
+
+	// scale lower SW corner
+	glm::vec3 lowerSWDiff = lowerSW - center;
+	lowerSWDiff *= distScale;
+	lowerSW = center + lowerSWDiff;
+
+	// scale lower NW corner
+	glm::vec3 lowerNWDiff = lowerNW - center;
+	lowerNWDiff *= distScale;
+	lowerNW = center + lowerNWDiff;
+
+	// scale upper NE corner
+	glm::vec3 upperNEDiff = upperNE - center;
+	upperNEDiff *= distScale;
+	upperNE = center + upperNEDiff;
+
+	// scale upper SE corner
+	glm::vec3 upperSEDiff = upperSE - center;
+	upperSEDiff *= distScale;
+	upperSE = center + upperSEDiff;
+
+	// scale upper SW corner
+	glm::vec3 upperSWDiff = upperSW - center;
+	upperSWDiff *= distScale;
+	upperSW = center + upperSWDiff;
+
+	// scale upper NW corner
+	glm::vec3 upperNWDiff = upperNW - center;
+	upperNWDiff *= distScale;
+	upperNW = center + upperNWDiff;
 }

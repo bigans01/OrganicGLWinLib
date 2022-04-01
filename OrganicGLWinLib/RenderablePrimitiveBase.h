@@ -47,17 +47,25 @@ class RenderablePrimitiveBase
 		// base methods
 		void setColor(float in_red, float in_green, float in_blue);		// Step 1: (optional) set color; default is white
 		void setColor(glm::vec3 in_color);
+		void setCenter(float in_x, float in_y, float in_z);	// set the coordinate that represents the center of the primitive; other points 
+															// will be built around this coordinate.
+		void setDistanceFromCenter(float in_distance);		// set the initial distance from center, before the call to buildTriangles(); this
+															// value will be multiplied the value of distScale.
+		void setDistanceScaling(float in_scalingValue);		// set the distance multiplier, before the call to buildTriangles()
 		void buildGLData();
-		void setPosition(float in_x, float in_y, float in_z);
 		void printTriangles();
 	protected:
 		glm::vec3 center = glm::vec3(0.5f, 0.5f, 0.5f);	// the center of the primitive, may be changed at will
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);								// the primitive's color used for OpenGL rendering
 		float distFromCenter = 0.5f;	// how far each triangle should be from the "center"
+		float distScale = 1.0f;			// can use this to shrink/expand points from the center of the cube; i.e., 0.5f makes for a smaller object, > 1.0f makes it larger
 		int totalTriangles = 0;		// the total number of triangles in the primitive; i.e, 12 for a cuboid
 		int totalFloats = 0;	// the total floats (for the unique_ptr)
 		std::vector<Triangle> triangleVector;	// all the triangles that make up the mesh
 		std::unique_ptr<GLfloat[]> pointArray;
+
+
+		virtual void applyDistScaling() = 0;	// defined per derived-class; 
 
 };
 
