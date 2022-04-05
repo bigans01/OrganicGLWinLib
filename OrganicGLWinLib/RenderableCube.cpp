@@ -75,7 +75,7 @@ void RenderableCube::buildTriangles()
 
 void RenderableCube::setupCorners()
 {
-	std::cout << "Setting up corners; center is at: " << center.x << ", " << center.y << ", " << center.z << std::endl;
+	//std::cout << "Setting up corners; center is at: " << center.x << ", " << center.y << ", " << center.z << std::endl;
 	// set lower NE
 	lowerNE = center;
 	lowerNE.x += distFromCenter;
@@ -132,9 +132,9 @@ void RenderableCube::applyDistScaling()
 	// scale lower NE corner
 	glm::vec3 lowerNEDiff = lowerNE - center;
 
-	std::cout << "> lowerNE: " << lowerNE.x << ", " << lowerNE.y << ", " << lowerNE.z << std::endl;
-	std::cout << "> lowerNEDiff: " << lowerNEDiff.x << ", " << lowerNEDiff.y << ", " << lowerNEDiff.z << std::endl;
-	std::cout << "> Center: " << center.x << ", " << center.y << ", " << center.z << std::endl;
+	//std::cout << "> lowerNE: " << lowerNE.x << ", " << lowerNE.y << ", " << lowerNE.z << std::endl;
+	//std::cout << "> lowerNEDiff: " << lowerNEDiff.x << ", " << lowerNEDiff.y << ", " << lowerNEDiff.z << std::endl;
+	//std::cout << "> Center: " << center.x << ", " << center.y << ", " << center.z << std::endl;
 
 	lowerNEDiff *= distScale;
 	lowerNE = center + lowerNEDiff;

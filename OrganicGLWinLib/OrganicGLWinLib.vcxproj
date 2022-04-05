@@ -176,6 +176,7 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CSCorrectionCandidate.h" />
     <ClInclude Include="FaceResolverBase.h" />
+    <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />
     <ClInclude Include="NegYFaceResolver.h" />
@@ -591,6 +592,7 @@
     <ClCompile Include="PosZFaceResolver.cpp" />
     <ClCompile Include="RenderableCube.cpp" />
     <ClCompile Include="RenderablePrimitiveBase.cpp" />
+    <ClCompile Include="RenderablePrimitiveContainer.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />

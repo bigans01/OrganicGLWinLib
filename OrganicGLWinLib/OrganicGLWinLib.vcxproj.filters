@@ -1392,6 +1392,9 @@
     <ClInclude Include="RenderableCube.h">
       <Filter>Header Files\ShaderMachines\RenderablePrimitives</Filter>
     </ClInclude>
+    <ClInclude Include="RenderablePrimitiveContainer.h">
+      <Filter>Header Files\ShaderMachines\RenderablePrimitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2016,6 +2019,9 @@
       <Filter>Source Files\ShaderMachines\RenderablePrimitives</Filter>
     </ClCompile>
     <ClCompile Include="RenderableCube.cpp">
+      <Filter>Source Files\ShaderMachines\RenderablePrimitives</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderablePrimitiveContainer.cpp">
       <Filter>Source Files\ShaderMachines\RenderablePrimitives</Filter>
     </ClCompile>
   </ItemGroup>

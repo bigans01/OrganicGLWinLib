@@ -54,6 +54,8 @@ class RenderablePrimitiveBase
 		void setDistanceScaling(float in_scalingValue);		// set the distance multiplier, before the call to buildTriangles()
 		void buildGLData();
 		void printTriangles();
+		int getTotalFloats();	// used by RenderablePrimitiveContainer class
+		GLfloat* getArrayDataPtr();
 	protected:
 		glm::vec3 center = glm::vec3(0.5f, 0.5f, 0.5f);	// the center of the primitive, may be changed at will
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);								// the primitive's color used for OpenGL rendering

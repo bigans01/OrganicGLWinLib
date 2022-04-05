@@ -47,3 +47,13 @@ void RenderablePrimitiveBase::printTriangles()
 		std::cout << std::endl;
 	}
 }
+
+int RenderablePrimitiveBase::getTotalFloats()
+{
+	return totalFloats;
+}
+
+GLfloat* RenderablePrimitiveBase::getArrayDataPtr()
+{
+	return pointArray.get();
+}
