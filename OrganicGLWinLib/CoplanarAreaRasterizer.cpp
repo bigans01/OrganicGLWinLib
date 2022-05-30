@@ -411,7 +411,7 @@ TileLocation CoplanarAreaRasterizer::determinePointTileLocation(glm::vec3 in_poi
 	}
 	else
 	{
-		x_value = whole_x_tiles;
+		x_value = int(whole_x_tiles);
 	}
 
 	int y_value = 0;
@@ -422,7 +422,7 @@ TileLocation CoplanarAreaRasterizer::determinePointTileLocation(glm::vec3 in_poi
 	}
 	else
 	{
-		y_value = whole_y_tiles;
+		y_value = int(whole_y_tiles);
 	}
 
 	//std::cout << "X value is: " << x_value << std::endl;

@@ -158,9 +158,9 @@ void RasterCubeTracerBase::iterateToNextBlock()
 		currentTracingPoint.z = dynamicPointMeta.dimensionResetValues.z;
 	}
 
-	currentCubeKey.x += dynamicPointMeta.moveDirectionValues.x;
-	currentCubeKey.y += dynamicPointMeta.moveDirectionValues.y;
-	currentCubeKey.z += dynamicPointMeta.moveDirectionValues.z;
+	currentCubeKey.x += int(dynamicPointMeta.moveDirectionValues.x);
+	currentCubeKey.y += int(dynamicPointMeta.moveDirectionValues.y);
+	currentCubeKey.z += int(dynamicPointMeta.moveDirectionValues.z);
 
 	//std::cout << "current key is now: " << currentCubeKey.x << ", " << currentCubeKey.y << ", " << currentCubeKey.z << std::endl;
 

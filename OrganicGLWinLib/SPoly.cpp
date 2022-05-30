@@ -78,7 +78,7 @@ std::map<int, int> SPoly::getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint)
 			(borderLinesBegin->second.pointB == in_sharedPoint)
 		)
 		{
-			int currentMapIndex = returnMap.size();
+			int currentMapIndex = int(returnMap.size());
 			returnMap[currentMapIndex] = borderLinesBegin->first;	// insert the ID of the border line.
 		}
 	}

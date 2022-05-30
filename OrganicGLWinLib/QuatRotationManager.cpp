@@ -255,7 +255,7 @@ bool QuatRotationManager::checkForRightAngle(glm::vec3 in_pointAtY0, glm::vec3 i
 {
 	bool wasRightAngleFound = false;
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -317,7 +317,7 @@ void QuatRotationManager::rotateAroundZToYZero()
 	if (pointBRef->y != 0.0f)
 	{
 		float radians = 0.0f;
-		float fullRadian360 = 6.28319;
+		float fullRadian360 = 6.28319f;
 
 		//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -362,7 +362,7 @@ void QuatRotationManager::flipOnXAxis()
 {
 	glm::vec3 rotationAroundX;
 	rotationAroundX.x = -1.0f;
-	float rotateRadians = 6.28319 / 2;
+	float rotateRadians = 6.28319f / 2;
 	QuatRotationRecord s1record(rotateRadians, rotationAroundX);
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	rotationpointsRefVector->applyQuaternion(originalQuat);	// rotate all values by this one
@@ -383,7 +383,7 @@ void QuatRotationManager::rotatePointAroundXToPosY(glm::vec3 in_point)
 float QuatRotationManager::findRadiansForObservation()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	pointARef = rotationpointsRefVector->getFirstPointRef();
 
 	//std::cout << "!! Point A ref X is: " << pointARef->x << std::endl;
@@ -806,7 +806,7 @@ glm::vec3 QuatRotationManager::getEmptyNormal()
 void QuatRotationManager::rotateAroundYAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -837,7 +837,7 @@ void QuatRotationManager::rotateAroundYAndPushIntoStack()
 void QuatRotationManager::rotateAroundYToPosXAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -869,7 +869,7 @@ void QuatRotationManager::rotateAroundYToPosXAndPushIntoStack()
 void QuatRotationManager::rotateAroundYToPosZForPlanarSlideAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(triangleNormalRef->z, triangleNormalRef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -901,7 +901,7 @@ void QuatRotationManager::rotateAroundYToPosZForPlanarSlideAndPushIntoStack()
 void QuatRotationManager::rotateAroundXToYZeroForPlanarSlideAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	float atan2result = atan2(triangleNormalRef->y, triangleNormalRef->z);
 
@@ -936,7 +936,7 @@ void QuatRotationManager::rotateAroundXToYZeroForPlanarSlideAndPushIntoStack()
 void QuatRotationManager::rotateAroundZAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -975,7 +975,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack()
 void QuatRotationManager::rotateAroundZToFindBorderLineEmptyNormalAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -1028,7 +1028,7 @@ void QuatRotationManager::rotateAroundZToFindBorderLineEmptyNormalAndPushIntoSta
 void QuatRotationManager::rotateAroundZToFindCoplanarCategorizedLineEmptyNormalAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -1083,7 +1083,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
 	if (in_point->y != 1.0f)
 	{
 		float radians = 0.0f;
-		float fullRadian360 = 6.28319;
+		float fullRadian360 = 6.28319f;
 
 		//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 		//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -1120,7 +1120,7 @@ void QuatRotationManager::rotateAroundZAndPushIntoStack(glm::vec3* in_point)
 void QuatRotationManager::rotateAroundXToYZeroAndPushIntoStack()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	float atan2result = atan2(pointCRef->y, pointCRef->z);
 
@@ -1229,7 +1229,7 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 	quatRotationManagerLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
 
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);
@@ -1298,7 +1298,7 @@ float QuatRotationManager::findRotationRadiansForZFracture(glm::vec3 in_vec3)
 float QuatRotationManager::findRotationRadainsForGettingToPosXThroughY(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnY = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.z, in_vec3.x);
@@ -1375,7 +1375,7 @@ float QuatRotationManager::findRotationRadiansForGettingToPosYThroughZ(glm::vec3
 	// The overarching goal is to get to POS Y for this 3rd point(3rd point is the value that was passed in), by rotating around the Z axis
 
 	float degreesToRotateOnZ = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.x);
@@ -1452,7 +1452,7 @@ float QuatRotationManager::findRotationRadainsForGettingToPosYThroughX(glm::vec3
 	// The overarching goal is to get to POS Y for this 3rd point(3rd point is the value that was passed in), by rotating around the Z axis
 
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);

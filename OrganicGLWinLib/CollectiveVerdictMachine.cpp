@@ -23,7 +23,7 @@ void CollectiveVerdictMachine::insertMappableIndividualVerdict(MappableIndividua
 		}
 	}
 	*/
-	individualVerdictMap[individualVerdictMap.size()] = in_mappableIndividualVerdict;
+	individualVerdictMap[int(individualVerdictMap.size())] = in_mappableIndividualVerdict;
 }
 
 bool CollectiveVerdictMachine::doesAnomalousMassSPolyExist()

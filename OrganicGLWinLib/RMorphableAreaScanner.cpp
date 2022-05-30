@@ -146,7 +146,7 @@ void RMorphableAreaScanner::scanGridMass()
 		meshGroupBuildingLogger.log("(RMorphableAreaScanner): current size of ungrouped mesh, after move: ", ungroupedMeshes.size(), "\n");
 		meshGroupBuildingLogger.log("(RMorphableAreaScanner): current size of currentMeshGroup: ", currentMeshGroup.size(), "\n");
 
-		int remainingMeshesToHandle = ungroupedMeshes.size();
+		int remainingMeshesToHandle = int(ungroupedMeshes.size());
 		int currentMeshGroupID = 0;
 		for (int x = 0; x < remainingMeshesToHandle; x++)
 		{

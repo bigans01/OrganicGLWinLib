@@ -266,7 +266,7 @@ void QMBoolDoLinesIntersect::rotateLineToYZeroPositiveX(glm::vec3* in_pointToRot
 			//std::cout << "!!! Rotate around Z detected." << std::endl;
 
 			float radians = 0.0f;
-			float fullRadian360 = 6.28319;
+			float fullRadian360 = 6.28319f;
 			//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 			//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 			float atan2result = atan2(in_pointToRotateFor->y, in_pointToRotateFor->x); // find the radians we'll need to rotate by

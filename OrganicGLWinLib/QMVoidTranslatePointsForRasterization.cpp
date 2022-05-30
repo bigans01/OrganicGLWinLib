@@ -68,7 +68,7 @@ void QMVoidTranslatePointsForRasterization::rotateEmptyNormalAroundXToYZero()
 void QMVoidTranslatePointsForRasterization::findRotationRadiansForGettingToYZeroThroughX(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);
@@ -124,7 +124,7 @@ void QMVoidTranslatePointsForRasterization::rotateEmptyNormalAroundYToPosZ()
 float QMVoidTranslatePointsForRasterization::findRotationRadiansForGettingToPosZThroughY(glm::vec3 in_vec3)
 {
 	float degreesToRotateOnY = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, 
 	float atan2result = atan2(in_vec3.x, in_vec3.z);

@@ -71,7 +71,7 @@ class KeyPressTracker
 			int currentValue = in_incrementValue + 1;
 			return incrementInputCount(currentValue, std::forward<RemainingInputs>(remaining)...);
 		}
-		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };	// required for above template function
+		int incrementInputCount(int in_incrementValue) { return in_incrementValue; };	// required for above templated recursive function
 
 		template<typename FirstInput, typename ...RemainingInputs> int getNumberOfFoundInputs(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
@@ -83,7 +83,7 @@ class KeyPressTracker
 			}
 			return getNumberOfFoundInputs(totalFoundInputs, std::forward<RemainingInputs>(remaining)...);
 		}
-		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };	// required for above template function
+		int getNumberOfFoundInputs(int in_incrementValue) { return in_incrementValue; };	// required for above templated recursive function
 
 		void handleKeyPressTransfers(bool in_shouldNotTransfer);
 		std::map<int, KeyPressCycle> cycleTracker;	// the int's of this map are specified by the GLFW_* enums in glfw.h.

@@ -83,7 +83,7 @@ bool FaceResolverBase::compareCorrectionCandidatesAgainstSequence(int in_invalid
 	{
 		// Get the size of the vector of CSCorrectionCandidates for the current line
 		std::cout << "Analyzing size of CSCorrectionCandiate vector for the CategorizedLine having ID " << organizedBegin->first <<  "..." << std::endl;
-		int currentHitCount = organizedBegin->second.size();
+		int currentHitCount = int(organizedBegin->second.size());
 		std::cout << "Hit count is: " << currentHitCount << std::endl;
 
 		// 1 Hit, always a PARTIAL_BOUND.

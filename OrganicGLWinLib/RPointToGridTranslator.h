@@ -32,7 +32,7 @@ class RPointToGridTranslator
 			}
 			else
 			{
-				returnKey.x = (in_pointToTranslate.x / dimPerTile) - 1;
+				returnKey.x = int((in_pointToTranslate.x / dimPerTile) - 1);
 			}
 
 			// Y calcs
@@ -46,7 +46,7 @@ class RPointToGridTranslator
 			}
 			else
 			{
-				returnKey.y = (in_pointToTranslate.y / dimPerTile) - 1;
+				returnKey.y = int((in_pointToTranslate.y / dimPerTile) - 1);
 			}
 
 			// Z calcs
@@ -60,7 +60,7 @@ class RPointToGridTranslator
 			}
 			else
 			{
-				returnKey.z = (in_pointToTranslate.z / dimPerTile) - 1;
+				returnKey.z = int((in_pointToTranslate.z / dimPerTile) - 1);
 			}
 
 			return returnKey;

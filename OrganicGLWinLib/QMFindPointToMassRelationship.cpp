@@ -150,7 +150,7 @@ void QMFindPointToMassRelationship::rotateFirstTriangleLineAroundYAndPushIntoSta
 {
 	glm::vec3* pointBRef = in_quatRotationPointsRef->getPointRefByIndex(2);	// we need to get a ref to the second point of the triangle.
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -184,7 +184,7 @@ void QMFindPointToMassRelationship::rotateFirstTriangleLineAroundZAndPushIntoSta
 	glm::vec3* pointBRef = in_quatRotationPointsRef->getPointRefByIndex(2);	// we need to get a ref to the second point of the triangle.
 
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
@@ -245,7 +245,7 @@ float QMFindPointToMassRelationship::findRadiansForRotateTriangleAroundX(glm::ve
 	qmRelationshipLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
 
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);

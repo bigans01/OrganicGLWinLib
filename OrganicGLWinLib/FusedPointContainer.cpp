@@ -24,7 +24,7 @@ void FusedPointContainer::insertSubDataForPoint(glm::vec3 in_point, FusedPointSu
 	}
 	else if (wasFound == false)
 	{
-		int nextIndexToInsert = fusedPointMap.size();
+		int nextIndexToInsert = int(fusedPointMap.size());
 		fusedPointMap[nextIndexToInsert].point = in_point;
 		fusedPointMap[nextIndexToInsert].insertFusedPointSubData(in_fusedPointSubData);
 	}

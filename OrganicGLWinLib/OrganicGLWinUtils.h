@@ -110,6 +110,7 @@ public:
 	static void IMGuiPrepBlockLocation(int world_organicLoc[9]);
 
 	// TerrainTriangle functions
+
 	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
 																	  EnclaveKeyDef::EnclaveKey in_oreKey, 
 																	  EnclaveKeyDef::EnclaveKey in_blueprintKey, 

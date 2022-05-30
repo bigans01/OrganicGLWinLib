@@ -25,7 +25,7 @@ EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToCo
 	*/
 
 	
-	int x_block_value = in_pointToConvert.x / in_tileGridWidth;
+	int x_block_value = int(in_pointToConvert.x / in_tileGridWidth);
 	if
 	(
 		(x_block_value != 0)
@@ -34,7 +34,7 @@ EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToCo
 		x_block_value--;
 	}
 
-	int y_block_value = in_pointToConvert.y / in_tileGridWidth;
+	int y_block_value = int(in_pointToConvert.y / in_tileGridWidth);
 	if
 	(
 		(y_block_value != 0)
@@ -43,7 +43,7 @@ EnclaveKeyDef::EnclaveKey RUtils::convertToRasterGridCell(glm::vec3 in_pointToCo
 		y_block_value--;
 	}
 
-	int z_block_value = in_pointToConvert.z / in_tileGridWidth;
+	int z_block_value = int(in_pointToConvert.z / in_tileGridWidth);
 	if
 	(
 		(z_block_value != 0)

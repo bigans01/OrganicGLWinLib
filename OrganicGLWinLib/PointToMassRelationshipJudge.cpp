@@ -127,7 +127,7 @@ bool PointToMassRelationshipJudge::determineVerdict()
 bool PointToMassRelationshipJudge::runTestDoAllHaveNoLineOfSight()
 {
 	bool testResult = false;
-	int sizeOfAnalysisMap = analysisMap.size();
+	int sizeOfAnalysisMap = int(analysisMap.size());
 	int noLOSCounter = 0;	// number of detected analysis of type NO_LINE_OF_SIGHT
 	auto analysisBegin = analysisMap.begin();
 	auto analysisEnd = analysisMap.end();

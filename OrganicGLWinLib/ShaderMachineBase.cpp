@@ -352,7 +352,7 @@ void ShaderMachineBase::mouseScrollCallbackWrapper(GLFWwindow* window, double xo
 void ShaderMachineBase::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	std::cout << "!!! Scroll detected; yoffset is: " << yoffset << std::endl;
-	machineFeedback.mouseFeedback[ShaderMachineFeedbackType::MOUSE_SCROLL] = yoffset;
+	machineFeedback.mouseFeedback[ShaderMachineFeedbackType::MOUSE_SCROLL] = float(yoffset);
 	//Message scrollValue(MessageType::REQUEST_FROM_CLIENT_MOUSE_SCROLL_INPUT_GENERATED);
 	if (yoffset == 1.0f)
 	{
@@ -870,7 +870,7 @@ void ShaderMachineBase::setDirection(float in_x, float in_y, float in_z)
 	glm::vec3 directionVec3(in_x, in_y, in_z);
 	glm::vec3 dirNormalized = glm::normalize(directionVec3);
 
-	const float doublePi = 3.14 * 2;
+	const float doublePi = 3.14f * 2;
 
 	// set horizontal angle -- first value is x, second is z.
 	float horizontalSet = atan2(dirNormalized.x, dirNormalized.z);

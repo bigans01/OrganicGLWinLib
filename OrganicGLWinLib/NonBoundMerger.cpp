@@ -114,7 +114,7 @@ void NonBoundMerger::insertPointIntoCounterMap(glm::vec3 in_point)
 	// insert the point if it didn't exist already.
 	if (wasPointAlreadyFound == false)
 	{
-		int pointCounterSize = pointCounterMap.size();
+		int pointCounterSize = int(pointCounterMap.size());
 		NonBoundMerger::PointCounter newCounter(in_point);
 		pointCounterMap[pointCounterSize] = newCounter;
 		pointCounterMap[pointCounterSize].incrementPointCount();
@@ -139,6 +139,6 @@ glm::vec3 NonBoundMerger::findFirstPointWithSingularCount()
 
 void NonBoundMerger::insertLineIntoOrderedNonBounds(CategorizedLine in_categorizedLine)
 {
-	int currentOrderedIndex = orderedNonboundMap.size();
+	int currentOrderedIndex = int(orderedNonboundMap.size());
 	orderedNonboundMap[currentOrderedIndex] = in_categorizedLine;
 }

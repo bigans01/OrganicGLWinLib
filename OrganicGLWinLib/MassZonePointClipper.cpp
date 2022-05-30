@@ -119,7 +119,7 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 		for (; clippingShellMapBegin != clippingShellMapEnd; clippingShellMapBegin++)
 		{
 			SPoly* currentClippingShellSPolyRef = clippingShellMapBegin->second;	 // get a ref to the shell SPoly.
-			int numberOfSTriangles = currentClippingShellSPolyRef->triangles.size(); 
+			int numberOfSTriangles = int(currentClippingShellSPolyRef->triangles.size()); 
 
 			/*
 			if (clipperPolyLogger.isLoggingSet())

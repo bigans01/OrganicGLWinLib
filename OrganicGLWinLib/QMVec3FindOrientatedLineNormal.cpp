@@ -98,7 +98,7 @@ void QMVec3FindOrientatedLineNormal::runExecutionsForFindingCentroidFacingNormal
 void QMVec3FindOrientatedLineNormal::rotateLineAroundZToYZero(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
 	float atan2result = atan2(in_pointToRotateFor->y, in_pointToRotateFor->x); // find the radians we'll need to rotate by
@@ -130,7 +130,7 @@ void QMVec3FindOrientatedLineNormal::rotateLineAroundZToYZero(glm::vec3* in_poin
 void QMVec3FindOrientatedLineNormal::rotateLineAroundYToPosXAndPushIntoStack(glm::vec3* in_pointToRotateFor, std::stack<QuatRotationRecord>* in_quatRotationRecordStackRef, QuatRotationPoints* in_quatRotationPointsRef)
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(in_pointToRotateFor->z, in_pointToRotateFor->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -177,7 +177,7 @@ float QMVec3FindOrientatedLineNormal::getRadiansForRotateToPosYViaX(glm::vec3 in
 	//quatRotationManagerLogger.log(">>>>> vec3 value is: ", in_vec3.x, ", ", in_vec3.y, ", ", in_vec3.z, "\n");
 
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);

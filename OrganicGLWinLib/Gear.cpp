@@ -9,7 +9,7 @@ void Gear::useProgram()
 
 void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)
 {
-	int currentKey = gearMultiDrawArrayJobMap.size();	// use this if it's a new job...
+	int currentKey = int(gearMultiDrawArrayJobMap.size());	// use this if it's a new job...
 	int targetKeyValue = currentKey;
 
 
@@ -41,7 +41,7 @@ void Gear::removeMultiDrawArrayJob(std::string in_jobName)
 
 void Gear::insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job)
 {
-	int currentKey = gearDrawElementsInstancedJobMap.size();	// use this if it's a new job...
+	int currentKey = int(gearDrawElementsInstancedJobMap.size());	// use this if it's a new job...
 	int targetKeyValue = currentKey;
 
 	//std::cout << "job has: " << in_job.numberOfElementsToRender << " elements to render. " << std::endl;
@@ -62,28 +62,28 @@ void Gear::insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElements
 
 void Gear::registerNewPersistentBuffer(std::string in_bufferName, GLuint in_bufferID)
 {
-	int currentKey = gearPersistentBufferMap.size();
+	int currentKey = int(gearPersistentBufferMap.size());
 	gearPersistentBufferMap[currentKey] = in_bufferID;
 	gearPersistentBufferLookup[in_bufferName] = currentKey;
 }
 
 void Gear::registerNewFBO(std::string in_fboName, GLuint in_bufferID)
 {
-	int currentKey = gearFboMap.size();
+	int currentKey = int(gearFboMap.size());
 	gearFboMap[currentKey] = in_bufferID;
 	gearFboLookup[in_fboName] = currentKey;
 }
 
 void Gear::registerNewTexture(std::string in_textureName, GLuint in_textureID)
 {
-	int currentKey = gearTextureMap.size();
+	int currentKey = int(gearTextureMap.size());
 	gearTextureMap[currentKey] = in_textureID;
 	gearTextureLookup[in_textureName] = currentKey;
 }
 
 void Gear::registerNewBuffer(std::string in_bufferName, GLuint in_bufferID)
 {
-	int currentKey = gearBufferMap.size();
+	int currentKey = int(gearBufferMap.size());
 	gearBufferMap[currentKey] = in_bufferID;
 	gearBufferLookup[in_bufferName] = currentKey;
 }

@@ -143,7 +143,7 @@ void QuatRotationPoints::roundAllPointsToHundredths()
 
 int QuatRotationPoints::getSize()
 {
-	return pointsRefVector.size();
+	return int(pointsRefVector.size());
 }
 
 glm::vec3 QuatRotationPoints::getFirstPoint()

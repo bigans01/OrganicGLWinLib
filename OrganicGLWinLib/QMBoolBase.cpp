@@ -49,7 +49,7 @@ void QMBoolBase::flipOnXAxis(QuatRotationPoints* in_quatRotationPointsRef)
 {
 	glm::vec3 rotationAroundX;
 	rotationAroundX.x = -1.0f;
-	float rotateRadians = 6.28319 / 2;
+	float rotateRadians = 6.28319f / 2;
 	QuatRotationRecord s1record(rotateRadians, rotationAroundX);
 	glm::quat originalQuat = s1record.returnOriginalRotation();
 	in_quatRotationPointsRef->applyQuaternion(originalQuat);	// rotate all values by this one

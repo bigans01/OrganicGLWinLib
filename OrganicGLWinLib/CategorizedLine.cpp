@@ -362,7 +362,7 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 					(borderLinesBegin->second.pointB == precisePoint)
 				)
 				{
-					int currentMapIndex = returnMap.size();
+					int currentMapIndex = int(returnMap.size());
 					returnMap[currentMapIndex] = borderLinesBegin->first;	// insert the ID of the border line.
 				}
 			}

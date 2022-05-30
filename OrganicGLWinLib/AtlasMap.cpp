@@ -100,7 +100,7 @@ void AtlasMap::buildAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextur
 	}
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7.0f);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);	// set the maximum value for this texture
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -262,7 +262,7 @@ void AtlasMap::buildAtlasOnTextureUnit(GLenum in_texUnit, std::string in_atlasFo
 	}
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7.0f);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);	// set the maximum value for this texture
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -428,7 +428,7 @@ AtlasMetaData AtlasMap::findAtlasMetadata(int in_atlasWidth, int in_tileWidth)
 	returnData.tileWidth = in_tileWidth;
 	returnData.tileMaxLevel = currentTileLevel;
 	returnData.mipMapLevelDiff = (currentAtlasLevel - currentTileLevel);
-	returnData.dimensionToSquare = pow(2.0f, (returnData.mipMapLevelDiff));
+	returnData.dimensionToSquare = int(pow(2.0f, (returnData.mipMapLevelDiff)));
 
 	std::cout << "Tile width: " << returnData.tileWidth << std::endl;
 

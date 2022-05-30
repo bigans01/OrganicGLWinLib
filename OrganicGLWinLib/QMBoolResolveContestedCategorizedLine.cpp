@@ -58,7 +58,7 @@ bool QMBoolResolveContestedCategorizedLine::solve(QuatRotationPoints* in_quatRot
 void QMBoolResolveContestedCategorizedLine::rotateContestedLineAroundXToPositiveY()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(contestedLinePointBRef->y, contestedLinePointBRef->z); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -90,7 +90,7 @@ void QMBoolResolveContestedCategorizedLine::rotateContestedLineAroundXToPositive
 void QMBoolResolveContestedCategorizedLine::rotateContestedLinePointBAroundZToPositiveX()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(contestedLinePointBRef->x, contestedLinePointBRef->y); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -125,7 +125,7 @@ void QMBoolResolveContestedCategorizedLine::rotateBoundaryCenterPointAlongXToPos
 {
 	glm::vec3* boundaryCenterRef = rotationPointsRefVector->getPointRefByIndex(2);
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(boundaryCenterRef->y, boundaryCenterRef->z); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)

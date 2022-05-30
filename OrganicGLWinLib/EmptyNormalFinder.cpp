@@ -78,7 +78,7 @@ EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, g
 float EmptyNormalFinder::getRadiansForXAlignmentS1(glm::vec3 in_vec3)
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(in_vec3.z, in_vec3.x);
 	float firstPassRotateRadians;
 	if (atan2result > 0.0)

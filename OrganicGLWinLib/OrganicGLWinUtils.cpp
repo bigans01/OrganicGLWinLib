@@ -364,7 +364,7 @@ AtlasMetaData OrganicGLWinUtils::findAtlasMetadata(int in_atlasWidth, int in_til
 	returnData.tileWidth = in_tileWidth;
 	returnData.tileMaxLevel = currentTileLevel;
 	returnData.mipMapLevelDiff = (currentAtlasLevel - currentTileLevel);
-	returnData.dimensionToSquare = pow(2.0f, (returnData.mipMapLevelDiff));
+	returnData.dimensionToSquare = int(pow(2.0f, (returnData.mipMapLevelDiff)));
 
 	std::cout << "Tile width: " << returnData.tileWidth << std::endl;
 
@@ -505,7 +505,7 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	}
 	//glGenerateMipmap(GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, atlasMaxLevelValue);	// set the maximum value for this texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7.0f);	// set the maximum value for this texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 7);	// set the maximum value for this texture
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);							// experiment with these hints
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -1117,7 +1117,7 @@ void OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
 
 glm::quat OrganicGLWinUtils::createQuaternion(float in_degrees, glm::vec3 in_unitVector)
 {
-	const float fullRadians360 = 6.28319;
+	const float fullRadians360 = 6.28319f;
 	float radianMultiplier = in_degrees / 360.0f;
 	float degreesToRadians = radianMultiplier * fullRadians360;
 
@@ -1129,9 +1129,9 @@ glm::quat OrganicGLWinUtils::createQuaternion(float in_degrees, glm::vec3 in_uni
 glm::vec3 OrganicGLWinUtils::roundVec3ToHundredths(glm::vec3 in_vec3)
 {
 	glm::vec3 returnVec = in_vec3;
-	returnVec.x = floor(in_vec3.x * 100 + 0.5) / 100;
-	returnVec.y = floor(in_vec3.y * 100 + 0.5) / 100;
-	returnVec.z = floor(in_vec3.z * 100 + 0.5) / 100;
+	returnVec.x = float(floor(in_vec3.x * 100 + 0.5) / 100);
+	returnVec.y = float(floor(in_vec3.y * 100 + 0.5) / 100);
+	returnVec.z = float(floor(in_vec3.z * 100 + 0.5) / 100);
 	return returnVec;
 }
 
@@ -1220,6 +1220,7 @@ void OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(MassZoneBoxBound
 		case MassZoneBoxBoundaryOrientation::NEG_Y: { std::cout << "NEG_Y"; break; }
 	};
 }
+
 
 std::vector<TerrainTriangle> OrganicGLWinUtils::produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
 																					EnclaveKeyDef::EnclaveKey in_oreKey, 

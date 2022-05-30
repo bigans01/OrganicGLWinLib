@@ -28,7 +28,7 @@ class PTriangleMesh
 
 		int getMeshPTriangleCount()
 		{
-			return meshPTriangles.size();
+			return int(meshPTriangles.size());
 		}
 
 		void rebuildPTriangleNormals()

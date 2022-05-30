@@ -81,7 +81,7 @@ void QMVoidFindCyclingDirection::runRotations(std::vector<QuatRotationType>* in_
 void QMVoidFindCyclingDirection::rotateEmptyNormalAroundYToPosZ()
 {
 	float radians = 0.0f;
-	float fullRadian360 = 6.28319;
+	float fullRadian360 = 6.28319f;
 	float atan2result = atan2(triangleNormalRef->z, triangleNormalRef->x); // find the radians we'll need to rotate by
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
@@ -145,7 +145,7 @@ float QMVoidFindCyclingDirection::findRotationRadiansForGettingToPosYThroughX(gl
 	//std::cout << ">>>>> vec3 value is: " << in_vec3.x << ", " << in_vec3.y << ", " << in_vec3.z << std::endl;
 
 	float degreesToRotateOnX = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.z);
@@ -226,7 +226,7 @@ float QMVoidFindCyclingDirection::findRotationRadiansForGettingToPosYThroughZ(gl
 	// The overarching goal is to get to POS Y for this 3rd point(3rd point is the value that was passed in), by rotating around the Z axis
 
 	float degreesToRotateOnZ = 0.0f;
-	float fullRadian360 = 6.28319;	// 360 degrees = this many radians
+	float fullRadian360 = 6.28319f;	// 360 degrees = this many radians
 
 	// get the atan2 result, and analyze it
 	float atan2result = atan2(in_vec3.y, in_vec3.x);

@@ -756,7 +756,7 @@ void CuttableTriangle::convertAndStoreCutTriangleVector(std::vector<CutTriangle>
 	for (; vectorBegin != vectorEnd; vectorBegin++)
 	{
 		STriangle convertedTriangle = convertCutTriangleToSTriangle(*vectorBegin);
-		int currentOutputMapSize = outputTriangles.size();
+		int currentOutputMapSize = int(outputTriangles.size());
 		outputTriangles[currentOutputMapSize] = convertedTriangle;
 	}
 }

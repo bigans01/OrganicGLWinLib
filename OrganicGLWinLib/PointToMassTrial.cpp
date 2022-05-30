@@ -51,7 +51,7 @@ void PointToMassTrial::insertShellSlice(glm::vec3 in_pointToJudge,
 		// if we DID NOT find it, we need to insert a new point into the map.
 		if (doesPointAlreadyExist == false)
 		{
-			int newIndexToUse = judgeMap.size();	// size of a map also equals the next index to use for map. (in our case)
+			int newIndexToUse = int(judgeMap.size());	// size of a map also equals the next index to use for map. (in our case)
 			judgeMap[newIndexToUse].point = in_pointToJudge;
 			judgeMap[newIndexToUse].judge.insertShellSliceForSPolyID(in_sPolyID, 
 																	in_sTriangleID, 

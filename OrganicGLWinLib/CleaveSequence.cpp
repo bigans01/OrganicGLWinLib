@@ -158,7 +158,7 @@ CleaveSequenceMeta CleaveSequence::getCleaveSequenceMeta()
 		sequenceType = CleaveSequenceType::MULTI_LINE;
 	}
 
-	CleaveSequenceMeta sequenceMeta(sequenceType, cleavingLines.size(), this);
+	CleaveSequenceMeta sequenceMeta(sequenceType, int(cleavingLines.size()), this);
 	return sequenceMeta;
 }
 
