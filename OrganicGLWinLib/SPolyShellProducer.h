@@ -7,7 +7,7 @@
 #include "MassZone.h"
 #include "MassZoneBoxType.h"
 #include <map>
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include <vector>
 #include "DebugOption.h"
 #include "PolyDebugLevel.h"
@@ -21,7 +21,7 @@ class SPolyShellProducer
 	and the shell-spawned SPolys -- which are SPolys that occupy an entire face, and are put into outputSPolySuperGroups. In some cases,
 	an appropriate SPoly cannot be produced due to bad CleaveSequence generation; in this case, an attempt to fix the issue should be performed.
 
-	If a resolution to the fix can't be performed, the resulting SPoly to use for the corresponding MassZoneBoxBoundaryOrientation/SPolySupergroup pairing
+	If a resolution to the fix can't be performed, the resulting SPoly to use for the corresponding BoundaryOrientation/SPolySupergroup pairing
 	should be an SPoly that occupys that entire face (i.e, for POS_X face this would be a square polygon with points (4,0,0) (4,4,0) (4,4,4) and (4,0,4)
 	The fix attempt needs to run in code that is called by productionMassZone.createMassZoneShell.
 
@@ -29,11 +29,11 @@ class SPolyShellProducer
 
 	public:
 		// template function for permit settings
-		template<typename FirstMassZoneBoxBoundaryOrientation, typename ...RemainingMassZoneBoxBoundaryOrientation> 
-		void setBoxFaceProductionPermit(FirstMassZoneBoxBoundaryOrientation && firstOption, RemainingMassZoneBoxBoundaryOrientation && ...remainingOptions)
+		template<typename FirstBoundaryOrientation, typename ...RemainingBoundaryOrientation> 
+		void setBoxFaceProductionPermit(FirstBoundaryOrientation && firstOption, RemainingBoundaryOrientation && ...remainingOptions)
 		{
-			productionMassZone.boxFaceProductionPermits.insert(std::forward<FirstMassZoneBoxBoundaryOrientation>(firstOption));
-			setBoxFaceProductionPermit(std::forward<RemainingMassZoneBoxBoundaryOrientation>(remainingOptions)...);
+			productionMassZone.boxFaceProductionPermits.insert(std::forward<FirstBoundaryOrientation>(firstOption));
+			setBoxFaceProductionPermit(std::forward<RemainingBoundaryOrientation>(remainingOptions)...);
 		}
 		void setBoxFaceProductionPermit() {};
 
@@ -62,7 +62,7 @@ class SPolyShellProducer
 
 		PolyDebugLevel printOutputSPolysDebugLevel = PolyDebugLevel::NONE;
 		std::map<int, SPoly> inputSPolys;
-		std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup> outputSPolySuperGroups;
+		std::map<BoundaryOrientation, SPolySupergroup> outputSPolySuperGroups;
 		int numberOfInputSPolys = 0;
 		MassZone productionMassZone;
 };

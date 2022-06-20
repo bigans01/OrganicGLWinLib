@@ -72,7 +72,7 @@ void CleaveSequenceFactory::setMergerDebugLevel(PolyDebugLevel in_polyDebugLevel
 	mergerDebugLevel = in_polyDebugLevel;
 }
 
-void CleaveSequenceFactory::setFactoryBoundaryOrientationOption(MassZoneBoxBoundaryOrientation in_optionalFactoryOrientation)
+void CleaveSequenceFactory::setFactoryBoundaryOrientationOption(BoundaryOrientation in_optionalFactoryOrientation)
 {
 	optionalFactoryOrientation = in_optionalFactoryOrientation;
 }
@@ -104,6 +104,8 @@ InvalidCleaveSequences CleaveSequenceFactory::constructAndExportCleaveSequences(
 		lineManager.printAllLines();
 	}
 
+	// for debug
+	originalUnmergedLines = lineManager;
 
 	cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) >>>> enter any number to continue...", "\n");
 	cleaveSequenceFactoryLogger.waitForDebugInput();
@@ -391,7 +393,11 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 				//std::cout << "!! Final partial bound line NOT FOUND! " << std::endl;
 				newSequence.sequenceStatus = CleaveSequenceStatus::INCOMPLETE; // mark it as complete
 
-				std::cout << "(CleaveSequenceFactory)  Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+				std::cout << "(CleaveSequenceFactory) Warning, CleaveSequence is INCOMPLETE. " << std::endl;
+				std::cout << "(CleaveSequenceFactory) Original set of unmerged lines is: " << std::endl;
+				originalUnmergedLines.printAllLines();
+				
+
 				std::cout << "(CleaveSequenceFactory) Last point to search value is: " << lastPointToSearch.x << ", " << lastPointToSearch.y << ", " << lastPointToSearch.z << std::endl;
 
 				std::cout << "(CleaveSequenceFactory) Remaining lines in line manager are: " << std::endl;
@@ -400,13 +406,13 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 				std::cout << "(CleaveSequenceFactory) Optional orientation value is: ";
 				switch (optionalFactoryOrientation)
 				{
-						case (MassZoneBoxBoundaryOrientation::NONE): { std::cout << "NONE"; break; };
-						case (MassZoneBoxBoundaryOrientation::NEG_X): { std::cout << "NEG_X"; break; };
-						case (MassZoneBoxBoundaryOrientation::NEG_Y): { std::cout << "NEG_Y"; break; };
-						case (MassZoneBoxBoundaryOrientation::NEG_Z): { std::cout << "NEG_Z"; break; };
-						case (MassZoneBoxBoundaryOrientation::POS_X): { std::cout << "POS_X"; break; };
-						case (MassZoneBoxBoundaryOrientation::POS_Y): { std::cout << "POS_Y"; break; };
-						case (MassZoneBoxBoundaryOrientation::POS_Z): { std::cout << "POS_Z"; break; };
+						case (BoundaryOrientation::NONE): { std::cout << "NONE"; break; };
+						case (BoundaryOrientation::NEG_X): { std::cout << "NEG_X"; break; };
+						case (BoundaryOrientation::NEG_Y): { std::cout << "NEG_Y"; break; };
+						case (BoundaryOrientation::NEG_Z): { std::cout << "NEG_Z"; break; };
+						case (BoundaryOrientation::POS_X): { std::cout << "POS_X"; break; };
+						case (BoundaryOrientation::POS_Y): { std::cout << "POS_Y"; break; };
+						case (BoundaryOrientation::POS_Z): { std::cout << "POS_Z"; break; };
 				}
 				std::cout << std::endl;
 

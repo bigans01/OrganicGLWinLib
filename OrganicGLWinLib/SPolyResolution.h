@@ -5,7 +5,7 @@
 
 #include "SPoly.h"
 #include "SPolyFracturer.h"
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include "MassZoneBoxType.h"
 #include "SPolyFracturer.h"
 #include "SPolySupergroup.h"
@@ -35,7 +35,7 @@ class SPolyResolution
 {
 	public:
 		SPolyResolution(SPoly* in_sPolyRef,
-						MassZoneBoxBoundaryOrientation in_boundaryOrientation,
+						BoundaryOrientation in_boundaryOrientation,
 						MassZoneBoxType in_zoneBoxType,
 						InvalidCleaveSequences in_invalidSequences) :
 			resolutionSPolyRef(in_sPolyRef),
@@ -50,7 +50,7 @@ class SPolyResolution
 	private:
 		// the following 4 values should be set by the constructor
 		SPoly* resolutionSPolyRef = nullptr;	// the SPolyResolution should reasonably assume that the SPoly has made it's call to determineBorderLines
-		MassZoneBoxBoundaryOrientation resolutionOrientation = MassZoneBoxBoundaryOrientation::NONE;	
+		BoundaryOrientation resolutionOrientation = BoundaryOrientation::NONE;	
 		MassZoneBoxType resolutionBoxType = MassZoneBoxType::NOVAL;
 		InvalidCleaveSequences sequencesToResolve;	// contains the invalid CleaveSequences that need to be resolved by this resolution.
 

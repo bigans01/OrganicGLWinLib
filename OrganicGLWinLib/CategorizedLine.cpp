@@ -874,6 +874,17 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 	*/
 }
 
+void CategorizedLine::roundLineEndpoints()
+{
+	line.pointA.x = IndependentUtils::roundToHundredth(line.pointA.x);
+	line.pointA.y = IndependentUtils::roundToHundredth(line.pointA.y);
+	line.pointA.z = IndependentUtils::roundToHundredth(line.pointA.z);
+
+	line.pointB.x = IndependentUtils::roundToHundredth(line.pointB.x);
+	line.pointB.y = IndependentUtils::roundToHundredth(line.pointB.y);
+	line.pointB.z = IndependentUtils::roundToHundredth(line.pointB.z);
+}
+
 void CategorizedLine::testFunction()
 {
 	std::cout << "!! Test!! " << std::endl;

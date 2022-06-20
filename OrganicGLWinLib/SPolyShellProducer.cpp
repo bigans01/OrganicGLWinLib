@@ -40,6 +40,24 @@ void SPolyShellProducer::configurePolysWithoutNormalCalcs()
 
 MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType in_massZoneBoxType)
 {
+	/*
+	// for when debugging only, print out the SPolys 
+	std::cout << "(SPolyShellProducer): printing out SPolys involved in shell construction:" << std::endl;
+	auto polysToAddBegin = inputSPolys.begin();
+	auto polysToAddEnd = inputSPolys.end();
+	for (; polysToAddBegin != polysToAddEnd; polysToAddBegin++)
+	{
+		std::cout << "ID: " << polysToAddBegin->first << std::endl;
+		auto trianglesBegin = polysToAddBegin->second.triangles.begin();
+		auto trianglesEnd = polysToAddBegin->second.triangles.end();
+		for (; trianglesBegin != trianglesEnd; trianglesBegin++)
+		{
+			std::cout << "Triangle " << trianglesBegin->first << std::endl;
+			trianglesBegin->second.printPoints();
+		}
+	}
+	*/
+
 	MessageContainer productionErrors;	
 	productionMassZone.createMassZoneBoxBoundary(in_massZoneBoxType);		// first, create the boundaries for the MassZone
 
@@ -75,7 +93,7 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 	//	TOPFACE,
 	//	BOTTOMFACE
 	//
-	// Each enum value corresponds to a MassZoneBoxBoundaryOrientation enum value:
+	// Each enum value corresponds to a BoundaryOrientation enum value:
 	//	WESTFACE	->	NEG_X
 	//  NORTHFACE	->	NEG_Z
 	//  EASTFACE	->	POS_X
@@ -98,7 +116,7 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 		auto outputsEnd = outputSPolySuperGroups.end();
 		for (; outputsBegin != outputsEnd; outputsBegin++)
 		{
-			OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(outputsBegin->first);
+			OrganicGLWinUtils::printBoundaryOrientationEnum(outputsBegin->first);
 			std::cout << std::endl;
 			outputsBegin->second.printSPolys();
 		}

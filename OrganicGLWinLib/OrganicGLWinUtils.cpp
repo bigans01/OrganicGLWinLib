@@ -1208,16 +1208,16 @@ glm::vec3 OrganicGLWinUtils::convert2DToGlmVec3(TwoDPoint in_twoDPoint)
 	return returnVec;
 }
 
-void OrganicGLWinUtils::printMassZoneBoxBoundaryOrientationEnum(MassZoneBoxBoundaryOrientation in_orientation)
+void OrganicGLWinUtils::printBoundaryOrientationEnum(BoundaryOrientation in_orientation)
 {
 	switch (in_orientation)
 	{
-		case MassZoneBoxBoundaryOrientation::NEG_Z: { std::cout << "NEG_Z"; break; }
-		case MassZoneBoxBoundaryOrientation::POS_X: { std::cout << "POS_X"; break; }
-		case MassZoneBoxBoundaryOrientation::POS_Z: { std::cout << "POS_Z"; break; }
-		case MassZoneBoxBoundaryOrientation::NEG_X: { std::cout << "NEG_X"; break; }
-		case MassZoneBoxBoundaryOrientation::POS_Y: { std::cout << "POS_Y"; break; }
-		case MassZoneBoxBoundaryOrientation::NEG_Y: { std::cout << "NEG_Y"; break; }
+		case BoundaryOrientation::NEG_Z: { std::cout << "NEG_Z"; break; }
+		case BoundaryOrientation::POS_X: { std::cout << "POS_X"; break; }
+		case BoundaryOrientation::POS_Z: { std::cout << "POS_Z"; break; }
+		case BoundaryOrientation::NEG_X: { std::cout << "NEG_X"; break; }
+		case BoundaryOrientation::POS_Y: { std::cout << "POS_Y"; break; }
+		case BoundaryOrientation::NEG_Y: { std::cout << "NEG_Y"; break; }
 	};
 }
 

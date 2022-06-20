@@ -4,7 +4,7 @@
 void FaceResolverBase::initialize(SPoly* in_sPolyPtr,
 	InvalidCleaveSequences in_invalids,
 	MassZoneBoxType in_boxType,
-	MassZoneBoxBoundaryOrientation in_faceOrientation)
+	BoundaryOrientation in_faceOrientation)
 {
 	sPolyPtr = in_sPolyPtr;
 	invalidsCopy = in_invalids;

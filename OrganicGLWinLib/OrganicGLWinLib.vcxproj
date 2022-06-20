@@ -387,7 +387,6 @@
     <ClInclude Include="MassZone.h" />
     <ClInclude Include="MassZoneBox.h" />
     <ClInclude Include="MassZoneBoxBoundary.h" />
-    <ClInclude Include="MassZoneBoxBoundaryOrientation.h" />
     <ClInclude Include="MassZoneBoxBoundarySPolySet.h" />
     <ClInclude Include="MassZoneBoxBoundaryState.h" />
     <ClInclude Include="MassZoneBoxType.h" />

@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "MassZoneBox.h"
 
-void MassZoneBox::insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet)
+void MassZoneBox::insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet)
 {
-	boxBoundaries[in_massZoneBoxBoundaryOrientation] = in_massZoneBoxBoundary;
-	boxBoundaries[in_massZoneBoxBoundaryOrientation].setBoundarySPolyInPolySet();	// must be called, or program will crash. The boundary SPoly ref should only be set
+	boxBoundaries[in_BoundaryOrientation] = in_massZoneBoxBoundary;
+	boxBoundaries[in_BoundaryOrientation].setBoundarySPolyInPolySet();	// must be called, or program will crash. The boundary SPoly ref should only be set
 																					// after the MassZoneBoxBoundary has been copied into the map, since it will correctly point to that newly
 																					// allocated memory.
-	boxBoundaries[in_massZoneBoxBoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
-	boxBoundaries[in_massZoneBoxBoundaryOrientation].setSPolySetEmptyNormal();		// sets the empty normal for the MassZoneBoxBoundarySPolySet
+	boxBoundaries[in_BoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
+	boxBoundaries[in_BoundaryOrientation].setSPolySetEmptyNormal();		// sets the empty normal for the MassZoneBoxBoundarySPolySet
 	//std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
 };
 
@@ -18,27 +18,27 @@ void MassZoneBox::printBoundaryLineCounts()
 	auto boxBoundariesEnd = boxBoundaries.end();
 	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
 	{
-		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Z)
 		{
 			std::cout << "Counts for boundary NEG_Z: ";
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_X)
 		{
 			std::cout << "Counts for boundary POS_X: ";
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Z)
 		{
 			std::cout << "Counts for boundary POS_Z: ";
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_X)
 		{
 			std::cout << "Counts for boundary NEG_X: ";
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Y)
 		{
 			std::cout << "Counts for boundary POS_Y: ";
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Y)
 		{
 			std::cout << "Counts for boundary NEG_Y: ";
 		}
@@ -52,27 +52,27 @@ void MassZoneBox::printBoundaries()
 	auto boxBoundariesEnd = boxBoundaries.end();
 	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
 	{
-		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Z)
 		{
 			std::cout << "Points for boundary NEG_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_X)
 		{
 			std::cout << "Points for boundary POS_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Z)
 		{
 			std::cout << "Points for boundary POS_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_X)
 		{
 			std::cout << "Points for boundary NEG_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Y)
 		{
 			std::cout << "Points for boundary POS_Y: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Y)
 		{
 			std::cout << "Points for boundary NEG_Y: " << std::endl;
 		}
@@ -93,27 +93,27 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 	auto boxBoundariesEnd = boxBoundaries.end();
 	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
 	{
-		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Z)
 		{
 			//std::cout << "> Comparing against NEG_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_X)
 		{
 			//std::cout << "> Comparing against POS_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Z)
 		{
 			//std::cout << "> Comparing against POS_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_X)
 		{
 			//std::cout << "> Comparing against NEG_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Y)
 		{
 			//std::cout << "> Comparing against POS_Y: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Y)
 		{
 			//std::cout << ">++++++++++++++++++++++++++++++++++++++++++++++ Comparing against NEG_Y: " << std::endl;
 		}
@@ -122,9 +122,9 @@ void MassZoneBox::runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZ
 	}
 }
 
-std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType)
+std::set<BoundaryOrientation> MassZoneBox::generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType)
 {
-	std::set<MassZoneBoxBoundaryOrientation> generatedTouchedList;
+	std::set<BoundaryOrientation> generatedTouchedList;
 	PolyLogger touchedLogger;
 	touchedLogger.setDebugLevel(generatedTouchedFaceDebugLevel);
 	auto currentBoundaryBegin = boxBoundaries.begin();
@@ -136,37 +136,37 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 		// std::cout << "!! Entering next boundary.." << std::endl;
 		switch (currentBoundaryBegin->first)
 		{
-			case MassZoneBoxBoundaryOrientation::NEG_X:
+			case BoundaryOrientation::NEG_X:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary NEG_X" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_X", "\n");
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::NEG_Z:
+			case BoundaryOrientation::NEG_Z:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary NEG_Z" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_Z", "\n");
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_X:
+			case BoundaryOrientation::POS_X:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary POS_X" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary POS_X", "\n");
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_Z:
+			case BoundaryOrientation::POS_Z:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary POS_Z" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary POS_Z", "\n");
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_Y:
+			case BoundaryOrientation::POS_Y:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary POS_Y" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary POS_Y", "\n");
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::NEG_Y:
+			case BoundaryOrientation::NEG_Y:
 			{
 				//std::cout << "(MassZoneBox): Found box Boundary NEG_Y" << std::endl;
 				touchedLogger.log("(MassZoneBox): Found box Boundary NEG_Y", "\n");
@@ -234,7 +234,7 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 						{
 							if (pointFaceList.faceList[x] != ECBPPOrientations::NOVAL)
 							{
-								MassZoneBoxBoundaryOrientation currentOrientation = convertPointOrientationToBoundaryOrientation(pointFaceList.faceList[x]);
+								BoundaryOrientation currentOrientation = convertPointOrientationToBoundaryOrientation(pointFaceList.faceList[x]);
 								generatedTouchedList.insert(currentOrientation);
 							}
 						}
@@ -253,32 +253,32 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 		{
 			switch (*listBegin)
 			{
-			case MassZoneBoxBoundaryOrientation::NEG_X:
+			case BoundaryOrientation::NEG_X:
 			{
 				std::cout << "(MassZoneBox): Found touched face NEG_X" << std::endl;
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::NEG_Z:
+			case BoundaryOrientation::NEG_Z:
 			{
 				std::cout << "(MassZoneBox): Found touched face NEG_Z" << std::endl;
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_X:
+			case BoundaryOrientation::POS_X:
 			{
 				std::cout << "(MassZoneBox): Found touched face POS_X" << std::endl;
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_Z:
+			case BoundaryOrientation::POS_Z:
 			{
 				std::cout << "(MassZoneBox): Found touched face POS_Z" << std::endl;
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::POS_Y:
+			case BoundaryOrientation::POS_Y:
 			{
 				std::cout << "(MassZoneBox): Found touched face POS_Y" << std::endl;
 				break;
 			}
-			case MassZoneBoxBoundaryOrientation::NEG_Y:
+			case BoundaryOrientation::NEG_Y:
 			{
 				std::cout << "(MassZoneBox): Found touched face NEG_Y" << std::endl;
 				break;
@@ -290,8 +290,8 @@ std::set<MassZoneBoxBoundaryOrientation> MassZoneBox::generateTouchedBoxFacesLis
 	return generatedTouchedList;
 }
 
-void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet,
-												 std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
+void MassZoneBox::runFirstTertiaryProductionPass(std::set<BoundaryOrientation> in_orientationSet,
+												 std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
 {
 	auto orientationSetBegin = in_orientationSet.begin();
 	auto orientationSetEnd = in_orientationSet.end();
@@ -301,34 +301,40 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOri
 		{
 			switch (*orientationSetBegin)
 			{
-				case MassZoneBoxBoundaryOrientation::NEG_X:
+				case BoundaryOrientation::NEG_X:
 				{
 					//std::cout << "NEG_X";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::NEG_X);
 					break;
 				}
-				case MassZoneBoxBoundaryOrientation::NEG_Z:
+				case BoundaryOrientation::NEG_Z:
 				{
 					//std::cout << "NEG_Z";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::NEG_Z);
 					break;
 				}
-				case MassZoneBoxBoundaryOrientation::POS_X:
+				case BoundaryOrientation::POS_X:
 				{
 					//std::cout << "POS_X";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::POS_X);
 					break;
 				}
-				case MassZoneBoxBoundaryOrientation::POS_Z:
+				case BoundaryOrientation::POS_Z:
 				{
 					//std::cout << "POS_Z";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::POS_Z);
 					break;
 				}
-				case MassZoneBoxBoundaryOrientation::POS_Y:
+				case BoundaryOrientation::POS_Y:
 				{
 					//std::cout << "POS_Y";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::POS_Y);
 					break;
 				}
-				case MassZoneBoxBoundaryOrientation::NEG_Y:
+				case BoundaryOrientation::NEG_Y:
 				{
 					//std::cout << "NEG_Y";
+					boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef->sPolyBoundaryIndicator.setBoundaryIndicator(BoundaryOrientation::NEG_Y);
 					break;
 				}
 			}
@@ -355,39 +361,39 @@ void MassZoneBox::setTouchedGenerationDebugLevel(PolyDebugLevel in_debugLevel)
 	generatedTouchedFaceDebugLevel = in_debugLevel;
 }
 
-MassZoneBoxBoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)
+BoundaryOrientation MassZoneBox::convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation)
 {
-	MassZoneBoxBoundaryOrientation returnOrientation;
+	BoundaryOrientation returnOrientation;
 	switch (in_pointOrientation)
 	{
 		case ECBPPOrientations::WESTFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_X;
+			returnOrientation = BoundaryOrientation::NEG_X;
 			break;
 		}	
 		case ECBPPOrientations::NORTHFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_Z;
+			returnOrientation = BoundaryOrientation::NEG_Z;
 			break;
 		}
 		case ECBPPOrientations::EASTFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::POS_X;
+			returnOrientation = BoundaryOrientation::POS_X;
 			break;
 		}
 		case ECBPPOrientations::SOUTHFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::POS_Z;
+			returnOrientation = BoundaryOrientation::POS_Z;
 			break;
 		}
 		case ECBPPOrientations::TOPFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::POS_Y;
+			returnOrientation = BoundaryOrientation::POS_Y;
 			break;
 		}
 		case ECBPPOrientations::BOTTOMFACE:
 		{
-			returnOrientation = MassZoneBoxBoundaryOrientation::NEG_Y;
+			returnOrientation = BoundaryOrientation::NEG_Y;
 			break;
 		}
 	}
@@ -401,27 +407,27 @@ void MassZoneBox::printCategorizedLinesInBoundaries()
 	auto boxBoundariesEnd = boxBoundaries.end();
 	for (; boxBoundariesBegin != boxBoundariesEnd; boxBoundariesBegin++)
 	{
-		if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Z)
+		if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Z)
 		{
 			std::cout << ">>>>>>> Categorized lines for NEG_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_X)
 		{
 			std::cout << ">>>>>>> Categorized lines for POS_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Z)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Z)
 		{
 			std::cout << ">>>>>>> Categorized lines for POS_Z: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_X)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_X)
 		{
 			std::cout << ">>>>>>> Categorized lines for NEG_X: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::POS_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::POS_Y)
 		{
 			std::cout << ">>>>>>> Categorized lines for POS_Y: " << std::endl;
 		}
-		else if (boxBoundariesBegin->first == MassZoneBoxBoundaryOrientation::NEG_Y)
+		else if (boxBoundariesBegin->first == BoundaryOrientation::NEG_Y)
 		{
 			std::cout << ">>>>>>> Categorized lines for NEG_Y: " << std::endl;
 		}

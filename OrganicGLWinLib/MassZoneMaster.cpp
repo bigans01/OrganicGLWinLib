@@ -165,52 +165,52 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		case (DebugOption::MASSZONEMASTER_OLDZONE_POINT_CLIPPING): {oldZone.clipper.setClipperDebugLevel(PolyDebugLevel::DEBUG, "(OLD_ZONE) "); break; };
 
 		// NEG_Z options (North)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINES) : { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINES) : { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
         // POS_X options (East)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		// POS_Z options (South)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
         // NEG_X options (West)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		// POS_Y options (Above)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_Y, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_POS_Y_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::POS_Y, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		// NEG_Y options (Below)
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Y, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_MAIN): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_SPOLY_FACTORY_MERGER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_FRACTURER): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_CATEGORIZED_LINES): { oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_OLDZONE_NEG_Y_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {oldZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Y, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		////////////////// For newZone																	 
 		
@@ -220,28 +220,28 @@ void MassZoneMaster::handleDebugOption(DebugOption in_debugOption)
 		case (DebugOption::MASSZONEMASTER_NEWZONE_POINT_CLIPPING): {newZone.clipper.setClipperDebugLevel(PolyDebugLevel::DEBUG, "(NEW_ZONE) "); break; };
 
 		// NEG_Z options (North)
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_Z_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_Z, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		// POS_X options (East)
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_POS_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(BoundaryOrientation::POS_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		// NEG_X options (West)
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::MAIN); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FACTORY); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FACTORY_MERGER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::FRACTURER); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINES); break; }
-		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_MAIN): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::MAIN); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_FACTORY): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FACTORY); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_SPOLY_FACTORY_MERGER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FACTORY_MERGER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_FRACTURER): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::FRACTURER); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_CATEGORIZED_LINES): { newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINES); break; }
+		case (DebugOption::MASSZONEMASTER_NEWZONE_NEG_X_BOUNDARY_CATEGORIZED_LINE_COPLANAR_TESTS): {newZone.insertBoundaryDebugOption(BoundaryOrientation::NEG_X, SPolyDO::CATEGORIZED_LINE_COPLANAR_TESTS); break; }
 
 		
 	}

@@ -20,6 +20,7 @@
 #include "QMVoidFindCyclingDirection.h"
 #include <vector>
 #include <algorithm>
+#include "IndependentUtils.h"
 
 
 class SPolyBorderLines;
@@ -90,6 +91,8 @@ public:
 		int in_borderLineBID,
 		glm::vec3 in_categorizedLineNormal,
 		PolyDebugLevel in_polyDebugLevel);
+
+	void roundLineEndpoints();
 
 	void testFunction();
 	void createCategorizedLineOptionals();

@@ -199,6 +199,12 @@ FusedPointReactorResult FusedPointReactor::getReactorResult()
 {
 	FusedPointReactorResult result;
 	result.wasLineProduced = fusionContinuationFlag;
+
+	// NEW FIX (6/20/2022): all points returned by this function should already be rounded to the nearest hundredth; 
+	// this fixes the problem that was occuring at blueprint (0,0,-1), ORE (2,0,7), when a plan run by the call to 
+	// OSServer::constructMultiMountTestWithElevator was being called.
+	producedLine.roundLineEndpoints();
+
 	result.resultingLine = producedLine;
 	return result;
 }

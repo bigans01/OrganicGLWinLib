@@ -4,7 +4,7 @@
 #define MASSZONEBOX_H
 
 #include <map>
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include "MassZoneBoxBoundary.h"
 #include <iostream>
 #include "MassSubZone.h"
@@ -25,19 +25,19 @@
 class MassZoneBox
 {
 	public:
-		std::map<MassZoneBoxBoundaryOrientation, MassZoneBoxBoundary> boxBoundaries;
-		void insertNewBoundary(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet);
+		std::map<BoundaryOrientation, MassZoneBoxBoundary> boxBoundaries;
+		void insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet);
 		void printBoundaryLineCounts();
 		void printBoundaries();
 		void printCategorizedLinesInBoundaries();
 		void runSPolyBasedSubZoneAgainstBoundaries(MassSubZone* in_massSubZoneRef);
-		std::set<MassZoneBoxBoundaryOrientation> generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
-		void runFirstTertiaryProductionPass(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet, 
-											std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
+		std::set<BoundaryOrientation> generateTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
+		void runFirstTertiaryProductionPass(std::set<BoundaryOrientation> in_orientationSet, 
+											std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 		void setContestedCategorizedLineAnalysisFlagInBoundaries();
 		void setTouchedGenerationDebugLevel(PolyDebugLevel in_debugLevel);
 	private:
-		MassZoneBoxBoundaryOrientation convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation);
+		BoundaryOrientation convertPointOrientationToBoundaryOrientation(ECBPPOrientations in_pointOrientation);
 		PolyDebugLevel generatedTouchedFaceDebugLevel = PolyDebugLevel::NONE;
 };
 

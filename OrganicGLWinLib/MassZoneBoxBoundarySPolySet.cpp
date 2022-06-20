@@ -260,12 +260,12 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 		std::string currentBoxBoundaryOrientation = "";
 		switch (boundarySPolySetOrientation)
 		{
-			case MassZoneBoxBoundaryOrientation::POS_X: { currentBoxBoundaryOrientation = "POS_X"; break; }
-			case MassZoneBoxBoundaryOrientation::NEG_X: { currentBoxBoundaryOrientation = "NEG_X"; break; }
-			case MassZoneBoxBoundaryOrientation::POS_Y: { currentBoxBoundaryOrientation = "POS_Y"; break; }
-			case MassZoneBoxBoundaryOrientation::NEG_Y: { currentBoxBoundaryOrientation = "NEG_Y"; break; }
-			case MassZoneBoxBoundaryOrientation::POS_Z: { currentBoxBoundaryOrientation = "POS_Z"; break; }
-			case MassZoneBoxBoundaryOrientation::NEG_Z: { currentBoxBoundaryOrientation = "NEG_Z"; break; }
+			case BoundaryOrientation::POS_X: { currentBoxBoundaryOrientation = "POS_X"; break; }
+			case BoundaryOrientation::NEG_X: { currentBoxBoundaryOrientation = "NEG_X"; break; }
+			case BoundaryOrientation::POS_Y: { currentBoxBoundaryOrientation = "POS_Y"; break; }
+			case BoundaryOrientation::NEG_Y: { currentBoxBoundaryOrientation = "NEG_Y"; break; }
+			case BoundaryOrientation::POS_Z: { currentBoxBoundaryOrientation = "POS_Z"; break; }
+			case BoundaryOrientation::NEG_Z: { currentBoxBoundaryOrientation = "NEG_Z"; break; }
 		}
 		std::cout << currentBoxBoundaryOrientation << std::endl;
 

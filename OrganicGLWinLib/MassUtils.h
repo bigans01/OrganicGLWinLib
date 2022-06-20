@@ -3,15 +3,15 @@
 #ifndef MASSUTILS_H
 #define MASSUTILS_H
 
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include <iostream>
 
 class MassUtils
 {
 	public:
-		static int getMassZoneOrientationIntValue(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation);
-		static MassZoneBoxBoundaryOrientation getMassZoneOrientationEnumValue(int in_massZoneBoundaryID);
-		static void printEnumValue(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation);
+		static int getMassZoneOrientationIntValue(BoundaryOrientation in_BoundaryOrientation);
+		static BoundaryOrientation getMassZoneOrientationEnumValue(int in_massZoneBoundaryID);
+		static void printEnumValue(BoundaryOrientation in_BoundaryOrientation);
 };
 
 #endif

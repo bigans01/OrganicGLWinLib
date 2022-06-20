@@ -27,9 +27,10 @@
 #include "BorderLineLinkContainer.h"
 #include "QuatUtils.h"
 #include "MessageContainer.h"
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include "InvalidCleaveSequences.h"
 #include "SPolyMode.h"
+#include "BoundaryPolyIndicator.h"
 
 class SPoly
 {
@@ -88,7 +89,8 @@ private:
 	SPolyMode mode = SPolyMode::TYPICAL;	// always starts as TYPICAL (as that is whats assumed); however, due to mitigation, it could be MALFORMED_MITIGATION
 	int numberOfSPolyBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
-	short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
+	//short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
+	BoundaryPolyIndicator sPolyBoundaryIndicator;
 	short sPolyMaterialID = 0;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
 	glm::vec3 primePoint0, primePoint1, primePoint2;	// the very first points of the polygon
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
@@ -105,7 +107,7 @@ private:
 
 
 	void determinePrimalPoints();
-	InvalidCleaveSequences buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation);
+	InvalidCleaveSequences buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, BoundaryOrientation in_optionalOrientation);
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.

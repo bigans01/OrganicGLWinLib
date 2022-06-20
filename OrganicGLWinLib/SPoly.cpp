@@ -596,7 +596,7 @@ void SPoly::moveLastCleave()
 	}
 }
 
-InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, MassZoneBoxBoundaryOrientation in_optionalOrientation)
+InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, BoundaryOrientation in_optionalOrientation)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	InvalidCleaveSequences retrievedInvalids;

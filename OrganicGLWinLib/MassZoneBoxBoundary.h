@@ -5,7 +5,7 @@
 
 #include <map>
 #include "MassZoneBoxBoundaryState.h"
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include "MassZoneBoxBoundarySPolySet.h"
 #include <glm/glm.hpp>
 #include <iostream>
@@ -24,7 +24,7 @@ class MassZoneBoxBoundary
 		friend class MassZoneBox;
 		MassZoneBoxBoundary() {};
 		MassZoneBoxBoundary(
-			MassZoneBoxBoundaryOrientation in_boxOrientation,
+			BoundaryOrientation in_boxOrientation,
 			glm::vec3 in_corner1, 
 			glm::vec3 in_corner2, 
 			glm::vec3 in_corner3, 
@@ -153,7 +153,7 @@ class MassZoneBoxBoundary
 			
 		}
 
-		MassZoneBoxBoundaryOrientation boxOrientation = MassZoneBoxBoundaryOrientation::NONE; // needs to be set by constructor.
+		BoundaryOrientation boxOrientation = BoundaryOrientation::NONE; // needs to be set by constructor.
 		SPoly boundarySPoly;
 		MassZoneBoxBoundarySPolySet boundaryPolySet;	
 		PolyDebugLevel massZoneBoxBoundaryLogLevel = PolyDebugLevel::NONE;

@@ -11,7 +11,7 @@
 #include <glm/glm.hpp>
 #include "PolyDebugLevel.h"
 #include "SPolyDOSet.h"
-#include "MassZoneBoxBoundaryOrientation.h"
+#include "BoundaryOrientation.h"
 #include "MassZoneType.h"
 #include "MassZonePointClipper.h"
 #include "DebugOption.h"
@@ -32,8 +32,8 @@ private:
 														// (this class hasn't been given a name, as of 1/29/2022)
 
 	std::map<int, MassSubZone> subZoneMap;
-	std::map<MassZoneBoxBoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
-	std::set<MassZoneBoxBoundaryOrientation> boxFaceProductionPermits;
+	std::map<BoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
+	std::set<BoundaryOrientation> boxFaceProductionPermits;
 	PolyDebugLevel massZoneLogLevel = PolyDebugLevel::NONE;
 	PolyDebugLevel printBoundaryLinesLogLevel = PolyDebugLevel::NONE;			// used for printing categorized lines in all SPolys of a MassZoneBox. (set via debug option, PRINT_BOUNDARY_CATEGORIZED_LINES)
 	PolyDebugLevel boundarySPolyConstructionLogLevel = PolyDebugLevel::NONE;	// used for halting and waiting for input, between the construction of boundary SPolys. (set via debug option, HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION)
@@ -59,12 +59,12 @@ private:
 	MessageContainer createMassZoneShell(MassZoneType in_massZoneType);
 	void enableContestedCategorizedLineAnalysis();
 	void wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);
-	void insertBoundaryDebugOption(MassZoneBoxBoundaryOrientation in_massZoneBoxBoundaryOrientation, SPolyDO in_sPolyDO);
+	void insertBoundaryDebugOption(BoundaryOrientation in_BoundaryOrientation, SPolyDO in_sPolyDO);
 	void runClipper();
-	std::set<MassZoneBoxBoundaryOrientation> getTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
-	void runFirstTertiaryProductionPassInZoneBox(std::set<MassZoneBoxBoundaryOrientation> in_orientationSet, 
-											     std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
-	void produceExtractableMassZoneShellSPolys(std::map<MassZoneBoxBoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
+	std::set<BoundaryOrientation> getTouchedBoxFacesList(MassZoneBoxType in_massZoneBoxType);
+	void runFirstTertiaryProductionPassInZoneBox(std::set<BoundaryOrientation> in_orientationSet, 
+											     std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
+	void produceExtractableMassZoneShellSPolys(std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 };
 
 #endif

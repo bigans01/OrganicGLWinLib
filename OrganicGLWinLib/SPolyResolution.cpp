@@ -14,37 +14,37 @@ void SPolyResolution::determineResolver()
 	std::cout << "(SPolyResolution): determining resolver..." << std::endl;
 	switch (resolutionOrientation)
 	{
-		case MassZoneBoxBoundaryOrientation::POS_X:
+		case BoundaryOrientation::POS_X:
 		{
 			selectedResolverPtr.reset(new PosXFaceResolver());
 			break;
 		}
 
-		case MassZoneBoxBoundaryOrientation::NEG_X:
+		case BoundaryOrientation::NEG_X:
 		{
 			selectedResolverPtr.reset(new NegXFaceResolver());
 			break;
 		}
 
-		case MassZoneBoxBoundaryOrientation::POS_Y:
+		case BoundaryOrientation::POS_Y:
 		{
 			selectedResolverPtr.reset(new PosYFaceResolver());
 			break;
 		}
 
-		case MassZoneBoxBoundaryOrientation::NEG_Y:
+		case BoundaryOrientation::NEG_Y:
 		{
 			selectedResolverPtr.reset(new NegYFaceResolver());
 			break;
 		}
 
-		case MassZoneBoxBoundaryOrientation::POS_Z:
+		case BoundaryOrientation::POS_Z:
 		{
 			selectedResolverPtr.reset(new PosZFaceResolver());
 			break;
 		}
 
-		case MassZoneBoxBoundaryOrientation::NEG_Z:
+		case BoundaryOrientation::NEG_Z:
 		{
 			selectedResolverPtr.reset(new NegZFaceResolver());
 			break;

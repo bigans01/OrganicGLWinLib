@@ -471,9 +471,6 @@
     <ClInclude Include="MassZoneBoxBoundary.h">
       <Filter>Header Files\MassZone</Filter>
     </ClInclude>
-    <ClInclude Include="MassZoneBoxBoundaryOrientation.h">
-      <Filter>Header Files\MassZone</Filter>
-    </ClInclude>
     <ClInclude Include="MassZoneBoxBoundarySPolySet.h">
       <Filter>Header Files\MassZone</Filter>
     </ClInclude>
