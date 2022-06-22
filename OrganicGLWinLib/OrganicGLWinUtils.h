@@ -98,6 +98,8 @@ public:
 	static glm::vec3 findTriangleNormal(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2);
 	static TwoDPoint convertGlmVec3To2D(glm::vec3 in_glmvec3);
 	static glm::vec3 convert2DToGlmVec3(TwoDPoint in_twoDPoint);
+	static ECBPolyPoint convertVec3ToPolyPoint(glm::vec3 in_glmvec3);
+	static glm::vec3 convertPolyPointToVec3(ECBPolyPoint in_ecbPolyPoint);
 	static void printBoundaryOrientationEnum(BoundaryOrientation in_orientation);
 
 	// IMGUI functions

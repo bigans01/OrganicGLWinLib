@@ -1208,6 +1208,16 @@ glm::vec3 OrganicGLWinUtils::convert2DToGlmVec3(TwoDPoint in_twoDPoint)
 	return returnVec;
 }
 
+ECBPolyPoint OrganicGLWinUtils::convertVec3ToPolyPoint(glm::vec3 in_glmvec3)
+{
+	return ECBPolyPoint(in_glmvec3.x, in_glmvec3.y, in_glmvec3.z);
+}
+
+glm::vec3 OrganicGLWinUtils::convertPolyPointToVec3(ECBPolyPoint in_ecbPolyPoint)
+{
+	return glm::vec3(in_ecbPolyPoint.x, in_ecbPolyPoint.y, in_ecbPolyPoint.z);
+}
+
 void OrganicGLWinUtils::printBoundaryOrientationEnum(BoundaryOrientation in_orientation)
 {
 	switch (in_orientation)
