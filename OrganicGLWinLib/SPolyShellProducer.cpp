@@ -151,3 +151,84 @@ std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()
 	}
 	return returnVector;
 }
+
+void SPolyShellProducer::printSupergroupBoundaryIndicators()
+{
+	auto generatedSPolysBegin = outputSPolySuperGroups.begin();
+	auto generatedSPolysEnd = outputSPolySuperGroups.end();
+	for (; generatedSPolysBegin != generatedSPolysEnd; generatedSPolysBegin++)
+	{
+		auto currentGroupSPolysBegin = generatedSPolysBegin->second.sPolyMap.begin();
+		auto currentValue = currentGroupSPolysBegin->second.sPolyBoundaryIndicator.getBoundaryIndicatorValue();
+
+		OrganicGLWinUtils::printBoundaryOrientationEnum(generatedSPolysBegin->first);
+		switch (currentValue)
+		{
+			case BoundaryOrientation::NONE: { std::cout << "-> NONE " << std::endl; break; }
+			case BoundaryOrientation::POS_X: { std::cout << "-> POS_X " << std::endl; break; }
+			case BoundaryOrientation::NEG_X: { std::cout << "-> NEG_X " << std::endl; break; }
+			case BoundaryOrientation::POS_Y: { std::cout << "-> POS_Y " << std::endl; break; }
+			case BoundaryOrientation::NEG_Y: { std::cout << "-> NEG_Y " << std::endl; break; }
+			case BoundaryOrientation::POS_Z: { std::cout << "-> POS_Z " << std::endl; break; }
+			case BoundaryOrientation::NEG_Z: { std::cout << "-> NEG_Z " << std::endl; break; }
+		}
+	}
+}
+
+std::set<BoundaryOrientation> SPolyShellProducer::fetchOutputBoundaries()
+{
+	std::set<BoundaryOrientation> boundaries;
+	auto outputSPolysBegin = outputSPolySuperGroups.begin();
+	auto outputSPolysEnd = outputSPolySuperGroups.end();
+	for (; outputSPolysBegin != outputSPolysEnd; outputSPolysBegin++)
+	{
+		boundaries.insert(outputSPolysBegin->first);
+	}
+	return boundaries;
+}
+
+Message SPolyShellProducer::convertBoundarySPolySupergroupToMessage(BoundaryOrientation in_targetBoundary)
+{
+	Message meltedGroupData;
+
+	// NOTE: this function assumes the SPolySupergroup at the specified BoundaryOrientation already exists.
+	SPolySupergroup* targetGroupRef = &outputSPolySuperGroups[in_targetBoundary];
+
+	int numberOfSPolys = targetGroupRef->sPolyMap.size();
+
+	// very first value for message will be the number of SPolys.
+	meltedGroupData.insertInt(numberOfSPolys);
+
+	// cycle through each SPoly
+	for (auto& currentSPoly : targetGroupRef->sPolyMap)
+	{
+		// get the current SPoly ID, insert that as next part of message.
+		int currentSPolyID = currentSPoly.first;
+		meltedGroupData.insertInt(currentSPolyID);
+
+		// get the number of triangles in the SPoly, and insert that.
+		int currentNumberOfPolyTriangles = currentSPoly.second.triangles.size();
+		meltedGroupData.insertInt(currentNumberOfPolyTriangles);
+
+		// insert empty normal
+		glm::vec3 currentSPolyEmptyNormal = currentSPoly.second.getEmptyNormal();
+		ECBPolyPoint convertedEmptyNormal(currentSPolyEmptyNormal.x, currentSPolyEmptyNormal.y, currentSPolyEmptyNormal.z);
+		meltedGroupData.insertPoint(convertedEmptyNormal);
+
+		// insert the boundary
+		meltedGroupData.insertInt(IndependentUtils::convertBoundaryOrientationToInt(currentSPoly.second.sPolyBoundaryIndicator.getBoundaryIndicatorValue()));
+
+		// now, cycle through each triangle; get pointA of each line and insert it into the Message.
+		for (auto& currentSTriangle : currentSPoly.second.triangles)
+		{
+			for (int currentLine = 0; currentLine < 3; currentLine++)
+			{
+				glm::vec3 currentLinePoint = currentSTriangle.second.triangleLines[currentLine].pointA;
+				ECBPolyPoint convertedPoint(currentLinePoint.x, currentLinePoint.y, currentLinePoint.z);
+				meltedGroupData.insertPoint(convertedPoint);
+			}
+		}
+	}
+		
+	return meltedGroupData;
+}

@@ -22,6 +22,16 @@ void SPoly::setSPolyMaterial(short in_sPolyMaterialID)
 	sPolyMaterialID = in_sPolyMaterialID;
 }
 
+void SPoly::setBoundaryIndicatorOrientation(BoundaryOrientation in_boundaryOrientation)
+{
+	sPolyBoundaryIndicator.setBoundaryIndicator(in_boundaryOrientation);
+}
+
+BoundaryOrientation SPoly::getBoundaryIndicatorOrientation()
+{
+	return sPolyBoundaryIndicator.getBoundaryIndicatorValue();
+}
+
 void SPoly::insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence)
 {
 	std::cout << "(SPoly): inserting CleaveSequence; size of CleaveSequences before insert is: " << cleaveMap.size() << std::endl;

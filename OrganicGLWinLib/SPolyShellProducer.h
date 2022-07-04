@@ -12,6 +12,7 @@
 #include "DebugOption.h"
 #include "PolyDebugLevel.h"
 #include "MessageContainer.h"
+#include <set>
 
 class SPolyShellProducer
 {
@@ -57,6 +58,9 @@ class SPolyShellProducer
 																					// a "fix" to malformed CleaveSequences; if it cannot be fixed, an SPoly that constitutes the entire face
 																					// should be returned as a safety measure (although this isn't pretty, it's necessary).
 		std::vector<SPoly> fetchAllSPolys();
+		void printSupergroupBoundaryIndicators();
+		std::set<BoundaryOrientation> fetchOutputBoundaries();
+		Message convertBoundarySPolySupergroupToMessage(BoundaryOrientation in_targetBoundary);
 	private:
 		void handleBorderDebugOption(DebugOption in_debugOption);
 

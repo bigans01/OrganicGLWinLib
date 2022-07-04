@@ -52,6 +52,17 @@ class SPolySupergroup
 				sPolysBegin->second.polyEmptyNormal = in_emptyNormalValue;
 			}
 		}
+
+		void setBoundaryOrientationInAllSPolys(BoundaryOrientation in_boundaryOrientation)
+		{
+			auto sPolysBegin = sPolyMap.begin();
+			auto sPolysEnd = sPolyMap.end();
+			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+			{
+				sPolysBegin->second.sPolyBoundaryIndicator.setBoundaryIndicator(in_boundaryOrientation);
+			}
+		}
+
 		void roundAllSTrianglesToHundredths()
 		{
 			auto sPolysBegin = sPolyMap.begin();

@@ -46,6 +46,8 @@ public:
 	void setEmptyNormal(float in_x, float in_y, float in_z);
 	void setEmptyNormal(glm::vec3 in_normalVec3);
 	void setSPolyMaterial(short in_sPolyMaterialID);
+	void setBoundaryIndicatorOrientation(BoundaryOrientation in_boundaryOrientation);
+	BoundaryOrientation getBoundaryIndicatorOrientation();
 	void insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence);
 	short getSPolyMaterial();
 	glm::vec3 getEmptyNormal();

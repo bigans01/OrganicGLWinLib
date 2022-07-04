@@ -222,6 +222,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
 			boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
 			boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+			boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 			boundarySPolySG.roundAllSTrianglesToHundredths();
 			boundarySPolySG.buildSPolyBorderLines();
 
@@ -282,6 +283,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 
 		boundarySPolySG = resolver.fetchResolution();
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+		boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 		boundarySPolySG.roundAllSTrianglesToHundredths();
 		boundarySPolySG.buildSPolyBorderLines();
 		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
