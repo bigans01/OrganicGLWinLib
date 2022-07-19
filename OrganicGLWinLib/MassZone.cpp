@@ -338,6 +338,25 @@ void MassZone::produceExtractableMassZoneShellSPolys(std::map<BoundaryOrientatio
 	}
 }
 
+void MassZone::extractAllBoundarySPolys(std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef)
+{
+	// should only be called after createMassZoneBoxBoundary.
+	//SPolySupergroup tempGroup;
+	//tempGroup.insertSPoly(*zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolyRef);
+	//(*in_outputSuperGroupsMapRef)[zoneBoxBoundariesBegin->first] = tempGroup;
+
+	// below: just get the boundary SPolys for each of the six faces.
+	auto zoneBoxBoundariesBegin = zoneBox.boxBoundaries.begin();
+	auto zoneBoxBoundariesEnd = zoneBox.boxBoundaries.end();
+	for (; zoneBoxBoundariesBegin != zoneBoxBoundariesEnd; zoneBoxBoundariesBegin++)
+	{
+		SPolySupergroup tempGroup;
+		tempGroup.insertSPoly(*zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolyRef);
+		tempGroup.setBoundaryOrientationInAllSPolys(zoneBoxBoundariesBegin->first);
+		(*in_outputSuperGroupsMapRef)[zoneBoxBoundariesBegin->first] = tempGroup;
+	}
+}
+
 MessageContainer MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 {
 	// need to apply tertiary extraction options, to all boundaries that need them set.

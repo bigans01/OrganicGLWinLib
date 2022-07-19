@@ -65,6 +65,7 @@ private:
 	void runFirstTertiaryProductionPassInZoneBox(std::set<BoundaryOrientation> in_orientationSet, 
 											     std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 	void produceExtractableMassZoneShellSPolys(std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
+	void extractAllBoundarySPolys(std::map<BoundaryOrientation, SPolySupergroup>* in_outputSuperGroupsMapRef);
 };
 
 #endif
