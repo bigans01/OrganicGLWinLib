@@ -61,6 +61,7 @@ public:
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
 	std::map<int, SPolyBorderLines> borderLines;
+	BoundaryPolyIndicator sPolyBoundaryIndicator;
 	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
 private:
 	friend class RPoly;
@@ -92,7 +93,7 @@ private:
 	int numberOfSPolyBorderLines = 0;
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	//short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
-	BoundaryPolyIndicator sPolyBoundaryIndicator;
+	
 	short sPolyMaterialID = 0;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
 	glm::vec3 primePoint0, primePoint1, primePoint2;	// the very first points of the polygon
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)

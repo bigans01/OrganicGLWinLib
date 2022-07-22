@@ -216,7 +216,8 @@ Message SPolyShellProducer::convertBoundarySPolySupergroupToMessage(BoundaryOrie
 	//  
 	//	-otherwise, if the resulting produced shell was from no input SPolys, then all 6 sides were produced.
 	//	 Thus, we will signify in the Message that they were produced from no Input (MessageType::SPOLYSHELLPRODUCER_BOUNDARY_PRODUCED_FROM_NO_INPUT)
-
+	SPolySupergroup* targetGroupRef = &outputSPolySuperGroups[in_targetBoundary];
+	meltedGroupData = SPolyUtils::meltSPolySupergroupIntoMessage(targetGroupRef);
 	if (!inputSPolys.empty())
 	{
 		meltedGroupData.messageType = MessageType::SPOLYSHELLPRODUCER_BOUNDARY_PRODUCED_FROM_INPUT;
@@ -225,45 +226,6 @@ Message SPolyShellProducer::convertBoundarySPolySupergroupToMessage(BoundaryOrie
 	{
 		meltedGroupData.messageType = MessageType::SPOLYSHELLPRODUCER_BOUNDARY_PRODUCED_FROM_NO_INPUT;
 	}
-
-	// NOTE: this function assumes the SPolySupergroup at the specified BoundaryOrientation already exists.
-	SPolySupergroup* targetGroupRef = &outputSPolySuperGroups[in_targetBoundary];
-
-	int numberOfSPolys = targetGroupRef->sPolyMap.size();
-
-	// very first value for message will be the number of SPolys.
-	meltedGroupData.insertInt(numberOfSPolys);
-
-	// cycle through each SPoly
-	for (auto& currentSPoly : targetGroupRef->sPolyMap)
-	{
-		// get the current SPoly ID, insert that as next part of message.
-		int currentSPolyID = currentSPoly.first;
-		meltedGroupData.insertInt(currentSPolyID);
-
-		// get the number of triangles in the SPoly, and insert that.
-		int currentNumberOfPolyTriangles = currentSPoly.second.triangles.size();
-		meltedGroupData.insertInt(currentNumberOfPolyTriangles);
-
-		// insert empty normal
-		glm::vec3 currentSPolyEmptyNormal = currentSPoly.second.getEmptyNormal();
-		ECBPolyPoint convertedEmptyNormal(currentSPolyEmptyNormal.x, currentSPolyEmptyNormal.y, currentSPolyEmptyNormal.z);
-		meltedGroupData.insertPoint(convertedEmptyNormal);
-
-		// insert the boundary
-		meltedGroupData.insertInt(IndependentUtils::convertBoundaryOrientationToInt(currentSPoly.second.sPolyBoundaryIndicator.getBoundaryIndicatorValue()));
-
-		// now, cycle through each triangle; get pointA of each line and insert it into the Message.
-		for (auto& currentSTriangle : currentSPoly.second.triangles)
-		{
-			for (int currentLine = 0; currentLine < 3; currentLine++)
-			{
-				glm::vec3 currentLinePoint = currentSTriangle.second.triangleLines[currentLine].pointA;
-				ECBPolyPoint convertedPoint(currentLinePoint.x, currentLinePoint.y, currentLinePoint.z);
-				meltedGroupData.insertPoint(convertedPoint);
-			}
-		}
-	}
-		
+	
 	return meltedGroupData;
 }

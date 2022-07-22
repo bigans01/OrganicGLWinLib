@@ -13,6 +13,7 @@
 #include "PolyDebugLevel.h"
 #include "MessageContainer.h"
 #include <set>
+#include "SPolyUtils.h"
 
 class SPolyShellProducer
 {

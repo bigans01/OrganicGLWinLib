@@ -431,6 +431,7 @@
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="SPolyScaler.h" />
     <ClInclude Include="SPolyScalingOps.h" />
+    <ClInclude Include="SPolyUtils.h" />
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
@@ -677,6 +678,7 @@
     <ClCompile Include="IntersectionLine.cpp" />
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
+    <ClCompile Include="SPolyUtils.cpp" />
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="MassZone.cpp" />

@@ -154,6 +154,12 @@
     <Filter Include="Source Files\ShaderMachines\RenderablePrimitives">
       <UniqueIdentifier>{2fe82f60-3fb5-4c93-ac4d-b5966613dc15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SolublePoly\SPolyUtils">
+      <UniqueIdentifier>{83ab3529-a348-4793-b683-f6d776d82af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly\SPolyUtils">
+      <UniqueIdentifier>{eb085d10-e8a4-4bb2-9842-041f35039dc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1392,6 +1398,9 @@
     <ClInclude Include="RenderablePrimitiveContainer.h">
       <Filter>Header Files\ShaderMachines\RenderablePrimitives</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyUtils.h">
+      <Filter>Header Files\SolublePoly\SPolyUtils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2020,6 +2029,9 @@
     </ClCompile>
     <ClCompile Include="RenderablePrimitiveContainer.cpp">
       <Filter>Source Files\ShaderMachines\RenderablePrimitives</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyUtils.cpp">
+      <Filter>Source Files\SolublePoly\SPolyUtils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
