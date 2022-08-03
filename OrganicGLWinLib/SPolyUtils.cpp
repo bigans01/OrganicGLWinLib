@@ -110,3 +110,52 @@ SPolySupergroup SPolyUtils::solidifySupergroupFromMessage(Message* in_messageRef
 	return solidifiedBoundaryGroup;
 }
 
+std::vector<OrganicWrappedBBFan> SPolyUtils::produceFansFromSupergroup(SPolySupergroup* in_sPolySupergroupRef)
+{
+	// Remember: one BB Fan is equivalent to one STriangle in an SPoly.
+	// The BB fan's empty normal and alignment must come from the same SPoly that the STriangle originated from.
+	std::vector<OrganicWrappedBBFan> returnFans;
+
+	// cycle through each SPoly; we must check to see the number of STriangles in each SPoly, to determine what to do.
+	// This is because if the number of triangles is > 6, we will have to split the SPoly into multiple fans.
+	for (auto& currentSPoly : in_sPolySupergroupRef->sPolyMap)
+	{
+		int currentNumberOfSTriangles = currentSPoly.second.triangles.size();
+
+		// the normal operation, almost 100% of the time. There are 6 or less triangles, so 8 points.
+		if (currentNumberOfSTriangles < 7)
+		{
+			auto currentTargetSTriangleBegin = currentSPoly.second.triangles.begin();
+			auto currentTargetSTriangleEnd = currentSPoly.second.triangles.end();
+
+			BlockCircuit tempCircuit;
+
+			// the very first triangle in the SPoly, will insert it's 3 points, as we are following the rules of the fan; 
+			// we will then go to the next triangle.
+			for (int x = 0; x < 3; x++)
+			{
+				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[x].pointA));
+			}
+
+			// Now, iterate currentTargetSTriangleBegin by 1, and then continue with the rest of the triangles.
+			// The Point to insert in each of these fans should be point A of the 3rd line. So point A of the line at index 2.
+			currentTargetSTriangleBegin++;
+			for (; currentTargetSTriangleBegin != currentTargetSTriangleEnd; currentTargetSTriangleBegin++)
+			{
+				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[2].pointA));
+			}
+
+			// Construct the OrganicWrappedBBFan we will be adding, and then call buildBBFanWithBoundaryIndicator on it.
+			auto currentMaterial = currentSPoly.second.getSPolyMaterial();
+			auto currentEmptyNormal = OrganicGLWinUtils::convertVec3ToPolyPoint(currentSPoly.second.getEmptyNormal());
+			BoundaryPolyIndicator currentIndicator;
+			currentIndicator.setBoundaryIndicator(currentSPoly.second.getBoundaryIndicatorOrientation());
+
+			OrganicWrappedBBFan constructedFan;
+			constructedFan.buildBBFanWithBoundaryIndicator(&tempCircuit, currentMaterial, currentEmptyNormal, currentIndicator);
+			
+			returnFans.push_back(constructedFan);
+		}
+	}
+	return returnFans;
+}
