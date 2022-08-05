@@ -56,7 +56,9 @@ public:
 	bool isSPolyValid();
 	void determineBorderLines();
 	void setMode(SPolyMode in_mode);
+	bool wasSpecialLogicUsed();
 	SPolyMode getMode();
+	std::map<int, int> getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint);
 	int groupID = 0;				// the ID of the group that this poly belongs to
 	int debugFlag = 0;				// for debugging purposes only
 	std::map<int, STriangle> triangles; // needed by OREReformer in OrganicCoreLib
@@ -106,7 +108,6 @@ private:
 	int currentCleaveIndex = 0;	// the index of the current cleave to work on
 	InterceptRegister intercepts; // the interceptRegister instance for this SPoly
 
-	std::map<int, int> getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint);
 
 
 	void determinePrimalPoints();

@@ -143,6 +143,17 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 	return productionErrors;
 }
 
+int SPolyShellProducer::getNumberOfProducedSPolysInMassZoneBoundarySPoly(BoundaryOrientation in_targetBoundary)
+{
+	int returnValue = 0;
+	auto orientationFinder = productionMassZone.zoneBox.boxBoundaries.find(in_targetBoundary);
+	if (orientationFinder != productionMassZone.zoneBox.boxBoundaries.end())	// the target orientation was found.
+	{
+		returnValue = productionMassZone.zoneBox.boxBoundaries[in_targetBoundary].getProducedSPolyCount();
+	}
+	return returnValue;
+}
+
 std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()
 {
 	std::vector<SPoly> returnVector;

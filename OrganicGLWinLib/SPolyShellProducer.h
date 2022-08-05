@@ -62,6 +62,7 @@ class SPolyShellProducer
 		void printSupergroupBoundaryIndicators();
 		std::set<BoundaryOrientation> fetchOutputBoundaries();
 		Message convertBoundarySPolySupergroupToMessage(BoundaryOrientation in_targetBoundary);
+		int getNumberOfProducedSPolysInMassZoneBoundarySPoly(BoundaryOrientation in_targetBoundary);
 	private:
 		void handleBorderDebugOption(DebugOption in_debugOption);
 

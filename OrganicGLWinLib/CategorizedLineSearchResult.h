@@ -9,6 +9,7 @@ class CategorizedLineSearchResult
 {
 	public:
 		bool wasFound = false;
+		bool backupOptionFlag = false;
 		CategorizedLine returnLine;
 		glm::vec3 nextPointToFind;		// the next point to find; this value is set appropriately when the search found a matching categorized line.
 };

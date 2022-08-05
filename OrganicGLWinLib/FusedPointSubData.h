@@ -4,6 +4,7 @@
 #define FUSEDPOINTSUBDATA_H
 
 #include "FusionCandidateOrigin.h"
+#include <iostream>
 
 class FusedPointSubData
 {
@@ -19,6 +20,18 @@ class FusedPointSubData
 		int triangleLineIndex = 0;
 		int isBorderLine = 0;
 		int borderLineValue = 0;
+
+		std::string fetchOriginString()
+		{
+			std::string originString = "";
+			switch (origin)
+			{
+				case FusionCandidateOrigin::NONE: { originString = "FusionCandidateOrigin::NONE"; break; }
+				case FusionCandidateOrigin::GUEST: { originString = "FusionCandidateOrigin::GUEST"; break; }
+				case FusionCandidateOrigin::HOST: { originString = "FusionCandidateOrigin::HOST"; break; }
+			}
+			return originString;
+		}
 };
 
 #endif

@@ -135,12 +135,30 @@ void HostLineReactor::buildInterceptsPointPrecise(glm::vec3 in_buildStartPoint, 
 	reactorBaseLogger.log("(HostLineReactor) : empty normal : ", resultantLine.emptyNormal.x, ", ", resultantLine.emptyNormal.y, ", ", resultantLine.emptyNormal.z, "\n");
 }
 
-void HostLineReactor::buildASliceSingleInterceptsPointPrecise(glm::vec3 in_buildStartPoint, glm::vec3 in_otherPoint)
+void HostLineReactor::buildASliceSingleInterceptsPointPrecise(glm::vec3 in_buildPrecisePoint, glm::vec3 in_otherPoint)
 {
 	reactorBaseLogger.log("(HostLineReactor): building A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE...", "\n");
 
-	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildStartPoint);
+	//std::cout << "(HostLineReactor) : building A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE..." << std::endl;
+	//std::cout << "(HostLineReactor): point used to fetch subDataArray is: " << in_buildPrecisePoint.x << ", " << in_buildPrecisePoint.y << ", " << in_buildPrecisePoint.z << std::endl;
+
+	// NEW: rebuild the host sub data.
+	//
+	// It was discovered on 8/4/2022, that there is chance that both of the sub data entries for a point are not necessarily registered as border lines.
+	// This was causing a sudden crash, as this function expects both entries in the FusedPointSubData retreived to both be valid border lines
+	// that share the point, when the point is the in_buildPrecisePoint. 
+	//
+	// In order to fix this anomaly, this function needs to make sure that both sub-data entries in the FusedPointSubData are border lines.
+	// We can just use the value returned by  hostFusionAnalysisRef->sPolyRef->getBorderLinesForSharedPoint(in_buildPrecisePoint) below
+	// to figure out what these border line ID values are; this function will return exactly 2 border lines for our selected point, 
+	// and guarantee that there is no crash that occurs when the A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE branch in CategorizedLine::determineCyclingDirection 
+	// ends up calling CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPrecise, when extraData is present in the CategorizedLine.
+	std::map<int, int> generatedLineMap = hostFusionAnalysisRef->sPolyRef->getBorderLinesForSharedPoint(in_buildPrecisePoint);
+	hostFusionAnalysisRef->fusedPoints.rebuildSubDataForPointForTwoBorderLines(in_buildPrecisePoint, generatedLineMap);
+
+	std::vector<FusedPointSubData>* subDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_buildPrecisePoint);
 	FusedPointSubData subDataArray[2];
+	std::cout << "(HostLineReactor): Size of subDataRef'd vector: " << subDataRef->size() << std::endl;
 	auto subDataRefBegin = subDataRef->begin();
 	auto subDataRefEnd = subDataRef->end();
 	int beginIndex = 0;
@@ -148,25 +166,57 @@ void HostLineReactor::buildASliceSingleInterceptsPointPrecise(glm::vec3 in_build
 	{
 		subDataArray[beginIndex++] = *subDataRefBegin;
 	}
-
-	// need to get border line ID from the other point.
-	std::vector<FusedPointSubData>* otherPointSubDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_otherPoint);
-	auto otherPointSubDataRefBegin = otherPointSubDataRef->begin();
-	FusedPointSubData otherSingleSubData = *otherPointSubDataRefBegin;
-
-	// testing, print out the contents of the sub data
-	for (int x = 0; x < 2; x++)
+	// testing, print out the contents of the sub data, by that vector's size.
+	for (int x = 0; x < subDataRef->size(); x++)
 	{
-		//std::cout << "Sub data at index " << x;
-		//std::cout << ": isBorderLine: " << subDataArray[x].isBorderLine;
-		//std::cout << ": borderLineID: " << subDataArray[x].borderLineValue << std::endl;
+		std::cout << "Sub data at index " << x;
+		std::cout << " triangleLineIndex: " << subDataArray[x].triangleLineIndex;
+		std::cout << " | isBorderLine: " << subDataArray[x].isBorderLine;
+		std::cout << " | borderLineID: " << subDataArray[x].borderLineValue;
+
+		std::string originString = subDataArray[x].fetchOriginString();
+
+		std::cout << " | origin: " << originString << std::endl;
 		reactorBaseLogger.log("(HostLineReactor) Sub data at index ", x, "\n");
 		reactorBaseLogger.log("(HostLineReactor) : isBorderLine: ", subDataArray[x].isBorderLine, "\n");
 		reactorBaseLogger.log("(HostLineReactor) : borderLineID: ", subDataArray[x].borderLineValue, "\n");
 	}
 
+	// need to get border line ID from the other point.
+	std::cout << "(HostLineReactor): point used to fetch subDataArray is: " << in_otherPoint.x << ", " << in_otherPoint.y << ", " << in_otherPoint.z << std::endl;
+	std::vector<FusedPointSubData>* otherPointSubDataRef = hostFusionAnalysisRef->fusedPoints.fetchSubDataVectorForPoint(in_otherPoint);
+	std::cout << "(HostLineReactor): Size of otherPointSubDataRef 'd vector: " << otherPointSubDataRef->size() << std::endl;
+	auto otherPointSubDataRefBegin = otherPointSubDataRef->begin();
+	FusedPointSubData otherSingleSubData = *otherPointSubDataRefBegin;
+
+	FusedPointSubData otherSingleArray[2];
+	auto otherDataRefBegin = otherPointSubDataRef->begin();
+	auto otherDataRefEnd = otherPointSubDataRef->end();
+	int otherBeginindex = 0;
+	for (; otherDataRefBegin != otherDataRefEnd; otherDataRefBegin++)
+	{
+		otherSingleArray[otherBeginindex++] = *otherDataRefBegin;
+	}
+	// print out other sub data
+	for (int x = 0; x < otherPointSubDataRef->size(); x++)
+	{
+		std::cout << "OTHER Sub data at index " << x;
+		std::cout << " triangleLineIndex: " << otherSingleArray[x].triangleLineIndex;
+		std::cout << " | isBorderLine: " << otherSingleArray[x].isBorderLine;
+		std::cout << " | borderLineID: " << otherSingleArray[x].borderLineValue;
+
+		std::string originString = otherSingleArray[x].fetchOriginString();
+
+		std::cout << " | origin: " << originString << std::endl;
+
+		reactorBaseLogger.log("(HostLineReactor) Sub data at index ", x, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : isBorderLine: ", otherSingleArray[x].isBorderLine, "\n");
+		reactorBaseLogger.log("(HostLineReactor) : borderLineID: ", otherSingleArray[x].borderLineValue, "\n");
+	}
+	
+
 	resultantLine.type = IntersectionType::A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE;
-	resultantLine.line.pointA = in_buildStartPoint;							// point A is the precise point
+	resultantLine.line.pointA = in_buildPrecisePoint;							// point A is the precise point
 	resultantLine.line.isPointAOnBorder = 1;								
 	resultantLine.line.pointB = in_otherPoint;								// point B is the other point
 	resultantLine.line.isPointBOnBorder = 1;

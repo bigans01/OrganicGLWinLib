@@ -30,6 +30,40 @@ void FusedPointContainer::insertSubDataForPoint(glm::vec3 in_point, FusedPointSu
 	}
 }
 
+void FusedPointContainer::rebuildSubDataForPointForTwoBorderLines(glm::vec3 in_point, std::map<int, int> in_lineMap)
+{
+	// check if the point exists
+	bool wasFound = false;
+	int foundIndex = 0;
+	auto pointFinderBegin = fusedPointMap.begin();
+	auto pointFinderEnd = fusedPointMap.end();
+	for (; pointFinderBegin != pointFinderEnd; pointFinderBegin++)
+	{
+		if (pointFinderBegin->second.point == in_point)
+		{
+			wasFound = true;
+			foundIndex = pointFinderBegin->first;
+		}
+	}
+
+	// if it does exist, just add to the one at the index we found it at.
+	if (wasFound == true)
+	{
+		// remember, we don't want to change the origin; we're only going to be updating the border line flag and border line value,
+		// and set the line index to 0.
+		auto targetVectorBegin = fusedPointMap[foundIndex].subDataVector.begin();
+		auto targetVectorEnd = fusedPointMap[foundIndex].subDataVector.end();
+		auto currentBorderLineIDBegin = in_lineMap.begin();
+		for (; targetVectorBegin != targetVectorEnd; targetVectorBegin++)
+		{
+			targetVectorBegin->isBorderLine = 1;
+			targetVectorBegin->borderLineValue = currentBorderLineIDBegin->second;
+			targetVectorBegin->triangleLineIndex = 0;
+			currentBorderLineIDBegin++;
+		}
+	}
+}
+
 FusedPointMeta FusedPointContainer::retrieveFusedPointMeta(glm::vec3 in_pointToRetrieve, FusionCandidateOrigin in_originToMarkAs)
 {
 	FusedPointMeta returnMeta;

@@ -11,6 +11,11 @@ SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyM
 
 	originalPolyID = in_originalPolyID;
 	polyRef = in_sPolyRef;
+	specialLogicSignalFlag = polyRef->wasSpecialLogicUsed();
+	if (specialLogicSignalFlag == true)
+	{
+		std::cout << "(SPolyFracturer): NOTICE: special logic was used!" << std::endl;
+	}
 	//std::cout << "|||| PRE-ROTATE Prime POINTS: " << std::endl;
 	//fracturerLogger.log("(SPolyFracturer) |||| Starting print out of PRE-ROTATE Prime Points: " << std::endl;
 	//std::cout << "********************************************************* Printing cleave sequence values, prior to runFracturing " << std::endl;
@@ -61,6 +66,8 @@ void SPolyFracturer::checkForCleaveIntersections()
 	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef, fracturerLoggerDebugLevel);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
 	quatPoints.clearPoints();															// clear out the quat points (which needs to be done if runFracturing() is called), so that we may insert the below.
 
+	
+
 	intersectFinder.triangleSupergroup.loadTrianglesIntoQuatRotationPoints(&quatPoints);
 
 	// remember, work in reverse order: quaternions get reverse-applied, then reverse any translations.
@@ -68,6 +75,20 @@ void SPolyFracturer::checkForCleaveIntersections()
 	if (pointTranslator.requiresTranslation == 1)
 	{
 		quatPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
+	}
+
+	if (specialLogicSignalFlag == true)
+	{
+		if (intersectFinder.wasWeldingSuccessful == false)
+		{
+			std::cout << "!!! WARNING: welding was NOT successful. " << std::endl;
+		}
+		else if (intersectFinder.wasWeldingSuccessful == true)
+		{
+			std::cout << "(SPolyFracturer::checkForCleaveIntersections) >> Number of triangle containers: " << intersectFinder.triangleSupergroup.triangleContainerMap.size() << std::endl;
+			intersectFinder.triangleSupergroup.printPointsInSupergroup();
+		}
+
 	}
 
 	// Remember: 1 WeldedTriangle = 1 STriangle
@@ -123,6 +144,12 @@ void SPolyFracturer::checkForCleaveIntersections()
 	//std::cout << "####################### Poly fracturing complete..... " << std::endl;
 	//int someVal = 3;
 	//std::cin >> someVal;
+
+	if (specialLogicSignalFlag == true)
+	{
+		std::cout << "(SPolyFracturer): Special debug flag indicated, printing resulting SPolys. " << std::endl;
+		sPolySG.printSPolys();
+	}
 
 	if (fracturerLogger.isLoggingSet() == true)
 	{

@@ -25,6 +25,7 @@ public:
 	CleaveSequenceStatus sequenceStatus = CleaveSequenceStatus::NOVAL;		// default is noval (make compiler happy)
 	LineWelderHierarchyPosition hierarchyPosition = LineWelderHierarchyPosition::SUB;	// by default, all lines will be a SUB; but at least one will get set to SUPER
 																						// during the LineWelder's welding process.
+	bool specialLogicUsedFlag = false;	// used to indicate that backup options were used one of the CategorizedLineManager functions.
 
 	void insertLineAtIndex(int in_index, CategorizedLine in_categorizedLine);
 	void insertFirstLine(CategorizedLine in_categorizedLine);

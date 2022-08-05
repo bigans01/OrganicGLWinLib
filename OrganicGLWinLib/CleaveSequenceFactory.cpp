@@ -387,6 +387,13 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 				//std::cout << "Final partial bound line found! Inserting final line... !!" << std::endl;
 				newSequence.insertLastLine(finalResult.returnLine);
 				newSequence.sequenceStatus = CleaveSequenceStatus::COMPLETE; // mark it as complete
+
+				if (finalResult.backupOptionFlag == true)
+				{
+					std::cout << "(CleaveSequenceFactory::handleScenarioTypical) !!! backupOptionFlag detected as true. " << std::endl;
+					newSequence.printCategorizedLines();
+					newSequence.specialLogicUsedFlag = true;
+				}
 			}
 			else
 			{

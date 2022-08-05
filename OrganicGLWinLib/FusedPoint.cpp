@@ -94,6 +94,10 @@ FusedPointMeta FusedPoint::getMetaForPoint(glm::vec3 in_pointToGetMetaFor)
 			 returnMeta.summary = FusedPointSummary::TYPICAL_NONBORDERLINE;
 		 }
 	}
+	else
+	{
+		std::cout << "(FusedPoint::getMetaForPoint): WARNING, couldn't calculate FusedPointSummary! " << std::endl;
+	}
 
 	return returnMeta;
 }

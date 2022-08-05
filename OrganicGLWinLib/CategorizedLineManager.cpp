@@ -285,6 +285,7 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 		{
 			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
 			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+			searchResult.backupOptionFlag = true;
 
 			auto nonBoundSecondPassBegin = containerMap[IntersectionType::NON_BOUND].lineMap.begin();
 			auto nonBoundSecondPassEnd = containerMap[IntersectionType::NON_BOUND].lineMap.end();
@@ -293,9 +294,11 @@ CategorizedLineSearchResult CategorizedLineManager::checkManagerForNextNonboundL
 				pointCheckResult = nonBoundSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
 				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 				{
-					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
-					int nearbyFound = 3;
-					std::cin >> nearbyFound;
+					//std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					//int nearbyFound = 3;
+					//std::cin >> nearbyFound;
+
+					std::cout << "(CategorizedLineManager::checkManagerForNextNonboundLine): NOTICE: found nearby point; continuing. " << std::endl;
 
 					// because we found a nearby non-bound line, we must 
 					// if we matched against point B of the non bound, then change point B of the line to be 
@@ -395,6 +398,7 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForLastPartialB
 		{
 			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
 			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+			searchResult.backupOptionFlag = true;
 
 			auto partialBoundSecondPassBegin = containerMap[IntersectionType::PARTIAL_BOUND].lineMap.begin();
 			auto partialBoundSecondPassEnd = containerMap[IntersectionType::PARTIAL_BOUND].lineMap.end();
@@ -403,9 +407,11 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForLastPartialB
 				pointCheckResult = partialBoundSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
 				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 				{
-					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
-					int nearbyFound = 3;
-					std::cin >> nearbyFound;
+					//std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					//int nearbyFound = 3;
+					//std::cin >> nearbyFound;
+
+					std::cout << "(CategorizedLineManager::searchManagerForLastPartialBoundLineForSequence): NOTICE: found nearby point, continuing. " << std::endl;
 
 					// because we found a nearby non-bound line, we must 
 					// if we matched against point B of the non bound, then change point B of the line to be 
@@ -525,6 +531,7 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForInterceptPoi
 		{
 			std::cout << "!!! Notice -> wasFound flagged as false, running backup option..." << std::endl;
 			std::cout << "pointToSearch is: " << in_pointToSearch.x << ", " << in_pointToSearch.y << ", " << in_pointToSearch.z << std::endl;
+			searchResult.backupOptionFlag = true;
 
 			auto preciseSecondPassBegin = containerMap[IntersectionType::INTERCEPTS_POINT_PRECISE].lineMap.begin();
 			auto preciseSecondPassEnd = containerMap[IntersectionType::INTERCEPTS_POINT_PRECISE].lineMap.end();
@@ -533,9 +540,11 @@ CategorizedLineSearchResult CategorizedLineManager::searchManagerForInterceptPoi
 				pointCheckResult = preciseSecondPassBegin->second.checkIfPointIsNearbyPointInLine(in_pointToSearch, 0.02f);
 				if (pointCheckResult != IRPointType::NEITHER) // it was found (it's either A or B)
 				{
-					std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
-					int nearbyFound = 3;
-					std::cin >> nearbyFound;
+					//std::cout << "!!! NOTICE: found nearby point...continue? " << std::endl;
+					//int nearbyFound = 3;
+					//std::cin >> nearbyFound;
+
+					std::cout << "(CategorizedLineManager::searchManagerForInterceptPointPreciseCategorizedLine): NOTICE: found nearby point, continuing. " << std::endl;
 
 					// because we found a nearby non-bound line, we must 
 					// if we matched against point B of the non bound, then change point B of the line to be 

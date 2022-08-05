@@ -1006,6 +1006,22 @@ void SPoly::printAllCleaveLines()
 	std::cout << "Testing...." << std::endl;
 }
 
+bool SPoly::wasSpecialLogicUsed()
+{
+	bool used = false;
+	auto cleaveMapBegin = cleaveMap.begin();
+	auto cleaveMapEnd = cleaveMap.end();
+	for (; cleaveMapBegin != cleaveMapEnd; cleaveMapBegin++)
+	{
+		if (cleaveMapBegin->second.specialLogicUsedFlag == true)
+		{
+			used = true;
+			break;
+		}
+	}
+	return used;
+}
+
 void SPoly::setDebugFlag(int in_debugFlagValue)
 {
 	debugFlag = in_debugFlagValue;

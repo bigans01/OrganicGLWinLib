@@ -79,6 +79,11 @@ class MassZoneBoxBoundary
 			boundarySPoly.sequenceFactory.printLinesInPool();
 		}
 
+		int getProducedSPolyCount()
+		{
+			return boundaryPolySet.boundarySPolySG.sPolyMap.size();
+		}
+
 		MessageContainer generateSPolysFromPolySet(MassZoneBoxType in_boxTypeValue)
 		{
 			return boundaryPolySet.buildBoundarySPolyFromFactory(in_boxTypeValue);

@@ -4,7 +4,7 @@
 
 void CategorizedLineInterceptsPreciseToPartialMerger::runMerging()
 {
-	std::cout << "Running merge for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. " << std::endl;
+	std::cout << "(CategorizedLineInterceptsPreciseToPartialMerger) Running merge for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. " << std::endl;
 	mergeMachineLogger.log("(CategorizedLineInterceptsPreciseToPartialMerger) Running merge for A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE. ", "\n");
 
 	// get the first INTERCEPTS_POINT_PRECISE line.

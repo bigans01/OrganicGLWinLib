@@ -21,6 +21,7 @@
 #include <vector>
 #include <algorithm>
 #include "IndependentUtils.h"
+#include <string>
 
 
 class SPolyBorderLines;

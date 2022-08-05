@@ -297,8 +297,55 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 		std::cout << "(CategorizedLine): preparing to enter logic for handling cycling directions for a CategorizedLine of type A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE" << std::endl;
 		if (containsExtraData == true)
 		{
+			std::cout << "(CategorizedLine): found extra data. " << std::endl;
+
+			std::map<int, int> returnMap;
+			auto borderLinesBegin = in_borderLineArrayRef.begin();
+			auto borderLinesEnd = in_borderLineArrayRef.end();
+			for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
+			{
+				std::cout << "Border Line ID: " << borderLinesBegin->first << " | point A: " << borderLinesBegin->second.pointA.x << ", " << borderLinesBegin->second.pointA.y << ", " << borderLinesBegin->second.pointA.z
+					<< " | point B: " << borderLinesBegin->second.pointB.x << ", " << borderLinesBegin->second.pointB.y << ", " << borderLinesBegin->second.pointB.z
+					<< std::endl;
+			}
+
+
+
 			// get the border line IDs, from the optional data of Point A.
 			auto pointAData = extraData->getPointASubData();
+
+			// analyze the subdataVector.
+			auto subdataSize = extraData->subdataVectorMap.size();
+			std::cout << "(CategorizedLine): size of subdata vector map is: " << subdataSize << std::endl;
+			auto subdataBegin = extraData->subdataVectorMap.begin();
+			auto subdataEnd = extraData->subdataVectorMap.end();
+			for (; subdataBegin != subdataEnd; subdataBegin++)
+			{
+				IRPointType currentType = subdataBegin->first;
+				std::string typeEnumed = "";
+				if (currentType == IRPointType::NEITHER)
+				{
+					typeEnumed = "IRPointType::NEITHER";
+				}
+				else if (currentType == IRPointType::POINT_A)
+				{
+					typeEnumed = "IRPointType::POINT_A";
+				}
+				else if (currentType == IRPointType::POINT_B)
+				{
+					typeEnumed = "IRPointType::POINT_B";
+				}
+
+				std::cout << "point type: [" << typeEnumed << "]" << std::endl;
+				auto currentVectorBegin = subdataBegin->second.begin();
+				auto currentVectorEnd = subdataBegin->second.end();
+				for (; currentVectorBegin != currentVectorEnd; currentVectorBegin++)
+				{
+					std::cout << "Current FusedPointSubData values: isBorderLine-> " << currentVectorBegin->isBorderLine << ", borderLineValue-> " << currentVectorBegin->borderLineValue << ", triangleLineIndex-> " << currentVectorBegin->triangleLineIndex << std::endl;
+				}
+			}
+
+
 			SPolyBorderLines sliceSingleInterceptBorderLineA = in_borderLineArrayRef[pointAData.begin()->borderLineValue];
 			SPolyBorderLines sliceSingleInterceptBorderLineB = in_borderLineArrayRef[pointAData.rbegin()->borderLineValue];
 			std::cout << "(CategorizedLine): sliceSingleInterceptBorderLineA value is: " << pointAData.begin()->borderLineValue << std::endl;
@@ -351,9 +398,9 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 			auto borderLinesEnd = in_borderLineArrayRef.end();
 			for (; borderLinesBegin != borderLinesEnd; borderLinesBegin++)
 			{
-				//std::cout << "Border Line ID: " << borderLinesBegin->first << " | point A: " << borderLinesBegin->second.pointA.x << ", " << borderLinesBegin->second.pointA.y << ", " << borderLinesBegin->second.pointA.z
-				//														   << " | point B: " << borderLinesBegin->second.pointB.x << ", " << borderLinesBegin->second.pointB.y << ", " << borderLinesBegin->second.pointB.z
-				//														   << std::endl;
+				std::cout << "Border Line ID: " << borderLinesBegin->first << " | point A: " << borderLinesBegin->second.pointA.x << ", " << borderLinesBegin->second.pointA.y << ", " << borderLinesBegin->second.pointA.z
+																		   << " | point B: " << borderLinesBegin->second.pointB.x << ", " << borderLinesBegin->second.pointB.y << ", " << borderLinesBegin->second.pointB.z
+																		   << std::endl;
 
 				if
 				(
@@ -365,7 +412,14 @@ bool CategorizedLine::determineCyclingDirection(std::map<int, SPolyBorderLines> 
 					int currentMapIndex = int(returnMap.size());
 					returnMap[currentMapIndex] = borderLinesBegin->first;	// insert the ID of the border line.
 				}
+
+				
 			}
+
+			std::cout << "!!!! Additional info: " << std::endl;
+			std::cout << "!!!! Size of border lines: " << in_borderLineArrayRef.size();
+			
+
 
 			generateCyclingDirectionForASliceSingleInterceptPointPrecise(in_borderLineArrayRef[returnMap[0]],
 																		 returnMap[0],
@@ -413,6 +467,7 @@ void CategorizedLine::generateCyclingDirectionForInterceptPointPrecise(SPolyBord
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
 
+	std::cout << "(CategorizedLine): calling generateCyclingDirectionForInterceptPointPrecise" << std::endl;
 
 	std::cout << "BorderLineACopy, point A, is: " << borderLineACopy.pointA.x << ", " << borderLineACopy.pointA.y << ", " << borderLineACopy.pointA.z << std::endl;
 	std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
@@ -638,6 +693,8 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 	QuatRotationPoints rotationPoints;
 	glm::vec3 pointToTranslateAgainst;
 
+	std::cout << "(CategorizedLine): calling generateCyclingDirectionForASliceSingleInterceptPointPrecise" << std::endl;
+
 	std::cout << "(A_SLICE_SINGLE_INTERCEPTS_POINT_PRECISE)" << std::endl;
 	std::cout << "||||||||||||||||||| BEFORE APPLICATION **************" << std::endl;
 	std::cout << "||||||| Border Line A ID: " << in_borderLineAID << std::endl;
@@ -649,8 +706,8 @@ void CategorizedLine::generateCyclingDirectionForASliceSingleInterceptPointPreci
 	std::cout << "BorderLineACopy, point A, is: " << borderLineACopy.pointA.x << ", " << borderLineACopy.pointA.y << ", " << borderLineACopy.pointA.z << std::endl;
 	std::cout << "BorderLineACopy, point B, is: " << borderLineACopy.pointB.x << ", " << borderLineACopy.pointB.y << ", " << borderLineACopy.pointB.z << std::endl;
 
-	std::cout << "border line A: " << borderLineBCopy.pointA.x << ", " << borderLineBCopy.pointA.y << ", " << borderLineBCopy.pointA.z << std::endl;
-	std::cout << "border line B: " << borderLineBCopy.pointB.x << ", " << borderLineBCopy.pointB.y << ", " << borderLineBCopy.pointB.z << std::endl;
+	std::cout << "BorderLineBCopy, border line A: " << borderLineBCopy.pointA.x << ", " << borderLineBCopy.pointA.y << ", " << borderLineBCopy.pointA.z << std::endl;
+	std::cout << "BorderLineBCopy, border line B: " << borderLineBCopy.pointB.x << ", " << borderLineBCopy.pointB.y << ", " << borderLineBCopy.pointB.z << std::endl;
 
 	if (borderLineACopy.pointB == borderLineBCopy.pointA)
 	{

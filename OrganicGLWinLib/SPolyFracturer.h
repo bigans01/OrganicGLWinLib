@@ -27,6 +27,7 @@ public:
 	QuatRotationPoints quatPoints;
 	QuatRotationManager rotationManager;
 	SPolySupergroup sPolySG;
+	bool specialLogicSignalFlag = false;
 
 	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel);
 	void runFracturing();	// run the fracturing process
