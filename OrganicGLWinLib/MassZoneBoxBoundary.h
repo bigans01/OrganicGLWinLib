@@ -132,6 +132,12 @@ class MassZoneBoxBoundary
 			boundaryPolySet.boundaryEmptyNormal = emptyNormal;
 		}
 
+		// debug functions, check for Pos Z square.
+		void checkBoundaryPolyForPosZSquare()
+		{
+			boundarySPoly.checkForSquarePosZ();
+		}
+
 	private:
 		void insertCornerPoint(glm::vec3 in_cornerPoint)
 		{

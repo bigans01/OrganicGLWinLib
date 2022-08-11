@@ -341,6 +341,10 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<BoundaryOrientation> i
 			//std::cout << " needs to have its face produced (tertiary SPoly, 1st pass)" << std::endl;
 			SPolySupergroup tempGroup;
 			tempGroup.insertSPoly(*boxBoundaries[*orientationSetBegin].boundaryPolySet.boundarySPolyRef);
+			if (tempGroup.checkForAnyPosZ() == true)
+			{
+				std::cout << "(MassZoneBox::runFirstTertiaryProductionPass): NOTICE: POS_Z square tertiary inserted. " << std::endl;
+			}
 			(*in_outputSuperGroupsMapRef)[*orientationSetBegin] = tempGroup;
 		}
 	}

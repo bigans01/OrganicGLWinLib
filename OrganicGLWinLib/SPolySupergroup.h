@@ -24,6 +24,9 @@ class SPolySupergroup
 			{
 				std::cout << ">>> SPoly: " << sPolysBegin->first << std::endl;
 				std::cout << ">> Empty Normal: " << sPolysBegin->second.polyEmptyNormal.x << ", " << sPolysBegin->second.polyEmptyNormal.y << ", " << sPolysBegin->second.polyEmptyNormal.z << std::endl;
+				std::cout << ">> Indicator Value: ";
+				std::cout << sPolysBegin->second.fetchPrintableBoundaryIndicatorString();
+				std::cout << std::endl;
 				auto sTrianglesBegin = sPolysBegin->second.triangles.begin();
 				auto sTrianglesEnd = sPolysBegin->second.triangles.end();
 				for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
@@ -93,6 +96,25 @@ class SPolySupergroup
 			{
 				sPolysBegin->second.determineBorderLines();
 			}
+		}
+
+		// debug functions
+		bool checkForAnyPosZ()
+		{
+			bool posZSquareDiscovered = false;
+
+			auto sPolysBegin = sPolyMap.begin();
+			auto sPolysEnd = sPolyMap.end();
+			for (; sPolysBegin != sPolysEnd; sPolysBegin++)
+			{
+				bool wasSquare = sPolysBegin->second.checkForSquarePosZ();
+				if (wasSquare == true)
+				{
+					posZSquareDiscovered = true;
+				}
+			}
+
+			return posZSquareDiscovered;
 		}
 };
 

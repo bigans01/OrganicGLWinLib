@@ -154,6 +154,19 @@ int SPolyShellProducer::getNumberOfProducedSPolysInMassZoneBoundarySPoly(Boundar
 	return returnValue;
 }
 
+void SPolyShellProducer::checkForPosZSquareBoundaryInOutput()
+{
+	auto orientationFinder = outputSPolySuperGroups.find(BoundaryOrientation::POS_Z);
+	if (orientationFinder != outputSPolySuperGroups.end())	// the target orientation was found.
+	{
+		outputSPolySuperGroups[BoundaryOrientation::POS_Z].checkForAnyPosZ();
+	}
+	else
+	{
+
+	}
+}
+
 std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()
 {
 	std::vector<SPoly> returnVector;

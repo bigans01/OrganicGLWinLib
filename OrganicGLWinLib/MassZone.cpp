@@ -352,6 +352,7 @@ void MassZone::extractAllBoundarySPolys(std::map<BoundaryOrientation, SPolySuper
 	{
 		SPolySupergroup tempGroup;
 		tempGroup.insertSPoly(*zoneBoxBoundariesBegin->second.boundaryPolySet.boundarySPolyRef);
+		//tempGroup.checkForAnyPosZ();
 		tempGroup.setBoundaryOrientationInAllSPolys(zoneBoxBoundariesBegin->first);
 		(*in_outputSuperGroupsMapRef)[zoneBoxBoundariesBegin->first] = tempGroup;
 	}

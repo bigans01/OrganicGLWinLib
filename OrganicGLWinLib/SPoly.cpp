@@ -32,6 +32,11 @@ BoundaryOrientation SPoly::getBoundaryIndicatorOrientation()
 	return sPolyBoundaryIndicator.getBoundaryIndicatorValue();
 }
 
+std::string SPoly::fetchPrintableBoundaryIndicatorString()
+{
+	return sPolyBoundaryIndicator.getPrintableIndicatorValue();
+}
+
 void SPoly::insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence)
 {
 	std::cout << "(SPoly): inserting CleaveSequence; size of CleaveSequences before insert is: " << cleaveMap.size() << std::endl;
@@ -63,6 +68,99 @@ bool SPoly::isSPolyValid()
 		}
 	}
 	return isValid;
+}
+
+bool SPoly::checkForSquarePosZ()
+{
+	bool checkPassed = false;
+
+	bool point0Found = false;
+	bool point1Found = false;
+	bool point2Found = false;
+	bool point3Found = false;
+
+	auto triangleScanBegin = triangles.begin();
+	auto triangleScanEnd = triangles.end();
+	for (; triangleScanBegin != triangleScanEnd; triangleScanBegin++)
+	{
+		for (int x = 0; x < 3; x++)
+		{
+			glm::vec3 currentPointA = triangleScanBegin->second.triangleLines[x].pointA;
+
+			// check for point 0.
+			if
+			(
+				(currentPointA.x == 1.0f)
+				&&
+				(currentPointA.y == 0.0f)
+				&&
+				(currentPointA.z == 1.0f)
+			)
+			{
+				//std::cout << "(SPoly::checkForSquarePosZ() -> !!! Found point0. " << std::endl;
+				point0Found = true;
+			}
+
+			// check for point 1.
+			if
+			(
+				(currentPointA.x == 1.0f)
+				&&
+				(currentPointA.y == 1.0f)
+				&&
+				(currentPointA.z == 1.0f)
+			)
+			{
+				//std::cout << "(SPoly::checkForSquarePosZ() -> !!! Found point1. " << std::endl;
+				point1Found = true;
+			}
+
+			// check for point 2.
+			if
+			(
+				(currentPointA.x == 0.0f)
+				&&
+				(currentPointA.y == 1.0f)
+				&&
+				(currentPointA.z == 1.0f)
+			)
+			{
+				//std::cout << "(SPoly::checkForSquarePosZ() -> !!! Found point2. " << std::endl;
+				point2Found = true;
+			}
+
+			// check for point 3.
+			if
+			(
+				(currentPointA.x == 0.0f)
+				&&
+				(currentPointA.y == 0.0f)
+				&&
+				(currentPointA.z == 1.0f)
+			)
+			{
+				//std::cout << "(SPoly::checkForSquarePosZ() -> !!! Found point3. " << std::endl;
+				point3Found = true;
+			}
+		}
+	}
+
+	if
+	(
+		(point0Found == true)
+		&&
+		(point1Found == true)
+		&&
+		(point2Found == true)
+		&&
+		(point3Found == true)
+	)
+	{
+		std::cout << "(SPoly::checkForSquarePosZ): --> NOTICE! found full square poly for POS_Z." << std::endl;
+		checkPassed = true;
+	}
+
+	return checkPassed;
 }
 
 void SPoly::determinePrimalPoints()

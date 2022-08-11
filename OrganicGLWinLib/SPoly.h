@@ -48,6 +48,7 @@ public:
 	void setSPolyMaterial(short in_sPolyMaterialID);
 	void setBoundaryIndicatorOrientation(BoundaryOrientation in_boundaryOrientation);
 	BoundaryOrientation getBoundaryIndicatorOrientation();
+	std::string fetchPrintableBoundaryIndicatorString();
 	void insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence);
 	short getSPolyMaterial();
 	glm::vec3 getEmptyNormal();
@@ -65,6 +66,10 @@ public:
 	std::map<int, SPolyBorderLines> borderLines;
 	BoundaryPolyIndicator sPolyBoundaryIndicator;
 	MassManipulationMode massManipulationSetting = MassManipulationMode::CREATION;	// default value is CREATION.
+
+	// debug functions
+	bool checkForSquarePosZ();
+
 private:
 	friend class RPoly;
 	friend class SPolyScaler;

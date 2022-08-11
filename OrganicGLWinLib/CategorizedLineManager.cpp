@@ -42,12 +42,14 @@ bool CategorizedLineManager::checkForDuplicateCategorizedLine(CategorizedLine in
 
 			)
 			{
+				/*
 				std::cout << "!! Duplicate line found; points are -> A: " << in_duplicateToCheck.line.pointA.x << ", "
 					<< in_duplicateToCheck.line.pointA.y << ", "
 					<< in_duplicateToCheck.line.pointA.z << "| B "
 					<< in_duplicateToCheck.line.pointB.x << ", "
 					<< in_duplicateToCheck.line.pointB.y << ", "
 					<< in_duplicateToCheck.line.pointB.z << std::endl;
+				*/
 				duplicateFound = true;
 			}
 		}

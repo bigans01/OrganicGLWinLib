@@ -224,6 +224,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 			boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 			boundarySPolySG.roundAllSTrianglesToHundredths();
+			//boundarySPolySG.checkForAnyPosZ();
 			boundarySPolySG.buildSPolyBorderLines();
 
 			//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
@@ -290,6 +291,9 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 		boundarySPolySG.printSPolys();
 		
 	}
+
+	//boundarySPolySG.checkForAnyPosZ();
+
 	return buildErrorMessages;
 }
 
