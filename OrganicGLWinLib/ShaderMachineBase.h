@@ -121,16 +121,18 @@ public:
 
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
 
-		// imgui features
+		// imgui clicked buttons
 		void checkForClickedButtons();						// checks for any button that was clicked; notifies the returning ShaderMachineFeedback instance for this tick whether or not
 															// the mouse cursor was in a button panel.
 
-		void checkForTextInput();							// loads data into machineFeedback; allows programs using the shader to access this input data;
-
-		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
-
+		// toggled displayManagers that are set in OrganicGLManager's displayManager (OrganicCoreLib)
+		void renderWorldLocation(float world_precise[3], int world_organicLoc[9]);	// renders a world location box on the screen. 
+		void renderTargetedBlockLocation(int world_organicLoc[9]);					// renders the coordinates of a targeted block.
+		void checkForTextInput();													// loads data into machineFeedback; allows programs using the shader to access this input data;
 		void renderSliders();								// will render single float interactable sliders; notifies the returning ShaderMachineFeedback instance for this tick whether or not
 															// the mouse cursor was in a slider panel.
+
+		ShaderMachineFeedback retrieveShaderInputs();		// fetches (via std::move) any inputs that were given to the ShaderMachine, for use by other code (such as OrganicCoreLib etc)
 		
 		// set direction
 		void setDirection(float in_x, float in_y, float in_z);

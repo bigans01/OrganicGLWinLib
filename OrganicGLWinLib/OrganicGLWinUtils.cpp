@@ -1089,9 +1089,9 @@ void OrganicGLWinUtils::IMGuiRenderAndDraw()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9])
+bool OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9])
 {
-	//SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0, const ImVec2& pivot = ImVec2(0,0));
+	bool wasMouseInThisWindow = false;
 	ImGui::SetNextWindowPos(ImVec2(700, 10));
 	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_FirstUseEver);
 	bool window_val = true;
@@ -1100,11 +1100,22 @@ void OrganicGLWinUtils::IMGuiPrepWorldLocation(float world_precise[3], int world
 	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
 	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
 	ImGui::Text("Absolute  : %f, %f, %f", world_precise[0], world_precise[1], world_precise[2]);
+	if
+	(
+		(ImGui::IsWindowHovered() == true)
+		||
+		(ImGui::IsAnyItemHovered() == true)
+	)
+	{
+		wasMouseInThisWindow = true;
+	}
 	ImGui::End();
+	return wasMouseInThisWindow;
 }
 
-void OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
+bool OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
 {
+	bool wasMouseInThisWindow = false;
 	ImGui::SetNextWindowPos(ImVec2(700, 150));
 	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_FirstUseEver);
 	bool window_val = true;
@@ -1112,7 +1123,17 @@ void OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicLoc[9])
 	ImGui::Text("Collection: %d, %d, %d", world_organicLoc[0], world_organicLoc[1], world_organicLoc[2]);
 	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
 	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);
+	if
+	(
+		(ImGui::IsWindowHovered() == true)
+		||
+		(ImGui::IsAnyItemHovered() == true)
+	)
+	{
+		wasMouseInThisWindow = true;
+	}
 	ImGui::End();
+	return wasMouseInThisWindow;
 }
 
 glm::quat OrganicGLWinUtils::createQuaternion(float in_degrees, glm::vec3 in_unitVector)

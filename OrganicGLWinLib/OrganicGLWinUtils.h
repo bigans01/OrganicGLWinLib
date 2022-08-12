@@ -108,8 +108,8 @@ public:
 	static void IMGuiTestText();	// a text box for testing purposes
 	static void IMGuiTextButton();
 	static void IMGuiRenderAndDraw();	// render and draw (all?) the IMGui stuff
-	static void IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// will prepare data and run imgui calls for displaying world location
-	static void IMGuiPrepBlockLocation(int world_organicLoc[9]);
+	static bool IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// render the world location, return if the mouse cursor was in the window at that time
+	static bool IMGuiPrepBlockLocation(int world_organicLoc[9]);							// render the block location, return if the mouse cursor was in the window at that time
 
 	// TerrainTriangle functions
 
