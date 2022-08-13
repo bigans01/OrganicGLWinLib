@@ -105,15 +105,7 @@ GLDrawElementsInstancedJob ShaderMachineBase::getDrawElementsInstancedJob(std::s
 
 void ShaderMachineBase::checkForClickedButtons()
 {
-	machineFeedback.loadButtonClickResults(buttonPanelContainer.checkAllPanelsForClickResults());
-
-	// If the OpenGL is focused, AND the cursor is in any of the button panels, return true,
-	// so that we may ignore mouse click inputs that would typically be recorded outside of the window/panels
-	if (buttonPanelContainer.mouseInButtonPanel == true)
-	{
-		machineFeedback.mouseHoveredPanelName = buttonPanelContainer.mouseInButtonPanelName;
-		machineFeedback.wasMouseInWindow = true;
-	}
+	machineFeedback += buttonPanelContainer.checkAllPanelsForClickResults();
 }
 
 void ShaderMachineBase::checkForTextInput()
@@ -128,35 +120,22 @@ ShaderMachineFeedback ShaderMachineBase::retrieveShaderInputs()
 
 void ShaderMachineBase::renderSliders()
 {
-	sliderPanelContainer.runAllSliders();
 
-	// If the OpenGL is focused, AND the cursor is in any of the button panels, return true,
-	// so that we may ignore mouse click inputs that would typically be recorded outside of the window/panels
-	if (sliderPanelContainer.mouseInSliderPanel == true)
-	{
-		machineFeedback.mouseHoveredPanelName = sliderPanelContainer.mouseInSliderPanelName;
-		machineFeedback.wasMouseInWindow = true;
-	}
+	machineFeedback += sliderPanelContainer.runAllSliders();
 }
 
 void ShaderMachineBase::renderWorldLocation(float world_precise[3], int world_organicLoc[9])
 {
 	// render it, and get the return value. If true, it means the mouse was in this specific window.
-	if (OrganicGLWinUtils::IMGuiPrepWorldLocation(world_precise, world_organicLoc) == true)
-	{
-		machineFeedback.mouseHoveredPanelName = "world_location";
-		machineFeedback.wasMouseInWindow = true;
-	}
+
+	machineFeedback += OrganicGLWinUtils::IMGuiPrepWorldLocation(world_precise, world_organicLoc);
 }
 
 void ShaderMachineBase::renderTargetedBlockLocation(int world_organicLoc[9])
 {
 	// render it, and get the return value. If true, it means the mouse was in this specific window.
-	if (OrganicGLWinUtils::IMGuiPrepBlockLocation(world_organicLoc) == true)
-	{
-		machineFeedback.mouseHoveredPanelName = "block_location";
-		machineFeedback.wasMouseInWindow = true;
-	}
+
+	machineFeedback += OrganicGLWinUtils::IMGuiPrepBlockLocation(world_organicLoc);
 }
 
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
@@ -210,7 +189,7 @@ int ShaderMachineBase::getVaoAttribByteSize()
 	return vaoAttribByteSize;
 }
 
-void ShaderMachineBase::computeMatricesFromInputs()
+void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
 {
 
 	// Compute time difference between current and last frame

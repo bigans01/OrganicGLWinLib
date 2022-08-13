@@ -176,6 +176,7 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CSCorrectionCandidate.h" />
     <ClInclude Include="FaceResolverBase.h" />
+    <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />

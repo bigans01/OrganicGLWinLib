@@ -39,8 +39,6 @@ class ImGuiInputTextPanel
 		{
 			ShaderMachineFeedback feedback;
 
-			auto inputMapBegin = inputMap.begin();
-			auto inputMapEnd = inputMap.end();
 
 			ImGui::SetNextWindowPos(ImVec2(xOffset, yOffset));
 			ImGui::SetNextWindowSize(ImVec2(xSize, ySize), ImGuiSetCond_FirstUseEver);
@@ -52,9 +50,9 @@ class ImGuiInputTextPanel
 
 			ImGui::Begin(panelName.c_str(), &window_val);
 
-			for (; inputMapBegin != inputMapEnd; inputMapBegin++)
+			for (auto& currentInput : inputMap)
 			{
-				ImGuiInputTextResponse currentPotentialResponse = inputMapBegin->second.renderAndListen();
+				ImGuiInputTextResponse currentPotentialResponse = currentInput.second.renderAndListen();
 				if (currentPotentialResponse.containsResponse == true)
 				{
 					foundMessageResponse = true;
@@ -71,16 +69,19 @@ class ImGuiInputTextPanel
 			// in this specific text panel, so that we may ignore mouse clicks 
 			// meant for the OpenGL area outside of the panel.
 
-			if
-			(
-				(ImGui::IsWindowHovered() == true)
-				||
-				(ImGui::IsAnyItemHovered() == true)
-			)
+			if (ImGui::IsWindowHovered() == true)
 			{
 				feedback.wasMouseInWindow = true;
 				feedback.mouseHoveredPanelName = panelName;
 			}
+
+			if (ImGui::IsWindowFocused() == true)
+			{
+				feedback.wasAWindowFocused = true;
+				feedback.focusedWindowName = panelName;
+			}
+
+
 			ImGui::End();
 
 			if (foundMessageResponse == true)

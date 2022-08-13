@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "ImGuiSliderFloat.h"
 #include <string>
+#include "ImGuiWindowFeedback.h"
 
 class ImGuiSliderFloatPanel
 {
@@ -34,21 +35,20 @@ class ImGuiSliderFloatPanel
 		float xSize = 0;
 		float ySize = 0;
 
-		bool renderSliderFloats()
+		ImGuiWindowFeedback renderSliderFloats()
 		{
+			ImGuiWindowFeedback returnFeedback;
 			bool isMouseInSliderPanel = false;
 
-			auto slidersBegin = sliderMap.begin();
-			auto slidersEnd = sliderMap.end();
 
 			ImGui::SetNextWindowPos(ImVec2(xOffset, yOffset));
 			ImGui::SetNextWindowSize(ImVec2(xSize, ySize), ImGuiSetCond_FirstUseEver);
 			bool window_val = true;
 			ImGui::Begin(panelName.c_str(), &window_val);
 
-			for (; slidersBegin != slidersEnd; slidersBegin++)
+			for (auto& currentSlider : sliderMap)
 			{
-				slidersBegin->second.render();
+				currentSlider.second.render();
 			}
 
 			// need to return true if the mouse was discovered as being within
@@ -57,14 +57,17 @@ class ImGuiSliderFloatPanel
 			if
 			(
 				(ImGui::IsWindowHovered() == true)
-				||
-				(ImGui::IsAnyItemHovered() == true)
 			)
 			{
-				isMouseInSliderPanel = true;
+				returnFeedback.setHoveredWindow(panelName);
+			}
+
+			if (ImGui::IsWindowFocused() == true)
+			{
+				returnFeedback.setFocusedWindow(panelName);
 			}
 			ImGui::End();
-			return isMouseInSliderPanel;
+			return returnFeedback;
 		}
 
 		void insertNewSliderFloat(std::string in_sliderName, float* in_floatRef, float in_minValue, float in_maxValue)

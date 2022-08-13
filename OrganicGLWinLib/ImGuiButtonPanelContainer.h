@@ -25,37 +25,28 @@ class ImGuiButtonPanelContainer
 
 		ImGuiButtonClickResult checkAllPanelsForClickResults()
 		{
-			// reset name string and panel, for this tick
-			mouseInButtonPanelName = "";
-			mouseInButtonPanel = false;
-
 			ImGuiButtonClickResult returnResult;
-
-			auto panelsBegin = panels.begin();
-			auto panelsEnd = panels.end();
-			mouseInButtonPanel = false;
-			for (; panelsBegin != panelsEnd; panelsBegin++)
+			for (auto& currentPanel : panels)
 			{
-				ImGuiButtonClickResult result = panelsBegin->second.getClickResult();
-				if	// check if the current button panel is hovered.
+				ImGuiButtonClickResult result = currentPanel.second.getClickResult();
+
+				// check if the current button panel is hovered, regardless of whether or not we clicked a button;
+				// this is because we need to check for panel hovering/focus.
+				if	
 				(
 					(result.wasWindowHovered == true)
+					||
+					(result.wasWindowOfButtonFocused == true)
 				)
 				{
-					//clickFound = true;
 					returnResult = result;
-					returnResult.buttonPanelName = panelsBegin->first;
-					mouseInButtonPanelName = panelsBegin->first;
-					mouseInButtonPanel = true;
+					returnResult.buttonPanelName = currentPanel.first;	// store the name of the panel that the butto was in
 					break;
 				}
 			}
 			
 			return returnResult;
 		}
-
-		std::string mouseInButtonPanelName = "";
-		bool mouseInButtonPanel = false;	// needs to be reset to false at beginning of call to checkAllPanelsForClickResults()
 };
 
 #endif

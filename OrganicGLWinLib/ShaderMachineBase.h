@@ -112,7 +112,7 @@ public:
 		 // "Terrain" vao data value retrieval functions for OrganicSystem
 		int getVaoAttribMode();
 		int getVaoAttribByteSize();
-		void computeMatricesFromInputs();			// STEP 2 
+		void computeMatricesFromInputs(bool in_imguiFocusedFlag);			// STEP 2 
 		void updateMatricesAndDelta();				// STEP 3
 
 		glm::vec3* getPosition();

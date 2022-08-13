@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include "ImGuiSliderFloatPanel.h"
+#include "ImGuiWindowFeedback.h"
 
 class ImGuiSliderFloatPanelContainer
 {
@@ -22,28 +23,15 @@ class ImGuiSliderFloatPanelContainer
 			panels[in_panelName].insertNewSliderFloat(in_sliderFloatName, in_floatRef, in_minValue, in_maxValue);
 		};
 
-		void runAllSliders()
+		ImGuiWindowFeedback runAllSliders()
 		{
-			// reset panel string and flag, for this tick
-			mouseInSliderPanelName = "";
-			mouseInSliderPanel = false;
-
-			auto panelsBegin = panels.begin();
-			auto panelsEnd = panels.end();
-			for (; panelsBegin != panelsEnd; panelsBegin++)
+			ImGuiWindowFeedback combinedFeedback;
+			for (auto& currentPanel : panels)
 			{
-				bool isCursorInPanel = panelsBegin->second.renderSliderFloats();
-				if (isCursorInPanel == true)
-				{
-					mouseInSliderPanelName = panelsBegin->first;
-					mouseInSliderPanel = true;
-					break;
-				}
+				combinedFeedback += currentPanel.second.renderSliderFloats();
 			}
+			return combinedFeedback;
 		}
-
-		std::string mouseInSliderPanelName = "";
-		bool mouseInSliderPanel = false;
 };
 
 #endif

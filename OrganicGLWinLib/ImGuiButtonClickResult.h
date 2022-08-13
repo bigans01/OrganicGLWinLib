@@ -16,6 +16,9 @@ class ImGuiButtonClickResult
 
 		bool wasAButtonClicked = false;		// false by default.
 		bool wasWindowHovered = false;		// ""
+
+		bool wasWindowOfButtonFocused = false;
+		std::string windowOfFocusedButtonName = "";
 };
 
 #endif

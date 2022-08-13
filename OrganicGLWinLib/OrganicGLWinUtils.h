@@ -44,6 +44,7 @@
 #include "UVCoordProducer.h"
 #include "UVTriangleCoords.h"
 #include "UVCoordProducerEnclaveTriangle.h"
+#include "ImGuiWindowFeedback.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -108,8 +109,8 @@ public:
 	static void IMGuiTestText();	// a text box for testing purposes
 	static void IMGuiTextButton();
 	static void IMGuiRenderAndDraw();	// render and draw (all?) the IMGui stuff
-	static bool IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// render the world location, return if the mouse cursor was in the window at that time
-	static bool IMGuiPrepBlockLocation(int world_organicLoc[9]);							// render the block location, return if the mouse cursor was in the window at that time
+	static ImGuiWindowFeedback IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// render the world location, return any metadata about mouse interaction/status
+	static ImGuiWindowFeedback IMGuiPrepBlockLocation(int world_organicLoc[9]);							// render the block location, return any metadata about mouse interaction/status
 
 	// TerrainTriangle functions
 

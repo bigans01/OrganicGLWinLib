@@ -1401,6 +1401,9 @@
     <ClInclude Include="SPolyUtils.h">
       <Filter>Header Files\SolublePoly\SPolyUtils</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiWindowFeedback.h">
+      <Filter>Header Files\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

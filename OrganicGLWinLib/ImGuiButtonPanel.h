@@ -39,37 +39,33 @@ class ImGuiButtonPanel
 		ImGuiButtonClickResult getClickResult()
 		{
 			ImGuiButtonClickResult result;
-			auto buttonsBegin = buttonMap.begin();
-			auto buttonsEnd = buttonMap.end();
 
 			ImGui::SetNextWindowPos(ImVec2(xOffset, yOffset));
 			ImGui::SetNextWindowSize(ImVec2(xSize, ySize), ImGuiSetCond_FirstUseEver);
 			bool window_val = true;
 			ImGui::Begin(panelName.c_str(), &window_val);
 
-			for (; buttonsBegin != buttonsEnd; buttonsBegin++)
+			for (auto& currentButton : buttonMap)
 			{
-				bool wasClicked = buttonsBegin->second.renderAndListen();
+				bool wasClicked = currentButton.second.renderAndListen();
 				if (wasClicked == true)
 				{
-					ImGuiButtonClickResult foundResult(buttonsBegin->second.buttonText);
-					std::cout << "Button " << buttonsBegin->second.buttonText << " was pressed. " << std::endl;
+					ImGuiButtonClickResult foundResult(currentButton.second.buttonText);
+					std::cout << "Button " << currentButton.second.buttonText << " was pressed. " << std::endl;
 					result = foundResult;
 				}
 			}
 
-			// need to return true if the mouse was discovered as being within
-			// in this specific button panel, so that we may ignore mouse clicks 
-			// meant for the OpenGL area outside of the panel.
-
-			if
-			(
-				(ImGui::IsWindowHovered() == true)
-				||
-				(ImGui::IsAnyItemHovered() == true)
-			)
+			// we won't be calling setHoveredWindow/setFocusedWindow below,
+			// because the names for those are not going to be here in this function.
+			if (ImGui::IsWindowHovered() == true)
 			{
 				result.wasWindowHovered = true;
+			}
+
+			if (ImGui::IsWindowFocused() == true)
+			{
+				result.wasWindowOfButtonFocused = true;
 			}
 
 			ImGui::End();

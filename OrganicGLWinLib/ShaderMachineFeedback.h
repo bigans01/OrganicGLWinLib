@@ -8,6 +8,7 @@
 #include "ImGuiInputTextResponse.h"
 #include "ImGuiButtonClickResult.h"
 #include "ShaderMachineFeedbackType.h"
+#include "ImGuiWindowFeedback.h"
 
 class ShaderMachineFeedback
 {
@@ -16,19 +17,15 @@ class ShaderMachineFeedback
 		ShaderMachineFeedback& operator+=(const ShaderMachineFeedback& in_feedbackB)
 		{
 			// append strings
-			auto feedbackBStringsBegin = in_feedbackB.feedbackStrings.begin();
-			auto feedbackBStringsEnd = in_feedbackB.feedbackStrings.end();
-			for (; feedbackBStringsBegin != feedbackBStringsEnd; feedbackBStringsBegin++)
+			for (auto& currentStringFeedback : in_feedbackB.feedbackStrings)
 			{
-				feedbackStrings.push_back(*feedbackBStringsBegin);
+				feedbackStrings.push_back(currentStringFeedback);
 			}
 
 			// append mouse feedback
-			auto mouseFeedbackBegin = in_feedbackB.mouseFeedback.begin();
-			auto mouseFeedbackEnd = in_feedbackB.mouseFeedback.end();
-			for (; mouseFeedbackBegin != mouseFeedbackEnd; mouseFeedbackBegin++)
+			for (auto& currentMouseFeedback : in_feedbackB.mouseFeedback)
 			{
-				mouseFeedback[mouseFeedbackBegin->first] = mouseFeedbackBegin->second;
+				mouseFeedback[currentMouseFeedback.first] = currentMouseFeedback.second;
 			}
 
 			// append mouse window flag
@@ -36,6 +33,18 @@ class ShaderMachineFeedback
 			{
 				wasMouseInWindow = true;
 				mouseHoveredPanelName = in_feedbackB.mouseHoveredPanelName;
+			}
+
+			// append the focused window, if it was set in in_feedbackB, but not here.
+			if
+			(
+				(wasAWindowFocused == false)
+				&&
+				(in_feedbackB.wasAWindowFocused == true)
+			)
+			{
+				wasAWindowFocused = true;
+				focusedWindowName = in_feedbackB.focusedWindowName;
 			}
 
 			// NOTE: ImGuiButtonClickResult isn't appended; it is manually set by the
@@ -50,15 +59,64 @@ class ShaderMachineFeedback
 			return *this;
 		}
 
+		ShaderMachineFeedback& operator+=(const ImGuiButtonClickResult& in_buttonClickResult)
+		{
+			// go ahead and copy the button click results.
+			buttonClickResult = in_buttonClickResult;
+
+			// check for hovering
+			if (in_buttonClickResult.wasWindowHovered == true)
+			{
+				wasMouseInWindow = true;
+				mouseHoveredPanelName = in_buttonClickResult.buttonPanelName;
+			}
+
+			// check for focus and set it, but only if we don't have a focus set already;
+			// the focusedWindowName would be the same as the buttonPanelName, but we must set the focused window data.
+			if
+			(
+				(wasAWindowFocused == false)
+				&&
+				(in_buttonClickResult.wasWindowOfButtonFocused == true)
+			)
+			{
+				wasAWindowFocused = true;
+				focusedWindowName = in_buttonClickResult.buttonPanelName;
+			}
+
+			return *this;
+		}
+
+		ShaderMachineFeedback& operator+=(const ImGuiWindowFeedback& in_windowFeedback)
+		{
+			// check for hovering
+			if (in_windowFeedback.windowHovered == true)
+			{
+				wasMouseInWindow = true;
+				mouseHoveredPanelName = in_windowFeedback.windowHoveredName;
+			}
+
+			// check for focus and set it, but only if we don't have a focus set already.
+			if
+			(
+				(wasAWindowFocused == false)
+				&&
+				(in_windowFeedback.windowFocused == true)
+			)
+			{
+				wasAWindowFocused = true;
+				focusedWindowName = in_windowFeedback.windowFocusedName;
+			}
+
+			return *this;
+		}
+
 		void clearFeedback()
 		{
 			feedbackStrings.clear();
 		}
 
-		void loadButtonClickResults(ImGuiButtonClickResult in_clickResult)
-		{
-			buttonClickResult = in_clickResult;
-		}
+
 
 		std::vector<std::string> feedbackStrings;
 		std::map<ShaderMachineFeedbackType, float> mouseFeedback;
@@ -66,6 +124,9 @@ class ShaderMachineFeedback
 		std::string mouseHoveredPanelName = "";
 		bool wasInputTextModified = false;		// if any input text was modified, set this value to true.
 		bool wasMouseInWindow = false;			// if a mosue was ever in a ImGui panel, window, etc...this should be set to true.
+
+		bool wasAWindowFocused = false;
+		std::string focusedWindowName = "";
 };
 
 #endif
