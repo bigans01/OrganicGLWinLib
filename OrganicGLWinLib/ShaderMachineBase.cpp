@@ -268,7 +268,15 @@ void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
 	// Up vector
 	up = glm::cross(right, direction);
 
-	if (isFocused == 1)
+	// If an ImGui window is currently focused, we want to direct arrow key input to that window, and not 
+	// have those keystrokes affect movement within the "world." This is what the check of in_imguiFocusedFlag is for.
+	if 
+	(
+		(isFocused == 1)				// the OpenGL window must be focused, 
+		&&								// AND
+		in_imguiFocusedFlag == false	// an ImGui panel within that window CANNOT be focused,
+										// because if it was focused we would want arrow key input to go to that ImGui panel.
+	)
 	{
 		
 
