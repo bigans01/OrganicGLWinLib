@@ -281,19 +281,19 @@ void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
 		
 
 		// Move forward
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		if (glfwGetKey(window, moveForwardKey) == GLFW_PRESS) {
 			position += direction * deltaTime * speed;
 		}
 		// Move backward
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		if (glfwGetKey(window, moveBackwardKey) == GLFW_PRESS) {
 			position -= direction * deltaTime * speed;
 		}
 		// Strafe right
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		if (glfwGetKey(window, strafeRightKey) == GLFW_PRESS) {
 			position += right * deltaTime * speed;
 		}
 		// Strafe left
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		if (glfwGetKey(window, strafeLeftKey) == GLFW_PRESS) {
 			position -= right * deltaTime * speed;
 		}
 
@@ -429,6 +429,15 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 
 	lastTime = currentTime;
+}
+
+void ShaderMachineBase::processInputFeedbackToImGuiObject(Message in_inputForObject)
+{
+	switch (in_inputForObject.messageType)
+	{
+		// for sending feedback to an ImGuiInputText object
+		case MessageType::IMGUI_SEND_INPUT_FEEDBACK_TO_IMGUI_INPUT_TEXT: { inputPanelContainer.sendInputToInputText(std::move(in_inputForObject)); break; };
+	}
 }
 
 void ShaderMachineBase::runGearTrain()

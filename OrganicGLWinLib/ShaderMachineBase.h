@@ -125,6 +125,9 @@ public:
 		void checkForClickedButtons();						// checks for any button that was clicked; notifies the returning ShaderMachineFeedback instance for this tick whether or not
 															// the mouse cursor was in a button panel.
 
+		// input feedback processing, where input/keystrokes can be sent to named ImGui objects.
+		void processInputFeedbackToImGuiObject(Message in_inputForObject);
+
 		// toggled displayManagers that are set in OrganicGLManager's displayManager (OrganicCoreLib)
 		void renderWorldLocation(float world_precise[3], int world_organicLoc[9]);	// renders a world location box on the screen. 
 		void renderTargetedBlockLocation(int world_organicLoc[9]);					// renders the coordinates of a targeted block.
@@ -194,6 +197,12 @@ protected:
 		double currentTime;
 		float deltaTime;
 
+		// world movement keys
+		int moveForwardKey = GLFW_KEY_W;
+		int strafeRightKey = GLFW_KEY_D;
+		int strafeLeftKey = GLFW_KEY_A;
+		int moveBackwardKey = GLFW_KEY_S;
+
 		bool wasFocusedPreviousFrame = false;
 
 		// buffer sizes
@@ -227,6 +236,8 @@ protected:
 		ImGuiButtonPanelContainer buttonPanelContainer;
 		ImGuiSliderFloatPanelContainer sliderPanelContainer;
 		ImGuiInputTextPanelContainer inputPanelContainer;
+
+		
 
 		// gearTrain related functions
 		void runGearTrain();

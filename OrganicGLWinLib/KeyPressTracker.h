@@ -51,6 +51,25 @@ class KeyPressTracker
 			return exists;
 		}
 
+		bool checkForSingleArrowKeystroke(int in_glfwArrowKeyStrokeValue)
+		{
+			bool singleKeyStrokeFound = false;
+			int foundCountForKeystroke = getNumberOfFoundInputs(0, in_glfwArrowKeyStrokeValue);
+			int totalArrowKeystrokes = getNumberOfFoundInputs(0, GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT);
+
+			if
+			(
+				foundCountForKeystroke == 1		// must match the arrow keystroke we're looking for
+				&&
+				totalArrowKeystrokes == 1		// AND it must be the only one
+			)
+			{
+				singleKeyStrokeFound = true;
+			}
+
+			return singleKeyStrokeFound;
+		}
+
 		// non-template public functions
 		void resetChangeState();				// should be called before any attempted modification to keyPressCycles map (i.e., insertCycle, killCycle); 
 												// ie., at the beginning of the OpenGL rendering loop iteration (see code in OrganicGLManager::renderReadyArrays())

@@ -97,6 +97,21 @@ class ImGuiInputTextPanel
 			ImGuiInputText newInput(in_inputName);
 			inputMap[in_inputName] = newInput;
 		}
+
+		void sendKeystrokeToInputTextObject(Message in_messageToSend)
+		{
+			// remove one string from this message (the first one), to read the next one (which would be the panel name)
+			in_messageToSend.removeStringsFromFrontAndResetIter(1);
+			auto inputTextName = in_messageToSend.readString();
+
+			// check that the input text exists
+			auto inputTextFinder = inputMap.find(inputTextName);
+			if (inputTextFinder != inputMap.end())
+			{
+				std::cout << "(ImGuiInputTextPanel): found input text object to send input to. " << std::endl;
+				inputTextFinder->second.handleKeystrokeInputMessage(std::move(in_messageToSend));
+			}
+		}
 };
 
 #endif
