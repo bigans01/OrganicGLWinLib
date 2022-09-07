@@ -36,7 +36,15 @@ class MassZoneBoxBoundarySPolySet
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
-		MessageContainer buildBoundarySPolyFromFactory(MassZoneBoxType in_boxTypeValue);
+		MessageContainer buildBoundarySPolyFromFactory(MassZoneBoxType in_boxTypeValue);	// this is where the "meat and potatoes" of forming the appropriate
+																							// results for the boundarySPolySG occurs. The job of this function 
+																							// is to produce *some* arrived-at SPoly that this instance of MassZoneBoxBoundarySPolySet
+																							// will have in it's boundarySPolySG. A SPolyResolution class must be used,
+																							// if:
+																							//		1.) There are invalid CleaveSequences, meaning that a SPolyFracturer can't be used.
+																							//		2.) The results of an SPolyFracturer run are empty.
+
+																											
 		SPoly* boundarySPolyRef = nullptr;	// the SPoly in the boundary that we will be inserting categorized lines into.
 	private:
 		glm::vec3 boundaryEmptyNormal;		// the empty normal applied to any SPolys that are generated as a result of fracturing.

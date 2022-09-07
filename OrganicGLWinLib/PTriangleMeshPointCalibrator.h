@@ -9,15 +9,25 @@
 #include <iomanip>
 #include "IndependentUtils.h"
 #include <glm/glm.hpp>
+#include "MassZoneBoxType.h"
 
 class PTriangleMeshPointCalibrator
 {
 	public:
 		PTriangleMeshPointCalibrator(RCollisionPointArray* in_translatorPointArrayRef,
-									 RPointToGridTranslator* in_translatorGridRef) 
+									 RPointToGridTranslator* in_translatorGridRef,
+								     MassZoneBoxType in_boxTypeForMaxXYZ) 
 		{
 			translatorPointArrayRef = in_translatorPointArrayRef;
 			translatorGridRef = in_translatorGridRef;
+
+			// set appropriate maxXYZ value
+			switch (in_boxTypeForMaxXYZ)
+			{
+				case (MassZoneBoxType::BLOCK): { maxXYZ = 1.0f; break;}
+				case (MassZoneBoxType::ENCLAVE): { maxXYZ = 4.0f; break;}
+				case (MassZoneBoxType::COLLECTION): { maxXYZ = 32.0f; break;}
+			}
 
 			determineCalibrationGridLimit(in_translatorGridRef->dimensionLimit, 
 										  in_translatorGridRef->dimPerTile, 
@@ -46,6 +56,10 @@ class PTriangleMeshPointCalibrator
 												//
 												// Logic: (index * cellLength) + (cellLength / 2)
 		float minCalibrationGridLimit = 0.0f;
+
+		float maxXYZ = 0.0f;	// the value that would be used when calibrating points that are on the "max"; 
+								// i.e., if working with blocks, then this is 1.0f, if ORE, then 4.0f, and if blueprint, then 32.0f.
+								// this value should be set in the constructor.
 };
 
 #endif

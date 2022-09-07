@@ -335,7 +335,12 @@ void RMorphableAreaScanner::clampNonFreeMeshPointsToNaturalLimits()
 	auto currentMeshGroupEnd = meshGroupMap.end();
 	for (; currentMeshGroupBegin != currentMeshGroupEnd; currentMeshGroupBegin++)
 	{
-		currentMeshGroupBegin->second.calibratePTriangleMeshPoints(&gridTranslator);
+		// pass the gridTranslator, and the type of box we are working on (so that the PTriangleMeshPointCalibrator can determine the
+		// max limit of 1.0f, 4.0f, or 32.0f when performing the clamping to borders.)
+		currentMeshGroupBegin->second.calibratePTriangleMeshPoints(&gridTranslator, selectedBoxType);
+
+		// determine the boundaries, after calibrating the current mesh group.
+		currentMeshGroupBegin->second.determineGroupMeshBoundaries(selectedBoxType);
 	}
 }
 
@@ -421,6 +426,7 @@ SPoly RMorphableAreaScanner::convertPTriangleToSPoly(PTriangle in_pTriangle)
 	
 	returnSPoly.setEmptyNormal(in_pTriangle.getEmptyNormal());
 	returnSPoly.setSPolyMaterial(in_pTriangle.getMaterialID());
+	returnSPoly.setBoundaryIndicator(in_pTriangle.pTriangleBoundaryIndicator);
 
 	STriangle currentSTriangle(in_pTriangle.collisionPointRefArray[0]->currentValue, 
 							in_pTriangle.collisionPointRefArray[1]->currentValue, 

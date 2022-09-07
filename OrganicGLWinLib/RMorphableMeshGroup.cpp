@@ -530,8 +530,14 @@ void RMorphableMeshGroup::produceSolution(MassGridArray* in_massGridArrayRef,
 	std::cout << "!!!!######################### Number of PTriangles in this solution: " << groupMesh.getMeshPTriangleCount() << std::endl;
 }
 
-void RMorphableMeshGroup::calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef)
+void RMorphableMeshGroup::calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef, MassZoneBoxType in_boxTypeForCalibrator)
 {
-	PTriangleMeshPointCalibrator calibrator(&meshGroupPointArray, in_translatorRef);
+	PTriangleMeshPointCalibrator calibrator(&meshGroupPointArray, in_translatorRef, in_boxTypeForCalibrator);
 	groupMesh.rebuildPTriangleNormals();	// should always rebuild normals after any modification to points.
+}
+
+void RMorphableMeshGroup::determineGroupMeshBoundaries(MassZoneBoxType in_boundaryType)
+{
+	int numberOfDiscoveredBoundaryPTriangles = groupMesh.determinePTriangleBoundaries(in_boundaryType);
+	std::cout << ">>> Number of PTriangles flagged as being on boundary: " << numberOfDiscoveredBoundaryPTriangles << std::endl;
 }

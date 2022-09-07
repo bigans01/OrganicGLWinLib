@@ -21,6 +21,7 @@ void PTriangleMeshPointCalibrator::applyCalibration(RCollisionPoint* in_collisio
 {
 	//glm::vec3 testVec3 = in_collisionPointRef->currentValue;
 
+	// Remember, the value of maxXYZ below will be one of 1.0f, 4.0f, or 32.0f.
 	if (in_cellLimit.applyXValue == 1)
 	{
 		if (in_collisionPointRef->currentValue.x == minCalibrationGridLimit)
@@ -32,7 +33,7 @@ void PTriangleMeshPointCalibrator::applyCalibration(RCollisionPoint* in_collisio
 		else if (in_collisionPointRef->currentValue.x == maxCalibrationGridLimit)
 		{
 			//testVec3.x = 4.0f;
-			in_collisionPointRef->currentValue.x = 4.0f;
+			in_collisionPointRef->currentValue.x = maxXYZ;	
 		}
 	}
 
@@ -46,7 +47,7 @@ void PTriangleMeshPointCalibrator::applyCalibration(RCollisionPoint* in_collisio
 		else if (in_collisionPointRef->currentValue.y == maxCalibrationGridLimit)
 		{
 			//testVec3.y = 4.0f;
-			in_collisionPointRef->currentValue.y = 4.0f;
+			in_collisionPointRef->currentValue.y = maxXYZ;
 		}
 	}
 
@@ -60,7 +61,7 @@ void PTriangleMeshPointCalibrator::applyCalibration(RCollisionPoint* in_collisio
 		else if (in_collisionPointRef->currentValue.z == maxCalibrationGridLimit)
 		{
 			//testVec3.z = 4.0f;
-			in_collisionPointRef->currentValue.z = 4.0f;
+			in_collisionPointRef->currentValue.z = maxXYZ;
 		}
 	}
 

@@ -26,6 +26,7 @@
 #include "DebugOptionSet.h"
 #include "PTriangleMeshPointCalibrator.h"
 #include "Operable3DEnclaveKeySet.h"
+#include "MassZoneBoxType.h"
 
 class RMorphableMeshGroup
 {
@@ -59,8 +60,10 @@ class RMorphableMeshGroup
 			float in_tileGridWidth,
 			int in_numberOfTilesPerDimension);
 
-		// optional manipulation functions
-		void calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef);
+		// optional manipulation functions; these two functions should be called together in RMorphableAreaScanner::clampNonFreeMeshPointsToNaturalLimits(),
+		// with calibrate* below called first.
+		void calibratePTriangleMeshPoints(RPointToGridTranslator* in_translatorRef, MassZoneBoxType in_boxTypeForCalibrator);
+		void determineGroupMeshBoundaries(MassZoneBoxType in_boundaryType);
 
 		PTriangleMesh groupMesh;
 

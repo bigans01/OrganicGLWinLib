@@ -204,32 +204,94 @@ void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPo
 
 MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(MassZoneBoxType in_boxTypeValue)
 {
-	//std::cout << "(MassZoneBoxBoundarySPolySet): begin building cleave sequences..." << std::endl;
+	// Remember, the job of this function is to produce a resulting SPolySupergroup (the boundarySPolySG member)  
+	// for this instance of MassZoneBoxBoundarySPolySet -- no matter how bad it looks! The logic for resolving a "bad" SPoly / CleaveSequence
+	// will evolve over time, and this function (and the functions its called) should be expected to change (this comment is dated on 9/7/2022)
 	MessageContainer buildErrorMessages;
 	InvalidCleaveSequences invalids = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, boundarySPolySetOrientation);
 
-	//std::cout << "(MassZoneBoxBoundarySPolySet): finished building cleave sequences..." << std::endl;
+	// Enter this below logic if there are no invalid CleaveSequences.
 	if (invalids.containsSequnces == false)
 	{
+		// Enter this below logic if there are also CleaveSequences to process.
 		if (boundarySPolyRef->cleaveMap.size() != 0)
 		{
-			//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 			SPolyMorphTracker morphTracker;
-
+			//std::cout << "(MassZoneBoxBoundarySPolyset) !!! Found cleave map values in Factory; processing..." << std::endl;
 			//std::cout << "(MassZoneBoxBoundarySPolySet): begin fracturing..." << std::endl;
-			SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, fracturerDebugLevel);
-			//std::cout << "(MassZoneBoxBoundarySPolySet): end fracturing..." << std::endl;
-			//std::cout << ">>>>> Size of fracturer SPolySG is: " << fracturer.sPolySG.sPolyMap.size() << std::endl;
-			boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
-			boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
-			boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
-			boundarySPolySG.roundAllSTrianglesToHundredths();
-			//boundarySPolySG.checkForAnyPosZ();
-			boundarySPolySG.buildSPolyBorderLines();
 
-			//std::cout << "!!! Size of produced SPolys in boundarySPolySG: " << boundarySPolySG.sPolyMap.size() << std::endl;
+			// Boundary SPolys that are at POS_Z or NEG_Z don't need to be rotated by the SPolyFracturer;
+			// In other words, assume ROTATE_TO_Z, unless boundarySPolySetOrientation is POS_Z or NEG_Z.
+			auto optionEnumToUse = SPolyFracturerOptionEnum::ROTATE_TO_Z;
+			if
+			(
+				(boundarySPolySetOrientation == BoundaryOrientation::POS_Z)
+				||
+				(boundarySPolySetOrientation == BoundaryOrientation::NEG_Z)
+			)
+			{
+				optionEnumToUse = SPolyFracturerOptionEnum::NO_ROTATE_TO_Z;
+			}
+
+			SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, optionEnumToUse, fracturerDebugLevel);
+
+	
+			/* 
+			// ||||||||||||||||||||||||||||||||||||||||||||||||||
+
+			Case 1:
+
+			The SPoly used for SPolyFracturer does NOT contain invalid sequences, --AND-- the SPolyFracturer produced
+			a valid set of SPolys (because the SPolyFracturer contained at least one valid CleaveSequence);
+			proceed with a normal attempt to produce an SPolySupergroup.
+
+			Most attempts fracturing attempts on an SPoly (~99%) will fall into this category.
+
+			// ||||||||||||||||||||||||||||||||||||||||||||||||||
+			*/
+			if (fracturer.sPolySG.sPolyMap.size() != 0)
+			{
+
+
+				boundarySPolySG = std::move(fracturer.sPolySG);		// should be able to move, since the data in the fracturer's sPolySG is about to be destroyed anyway, once we go out of scope.
+				boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+				boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
+				boundarySPolySG.roundAllSTrianglesToHundredths();
+				//boundarySPolySG.checkForAnyPosZ();
+				boundarySPolySG.buildSPolyBorderLines();
+			}
+
+			/*
+			// ||||||||||||||||||||||||||||||||||||||||||||||||||
+
+			Case 2:
+
+			The SPoly used for SPolyFracturer does NOT contain invalid sequences, --BUT-- the SPolyFracturer produced
+			NO SPolys (likely problems with LineWelder). We must attempt to use an SPolyResolution, preferably with a hint on 
+			what it should do.
+
+			This is a fairly rare occurrence (way less than 1%)
+
+			// ||||||||||||||||||||||||||||||||||||||||||||||||||
+			*/
+			else if (fracturer.sPolySG.sPolyMap.size() == 0)
+			{
+				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): !!!!!!! WARNING: SPolyFracturer produced no SPolys. " << std::endl;
+				//polyCopy.printPoints();
+				SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
+				boundarySPolySG = resolver.fetchResolution();
+
+				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): SPolyResolution supergroup size: " << boundarySPolySG.sPolyMap.size() << std::endl;
+
+				boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
+				boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
+				boundarySPolySG.roundAllSTrianglesToHundredths();
+				boundarySPolySG.buildSPolyBorderLines();
+
+			}
 		}
-		//std::cout << "(MassZoneBoxBoundarySPolySet): finished fracturing, and build of border lines..." << std::endl;
+
+		// Below: run any CateogrizedLine contests, if they exist.
 		if
 		(
 			(boundarySPolyRef->cleaveMap.size() == 0)
@@ -255,6 +317,20 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			}
 		}
 	}
+
+
+	/*
+	// ||||||||||||||||||||||||||||||||||||||||||||||||||
+
+	Case 3:
+
+	The SPoly used for SPolyFracturer DOES contain invalid CleaveSequences. Call for resolution via
+	SPolyResolution, preferably with a hint. 
+
+	This is a fairly rare occurrence (way less than 1%)
+
+	// ||||||||||||||||||||||||||||||||||||||||||||||||||
+	*/
 	else if (invalids.containsSequnces == true)
 	{
 		std::cout << "(MassZoneBoxBoundarySPolySet): detected buildCleaveSequence run as being unsuccesful..." << std::endl;
@@ -273,15 +349,6 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 
 		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
 		SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
-
-		/*
-		SPolySupergroup testResolvedSuperGroup = resolver.fetchResolution();
-		testResolvedSuperGroup.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
-		testResolvedSuperGroup.buildSPolyBorderLines();
-		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
-		testResolvedSuperGroup.printSPolys();
-		*/
-
 		boundarySPolySG = resolver.fetchResolution();
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 		boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
@@ -291,9 +358,7 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 		boundarySPolySG.printSPolys();
 		
 	}
-
 	//boundarySPolySG.checkForAnyPosZ();
-
 	return buildErrorMessages;
 }
 

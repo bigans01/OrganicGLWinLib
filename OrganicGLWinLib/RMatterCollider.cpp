@@ -9,7 +9,7 @@ void RMatterCollider::initializeCollider(int in_colliderTilesPerDimension,
 	RMatterCollisionMode in_colliderMode)
 {
 	colliderTilesPerDimension = in_colliderTilesPerDimension;
-	colliderDimensionLimit = in_colliderDimensionLimit;
+	colliderDimensionLimit = in_colliderDimensionLimit;			// should always be 1.0f, 4.0f, or 32.0f.
 	colliderMeshesPerDimension = in_colliderMeshesPerDimension;
 	colliderPointsPerSlicePointArray = in_colliderPointsPerSlicePointArray;
 	colliderMassZoneBoxType = in_colliderMassZoneBoxType;
@@ -153,7 +153,7 @@ void RMatterCollider::generateCollidedMatterResult()
 {
 	collidableScanner.scanGridMass();					// generate each RMorphableMeshGroup
 	applyRMatterManipulationOptions();					// apply options to each RMorphableMeshGroup, if any exist
-	
+
 	// the folloing block is test output; remove when needed.
 	int totalTriangleCount = 0;
 	auto currentMeshBegin = collidableScanner.meshGroupMap.begin();
@@ -206,6 +206,10 @@ void RMatterCollider::applyRMatterManipulationOptions()
 		{
 			case RMatterManipulationOption::CLAMP_NONFREE_GRID_POINTS_TO_NATURAL_LIMITS:	
 			{
+				// Because we are attempting to clamp to natural limits, we can also set the BoundaryIndicator in each PTriangle.
+				// So, for each RMorphableMeshGroup in the collidableScanner, we will need to call a function on each RMorphableMeshGroup instance,
+				// that will attempt to set boundaries on each PTriangle in the underlying PTriangleMesh (the groupMesh member in RMorphableMeshGroup).
+				// We will let the call to the function below handle this for us.
 				collidableScanner.clampNonFreeMeshPointsToNaturalLimits();
 				break;
 			};

@@ -12,6 +12,7 @@
 #include <map>
 #include "MassGridArray.h"
 #include "RUtils.h"
+#include "BoundaryPolyIndicator.h"
 
 class PTriangle
 {
@@ -34,6 +35,8 @@ class PTriangle
 
 		glm::vec3 getEmptyNormal();
 		RCollisionPoint* collisionPointRefArray[3] = { nullptr };	// an array of references to the RCollisionPoints that make up the PTriangle.
+		BoundaryPolyIndicator pTriangleBoundaryIndicator;	// must be calculated by a call to the function PTriangleMesh::determinePTriangleBoundaries, 
+															// as it is cannot be determined until runtime.
 	private:
 		bool runInitialEmptyNormalTest(bool in_pTriangleDebugFlag);		// checks whether or not the normalized initial calculation of the empty normal -- which is the cross product
 																		// of the points of the PTriangle -- matches the normalized version of the initial value of currentEmptyNormal.

@@ -27,6 +27,11 @@ void SPoly::setBoundaryIndicatorOrientation(BoundaryOrientation in_boundaryOrien
 	sPolyBoundaryIndicator.setBoundaryIndicator(in_boundaryOrientation);
 }
 
+void SPoly::setBoundaryIndicator(BoundaryPolyIndicator in_boundaryIndicator)
+{
+	sPolyBoundaryIndicator = in_boundaryIndicator;
+}
+
 BoundaryOrientation SPoly::getBoundaryIndicatorOrientation()
 {
 	return sPolyBoundaryIndicator.getBoundaryIndicatorValue();
