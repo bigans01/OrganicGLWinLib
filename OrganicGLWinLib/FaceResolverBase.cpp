@@ -49,6 +49,16 @@ void FaceResolverBase::debugPrintOneDimLines()	// for debug: print the values of
 	}
 }
 
+void FaceResolverBase::setResolverRecorderRef(ExceptionRecorder* in_exceptionRecorderRef)
+{
+	resolverRecorderRef = in_exceptionRecorderRef;
+}
+
+void FaceResolverBase::setResolverBoundaryOrientation(BoundaryOrientation in_resolverBoundaryOrientation)
+{
+	resolverBoundaryOrientation = in_resolverBoundaryOrientation;
+}
+
 SPolySupergroup FaceResolverBase::fetchResolution()
 {
 	return resolution;

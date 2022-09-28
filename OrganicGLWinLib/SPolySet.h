@@ -34,6 +34,7 @@
 #include "FusedPointReactor.h"
 #include "SPolyDOSet.h"
 #include "MassManipulationMode.h"
+#include "ExceptionRecorder.h"
 
 // test only
 //#include "FanManager.h"

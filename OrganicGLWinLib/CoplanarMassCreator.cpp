@@ -164,12 +164,21 @@ void CoplanarMassCreator::runMassManipulation()
 		
 
 		trackedCopy.massManipulationSetting = MassManipulationMode::DESTRUCTION;	// we need to do this, because we need the area of the piece that is cut out.
-		trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::NO_MERGE, BoundaryOrientation::NONE);		// merging cannot be done on coplanar comparisons.
+
+		ExceptionRecorder tempExceptionRecorder;	// required error/exception logging for buildCleaveSequences
+		trackedCopy.buildCleaveSequences(CleaveSequenceMergeMode::NO_MERGE, 
+										BoundaryOrientation::NONE,
+										&tempExceptionRecorder);		// merging cannot be done on coplanar comparisons.
 
 		SPolyMorphTracker tempTracker;			// not sure if we ever even need this? (need to revisit, 12/9/2020)
 
 		
-		SPolyFracturer fracturer(0, &trackedCopy, &tempTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, massManipulatorLogLevel);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
+		SPolyFracturer fracturer(0, 
+								&trackedCopy, 
+								&tempTracker, 
+								SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, 
+								massManipulatorLogLevel,
+								&tempExceptionRecorder, BoundaryOrientation::NONE);	// (Step 4: ) Perform the fracturing against the tracked SPoly, using an instance of SPolyFracturer. Do not rotate to Z, as this has been done already.
 		
 		// (Step 5: ) Get area, from the fractured 
 		//fracturer.sPolySG.roundAllSTrianglesToHundredths();

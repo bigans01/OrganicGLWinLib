@@ -31,6 +31,7 @@
 #include "InvalidCleaveSequences.h"
 #include "SPolyMode.h"
 #include "BoundaryPolyIndicator.h"
+#include "ExceptionRecorder.h"
 
 class SPoly
 {
@@ -117,7 +118,9 @@ private:
 
 
 	void determinePrimalPoints();
-	InvalidCleaveSequences buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, BoundaryOrientation in_optionalOrientation);
+	InvalidCleaveSequences buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, 
+											   BoundaryOrientation in_optionalOrientation,
+											   ExceptionRecorder* in_exceptionRecorderRef);
 	void determinePlanarVectors();
 	void addBorderLine(STriangleLine in_triangleLine);
 	int getNextBorderLineID(int in_currentBorderLineID, CyclingDirection in_direction);	// will get the ID of the next SPolyBorderLine, given the ID of a valid current one, and a CyclingDirection.

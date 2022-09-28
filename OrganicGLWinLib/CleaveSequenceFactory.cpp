@@ -89,7 +89,11 @@ void CleaveSequenceFactory::loadCategorizedLineEmptyNormalsIntoQuatPoints(QuatRo
 
 
 
-InvalidCleaveSequences CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, std::map<int, SPolyBorderLines> in_borderLineArrayRef, MassManipulationMode in_massManipulationMode, CleaveSequenceMergeMode in_cleaveSequenceMergeMode)
+InvalidCleaveSequences CleaveSequenceFactory::constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, 
+																				std::map<int, SPolyBorderLines> in_borderLineArrayRef, 
+																				MassManipulationMode in_massManipulationMode, 
+																				CleaveSequenceMergeMode in_cleaveSequenceMergeMode,
+																				ExceptionRecorder* in_exceptionRecorderRef)
 {
 	InvalidCleaveSequences producedInvalids;
 	// NEWW
@@ -199,7 +203,7 @@ InvalidCleaveSequences CleaveSequenceFactory::constructAndExportCleaveSequences(
 				lineManager.printLineCountsForEachType();
 			}
 
-			producedInvalids = handleScenarioTypical(in_cleaveMapRef);
+			producedInvalids = handleScenarioTypical(in_cleaveMapRef, in_exceptionRecorderRef);
 		}
 
 		// Special case 1: there is 1 line with a value of INTERCEPTS_POINT_PRECISE.
@@ -277,7 +281,8 @@ void CleaveSequenceFactory::clearLinePools()
 	lineManager.clearAllLines();
 }
 
-InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef)
+InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef,
+																	ExceptionRecorder* in_exceptionRecorderRef)
 {
 	//bool wasSuccessful = true;
 	InvalidCleaveSequences invalids;
@@ -316,6 +321,7 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 	// only continue if areNormalsValid is true.
 	if (areNormalsValid == true)
 	{
+		int typicalWhileIteration = 0;
 		while (lineManager.getCountOfIntersectionType(IntersectionType::PARTIAL_BOUND) > 0)	// do this until all partial_bound lines have been accounted for. 
 		{
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory): BEGIN, partialBoundCount > 0 --> Number of non-bound lines in map is:", lineManager.getCountOfIntersectionType(IntersectionType::NON_BOUND), "\n");
@@ -433,16 +439,19 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 
 				invalids.insertCleaveSequenceAtKey(currentSequenceIndex, newSequence);
 
-				std::cout << "+++++++++++++++ entering infinite while for debug testing (6/2/2021)" << std::endl;
-				//int infVal = 3;
-				//while (infVal == 3)
-				//{
+				// --Record exception, EXCEPTION_INVALID_TYPICAL_SEQUENCE here; note that this may actually insert the exception twice
+				// because of the while loop.
 
-				//}
+				//std::cout << "+++++++++++++++ entering infinite while for debug testing (6/2/2021) --> handled by EXCEPTION_INVALID_TYPICAL_SEQUENCE." << std::endl;
+				//std::cout << "+++++++++++++++ exception count is: " << exceptionCount << std::endl;
+				//exceptionCount++;
+				//int someVal = 3;
+				//std::cin >> someVal;
 
+				ExceptionRecord sequenceException(ExceptionRecordType::EXCEPTION_INVALID_TYPICAL_SEQUENCE, 
+												writeOutCategorizedLines(&newSequence, typicalWhileIteration));
+				in_exceptionRecorderRef->insertException(sequenceException);
 
-				int someVal = 3;
-				std::cin >> someVal;
 			}
 			//std::cout << "## Remaining number of partial bounds: " << partialboundCount << std::endl;
 
@@ -459,6 +468,7 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 			cleaveSequenceFactoryLogger.log("(CleaveSequenceFactory) ++++++++++ Finished 1 pass of a CategorizedLine. ", "\n");
 
 			currentSequenceIndex++;
+			typicalWhileIteration++;
 		}
 
 		while (lineManager.getCountOfIntersectionType(IntersectionType::A_SLICE) > 0)
@@ -508,6 +518,47 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioTypical(std::map<int
 
 	//return typicalErrorMessages;
 	return invalids;
+}
+
+Message CleaveSequenceFactory::writeOutCategorizedLines(CleaveSequence* in_currentCleaveSequence, int in_currentIteration)
+{
+	// The message everything will go into.
+	Message writtenLines(MessageType::CLEAVESEQUENCE_CATEGORIZED_LINES);
+
+	// The first string will containt the orientation of the SPoly that the exception occurred in.
+	std::string debugStringBase = "\tAn ExceptionRecordType::EXCEPTION_INVALID_TYPICAL_SEQUENCE was detected during generation of CleaveSequences, in the PARTIAL_BOUND while loop at iteration " + std::to_string(in_currentIteration) + " in an SPoly having an orientation of ";
+	auto orientationString = IndependentUtils::getBoundaryOrientationString(optionalFactoryOrientation);
+	std::string debugString = debugStringBase + orientationString;
+	writtenLines.insertString(debugString);
+
+	// Read all categorized lines from both the lineManager, and the current CleaveSequence.
+	// Get lineManager lines, and line count.
+	auto fetchedManagerLines = lineManager.fetchAllLines(); // fetch CategorizedLines from lineManager 
+	int totalManagerLines = fetchedManagerLines.size();
+	writtenLines.insertInt(totalManagerLines);			// the first int of the message should be the number of lines from the lineManager.
+
+	// Get a pointer to the CleaveSequence lines, and the total size of those.
+	auto cleaveSequenceMapPtr = &in_currentCleaveSequence->cleavingLines;
+	int totalCleaveSequenceLines = cleaveSequenceMapPtr->size();
+	writtenLines.insertInt(totalCleaveSequenceLines);
+
+	// Now, cycle through each CategorizedLine from the lineManager. Make sure to insert two tabs.
+	writtenLines.insertString("\t\tremaining lines in lineManager: ");
+	for (auto& managerLines : fetchedManagerLines)
+	{
+		// before writing out the string, adjust the float precision to 2 for easier readability.
+		writtenLines.insertString(managerLines.writeLineToString());
+	}
+
+	// Then, the cleaveSequence lines. Make sure to insert two tabs.
+	writtenLines.insertString("\t\tlines inserted into CleaveSequence: ");
+	for (auto& cleaveSequenceLines : in_currentCleaveSequence->cleavingLines)
+	{
+		// before writing out the string, adjust the float precision to 2 for easier readability.
+		writtenLines.insertString(cleaveSequenceLines.second.writeLineToString());
+	}
+
+	return writtenLines;
 }
 
 InvalidCleaveSequences CleaveSequenceFactory::handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef)

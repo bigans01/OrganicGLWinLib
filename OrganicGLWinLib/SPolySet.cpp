@@ -354,7 +354,8 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 
 
-	// Step 3: build the CleaveSequences
+	// Step 3: build the CleaveSequences; must record any errors.
+	ExceptionRecorder cleaveSequenceErrorRecorder;
 	for (int x = 0; x < compCount2; x++)
 	{
 		//secondaryPolys[x].sequenceFactory.printLinesInPool();
@@ -362,7 +363,9 @@ void SPolySet::runPolyComparison(MassZoneBoxType in_massZoneBoxType)
 
 		// if an SPoly contains CleaveSequences, it must be disqualified (meaning, the appropriate MassZone it belongs to doesn't need to compare it to another MassZone.)
 		std::cout << ">>>>>>> Building cleave sequences, for SPoly with ID: " << x << std::endl;
-		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE, BoundaryOrientation::NONE);		
+		secondaryPolys[x].buildCleaveSequences(CleaveSequenceMergeMode::MERGE, 
+												BoundaryOrientation::NONE,
+												&cleaveSequenceErrorRecorder);		
 		/*
 		if (secondaryPolys[x].sequenceFactory.doesFactoryContainLines() == true)
 		{
@@ -666,7 +669,14 @@ void SPolySet::performFracturing()
 			auto truestart = std::chrono::high_resolution_clock::now();
 			//SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkIfSpecificSPolyFracturingDebugIsSet(x));
 			
-			SPolyFracturer fracturer(x, &secondaryPolys[x], &polyMorphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, checkForSPolyOptionInSpecificSPoly(x, SPolyDO::FRACTURER));
+			ExceptionRecorder tempSetRecorder;
+			SPolyFracturer fracturer(x, 
+									&secondaryPolys[x], 
+									&polyMorphTracker, 
+									SPolyFracturerOptionEnum::ROTATE_TO_Z, 
+									checkForSPolyOptionInSpecificSPoly(x, SPolyDO::FRACTURER),
+									&tempSetRecorder,
+									BoundaryOrientation::NONE);
 			insertPolyFracturingResults(x, fracturer.sPolySG);
 
 			auto trueend = std::chrono::high_resolution_clock::now();

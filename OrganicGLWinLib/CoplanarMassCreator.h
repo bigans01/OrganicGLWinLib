@@ -10,6 +10,7 @@
 #include "STriangleCutter.h"
 #include "CuttingTriangleManager.h"
 #include "STriangleCutter.h"
+#include "ExceptionRecorder.h"
 
 class CoplanarMassCreator : public CoplanarMassManipulator
 {

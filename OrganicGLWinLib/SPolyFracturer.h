@@ -16,6 +16,7 @@
 #include "SPolyFracturerOptionEnum.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
+#include "ExceptionRecorder.h"
 
 class SPolyFracturer
 {
@@ -29,7 +30,13 @@ public:
 	SPolySupergroup sPolySG;
 	bool specialLogicSignalFlag = false;
 
-	SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel);
+	SPolyFracturer(int in_originalPolyID, 
+					SPoly* in_sPolyRef, 
+					SPolyMorphTracker* in_morphTrackerRef, 
+					SPolyFracturerOptionEnum in_option, 
+					PolyDebugLevel in_polyDebugLevel,
+					ExceptionRecorder* in_exceptionRecorderRef,
+					BoundaryOrientation in_fracturerBoundaryOrientation);
 	void runFracturing();	// run the fracturing process
 	void applyTranslationToAllPoints(glm::vec3 in_translationOffset);	// applies a point translation to all points (but not the normals)
 	void populatePointsForQuaternions();	// populates the point ref vector in rotationPoints with all cleave line points, normals, and border lines; all of these will need to be transformed by the quaternion(s)
@@ -39,6 +46,8 @@ public:
 	bool getFractureValidity();
 private:
 	PolyLogger fracturerLogger;
+	ExceptionRecorder* fracturerRecorderRef = nullptr;
+	BoundaryOrientation fracturerBoundaryOrientation = BoundaryOrientation::NONE;
 	PolyDebugLevel fracturerLoggerDebugLevel = PolyDebugLevel::NONE;
 	bool isFracturingValid = true;	// assumes the LineWelders did their job; set to false if a fault is detected in the LineWelder.
 };

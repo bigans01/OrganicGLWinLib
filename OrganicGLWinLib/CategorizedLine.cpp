@@ -942,6 +942,40 @@ void CategorizedLine::roundLineEndpoints()
 	line.pointB.z = IndependentUtils::roundToHundredth(line.pointB.z);
 }
 
+std::string CategorizedLine::writeLineToString()
+{
+	std::string writtenLine;
+	std::string intersectionTypeString = getIntersectionTypeString();
+	std::string stringedParentPoly = std::to_string(parentPoly);
+
+	// pointA
+	std::string pointAX = std::to_string(line.pointA.x);
+	std::string pointAY = std::to_string(line.pointA.y);
+	std::string pointAZ = std::to_string(line.pointA.z);
+	std::string stringedPointA(pointAX + ", " + pointAY + ", " + pointAZ);
+
+	// pointB
+	std::string pointBX = std::to_string(line.pointB.x);
+	std::string pointBY = std::to_string(line.pointB.y);
+	std::string pointBZ = std::to_string(line.pointB.z);
+	std::string stringedPointB(pointBX + ", " + pointBY + ", " + pointBZ);
+
+	// empty normal
+	std::string emptyNormalX = std::to_string(emptyNormal.x);
+	std::string emptyNormalY = std::to_string(emptyNormal.y);
+	std::string emptyNormalZ = std::to_string(emptyNormal.z);
+	std::string stringedEmptyNormal(emptyNormalX + ", " + emptyNormalY + ", " + emptyNormalZ);
+
+	std::ostringstream formattedString;
+	formattedString << "\t\t" << intersectionTypeString << std::fixed << std::setprecision(2)
+					<< ": parentPoly: " << stringedParentPoly
+					<< " | pointA: " << line.pointA.x << ", " << line.pointA.y << ", " << line.pointA.z << " "
+					<< " | pointB: " << line.pointB.x << ", " << line.pointB.y << ", " << line.pointB.z << " " 
+					<< " | emptyNormal: " << emptyNormal.x << ", " << emptyNormal.y << ", " << emptyNormal.z;
+	writtenLine = formattedString.str();
+	return writtenLine;
+}
+
 void CategorizedLine::testFunction()
 {
 	std::cout << "!! Test!! " << std::endl;

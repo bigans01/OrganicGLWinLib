@@ -21,12 +21,16 @@
 #include "BorderDataMap.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
+#include "ExceptionRecorder.h"
 
 class MassZoneBox
 {
 	public:
 		std::map<BoundaryOrientation, MassZoneBoxBoundary> boxBoundaries;
-		void insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet);
+		void insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, 
+							   MassZoneBoxBoundary in_massZoneBoxBoundary, 
+			                   SPolyDOSet in_sPolyDOSet,
+							   ExceptionRecorder* in_exceptionRecorderRefToPass);
 		void printBoundaryLineCounts();
 		void printBoundaries();
 		void printCategorizedLinesInBoundaries();

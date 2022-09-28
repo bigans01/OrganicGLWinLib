@@ -96,7 +96,14 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) Last triangle welded line, point A: ", lastTriangleWeldedLineRef->pointA.x, ", ", lastTriangleWeldedLineRef->pointA.y, ", ", lastTriangleWeldedLineRef->pointA.z, "\n");
 
 	bool isAligned = false;
-	while (isAligned == false)
+	bool wereShiftsExceeded = false;
+	int shiftCount = 0;
+	while 
+	(
+		(isAligned == false)
+		&&
+		(wereShiftsExceeded == false)
+	)
 	{
 		if
 		(
@@ -112,6 +119,25 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 		else
 		{
 			tracerContainer->second.shiftLines();
+			shiftCount++;
+			if (shiftCount > 3)
+			{
+				wereShiftsExceeded = true;
+				// --Record exception, EXCEPTION_WELDED_TRIANGLE_SHIFT_LINES_EXCEEDED here.
+				//std::cout << "(WeldedTriangleGroupBuilder::handleFinalObservation): NOTICE: shifts of tracerContainer exceeded; handling required. " << std::endl;
+				Message weldingContextMessage;	// no explicit message type required here, for this kind of exception.
+				std::string getOrientationString = IndependentUtils::getBoundaryOrientationString(groupBuilderBoundaryOrientation);
+				std::string firstContextLine = "\tAn ExceptionRecordType::EXCEPTION_WELDED_TRIANGLE_SHIFT_LINES_EXCEEDED was detected during call to WeldedTriangleGroupBuilder::handleFinalObservation(), on the "
+					+ getOrientationString + " face. ";
+				std::string secondContextLine = "\t\tThis may trigger an SPolyResolution to be called on this same face.";
+				weldingContextMessage.insertString(firstContextLine);
+				weldingContextMessage.insertString(secondContextLine);
+
+				ExceptionRecord exceededShiftRecord(ExceptionRecordType::EXCEPTION_WELDED_TRIANGLE_SHIFT_LINES_EXCEEDED, weldingContextMessage);
+				groupBuilderRecorderRef->insertException(exceededShiftRecord);
+				//int shifts = 3;
+				//std::cin >> shifts;
+			}
 		}
 
 		//std::cout << "!! Looping alignment while..." << std::endl;
@@ -127,5 +153,8 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 	weldedTriangleGroupBuilderLogger.log("(WeldedTriangleGroupBuilder) !!! handleFinalObservation, while loop complete...", "\n");
 
 	// before we insert the last triangle, we must make sure it is aligned to the rule of the triangle fan (should be done from the previous loop)
-	lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
+	if (wereShiftsExceeded == false)
+	{
+		lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
+	}
 }

@@ -1,8 +1,20 @@
 #include "stdafx.h"
 #include "SPolyFracturer.h"
 
-SPolyFracturer::SPolyFracturer(int in_originalPolyID, SPoly* in_sPolyRef, SPolyMorphTracker* in_morphTrackerRef, SPolyFracturerOptionEnum in_option, PolyDebugLevel in_polyDebugLevel)
+SPolyFracturer::SPolyFracturer(int in_originalPolyID, 
+								SPoly* in_sPolyRef, 
+								SPolyMorphTracker* in_morphTrackerRef, 
+								SPolyFracturerOptionEnum in_option, 
+								PolyDebugLevel in_polyDebugLevel,
+								ExceptionRecorder* in_exceptionRecorderRef,
+								BoundaryOrientation in_fracturerBoundaryOrientation)
 {
+	// set a reference to the recorder.
+	fracturerRecorderRef = in_exceptionRecorderRef;
+
+	// set the BoundaryOrientation.
+	fracturerBoundaryOrientation = in_fracturerBoundaryOrientation;
+
 	// set the debug level
 	fracturerLoggerDebugLevel = in_polyDebugLevel;
 	fracturerLogger.setDebugLevel(in_polyDebugLevel);
@@ -63,7 +75,12 @@ void SPolyFracturer::generatePlanarNormalsForPoly()
 
 void SPolyFracturer::checkForCleaveIntersections()
 {
-	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, polyRef, fracturerLoggerDebugLevel);		// assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
+	// the below instance of CleaveSequenceIntersectFinder assumes that all coordinate's have been translated such that the coordinates of the poly to be fratured have their Z = 0.
+	CleaveSequenceIntersectFinder intersectFinder(originalPolyID, 
+												polyRef, 
+												fracturerLoggerDebugLevel, 
+												fracturerRecorderRef, 
+												fracturerBoundaryOrientation);		
 	quatPoints.clearPoints();															// clear out the quat points (which needs to be done if runFracturing() is called), so that we may insert the below.
 
 	

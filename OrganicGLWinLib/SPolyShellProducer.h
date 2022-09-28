@@ -14,6 +14,7 @@
 #include "MessageContainer.h"
 #include <set>
 #include "SPolyUtils.h"
+#include "ExceptionRecorder.h"
 
 class SPolyShellProducer
 {
@@ -66,6 +67,8 @@ class SPolyShellProducer
 
 		// debug functions
 		void checkForPosZSquareBoundaryInOutput();
+		ExceptionRecorder getExceptions();			// this will retrieve a copy of the ExceptionRecorder,
+													// so that any recorded exceptions can be analyzed/tracked/logged 
 
 	private:
 		void handleBorderDebugOption(DebugOption in_debugOption);
@@ -75,6 +78,8 @@ class SPolyShellProducer
 		std::map<BoundaryOrientation, SPolySupergroup> outputSPolySuperGroups;
 		int numberOfInputSPolys = 0;
 		MassZone productionMassZone;
+		ExceptionRecorder producerExceptionRecorder;	// the instance of ExceptionRecorder that is passed to various sub-components
+														// contained within the instance of SPolyShellProducer.
 };
 
 #endif

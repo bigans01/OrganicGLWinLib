@@ -1,8 +1,18 @@
 #include "stdafx.h"
 #include "CleaveSequenceIntersectFinder.h"
 
-CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, SPoly* in_sPolyRef, PolyDebugLevel in_polyDebugLevel)
+CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPolyID, 
+															SPoly* in_sPolyRef, 
+															PolyDebugLevel in_polyDebugLevel,
+															ExceptionRecorder* in_exceptionRecorderRef,
+															BoundaryOrientation in_intersectBoundaryOrientation)
 {
+	// set the recorder ref.
+	sequenceRecorderRef = in_exceptionRecorderRef;
+
+	// set the intersect finder's orientation.
+	intersectBoundaryOrientation = in_intersectBoundaryOrientation;
+
 	intersectFinderLoggerDebugLevel = in_polyDebugLevel;
 	intersectFinderLogger.setDebugLevel(in_polyDebugLevel);
 
@@ -76,7 +86,7 @@ CleaveSequenceIntersectFinder::CleaveSequenceIntersectFinder(int in_originalPoly
 
 			//std::cout << "++++ Debug only, printing lines: " << std::endl;
 			//linePool.printLines();
-			WeldedTriangleGroupBuilder groupBuilder(intersectFinderLoggerDebugLevel);
+			WeldedTriangleGroupBuilder groupBuilder(intersectFinderLoggerDebugLevel, sequenceRecorderRef, intersectBoundaryOrientation);
 			groupBuilder.setWeldedLinePool(linePool);
 			groupBuilder.runTracingObservers();
 

@@ -14,6 +14,11 @@ void MassZoneBoxBoundarySPolySet::setBoundarySPolyRef(SPoly* in_sPolyRef)
 	//std::cin >> stopVal;
 }
 
+void MassZoneBoxBoundarySPolySet::setRecorderRef(ExceptionRecorder* in_exceptionRecorderRef)
+{
+	boundaryRecorderRef = in_exceptionRecorderRef;
+}
+
 void MassZoneBoxBoundarySPolySet::setLogLevel(PolyDebugLevel in_sPolyDebugLevel)
 {
 	boxBoundarySPolySetLogLevel = in_sPolyDebugLevel;
@@ -208,7 +213,9 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 	// for this instance of MassZoneBoxBoundarySPolySet -- no matter how bad it looks! The logic for resolving a "bad" SPoly / CleaveSequence
 	// will evolve over time, and this function (and the functions its called) should be expected to change (this comment is dated on 9/7/2022)
 	MessageContainer buildErrorMessages;
-	InvalidCleaveSequences invalids = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, boundarySPolySetOrientation);
+	InvalidCleaveSequences invalids = boundarySPolyRef->buildCleaveSequences(CleaveSequenceMergeMode::MERGE, 
+																			boundarySPolySetOrientation,
+																			boundaryRecorderRef);
 
 	// Enter this below logic if there are no invalid CleaveSequences.
 	if (invalids.containsSequnces == false)
@@ -233,7 +240,21 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 				optionEnumToUse = SPolyFracturerOptionEnum::NO_ROTATE_TO_Z;
 			}
 
-			SPolyFracturer fracturer(0, boundarySPolyRef, &morphTracker, optionEnumToUse, fracturerDebugLevel);
+			// Make multiple copies of the boundarySPoly, in case we have to put the original boundarySPolyRef
+			// through a fracturer multiple times. This is because although valid, running the same instance of an SPoly through
+			// a fracturer will produce different/unintended results.
+			//
+			// For a refactor/speed enhancement, a function should be added in the SPolyFracturer that returns the SPoly back to
+			// its original state. 
+			auto firstFractureCopy = *boundarySPolyRef;
+			auto case2FractureCopy = *boundarySPolyRef;
+			SPolyFracturer fracturer(0, 
+									&firstFractureCopy, 
+									&morphTracker, 
+									optionEnumToUse, 
+									fracturerDebugLevel, 
+									boundaryRecorderRef,
+									boundarySPolySetOrientation);
 
 	
 			/* 
@@ -258,7 +279,15 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 				boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 				boundarySPolySG.roundAllSTrianglesToHundredths();
 				//boundarySPolySG.checkForAnyPosZ();
-				boundarySPolySG.buildSPolyBorderLines();
+				boundarySPolySG.buildSPolyBorderLines();		// needed for when MassZoneBox::generateTouchedBoxFacesList is called.
+
+				/*
+				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory) CASE 1: Resolution, for orientation: ";
+				IndependentUtils::printBoundaryOrientation(boundarySPolySetOrientation);
+				std::cout << std::endl;
+				std::cout << "Printing SPolys for this resolution: " << std::endl;
+				boundarySPolySG.printSPolys();
+				*/
 			}
 
 			/*
@@ -278,20 +307,31 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			{
 				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): !!!!!!! WARNING: SPolyFracturer produced no SPolys. " << std::endl;
 				//polyCopy.printPoints();
-				SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
+				SPolyResolution resolver(&case2FractureCopy, 
+										boundarySPolySetOrientation, 
+										in_boxTypeValue, 
+										invalids, 
+										boundaryRecorderRef);
 				boundarySPolySG = resolver.fetchResolution();
 
-				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): SPolyResolution supergroup size: " << boundarySPolySG.sPolyMap.size() << std::endl;
+				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): CASE 2, SPolyResolution supergroup size: " << boundarySPolySG.sPolyMap.size() << std::endl;
+				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): printing SPolys for resolution. " << std::endl;
+				boundarySPolySG.printSPolys();
 
 				boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 				boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 				boundarySPolySG.roundAllSTrianglesToHundredths();
-				boundarySPolySG.buildSPolyBorderLines();
+				boundarySPolySG.buildSPolyBorderLines();		// needed for when MassZoneBox::generateTouchedBoxFacesList is called.
+
 
 			}
 		}
 
 		// Below: run any CateogrizedLine contests, if they exist.
+		//
+		// A CategorizedLine contest is a test in which a CategorizedLine(s) that was detected as being coplanar to
+		// the boundarySPolyRef, has its (their) empty normals compared against the empty normal of the boundarySPolyRef itself.
+		// 
 		if
 		(
 			(boundarySPolyRef->cleaveMap.size() == 0)
@@ -301,19 +341,34 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			(contestables.contestableBorderLineChallengersMap.size() != 0)
 		)
 		{
-			std::cout << "!!! Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
+			std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory) !!! >>>>>>>>>>>>>>> Running analysis on contestables; will attempt to produce boundary SPolys..." << std::endl;
+			std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): orientation for contestable analysis is: ";
+			IndependentUtils::printBoundaryOrientation(boundarySPolySetOrientation);
+			std::cout << std::endl;
+			std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): number of contested lines is: " << contestables.contestableBorderLineChallengersMap.size() << std::endl;
+			std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): Face center point is: " << boundaryFaceCenterPoint.x << ", " << boundaryFaceCenterPoint.y << ", " << boundaryFaceCenterPoint.z << std::endl;
+			std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): printing out contested lines. " << std::endl;
+			for (auto& currentBorderLineID : contestables.contestableBorderLineChallengersMap)
+			{
+				for (auto& currentLine : currentBorderLineID.second)
+				{
+					std::cout << "Border line ID: " << currentBorderLineID.first << std::endl;
+					std::cout << "CategorizedLine points: " << currentLine.line.pointA.x << ", " << currentLine.line.pointA.y << ", " << currentLine.line.pointA.z << " | "
+						<< currentLine.line.pointB.x << ", " << currentLine.line.pointB.y << ", " << currentLine.line.pointB.z << std::endl;
+					std::cout << "CategorizedLine empty normal" << currentLine.emptyNormal.x << ", " << currentLine.emptyNormal.y << ", " << currentLine.emptyNormal.z << std::endl;
+				}
+			}
 
-			std::cout << "Face center point is: " << boundaryFaceCenterPoint.x << ", " << boundaryFaceCenterPoint.y << ", " << boundaryFaceCenterPoint.z << std::endl;
 			auto firstContestedLine = contestables.contestableBorderLineChallengersMap.begin()->second.begin();
-			std::cout << "First contested categorized line points are: " << firstContestedLine->line.pointA.x << ", " << firstContestedLine->line.pointA.y << ", " << firstContestedLine->line.pointA.z << " | "
-				<< firstContestedLine->line.pointB.x << ", " << firstContestedLine->line.pointB.y << ", " << firstContestedLine->line.pointB.z << std::endl;
-			std::cout << "First contested categorized line empty normal is: " << firstContestedLine->emptyNormal.x << ", " << firstContestedLine->emptyNormal.y << ", " << firstContestedLine->emptyNormal.z << std::endl;
-
 			requiresContestedAnalysis = true;
 			didCategorizedLineWinContest = resolveContest(*firstContestedLine);
 			if (didCategorizedLineWinContest == true)
 			{
-				std::cout << "!! Notice: categorized lie won contest!" << std::endl;
+				std::cout << "!! Notice: categorized line won contest!" << std::endl;
+			}
+			else
+			{
+				std::cout << "!! Notice: categorized line DID NOT win contest! " << std::endl;
 			}
 		}
 	}
@@ -348,12 +403,17 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 		std::cout << currentBoxBoundaryOrientation << std::endl;
 
 		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
-		SPolyResolution resolver(boundarySPolyRef, boundarySPolySetOrientation, in_boxTypeValue, invalids);
+		SPolyResolution resolver(boundarySPolyRef, 
+								boundarySPolySetOrientation, 
+								in_boxTypeValue, 
+								invalids,
+								boundaryRecorderRef
+								);
 		boundarySPolySG = resolver.fetchResolution();
 		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
 		boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 		boundarySPolySG.roundAllSTrianglesToHundredths();
-		boundarySPolySG.buildSPolyBorderLines();
+		boundarySPolySG.buildSPolyBorderLines();		// needed for when MassZoneBox::generateTouchedBoxFacesList is called.
 		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;
 		boundarySPolySG.printSPolys();
 		

@@ -22,6 +22,7 @@
 #include "NegYFaceResolver.h"
 #include "PosZFaceResolver.h"
 #include "NegZFaceResolver.h"
+#include "ExceptionRecorder.h"
 
 /*
 
@@ -37,11 +38,13 @@ class SPolyResolution
 		SPolyResolution(SPoly* in_sPolyRef,
 						BoundaryOrientation in_boundaryOrientation,
 						MassZoneBoxType in_zoneBoxType,
-						InvalidCleaveSequences in_invalidSequences) :
+						InvalidCleaveSequences in_invalidSequences,
+						ExceptionRecorder* in_exceptionRecorderRef) :
 			resolutionSPolyRef(in_sPolyRef),
 			resolutionOrientation(in_boundaryOrientation),
 			resolutionBoxType(in_zoneBoxType),
-			sequencesToResolve(in_invalidSequences)
+			sequencesToResolve(in_invalidSequences),
+			resolutionRecorderRef(in_exceptionRecorderRef)
 		{
 			calculateResolution();
 			sequencesToResolve.printInvalidSequenceData();	// debug/dev only; remove call at will
@@ -50,6 +53,7 @@ class SPolyResolution
 	private:
 		// the following 4 values should be set by the constructor
 		SPoly* resolutionSPolyRef = nullptr;	// the SPolyResolution should reasonably assume that the SPoly has made it's call to determineBorderLines
+		ExceptionRecorder* resolutionRecorderRef = nullptr;
 		BoundaryOrientation resolutionOrientation = BoundaryOrientation::NONE;	
 		MassZoneBoxType resolutionBoxType = MassZoneBoxType::NOVAL;
 		InvalidCleaveSequences sequencesToResolve;	// contains the invalid CleaveSequences that need to be resolved by this resolution.

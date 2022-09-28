@@ -5,6 +5,8 @@ void SPolyResolution::calculateResolution()
 {
 	// first, determine the resolver.
 	determineResolver();
+	selectedResolverPtr->setResolverRecorderRef(resolutionRecorderRef);
+	selectedResolverPtr->setResolverBoundaryOrientation(resolutionOrientation);
 	selectedResolverPtr->runResolutionAlgorithm();	// run the algorithm
 	calculationResult = selectedResolverPtr->fetchResolution();	// fetch the resulting resolution
 }
@@ -52,7 +54,7 @@ void SPolyResolution::determineResolver()
 	}
 	selectedResolverPtr->initialize(resolutionSPolyRef, sequencesToResolve, resolutionBoxType, resolutionOrientation);
 	selectedResolverPtr->setupBorderLineRangesAndDimLoc();
-	selectedResolverPtr->debugPrintOneDimLines(); // only needed for debugging, not always needed.
+	//selectedResolverPtr->debugPrintOneDimLines(); // only needed for debugging, not always needed.
 }
 
 SPolySupergroup SPolyResolution::fetchResolution()

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <vector>
 #include "CSCorrectionCandidate.h"
+#include "ExceptionRecorder.h"
 
 class FaceResolverBase
 {
@@ -31,9 +32,13 @@ class FaceResolverBase
 		virtual void produceMalformedMitigation() = 0;		// the malformed mitigation is produced when the resolver can't actually resolve anything;
 															// it produces SPolys and then puts them into the resolution (SPolySupergroup)
 		void debugPrintOneDimLines();	// for debug: print the values of the one dim lines
+		void setResolverRecorderRef(ExceptionRecorder* in_exceptionRecorderRef);
+		void setResolverBoundaryOrientation(BoundaryOrientation in_resolverBoundaryOrientation);
 		SPolySupergroup fetchResolution();	// gets a copy of the resulting resolution (to be used by SPolyResolution)
 	protected:
 		SPoly* sPolyPtr = nullptr;	
+		ExceptionRecorder* resolverRecorderRef = nullptr;
+		BoundaryOrientation resolverBoundaryOrientation = BoundaryOrientation::NONE;
 		InvalidCleaveSequences invalidsCopy;
 		MassZoneBoxType boxType = MassZoneBoxType::NOVAL;
 		BoundaryOrientation faceOrientation = BoundaryOrientation::NONE;

@@ -17,6 +17,7 @@
 #include "DebugOption.h"
 #include "MessageContainer.h"
 #include "MassUtils.h"
+#include "ExceptionRecorder.h"
 
 
 class MassZone
@@ -30,6 +31,7 @@ private:
 														// must be set during the call to createMassZoneBoxBoundary; this value is needed
 														// when calling the class that will attempt to resolve bad CleaveSequence generation
 														// (this class hasn't been given a name, as of 1/29/2022)
+	ExceptionRecorder* massZoneRecorderRef = nullptr;
 
 	std::map<int, MassSubZone> subZoneMap;
 	std::map<BoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
@@ -44,6 +46,7 @@ private:
 	std::map<int, int> subZoneToSPolyMap;
 	std::map<int, MeshMatterMeta> meshMatterMetaMap;
 
+	void setMassZoneRecorderRef(ExceptionRecorder* in_massZoneRecorderRef);
 	void setMassZoneLogLevel(PolyDebugLevel in_polyDebugLevel);
 	void insertSPolyMassSubZone(int in_sPolyID, SPoly in_sPolyCopy);
 	void insertSPolyToSubZoneMapEntry(int in_sPolyID, int in_subZoneID);

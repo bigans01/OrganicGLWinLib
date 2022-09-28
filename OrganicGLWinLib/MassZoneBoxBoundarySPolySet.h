@@ -24,6 +24,7 @@
 #include "BoundaryOrientation.h"
 #include "MassZoneBoxType.h"
 #include "SPolyResolution.h"
+#include "ExceptionRecorder.h"
 
 
 class MassZoneBoxBoundarySPolySet
@@ -33,6 +34,7 @@ class MassZoneBoxBoundarySPolySet
 		friend class MassZoneBoxBoundary;
 		friend class MassZoneBox;
 		void setBoundarySPolyRef(SPoly* in_sPolyRef);
+		void setRecorderRef(ExceptionRecorder* in_exceptionRecorderRef);
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
@@ -58,10 +60,13 @@ class MassZoneBoxBoundarySPolySet
 		bool wasLineProducedByReactor = false;	
 		bool isContestedCategorizedLineAnalysisEnabled = false;	// if set to true, "rulings" will be made on contested lines, potentially allowing the construction of an entire boundary SPoly.
 		bool requiresContestedAnalysis = false;					
-		bool didCategorizedLineWinContest = false;
+		bool didCategorizedLineWinContest = false;		// If this value is true, AND there are no generated SPolys for this boundary,
+		                                                // an SPoly constituting the entire boundary face will need to be generated.
+														// See notes in QMBoolResolveContestedCategorizedLine::solve; 
 		ContestableBorderLineMap contestables;					// used only when isContestedCategorizedLineAnalysisEnabled is set to TRUE.
 		glm::vec3 boundaryFaceCenterPoint;
 		BoundaryOrientation boundarySPolySetOrientation = BoundaryOrientation::NONE;	// needs to be set elsewhere.
+		ExceptionRecorder* boundaryRecorderRef = nullptr;
 
 		bool resolveContest(CategorizedLine in_categorizedLine);
 };

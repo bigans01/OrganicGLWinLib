@@ -59,6 +59,7 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 	*/
 
 	MessageContainer productionErrors;	
+	productionMassZone.setMassZoneRecorderRef(&producerExceptionRecorder);	// the recorder ref needs to be set before the boundaries are created.
 	productionMassZone.createMassZoneBoxBoundary(in_massZoneBoxType);		// first, create the boundaries for the MassZone
 
 
@@ -165,6 +166,11 @@ void SPolyShellProducer::checkForPosZSquareBoundaryInOutput()
 	{
 
 	}
+}
+
+ExceptionRecorder SPolyShellProducer::getExceptions()
+{
+	return producerExceptionRecorder;
 }
 
 std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()

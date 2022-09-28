@@ -96,7 +96,13 @@ bool NegYFaceResolver::attemptSolveByInvalidCount()
 		if (resolved == true)
 		{
 			SPolyMorphTracker morphTracker;
-			SPolyFracturer fracturer(0, sPolyPtr, &morphTracker, SPolyFracturerOptionEnum::ROTATE_TO_Z, PolyDebugLevel::NONE);
+			SPolyFracturer fracturer(0, 
+									sPolyPtr, 
+									&morphTracker, 
+									SPolyFracturerOptionEnum::ROTATE_TO_Z, 
+									PolyDebugLevel::NONE,
+									resolverRecorderRef, 
+									resolverBoundaryOrientation);
 			std::cout << "(NegYFaceResolver): Fracturing successful." << std::endl;
 			wasResolved = true;
 

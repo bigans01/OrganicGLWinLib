@@ -22,6 +22,9 @@
 #include <algorithm>
 #include "IndependentUtils.h"
 #include <string>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 
 
 class SPolyBorderLines;
@@ -94,6 +97,7 @@ public:
 		PolyDebugLevel in_polyDebugLevel);
 
 	void roundLineEndpoints();
+	std::string writeLineToString();
 
 	void testFunction();
 	void createCategorizedLineOptionals();

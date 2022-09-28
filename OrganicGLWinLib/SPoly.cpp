@@ -709,7 +709,9 @@ void SPoly::moveLastCleave()
 	}
 }
 
-InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, BoundaryOrientation in_optionalOrientation)
+InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cleaveSequenceMergeMode, 
+												BoundaryOrientation in_optionalOrientation,
+												ExceptionRecorder* in_exceptionRecorderRef)
 {
 	//std::cout << "############################### BUILDING CLEAVE SEQUENCES ################################### " << std::endl;
 	InvalidCleaveSequences retrievedInvalids;
@@ -717,7 +719,11 @@ InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cl
 	if (sequenceFactory.doesFactoryContainLines() == true)	// only do this if there are actually lines to work on
 	{	
 		//std::cout << "!! Constructing Cleave Sequences. " << std::endl;
-		retrievedInvalids = sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, borderLines, massManipulationSetting, in_cleaveSequenceMergeMode);
+		retrievedInvalids = sequenceFactory.constructAndExportCleaveSequences(&cleaveMap, 
+																			borderLines, 
+																			massManipulationSetting, 
+																			in_cleaveSequenceMergeMode,
+																			in_exceptionRecorderRef);
 		if (retrievedInvalids.containsSequnces == true)
 		{
 			std::cout << "!!! CleaveSequence construction unsuccessful; preparing to perform alternate action. " << std::endl;
@@ -727,8 +733,8 @@ InvalidCleaveSequences SPoly::buildCleaveSequences(CleaveSequenceMergeMode in_cl
 			std::cout << "!!! Points of this SPoly are: " << std::endl;
 			printPoints();
 
-			int alternateWait = 3;
-			std::cin >> alternateWait;
+			//int alternateWait = 3;
+			//std::cin >> alternateWait;
 		}
 		//std::cout << "!! Done Constructing Cleave Sequences. " << std::endl;
 	}

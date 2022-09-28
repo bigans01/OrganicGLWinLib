@@ -15,7 +15,7 @@
 #include "SPolyDOSet.h"
 #include "MessageContainer.h"
 #include "MassZoneBoxType.h"
-
+#include "ExceptionRecorder.h"
 
 class MassZoneBoxBoundary
 {
@@ -74,6 +74,12 @@ class MassZoneBoxBoundary
 			boundaryPolySet.setBoundarySPolyRef(&boundarySPoly);
 			boundaryPolySet.setLogLevel(massZoneBoxBoundaryLogLevel);
 		}
+
+		void setExceptionRecorderInPolySet(ExceptionRecorder* in_exceptionRecorderRef)
+		{
+			boundaryPolySet.setRecorderRef(in_exceptionRecorderRef);
+		}
+
 		void printBoundarySPolyCategorizedLines()
 		{
 			boundarySPoly.sequenceFactory.printLinesInPool();
@@ -127,6 +133,7 @@ class MassZoneBoxBoundary
 
 			boundarySPoly.applyDebugOptions(in_sPolyDOSet);
 		}
+
 		void setSPolySetEmptyNormal()
 		{
 			boundaryPolySet.boundaryEmptyNormal = emptyNormal;

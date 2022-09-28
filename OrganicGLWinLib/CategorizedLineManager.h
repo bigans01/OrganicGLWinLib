@@ -45,6 +45,7 @@ class CategorizedLineManager
 
 		void printAllLines();	// use in: CleaveSequenceFactory::printLinesInPool() --> prints all lines in each CategorizedLineContainer.
 		void clearAllLines();	// use in: CleaveSequenceFactory::clearLinePools() --> clears all lines in each CatgorizedLineContainer.
+		std::vector<CategorizedLine> fetchAllLines(); // used in: CleaveSequenceFactory::writeOutCategorizedLines, when needing to write output for exception logging.
 
 		std::map<int, CategorizedLine>::iterator getBeginIteratorForType(IntersectionType in_intersectionType);
 		std::map<int, CategorizedLine>::iterator getEndIteratorForType(IntersectionType in_intersectionType);

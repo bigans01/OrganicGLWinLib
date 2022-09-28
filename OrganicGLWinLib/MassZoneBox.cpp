@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "MassZoneBox.h"
 
-void MassZoneBox::insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, MassZoneBoxBoundary in_massZoneBoxBoundary, SPolyDOSet in_sPolyDOSet)
+void MassZoneBox::insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, 
+									MassZoneBoxBoundary in_massZoneBoxBoundary, 
+									SPolyDOSet in_sPolyDOSet,
+									ExceptionRecorder* in_exceptionRecorderRefToPass)
 {
 	boxBoundaries[in_BoundaryOrientation] = in_massZoneBoxBoundary;
 	boxBoundaries[in_BoundaryOrientation].setBoundarySPolyInPolySet();	// must be called, or program will crash. The boundary SPoly ref should only be set
@@ -9,6 +12,7 @@ void MassZoneBox::insertNewBoundary(BoundaryOrientation in_BoundaryOrientation, 
 																					// allocated memory.
 	boxBoundaries[in_BoundaryOrientation].setDebugOptionsInSPoly(std::move(in_sPolyDOSet));
 	boxBoundaries[in_BoundaryOrientation].setSPolySetEmptyNormal();		// sets the empty normal for the MassZoneBoxBoundarySPolySet
+	boxBoundaries[in_BoundaryOrientation].setExceptionRecorderInPolySet(in_exceptionRecorderRefToPass);
 	//std::cout << "!!! Size of box boundaries is now: " << boxBoundaries.size() << std::endl;
 };
 

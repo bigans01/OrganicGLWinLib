@@ -29,15 +29,20 @@
 #include "Message.h"
 #include "BoundaryOrientation.h"
 #include "InvalidCleaveSequences.h"
+#include "ExceptionRecorder.h"
+#include <string>
 
 class CleaveSequenceFactory
 {
 	public:
 		void addCategorizedLine(CategorizedLine in_categorizedLine);
+
+		// below: construction of CleaveSequences needs to have an ExceptionRecorder, in the case that CleaveSequence generation fails.
 		InvalidCleaveSequences constructAndExportCleaveSequences(std::map<int, CleaveSequence>* in_cleaveMapRef, 
 																std::map<int, SPolyBorderLines> in_borderLineArrayRef, 
 																MassManipulationMode in_massManipulationMode, 
-																CleaveSequenceMergeMode in_cleaveSequenceMergeMode);
+																CleaveSequenceMergeMode in_cleaveSequenceMergeMode,
+																ExceptionRecorder* in_exceptionRecorderRef);
 		void printLinesInPool();
 		void copyCategorizedLinesFromLinePool(CategorizedLinePool* in_categorizedLinePoolRef);
 		void printLineCounts();
@@ -86,9 +91,13 @@ class CleaveSequenceFactory
 		// scenario processing -- a scenario just describes different cases that occur, for instance the case in which there is at least
 		// one CategorizedLine with an IntersectionType of INTERCEPTS_POINT_PRECISE.
 
-		InvalidCleaveSequences handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef);
+		InvalidCleaveSequences handleScenarioTypical(std::map<int, CleaveSequence>* in_cleaveMapRef,
+													ExceptionRecorder* in_exceptionRecorderRef);
 		InvalidCleaveSequences handleScenarioSingleInterceptsPointPreciseFound(std::map<int, CleaveSequence>* in_cleaveMapRef);
 		InvalidCleaveSequences handleScenarioMultipleInterceptsPointPrecise(std::map<int, CleaveSequence>* in_cleaveMapRef);
+
+		Message writeOutCategorizedLines(CleaveSequence* in_currentCleaveSequence, int in_currentIteration);	// write out all relevant CategorizedLine data to a 
+																												// single Message, so that it can be used for exception logging or other purposes.
 };
 
 #endif

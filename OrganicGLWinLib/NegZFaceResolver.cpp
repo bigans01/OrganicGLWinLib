@@ -99,7 +99,13 @@ bool NegZFaceResolver::attemptSolveByInvalidCount()
 			SPolyMorphTracker morphTracker;
 
 			// Remember, NEG_Z means that the SPolyFracturer shouldn't have to do anything.
-			SPolyFracturer fracturer(0, sPolyPtr, &morphTracker, SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, PolyDebugLevel::NONE);
+			SPolyFracturer fracturer(0, 
+									sPolyPtr, 
+									&morphTracker, 
+									SPolyFracturerOptionEnum::NO_ROTATE_TO_Z, 
+									PolyDebugLevel::NONE,
+									resolverRecorderRef, 
+									resolverBoundaryOrientation);
 			std::cout << "(NegZFaceResolver): Fracturing successful." << std::endl;
 			wasResolved = true;
 

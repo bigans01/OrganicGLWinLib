@@ -165,6 +165,19 @@ void CategorizedLineManager::clearAllLines()
 	}
 }
 
+std::vector<CategorizedLine> CategorizedLineManager::fetchAllLines()
+{
+	std::vector<CategorizedLine> lineVector;
+	for (auto& currentContainer : containerMap)
+	{
+		for (auto& currentLine : currentContainer.second.lineMap)
+		{
+			lineVector.push_back(currentLine.second);
+		}
+	}
+	return lineVector;
+}
+
 void CategorizedLineManager::invertEmptyNormalsInContainers()
 {
 	auto containerMapBegin = containerMap.begin();
