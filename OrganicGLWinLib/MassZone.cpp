@@ -511,6 +511,13 @@ MessageContainer MassZone::createMassZoneShell(MassZoneType in_massZoneType)
 		std::cin >> handle;
 	}
 
+	// Step 3-B: for any SPolys which were determined as having boundaries already (which should have caused the call to 
+	// generateSPolysFromPolySet for that face to be ignored) we will need to insert each already-produced SPolySupergroup back
+	// into the boundaryPolySet.boundarySPolySG in each corresponding MassZoneBoxBoundary.
+	//
+	// We should also probably call SPolySupergroup::buildSPolyBorderLines(), in the event that we need to use these for 
+	// productionMassZone.getTouchedBoxFacesList in SPolyShellProducer (which gets called after this function)
+
 	// Step 4: put all super groups which actually contain data, into their own sub zone.
 	PolyLogger tempBoundarySuperGroupLogger;
 	tempBoundarySuperGroupLogger.setDebugLevel(pointClippingLogLevel);

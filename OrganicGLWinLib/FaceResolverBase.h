@@ -34,11 +34,13 @@ class FaceResolverBase
 		void debugPrintOneDimLines();	// for debug: print the values of the one dim lines
 		void setResolverRecorderRef(ExceptionRecorder* in_exceptionRecorderRef);
 		void setResolverBoundaryOrientation(BoundaryOrientation in_resolverBoundaryOrientation);
+		void setResolverEmptyNormal(glm::vec3 in_resolverEmptyNormal);
 		SPolySupergroup fetchResolution();	// gets a copy of the resulting resolution (to be used by SPolyResolution)
 	protected:
 		SPoly* sPolyPtr = nullptr;	
 		ExceptionRecorder* resolverRecorderRef = nullptr;
 		BoundaryOrientation resolverBoundaryOrientation = BoundaryOrientation::NONE;
+		glm::vec3 resolverEmptyNormal;
 		InvalidCleaveSequences invalidsCopy;
 		MassZoneBoxType boxType = MassZoneBoxType::NOVAL;
 		BoundaryOrientation faceOrientation = BoundaryOrientation::NONE;

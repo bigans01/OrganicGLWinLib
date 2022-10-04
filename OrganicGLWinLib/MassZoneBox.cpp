@@ -201,33 +201,33 @@ std::set<BoundaryOrientation> MassZoneBox::generateTouchedBoxFacesList(MassZoneB
 						ECBPPOrientationResults pointOrientation;
 						switch (in_massZoneBoxType)
 						{
-						case MassZoneBoxType::BLOCK:
-						{
-							BlockBorderLineList blockBorders;
-							pointOrientation = IndependentUtils::GetPointOrientation(convertedPoint, &blockBorders);
-							break;
-						};
-						case MassZoneBoxType::ENCLAVE:
-						{
-							EnclaveBorderLineList enclaveBorders;
-							pointOrientation = IndependentUtils::GetEnclavePointOrientation(convertedPoint, &enclaveBorders);
-							if (pointOrientation.otype == ECBPPOrientations::LINE)
+							case MassZoneBoxType::BLOCK:
 							{
-								if (touchedLogger.isLoggingSet())
+								BlockBorderLineList blockBorders;
+								pointOrientation = IndependentUtils::GetPointOrientation(convertedPoint, &blockBorders);
+								break;
+							};
+							case MassZoneBoxType::ENCLAVE:
+							{
+								EnclaveBorderLineList enclaveBorders;
+								pointOrientation = IndependentUtils::GetEnclavePointOrientation(convertedPoint, &enclaveBorders);
+								if (pointOrientation.otype == ECBPPOrientations::LINE)
 								{
-									std::cout << "(MassZoneBox): ";
-									IndependentUtils::printOrientationEnum(pointOrientation.osubtype);
+									if (touchedLogger.isLoggingSet())
+									{
+										std::cout << "(MassZoneBox): ";
+										IndependentUtils::printOrientationEnum(pointOrientation.osubtype);
+									}
 								}
+								break;
 							}
-							break;
-						}
-						case MassZoneBoxType::COLLECTION:
-						{
-							EnclaveKeyDef::EnclaveKey tempKey(0, 0, 0);
-							ECBBorderLineList collectionBorders = IndependentUtils::determineBorderLines(tempKey);
-							pointOrientation = IndependentUtils::GetBlueprintPointOrientation(convertedPoint, &collectionBorders);
-							break;
-						}
+							case MassZoneBoxType::COLLECTION:
+							{
+								EnclaveKeyDef::EnclaveKey tempKey(0, 0, 0);
+								ECBBorderLineList collectionBorders = IndependentUtils::determineBorderLines(tempKey);
+								pointOrientation = IndependentUtils::GetBlueprintPointOrientation(convertedPoint, &collectionBorders);
+								break;
+							}
 						}
 
 						// get the face list
@@ -301,6 +301,9 @@ void MassZoneBox::runFirstTertiaryProductionPass(std::set<BoundaryOrientation> i
 	auto orientationSetEnd = in_orientationSet.end();
 	for (; orientationSetBegin != orientationSetEnd; orientationSetBegin++)
 	{
+		// remember: if at any point a line was attempted to be inserted (see how wasLineProducedByReactor = true is used in the function
+		// MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly), we will ignore it. Otherwise, if there was never an attempt,
+		// it means that it needs an entire face created.
 		if (boxBoundaries[*orientationSetBegin].boundaryPolySet.wasLineProducedByReactor == false)
 		{
 			switch (*orientationSetBegin)

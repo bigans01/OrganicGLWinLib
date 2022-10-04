@@ -4,6 +4,57 @@
 void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 {
 	inputSPolys[numberOfInputSPolys++] = in_inputSPoly; // add the poly, and increment it
+
+	// get the values to determine the branching.
+	BoundaryOrientation currentOrientation = in_inputSPoly.sPolyBoundaryIndicator.getBoundaryIndicatorValue();
+	bool isScabParent = in_inputSPoly.sPolyBoundaryIndicator.isScabParentIndicatorSet();
+	bool isScabChild = in_inputSPoly.sPolyBoundaryIndicator.isScabChildIndicatorSet();
+
+	// case 1: no boundary indicators, no scabs, -- a perfectly normal SPoly.
+	if
+	(
+		currentOrientation == BoundaryOrientation::NONE
+		&&
+		isScabParent == false
+		&&
+		isScabChild == false
+	)
+	{
+		// would just do inputSPolys[numberOfInputSPolys++] = in_inputSPoly;
+	}
+
+	// case 2: boundary indicators, but no scabs. These would be any boundary polys that are produced by normal means (i.e, no errors/exceptions); 
+	// remember, that we will need to call SPolySupergroup::buildSPolyBorderLines() at some point.these kinds of SPolys, although normal, 
+	// shouldn't need to be reconstructed -- they should go in the SPolySupergroup map that we
+	// pass as a reference to productionMassZone.
+	// (may not be here)
+	else if
+	(
+		currentOrientation != BoundaryOrientation::NONE
+		&&
+		isScabParent == false
+		&&
+		isScabChild == false
+	)
+	{
+
+	}
+
+	// case 3: any scabs; MAY need to call SPolySupergroup::buildSPolyBorderLines(), but not sure yet.
+	// A SCAB_PARENT or SCAB_CHILD CAN have a boundary flag set, but this is not mandatory.
+	// It is important to remember that any SPolys produced by an SPolyResolution should have a SCAB_PARENT and/or SCAB_CHILD flag
+	// on them. Additionally, all SCAB_PARENTS should have an border indicator flag set (i.e, POS_X), in addition to the SCAB_PARENT/SCAB_CHILD
+	// flags.
+	else if
+	(
+		isScabParent == true
+		||
+		isScabChild == true
+	)
+	{
+
+	}
+		
 }
 
 void SPolyShellProducer::handleBorderDebugOption(DebugOption in_debugOption)
@@ -77,6 +128,10 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 		{
 			productionMassZone.insertSPolyMassSubZone(x, inputSPolys[x]);
 		}
+
+		// NEW: need to give the productionMassZone a reference to the map that stores any SPolys that have boundary values,
+		// so that it knows which faces to ignore production on and insert the already-generated boundary SPolys into.
+
 
 		// enable "shell extraction mode" in the MassZoneShell before creating the shell; should be done after boundary creation, but before shell creation.
 		productionMassZone.enableContestedCategorizedLineAnalysis();

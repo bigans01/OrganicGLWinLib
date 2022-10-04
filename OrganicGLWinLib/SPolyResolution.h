@@ -30,6 +30,10 @@ quick notes:
 
 --the valid CleaveSequences that were already generated will be stored in the referenced SPoly's cleaveMap class member.
 
+--the SPolyResolution class is responsible for passing on data to the chosen FaceResolverBase, so that
+  the selected FaceResolverBase instance may appropriately apply the empty normal, BoundaryOrientation values, 
+  and SCAB_PARENT/SCAB_CHILD flags to the appropriate SPolys.   
+
 */
 
 class SPolyResolution
@@ -39,12 +43,14 @@ class SPolyResolution
 						BoundaryOrientation in_boundaryOrientation,
 						MassZoneBoxType in_zoneBoxType,
 						InvalidCleaveSequences in_invalidSequences,
-						ExceptionRecorder* in_exceptionRecorderRef) :
+						ExceptionRecorder* in_exceptionRecorderRef,
+						glm::vec3 in_resolutionMainEmptyNormal) :
 			resolutionSPolyRef(in_sPolyRef),
 			resolutionOrientation(in_boundaryOrientation),
 			resolutionBoxType(in_zoneBoxType),
 			sequencesToResolve(in_invalidSequences),
-			resolutionRecorderRef(in_exceptionRecorderRef)
+			resolutionRecorderRef(in_exceptionRecorderRef),
+			resolutionMainEmptyNormal(in_resolutionMainEmptyNormal)
 		{
 			calculateResolution();
 			sequencesToResolve.printInvalidSequenceData();	// debug/dev only; remove call at will
@@ -57,6 +63,7 @@ class SPolyResolution
 		BoundaryOrientation resolutionOrientation = BoundaryOrientation::NONE;	
 		MassZoneBoxType resolutionBoxType = MassZoneBoxType::NOVAL;
 		InvalidCleaveSequences sequencesToResolve;	// contains the invalid CleaveSequences that need to be resolved by this resolution.
+		glm::vec3 resolutionMainEmptyNormal;	// the main empty normal that represents the face that the resolution is operating on (i.e, 1.0f for POS_X)
 
 		// stores the result of the resolution (whatever it may be) in this super group
 		SPolySupergroup calculationResult;

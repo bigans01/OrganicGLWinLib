@@ -66,6 +66,14 @@ class SPolySupergroup
 			}
 		}
 
+		void setScabParentFlagInAllSPolys()
+		{
+			for (auto& currentSPoly : sPolyMap)
+			{
+				currentSPoly.second.sPolyBoundaryIndicator.setScabParentIndicator();
+			}
+		}
+
 		void roundAllSTrianglesToHundredths()
 		{
 			auto sPolysBegin = sPolyMap.begin();

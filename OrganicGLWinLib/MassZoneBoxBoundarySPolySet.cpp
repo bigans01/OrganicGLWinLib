@@ -306,20 +306,19 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 			else if (fracturer.sPolySG.sPolyMap.size() == 0)
 			{
 				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): !!!!!!! WARNING: SPolyFracturer produced no SPolys. " << std::endl;
-				//polyCopy.printPoints();
+	
+				// Reminder: it is up to the SPolyResolution to determine what SPolys are considered SCAB_PARENT or SCAB_CHILD.
 				SPolyResolution resolver(&case2FractureCopy, 
 										boundarySPolySetOrientation, 
 										in_boxTypeValue, 
 										invalids, 
-										boundaryRecorderRef);
+										boundaryRecorderRef,
+										boundaryEmptyNormal);
 				boundarySPolySG = resolver.fetchResolution();
 
 				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): CASE 2, SPolyResolution supergroup size: " << boundarySPolySG.sPolyMap.size() << std::endl;
 				std::cout << "(MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory): printing SPolys for resolution. " << std::endl;
 				boundarySPolySG.printSPolys();
-
-				boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
-				boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
 				boundarySPolySG.roundAllSTrianglesToHundredths();
 				boundarySPolySG.buildSPolyBorderLines();		// needed for when MassZoneBox::generateTouchedBoxFacesList is called.
 
@@ -403,15 +402,17 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 		std::cout << currentBoxBoundaryOrientation << std::endl;
 
 		std::cout << "(MassZoneBoxBoundarySPolySet): Calling for resolution..." << std::endl;
+
+		// Reminder: it is up to the SPolyResolution to determine what SPolys are considered SCAB_PARENT or SCAB_CHILD.
 		SPolyResolution resolver(boundarySPolyRef, 
 								boundarySPolySetOrientation, 
 								in_boxTypeValue, 
 								invalids,
-								boundaryRecorderRef
+								boundaryRecorderRef,
+								boundaryEmptyNormal
 								);
 		boundarySPolySG = resolver.fetchResolution();
-		boundarySPolySG.setEmptyNormalInAllSPolys(boundaryEmptyNormal);
-		boundarySPolySG.setBoundaryOrientationInAllSPolys(boundarySPolySetOrientation);
+		//boundarySPolySG.setScabParentFlagInAllSPolys();
 		boundarySPolySG.roundAllSTrianglesToHundredths();
 		boundarySPolySG.buildSPolyBorderLines();		// needed for when MassZoneBox::generateTouchedBoxFacesList is called.
 		std::cout << "(MassZoneBoxBoundarySPolySet): Printing resolved SPolySupergroup (test): " << std::endl;

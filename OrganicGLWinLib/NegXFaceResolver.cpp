@@ -119,6 +119,12 @@ bool NegXFaceResolver::attemptSolveByInvalidCount()
 			{
 				std::cout << "(NegXFaceResolver): fracturing was valid, setting this as the resolution." << std::endl;
 				resolution = std::move(fracturer.sPolySG);
+
+				// remember, we must manually set the empty normal, orientations, and scab parent flag --
+				// as it is the responsibility of the Resolver class to do this.
+				resolution.setEmptyNormalInAllSPolys(resolverEmptyNormal);
+				resolution.setBoundaryOrientationInAllSPolys(resolverBoundaryOrientation);
+				resolution.setScabParentFlagInAllSPolys();
 			}
 		}
 	}
@@ -149,4 +155,10 @@ void NegXFaceResolver::produceMalformedMitigation()
 																		// we must flag the SPoly as MALFORMED_MITIGATION, so that it 
 																		// isn't counted in the call to MassZoneBox::generateTouchedBoxFacesList
 	resolution.insertSPoly(malformedMitigationPoly);
+
+	// remember, we must manually set the empty normal, orientations, and scab parent flag --
+	// as it is the responsibility of the Resolver class to do this.
+	resolution.setEmptyNormalInAllSPolys(resolverEmptyNormal);
+	resolution.setBoundaryOrientationInAllSPolys(resolverBoundaryOrientation);
+	resolution.setScabParentFlagInAllSPolys();
 }

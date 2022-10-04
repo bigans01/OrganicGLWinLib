@@ -25,8 +25,8 @@ Message SPolyUtils::meltSPolySupergroupIntoMessage(SPolySupergroup* in_sPolySupe
 		ECBPolyPoint convertedEmptyNormal(currentSPolyEmptyNormal.x, currentSPolyEmptyNormal.y, currentSPolyEmptyNormal.z);
 		meltedGroupData.insertPoint(convertedEmptyNormal);
 
-		// insert the boundary
-		meltedGroupData.insertInt(IndependentUtils::convertBoundaryOrientationToInt(currentSPoly.second.sPolyBoundaryIndicator.getBoundaryIndicatorValue()));
+		// insert the indicator data.
+		meltedGroupData.insertInt(int(currentSPoly.second.sPolyBoundaryIndicator.getIndicatorData()));
 
 		// now, cycle through each triangle; get pointA of each line and insert it into the Message.
 		for (auto& currentSTriangle : currentSPoly.second.triangles)
@@ -64,21 +64,23 @@ SPolySupergroup SPolyUtils::solidifySupergroupFromMessage(Message* in_messageRef
 			int numberOfSTriangles = in_messageRef->readInt();
 			//std::cout << "(RJPhasedDeleteBlock): Current number of STriangles in liquidated SPoly: " << numberOfSTriangles << std::endl;
 
-			int oppositeOrientation = in_messageRef->readInt();
+			int oppositeIndicatorData = in_messageRef->readInt();
 			ECBPolyPoint solidifiedEmptyNormal = in_messageRef->readPoint();
 			//std::cout << "(RJPhasedDeleteBlock): Current empty normal of liquidated SPoly: ";
 			//solidifiedEmptyNormal.printPointCoords();
 			//std::cout << std::endl;
 
 			//std::cout << "(RJPhasedDeleteBlock): Opposite orientation of liquidated SPoly: ";
-			BoundaryOrientation currentOppositeOrientation = IndependentUtils::convertIntToBoundaryOrientation(oppositeOrientation);
-			//IndependentUtils::printBoundaryOrientation(currentOppositeOrientation);
+			//IndependentUtils::printBoundaryOrientation(currentoppositeIndicatorData);
 			//std::cout << std::endl;
 
 			// set up the SPoly; set it's normal and opposite orientation.
 			SPoly currentSolidifiedSPoly;
 			currentSolidifiedSPoly.setEmptyNormal(OrganicGLWinUtils::convertPolyPointToVec3(solidifiedEmptyNormal));
-			currentSolidifiedSPoly.setBoundaryIndicatorOrientation(currentOppositeOrientation);
+			
+			BoundaryPolyIndicator formedIndicator;
+			formedIndicator.setIndicatorData(unsigned char(oppositeIndicatorData));
+			currentSolidifiedSPoly.setBoundaryIndicator(formedIndicator);
 
 			// safety: continue reading message, only if STriangles > 0.
 			if (numberOfSTriangles > 0)
@@ -148,8 +150,9 @@ std::vector<OrganicWrappedBBFan> SPolyUtils::produceFansFromSupergroup(SPolySupe
 			// Construct the OrganicWrappedBBFan we will be adding, and then call buildBBFanWithBoundaryIndicator on it.
 			auto currentMaterial = currentSPoly.second.getSPolyMaterial();
 			auto currentEmptyNormal = OrganicGLWinUtils::convertVec3ToPolyPoint(currentSPoly.second.getEmptyNormal());
+
 			BoundaryPolyIndicator currentIndicator;
-			currentIndicator.setBoundaryIndicator(currentSPoly.second.getBoundaryIndicatorOrientation());
+			currentIndicator.setIndicatorData(currentSPoly.second.sPolyBoundaryIndicator.getIndicatorData());
 
 			OrganicWrappedBBFan constructedFan;
 			constructedFan.buildBBFanWithBoundaryIndicator(&tempCircuit, currentMaterial, currentEmptyNormal, currentIndicator);

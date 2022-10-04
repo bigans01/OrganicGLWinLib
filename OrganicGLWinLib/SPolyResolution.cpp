@@ -7,6 +7,7 @@ void SPolyResolution::calculateResolution()
 	determineResolver();
 	selectedResolverPtr->setResolverRecorderRef(resolutionRecorderRef);
 	selectedResolverPtr->setResolverBoundaryOrientation(resolutionOrientation);
+	selectedResolverPtr->setResolverEmptyNormal(resolutionMainEmptyNormal);
 	selectedResolverPtr->runResolutionAlgorithm();	// run the algorithm
 	calculationResult = selectedResolverPtr->fetchResolution();	// fetch the resulting resolution
 }

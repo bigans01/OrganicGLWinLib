@@ -59,6 +59,11 @@ void FaceResolverBase::setResolverBoundaryOrientation(BoundaryOrientation in_res
 	resolverBoundaryOrientation = in_resolverBoundaryOrientation;
 }
 
+void FaceResolverBase::setResolverEmptyNormal(glm::vec3 in_resolverEmptyNormal)
+{
+	resolverEmptyNormal = in_resolverEmptyNormal;
+}
+
 SPolySupergroup FaceResolverBase::fetchResolution()
 {
 	return resolution;
