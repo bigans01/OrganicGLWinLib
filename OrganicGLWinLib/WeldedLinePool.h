@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <string>
 
 class WeldedLinePool
 {
@@ -16,6 +18,7 @@ class WeldedLinePool
 			int currentIndex = int(pool.size());
 			pool[currentIndex] = in_weldedLineToInsert;
 		}
+
 		void printLines()
 		{
 			auto poolBegin = pool.begin();
@@ -27,6 +30,21 @@ class WeldedLinePool
 					<< "| Empty normal: " << poolBegin->second.emptyNormal.x << ", " << poolBegin->second.emptyNormal.y << ", " << poolBegin->second.emptyNormal.z << std::endl;
 			}
 		}
+
+		std::vector<std::string> printLinesToStringVector()
+		{
+			std::vector<std::string> lineStringVector;
+			for (auto& currentLine : pool)
+			{
+				std::string currentLineString = "Line ID: " + std::to_string(currentLine.first) + " | Point A -> ("
+					+ std::to_string(currentLine.second.pointA.x) + ", " + std::to_string(currentLine.second.pointA.y) + ", " + std::to_string(currentLine.second.pointA.z)
+					+ ") | Point B -> (" + std::to_string(currentLine.second.pointB.x) + ", " + std::to_string(currentLine.second.pointB.y) + ", " + std::to_string(currentLine.second.pointB.z) + ") | Normal -> "
+					+ std::to_string(currentLine.second.emptyNormal.x) + ", " + std::to_string(currentLine.second.emptyNormal.y) + ", " + std::to_string(currentLine.second.emptyNormal.z) + ") ";
+				lineStringVector.push_back(currentLineString);
+			}
+			return lineStringVector;
+		}
+
 		int getPoolSize()
 		{
 			return int(pool.size());
@@ -48,15 +66,18 @@ class WeldedLinePool
 		{
 			return pool[in_lineIndex];
 		}
+
 		WeldedLine fetchLastLineInPool()
 		{
 			auto lastLine = pool.rbegin();
 			return lastLine->second;
 		}
+
 		std::map<int, WeldedLine>::iterator getPoolIteratior(int in_lineIndex)
 		{
 			return pool.find(in_lineIndex);
 		}
+
 		int fetchFollowingIndex(int in_lineIndex)
 		{
 			int returnValue = 0;

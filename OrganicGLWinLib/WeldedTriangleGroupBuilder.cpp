@@ -24,11 +24,36 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 	
 	if (linePool.getPoolSize() > 3)
 	{
-		while (linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+		// The below 3 variables are a safety that prevents an infinite loop from occurring;
+		// this is needed due to the fact that the call to TracingObserver::insertWeldedTriangleIfLineOfSightIsMaintained() doesn't always return true.
+		// When this function returns false, it means that a line wasn't extracted from the linePool, and makes the 
+		// currentObserverState of the tracer equal to TracingObserverState::TERMINATED.
+		int terminationLimit = int(linePool.getPoolSize()) * 10;
+		auto originalLinesVector = linePool.printLinesToStringVector();
+		int currentTerminationCounter = 0;
+		bool terminationExceeded = false;
+		while 
+		(
+			(linePool.getPoolSize() > 3)		// when we remove the last of 4 lines from the pool, that's when we stop, as it means there are 3 lines left (only one triangle left to form)
+			&&
+			terminationExceeded == false
+		)
 		{
 			//std::cout << "###~~~~~ Building new observation. " << std::endl;
 			//std::cout << " ### Size of line pool is: " << linePool.getPoolSize() << std::endl;
 			acquireWeldedLinesForWindowAndBuildObservation();
+
+			if (tracer.getCurrentObserverState() == TracingObserverState::TERMINATED)
+			{
+				currentTerminationCounter++;
+			}
+
+			// if the terminationLimit is exceeded, throw a recorded exception.
+			if (currentTerminationCounter > terminationLimit)
+			{
+				terminationExceeded = true;
+				throwTerminationAttemptsExceeded(originalLinesVector);	// throw the appropriate exception
+			}
 		}
 
 		//std::cout << "getPoolSize, post check: " << linePool.getPoolSize() << std::endl;
@@ -37,7 +62,10 @@ void WeldedTriangleGroupBuilder::runTracingObservers()
 		//std::cout << "getPoolSize, pre check 2" << std::endl;
 
 		//acquireWeldedLinesForWindowAndBuildObservation();
-		handleFinalObservation();
+		if (terminationExceeded == false)
+		{
+			handleFinalObservation();
+		}
 	}
 	else if (linePool.getPoolSize() == 3)
 	{
@@ -157,4 +185,42 @@ void WeldedTriangleGroupBuilder::handleFinalObservation()
 	{
 		lastContainer->insertWeldedTriangle(std::move(tracerContainer->second));
 	}
+}
+
+void WeldedTriangleGroupBuilder::throwTerminationAttemptsExceeded(std::vector<std::string> in_originalLines)
+{
+	Message excessiveTerminationsMessage;
+
+	// Part 1: set up the context strings.
+	std::string getOrientationString = IndependentUtils::getBoundaryOrientationString(groupBuilderBoundaryOrientation);
+	std::string firstContextLine("\tAn ExceptionRecordType::EXCEPTION_TERMINATION_ATTEMPTS_EXCEEDED was detected during call to WeldedTriangleGroupBuilder::runTracingObservers() , on the "
+		+ getOrientationString + " face.");
+	excessiveTerminationsMessage.insertString(firstContextLine);
+	std::string secondContextline("\tThe final size of the weldedTriangleContainerVector was: " + std::to_string(weldedTriangleContainerVector.size()) + "; now printing original lines.");
+	excessiveTerminationsMessage.insertString(secondContextline);
+
+
+	// Part 2: Write the original lines; prefix with a context string.
+	excessiveTerminationsMessage.insertString("\t\tOriginal lines, prior to observations: ");
+	excessiveTerminationsMessage.insertInt(int(in_originalLines.size()));
+	for (auto& currentStringedLine : in_originalLines)
+	{
+		excessiveTerminationsMessage.insertString(std::string("\t\t" + currentStringedLine));
+	}
+
+	// Part 3: Write the final lines; prefix with a context string.
+	excessiveTerminationsMessage.insertString("\t\tRemaining lines, after observations: ");
+	excessiveTerminationsMessage.insertInt(int(linePool.getPoolSize()));
+	auto remainingLines = linePool.printLinesToStringVector();
+	for (auto& currentRemainingLine : remainingLines)
+	{
+		excessiveTerminationsMessage.insertString(std::string("\t\t" + currentRemainingLine));
+	}
+
+	ExceptionRecord exceededShiftRecord(ExceptionRecordType::EXCEPTION_TERMINATION_ATTEMPTS_EXCEEDED, excessiveTerminationsMessage);
+	groupBuilderRecorderRef->insertException(exceededShiftRecord);
+
+	// because the group building was bad, we must clear out the value of weldedTriangleContainerVector, as this value must be 0
+	// if we wish to run handling in MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory.
+	weldedTriangleContainerVector.clear();
 }

@@ -36,6 +36,12 @@ private:
 	std::map<int, MassSubZone> subZoneMap;
 	std::map<BoundaryOrientation, SPolyDOSet> boundaryDebugOptions;
 	std::set<BoundaryOrientation> boxFaceProductionPermits;
+	std::set<BoundaryOrientation> massZoneExcludedBoundaries;	// a set of BoundaryOrientations that represents
+																// the correlating MassZoneBoxBoundary instances that exist in MassZoneBox.
+																// If a BoundaryOrientation is in this set, building SPolys on that boundary will be ignored.
+	std::map<BoundaryOrientation, SPolySupergroup>* excludedLegitBoundarySupergroupsRef = nullptr;	// a map of supergroups, where each supergroup contains normally-generated (non SCAB) boundary SPolys.
+																									// This is needed by step 3-B of the MassZone::createMassZoneShell function,
+																									// in order to manually insert the already generated, valid SPolys back into their respective orientations in the shell.
 	PolyDebugLevel massZoneLogLevel = PolyDebugLevel::NONE;
 	PolyDebugLevel printBoundaryLinesLogLevel = PolyDebugLevel::NONE;			// used for printing categorized lines in all SPolys of a MassZoneBox. (set via debug option, PRINT_BOUNDARY_CATEGORIZED_LINES)
 	PolyDebugLevel boundarySPolyConstructionLogLevel = PolyDebugLevel::NONE;	// used for halting and waiting for input, between the construction of boundary SPolys. (set via debug option, HALT_BETWEEN_BOUNDARY_SPOLY_CONSTRUCTION)
@@ -59,6 +65,8 @@ private:
 	void printBoundaryErrors(MessageContainer* in_messageContainerRef);
 
 	void createMassZoneBoxBoundary(MassZoneBoxType in_massZoneBoxType);
+	void setExcludedBoundaries(std::set<BoundaryOrientation> in_excludedBoundaries);	// called by SPolyShellProducer, to send the excluded boundarys to an instance of this class.
+	void setLegitimateBoundaryGroupsRef(std::map<BoundaryOrientation, SPolySupergroup>* in_legitBoundarySoupergroupsRef);	// called by SPolyShellProdcer, to set the ref to the legitimate boundary SPoly group map.
 	MessageContainer createMassZoneShell(MassZoneType in_massZoneType);
 	void enableContestedCategorizedLineAnalysis();
 	void wrapperInsertDOForClippableSPoly(int in_sPolyID, DebugOption in_debugOption);

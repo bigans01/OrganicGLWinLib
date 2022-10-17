@@ -3,14 +3,15 @@
 
 void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 {
-	inputSPolys[numberOfInputSPolys++] = in_inputSPoly; // add the poly, and increment it
-
-	// get the values to determine the branching.
+	// Get the values to determine the condition branching that follows.
 	BoundaryOrientation currentOrientation = in_inputSPoly.sPolyBoundaryIndicator.getBoundaryIndicatorValue();
 	bool isScabParent = in_inputSPoly.sPolyBoundaryIndicator.isScabParentIndicatorSet();
 	bool isScabChild = in_inputSPoly.sPolyBoundaryIndicator.isScabChildIndicatorSet();
 
-	// case 1: no boundary indicators, no scabs, -- a perfectly normal SPoly.
+	// CONDITION 1: no boundary indicators, no scabs, -- a perfectly normal SPoly.
+	// These normal SPolys are responsible for producing all other SPolys that should exist on each
+	// BoundaryOrientation (i.e, POS_X, NEG_Y). It is possible however that these normal SPolys cause abnormal
+	// SPolys to be produced on the borders, which requires the use of an SPolyResolution. 
 	if
 	(
 		currentOrientation == BoundaryOrientation::NONE
@@ -20,14 +21,14 @@ void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 		isScabChild == false
 	)
 	{
-		// would just do inputSPolys[numberOfInputSPolys++] = in_inputSPoly;
+		// 2022_4_002 (1) -> make sure to uncomment/remove the inputSPolys call above
+		inputSPolys[numberOfInputSPolys++] = in_inputSPoly;
 	}
 
-	// case 2: boundary indicators, but no scabs. These would be any boundary polys that are produced by normal means (i.e, no errors/exceptions); 
-	// remember, that we will need to call SPolySupergroup::buildSPolyBorderLines() at some point.these kinds of SPolys, although normal, 
-	// shouldn't need to be reconstructed -- they should go in the SPolySupergroup map that we
-	// pass as a reference to productionMassZone.
-	// (may not be here)
+	// CONDITION 2: boundary indicators, but no scabs. These would be any boundary polys that are produced by normal means (i.e, no errors/exceptions); 
+	// SPolySupergroup::buildSPolyBorderLines() is called on these supergroups, in Step 3-B of the MassZone::createMassZoneShell function.
+	// These kinds of SPolys, although normal, shouldn't need to be reconstructed -- they should go in the SPolySupergroup map,
+	// (existingLegitimateBoundarySupergroups) that we pass as a reference to productionMassZone.
 	else if
 	(
 		currentOrientation != BoundaryOrientation::NONE
@@ -37,14 +38,28 @@ void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 		isScabChild == false
 	)
 	{
+		// always: insert the excluded boundary, since it is not NONE.
+		auto currentSPolyBoundaryOrientation = in_inputSPoly.getBoundaryIndicatorOrientation();
+		excludedOrientations.insert(currentSPolyBoundaryOrientation);
 
+		// since it's a legitimate SPoly with a valid BoundaryOrientation value, add it to the invalidBoundaries SPolySuperogroup map.
+		existingLegitimateBoundarySupergroups[currentSPolyBoundaryOrientation].insertSPoly(in_inputSPoly);
 	}
 
-	// case 3: any scabs; MAY need to call SPolySupergroup::buildSPolyBorderLines(), but not sure yet.
+	// CONDITION 3: any scabs; MAY need to call SPolySupergroup::buildSPolyBorderLines(), but not sure yet.
 	// A SCAB_PARENT or SCAB_CHILD CAN have a boundary flag set, but this is not mandatory.
 	// It is important to remember that any SPolys produced by an SPolyResolution should have a SCAB_PARENT and/or SCAB_CHILD flag
 	// on them. Additionally, all SCAB_PARENTS should have an border indicator flag set (i.e, POS_X), in addition to the SCAB_PARENT/SCAB_CHILD
-	// flags.
+	// flags. Note that each SPoly's mode member to be inserted should be in SPolyMode::MALFORMED_MITIGATION, since it's a SCAB_PARENT or SCAB_CHILD;
+	// Doing this will prevent it from being used to generate the list in the function MassZoneBox::generateTouchedBoxFacesList.
+	//
+	// It needs to be noted here, that SCAB_PARENT or SCAB_CHILD SPolys cannot be relied upon to generate tertiary SPolys; this is 
+	// the reason they are inserted at the end of the SPolyShellProducer::runSPolyShellConstruction function, 
+	// but not before the call to MassZone::runFirstTertiaryProductionPassInZoneBox, as doing so could cause weird tertiary production artifacts.
+	// 
+	// any SPoly that is a SCAB_PARENT or SCAB_CHILD, regardless of its BoundaryOrientation, can be put into one SPolySupergroup.
+	// These SPolys will be moved into the outputSPolySupergroups member or non-boundary supergroup, by calling relocateScabPolysToOutput() at
+	// the end of the SPolyShellProducer::runSPolyShellConstruction function call.
 	else if
 	(
 		isScabParent == true
@@ -52,7 +67,15 @@ void SPolyShellProducer::addInputSPoly(SPoly in_inputSPoly)
 		isScabChild == true
 	)
 	{
+		// sometimes, a scab isn't ALWAYS on a boundary. But if it is, exclude it.
+		auto currentSPolyBoundaryOrientation = in_inputSPoly.getBoundaryIndicatorOrientation();
+		if (currentSPolyBoundaryOrientation != BoundaryOrientation::NONE)
+		{
+			excludedOrientations.insert(currentSPolyBoundaryOrientation);
+		}
 
+		in_inputSPoly.setMode(SPolyMode::MALFORMED_MITIGATION);
+		existingScabSupergroups.insertSPoly(in_inputSPoly);
 	}
 		
 }
@@ -86,6 +109,37 @@ void SPolyShellProducer::configurePolysWithoutNormalCalcs()
 		// PHASE 1: determine border lines, and planar normals; empty normals would already be calculated for these secondaries, if using this function as intended.
 		inputSPolys[x].determinePrimalPoints();		// determine the primal points for the triangle
 		inputSPolys[x].determineBorderLines();		// for each SPoly, determine its border lines.
+	}
+}
+
+void SPolyShellProducer::relocateScabPolysToOutput()
+{
+	// put each scab poly back into it's appropriate orientation in outputSPolySuperGroups.
+	for (auto& currentScabPoly : existingScabSupergroups.sPolyMap)
+	{
+		auto currentSPolyOrientation = currentScabPoly.second.getBoundaryIndicatorOrientation();
+
+		// any SCAB_PARENT or SCAB_CHILD that has a BoundaryOrientation should go into the corresponding supergroup having 
+		// the matching BoundaryOrientation.
+		if (currentSPolyOrientation != BoundaryOrientation::NONE)
+		{
+			// insert into the corresponding boundary (POS_X, NEG_X, etc)
+			outputSPolySuperGroups[currentSPolyOrientation].insertSPoly(currentScabPoly.second);
+		}
+
+		// ...however, a SCAB_CHILD SPoly that is NOT bound to any BoundaryOrientation will need to go back into it's own special supergroup, 
+		// as this is a "Free" SCAB-type SPoly. SCAB_PARENTS should NEVER ever have a missing BoundaryOrientation, so we should only need to 
+		// check for the SCAB_CHILD and BoundaryOrientation values.
+		else if
+		(
+			(currentScabPoly.second.sPolyBoundaryIndicator.isScabChildIndicatorSet())
+			&&
+			currentSPolyOrientation == BoundaryOrientation::NONE
+		)
+		{
+			existingFreeScabChildSupergroup.insertSPoly(currentScabPoly.second);	// insert into the "Free" SCAB_CHILD supergroup
+		}
+
 	}
 }
 
@@ -131,7 +185,9 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 
 		// NEW: need to give the productionMassZone a reference to the map that stores any SPolys that have boundary values,
 		// so that it knows which faces to ignore production on and insert the already-generated boundary SPolys into.
-
+		// Also need to give the productionMassZone a list of excluded boundaries that it can ignore producing SPolys on.
+		productionMassZone.setExcludedBoundaries(excludedOrientations);
+		productionMassZone.setLegitimateBoundaryGroupsRef(&existingLegitimateBoundarySupergroups);
 
 		// enable "shell extraction mode" in the MassZoneShell before creating the shell; should be done after boundary creation, but before shell creation.
 		productionMassZone.enableContestedCategorizedLineAnalysis();
@@ -187,6 +243,10 @@ MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType i
 				outputsBegin->second.printSPolys();
 			}
 		}
+
+		// after everything above is done, insert any SCAB_PARENT or SCAB_CHILD polys back into their appropriate zoneBox.boxBoundary, or other SPolySupergroup.
+		// 2022_4_002 (4)
+		relocateScabPolysToOutput();
 	}
 
 	// ||||||||||||||||||| Do this if there are NO input SPolys.
@@ -233,25 +293,35 @@ std::vector<SPoly> SPolyShellProducer::fetchAllSPolys()
 	std::vector<SPoly> returnVector;
 
 	// push back all SPolys that were inserted to produce the bordering SPolys (from the call to addInputSPoly)
-	auto addedSPolysBegin = inputSPolys.begin();
-	auto addedSPolysEnd = inputSPolys.end();
-	for (; addedSPolysBegin != addedSPolysEnd; addedSPolysBegin++)
+	for (auto& currentInputSPoly : inputSPolys)
 	{
-		returnVector.push_back(addedSPolysBegin->second);
+		returnVector.push_back(currentInputSPoly.second);
 	}
 
-	// push back all SPolys from each generated SPoly super group.
-	auto generatedSPolysBegin = outputSPolySuperGroups.begin();
-	auto generatedSPolysEnd = outputSPolySuperGroups.end();
-	for (; generatedSPolysBegin != generatedSPolysEnd; generatedSPolysBegin++)
+	// push back all SPolys from each oriented SPoly super group; this includes:
+	//	-any normally produced SPolys that have don't have a BoundaryOrientation::NONE in their indicator, and were produced as a result of the call to the function MassZone::createMassZoneShell (see Step 3),
+	//	 when this SPolyShellProducer did its run.
+	//
+	//	-any SCAB_PARENT -OR- SCAB_CHILD SPolys produced as a result of an SPolyResolution generating a "fix" during the call to MassZone::createMassZoneShell
+	//
+	//	-from a previous run of SPolyShellProducer, any SCAB_PARENT -OR- SCAB_CHILD that has doesn't have a BoundaryOrientation::NONE in its indicator;
+	//	 these would be all of the SCAB_PARENT SPolys contained in existingScabSupergroups that would be moved to their appropriate orientation during the
+	//	 call to relocateScabPolysToOutput()
+	for (auto& currentOrientedSupergroup : outputSPolySuperGroups)
 	{
-		auto currentGroupSPolysBegin = generatedSPolysBegin->second.sPolyMap.begin();
-		auto currentGroupSPolysEnd = generatedSPolysBegin->second.sPolyMap.end();
-		for (; currentGroupSPolysBegin != currentGroupSPolysEnd; currentGroupSPolysBegin++)
+		for (auto& currentOrientedSPoly : currentOrientedSupergroup.second.sPolyMap)
 		{
-			returnVector.push_back(currentGroupSPolysBegin->second);
+			returnVector.push_back(currentOrientedSPoly.second);
 		}
 	}
+
+	// push back any free scab children; this would be all of the SCAB_CHILD SPolys that were added during the call to addInputSPoly that DID
+	// have BoundaryOrientation::NONE value
+	for (auto& currentFreeScabChild : existingFreeScabChildSupergroup.sPolyMap)
+	{
+		returnVector.push_back(currentFreeScabChild.second);
+	}
+
 	return returnVector;
 }
 

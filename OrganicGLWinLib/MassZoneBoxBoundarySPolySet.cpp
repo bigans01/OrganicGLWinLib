@@ -72,6 +72,11 @@ void MassZoneBoxBoundarySPolySet::compareSPolySubZoneSPolyToBoundarySPoly(SPoly*
 	//std::cin >> waitVal;
 }
 
+void MassZoneBoxBoundarySPolySet::setBoundarySPolySG(SPolySupergroup in_boundarySPolySG)
+{
+	boundarySPolySG = in_boundarySPolySG;
+}
+
 void MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly(SPoly* in_guestPolyPtr)
 {
 	SPoly* in_hostPolyPtr = boundarySPolyRef;
@@ -255,8 +260,8 @@ MessageContainer MassZoneBoxBoundarySPolySet::buildBoundarySPolyFromFactory(Mass
 									fracturerDebugLevel, 
 									boundaryRecorderRef,
 									boundarySPolySetOrientation);
-
 	
+
 			/* 
 			// ||||||||||||||||||||||||||||||||||||||||||||||||||
 

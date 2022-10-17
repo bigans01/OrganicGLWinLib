@@ -82,8 +82,8 @@ void SPolyFracturer::checkForCleaveIntersections()
 												fracturerRecorderRef, 
 												fracturerBoundaryOrientation);		
 	quatPoints.clearPoints();															// clear out the quat points (which needs to be done if runFracturing() is called), so that we may insert the below.
-
 	
+
 
 	intersectFinder.triangleSupergroup.loadTrianglesIntoQuatRotationPoints(&quatPoints);
 

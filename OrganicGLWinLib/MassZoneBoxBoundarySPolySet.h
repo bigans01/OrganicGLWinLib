@@ -38,6 +38,9 @@ class MassZoneBoxBoundarySPolySet
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
 		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
+		void setBoundarySPolySG(SPolySupergroup in_boundarySPolySG);	// used to manually set the value of boundarySPolySG; would be used in the case
+																		// where a valid typical boundary SPoly already exists and needs to be inserted 
+																		// (see the function MassZone::createMassZoneShell, Step 3-B)
 		MessageContainer buildBoundarySPolyFromFactory(MassZoneBoxType in_boxTypeValue);	// this is where the "meat and potatoes" of forming the appropriate
 																							// results for the boundarySPolySG occurs. The job of this function 
 																							// is to produce *some* arrived-at SPoly that this instance of MassZoneBoxBoundarySPolySet
