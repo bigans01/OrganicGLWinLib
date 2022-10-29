@@ -1119,7 +1119,10 @@ ImGuiWindowFeedback OrganicGLWinUtils::IMGuiPrepBlockLocation(int world_organicL
 	ImGui::SetNextWindowPos(ImVec2(700, 150));
 	ImGui::SetNextWindowSize(ImVec2(300, 120), ImGuiSetCond_FirstUseEver);
 	bool window_val = true;
-	ImGui::Begin("Block Location", &window_val);
+	ImGui::Begin("Block Location", &window_val, ImGuiWindowFlags_NoFocusOnAppearing);	// prevents the window from being auto-focused;
+																						// this is something we don't want to happen as this 
+																						// window can easily pop-in/out dynamically and alter control
+																						// in an unintuitive way for the user.
 	ImGui::Text("Collection: %d, %d, %d", world_organicLoc[0], world_organicLoc[1], world_organicLoc[2]);
 	ImGui::Text("Enclave   : %d, %d, %d", world_organicLoc[3], world_organicLoc[4], world_organicLoc[5]);
 	ImGui::Text("Block     : %d, %d, %d", world_organicLoc[6], world_organicLoc[7], world_organicLoc[8]);

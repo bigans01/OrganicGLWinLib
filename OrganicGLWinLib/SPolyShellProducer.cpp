@@ -348,6 +348,33 @@ void SPolyShellProducer::printSupergroupBoundaryIndicators()
 	}
 }
 
+void SPolyShellProducer::printAllProducedSPolys()
+{
+	std::cout << "(SPolyShellProducer): Printing all produced SPolys. " << std::endl;
+
+	// cycle through the input SPolys.
+	std::cout << "|| Input SPolys: " << std::endl;
+	int currentInputsPolyID = 0;
+	for (auto& currentInputSPoly : inputSPolys)
+	{
+		std::cout << "Input SPoly at index: " << currentInputsPolyID++ << std::endl;
+		
+	}
+
+	// cycle through the normal output SPolys.
+	for (auto& currentOutputSG : outputSPolySuperGroups)
+	{
+		std::cout << "|| Output SPolys for orientation ";
+		OrganicGLWinUtils::printBoundaryOrientationEnum(currentOutputSG.first);
+		std::cout << ": " << std::endl;
+		currentOutputSG.second.printSPolys();
+	}
+
+	// cycle through SCAB_CHILD free SPolys
+	std::cout << "|| Free SCAB_CHILD SPolys: " << std::endl;
+	existingFreeScabChildSupergroup.printSPolys();
+}
+
 std::set<BoundaryOrientation> SPolyShellProducer::fetchOutputBoundaries()
 {
 	std::set<BoundaryOrientation> boundaries;

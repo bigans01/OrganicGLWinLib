@@ -80,6 +80,7 @@ class SPolyShellProducer
 													//	-outputSPolySuperGroups
 													//	-existingFreeScabChildSupergroup
 		void printSupergroupBoundaryIndicators();
+		void printAllProducedSPolys();
 		std::set<BoundaryOrientation> fetchOutputBoundaries();
 		Message convertBoundarySPolySupergroupToMessage(BoundaryOrientation in_targetBoundary);
 		int getNumberOfProducedSPolysInMassZoneBoundarySPoly(BoundaryOrientation in_targetBoundary);
