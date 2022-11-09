@@ -4,7 +4,6 @@
 #define PTRIANGLEMESH_H
 
 #include "PTriangle.h"
-#include <map>
 #include "MassGridArray.h"
 #include "MassZoneBoxType.h"
 

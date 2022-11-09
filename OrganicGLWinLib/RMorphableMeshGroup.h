@@ -3,23 +3,16 @@
 #ifndef RMORPHABLEMESHGROUP_H
 #define RMORPHABLEMESHGROUP_H
 
-#include "EnclaveKeyDef.h"
 #include "RMorphableMesh.h"
-#include <unordered_map>
-#include <unordered_set>
 #include "RCollisionPointArray.h"
 #include "RCollisionPoint.h"
 #include "DynamicBorderLineList.h"
-#include "IndependentUtils.h"
 #include "ECBPPOrientationResults.h"
-#include <algorithm>
 #include "RAdditiveSliceBase.h"
 #include "RAdditiveXSlice.h"
 #include "RAdditiveXSliceWestEnd.h"
 #include "RAdditiveXSliceEastEnd.h"
 #include "RAdditiveXSliceStandalone.h"
-#include <mutex>
-#include <map>
 #include "MassGridArray.h"
 #include "RCollisionPointToPTriangleMapContainer.h"
 #include "PTriangleMesh.h"

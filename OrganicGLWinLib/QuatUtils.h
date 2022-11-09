@@ -3,7 +3,6 @@
 #ifndef QUATUTILS_H
 #define QUATUTILS_H
 
-#include <glm/glm.hpp>
 #include "QuatRotationPoints.h"
 #include "QuatRotationManager.h"
 #include "QMBoolPointWithinTrianglePBZ.h"
@@ -14,7 +13,6 @@
 #include "QMBoolDoLinesIntersect.h"
 #include "QMBoolIsColinearLineAContainedWithinB.h"
 #include "QMBoolIsPointWithinPBZMassSide.h"
-#include <iostream>
 #include "Vec3Result.h"
 #include "PolyDebugLevel.h"
 #include "PointToMassRelationshipType.h"

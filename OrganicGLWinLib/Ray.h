@@ -3,7 +3,6 @@
 #ifndef RAY
 #define RAY
 
-#include <glm/glm.hpp>
 
 class Ray
 {

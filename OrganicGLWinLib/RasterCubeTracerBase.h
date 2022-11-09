@@ -4,10 +4,7 @@
 #define RASTERCUBETRACERBASE_H
 
 #include "RasterCubeLookup.h"
-#include "EnclaveKeyDef.h"
-#include <glm/glm.hpp>
 #include "DynamicBorderLineList.h"
-#include "IndependentUtils.h"
 #include "ECBPolyPointTri.h"
 #include "DynamicEndpointMeta.h"
 #include "DynamicLinePointSynchronizer.h"

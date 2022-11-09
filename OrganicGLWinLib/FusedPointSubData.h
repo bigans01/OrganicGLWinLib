@@ -4,7 +4,6 @@
 #define FUSEDPOINTSUBDATA_H
 
 #include "FusionCandidateOrigin.h"
-#include <iostream>
 
 class FusedPointSubData
 {

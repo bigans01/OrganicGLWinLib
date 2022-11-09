@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ECBPolyPoint.h"
 
 #ifndef MASSGRIDARRAYCELLLIMIT_H
 #define MASSGRIDARRAYCELLLIMIT_H

@@ -3,7 +3,6 @@
 #ifndef CLEAVESEQUENCEMETATRACKER_H
 #define CLEAVESEQUENCEMETATRACKER_H
 
-#include <map>
 #include "CleaveSequenceMeta.h"
 
 class CleaveSequenceMetaTracker

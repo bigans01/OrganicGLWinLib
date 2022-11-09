@@ -3,7 +3,6 @@
 #ifndef MAPPABLEVEC3_H
 #define MAPPABLEVEC3_H
 
-#include <glm/glm.hpp>
 #include "PointToMassRelationshipJudge.h"
 #include "IndividualVerdict.h"
 

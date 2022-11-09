@@ -3,8 +3,6 @@
 #ifndef INTERSECTIONFINDINGATTEMPT_H
 #define INTERSECTIONFINDINGATTEMPT_H
 
-#include <glm/glm.hpp>
-
 class IntersectionFindingAttempt
 {
 	public:

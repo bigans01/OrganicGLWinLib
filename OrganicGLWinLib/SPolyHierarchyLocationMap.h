@@ -3,7 +3,6 @@
 #ifndef SPOLYHIERARCHYLOCATIONMAP_H
 #define SPOLYHIERARCHYLOCATIONMAP_H
 
-#include <map>
 #include "SPolyHierarchyLocation.h"
 
 class SPolyHierarchyLocationMap

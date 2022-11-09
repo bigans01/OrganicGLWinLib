@@ -3,7 +3,6 @@
 #ifndef BORDERLINEDATA_H
 #define BORDERLINEDATA_H
 
-#include <glm/glm.hpp>
 
 class BorderLineData
 {

@@ -3,8 +3,6 @@
 #ifndef RASTERGRID3DBASE_H
 #define RASTERGRID3DBASE_H
 
-#include "EnclaveKeyDef.h"
-#include <iostream>
 #include "SPoly.h"
 #include "RUtils.h"
 #include "RPoly.h"

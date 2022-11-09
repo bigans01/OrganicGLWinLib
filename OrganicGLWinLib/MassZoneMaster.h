@@ -6,7 +6,6 @@
 #include "MassZoneBoxType.h"
 #include "MassZoneType.h"
 #include "MassZone.h"
-#include <map>
 #include "SPoly.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"

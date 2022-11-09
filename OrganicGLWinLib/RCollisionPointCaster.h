@@ -4,7 +4,6 @@
 #define RCOLLISIONPOINTCASTER_H
 
 #include "RasterCubeTracerBase.h"
-#include <iostream>
 #include "MassGridArray.h"
 #include "MassGridSearchResult.h"
 #include "RUtils.h"

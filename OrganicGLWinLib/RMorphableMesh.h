@@ -3,13 +3,11 @@
 #ifndef RMORPHABLEMESH_H
 #define RMORPHABLEMESH_H
 
-#include <glm/glm.hpp>
 #include "RMorphableMeshCubeAreaDefiner.h"
 #include "RMorphableMeshCorners.h"
 #include "RPointToGridTranslator.h"
 #include "Rasterized3DMassGrid.h"
 #include "RMorphableMeshCornerArray.h"
-#include <map>
 #include "ECBPPOrientations.h"
 #include "RProductFace.h"
 #include "RMorphableMeshState.h"

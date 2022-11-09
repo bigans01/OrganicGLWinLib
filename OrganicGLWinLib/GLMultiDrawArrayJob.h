@@ -6,8 +6,7 @@
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
-#include <mutex>
-#include <iostream>
+
 
 class GLMultiDrawArrayJob
 {

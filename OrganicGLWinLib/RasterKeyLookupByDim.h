@@ -3,10 +3,6 @@
 #ifndef RASTERKEYLOOKUPBYDIM_H
 #define RASTERKEYLOOKUPBYDIM_H
 
-#include <map>
-#include <unordered_map>
-#include <unordered_set>
-#include "EnclaveKeyDef.h"
 
 class RasterKeyLookupByDim
 {

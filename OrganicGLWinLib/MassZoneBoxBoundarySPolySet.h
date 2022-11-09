@@ -21,7 +21,6 @@
 #include "ContestableBorderLineMap.h"
 #include "QuatUtils.h"
 #include "MessageContainer.h"
-#include "BoundaryOrientation.h"
 #include "MassZoneBoxType.h"
 #include "SPolyResolution.h"
 #include "ExceptionRecorder.h"

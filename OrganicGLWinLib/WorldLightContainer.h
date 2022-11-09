@@ -3,7 +3,6 @@
 #ifndef WORLDLIGHTCONTAINER_H
 #define WORLDLIGHTCONTAINER_H
 
-#include <map>
 #include "WorldLight.h"
 
 class WorldLightContainer

@@ -3,7 +3,6 @@
 #ifndef INDIVIDUALVERDICT_H
 #define INDIVIDUALVERDICT_H
 
-#include <map>
 #include "PointToMassRelationshipType.h"
 
 class IndividualVerdict

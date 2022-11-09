@@ -3,10 +3,7 @@
 #ifndef FUSEDPOINT_H
 #define FUSEDPOINT_H
 
-#include <vector>
 #include "FusedPointSubData.h"
-#include <glm/glm.hpp>
-#include <iostream>
 #include "FusedPointMeta.h"
 
 class FusedPoint

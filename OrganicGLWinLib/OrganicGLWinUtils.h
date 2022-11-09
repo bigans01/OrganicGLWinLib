@@ -9,22 +9,15 @@
 
 
 #define NOMINMAX		// required to use std::min without parenthesis
-#include <algorithm>
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
 // Include GLM
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <stdio.h>
 #include <math.h>
-
-#include <iostream>
-#include <map>
-#include <vector>
-
 #include "OrganicShaderLoader.h"
 #include "AtlasMetaData.h"
 #include "AtlasMap.h"
@@ -37,7 +30,6 @@
 #include "TwoDLineSegment.h"
 #include "TwoDPoint.h"
 #include "ThreeDLineSegment.h"
-#include "BoundaryOrientation.h"
 #include "TerrainTriangle.h"
 #include "OrganicRawEnclave.h"
 #include "TertiaryTriangleProducer.h"

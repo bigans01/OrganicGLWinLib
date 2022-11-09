@@ -3,7 +3,6 @@
 #ifndef BORDERLINELINK_H
 #define BORDERLINELINK_H
 
-#include <glm/glm.hpp>
 #include "SPolyBorderLines.h"
 #include "BorderLineLinkPointState.h"
 

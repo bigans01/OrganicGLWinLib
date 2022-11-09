@@ -4,12 +4,7 @@
 #define POINTTOSPOLYRELATIONSHIPTRACKERCONTAINER_H
 
 #include "PointToSPolyRelationshipTracker.h"
-#include <map>
 #include "STriangle.h"
-#include <iostream>
-#include "OperableIntSet.h"
-#include <glm/glm.hpp>
-#include <vector>
 #include "QuatUtils.h"
 #include "SPoly.h"
 #include "PointToMassTrial.h"

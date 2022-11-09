@@ -3,9 +3,7 @@
 #ifndef INVALIDCLEAVESEQUENCES_H
 #define INVALIDCLEAVESEQUENCES_H
 
-#include <map>
 #include "CleaveSequence.h"
-#include <iostream>
 
 class InvalidCleaveSequences
 {

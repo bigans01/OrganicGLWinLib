@@ -6,7 +6,6 @@
 #include "FusionCandidate.h"
 #include "STriangle.h"
 #include "STriangleLine.h"
-#include <iostream>
 #include "OrganicGLWinUtils.h"
 #include "RayIntersectionResult.h"
 #include "PolyLogger.h"

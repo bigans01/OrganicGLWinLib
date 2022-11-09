@@ -3,7 +3,6 @@
 #ifndef CUTTABLETRIANGLECONTAINER_H
 #define CUTTABLETRIANGLECONTAINER_H
 
-#include <map>
 #include "STriangle.h"
 #include "CuttableTriangle.h"
 #include "STriangleOutputContainer.h"

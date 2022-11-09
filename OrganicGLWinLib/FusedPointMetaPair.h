@@ -3,7 +3,6 @@
 #ifndef FUSEDPOINTMETAPAIR_H
 #define FUSEDPOINTMETAPAIR_H
 
-#include <map>
 #include "FusedPointMeta.h"
 #include "SummaryScanResult.h"
 #include "FusionCandidateOrigin.h"

@@ -4,7 +4,6 @@
 #define QMVOIDFINDCYCLINGDIRECTION_H
 
 #include "QMVoidBase.h"
-#include <stack>
 #include "QuatRotationType.h"
 
 class QMVoidFindCyclingDirection : public QMVoidBase

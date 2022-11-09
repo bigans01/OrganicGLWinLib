@@ -2,8 +2,6 @@
 
 #ifndef RMORPHABLEMESHCUBEAREADEFINER_H
 #define RMORPHABLEMESHCUBEAREADEFINER_H
-
-#include <glm/glm.hpp>
 #include "RMorphableMeshPointRequests.h"
 
 class RMorphableMeshCubeAreaDefiner

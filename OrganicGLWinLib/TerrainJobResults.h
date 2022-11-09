@@ -3,7 +3,6 @@
 #ifndef TERRAINJOBRESULTS_H
 #define TERRAINJOBRESULTS_H
 
-#include "EnclaveKeyDef.h"
 
 class TerrainJobResults
 {

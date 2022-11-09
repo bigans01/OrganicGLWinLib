@@ -4,8 +4,6 @@
 #define MAPPABLEINDIVIDUALVERDICT_H
 
 #include "IndividualVerdict.h"
-#include <map>
-#include <glm/glm.hpp>
 #include "PointToMassRelationshipType.h"
 
 class MappableIndividualVerdict

@@ -4,7 +4,6 @@
 #define RTRIANGLELINETRACER_H
 
 #include "RasterCubeTracerBase.h"
-#include <iostream>
 #include <chrono>
 
 class RTriangleLineTracer : public RasterCubeTracerBase

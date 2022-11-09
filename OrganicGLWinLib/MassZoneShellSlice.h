@@ -4,8 +4,6 @@
 #define MASSZONESHELLSLICE_H
 
 #include "STriangle.h"
-#include <glm/glm.hpp>
-#include <map>
 #include "SPoly.h"
 #include "PointToMassRelationshipType.h"
 #include "QuatUtils.h"

@@ -3,11 +3,10 @@
 #ifndef UVCOORDPRODUCER_H
 #define UVCOORDPRODUCER_H
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "EnclaveBlock.h"
 #include "EnclaveBlockVertex.h"
 #include "AtlasMap.h"
-#include "IndependentUtils.h"
 #include "OrganicPolygon.h"
 #include "UVTriangleCoords.h"
 #include "TexturePoints.h"

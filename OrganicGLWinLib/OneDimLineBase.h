@@ -3,7 +3,6 @@
 #ifndef ONEDIMLINEBASE_H
 #define ONEDIMLINEBASE_H
 
-#include <glm/glm.hpp>
 
 class OneDimLineBase
 {

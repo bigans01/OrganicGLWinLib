@@ -5,8 +5,6 @@
 
 #include "FusedPointSubdataLineType.h"
 #include "FusedPointSummary.h"
-#include <iostream>
-#include <glm/glm.hpp>
 
 class FusedPointMeta
 {

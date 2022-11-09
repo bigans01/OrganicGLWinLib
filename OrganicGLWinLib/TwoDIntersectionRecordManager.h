@@ -3,10 +3,6 @@
 #ifndef TWODINTERSECTIONRECORDMANAGER_H
 #define TWODINTERSECTIONRECORDMANAGER_H
 
-#include <map>
-#include <glm/glm.hpp>
-#include <iostream>
-#include "OperableIntSet.h"
 
 class TwoDIntersectionRecordManager
 {

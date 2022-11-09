@@ -4,7 +4,6 @@
 #define RMORPHABLEMESHCORNERS_H
 
 #include "RCollisionPoint.h"
-#include <iostream>
 #include "RMorphableMeshCornerArray.h"
 #include "RProductFaceRootPoints.h"
 

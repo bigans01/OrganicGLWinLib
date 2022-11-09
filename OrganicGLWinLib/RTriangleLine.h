@@ -3,9 +3,6 @@
 #ifndef RTRIANGLELINE_H
 #define RTRIANGLELINE_H
 
-#include <unordered_set>
-#include "EnclaveKeyDef.h"
-#include <glm/glm.hpp>
 #include "STriangleLine.h"
 #include "RasterCubeLookup.h"
 #include "RTriangleLineTracer.h"

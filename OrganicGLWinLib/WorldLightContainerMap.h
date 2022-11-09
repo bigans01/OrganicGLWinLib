@@ -3,8 +3,6 @@
 #ifndef WORLDLIGHTCONTAINERMAP_H
 #define WORLDLIGHTCONTAINERMAP_H
 
-#include <unordered_map>
-#include <mutex>
 #include "WorldLightContainer.h"
 
 

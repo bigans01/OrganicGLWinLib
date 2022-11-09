@@ -4,10 +4,7 @@
 #define TIMEBASEDWAVEMANAGER_H
 
 #include "SmartIntMap.h"
-#include <map>
-#include <mutex>
 #include "TimeBasedWaveBase.h"
-#include <unordered_map>
 #include "TimeBasedWaveType.h"
 #include "SinTBW.h"
 #include "GLUniformRegistry.h"

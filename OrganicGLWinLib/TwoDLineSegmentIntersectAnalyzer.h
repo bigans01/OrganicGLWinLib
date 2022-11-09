@@ -6,7 +6,6 @@
 #include "TwoDLineSegmentIntersectResult.h"
 #include "TwoDLineSegment.h"
 #include "TwoDPoint.h"
-#include <iostream>
 #include "TwoDLineSegmentJudge.h"
 #include "IntersectAnalyzerOption.h"
 #include "PolyDebugLevel.h"

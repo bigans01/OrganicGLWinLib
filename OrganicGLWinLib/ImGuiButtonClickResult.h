@@ -3,7 +3,6 @@
 #ifndef IMGUIBUTTONCLICKRESULT_H
 #define IMGUIBUTTONCLICKRESULT_H
 
-#include <iostream>
 
 class ImGuiButtonClickResult
 {

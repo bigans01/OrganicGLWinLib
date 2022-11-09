@@ -5,14 +5,9 @@
 
 #include "SPoly.h"
 #include "InvalidCleaveSequences.h"
-#include "BoundaryOrientation.h"
 #include "MassZoneBoxType.h"
 #include "OneDimLineBase.h"
 #include "SPolySupergroup.h"
-#include <map>
-#include <mutex>
-#include <iostream>
-#include <vector>
 #include "CSCorrectionCandidate.h"
 #include "ExceptionRecorder.h"
 

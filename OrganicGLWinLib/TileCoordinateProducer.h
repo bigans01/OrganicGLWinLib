@@ -3,8 +3,6 @@
 #ifndef TILECOORDINATEPRODUCER_H
 #define TILECOORDINATEPRODUCER_H
 
-#include <glm/glm.hpp>
-#include <iostream>
 #include "QuatRotationRecord.h"
 #include "QuatRotationPoints.h"
 #include "QuatRotationManager.h"

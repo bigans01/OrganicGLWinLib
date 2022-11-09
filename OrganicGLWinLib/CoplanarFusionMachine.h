@@ -6,10 +6,8 @@
 #include "CoplanarRelationshipTracker.h"
 #include "MassZoneType.h"
 #include "MassZoneBoxType.h"
-#include <map>
 #include "CoplanarFusionType.h"
 #include "PolyDebugLevel.h"
-#include "OperableIntSet.h"
 #include "CoplanarRelationshipDebugFlags.h"
 
 class CoplanarFusionMachine

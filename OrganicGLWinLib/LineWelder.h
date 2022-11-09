@@ -19,7 +19,6 @@
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "UsableCleaveSequenceCalculator.h"
-#include "OperableIntSet.h"
 #include "ConsumedCleaveSequenceGroups.h"
 
 class LineWelder

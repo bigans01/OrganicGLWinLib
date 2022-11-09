@@ -4,7 +4,6 @@
 #define GLUNIFORMREQUEST_H
 
 #include "GLDataType.h"
-#include <iostream>
 
 class GLUniformRequest
 {

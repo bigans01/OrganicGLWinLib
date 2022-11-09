@@ -7,7 +7,6 @@
 #include "QuatRotationPoints.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "QuatRotationType.h"

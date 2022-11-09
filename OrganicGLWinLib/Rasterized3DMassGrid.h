@@ -4,11 +4,9 @@
 #define RASTERIZED3DMASSGRID_H
 
 #include "RasterGrid3dBase.h"
-#include <map>
 #include "RPoly.h"
 #include "MassGridArray.h"
 #include "MassGridArrayCellScanArea.h"
-#include "EnclaveKeyDef.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "DebugOption.h"

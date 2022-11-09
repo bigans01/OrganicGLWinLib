@@ -3,11 +3,8 @@
 #ifndef QUATROTATIONPOINTS_H
 #define QUATROTATIONPOINTS_H
 
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <vector>
-#include <iostream>
 //#include "OrganicGLWinUtils.h"
 
 class OrganicGLWinUtils;

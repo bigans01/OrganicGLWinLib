@@ -3,7 +3,6 @@
 #ifndef WELDEDTRIANGLECONTAINER_H
 #define WELDEDTRIANGLECONTAINER_H
 
-#include <map>
 #include "WeldedTriangle.h"
 
 class WeldedTriangleContainer

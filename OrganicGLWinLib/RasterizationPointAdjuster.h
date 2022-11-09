@@ -5,8 +5,6 @@
 
 #include "QuatRotationPoints.h"
 #include "MassZoneBoxType.h"
-#include <glm/glm.hpp>
-#include <algorithm>
 
 // this class assumes the following conditions, prior to its non-default constructor call:
 // -1.) the reference to QuatRotationPoints is an instance of that class, such that all points have been aligned to the same Z-plane.

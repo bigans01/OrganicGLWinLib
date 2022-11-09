@@ -3,18 +3,12 @@
 #ifndef RCOLLISIONPOINTMODIFIER_H
 #define RCOLLISIONPOINTMODIFIER_H
 
-#include <glm/glm.hpp>
 #include "ECBPPOrientations.h"
-#include <iostream>
-#include "IndependentUtils.h"
 #include "RCollisionPointState.h"
 #include "RMorphableMeshCornerArray.h"
 #include "RCollisionPoint.h"
 #include "RPointToGridTranslator.h"
-#include <map>
 #include "RUtils.h"
-#include "EnclaveKeyDef.h"
-#include <algorithm>
 #include "RCollisionPointCaster.h"
 #include "MassGridArray.h"
 #include "PolyLogger.h"

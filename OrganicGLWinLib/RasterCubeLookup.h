@@ -3,10 +3,6 @@
 #ifndef RASTERCUBELOOKUP_H
 #define RASTERCUBELOOKUP_H
 
-#include "EnclaveKeyDef.h"
-#include <unordered_set>
-#include <map>
-#include <iostream>
 #include "RasterKeyLookupByDim.h"
 
 class RasterCubeLookup

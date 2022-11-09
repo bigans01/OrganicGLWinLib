@@ -7,7 +7,6 @@
 #include "SPolyRefMap.h"
 #include "QuatRotationPoints.h"
 #include "CoplanarCategorizedLineProducer.h"
-#include <map>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 

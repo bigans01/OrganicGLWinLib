@@ -5,7 +5,6 @@
 
 #include "MassGridArray.h"
 #include "RasterCubeTracerBase.h"
-#include <glm/glm.hpp>
 
 class RTriangleInteriorAreaTracer : public RasterCubeTracerBase
 {

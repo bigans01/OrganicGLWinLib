@@ -6,8 +6,6 @@
 #include "RTriangleLine.h"
 #include "MassGridArray.h"
 #include "LookupByDimRegister.h"
-#include <mutex>
-#include <algorithm>
 #include "RScanDim.h"
 #include "DebugOption.h"
 #include "PolyLogger.h"

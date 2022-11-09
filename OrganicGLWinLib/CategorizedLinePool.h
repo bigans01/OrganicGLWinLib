@@ -4,9 +4,6 @@
 #define CATEGORIZEDLINEPOOL_H
 
 #include "CategorizedLine.h"
-#include <vector>
-#include <iostream>
-#include <map>
 #include "SPolyBorderLines.h"
 #include "UnsolvedPreciseSolver.h"
 

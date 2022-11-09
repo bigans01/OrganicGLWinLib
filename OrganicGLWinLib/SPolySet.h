@@ -12,9 +12,6 @@
 #include "SliceFinder.h"
 #include "SPolyFracturer.h"
 #include "SPolyMorphTracker.h"
-#include <map>
-#include <iostream>
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <chrono>

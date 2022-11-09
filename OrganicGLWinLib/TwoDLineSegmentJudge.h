@@ -7,7 +7,6 @@
 #include "TwoDLineSegment.h"
 #include "SPoly.h"
 #include "OrganicGLWinUtils.h"
-#include <iostream>
 
 
 class TwoDLineSegmentJudge

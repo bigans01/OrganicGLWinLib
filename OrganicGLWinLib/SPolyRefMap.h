@@ -3,7 +3,6 @@
 #ifndef SPOLYREFMAP_H
 #define SPOLYREFMAP_H
 
-#include <map>
 #include "SPoly.h"
 
 class SPolyRefMap

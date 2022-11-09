@@ -3,7 +3,6 @@
 #ifndef FOUNDCLEAVESEQUENCE_H
 #define FOUNDCLEAVESEQUENCE_H
 
-#include <glm/glm.hpp>
 #include "DistanceToPoint.h"
 
 class FoundCleaveSequence

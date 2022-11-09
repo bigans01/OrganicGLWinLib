@@ -3,9 +3,6 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include <glm/glm.hpp>
-#include <iostream>
-
 class Triangle
 {
 	public:

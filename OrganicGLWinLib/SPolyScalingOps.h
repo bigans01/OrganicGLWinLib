@@ -3,8 +3,6 @@
 #ifndef SPOLYSCALINGOPS_H
 #define SPOLYSCALINGOPS_H
 
-#include <glm/glm.hpp>
-#include <stack>
 #include "QuatRotationRecord.h"
 
 class SPolyScalingOps

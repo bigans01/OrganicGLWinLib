@@ -5,7 +5,6 @@
 
 #include "FusionAnalysis.h"
 #include "FusedPointContainer.h"
-#include <iostream>
 #include "FusedPointMetaPair.h"
 #include "FusedPointMeta.h"
 #include "HostLineReactor.h"

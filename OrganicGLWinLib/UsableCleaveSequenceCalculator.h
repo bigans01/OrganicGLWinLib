@@ -3,12 +3,9 @@
 #ifndef USABLECLEAVESEQUENCECALCULATOR_H
 #define USABLECLEAVESEQUENCECALCULATOR_H
 
-#include <map>
-#include <set>
 #include "CleaveSequence.h"
 #include "CategorizedLine.h"
 #include "CleaveSequenceCandidateList.h"
-#include "OperableIntSet.h"
 #include "DistanceToPoint.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"

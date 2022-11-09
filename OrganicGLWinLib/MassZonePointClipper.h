@@ -3,8 +3,6 @@
 #ifndef MASSZONEPOINTCLIPPER_H
 #define MASSZONEPOINTCLIPPER_H
 
-#include <map>
-#include <set>
 #include "SPoly.h"
 #include "SPolySupergroup.h"
 #include "PolyLogger.h"
@@ -14,7 +12,6 @@
 #include "PointToSPolyRelationshipTrackerContainer.h"
 #include "QuatRotationPoints.h"
 #include "QMBoolPointWithinTrianglePBZ.h"
-#include "OperableIntSet.h"
 #include "CoplanarChecker.h"
 #include "BorderLineLinkContainer.h"
 #include "FusionCandidateProducer.h"

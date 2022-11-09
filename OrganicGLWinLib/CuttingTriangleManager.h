@@ -3,7 +3,6 @@
 #ifndef CUTTINGTRIANGLEMANAGER_H
 #define CUTTINGTRIANGLEMANAGER_H
 
-#include <map>
 #include "CuttingTriangle.h"
 
 class CuttingTriangleManager

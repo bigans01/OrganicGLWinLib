@@ -3,7 +3,6 @@
 #ifndef UVTRIANGLECOORDS_H
 #define UVTRIANGLECOORDS_H
 
-#include <glm/glm.hpp>
 
 class UVTriangleCoords
 {

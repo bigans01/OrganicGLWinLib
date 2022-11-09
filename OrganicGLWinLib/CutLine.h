@@ -3,7 +3,6 @@
 #ifndef CUTLINE_H
 #define CUTLINE_H
 
-#include <glm/glm.hpp>
 
 class CutLine
 {

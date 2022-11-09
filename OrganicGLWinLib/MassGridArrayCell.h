@@ -4,8 +4,6 @@
 #define MASSGRIDARRAYCELL_H
 
 #include "MassCellBitFlags.h"
-#include <glm/glm.hpp>
-#include <vector>
 
 class MassGridArrayCell
 {

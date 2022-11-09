@@ -4,18 +4,12 @@
 #define RADDITIVESLICEBASE_H
 
 #include "RAdditiveSliceType.h"
-#include <mutex>
 #include "RCollisionPoint.h"
 #include "MassGridArray.h"
 #include "RCollisionPointArray.h"
-#include "IndependentUtils.h"
-#include <unordered_map>
 #include "RMorphableMesh.h"
-#include <algorithm>
-#include <iostream>
 #include "DynamicBorderLineList.h"
 #include "RCollisionPointToPTriangleMapContainer.h"
-#include <map>
 #include "PTriangle.h"
 
 class RAdditiveSliceBase

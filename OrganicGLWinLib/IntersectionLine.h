@@ -3,11 +3,9 @@
 #ifndef INTERSECTIONLINE_H
 #define INTERSECTIONLINE_H
 
-#include <glm/glm.hpp>
 #include "IntersectionResult.h"
 #include "BorderLineIDPair.h"
 #include "BorderLinePointPair.h"
-#include <iostream>
 #include "IntersectionLineValidity.h"
 #include "CyclingDirection.h"
 #include "BorderLineData.h"

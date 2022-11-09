@@ -9,9 +9,6 @@
 #include "TileMeta.h"
 #include "TileLoadData.h"
 #include "TexturePoints.h"
-#include <map>
-#include <iostream>
-#include <string>
 #include <filesystem>
 #include <fstream>
 

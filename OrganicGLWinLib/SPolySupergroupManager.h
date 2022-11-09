@@ -3,7 +3,6 @@
 #ifndef SPOLYSUPERGROUPMANAGER_H
 #define SPOLYSUPERGROUPMANAGER_H
 
-#include <map>
 #include "SPolySupergroup.h"
 
 class SPolySupergroupManager

@@ -3,9 +3,6 @@
 #ifndef INTERCEPTREGISTER_H
 #define INTERCEPTREGISTER_H
 
-#include <map>
-#include <glm/glm.hpp>
-#include <iostream>
 #include "IRGroup.h"
 #include "IRPointType.h"
 

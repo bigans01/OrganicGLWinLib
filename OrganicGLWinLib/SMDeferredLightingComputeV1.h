@@ -6,14 +6,10 @@
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "ShaderMachineBase.h"
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
-#include <map>
-#include <unordered_map>
-#include <mutex>
 
 // gears used by this machine; doesn't represent actual order of usage
 //#include "TerrainComputeGearT1.h"

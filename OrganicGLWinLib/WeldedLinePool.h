@@ -4,11 +4,6 @@
 #define WELDEDLINEPOOL_H
 
 #include "WeldedLine.h"
-#include <glm/glm.hpp>
-#include <iostream>
-#include <map>
-#include <vector>
-#include <string>
 
 class WeldedLinePool
 {

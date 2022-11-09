@@ -3,10 +3,7 @@
 #ifndef SPOLYUTILS_H
 #define SPOLYUTILS_H
 
-#include "Message.h"
 #include "SPolySupergroup.h"
-#include "IndependentUtils.h"
-#include <vector>
 #include "OrganicWrappedBBFan.h"
 
 class SPolyUtils

@@ -3,7 +3,6 @@
 #ifndef SUMMARYSCANRESULT_H
 #define SUMMARYSCANRESULT_H
 
-#include <glm/glm.hpp>
 #include "FusedPointSummary.h"
 
 class SummaryScanResult

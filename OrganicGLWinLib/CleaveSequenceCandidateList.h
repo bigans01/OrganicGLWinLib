@@ -3,8 +3,6 @@
 #ifndef CLEAVESEQUENCECANDIDATELIST_H
 #define CLEAVESEQUENCECANDIDATELIST_H
 
-#include <set>
-#include <iostream>
 
 class CleaveSequenceCandidateList
 {

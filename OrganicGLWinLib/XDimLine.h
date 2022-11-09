@@ -4,8 +4,6 @@
 #define XDIMLINE_H
 
 #include "OneDimLineBase.h"
-#include <iostream>
-
 class XDimLine : public OneDimLineBase
 {
 	public:

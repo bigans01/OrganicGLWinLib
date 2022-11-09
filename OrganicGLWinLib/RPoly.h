@@ -7,8 +7,6 @@
 #include "RUtils.h"
 #include "RTriangle.h"
 #include "RTriangleLine.h"
-#include "EnclaveKeyDef.h"
-#include <map>
 #include "DebugOption.h"
 #include "PolyLogger.h"
 

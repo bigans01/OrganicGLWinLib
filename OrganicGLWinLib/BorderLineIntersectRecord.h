@@ -5,7 +5,6 @@
 
 #include "CategorizedLine.h"
 #include "BorderLineIntersectRecordType.h"
-#include <map>
 
 class BorderLineIntersectRecord
 {

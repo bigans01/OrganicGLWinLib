@@ -3,12 +3,7 @@
 #ifndef COPLANARAREARASTERIZER_H
 #define COPLANARAREARASTERIZER_H
 
-#include <mutex>
-#include <set>
-#include <glm/glm.hpp>
-#include <iostream>
 #include <iomanip>
-#include <algorithm>
 #include "TileLocation.h"
 #include "BrasenhamLineData.h"
 

@@ -3,8 +3,6 @@
 #ifndef MASSUTILS_H
 #define MASSUTILS_H
 
-#include "BoundaryOrientation.h"
-#include <iostream>
 
 class MassUtils
 {

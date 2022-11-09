@@ -7,11 +7,8 @@
 #include "QuatRotationType.h"
 #include "QuatRotationRecord.h"
 #include "CyclingDirection.h"
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <vector>
-#include <stack>
 //#include "OrganicGLWinUtils.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"

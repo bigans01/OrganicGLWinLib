@@ -7,9 +7,7 @@
 #include "RMatterAge.h"
 #include "MassZoneBoxType.h"
 #include "RMatterCollisionMode.h"
-#include <vector>
 #include "SPoly.h"
-#include <set>
 #include "RMatterManipulationOption.h"
 #include "MessageContainer.h"
 #include "Operable3DEnclaveKeySet.h"

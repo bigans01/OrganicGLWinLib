@@ -6,8 +6,6 @@
 #include "LineReactorBase.h"
 #include "FusionAnalysis.h"
 #include "FusedPointMetaPair.h"
-#include <iostream>
-#include <vector>
 #include "FusedPointSubData.h"
 #include "SPoly.h"
 

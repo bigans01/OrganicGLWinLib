@@ -3,7 +3,6 @@
 #ifndef SPOLYMORPHTRACKER_H
 #define SPOLYMORPHTRACKER_H
 
-#include <map>
 #include "SPoly.h"
 
 

@@ -6,7 +6,6 @@
 #include "MassGridArray.h"
 #include "BrasenhamMassTracerDim.h"
 #include "BrasenhamLineData.h"
-#include "EnclaveKeyDef.h"
 
 class BrasenhamMassTracer
 {

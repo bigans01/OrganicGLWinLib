@@ -3,7 +3,6 @@
 #ifndef RCollisionPointARRAY_H
 #define RCollisionPointARRAY_H
 
-#include <mutex>
 #include "RCollisionPoint.h"
 #include "RCollisionPointSearchResult.h"
 #include "ECBPPOrientations.h"

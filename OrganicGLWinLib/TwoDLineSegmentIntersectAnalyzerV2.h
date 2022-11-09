@@ -6,7 +6,6 @@
 #include "TwoDLineSegmentIntersectResult.h"
 #include "TwoDLineSegment.h"
 #include "TwoDPoint.h"
-#include <iostream>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "QuatRotationPoints.h"

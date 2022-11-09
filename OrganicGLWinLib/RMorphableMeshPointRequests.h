@@ -3,7 +3,6 @@
 #ifndef RMORPHABLEMESHPOINTREQUESTS_H
 #define RMORPHABLEMESHPOINTREQUESTS_H
 
-#include <glm/glm.hpp>
 
 class RMorphableMeshPointRequests
 {

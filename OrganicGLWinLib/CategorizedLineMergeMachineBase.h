@@ -5,8 +5,6 @@
 
 #include "CategorizedLine.h"
 #include "CategorizedLineGroup.h"
-#include <map>
-#include <vector>
 #include "CategorizedLineGroupLocation.h"
 #include "CategorizedLineSearchResult.h"
 #include "PolyLogger.h"

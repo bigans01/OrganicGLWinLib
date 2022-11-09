@@ -3,7 +3,6 @@
 #ifndef CATEGORIZEDLINEOPTIONALS_H
 #define CATEGORIZEDLINEOPTIONALS_H
 
-#include <map>
 #include "IRPointType.h"
 #include "FusedPointSubData.h"
 

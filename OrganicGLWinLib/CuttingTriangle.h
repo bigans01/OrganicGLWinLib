@@ -7,7 +7,6 @@
 #include "CuttingTriangleLine.h"
 #include "OrganicGLWinUtils.h"
 #include "QuatUtils.h"
-#include "OperableIntSet.h"
 
 class CuttingTriangle
 {

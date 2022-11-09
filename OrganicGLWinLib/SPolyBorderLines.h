@@ -3,7 +3,6 @@
 #ifndef SPOLYBORDERLINES_H
 #define SPOLYBORDERLINES_H
 
-#include <glm/glm.hpp>
 #include "BorderLineIntersectRecorder.h"
 
 class SPolyBorderLines

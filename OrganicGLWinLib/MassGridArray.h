@@ -3,11 +3,9 @@
 #ifndef MASSGRIDARRAY_H
 #define MASSGRIDARRAY_H
 
-#include <mutex>
 #include "MassGridArrayCell.h"
 #include "MassGridSearchResult.h"
 #include "MassGridArrayCellScanArea.h"
-#include "EnclaveKeyDef.h"
 #include <chrono>
 
 class MassGridArray

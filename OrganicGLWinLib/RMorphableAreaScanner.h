@@ -4,8 +4,6 @@
 #define RMORPHABLEAREASCANNER_H
 
 #include "RMorphableMeshGroup.h"
-#include <map>
-#include <unordered_map>
 #include "Rasterized3DMassGrid.h"
 #include "RMorphableMesh.h"
 #include "MassGridArrayCellScanArea.h"
@@ -16,7 +14,6 @@
 #include "DebugOptionSet.h"
 #include "PolyLogger.h"
 #include "SPoly.h"
-#include <vector>
 #include "Operable3DEnclaveKeySet.h"
 #include "MassZoneBoxType.h"
 

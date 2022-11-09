@@ -3,11 +3,9 @@
 #ifndef IMGUIINPUTTEXTPANEL_H
 #define IMGUIINPUTTEXTPANEL_H
 
-#include <unordered_map>
 #include "ImGuiInputText.h"
 #include "ImGuiInputTextResponse.h"
 #include "ShaderMachineFeedback.h"
-#include <string>
 
 class ImGuiInputTextPanel
 {

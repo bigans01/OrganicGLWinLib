@@ -10,7 +10,6 @@
 #include "PointTranslationCheck.h"
 #include "CoplanarMassManipulator.h"
 #include "CoplanarMassCreator.h"
-#include <mutex>
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "CoplanarRelationshipDebugFlags.h"

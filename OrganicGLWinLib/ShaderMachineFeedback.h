@@ -3,8 +3,6 @@
 #ifndef SHADERMACHINEFEEDBACK_H
 #define SHADERMACHINEFEEDBACK_H
 
-#include <vector>
-#include <string>
 #include "ImGuiInputTextResponse.h"
 #include "ImGuiButtonClickResult.h"
 #include "ShaderMachineFeedbackType.h"

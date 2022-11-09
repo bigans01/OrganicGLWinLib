@@ -3,8 +3,6 @@
 #ifndef RPOINTTOGRIDTRANSLATOR
 #define RPOINTTOGRIDTRANSLATOR
 
-#include "EnclaveKeyDef.h"
-#include <glm/glm.hpp>
 
 class RPointToGridTranslator
 {

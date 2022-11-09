@@ -3,12 +3,10 @@
 #ifndef SHADERMANAGERMODE1_H
 #define SHADERMANAGERMODE1_H
 
-#include <string>
 
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdio.h>
 #include "OrganicGLWinUtils.h"

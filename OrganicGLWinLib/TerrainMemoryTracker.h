@@ -3,10 +3,8 @@
 #ifndef TERRAINMEMORYTRACKER_H
 #define TERRAINMEMORYTRACKER_H
 
-#include <map>
 #include "TerrainMemoryMeta.h"
 #include "TerrainMemoryMoveMeta.h"
-#include "EnclaveKeyDef.h"
 #include "TerrainJobResults.h"
 
 class TerrainMemoryTracker

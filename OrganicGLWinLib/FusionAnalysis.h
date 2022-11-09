@@ -4,14 +4,12 @@
 #define FUSIONANALYSIS_H
 
 #include "FusionAnalysisResult.h"
-#include <map>
 #include "IntersectionLine.h"
 #include "FusionCandidate.h"
 #include "IntersectionResult.h"
 #include "FusionAnalysisPrimaryClassification.h"
 #include "FusionAnalysisPointsClassification.h"
 #include "FusionAnalysisCoplanarLineType.h"
-#include <iostream>
 #include "FusedPointContainer.h"
 #include "FusedPointSubData.h"
 #include "FusionCandidateOrigin.h"

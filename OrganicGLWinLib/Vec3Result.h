@@ -3,7 +3,6 @@
 #ifndef VEC3RESULT_H
 #define VEC3RESULT_H
 
-#include <glm/glm.hpp>
 
 class Vec3Result
 {

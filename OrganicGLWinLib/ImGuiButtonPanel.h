@@ -3,10 +3,8 @@
 #ifndef IMGUIBUTTONPANEL_H
 #define IMGUIBUTTONPANEL_H
 
-#include <unordered_map>
 #include "ImGuiButton.h"
 #include "ImGuiButtonClickResult.h"
-#include <string>
 
 class ImGuiButtonPanel
 {

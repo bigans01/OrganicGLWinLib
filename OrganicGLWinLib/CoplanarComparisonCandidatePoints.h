@@ -4,9 +4,6 @@
 #define COPLANARCOMPARISONCANDIDATEPOINTS_H
 
 #include "STriangle.h"
-#include <map>
-#include <set>
-#include <glm/glm.hpp>
 
 class CoplanarComparisonCoandidatePoints
 {

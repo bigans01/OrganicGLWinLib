@@ -3,7 +3,6 @@
 #ifndef DISTANCETOPOINT_H
 #define DISTANCETOPOINT_H
 
-#include <glm/glm.hpp>
 
 class DistanceToPoint
 {

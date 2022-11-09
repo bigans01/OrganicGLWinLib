@@ -3,8 +3,6 @@
 #ifndef CONTESTABLEBORDERLINEMAP_H
 #define CONTESTABLEBORDERLINEMAP_H
 
-#include <vector>
-#include <map>
 #include "CategorizedLine.h"
 
 class ContestableBorderLineMap

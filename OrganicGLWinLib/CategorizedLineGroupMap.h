@@ -3,7 +3,6 @@
 #ifndef CATEGORIZEDLINEGROUPMAP_H
 #define CATEGORIZEDLINEGROUPMAP_H
 
-#include <map>
 #include "IntersectionType.h"
 #include "CategorizedLineGroup.h"
 #include "CategorizedLineGroupLocation.h"

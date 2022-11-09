@@ -3,7 +3,6 @@
 #ifndef SIMPLEUNIQUE_H
 #define SIMPLEUNIQUE_H
 
-#include <mutex>
 
 class SimpleUnique
 {

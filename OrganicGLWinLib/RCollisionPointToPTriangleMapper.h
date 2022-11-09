@@ -4,7 +4,6 @@
 #define RCOLLISIONPOINTTOPTRIANGLEMAPPER_H
 
 #include "RCollisionPoint.h"
-#include <map>
 
 class RCollisionPointToPTriangleMapper
 {

@@ -3,7 +3,6 @@
 #ifndef TILEMETA_H
 #define TILEMETA_H
 
-#include <string>
 
 class TileMeta
 {

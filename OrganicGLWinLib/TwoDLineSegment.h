@@ -6,7 +6,6 @@
 #include "TwoDPoint.h"
 #include "STriangle.h"
 #include "STriangleLine.h"
-#include <vector>
 #include "TwoDSPolyIntersectionRecord.h"
 #include "TwoDSPolyIntersectionType.h"
 #include "CategorizedLine.h"

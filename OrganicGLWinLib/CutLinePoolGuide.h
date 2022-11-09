@@ -3,7 +3,6 @@
 #ifndef CUTLINEPOOLGUIDE_H
 #define CUTLINEPOOLGUIDE_H
 
-#include <vector>
 #include "CutLinePool.h"
 
 class CutLinePoolGuide

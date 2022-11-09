@@ -5,16 +5,12 @@
 
 #include "SPoly.h"
 #include "SPolyFracturer.h"
-#include "BoundaryOrientation.h"
 #include "MassZoneBoxType.h"
 #include "SPolyFracturer.h"
 #include "SPolySupergroup.h"
 #include "MessageContainer.h"
-#include <iostream>
-#include <map>
 #include "InvalidCleaveSequences.h"
 #include "CleaveSequence.h"
-#include <mutex>
 #include "FaceResolverBase.h"
 #include "PosXFaceResolver.h"
 #include "NegXFaceResolver.h"

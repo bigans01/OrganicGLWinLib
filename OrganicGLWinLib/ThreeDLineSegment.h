@@ -3,7 +3,6 @@
 #ifndef THREEDLINESEGMENT_H
 #define	THREEDLINESEGMENT_H
 
-#include <glm/glm.hpp>
 
 class ThreeDLineSegment
 {

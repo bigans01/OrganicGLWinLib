@@ -3,11 +3,7 @@
 #ifndef RCOLLISIONPOINT_H
 #define RCOLLISIONPOINT_H
 
-#include <glm/glm.hpp>
 #include "ECBPPOrientations.h"
-#include <iostream>
-#include <string>
-#include "IndependentUtils.h"
 #include "RCollisionPointState.h"
 
 class RCollisionPoint

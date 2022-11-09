@@ -3,8 +3,6 @@
 #ifndef EMPTYNORMALFINDER_H
 #define EMPTYNORMALFINDER_H
 
-#include <glm/glm.hpp>
-#include <iostream>
 #include "QuatRotationRecord.h"
 #include "QuatRotationPoints.h"
 #include "QuatRotationManager.h"

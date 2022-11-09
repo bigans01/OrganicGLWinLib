@@ -3,12 +3,10 @@
 #ifndef FUSEDPOINTCONTAINER_H
 #define FUSEDPOINTCONTAINER_H
 
-#include <map>
 #include "FusedPoint.h"
 #include "FusedPointMeta.h"
 #include "FusionCandidateOrigin.h"
 #include "FusedPointSubData.h"
-#include <vector>
 
 class FusedPointContainer
 {

@@ -6,9 +6,7 @@
 #include "RProductFaceRootPoints.h"
 #include "RCollisionPoint.h"
 #include "PTriangle.h"
-#include <glm/glm.hpp>
 #include "PTriangleMesh.h"
-#include <iostream>
 
 class RProductFace
 {

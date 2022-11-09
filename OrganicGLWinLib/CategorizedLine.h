@@ -6,24 +6,16 @@
 #include "IntersectionLine.h"
 #include "IntersectionType.h"
 #include "IRPointType.h"
-#include <iostream>
-#include <glm/glm.hpp>
 #include "CyclingDirection.h"
 #include "QuatRotationManager.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
-#include <map>
-#include <mutex>
+//#include <mutex>
 #include "CategorizedLineOptionals.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "QMVoidFindCyclingDirection.h"
-#include <vector>
-#include <algorithm>
-#include "IndependentUtils.h"
-#include <string>
 #include <sstream>
-#include <iostream>
 #include <iomanip>
 
 

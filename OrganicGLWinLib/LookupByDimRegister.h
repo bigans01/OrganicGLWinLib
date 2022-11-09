@@ -3,12 +3,9 @@
 #ifndef LOOKUPBYDIMREGISTER_H
 #define LOOKUPBYDIMREGISTER_H
 
-#include <unordered_set>
-#include "EnclaveKeyDef.h"
 #include "MassGridArray.h"
 #include "RTriangleInteriorAreaTracer.h"
 #include "RScanDim.h"
-#include <glm/glm.hpp>
 #include "BrasenhamMassTracerDim.h"
 #include "BrasenhamMassTracer.h"
 

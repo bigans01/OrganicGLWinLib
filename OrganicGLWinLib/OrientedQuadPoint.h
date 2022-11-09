@@ -4,7 +4,6 @@
 #define ORIENTEDQUADPOINT_H
 
 #include "QuadPointOrientation.h"
-#include <glm/glm.hpp>
 
 class OrientedQuadPoint
 {

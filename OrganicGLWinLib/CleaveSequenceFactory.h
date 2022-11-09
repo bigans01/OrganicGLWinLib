@@ -3,14 +3,12 @@
 #ifndef CLEAVESEQUENCEFACTORY_H
 #define CLEAVESEQUENCEFACTORY_H
 
-#include <map>
 #include "CleaveSequence.h"
 #include "CategorizedLine.h"
 #include "CategorizedLineSearchResult.h"
 #include "IRPointType.h"
 #include "SPolyBorderLines.h"
 #include "MassManipulationMode.h"
-#include <glm/glm.hpp>
 #include "QuatRotationPoints.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationManager.h"
@@ -18,19 +16,13 @@
 #include "CategorizedLineGroupMap.h"
 #include "CategorizedLineMerger.h"
 #include "CleaveSequenceMergeMode.h"
-#include <vector>
 #include "CategorizedLineGroupLocation.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "CategorizedLineManager.h"
-#include "ECBPolyPoint.h"
-#include "IndependentUtils.h"
 #include "MessageContainer.h"
-#include "Message.h"
-#include "BoundaryOrientation.h"
 #include "InvalidCleaveSequences.h"
 #include "ExceptionRecorder.h"
-#include <string>
 
 class CleaveSequenceFactory
 {

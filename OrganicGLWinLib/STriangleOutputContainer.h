@@ -3,8 +3,6 @@
 #ifndef STRIANGLEOUTPUTCONTAINER_H
 #define STRIANGLEOUTPUTCONTAINER_H
 
-#include <vector>
-#include <map>
 #include "STriangle.h"
 
 class STriangleOutputContainer

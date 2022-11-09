@@ -3,8 +3,6 @@
 #ifndef IRLINE_H
 #define IRLINE_H
 
-#include <map>
-#include <glm/glm.hpp>
 #include "IRPointType.h"
 
 class IRLine

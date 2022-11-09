@@ -4,15 +4,9 @@
 #define PTRIANGLE_H
 
 #include "RCollisionPoint.h"
-#include <glm/glm.hpp>
-#include "IndependentUtils.h"
-#include "ECBPolyPoint.h"
-#include <iostream>
 #include "PTrianglePointLinkArray.h"
-#include <map>
 #include "MassGridArray.h"
 #include "RUtils.h"
-#include "BoundaryPolyIndicator.h"
 
 class PTriangle
 {

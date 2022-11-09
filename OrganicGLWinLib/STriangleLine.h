@@ -3,7 +3,6 @@
 #ifndef STRIANGLELINE_H
 #define STRIANGLELINE_H
 
-#include <glm/glm.hpp>
 
 class STriangleLine
 {

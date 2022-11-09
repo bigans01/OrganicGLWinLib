@@ -6,18 +6,12 @@
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <map>
-#include <unordered_map>
-#include <iostream>
-#include <vector>
 #include "GLUniformRegistry.h"
 #include "GLUniformRequest.h"
 #include "GLDataType.h"
 #include "GLMultiDrawArrayJob.h"
 #include "GLDrawElementsInstancedJob.h"
-#include "Message.h"
 #include "SmartIntMap.h"
 
 class ShaderMachineBase;

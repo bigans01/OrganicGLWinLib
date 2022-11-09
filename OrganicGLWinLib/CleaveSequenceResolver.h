@@ -3,8 +3,6 @@
 #ifndef CLEAVESEQUENCERESOLVER_H
 #define CLEAVESEQUENCERESOLVER_H
 
-#include "EnclaveKeyDef.h"
-#include <iostream>
 #include "SPoly.h"
 #include "RUtils.h"
 #include "RPoly.h"

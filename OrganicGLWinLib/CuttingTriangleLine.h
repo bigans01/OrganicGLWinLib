@@ -3,7 +3,6 @@
 #ifndef CUTTINGTRIANGLELINE_H
 #define CUTTINGTRIANGLELINE_H
 
-#include <glm/glm.hpp>
 #include "TwoDIntersectionRecordManager.h"
 #include "CyclingDirection.h"
 

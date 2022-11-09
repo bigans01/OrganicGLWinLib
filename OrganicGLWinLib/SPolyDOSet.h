@@ -3,7 +3,6 @@
 #ifndef SPOLYDOSET_H
 #define SPOLYDOSET_H
 
-#include <set>
 #include "SPolyDO.h"
 
 class SPolyDOSet

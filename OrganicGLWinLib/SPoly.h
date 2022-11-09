@@ -12,10 +12,8 @@
 #include "EmptyNormalFinder.h"
 #include "PointTranslationCheck.h"
 #include "IRPointType.h"
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <map>
 #include "MassManipulationMode.h"
 #include "CleaveSequenceCandidateListMap.h"
 #include "CleaveSequenceMetaTracker.h"
@@ -27,10 +25,8 @@
 #include "BorderLineLinkContainer.h"
 #include "QuatUtils.h"
 #include "MessageContainer.h"
-#include "BoundaryOrientation.h"
 #include "InvalidCleaveSequences.h"
 #include "SPolyMode.h"
-#include "BoundaryPolyIndicator.h"
 #include "ExceptionRecorder.h"
 
 class SPoly

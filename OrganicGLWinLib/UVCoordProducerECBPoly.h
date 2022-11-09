@@ -3,11 +3,9 @@
 #ifndef UVCOORDPRODUCERECBPOLY_H
 #define UVCOORDPRODUCERECBPOLY_H
 
-#include "ECBPolyPoint.h"
 #include "UVTriangleCoords.h"
 #include "TileCoordinateProducer.h"
 #include "AtlasMap.h"
-#include "EnclaveKeyDef.h"
 
 class UVCoordProducerECBPoly
 {

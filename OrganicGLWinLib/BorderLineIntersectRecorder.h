@@ -3,10 +3,8 @@
 #ifndef BORDERLINEINTERSECTRECORDER_H
 #define BORDERLINEINTERSECTRECORDER_H
 
-#include <map>
 #include "BorderLineIntersectRecord.h"
 #include "CategorizedLine.h"
-#include <set>
 
 class BorderLineIntersectRecorder
 {

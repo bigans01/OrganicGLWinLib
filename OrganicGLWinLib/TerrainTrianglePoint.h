@@ -3,7 +3,6 @@
 #ifndef TERRAINTRIANGLEPOINT_H
 #define TERRAINTRIANGLEPOINT_H
 
-#include "ECBPolyPoint.h"
 
 class TerrainTrianglePoint
 {

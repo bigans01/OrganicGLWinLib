@@ -10,12 +10,10 @@
 #include "LineWelder.h"
 #include "WeldedLinePool.h"
 #include "WeldedTriangleGroupBuilder.h"
-#include <vector>
 #include "WeldedTriangleSuperGroup.h"
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "ExceptionRecorder.h"
-#include "BoundaryOrientation.h"
 
 class CleaveSequenceIntersectFinder
 {

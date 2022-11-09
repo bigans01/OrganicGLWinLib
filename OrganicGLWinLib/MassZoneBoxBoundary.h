@@ -3,12 +3,8 @@
 #ifndef MASSZONEBOXBOUNDARY_H
 #define MASSZONEBOXBOUNDARY_H
 
-#include <map>
 #include "MassZoneBoxBoundaryState.h"
-#include "BoundaryOrientation.h"
 #include "MassZoneBoxBoundarySPolySet.h"
-#include <glm/glm.hpp>
-#include <iostream>
 #include "SPoly.h"
 #include "STriangle.h"
 #include "PolyDebugLevel.h"

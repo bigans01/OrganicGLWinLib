@@ -1,7 +1,5 @@
 #pragma once
 
-#include "ECBPolyPoint.h"
-#include <iostream>
 #include <math.h>
 
 #ifndef ORGANICPOLYGON_H

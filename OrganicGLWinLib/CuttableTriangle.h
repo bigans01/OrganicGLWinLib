@@ -6,13 +6,11 @@
 #include "STriangle.h"
 #include "CuttingTriangle.h"
 #include "CuttableTriangleLine.h"
-#include <map>
 #include "OrganicGLWinUtils.h"
 #include "QuatRotationPoints.h"
 #include "TwoDLineSegment.h"
 #include "TwoDLineSegmentIntersectAnalyzerV2.h"
 #include "TwoDPoint.h"
-#include <vector>
 #include "TwoDCrawlingAttempt.h"
 #include "CutLinePool.h"
 #include "CyclingDirection.h"

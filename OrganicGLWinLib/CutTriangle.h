@@ -5,7 +5,6 @@
 
 #include "CutLine.h"
 #include "OrganicGLWinUtils.h"
-#include <glm/glm.hpp>
 #include "QuatUtils.h"
 
 class CutTriangle

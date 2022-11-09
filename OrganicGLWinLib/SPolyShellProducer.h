@@ -6,13 +6,9 @@
 #include "SPoly.h"
 #include "MassZone.h"
 #include "MassZoneBoxType.h"
-#include <map>
-#include "BoundaryOrientation.h"
-#include <vector>
 #include "DebugOption.h"
 #include "PolyDebugLevel.h"
 #include "MessageContainer.h"
-#include <set>
 #include "SPolyUtils.h"
 #include "ExceptionRecorder.h"
 

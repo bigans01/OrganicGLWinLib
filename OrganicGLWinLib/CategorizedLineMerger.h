@@ -12,8 +12,6 @@
 #include "NonBoundMerger.h"
 #include "CategorizedLineInterceptsPointPreciseMerger.h"
 #include "CategorizedLineInterceptsPreciseToPartialMerger.h"
-#include <map>
-#include <mutex>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 

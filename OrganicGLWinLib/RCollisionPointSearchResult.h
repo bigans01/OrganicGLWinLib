@@ -3,7 +3,6 @@
 #ifndef RCollisionPointSEARCHRESULT_H
 #define RCollisionPointSEARCHRESULT_H
 
-#include <glm/glm.hpp>
 
 class RCollisionPointSearchResult
 {

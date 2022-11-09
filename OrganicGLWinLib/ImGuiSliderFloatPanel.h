@@ -3,9 +3,7 @@
 #ifndef IMGUISLIDERFLOATPANEL_H
 #define IMGUISLIDERFLOATPANEL_H
 
-#include <unordered_map>
 #include "ImGuiSliderFloat.h"
-#include <string>
 #include "ImGuiWindowFeedback.h"
 
 class ImGuiSliderFloatPanel

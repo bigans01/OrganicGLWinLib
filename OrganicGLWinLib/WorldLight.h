@@ -3,7 +3,6 @@
 #ifndef WORLDLIGHT_H
 #define WORLDLIGHT_H
 
-#include <glm/glm.hpp>
 
 class WorldLight
 {

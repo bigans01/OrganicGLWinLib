@@ -3,7 +3,6 @@
 #ifndef BORDERLINEPOINTPAIR_H
 #define BORDERLINEPOINTPAIR_H
 
-#include <glm/glm.hpp>
 
 class BorderLinePointPair
 {

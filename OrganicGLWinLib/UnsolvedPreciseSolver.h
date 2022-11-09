@@ -4,9 +4,7 @@
 #define UNSOLVEDPRECISESOLVER_H
 
 #include "CategorizedLine.h"
-#include <map>
 #include "SPolyBorderLines.h"
-#include <glm/glm.hpp>
 
 class UnsolvedPreciseSolver
 {

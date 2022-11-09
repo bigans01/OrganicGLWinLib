@@ -3,9 +3,7 @@
 #ifndef INTERSECTIONLINEGROUP_H
 #define INTERSECTIONLINEGROUP_H
 
-#include <map>
 #include "IntersectionLine.h"
-#include <iostream>
 #include "PolyLogger.h"
 #include "PolyDebugLevel.h"
 #include "FusedIntersectionLine.h"

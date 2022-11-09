@@ -3,9 +3,6 @@
 #ifndef POINTTRANSLATIONCHECK_H
 #define POINTTRANSLATIONCHECK_H
 
-#include <glm/glm.hpp>
-#include <iostream>
-
 class PointTranslationCheck
 {
 public:

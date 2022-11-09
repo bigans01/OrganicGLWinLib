@@ -3,7 +3,6 @@
 #ifndef WELDEDLINEPOOLGUIDE_H
 #define WELDEDLINEPOOLGUIDE_H
 
-#include <vector>
 #include "WeldedLinePool.h"
 
 class WeldedLinePoolGuide

@@ -3,12 +3,9 @@
 #ifndef CATEGORIZEDLINEMANAGER_H
 #define CATEGORIZEDLINEMANAGER_H
 
-#include <map>
 #include "CategorizedLineGroupMap.h"
 #include "CategorizedLineContainer.h"
 #include "IntersectionType.h"
-#include <iostream>
-#include <vector>
 #include "CategorizedLineGroupLocation.h"
 #include "QuatRotationPoints.h"
 #include "SPolyBorderLines.h"

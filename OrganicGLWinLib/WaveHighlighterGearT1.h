@@ -7,8 +7,6 @@
 #include "GLMultiDrawArrayJob.h"
 #include "OrganicGLWinUtils.h"
 #include "SinTBW.h"
-#include <unordered_map>
-#include <mutex>
 
 class WaveHighlighterGearT1 : public Gear
 {

@@ -6,7 +6,6 @@
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "CutLinePool.h"
-#include <vector>
 #include "CutTriangleContainer.h"
 #include "CutLineTraceObserver.h"
 

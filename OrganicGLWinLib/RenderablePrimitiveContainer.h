@@ -3,10 +3,7 @@
 #ifndef RENDERABLEPRIMITIVECONTAINER_H
 #define RENDERABLEPRIMITIVECONTAINER_H
 
-#include <vector>
 #include "RenderablePrimitiveBase.h"
-#include <mutex>
-#include <iostream>
 
 class RenderablePrimitiveContainer
 {

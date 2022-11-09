@@ -5,7 +5,6 @@
 #ifndef TILEDATAGLWIN_H
 #define TILEDATAGLWIN_H
 
-#include <string>
 
 class TileDataGLWIN
 {

@@ -3,7 +3,6 @@
 #ifndef SPOLYFRACTURER_H
 #define SPOLYFRACTURER_H
 
-#include <glm/glm.hpp>
 #include "SPoly.h"
 #include "PointTranslationCheck.h"
 #include "QuatRotationPoints.h"
@@ -11,7 +10,6 @@
 #include "CleaveSequenceIntersectFinder.h"
 #include "SPolyMorphTracker.h"
 #include <chrono>
-#include <vector>
 #include "SPolySupergroup.h"
 #include "SPolyFracturerOptionEnum.h"
 #include "PolyLogger.h"

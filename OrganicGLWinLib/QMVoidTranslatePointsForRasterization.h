@@ -4,7 +4,6 @@
 #define QMVOIDTRANSLATEPOINTSFORRASTERIZATION_H
 
 #include "QMVoidBase.h"
-#include <stack>
 #include "QuatRotationType.h"
 
 class QMVoidTranslatePointsForRasterization	: public QMVoidBase

@@ -3,12 +3,10 @@
 #ifndef COPLANARRELATIONSHIPTRACKER_H
 #define COPLANARRELATIONSHIPTRACKER_H
 
-#include <map>
 #include "CoplanarRelationships.h"
 #include "SPoly.h"
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
-#include "OperableIntSet.h"
 #include "CoplanarRelationshipDebugFlags.h"
 #include "MassZoneBoxType.h"
 

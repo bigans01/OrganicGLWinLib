@@ -4,7 +4,6 @@
 #define CUTLINETRACEOBSERVER_H
 
 #include "CutLinePool.h"
-#include <vector>
 #include "CutTriangleContainer.h"
 #include "CutLinePoolGuide.h"
 #include "TracingObserverState.h"

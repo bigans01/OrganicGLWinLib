@@ -3,7 +3,6 @@
 #ifndef TWODPOINT_H
 #define TWODPOINT_H
 
-#include <iostream>
 
 class TwoDPoint
 {

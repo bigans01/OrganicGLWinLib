@@ -7,8 +7,6 @@
 #include "RCollisionPointArray.h"
 #include "DynamicRasterGridCellBorders.h"
 #include <iomanip>
-#include "IndependentUtils.h"
-#include <glm/glm.hpp>
 #include "MassZoneBoxType.h"
 
 class PTriangleMeshPointCalibrator

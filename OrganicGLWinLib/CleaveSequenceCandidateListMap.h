@@ -3,7 +3,6 @@
 #ifndef CLEAVESEQUENCECANDIDATELISTMAP_H
 #define CLEAVESEQUENCECANDIDATELISTMAP_H
 
-#include <map>
 #include "CleaveSequenceCandidateList.h"
 
 class CleaveSequenceCandidateListMap

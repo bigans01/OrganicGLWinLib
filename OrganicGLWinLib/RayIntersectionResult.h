@@ -3,7 +3,6 @@
 #ifndef RAYINTERSECTIONRESULT_H
 #define RAYINTERSECTIONRESULT_H
 
-#include <glm/glm.hpp>
 
 class RayIntersectionResult
 {

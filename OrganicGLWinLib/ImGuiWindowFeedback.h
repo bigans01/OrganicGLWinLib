@@ -2,7 +2,6 @@
 #ifndef IMGUIWINDOWFEEDBACK_H
 #define IMGUIWINDOWFEEDBACK_H
 
-#include <string>
 
 class ImGuiWindowFeedback
 {

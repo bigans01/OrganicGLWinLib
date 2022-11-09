@@ -3,12 +3,9 @@
 #ifndef CLEAVESEQUENCE_H
 #define CLEAVESEQUENCE_H
 
-//#include "CategorizedLine.h"
 #include "CleaveSequenceStatus.h"
-#include <map>
 #include "CleaveSequenceMeta.h"
 #include "DistanceToPoint.h"
-#include <algorithm>
 #include "LineWelderHierarchyPosition.h"
 #include "CleaveSequenceCrawlDirection.h"
 #include "BorderLineData.h"

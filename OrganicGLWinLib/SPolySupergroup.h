@@ -3,7 +3,6 @@
 #ifndef SPOLYSUPERGROUP_H
 #define SPOLYSUPERGROUP_H
 
-#include <map>
 #include "SPoly.h"
 #include "OrganicGLWinUtils.h"
 

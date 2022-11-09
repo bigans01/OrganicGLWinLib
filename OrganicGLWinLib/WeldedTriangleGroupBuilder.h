@@ -7,11 +7,9 @@
 #include "TracingObserver.h"
 #include "WeldedLinePoolGuide.h"
 #include "WeldedTriangleContainer.h"
-#include <vector>
 #include "PolyDebugLevel.h"
 #include "PolyLogger.h"
 #include "ExceptionRecorder.h"
-#include "BoundaryOrientation.h"
 
 class WeldedTriangleGroupBuilder
 {

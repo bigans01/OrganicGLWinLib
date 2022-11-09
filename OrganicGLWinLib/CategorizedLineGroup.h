@@ -3,10 +3,8 @@
 #ifndef CATEGORIZEDLINEGROUP_H
 #define CATEGORIZEDLINEGROUP_H
 
-#include <vector>
 #include "IntersectionType.h"
 #include "CategorizedLineInsertionRecord.h"
-#include <iostream>
 
 class CategorizedLineGroup
 {

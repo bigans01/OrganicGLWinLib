@@ -3,7 +3,6 @@
 #ifndef CATEGORIZEDLINECONTAINER_H
 #define CATEGORIZEDLINECONTAINER_H
 
-#include <map>
 #include "CategorizedLine.h"
 
 class CategorizedLineContainer

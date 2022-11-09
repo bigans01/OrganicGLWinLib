@@ -6,8 +6,6 @@
 #include "OrientedQuadPoint.h"
 #include "OrientedQuadQuadrant.h"
 #include "OrientedQuadType.h"
-#include <glm/glm.hpp>
-#include <iostream>
 #include "OrganicGLWinUtils.h"
 #include "QuadTriangles.h"
 

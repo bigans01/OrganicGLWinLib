@@ -3,7 +3,6 @@
 #ifndef IMGUIINPUTTEXTRESPONSE_H
 #define IMGUIINPUTTEXTRESPONSE_H
 
-#include <string>
 
 class ImGuiInputTextResponse
 {

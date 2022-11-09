@@ -3,11 +3,8 @@
 #ifndef POINTTOSPOLYRELATIONSHIPTRACKER_H
 #define POINTTOSPOLYRELATIONSHIPTRACKER_H
 
-#include <glm/glm.hpp>
-#include <map>
 #include "PointToSPolyRelationship.h"
 #include "STriangle.h"
-#include "OperableIntSet.h"
 
 class PointToSPolyRelationshipTracker
 {

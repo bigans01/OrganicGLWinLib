@@ -4,7 +4,6 @@
 #define BORDERLINELINKCONTAINER_H
 
 #include "BorderLineLink.h"
-#include <map>
 
 class BorderLineLinkContainer
 {

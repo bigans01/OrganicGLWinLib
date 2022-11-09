@@ -4,10 +4,7 @@
 #define DYNAMICBUFFERMANAGER_H
 
 #include "SmartIntMap.h"
-#include <unordered_map>
-#include <iostream>
 #include "OrganicGLWinUtils.h"
-#include "OperableIntSet.h"
 #include "GLMultiDrawArrayJob.h"
 
 class DynamicBufferManager

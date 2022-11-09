@@ -3,7 +3,6 @@
 #ifndef MASSGRIDARRAYCELLSCANAREA_H
 #define MASSGRIDARRAYCELLSCANAREA_H
 
-#include "EnclaveKeyDef.h"
 
 class MassGridArrayCellScanArea
 {

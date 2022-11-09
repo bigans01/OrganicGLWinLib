@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ECBPolyPoint.h"
 #include "MassGridArrayCellLimit.h"
 
 #ifndef DYNAMICRASTERGRIDCELLBORDERS_H

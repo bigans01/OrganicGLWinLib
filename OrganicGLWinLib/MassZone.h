@@ -7,11 +7,8 @@
 #include "MassSubZone.h"
 #include "MeshMatterMeta.h"
 #include "MassZoneBoxType.h"
-#include <map>
-#include <glm/glm.hpp>
 #include "PolyDebugLevel.h"
 #include "SPolyDOSet.h"
-#include "BoundaryOrientation.h"
 #include "MassZoneType.h"
 #include "MassZonePointClipper.h"
 #include "DebugOption.h"

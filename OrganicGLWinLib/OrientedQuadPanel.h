@@ -5,11 +5,8 @@
 
 #include "OrientedQuad.h"
 #include "OrientedQuadPlane.h"
-#include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include <vector>
-#include <iostream>
 #include "OrganicGLWinUtils.h"
 #include "Triangle.h"
 

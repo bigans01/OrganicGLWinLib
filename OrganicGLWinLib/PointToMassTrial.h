@@ -3,8 +3,6 @@
 #ifndef POINTTOMASSTRIAL_H
 #define POINTTOMASSTRIAL_H
 
-#include <map>
-#include <glm/glm.hpp>
 #include "MappableJudge.h"
 #include "CollectiveVerdictMachine.h"
 #include "PolyDebugLevel.h"

@@ -3,7 +3,6 @@
 #ifndef POINTTOMASSRELATIONSHIPJUDGE_H
 #define POINTTOMASSRELATIONSHIPJUDGE_H
 
-#include <map>
 #include "MassZoneShellSlice.h"
 #include "IndividualVerdict.h"
 #include "PolyDebugLevel.h"

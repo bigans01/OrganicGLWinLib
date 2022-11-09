@@ -3,7 +3,6 @@
 #ifndef TERRAINMEMORYMETA_H
 #define TERRAINMEMORYMETA_H
 
-#include "EnclaveKeyDef.h"
 
 class TerrainMemoryMeta
 {

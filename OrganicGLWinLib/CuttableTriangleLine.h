@@ -3,9 +3,7 @@
 #ifndef CUTTABLETRIANGLELINE_H
 #define CUTTABLETRIANGLELINE_H
 
-#include <glm/glm.hpp>
 #include "TwoDIntersectionRecordManager.h"
-#include <map>
 #include "CyclingDirection.h"
 #include "IntersectionFindingAttempt.h"
 

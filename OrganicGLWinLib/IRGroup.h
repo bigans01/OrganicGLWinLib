@@ -3,7 +3,6 @@
 #ifndef IRGROUP_H
 #define IRGROUP_H
 
-#include <map>
 #include "IRLine.h"
 
 class IRGroup

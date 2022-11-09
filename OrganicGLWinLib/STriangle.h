@@ -4,9 +4,6 @@
 #define STRIANGLE_H
 
 #include "STriangleLine.h"
-#include <glm/glm.hpp>
-#include <iostream>
-#include <map>
 
 class STriangle
 {

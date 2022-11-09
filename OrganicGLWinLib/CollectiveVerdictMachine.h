@@ -4,8 +4,6 @@
 #define COLLECTIVEVERDICTMACHINE_H
 
 #include "MappableIndividualVerdict.h"
-#include <map>
-#include <set>
 
 class CollectiveVerdictMachine
 {

@@ -3,17 +3,11 @@
 #ifndef MASSZONEBOX_H
 #define MASSZONEBOX_H
 
-#include <map>
-#include "BoundaryOrientation.h"
 #include "MassZoneBoxBoundary.h"
-#include <iostream>
 #include "MassSubZone.h"
 #include "SPolyDOSet.h"
 #include "MassZoneBoxType.h"
-#include <set>
-#include "ECBPolyPoint.h"
 #include "ECBPPOrientationResults.h"
-#include "IndependentUtils.h"
 #include "BlockBorderLineList.h"
 #include "EnclaveBorderLineList.h"
 #include "ECBBorderLineList.h"

@@ -3,8 +3,6 @@
 #ifndef RUTILS_H
 #define RUTILS_H
 
-#include "EnclaveKeyDef.h"
-#include <glm/glm.hpp>
 
 class RUtils
 {

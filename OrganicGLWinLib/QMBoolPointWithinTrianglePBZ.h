@@ -5,7 +5,6 @@
 
 #include "QMBoolBase.h"
 #include "ThreeDLineSegment.h"
-#include <stack>
 #include "QuatRotationType.h"
 #include "OrganicGLWinUtils.h"
 

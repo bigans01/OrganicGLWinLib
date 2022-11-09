@@ -3,9 +3,6 @@
 #ifndef CONSUMEDCLEAVESEQUENCEGROUPS_H
 #define CONSUMEDCLEAVESEQUENCEGROUPS_H
 
-#include <map>
-#include "OperableIntSet.h"
-#include <iostream>
 
 class ConsumedCleaveSequenceGroups
 {

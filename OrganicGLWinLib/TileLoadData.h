@@ -3,7 +3,6 @@
 #ifndef TILELOADDATA_H
 #define TILELOADDATA_H
 
-#include <string>
 
 class TileLoadData
 {

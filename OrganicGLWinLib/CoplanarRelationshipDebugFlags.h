@@ -5,7 +5,6 @@
 
 #include "DebugOption.h"
 #include "PolyDebugLevel.h"
-#include <map>
 #include "DebugOptionSet.h"
 
 class CoplanarRelationshipDebugFlags

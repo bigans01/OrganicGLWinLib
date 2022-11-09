@@ -3,8 +3,6 @@
 #ifndef POINTTOMASSRELATIONSHIPMAP_H
 #define POINTTOMASSRELATIONSHIPMAP_H
 
-#include <map>
-#include <glm/glm.hpp>
 #include "PointToMassRelationship.h"
 
 class PointToMassRelationshipMap

@@ -3,7 +3,6 @@
 #ifndef INTERSECTIONRESULT_H
 #define INTERSECTIONRESULT_H
 
-#include <glm/glm.hpp>
 
 class IntersectionResult
 {

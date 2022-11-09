@@ -3,7 +3,6 @@
 #ifndef WELDEDTRIANGLESUPERGROUP_H
 #define WELDEDTRIANGLESUPERGROUP_H
 
-#include <map>
 #include "WeldedTriangleContainer.h"
 #include "QuatRotationPoints.h"
 
