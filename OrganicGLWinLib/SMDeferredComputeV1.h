@@ -44,6 +44,8 @@ private:
 
 	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);		// creates a G-Buffer texture for use by the deferred shader.
 	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
+
+	float globalAmbienceMultiplier = 1.0f; // global ambience multiplier; used in DeferredLightingComputeLightContributionsT1
 };
 
 #endif

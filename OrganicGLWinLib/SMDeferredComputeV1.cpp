@@ -29,22 +29,42 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
 	glfwSetKeyCallback(window, keyCallbackWrapper);
+	glfwSetScrollCallback(window, mouseScrollCallbackWrapper);			// mouse scroll
+	glfwSetMouseButtonCallback(window, mouseButtonCallbackWrapper);		// mouse buttons
 
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
 
+	// create the panel, then add buttons to panel.
+	buttonPanelContainer.insertNewPanel("panel1", 10, 10, 200, 100);
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "button1");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleBlockTargetHighlight");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "toggleCurrentEnclaveHighlighting");
+	buttonPanelContainer.insertButtonIntoPanel("panel1", "showSolidBlocks");
+
+	// create a test panel for input.
+	inputPanelContainer.insertNewPanel("test_input", 10, 330, 200, 130);
+	inputPanelContainer.insertInputIntoPanel("test_input", "input_area1");
+
+	//testPanel.insertNewSliderFloat("slider1", &globalAmbienceMultiplier, 0.0f, 1.0f);
+	sliderPanelContainer.insertNewPanel("adjustable uniforms", 10, 150, 200, 100);
+	sliderPanelContainer.insertSliderFloatIntoPanel("adjustable uniforms", "world light", &globalAmbienceMultiplier, 0.0f, 1.0f);
+
 
 	// ########################################################################## Terrain Gear (Compute) set up
-	createProgram("TerrainComputeGearT1");
 	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 	insertNewBuffer("render_quad_buffer");							// set up the render quad buffer
 	insertNewFBO("deferred_FBO");									// create the deferred FBO; set it up
 	setupDeferredFBO();
+
+	
 	//insertNewMultiDrawArrayJob("terrain");
+	createProgram("TerrainComputeGearT1");
 	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
+	
 	// ########################################################################## Compute Gear set up
 	createComputeProgram("DeferredComputeGearT1");
 	createComputeImage("computeWrite");			// the name of the texture that contains the image the compute shader will write to
@@ -54,6 +74,7 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	createProgram("DeferredComputeResultsGearT1");
 	insertNewBuffer("compute_quad_buffer");
 	insertComputeResultsGear(2, programLookup["DeferredComputeResultsGearT1"]);
+	
 
 	// ########################################################################## Highlighter Gear set up
 	createProgram("HighlighterGearT1");
@@ -77,7 +98,8 @@ void SMDeferredComputeV1::setupTextureAtlases()
 	insertNewTexture("terrainAtlas");
 	//OrganicGLWinUtils::setupTextureAtlasJPEG(getTextureRef("terrainAtlas"), in_atlasMapRef, in_atlasPropertiesGLRef, uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
 	//in_atlasMapRef->buildAtlas("Core", getTextureRef("terrainAtlas"), uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
-	insertAndBuildNewAtlas("Core", getTextureRef("terrainAtlas"), uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
+	//insertAndBuildNewAtlas("Core", getTextureRef("terrainAtlas"), uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
+	insertAndBuildNewAtlasToSpecifiedTextureChannel(GL_TEXTURE0, "Core", getTextureRef("terrainAtlas"), uniformRegistry.getFloatRef("atlasTileTextureWidth"), uniformRegistry.getFloatRef("atlasTextureWidth"));
 
 	std::cout << "Atlas set up.................printing values: " << std::endl;
 	std::cout << "Atlas texture width: " << uniformRegistry.getFloat("atlasTextureWidth");
@@ -219,13 +241,15 @@ void SMDeferredComputeV1::setupDeferredFBO()
 	std::cout << "!!!!!!!!!!! COMPUTE_V1: Color buf value is: " << getTextureID("colorTex") << std::endl;
 	std::cout << "!!!!!!!!!!! COMPUTE_V1: Depth buf value is: " << getTextureID("depthBuf") << std::endl;
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+
+	std::cout << "Error fetch, depth buffer setup: " << glGetError() << std::endl;
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, getTextureID("depthBuf"), 0);
 
-
+	std::cout << "Error fetch, depth buffer setup 2: " << glGetError() << std::endl;
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, getTextureID("posTex"), 0);	// posTex			(location = 1), in fragment shader
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, getTextureID("colorTex"), 0);	// colorTex     (location = 2), in fragment shader
@@ -235,7 +259,9 @@ void SMDeferredComputeV1::setupDeferredFBO()
 
 	// check the buffer status
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
 		std::cout << "Framebuffer not complete!" << std::endl;
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);				// reset back to the default OpenGL FBO
 }
 
