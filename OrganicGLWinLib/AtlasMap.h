@@ -54,12 +54,12 @@ class AtlasMap
 		std::unique_ptr<AtlasTile[]> AtlasTileArray;	// will contain all tile information (generated at run time)
 
 		void setupTileArray(int in_atlasPixelsLength, int in_tilePixelsLength);
-		void insertTileLookup(int in_tileID, int in_tileX, int in_tileY, std::string in_fileName);
+		void insertTileLookup(TriangleMaterial in_tileID, int in_tileX, int in_tileY, std::string in_fileName);
 		AtlasPropertiesGL readGLData(std::string in_string);
 		void buildAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
 		void buildAtlasOnTextureUnit(GLenum in_texUnit, std::string in_atlasFolderName, GLuint* in_atlasTextureRef, float* in_atlasTileWidth, float* in_atlasWidth);
-		TileLoadData getTileLoadData(int in_tileID);
-		TexturePoints getUVPointsForTerrainTile(int in_tileID, TexturePoints in_pointsToConvert);
+		TileLoadData getTileLoadData(TriangleMaterial in_tileID);
+		TexturePoints getUVPointsForTerrainTile(TriangleMaterial in_tileID, TexturePoints in_pointsToConvert);
 		//TexturePoints getBorderedUVPoints()
 		int someval = 0;
 		int atlasTileArrayLength = 0;		// value computed by setupTileArray
@@ -68,7 +68,7 @@ class AtlasMap
 		int tilePixelsLength = 0;	// the nunber of pixels of each tile goes, in either dimension; since we square this value to get the area of a tile, we only need to store it once
 		int tileDimension = 0;		// the number of tiles on either axis
 		float tileCoordinateLength = 0.0f;	// the amount of a single float (1.0f) that a tile will occupy, in either dimension
-		std::map<int, TileMeta> tileLookup;		// map for looking up the tile data
+		std::map<TriangleMaterial, TileMeta> tileLookup;		// map for looking up the tile data
 
 		TextureUV scaleDownUVcoords(TextureUV in_textureUV);
 		int findTileIndex(int in_tileX, int in_tileY);

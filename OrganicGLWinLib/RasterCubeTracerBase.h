@@ -31,7 +31,7 @@ class RasterCubeTracerBase
 
 		void setOptionalCubeLookupRef(RasterCubeLookup* in_optionalCubeLookupRef);
 		void setOptionalPolyLoggerRef(PolyLogger* in_optionalLoggerRef);
-		void setOptionalMaterialID(short in_materialID);
+		void setOptionalMaterialID(TriangleMaterial in_materialID);
 		void setOptionalMassGridArrayRef(MassGridArray* in_massGridArrayRef);
 
 		virtual void runTrace() = 0;
@@ -74,7 +74,7 @@ class RasterCubeTracerBase
 		RasterCubeLookup* optionalCubeLookup = nullptr;
 		MassGridArray* optionalMassGridArrayRef = nullptr;
 		bool optionalMatchingBool = false;
-		short optionalTracerMaterialID = 0;
+		TriangleMaterial optionalTracerMaterialID = TriangleMaterial::NOVAL;
 
 		bool debugFlag = false;
 };

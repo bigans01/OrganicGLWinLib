@@ -17,7 +17,7 @@ class BrasenhamMassTracer
 							BrasenhamMassTracerDim in_massTracingDim, 
 							int in_brashenhamtilesPerDim,
 							int in_massTracingSelectedDimLocation,
-							short in_brasenhamMaterialID) :
+							TriangleMaterial in_brasenhamMaterialID) :
 			massGridArrayRef(in_massGridArrayRef),
 			massTracingDim(in_massTracingDim),
 			twoDKeyBegin(in_twoDKeyBegin),
@@ -51,7 +51,7 @@ class BrasenhamMassTracer
 		BrasenhamMassTracerDim massTracingDim = BrasenhamMassTracerDim::NOVAL;
 		int brasenhamTilesPerDim = 0;
 		int massTracingSelectedDimLocation = 0;
-		short brasenhamMaterialID = 0;
+		TriangleMaterial brasenhamMaterialID = TriangleMaterial::NOVAL;
 
 		BrasenhamLineData tracingLine;
 		

@@ -14,7 +14,7 @@ class MassGridArrayCell
 			cellData = 0;
 		}
 
-		void setCellMaterialID(short in_cellMaterialID)
+		void setCellMaterialID(TriangleMaterial in_cellMaterialID)
 		{
 			if (isFlagSet(MassCellBitFlags::MATERIAL_SET) == false)
 			{
@@ -23,7 +23,7 @@ class MassGridArrayCell
 			}
 		}
 
-		short getCellMaterialID()
+		TriangleMaterial getCellMaterialID()
 		{
 			return cellMaterialID;
 		}
@@ -146,7 +146,7 @@ class MassGridArrayCell
 			return numberOfFlagsSet;
 		}
 	private:
-		short cellMaterialID = 0;
+		TriangleMaterial cellMaterialID = TriangleMaterial::NOVAL;
 };
 
 #endif

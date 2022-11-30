@@ -64,14 +64,14 @@ void PTriangle::printPTrianglePoints()
 	}
 }
 
-short PTriangle::getMaterialID()
+TriangleMaterial PTriangle::getMaterialID()
 {
 	return pTriangleMaterialID;
 }
 
 void PTriangle::calculateTriangleMaterial()
 {
-	std::map<short, int> materialCountMap;
+	std::map<TriangleMaterial, int> materialCountMap;
 	for (int x = 0; x < 3; x++)
 	{
 		materialCountMap[collisionPointRefArray[x]->sampledMaterialID]++;
@@ -86,7 +86,7 @@ void PTriangle::calculateTriangleMaterial()
 	{
 		auto materialFinderBegin = materialCountMap.begin();
 		auto materialFinderEnd = materialCountMap.end();
-		short targetMaterialValue = 0;
+		TriangleMaterial targetMaterialValue = TriangleMaterial::NOVAL;
 		for (; materialFinderBegin != materialFinderEnd; materialFinderBegin++)
 		{
 			if (materialFinderBegin->second == 2)

@@ -144,11 +144,11 @@ void AtlasMap::buildAtlas(std::string in_atlasFolderName, GLuint* in_atlasTextur
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
 	// Step 3: cycle through all tiles in the tileLookup map, and insert them
-	std::map<int, TileMeta>::iterator currentTile = tileLookup.begin();		// get the beginning iterator for the tile lookup
-	std::map<int, TileMeta>::iterator tileMapEnd = tileLookup.end();
+	auto currentTile = tileLookup.begin();		// get the beginning iterator for the tile lookup
+	auto tileMapEnd = tileLookup.end();
 	for (currentTile; currentTile != tileMapEnd; ++currentTile)
 	{
-		int currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
+		TriangleMaterial currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
 		TileLoadData dataToLoad = getTileLoadData(currentTileID);	// get the load data, to use it later for OpenGL
 		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
 		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load
@@ -306,11 +306,11 @@ void AtlasMap::buildAtlasOnTextureUnit(GLenum in_texUnit, std::string in_atlasFo
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
 	// Step 3: cycle through all tiles in the tileLookup map, and insert them
-	std::map<int, TileMeta>::iterator currentTile = tileLookup.begin();		// get the beginning iterator for the tile lookup
-	std::map<int, TileMeta>::iterator tileMapEnd = tileLookup.end();
+	auto currentTile = tileLookup.begin();		// get the beginning iterator for the tile lookup
+	auto tileMapEnd = tileLookup.end();
 	for (currentTile; currentTile != tileMapEnd; ++currentTile)
 	{
-		int currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
+		TriangleMaterial currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
 		TileLoadData dataToLoad = getTileLoadData(currentTileID);	// get the load data, to use it later for OpenGL
 		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
 		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load
@@ -436,7 +436,7 @@ AtlasMetaData AtlasMap::findAtlasMetadata(int in_atlasWidth, int in_tileWidth)
 
 }
 
-void AtlasMap::insertTileLookup(int in_tileID, int in_tileX, int in_tileY, std::string in_fileName)
+void AtlasMap::insertTileLookup(TriangleMaterial in_tileID, int in_tileX, int in_tileY, std::string in_fileName)
 {
 	TileMeta metaToInsert;
 	metaToInsert.x_location = in_tileX;
@@ -445,7 +445,7 @@ void AtlasMap::insertTileLookup(int in_tileID, int in_tileX, int in_tileY, std::
 	tileLookup[in_tileID] = metaToInsert;
 }
 
-TileLoadData AtlasMap::getTileLoadData(int in_tileID)
+TileLoadData AtlasMap::getTileLoadData(TriangleMaterial in_tileID)
 {
 	TileLoadData returnMeta;
 	int x_lookup = tileLookup[in_tileID].x_location;
@@ -457,7 +457,7 @@ TileLoadData AtlasMap::getTileLoadData(int in_tileID)
 	return returnMeta;
 }
 
-TexturePoints AtlasMap::getUVPointsForTerrainTile(int in_tileID, TexturePoints in_pointsToConvert)
+TexturePoints AtlasMap::getUVPointsForTerrainTile(TriangleMaterial in_tileID, TexturePoints in_pointsToConvert)
 {
 	TexturePoints returnUVcoords = in_pointsToConvert;
 	//std::cout << "!!!! Before down scale: " << std::endl;

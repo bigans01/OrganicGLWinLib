@@ -10,7 +10,7 @@ RTriangle::RTriangle(RTriangleLine in_line0,
 					RTriangleLine in_line1, 
 					RTriangleLine in_line2, 
 					PolyDebugLevel in_rTriangleDebugLevel,
-					short in_rTriangleMaterialID)
+					TriangleMaterial in_rTriangleMaterialID)
 {
 	rLines[0] = in_line0;
 	rLines[1] = in_line1;
@@ -284,7 +284,9 @@ void RTriangle::runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-	                                short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
+	                                short in_upfillCrustBitValue, 
+									glm::vec3 in_emptyNormal, 
+									TriangleMaterial in_scanMaterialID)
 {
 	for (int x = xScanMeta.dimStartValue; x < xScanMeta.numberOfScans; x++)
 	{
@@ -317,7 +319,9 @@ void RTriangle::runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
+									short in_upfillCrustBitValue, 
+									glm::vec3 in_emptyNormal, 
+									TriangleMaterial in_scanMaterialID)
 {
 	for (int y = yScanMeta.dimStartValue; y < yScanMeta.numberOfScans; y++)
 	{
@@ -350,7 +354,9 @@ void RTriangle::runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 									float in_rPolyTilesPerDim,
 									float in_rPolyTileWeightToHundredthFloatRatio,
 									short in_downfillCrustBitValue,
-									short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID)
+									short in_upfillCrustBitValue, 
+									glm::vec3 in_emptyNormal, 
+									TriangleMaterial in_scanMaterialID)
 {
 	for (int z = zScanMeta.dimStartValue; z < zScanMeta.numberOfScans; z++)
 	{

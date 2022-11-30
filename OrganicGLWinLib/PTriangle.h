@@ -20,7 +20,7 @@ class PTriangle
 
 		void rebuildEmptyNormal();					// uses cross-product calculation to generate the empty normal 
 		void printPTrianglePoints();		
-		short getMaterialID();			
+		TriangleMaterial getMaterialID();
 		void calculateTriangleMaterial();			// simple function for calculating the triangle's material.
 		void sampleTriangleMaterial(MassGridArray* in_massGridArrayRef, 
 									float in_tileGridWidth,
@@ -39,7 +39,7 @@ class PTriangle
 
 		glm::vec3 currentEmptyNormal;
 
-		short pTriangleMaterialID = 2;		// needs to be calculated by analyzing the materials in all 3 collision points
+		TriangleMaterial pTriangleMaterialID = TriangleMaterial::GRASS;		// needs to be calculated by analyzing the materials in all 3 collision points
 
 };
 

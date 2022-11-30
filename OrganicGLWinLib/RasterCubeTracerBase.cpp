@@ -253,7 +253,7 @@ void RasterCubeTracerBase::setOptionalMassGridArrayRef(MassGridArray* in_massGri
 	optionalMassGridArrayRef = in_massGridArrayRef;
 }
 
-void RasterCubeTracerBase::setOptionalMaterialID(short in_materialID)
+void RasterCubeTracerBase::setOptionalMaterialID(TriangleMaterial in_materialID)
 {
 	optionalTracerMaterialID = in_materialID;
 }

@@ -549,11 +549,11 @@ int OrganicGLWinUtils::setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMa
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
 	// Step 3: cycle through all tiles in the tileLookup map, and insert them
-	std::map<int, TileMeta>::iterator currentTile = in_atlasRef->tileLookup.begin();		// get the beginning iterator for the tile lookup
-	std::map<int, TileMeta>::iterator tileMapEnd = in_atlasRef->tileLookup.end();
+	auto currentTile = in_atlasRef->tileLookup.begin();		// get the beginning iterator for the tile lookup
+	auto tileMapEnd = in_atlasRef->tileLookup.end();
 	for (currentTile; currentTile != tileMapEnd; ++currentTile)
 	{
-		int currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
+		TriangleMaterial currentTileID = currentTile->first;									// fetch the tileID for the current looked-up tile
 		TileLoadData dataToLoad = in_atlasRef->getTileLoadData(currentTileID);	// get the load data, to use it later for OpenGL
 		std::string loadingTileName = dataToLoad.filename;						// get the filename of the texture to load
 		int load_width, load_height, load_nrChannels;							// variables for the call to stbi_load

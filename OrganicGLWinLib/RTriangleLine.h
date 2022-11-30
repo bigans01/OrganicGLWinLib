@@ -19,7 +19,7 @@ class RTriangleLine
 					  float in_rPolyCubeDimLength,
 					  STriangleLine in_sTriangleLineToBuildFrom,
 			          float in_tileWeightRatio, 
-					  short in_rTriangleMaterialID) :
+					  TriangleMaterial in_rTriangleMaterialID) :
 			rLinePointA(in_rasterGridPointA),
 			rLinePointB(in_rasterGridPointB),
 			rPolyCubeDimLength(in_rPolyCubeDimLength),
@@ -135,7 +135,7 @@ class RTriangleLine
 	private:
 		friend class RTriangle;
 		RasterCubeLookup rasterizedBlocks;
-		short rTriangleLineMaterialID = 0;
+		TriangleMaterial rTriangleLineMaterialID = TriangleMaterial::NOVAL;
 
 };
 

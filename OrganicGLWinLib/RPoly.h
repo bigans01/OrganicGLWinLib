@@ -101,7 +101,7 @@ class RPoly
 		float rPolyTileWidth = 0.0f;
 		float rPolyRCubeDimLength = 0.0f;
 		float rPolyTileWeightToHundredthFloatRatio = 0.0f;
-		short rPolyMaterialID = 0;
+		TriangleMaterial rPolyMaterialID = TriangleMaterial::NOVAL;
 		short numberOfRTriangles = 0;
 		short numberOfRBorderLines = 0;
 		glm::vec3 rPolyEmptyNormal;

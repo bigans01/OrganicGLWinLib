@@ -18,7 +18,7 @@ class RTriangle
 				RTriangleLine in_line1, 
 				RTriangleLine in_line2, 
 				PolyDebugLevel in_rTriangleDebugLevel,
-				short in_rTriangleMaterialID);
+				TriangleMaterial in_rTriangleMaterialID);
 		RTriangle(const RTriangle& in_triangleB);
 		RTriangle& operator=(const RTriangle& in_triangleB)
 		{
@@ -98,18 +98,30 @@ class RTriangle
 		void runXDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
+								float in_rPolyTileWeightToHundredthFloatRatio, 
+								short in_downfillCrustBitValue,
+								short in_upfillCrustBitValue, 
+								glm::vec3 in_emptyNormal, 
+								TriangleMaterial in_scanMaterialID);
+
 		void runYDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
+								float in_rPolyTileWeightToHundredthFloatRatio, 
+								short in_downfillCrustBitValue,
+								short in_upfillCrustBitValue, 
+								glm::vec3 in_emptyNormal, 
+								TriangleMaterial in_scanMaterialID);
+
 		void runZDimRegisterScan(MassGridArray* in_massGridArrayRef,
 								float in_rPolyRCubeDimLength,
 								float in_rPolyTilesPerDim,
-								float in_rPolyTileWeightToHundredthFloatRatio, short in_downfillCrustBitValue,
-			short in_upfillCrustBitValue, glm::vec3 in_emptyNormal, short in_scanMaterialID);
+								float in_rPolyTileWeightToHundredthFloatRatio, 
+								short in_downfillCrustBitValue,
+								short in_upfillCrustBitValue, 
+								glm::vec3 in_emptyNormal, 
+								TriangleMaterial in_scanMaterialID);
+
 		void buildRegisters(PolyDebugLevel in_rTriangleDebugLevel);
 
 		RTriangleLine rLines[3];
@@ -117,7 +129,7 @@ class RTriangle
 		std::unique_ptr<LookupByDimRegister[]> yDimRegister;
 		std::unique_ptr<LookupByDimRegister[]> zDimRegister;
 		bool areRegistersSet = false;
-		short rTriangleMaterialID = 0;
+		TriangleMaterial rTriangleMaterialID = TriangleMaterial::NOVAL;
 
 		int totalXInteriorInserts = 0;
 		int totalYInteriorInserts = 0;

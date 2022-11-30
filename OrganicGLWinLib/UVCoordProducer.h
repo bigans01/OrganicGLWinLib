@@ -25,7 +25,7 @@ private:
 	int currentNibble = 0;	// nibble index
 	int current_second_point_index = 1;		// always starts at 1
 	int current_third_point_index = 2;		// always starts at 2
-	short atlasTileID = 0;		// the ID of the atlas tile to look up -- equivalent to polyMaterialID
+	TriangleMaterial atlasTileID = TriangleMaterial::NOVAL;		// the ID of the atlas tile to look up -- equivalent to polyMaterialID
 	AtlasMap* atlasMapRef;
 };
 

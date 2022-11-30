@@ -106,7 +106,7 @@ void LookupByDimRegister::executeScanRuns(MassGridArray* in_massGridArrayRef,
 	short in_downfillCrustBitValue,
 	short in_upfillCrustBitValue, 
 	glm::vec3 in_emptyNormal,
-	short in_scanRunMaterialID)
+	TriangleMaterial in_scanRunMaterialID)
 {
 	int totalScansRan = 0;
 	auto scansBegin = scanRuns.begin();

@@ -119,7 +119,7 @@ void MassGridArray::executeDownfills()
 				(doesCellLocationHaveTerminatingUpfill(cellLocation) == true)
 			)
 			{
-				short downfillMaterialID = massCellArray[x].getCellMaterialID();	// get the materialID that this downfill process will 
+				TriangleMaterial downfillMaterialID = massCellArray[x].getCellMaterialID();	// get the materialID that this downfill process will 
 																					// use to fill the cells it touches.
 
 				/*
@@ -204,7 +204,7 @@ void MassGridArray::printColumnMaterialValues(int in_x, int in_z)
 		if (currentSearchResult.wasSearchKeyValid == true)
 		{
 			std::cout << "Cell at (" << in_x << ", " << y << ", " << in_z << ") has "
-			<< currentSearchResult.cellRef->getNumberOfFlagsSet() << " cells set; it's material is: " << currentSearchResult.cellRef->getCellMaterialID() << std::endl;
+			<< currentSearchResult.cellRef->getNumberOfFlagsSet() << " cells set; it's material is: " << int(currentSearchResult.cellRef->getCellMaterialID()) << std::endl;
 		}
 
 	}

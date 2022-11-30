@@ -42,13 +42,13 @@ public:
 	void setMRP(glm::vec3 in_mrp);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
 	void setEmptyNormal(glm::vec3 in_normalVec3);
-	void setSPolyMaterial(short in_sPolyMaterialID);
+	void setSPolyMaterial(TriangleMaterial in_sPolyMaterialID);
 	void setBoundaryIndicatorOrientation(BoundaryOrientation in_boundaryOrientation);
 	void setBoundaryIndicator(BoundaryPolyIndicator in_boundaryIndicator);
 	BoundaryOrientation getBoundaryIndicatorOrientation();
 	std::string fetchPrintableBoundaryIndicatorString();
 	void insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence in_cleaveSequence);
-	short getSPolyMaterial();
+	TriangleMaterial getSPolyMaterial();
 	glm::vec3 getEmptyNormal();
 	void calculateEmptyNormal();
 	int calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
@@ -99,7 +99,7 @@ private:
 	int originalID = 0;				// the ID assigined to the poly the time it was spawned (optional; may not be used in dev/testing)
 	//short polygonType = 0;		// what is the polygon's type? triangle_fan? etc...0 is typical triangle fan type
 	
-	short sPolyMaterialID = 0;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
+	TriangleMaterial sPolyMaterialID = TriangleMaterial::NOVAL;	// the SPoly material, if any is set for this SPoly. (needed by "R" family of classes)
 	glm::vec3 primePoint0, primePoint1, primePoint2;	// the very first points of the polygon
 	glm::vec3 massOriginPoint;	// the point representing where the solid mass originates from. for example, from the top of a mountain, etc. (same as massReferencePoint)
 	short numberOfTriangles = 0;	// the number of triangles

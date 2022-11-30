@@ -54,7 +54,7 @@ class LookupByDimRegister
 			short in_downfillCrustBitValue,
 			short in_upfillCrustBitValue, 
 			glm::vec3 in_emptyNormal,
-			short in_scanRunMaterialID);
+			TriangleMaterial in_scanRunMaterialID);
 
 		int dimValue = 0;	// x,y,z or coordinate value that represents the slice to scan. 
 							// i.e, dimValue = 3 could mean:

@@ -17,7 +17,7 @@ void SPoly::setEmptyNormal(glm::vec3 in_normalVec3)
 	polyEmptyNormal = glm::normalize(in_normalVec3);
 }
 
-void SPoly::setSPolyMaterial(short in_sPolyMaterialID)
+void SPoly::setSPolyMaterial(TriangleMaterial in_sPolyMaterialID)
 {
 	sPolyMaterialID = in_sPolyMaterialID;
 }
@@ -49,7 +49,7 @@ void SPoly::insertCleaveSequenceAtIndex(int in_indexToInsertAt, CleaveSequence i
 	std::cout << "(SPoly): Size of CleaveSequences, post insert: " << cleaveMap.size() << std::endl;
 }
 
-short SPoly::getSPolyMaterial()
+TriangleMaterial SPoly::getSPolyMaterial()
 {
 	return sPolyMaterialID;
 }

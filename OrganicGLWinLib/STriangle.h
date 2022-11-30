@@ -11,9 +11,9 @@ public:
 	STriangle(glm::vec3 in_pointA, glm::vec3 in_pointB, glm::vec3 in_pointC);
 	STriangle();
 
-	void setSTriangleMaterialID(short in_sTriangleMaterialID)
+	void setSTriangleMaterialID(TriangleMaterial in_sTriangleMaterialID)
 	{
-
+		sTriangleMaterialID = in_sTriangleMaterialID;
 	}
 
 	void printPoints()
@@ -136,7 +136,7 @@ public:
 	}
 
 	STriangleLine triangleLines[3];	// the lines of the STriangle
-	short sTriangleMaterialID = 0;	// the materialID that would be inherited from the parent SPoly (needed for use by "R" family of classes)
+	TriangleMaterial sTriangleMaterialID = TriangleMaterial::NOVAL;	// the materialID that would be inherited from the parent SPoly (needed for use by "R" family of classes)
 };
 
 #endif

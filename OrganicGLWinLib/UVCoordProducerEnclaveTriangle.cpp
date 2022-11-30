@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "UVCoordProducerEnclaveTriangle.h"
 
-UVCoordProducerEnclaveTriangle::UVCoordProducerEnclaveTriangle(int in_materialID, ECBPolyPoint in_point0, ECBPolyPoint in_point1, ECBPolyPoint in_point2, AtlasMap* in_mapRef, int in_debugFlag, EnclaveKeyDef::EnclaveKey in_blueprintKey)
+UVCoordProducerEnclaveTriangle::UVCoordProducerEnclaveTriangle(TriangleMaterial in_materialID, ECBPolyPoint in_point0, ECBPolyPoint in_point1, ECBPolyPoint in_point2, AtlasMap* in_mapRef, int in_debugFlag, EnclaveKeyDef::EnclaveKey in_blueprintKey)
 {
 	point0 = in_point0;
 	point1 = in_point1;

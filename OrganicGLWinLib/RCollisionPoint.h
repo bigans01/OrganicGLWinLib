@@ -42,7 +42,7 @@ class RCollisionPoint
 			}
 		}
 
-		void setCollisionPointMaterial(short in_sampledMaterialID)
+		void setCollisionPointMaterial(TriangleMaterial in_sampledMaterialID)
 		{
 			sampledMaterialID = in_sampledMaterialID;
 		}
@@ -59,7 +59,7 @@ class RCollisionPoint
 
 		glm::vec3 originalValue;	// will always stay the same after it has been set
 		glm::vec3 currentValue;		// can be manipulated by any MorphableMesh that has this as a point
-		short sampledMaterialID = 0;	// the materialID that the point acquired, from the MassGridArrayCell that it ended up colliding (coming into contact) with
+		TriangleMaterial sampledMaterialID = TriangleMaterial::NOVAL;	// the materialID that the point acquired, from the MassGridArrayCell that it ended up colliding (coming into contact) with
 	private:
 		int usageCount = 0;			// the number of times this point is used by instance(s) of RMorphableMesh; a value of 8 means the point should go unused (the point would be completely surrounded and not visible at all)
 		RCollisionPointState pointState = RCollisionPointState::FREE;	// the point can be freely moved; all points start out as this
