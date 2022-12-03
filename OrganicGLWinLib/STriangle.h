@@ -45,9 +45,9 @@ public:
 		}
 	};
 
-	int getPerfectClampingValue()
+	PerfectClampEnum getPerfectClampingValue()
 	{
-		int perfectClampValue = 0;
+		PerfectClampEnum perfectClampValue = PerfectClampEnum::NONE;
 		// x clamp check
 		if
 		(
@@ -57,7 +57,7 @@ public:
 		)
 		{
 			//std::cout << "Perfect X-clamp detected! " << std::endl;
-			perfectClampValue = 1;			// 1 == clamped to X
+			perfectClampValue = PerfectClampEnum::CLAMPED_TO_X;			// 1 == clamped to X
 		}
 
 		// y clamp check
@@ -69,7 +69,7 @@ public:
 		)
 		{
 			//std::cout << "Perfect Y-clamp detected! " << std::endl;
-			perfectClampValue = 2;			// 2 == clamped to X
+			perfectClampValue = PerfectClampEnum::CLAMPED_TO_Y;			// 2 == clamped to X
 		}
 
 		// z clamp check
@@ -81,7 +81,7 @@ public:
 		)
 		{
 			//std::cout << "Perfect Z-clamp detected! " << std::endl;
-			perfectClampValue = 3;			// 3 == clamped to X
+			perfectClampValue = PerfectClampEnum::CLAMPED_TO_Z;			// 3 == clamped to X
 		}
 		return perfectClampValue;
 	}

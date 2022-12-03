@@ -51,7 +51,7 @@ public:
 	TriangleMaterial getSPolyMaterial();
 	glm::vec3 getEmptyNormal();
 	void calculateEmptyNormal();
-	int calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
+	PerfectClampEnum calculateAndGetPerfectClampingValue();	// at least one STriangle must be added before calling this function.
 	bool isSPolyValid();
 	void determineBorderLines();
 	void setMode(SPolyMode in_mode);

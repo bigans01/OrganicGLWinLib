@@ -291,9 +291,9 @@ void SPoly::calculateEmptyNormal()
 	polyEmptyNormal = finder.calculatedNormal;
 }
 
-int SPoly::calculateAndGetPerfectClampingValue()
+PerfectClampEnum SPoly::calculateAndGetPerfectClampingValue()
 {
-	int returnValue = 0;
+	PerfectClampEnum returnValue = PerfectClampEnum::NONE;
 	if (triangles.size() != 0)	// will only run if there is at least one triangle to verify.
 	{
 		returnValue = triangles[0].getPerfectClampingValue();
