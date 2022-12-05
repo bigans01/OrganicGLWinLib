@@ -283,6 +283,10 @@ void RMorphableAreaScanner::scanGridMass()
 	// We must then analyze which LANDLOCKED meshes do not have a TRACE_BIT set in them (by calling scanForSolidBlocks); this indicates that the LANDLOCKED mesh wasn't touched, 
 	// and that it could be considered a "solid" block.
 	// 
+	// We must also get a list of LANDLOCKED blocks that contained INNER_MASS in them; this will be needed by the ORE function,
+	// setPendingRMatterSolids, to ensure that the LANDLOCKED blocks with INNER_MASS actually become EXPOSED blocks when the ORE does
+	// its RMatter processing. If they are not EXPOSED, we need to ensure that the blocks are considered FULL (aka, blockSkeletons) in the ORE.
+	//
 	// However, we can only do this if the selectedBoxType is set to MassZoneBoxType::ENCLAVE.
 	//
 	// It should only be done if the meshes per dimension is 4 (this may be changed later to handle cases of >4, but not right now)
@@ -295,6 +299,7 @@ void RMorphableAreaScanner::scanGridMass()
 			for (; solidScanBegin != solidScanEnd; solidScanBegin++)
 			{
 				wholeBlocks += solidScanBegin->second.scanForSolidBlocks(massGrid.fetchDataArrayRef());
+				wholeBlocksWithFilling += solidScanBegin->second.scanForSolidBlocksWithFilling(massGrid.fetchDataArrayRef());
 				std::cout << "Size of solid blocks (wholeBlocks): " << wholeBlocks.size() << std::endl;
 				// remember, special logic will need to be done if this is an ORE box type, and the meshesPerDimension is NOT 4.
 			}

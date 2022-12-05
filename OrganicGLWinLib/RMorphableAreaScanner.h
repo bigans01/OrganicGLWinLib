@@ -87,7 +87,9 @@ class RMorphableAreaScanner
 		float morphableMeshDimension = 0.0f;
 		RPointToGridTranslator gridTranslator;
 		RCollisionPointToPTriangleMapContainer scannerPointToTriangleMapper;
-		Operable3DEnclaveKeySet wholeBlocks;	// contains a list of blocks for an ORE that are "whole", as in, their entire mass is surrounded.
+		Operable3DEnclaveKeySet wholeBlocks;				// contains a list of blocks from an RMatter operation that are "whole", as in, their entire mass is surrounded.
+		Operable3DEnclaveKeySet	wholeBlocksWithFilling;		// contains a list of blocks from an RMatter operation that are "whole", but also had MassCellBitFlags::INNER_MASS set;
+															// needed by the ORE function, setPendingRMatterSolids
 
 		DebugOptionSet scannerDebugOptions;
 		MassZoneBoxType selectedBoxType = MassZoneBoxType::NOVAL;	// needs to be used when determining if we will be populationg wholeBlocks,

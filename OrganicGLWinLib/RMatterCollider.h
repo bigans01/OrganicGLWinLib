@@ -63,7 +63,9 @@ class RMatterCollider
 
 		RMorphableAreaScanner collidableScanner;
 		std::vector<SPoly> fetchProducedSPolys();	// used by OrganicCoreLib to get the resulting SPolys produced by the collider
-		Operable3DEnclaveKeySet fetchProducedWholeBlocks();
+		Operable3DEnclaveKeySet fetchProducedWholeBlocks();	// gets a list of blocks that were considered LANDLOCKED, and which had no TRACE_BIT set in their area.
+		Operable3DEnclaveKeySet fetchFilledWholeBlocks();	// gets a list of blocks that were considered LANDLOCKED, AND had some MassCellBitFlags::INNER_MASS traced in their area;
+															// This is needed for the ORE function, setPendingRMatterSolids (see OrganicIndependents lib)
 	private:
 		void applyRMatterManipulationOptions();	// iterates through each member of matterManipulationOptions, if there are any, 
 												// and applies it to the collidableScanner. collidableScanner.scanGridMass() must be called before this is called.

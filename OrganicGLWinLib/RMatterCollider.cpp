@@ -196,6 +196,11 @@ Operable3DEnclaveKeySet RMatterCollider::fetchProducedWholeBlocks()
 	return collidableScanner.wholeBlocks;
 }
 
+Operable3DEnclaveKeySet RMatterCollider::fetchFilledWholeBlocks()
+{
+	return collidableScanner.wholeBlocksWithFilling;
+}
+
 void RMatterCollider::applyRMatterManipulationOptions()
 {
 	auto optionsBegin = matterManipulationOptions.begin();

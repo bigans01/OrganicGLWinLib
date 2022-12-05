@@ -31,6 +31,7 @@ class RMorphableMeshGroup
 		void flagImmutablePoints();			// Step 3
 		void updatePointsWithinMass(MassGridArray* in_massGridArrayRef, RPointToGridTranslator* in_translatorRef);
 		Operable3DEnclaveKeySet scanForSolidBlocks(MassGridArray* in_massGridArrayRef);
+		Operable3DEnclaveKeySet	scanForSolidBlocksWithFilling(MassGridArray* in_massGridArrayRef);
 		void generatePoints();						// Step 4
 		bool doesGroupContainKey(EnclaveKeyDef::EnclaveKey in_enclaveKey);
 		void printLandlockedPoints();
