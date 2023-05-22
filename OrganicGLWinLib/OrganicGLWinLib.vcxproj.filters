@@ -121,9 +121,6 @@
     <Filter Include="Header Files\UV">
       <UniqueIdentifier>{d7eb27a6-16f3-4946-9bee-dc070adaa11e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UV">
-      <UniqueIdentifier>{39bf4d93-dc69-44f6-a407-7af27f4c2c79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ShaderMachines\Gears\Generic">
       <UniqueIdentifier>{5b037c69-7140-4fc4-9ed3-086e73fee9d3}</UniqueIdentifier>
     </Filter>
@@ -239,18 +236,6 @@
     </ClInclude>
     <ClInclude Include="Rasterized3DMassGrid.h">
       <Filter>Header Files\RasterizedMass</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasMap.h">
-      <Filter>Header Files\Atlas</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasMetaData.h">
-      <Filter>Header Files\Atlas</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasPropertiesGL.h">
-      <Filter>Header Files\Atlas</Filter>
-    </ClInclude>
-    <ClInclude Include="AtlasTile.h">
-      <Filter>Header Files\Atlas</Filter>
     </ClInclude>
     <ClInclude Include="CoplanarRelationshipTracker.h">
       <Filter>Header Files\Coplanar</Filter>
@@ -783,18 +768,6 @@
     <ClInclude Include="QuadTriangles.h">
       <Filter>Header Files\Quaternions</Filter>
     </ClInclude>
-    <ClInclude Include="QuatRotationManager.h">
-      <Filter>Header Files\Quaternions</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationPoints.h">
-      <Filter>Header Files\Quaternions</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationRecord.h">
-      <Filter>Header Files\Quaternions</Filter>
-    </ClInclude>
-    <ClInclude Include="QuatRotationType.h">
-      <Filter>Header Files\Quaternions</Filter>
-    </ClInclude>
     <ClInclude Include="QuatUtils.h">
       <Filter>Header Files\Quaternions</Filter>
     </ClInclude>
@@ -1122,9 +1095,6 @@
     <ClInclude Include="MassUtils.h">
       <Filter>Header Files\MassZone</Filter>
     </ClInclude>
-    <ClInclude Include="CyclingDirection.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="CyclingDirectionFinder.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -1134,34 +1104,10 @@
     <ClInclude Include="ConsumedCleaveSequenceGroups.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
-    <ClInclude Include="UVCoordProducer.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="UVCoordProducerECBPoly.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="UVCoordProducerEnclaveTriangle.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="UVTriangleCoords.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
     <ClInclude Include="UVTriangleCoordsGL.h">
       <Filter>Header Files\UV</Filter>
     </ClInclude>
-    <ClInclude Include="TileCoordinateProducer.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="TileDataGLWIN.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="TileLoadData.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
     <ClInclude Include="TileLocation.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMeta.h">
       <Filter>Header Files\UV</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -1181,9 +1127,6 @@
     </ClInclude>
     <ClInclude Include="LineReactorBase.h">
       <Filter>Header Files\SolublePoly\Fusion</Filter>
-    </ClInclude>
-    <ClInclude Include="ContainerType.h">
-      <Filter>Header Files\UV</Filter>
     </ClInclude>
     <ClInclude Include="InterceptRegister.h">
       <Filter>Header Files\SolublePoly</Filter>
@@ -1278,9 +1221,6 @@
     <ClInclude Include="FoundCleaveSequence.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
-    <ClInclude Include="OrganicPolygon.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
     <ClInclude Include="FusedIntersectionLine.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
@@ -1341,23 +1281,8 @@
     <ClInclude Include="OrientedQuadType.h">
       <Filter>Header Files\OrientedQuad</Filter>
     </ClInclude>
-    <ClInclude Include="PointTranslationCheck.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="SummaryScanResult.h">
       <Filter>Header Files\SolublePoly\Fusion</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainTriangle.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainTrianglePoint.h">
-      <Filter>Header Files\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureUV.h">
-      <Filter>Header Files\UV</Filter>
-    </ClInclude>
-    <ClInclude Include="TexturePoints.h">
-      <Filter>Header Files\UV</Filter>
     </ClInclude>
     <ClInclude Include="ThreeDLineSegment.h">
       <Filter>Header Files\Misc</Filter>
@@ -1459,9 +1384,6 @@
     </ClCompile>
     <ClCompile Include="RUtils.cpp">
       <Filter>Source Files\RasterizedMass</Filter>
-    </ClCompile>
-    <ClCompile Include="AtlasMap.cpp">
-      <Filter>Source Files\Atlas</Filter>
     </ClCompile>
     <ClCompile Include="CoplanarAreaRasterizer.cpp">
       <Filter>Source Files\Coplanar</Filter>
@@ -1757,15 +1679,6 @@
     <ClCompile Include="QMVoidTranslatePointsForRasterization.cpp">
       <Filter>Source Files\Quaternions</Filter>
     </ClCompile>
-    <ClCompile Include="QuatRotationManager.cpp">
-      <Filter>Source Files\Quaternions</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatRotationPoints.cpp">
-      <Filter>Source Files\Quaternions</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatRotationRecord.cpp">
-      <Filter>Source Files\Quaternions</Filter>
-    </ClCompile>
     <ClCompile Include="QuatUtils.cpp">
       <Filter>Source Files\Quaternions</Filter>
     </ClCompile>
@@ -1934,18 +1847,6 @@
     <ClCompile Include="HighlighterGearT1.cpp">
       <Filter>Source Files\ShaderMachines\Gears</Filter>
     </ClCompile>
-    <ClCompile Include="TileCoordinateProducer.cpp">
-      <Filter>Source Files\UV</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducer.cpp">
-      <Filter>Source Files\UV</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducerECBPoly.cpp">
-      <Filter>Source Files\UV</Filter>
-    </ClCompile>
-    <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp">
-      <Filter>Source Files\UV</Filter>
-    </ClCompile>
     <ClCompile Include="EmptyNormalFinder.cpp">
       <Filter>Source Files\SolublePoly</Filter>
     </ClCompile>
@@ -1982,9 +1883,6 @@
     <ClCompile Include="OrganicGLWinUtils.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="OrganicPolygon.cpp">
-      <Filter>Source Files\UV</Filter>
-    </ClCompile>
     <ClCompile Include="IntersectionResult.cpp">
       <Filter>Source Files\SolublePoly\Fusion</Filter>
     </ClCompile>
@@ -2011,9 +1909,6 @@
     </ClCompile>
     <ClCompile Include="OrientedQuadPanel.cpp">
       <Filter>Source Files\OrientedQuad</Filter>
-    </ClCompile>
-    <ClCompile Include="PointTranslationCheck.cpp">
-      <Filter>Source Files\Misc</Filter>
     </ClCompile>
     <ClCompile Include="TracingObserver.cpp">
       <Filter>Source Files\SolublePoly</Filter>

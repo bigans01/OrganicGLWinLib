@@ -762,16 +762,20 @@ InvalidCleaveSequences CleaveSequenceFactory::handleScenarioMultipleInterceptsPo
 		if (newSequence.sequenceStatus == CleaveSequenceStatus::COMPLETE)
 		{
 			int cleaveMapRefSize = int((*in_cleaveMapRef).size());
-			//std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
+			std::cout << "!! Inserting new cleave sequence at index: " << cleaveMapRefSize << std::endl;
 			(*in_cleaveMapRef)[cleaveMapRefSize] = newSequence;	// insert the sequence.
 			//std::cout << "Map size is now: " << cleaveMapRefSize << std::endl;
+		}
+		else
+		{
+			std::cout << "!!! NOTICE, double precise point solution not found. " << std::endl;
 		}
 
 		newSequence.printCategorizedLines();
 
-		std::cout << "(CleaveSequenceFactory)  !! End of handle multiple precise loop tick. Continue? " << std::endl;
-		int endTest = 3;
-		std::cin >> endTest;
+		//std::cout << "(CleaveSequenceFactory)  !! End of handle multiple precise loop tick. Continue? " << std::endl;
+		//int endTest = 3;
+		//std::cin >> endTest;
 	}
 
 	//return multiplePreciseErrorMessages;

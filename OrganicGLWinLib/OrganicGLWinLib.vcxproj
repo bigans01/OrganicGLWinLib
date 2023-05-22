@@ -238,7 +238,6 @@
     <ClInclude Include="MassGridArrayCellScanArea.h" />
     <ClInclude Include="MassGridSearchResult.h" />
     <ClInclude Include="MassUtils.h" />
-    <ClInclude Include="OrganicPolygon.h" />
     <ClInclude Include="PTriangle.h" />
     <ClInclude Include="PTriangleMapperUpdate.h" />
     <ClInclude Include="PTriangleMesh.h" />
@@ -262,7 +261,6 @@
     <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h" />
     <ClInclude Include="ComputeResolution.h" />
     <ClInclude Include="ConsumedCleaveSequenceGroups.h" />
-    <ClInclude Include="ContainerType.h" />
     <ClInclude Include="ContestableBorderLineMap.h" />
     <ClInclude Include="CoplanarAreaRasterizer.h" />
     <ClInclude Include="CoplanarCategorizedLineProducer.h" />
@@ -292,7 +290,6 @@
     <ClInclude Include="CutTriangleGroupBuilder.h" />
     <ClInclude Include="CutTriangleProducer.h" />
     <ClInclude Include="CutTriangleProductionResult.h" />
-    <ClInclude Include="CyclingDirection.h" />
     <ClInclude Include="CyclingDirectionFinder.h" />
     <ClInclude Include="DeferredLightingComputeGearT1.h" />
     <ClInclude Include="DistanceToPoint.h" />
@@ -436,8 +433,6 @@
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
-    <ClInclude Include="TerrainTriangle.h" />
-    <ClInclude Include="TerrainTrianglePoint.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TileLocation.h" />
     <ClInclude Include="TimeBasedWaveBase.h" />
@@ -458,11 +453,6 @@
     <ClInclude Include="MassManipulationMode.h" />
     <ClInclude Include="NextCleaveSequenceFinder.h" />
     <ClInclude Include="PermitType.h" />
-    <ClInclude Include="PointTranslationCheck.h" />
-    <ClInclude Include="QuatRotationManager.h" />
-    <ClInclude Include="QuatRotationPoints.h" />
-    <ClInclude Include="QuatRotationRecord.h" />
-    <ClInclude Include="QuatRotationType.h" />
     <ClInclude Include="SelfComparePermit.h" />
     <ClInclude Include="SliceFinder.h" />
     <ClInclude Include="SMDebugV1.h" />
@@ -491,14 +481,9 @@
     <ClInclude Include="TerrainMemoryTracker.h" />
     <ClInclude Include="TerrainPrimitiveGearT1.h" />
     <ClInclude Include="TerrainSimpleGearT1.h" />
-    <ClInclude Include="TileCoordinateProducer.h" />
     <ClInclude Include="TracingObserver.h" />
     <ClInclude Include="TracingObserverState.h" />
     <ClInclude Include="Triangle.h" />
-    <ClInclude Include="AtlasMap.h" />
-    <ClInclude Include="AtlasMetaData.h" />
-    <ClInclude Include="AtlasPropertiesGL.h" />
-    <ClInclude Include="AtlasTile.h" />
     <ClInclude Include="DeferredComputeGearT1.h" />
     <ClInclude Include="DeferredComputeResultsGearT1.h" />
     <ClInclude Include="GLDataType.h" />
@@ -544,21 +529,12 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TexturePoints.h" />
-    <ClInclude Include="TextureUV.h" />
-    <ClInclude Include="TileDataGLWIN.h" />
-    <ClInclude Include="TileLoadData.h" />
-    <ClInclude Include="TileMeta.h" />
     <ClInclude Include="TwoDLineSegmentJudge.h" />
     <ClInclude Include="TwoDPoint.h" />
     <ClInclude Include="TwoDSPolyIntersectionRecord.h" />
     <ClInclude Include="TwoDSPolyIntersectionType.h" />
     <ClInclude Include="UnsolvedPreciseSolver.h" />
     <ClInclude Include="UsableCleaveSequenceCalculator.h" />
-    <ClInclude Include="UVCoordProducer.h" />
-    <ClInclude Include="UVCoordProducerECBPoly.h" />
-    <ClInclude Include="UVCoordProducerEnclaveTriangle.h" />
-    <ClInclude Include="UVTriangleCoords.h" />
     <ClInclude Include="UVTriangleCoordsGL.h" />
     <ClInclude Include="Vec3Result.h" />
     <ClInclude Include="WaveHighlighterGearT1.h" />
@@ -579,7 +555,6 @@
     <ClInclude Include="ZDimLine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AtlasMap.cpp" />
     <ClCompile Include="BorderLineCycle.cpp" />
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
@@ -618,7 +593,6 @@
     <ClCompile Include="LookupByDimRegister.cpp" />
     <ClCompile Include="MassGridArray.cpp" />
     <ClCompile Include="MassUtils.cpp" />
-    <ClCompile Include="OrganicPolygon.cpp" />
     <ClCompile Include="PTriangle.cpp" />
     <ClCompile Include="PTriangleMeshPointCalibrator.cpp" />
     <ClCompile Include="RAdditiveSliceBase.cpp" />
@@ -696,7 +670,6 @@
     <ClCompile Include="PointToMassRelationshipJudge.cpp" />
     <ClCompile Include="PointToMassTrial.cpp" />
     <ClCompile Include="PointToSPolyRelationshipTrackerContainer.cpp" />
-    <ClCompile Include="PointTranslationCheck.cpp" />
     <ClCompile Include="QMBoolAreLinesColinear.cpp" />
     <ClCompile Include="QMBoolBase.cpp" />
     <ClCompile Include="QMBoolDoLinesIntersect.cpp" />
@@ -714,9 +687,6 @@
     <ClCompile Include="QMVoidBase.cpp" />
     <ClCompile Include="QMVoidFindCyclingDirection.cpp" />
     <ClCompile Include="QMVoidTranslatePointsForRasterization.cpp" />
-    <ClCompile Include="QuatRotationManager.cpp" />
-    <ClCompile Include="QuatRotationPoints.cpp" />
-    <ClCompile Include="QuatRotationRecord.cpp" />
     <ClCompile Include="QuatUtils.cpp" />
     <ClCompile Include="RasterCubeTracerBase.cpp" />
     <ClCompile Include="RasterizationPointAdjuster.cpp" />
@@ -778,7 +748,6 @@
     <ClCompile Include="TerrainMemoryTracker.cpp" />
     <ClCompile Include="TerrainPrimitiveGearT1.cpp" />
     <ClCompile Include="TerrainSimpleGearT1.cpp" />
-    <ClCompile Include="TileCoordinateProducer.cpp" />
     <ClCompile Include="TimeBasedWaveBase.cpp" />
     <ClCompile Include="TimeBasedWaveManager.cpp" />
     <ClCompile Include="TracingObserver.cpp" />
@@ -788,9 +757,6 @@
     <ClCompile Include="TwoDLineSegmentJudge.cpp" />
     <ClCompile Include="UnsolvedPreciseSolver.cpp" />
     <ClCompile Include="UsableCleaveSequenceCalculator.cpp" />
-    <ClCompile Include="UVCoordProducer.cpp" />
-    <ClCompile Include="UVCoordProducerECBPoly.cpp" />
-    <ClCompile Include="UVCoordProducerEnclaveTriangle.cpp" />
     <ClCompile Include="WaveHighlighterGearT1.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
