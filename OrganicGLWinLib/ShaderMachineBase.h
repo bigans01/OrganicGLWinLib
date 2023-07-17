@@ -60,7 +60,9 @@ public:
 																GLsizei* in_vertexCount,
 																int in_drawCount);
 		void sendDataToDynamicBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
-		void deleteDynamicBuffer(std::string in_bufferName);
+		void deleteDynamicBuffer(std::string in_bufferName);	// uses the dynBufferManager to search for a list of gears that are affected by the 
+																// buffer delete; these affected gears will get a Message sent to them, which they may
+																// interpret to perform any necessary cleanup before the dynamically allocated buffer is deleted.
 
 		// GL multi draw array functions
 		void registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.

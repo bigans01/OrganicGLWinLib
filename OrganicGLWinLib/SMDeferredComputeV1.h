@@ -16,6 +16,7 @@
 #include "HighlighterGearT1.h"
 #include "InstancedHighlighterGearT1.h"
 #include "ComputeResolution.h"
+#include "WaveHighlighterGearT1.h"
 
 class SMDeferredComputeV1 : public ShaderMachineBase
 {
@@ -36,6 +37,7 @@ private:
 	void insertTerrainGear(int in_gearID, GLuint in_programID);
 	void insertHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertComputeGear(int in_gearID, GLuint in_programID);
+	void insertWaveHighlighterGear(int in_gearID, GLuint in_programID);
 	void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 	void insertInstancedHighlighterGear(int in_gearID, GLuint in_programID);
 

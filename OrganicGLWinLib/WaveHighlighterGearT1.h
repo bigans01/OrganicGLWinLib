@@ -8,6 +8,18 @@
 #include "OrganicGLWinUtils.h"
 #include "SinTBW.h"
 
+/*
+
+Description:
+
+The role of the WaveHighlighterGearT1 is to provide highlights that have the ability to "fade" in and out (i.e, go from solid to transparent, and back again, in a cycle)
+
+Note that like other Gears, this doesn't manage its own buffers. It assumes they have been created.
+
+This gear will call glEnable(GL_BLEND), and disable it via glDisable, after the rendering of a highlight has been completed.
+
+*/
+
 class WaveHighlighterGearT1 : public Gear
 {
 	public:
@@ -22,7 +34,7 @@ class WaveHighlighterGearT1 : public Gear
 		struct WaveDrawJob
 		{
 			public:
-				WaveDrawJob() {};
+				WaveDrawJob();
 				WaveDrawJob(int in_waveDrawJobBufferID) :
 					waveDrawJobBufferID(in_waveDrawJobBufferID)
 				{
@@ -30,71 +42,35 @@ class WaveHighlighterGearT1 : public Gear
 					wave.get()->initialize();
 					isWaveInitialized = true;
 				};
-				~WaveDrawJob() 
-				{
-					if (isWaveReady == true)	// memory management; only delete the VAO if it was actually created.
-					{
-						glDeleteVertexArrays(1, &waveVAO);
-					}
-				};
+				~WaveDrawJob();		// does required OpenGL operations for when the draw job gets deleted (i.e, glDeleteVertexArrays).
+									// The vertex array only gets deleted if setDrawJobAndBuildVAO was called (see isWaveReady flag).
 
-				void setDrawJobDataAndBuildVAO(GLMultiDrawArrayJob in_waveDrawJobData)
-				{
-					waveDrawJobData = in_waveDrawJobData;
-					buildVAO();
-					isWaveReady = true;
-				}
-				void buildVAO()
-				{
-					OrganicGLWinUtils::createAndBindVertexArray(&waveVAO);	// create/bind the highlighter VAO
-					glBindBuffer(GL_ARRAY_BUFFER, waveDrawJobBufferID);	// bind to the highlighter buffer
-					//glVertexAttribPointer(
-					//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-					//	3,                  // size
-					//	GL_FLOAT,           // type
-					//	GL_FALSE,           // normalized?
-					//	0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
-					//	(void*)0             array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
-					//						For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
-					//						
-					//);
-
-
-					glEnableVertexAttribArray(0);
-					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
-					glEnableVertexAttribArray(1);
-					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
-
-					glEnableVertexAttribArray(0);
-				}
-
-				void renderWavedHighlight(int in_programID, GLUniformRegistry* in_gearUniformRegistryRef)
-				{
-					if (isWaveReady == true)
-					{
-						//std::cout << "Wave is READY!!!!!!! -- draw count is: " << waveDrawJobData.drawCount << std::endl;
-						glBindVertexArray(waveVAO);
-						GLuint mvpUniform = glGetUniformLocation(in_programID, "MVP");		// find the MVP uniform
-						glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &in_gearUniformRegistryRef->getMat4("MVP")[0][0]);		// set the uniform
-						GLuint waveUniform = glGetUniformLocation(in_programID, "alphaWaveValue");
-						glUniform1f(waveUniform, wave.get()->calculateWaveYValue());
-
-						glMultiDrawArrays(GL_TRIANGLES, waveDrawJobData.multiStartIndices.get(), waveDrawJobData.multiVertexCount.get(), waveDrawJobData.drawCount);
-					}
-				}
-
-
+				void setDrawJobDataAndBuildVAO(GLMultiDrawArrayJob in_waveDrawJobData);	
+				void buildVAO();	// builds the VAO (only needs to be called once on call to setDrawJobDataAndBuildVAO)
+				void renderWavedHighlight(int in_programID, GLUniformRegistry* in_gearUniformRegistryRef);	// render the wave highlight. Blending will be enabled,
+																											// the proper blending function will get used, and then 
+																											// blending needs to be disabled after the draw call.
+																											// Failing to disable blending will cause strangeness 
+																											// on cards such as GTX 4070. This was the cause of bug
+																											// B-006.
 
 				GLMultiDrawArrayJob waveDrawJobData;
-				GLuint waveVAO;
-				int waveDrawJobBufferID = 0;
-				bool isWaveInitialized = false;
-				std::shared_ptr<TimeBasedWaveBase> wave;
-				bool isWaveReady = false;
+				GLuint waveVAO;							// stores the ID of the VAO that will be used during the call to glBindVertexArray. Utilized during call to
+														// WaveDrawJob::buildVAO() above.
+
+				int waveDrawJobBufferID = 0;			// stores the ID of the buffer that will be used to store this WaveDrawJob's data; 
+														// follow the chain of execution that starts in the OrganicGLManager::jobConstructCameraEnclaveHighlight, where it calls the
+														// createDynamicBufferAndSendToGear function.
+
+				bool isWaveInitialized = false;		// used to indicate when setDrawJobDataAndBuildVAO() is called, and that the WaveDrawJob is ready for use.
+
+				std::shared_ptr<TimeBasedWaveBase> wave;	// stores the SinTBW when it gets setup; the value of the SinTBW is based on time delta, to allow for a "fading" effect.
+
+				bool isWaveReady = false;	// mainly used to indicate that it is OK to call glDeleteVertexArrays, when it comes time to delete the WaveDrawJob.
 
 		};
 		
-		std::unordered_map<std::string, WaveDrawJob> waveJobMap;
+		std::unordered_map<std::string, WaveDrawJob> waveJobMap;	// stores all possible WaveDrawJobs that can be run.
 		
 };
 

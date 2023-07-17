@@ -8,6 +8,9 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 	height = in_height;
 	window = in_windowRef;
 	programID = in_programID;
+	
+	std::cout << "TerrainGearID: ID of this program is -> " << programID << std::endl;
+
 	gearMachinePtr = in_shaderMachineBasePtr;
 
 	// get the uniforms; program must have been compiled before this
@@ -224,8 +227,18 @@ void TerrainGearT1::setupTerrainVAO()
 
 void TerrainGearT1::acquireSubroutineIndices()
 {
+
+	// NOTE: call of glGetSubroutineIndex fails on GTX 4070, with latest drivers installed from circa 7/17/2023.
+	std::cout << "TerrainGearT1: pause, before attempting to get subroutine values. Program id is: " << programID << std::endl;
+	int pause = 3;
+	std::cin >> pause;
+
 	pass1index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass1");
 	pass2index = glGetSubroutineIndex(programID, GL_FRAGMENT_SHADER, "pass2");
+
+	std::cout << "TerrainGearT1: post-pause, after attempting to get subroutine values. Program id is: " << programID << std::endl;
+	int postpause = 3;
+	std::cin >> postpause;
 }
 
 

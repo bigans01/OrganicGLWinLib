@@ -10,8 +10,11 @@
 class DynamicBufferManager
 {
 	public:
-		GLuint attemptCreateOfDynamicBufferForGear(std::string in_string, int in_programGearID);
-		void attemptDeleteOfDynamicBuffer(std::string in_string);
+		GLuint attemptCreateOfDynamicBufferForGear(std::string in_string, int in_programGearID);	// flags a gear to use a specific buffer, and registers this data.
+																									// If the buffer doesn't already exist, it is created before it is assigned.
+
+		void attemptDeleteOfDynamicBuffer(std::string in_string);	// deletes a dynamic buffer, if that buffer exists.
+
 		void insertDataIntoDynBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
 		void createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
 		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJob(std::string in_bufferName);

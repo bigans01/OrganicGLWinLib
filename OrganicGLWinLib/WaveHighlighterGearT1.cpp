@@ -53,7 +53,8 @@ void WaveHighlighterGearT1::interpretMessage(Message in_message)
 			GLuint waveJobBufferID = messageCopy.readInt();
 			WaveDrawJob newWaveDrawJob(waveJobBufferID);
 			waveJobMap[waveJobName] = newWaveDrawJob;
-			//std::cout << "(WaveHighlighterGearT1): created and initialized wave for WaveDrawJob, " << waveJobName << std::endl;
+			std::cout << "(WaveHighlighterGearT1): wave job name is: " << waveJobName << std::endl;
+			std::cout << "(WaveHighlighterGearT1): created and initialized wave for WaveDrawJob, " << waveJobName << std::endl;
 			break;
 		}
 		case (MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR):
@@ -78,3 +79,77 @@ void WaveHighlighterGearT1::interpretMessage(Message in_message)
 		} 
 	}
 }
+
+// ++++++++++++++++++++++++++++++++++++++++
+// Start: functions for WaveHighlighterGearT1::WaveDrawJob
+// ++++++++++++++++++++++++++++++++++++++++
+
+WaveHighlighterGearT1::WaveDrawJob::WaveDrawJob()
+{
+
+}
+
+WaveHighlighterGearT1::WaveDrawJob::~WaveDrawJob()
+{
+	if (isWaveReady == true)	// memory management; only delete the VAO if it was actually created.
+	{
+		glDeleteVertexArrays(1, &waveVAO);
+	}
+}
+
+void WaveHighlighterGearT1::WaveDrawJob::setDrawJobDataAndBuildVAO(GLMultiDrawArrayJob in_waveDrawJobData)
+{
+	waveDrawJobData = in_waveDrawJobData;
+	buildVAO();
+	isWaveReady = true;
+}
+
+void WaveHighlighterGearT1::WaveDrawJob::buildVAO()
+{
+	OrganicGLWinUtils::createAndBindVertexArray(&waveVAO);	// create/bind the highlighter VAO
+	glBindBuffer(GL_ARRAY_BUFFER, waveDrawJobBufferID);	// bind to the highlighter buffer
+	//glVertexAttribPointer(
+	//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+	//	3,                  // size
+	//	GL_FLOAT,           // type
+	//	GL_FALSE,           // normalized?
+	//	0,                  // stride = 0 (tightly packed); bytes offset between consecutive generic vertex attributes is 0.
+	//	(void*)0             array buffer offset. Number following (void*) indicates offset point to begin reading from in the pointed-to buffer, measured in bytes;
+	//						For instance, if the data begins at byte 10000, you would put (void*)10000 in the array you are reading.
+	//						
+	//);
+
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
+
+	glEnableVertexAttribArray(0);
+}
+
+void WaveHighlighterGearT1::WaveDrawJob::renderWavedHighlight(int in_programID, GLUniformRegistry* in_gearUniformRegistryRef)
+{
+	if (isWaveReady == true)
+	{
+		//std::cout << "Wave is READY!!!!!!! -- draw count is: " << waveDrawJobData.drawCount << std::endl;
+		glBindVertexArray(waveVAO);
+		GLuint mvpUniform = glGetUniformLocation(in_programID, "MVP");		// find the MVP uniform
+		glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &in_gearUniformRegistryRef->getMat4("MVP")[0][0]);		// set the uniform
+		GLuint waveUniform = glGetUniformLocation(in_programID, "alphaWaveValue");
+
+		//std::cout << "waveUniform value is: " << waveUniform << std::endl;
+
+		glUniform1f(waveUniform, wave.get()->calculateWaveYValue());
+
+		// Remember: GL_BLEND must be enabled, and then immediately disabled, when we are done. 
+		// Not calling glDisable(GL_BLEND) is generally bad practice, and will lead to the compute shaders and similiar gears not working
+		// correctly in SMDeferredLightingComputeV1.
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glMultiDrawArrays(GL_TRIANGLES, waveDrawJobData.multiStartIndices.get(), waveDrawJobData.multiVertexCount.get(), waveDrawJobData.drawCount);
+		glDisable(GL_BLEND);
+	}
+}
+
+

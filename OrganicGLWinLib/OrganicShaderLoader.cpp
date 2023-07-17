@@ -51,6 +51,14 @@ GLuint OrganicShaderLoader::LoadShaders(const char* vertex_file_path, const char
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
+	GLint vertexBuildSuccess = 0;
+	glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &vertexBuildSuccess);
+	if (vertexBuildSuccess == GL_FALSE)
+	{
+		std::cout << "!! WARNING, error occurred during vertex shader compilation. " << std::endl;
+		int vertexError = 3;
+		std::cin >> vertexError;
+	}
 
 	// Check Vertex Shader
 	glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
@@ -68,6 +76,15 @@ GLuint OrganicShaderLoader::LoadShaders(const char* vertex_file_path, const char
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
+	GLint fragmentBuildSuccess = 0;
+	glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &fragmentBuildSuccess);
+	if (fragmentBuildSuccess == GL_FALSE)
+	{
+		std::cout << "!! WARNING, error occurred during fragment shader compilation. " << std::endl;
+		int fragmentError = 3;
+		std::cin >> fragmentError;
+	}
+
 
 	// Check Fragment Shader
 	glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);

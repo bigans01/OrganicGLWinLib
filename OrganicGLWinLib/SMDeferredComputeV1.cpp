@@ -87,6 +87,10 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	insertNewBuffer("matrices_buffer");
 	insertInstancedHighlighterGear(4, programLookup["InstancedHighlighterGearT1"]);
 
+	// ########################################################################## Wave highlighter gear set up
+	createProgram("WaveHighlighterGearT1");
+	insertWaveHighlighterGear(5, programLookup["WaveHighlighterGearT1"]);
+
 
 }
 
@@ -158,6 +162,12 @@ void SMDeferredComputeV1::insertHighlighterGear(int in_gearID, GLuint in_program
 void SMDeferredComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+}
+
+void SMDeferredComputeV1::insertWaveHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new WaveHighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 }
 

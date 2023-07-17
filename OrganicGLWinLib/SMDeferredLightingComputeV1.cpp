@@ -31,8 +31,6 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
@@ -77,29 +75,35 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 	insertNewFBO("deferred_FBO");
 	setupDeferredFBO();
+
+
 	insertTerrainGear(0, programLookup["TerrainLightingComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 
 	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
+	createComputeImage(GL_TEXTURE16, "computeRead", 1);					// image unit 1, "read"
 	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
-	createComputeImage(GL_TEXTURE31, "computeRead", 1);					// image unit 1, "read"
 	//createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 
 
+	
 	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
 	createComputeProgram("ComputeCopyRBGFromTextureToImageGearT1");
 	insertComputeTransferGear(1, programLookup["ComputeCopyRBGFromTextureToImageGearT1"]);
+	
 
-
-
+	
 	// ########################################################################## Compute Gear set up
 	createComputeProgram("DeferredLightingComputeGearT1");
 	//createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 	insertComputeGear(2, programLookup["DeferredLightingComputeGearT1"]);
-
+	
+	
+	
 	// ########################################################################## Compute results gear set up
 	createProgram("DeferredComputeResultsGearT1");
 	insertComputeResultsGear(3, programLookup["DeferredComputeResultsGearT1"]);
+	
 
 	// ########################################################################## Highlighter Gear set up
 	createProgram("HighlighterGearT1");

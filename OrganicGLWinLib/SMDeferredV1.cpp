@@ -30,6 +30,7 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// NEW ---> setup IMGui
 	OrganicGLWinUtils::IMGuiInit(window);
 
+	std::cout << "============SMDeferredV1, START initializing..." << std::endl;
 
 	// ########################################################################## Terrain Gear set up
 	// create the programs
@@ -44,7 +45,9 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	//insertNewMultiDrawArrayJob("terrain");
 
 	// set up the render quad buffer
+	std::cout << "!!! Attemtpting render quad buffer setup. " << std::endl;
 	insertNewBuffer("render_quad_buffer");
+	std::cout << "!!! DONE with render quad buffer setup. " << std::endl;
 
 	// create the deferred FBO; set it up
 	insertNewFBO("deferred_FBO");
@@ -57,7 +60,9 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	// ...
 
 	// create the terrain gear
+	std::cout << "!!! Attempting insert of TerrainGearT1" << std::endl;
 	insertTerrainGear(0, programLookup["TerrainGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
+	std::cout << "!!! DONE Attempting insert of TerrainGearT1" << std::endl;
 
 	// ########################################################################## Highlighter Gear set up
 	//createMode0Program("Mode0");
@@ -69,6 +74,10 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	std::cout << "============SMDeferredV1, DONE initializing..." << std::endl;
+	int someVal = 3;
+	std::cin >> someVal;
 }
 
 void SMDeferredV1::setupTextureAtlases()
@@ -123,13 +132,23 @@ void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	//int currentSize = gearTrain.size();
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainGearT1());
+
+	std::cout << "Attempting to initialize SMDeferredV1..." << std::endl;
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+	std::cout << "DONE Attempting to initialize SMDeferredV1..." << std::endl;
+
 	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("render_quad_buffer", getBufferID("render_quad_buffer"));		// pass the render quad buffer
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));					// pass the deferred FBO
+
+	std::cout << "Attempting to execute gear function, setup_terrain_VAO. " << std::endl;
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
+	std::cout << "DONE Attempting to execute gear function, setup_terrain_VAO. " << std::endl;
+
+	std::cout << "Attempting to execute gear function, acquire_subroutine_indices. " << std::endl;
 	gearTrain[in_gearID]->executeGearFunction("acquire_subroutine_indices");
+	std::cout << "DONE Attempting to execute gear function, acquire_subroutine_indices. " << std::endl;
 
 	std::cout << "!!! Terrain gear inserted. " << std::endl;
 }
