@@ -72,23 +72,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;C:\Program Files\OpenSSL-Win64\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;C:\Program Files\OpenSSL-Win64\lib;C:\Program Files\OpenSSL-Win64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;C:\Program Files\OpenSSL-Win64\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Debug;C:\Program Files\OpenSSL-Win64\lib;C:\Program Files\OpenSSL-Win64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;C:\Program Files\OpenSSL-Win64\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;C:\Program Files\OpenSSL-Win64\;C:\Program Files\OpenSSL-Win64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>F:\glm;F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\include;F:\GLEW\glew-2.0.0\include;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\OrganicIndependents;C:\Program Files\OpenSSL-Win64\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\OpenGL_GLFW\glfw-3.2.1.bin.WIN64\lib-vc2015;C:\Users\Michael Ansinelli\Documents\Visual Studio 2017\Projects\OrganicIndependents\x64\Release;C:\Program Files\OpenSSL-Win64\;C:\Program Files\OpenSSL-Win64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
