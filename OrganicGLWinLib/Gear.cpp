@@ -4,7 +4,8 @@
 
 void Gear::useProgram()
 {
-	glUseProgram(programID);
+	//glUseProgram(programID);
+	glUseProgram(programIndex.selectProgram());
 }
 
 void Gear::insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job)

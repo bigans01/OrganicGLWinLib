@@ -176,6 +176,7 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CSCorrectionCandidate.h" />
     <ClInclude Include="FaceResolverBase.h" />
+    <ClInclude Include="GLProgramIDIndex.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
@@ -560,6 +561,7 @@
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="FaceResolverBase.cpp" />
+    <ClCompile Include="GLProgramIdIndex.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />

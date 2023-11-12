@@ -13,15 +13,18 @@
 #include "GLMultiDrawArrayJob.h"
 #include "GLDrawElementsInstancedJob.h"
 #include "SmartIntMap.h"
+#include "GLProgramIDIndex.h"
 
 class ShaderMachineBase;
 class Gear
 {
 	public:
 		// misc, inherited by all
-		GLFWwindow* window;									// pointer to openGL window
-		int width, height;									// screen height, width
-		GLuint programID;									// the ID of the shader program this Gear uses
+		GLFWwindow* window;			// pointer to openGL window
+		int width, height;			// screen height, width
+		GLuint programID;			// optional, but used in most cases: the ID of the shader program this Gear uses, when using a single shader machine.
+
+		GLProgramIDIndex programIndex;		// stores multiple program IDs; the value a Gear uses for the programID will also be fetched from here.
 
 		// virtual functions
 		virtual void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr) = 0;

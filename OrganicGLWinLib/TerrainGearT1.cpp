@@ -7,7 +7,9 @@ void TerrainGearT1::initializeMachineShader(int in_width, int in_height, GLuint 
 	width = in_width;
 	height = in_height;
 	window = in_windowRef;
-	programID = in_programID;
+
+	programIndex.insertDefaultEntry(in_programID); 
+	programID = programIndex.selectProgram();
 	
 	std::cout << "TerrainGearID: ID of this program is -> " << programID << std::endl;
 

@@ -1329,6 +1329,9 @@
     <ClInclude Include="ImGuiWindowFeedback.h">
       <Filter>Header Files\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="GLProgramIDIndex.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1930,6 +1933,9 @@
     </ClCompile>
     <ClCompile Include="SPolyUtils.cpp">
       <Filter>Source Files\SolublePoly\SPolyUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="GLProgramIdIndex.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
