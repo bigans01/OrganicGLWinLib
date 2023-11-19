@@ -6,6 +6,13 @@
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
 
+/*
+
+Description: The very first shader I made; simply renders everything as red.
+
+*/
+
+
 class TerrainPrimitiveGearT1 : public Gear
 {
 	public:
@@ -15,23 +22,28 @@ class TerrainPrimitiveGearT1 : public Gear
 		void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 		void executeGearFunction(std::string in_identifier);
 		void printData();
-		void interpretMessage(Message in_message);
-private:
 
-	// shader uniforms 
-	GLuint mvpHandle;
+		// unused, but required public virtual functions for Gear
+		void interpretMessage(Message in_message) {};
+		void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
+		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
 
-	// VAO 
-	GLuint terrainVaoID = 0;
+	private:
 
-	// terrain VAO setup
-	void setupTerrainVAO();
+		// shader uniforms 
+		GLuint mvpHandle;
 
-	// render terrain
-	void renderTerrain();
+		// VAO 
+		GLuint terrainVaoID = 0;
 
-	// set matrices
-	void setMatrices();
+		// terrain VAO setup
+		void setupTerrainVAO();
+
+		// render terrain
+		void renderTerrain();
+
+		// set matrices
+		void setMatrices();
 };
 
 #endif

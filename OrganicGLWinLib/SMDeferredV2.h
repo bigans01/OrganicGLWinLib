@@ -13,37 +13,42 @@
 #include "TerrainGearT1.h"
 #include "HighlighterGearT1.h"
 
+/*
+
+Description: An alternative to the "mode 4" shader, SMDeferredV1; structured in a similiar manner, but deprecated and unused.
+
+This can be refactored/cleaned when it's been resolved (see the bug tracker, B-007 for tis related issue)
+
+*/
+
 class SMDeferredV2 : public ShaderMachineBase
 {
-public:
-	// virtual functions (defined, inherited)
-	void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize);
-	//void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);	// STEP 2
-	void setupTextureAtlases();	// STEP 2
-	void runAllShadersAndSwap();
-	void runAllShadersNoSwap();
-	void shutdownGL();
-	void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);		// called by OrganicSystem
-	void printDataForGears();
-	//void updateMVPinGears();
-	void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
-	void removeUnusedReplaceables();
-	void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight);
-private:
-	//std::map<int, GLuint> persistentBufferMap;							// map that stores IDs of persistent buffers
-	//std::map<int, std::unique_ptr<Gear>> gearTrain;						// map that stores individual OpenGL programs (aka, "Gears"). GearTrain is borrowed from an engineering term.
-	//std::unordered_map<std::string, int> bufferLookup;					// used to look up buffer IDs
+	public:
+		// virtual functions (defined, inherited)
+		void initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize);
+		void setupTextureAtlases();	// STEP 2
+		void runAllShadersAndSwap();
+		void runAllShadersNoSwap();
+		void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);		// called by OrganicSystem
+		void printDataForGears();
+		void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef);
+		void removeUnusedReplaceables();
+		void flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval);
 
-	//void insertNewPersistentBuffer(std::string in_bufferName, int in_size);
-	void insertTerrainGear(int in_gearID, GLuint in_programID);
-	void insertHighlighterGear(int in_gearID, GLuint in_programID);
+		// unused, but required public virtual functions for ShaderMachineBase
+		void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) {};
+		void shutdownGL() {};
 
-	void setupDeferredFBO();		// sets up the deferred FBO, according to this Machine's needs/specifications
+	private:
+		void insertTerrainGear(int in_gearID, GLuint in_programID);
+		void insertHighlighterGear(int in_gearID, GLuint in_programID);
+		void setupDeferredFBO();		// sets up the deferred FBO, according to this Machine's needs/specifications
+		void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);
+		void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
 
-	void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);
-	void updateUniformRegistry();	// updates the uniform registry with all the appropriate values
+		// unused, but required private virtual functions for ShaderMachineBase
+		void insertCollectionGLDataIntoGearBuffer(std::string in_gearName, std::string in_gearBufferName, TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {}
 
-	//void setupAlternativeDepthTexture();
 };
 
 #endif

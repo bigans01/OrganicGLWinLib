@@ -38,16 +38,12 @@ void SMForwardV1::initialize(int in_windowWidth, int in_windowHeight, int in_imm
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
-	// create the forward multiDrawCallJob
-	//insertNewMultiDrawArrayJob("terrain");
-
-	// create the terrain gear
+	// Gear 0: create the simple terrain gear; renders texture data without UV correction.
 	insertTerrainGear(0, programLookup["TerrainSimpleGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
-	// create the highlighter gear
+	// Gear 1: Render any solid highlightable objects (block target, current blueprint borders, etc)
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 }
 
@@ -88,11 +84,6 @@ void SMForwardV1::runAllShadersNoSwap()
 	runGearTrain();	  // run the draw/rendering for each gear
 }
 
-void SMForwardV1::shutdownGL()
-{
-
-}
-
 void SMForwardV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainSimpleGearT1());
@@ -113,12 +104,12 @@ void SMForwardV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
 void SMForwardV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
-	//updateMVPinGears(); // update the MVP uniforms in each gear
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
 	swapAndPoll();		// swap the buffers, poll for events
 }
+
 void SMForwardV1::printDataForGears()
 {
 	updateUniformRegistry();
@@ -184,7 +175,7 @@ void SMForwardV1::removeUnusedReplaceables()
 	}
 }
 
-void SMForwardV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
+void SMForwardV1::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-
+	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
 }

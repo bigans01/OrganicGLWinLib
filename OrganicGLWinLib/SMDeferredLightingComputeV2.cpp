@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "SMDeferredLightingComputeV1.h"
+#include "SMDeferredLightingComputeV2.h"
 
 // virtual functions (defined, inherited)
-void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
+void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
 	// since this is a compute shader, we must make sure the compute "tiles" are setup correctly
 	ComputeResolution resolution(in_windowWidth, in_windowHeight, 16, 16);// use compute-adjusted coordinates, for a group size of 16
@@ -24,7 +24,7 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
 	//OrganicGLWinUtils::setClearColor(0.33f, 0.01f, 0.23f, 0.0f);	// background color
-	OrganicGLWinUtils::setClearColor(0.33f, 0.72f, 0.25f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.49f, 0.0f, 0.47f, 0.0f);	// background color
 
 
 	// enable depth dest
@@ -63,46 +63,39 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 
 
 	// ########################################################################## Terrain Gear (Lighting Compute) set up
-	// Gear 0: TerrainLightingComputeGearT1, which utilizes the terrain data, operates on the terrain_main buffer;
-	// the terrain_swap is a buffer that is required to allow the GLdata to be swapped in memory.
-	createProgram("TerrainLightingComputeGearT1");
-	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
-	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
-	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
+	// Gear 0: Remember, the TerrainLightingComputeGearBP gear doesn't use the two huge buffers; it manages it's own buffers for each blueprint draw call.
+	// The actual renderable data for each blueprint gets stored in this gear, via the calls to insertCollectionGLData.
+	createProgram("TerrainLightingComputeGearBP");
 	insertNewFBO("deferred_FBO");
 	setupDeferredFBO();
 
-
-	insertTerrainGear(0, programLookup["TerrainLightingComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
-
+	insertTerrainGear(0, programLookup["TerrainLightingComputeGearBP"]);
 
 	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
 	createComputeImage(GL_TEXTURE16, "computeRead", 1);					// image unit 1, "read"
 	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 
 
-	
 	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
 	// Gear 1: The ComputeCopyRBGFromTextureToImageGearT1 gear will read from the color buffer that was output to, 
 	// by Gear 0, and feed this data into the "computeRead" image unit, so that it may be operated on by the next gear.
 	createComputeProgram("ComputeCopyRBGFromTextureToImageGearT1");
 	insertComputeTransferGear(1, programLookup["ComputeCopyRBGFromTextureToImageGearT1"]);
-	
 
-	
+
+
 	// ########################################################################## Compute Gear set up
 	// Gear 2: The DeferredLightingComputeGearT1 compute shader is an experimental shader, that is designed to experiment with
 	// rendering lights against tiles defined in compute shaders. This gear will apply lighting to the color buffer that was transffered-into by Gear 1.
 	createComputeProgram("DeferredLightingComputeGearT1");
 	insertComputeGear(2, programLookup["DeferredLightingComputeGearT1"]);
-	
-	
-	
+
+
 	// ########################################################################## Compute results gear set up
 	// Gear 3: Transfer the resulting lighting data that was stored into the image, into the main FBO.
 	createProgram("DeferredComputeResultsGearT1");
 	insertComputeResultsGear(3, programLookup["DeferredComputeResultsGearT1"]);
-	
+
 
 	// ########################################################################## Highlighter Gear set up
 	// Gear 4: Render any solid highlightable objects (block target, current blueprint borders, etc)
@@ -122,16 +115,27 @@ void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHe
 	createProgram("WaveHighlighterGearT1");
 	insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
 
+	std::cout << "Program IDs: " << std::endl;
+	for (auto& currentProgramValue : programLookup)
+	{
+		std::cout << currentProgramValue.first << " -> " << currentProgramValue.second << std::endl;
+	}
+
+	std::cout << "Gears: " << std::endl;
+	for (auto& currentGearID : gearTrain)
+	{
+		std::cout << currentGearID.first << std::endl;
+	}
 
 
-	std::cout << "++++++++ !! SMDeferredLightingComputeV1 complete. " << std::endl;
+	std::cout << "++++++++ !! SMDeferredLightingComputeV2 complete. " << std::endl;
 	int someVal = 4;
 	std::cin >> someVal;
 }
 
-void SMDeferredLightingComputeV1::setupDeferredFBO()
+void SMDeferredLightingComputeV2::setupDeferredFBO()
 {
-	
+
 	insertNewTexture("depthBuf");
 	insertNewTexture("posTex");
 	insertNewTexture("ambientTex");		// for lighting
@@ -184,7 +188,7 @@ void SMDeferredLightingComputeV1::setupDeferredFBO()
 		int someVal = 3;
 		std::cin >> someVal;
 	}
-		
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//std::cout << "Test of framebuffer has completed. " << std::endl;
@@ -192,7 +196,7 @@ void SMDeferredLightingComputeV1::setupDeferredFBO()
 	//std::cin >> someVal2;
 }
 
-void SMDeferredLightingComputeV1::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
+void SMDeferredLightingComputeV2::createGBufText(GLenum texUnit, GLenum  format, GLuint &texid)
 {
 	glActiveTexture(texUnit);
 	glGenTextures(1, &texid);
@@ -202,7 +206,7 @@ void SMDeferredLightingComputeV1::createGBufText(GLenum texUnit, GLenum  format,
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void SMDeferredLightingComputeV1::createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit)
+void SMDeferredLightingComputeV2::createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit)
 {
 	int tex_w = width;
 	int tex_h = height;
@@ -220,7 +224,7 @@ void SMDeferredLightingComputeV1::createComputeImage(GLenum texUnit, std::string
 	std::cout << "!!!!!!! Compute Image Texture ID is: " << getTextureID(in_imageName) << std::endl;	// should be 4
 }
 
-void SMDeferredLightingComputeV1::setupTextureAtlases()
+void SMDeferredLightingComputeV2::setupTextureAtlases()
 {
 	uniformRegistry.insertFloat("atlasTextureWidth", 1.0f);		// the "1.0f"s will get reset in the call to OrganicGLWinUtils::setupTextureAtlasJPEG
 	uniformRegistry.insertFloat("atlasTileTextureWidth", 1.0f);
@@ -241,7 +245,7 @@ void SMDeferredLightingComputeV1::setupTextureAtlases()
 
 }
 
-void SMDeferredLightingComputeV1::runAllShadersAndSwap()
+void SMDeferredLightingComputeV2::runAllShadersAndSwap()
 {
 	// RESERVED FOR LATER USER
 	updateWaveUniforms();
@@ -252,7 +256,7 @@ void SMDeferredLightingComputeV1::runAllShadersAndSwap()
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredLightingComputeV1::runAllShadersNoSwap()
+void SMDeferredLightingComputeV2::runAllShadersNoSwap()
 {
 	updateWaveUniforms();
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
@@ -261,20 +265,14 @@ void SMDeferredLightingComputeV1::runAllShadersNoSwap()
 	runGearTrain();	  // run the draw/rendering for each gear
 }
 
-void SMDeferredLightingComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
-	
-	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainLightingComputeGearT1());
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new TerrainLightingComputeGearBP());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
-	gearTrain[in_gearID]->passGLuintValue("terrain_main", getPersistentBufferID("terrain_main"));		// pass the main terrain buffer
-	gearTrain[in_gearID]->passGLuintValue("terrain_swap", getPersistentBufferID("terrain_swap"));		// pass the swap terrain buffer
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));					// pass the deferred FBO
-	gearTrain[in_gearID]->executeGearFunction("setup_terrain_VAO");
-
-	std::cout << "!!! Terrain gear (Lighting Compute) inserted. " << std::endl;
 }
 
-void SMDeferredLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertComputeTransferGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new ComputeCopyRBGFromTextureToImageGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
@@ -282,7 +280,7 @@ void SMDeferredLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuin
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
-void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertComputeGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredLightingComputeGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
@@ -293,7 +291,7 @@ void SMDeferredLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_pro
 	std::cout << "!!! Compute Lights gear (Lighting Compute) inserted. " << std::endl;
 }
 
-void SMDeferredLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertComputeResultsGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
@@ -301,7 +299,7 @@ void SMDeferredLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuint
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
-void SMDeferredLightingComputeV1::insertHighlighterGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new HighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
@@ -309,7 +307,7 @@ void SMDeferredLightingComputeV1::insertHighlighterGear(int in_gearID, GLuint in
 	gearTrain[in_gearID]->executeGearFunction("setup_terrain_highlighter_VAO");
 }
 
-void SMDeferredLightingComputeV1::insertInstancedHighlighterGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertInstancedHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new InstancedHighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
@@ -318,13 +316,13 @@ void SMDeferredLightingComputeV1::insertInstancedHighlighterGear(int in_gearID, 
 	gearTrain[in_gearID]->executeGearFunction("setup_instancing_buffers_and_VAO");
 }
 
-void SMDeferredLightingComputeV1::insertWaveHighlighterGear(int in_gearID, GLuint in_programID)
+void SMDeferredLightingComputeV2::insertWaveHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new WaveHighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 }
 
-void SMDeferredLightingComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void SMDeferredLightingComputeV2::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	// clear the FBOs here;
 	// -each Gear's uniforms need to be appropriately set before glUseProgram is called for that gear.
@@ -339,7 +337,7 @@ void SMDeferredLightingComputeV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint
 	swapAndPoll();		// swap the buffers, poll for events
 }
 
-void SMDeferredLightingComputeV1::printDataForGears()
+void SMDeferredLightingComputeV2::printDataForGears()
 {
 	updateUniformRegistry();
 	sendGearUniforms();
@@ -347,7 +345,7 @@ void SMDeferredLightingComputeV1::printDataForGears()
 	gearTrain[0]->printData();
 }
 
-void SMDeferredLightingComputeV1::updateUniformRegistry()
+void SMDeferredLightingComputeV2::updateUniformRegistry()
 {
 	// screen width/height uniforms, adjusted to compute group dimensions
 	uniformRegistry.insertInt("screenWidth", width);
@@ -375,101 +373,26 @@ void SMDeferredLightingComputeV1::updateUniformRegistry()
 	uniformRegistry.insertMat3("NormalMatrix", normalMatrix);
 }
 
-void SMDeferredLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
+void SMDeferredLightingComputeV2::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
 {
-	//std::cout << "!! Called insertCollectionGLData. | Array size is: " << in_arraySize << std::endl;
-	TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.checkForMemoryMovements(in_jobResults);		// check if there are any memory movements required
-	if (currentMeta.containsMovement == 1)
-	{
-		//std::cout << "!! Branch 1 hit. " << std::endl;
-
-		auto copystart = std::chrono::high_resolution_clock::now();
-		//std::cout << "Notice,  currentMeta contains movement. " << std::endl;
-		//OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
-		int writeBackOffset = terrainMemoryTracker.insertNewCollection(in_jobResults);
-		//OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
-		auto copyend = std::chrono::high_resolution_clock::now();
-
-		OrganicGLWinUtils::moveForCopy(getTerrainBufferRef(), currentMeta.byteOffset, currentMeta.byteSize, writeBackOffset);
-
-		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
-
-		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
-		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
-
-		auto buffersubstart = std::chrono::high_resolution_clock::now();
-		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
-		auto buffersubend = std::chrono::high_resolution_clock::now();
-
-		//auto trueend = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> copyelapsed = copyend - copystart;
-		std::chrono::duration<double> buffersubelapsed = buffersubend - buffersubstart;
-		//std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
-		//std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
-		//std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
-		
-		/*
-		if (copyelapsed.count() > 0.016)
-		{
-			std::cout << ">> !! Branch 1: InsertCollectionGLData copy swap time: " << copyelapsed.count() << std::endl;
-			std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
-		}
-		if (buffersubelapsed.count() > 0.016)
-		{
-			std::cout << ">> !! Branch 1: InsertCollectionGLData buffer sub time: " << buffersubelapsed.count() << std::endl;
-			std::cout << ">> Size of swapped data was: " << currentMeta.byteSize << std::endl;
-		}
-		*/
-		
-	}
-	else if (currentMeta.containsMovement == 0)
-	{
-		//std::cout << "!! Branch 2 hit. " << std::endl;
-		auto truestart = std::chrono::high_resolution_clock::now();
-
-		terrainMemoryTracker.insertNewCollection(in_jobResults);
-		glBindBuffer(GL_ARRAY_BUFFER, *getTerrainBufferRef());
-		int targetOffset = terrainMemoryTracker.getCollectionOffset(in_jobResults.collectionKey);
-		//RenderCollection* tempRenderCollectionRef = organicSystemPtr->renderCollMap.getRenderCollectionRef(in_jobResults.collectionKey);
-		glBufferSubData(GL_ARRAY_BUFFER, targetOffset, in_arraySize, in_arrayRef);
-
-		auto trueend = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> trueelapsed = trueend - truestart;
-		//std::cout << ">> !! Branch 2: InsertCollectionGLData time: " << trueelapsed.count() << std::endl;
-		/*
-		if (trueelapsed.count() > 0.016)
-		{
-			std::cout << ">> !! Branch 2: InsertCollectionGLData time: " << trueelapsed.count() << std::endl;
-		}
-		*/
-	}
+	std::cout << "!!~~ Called insertCollectionGLData. | Array size is: " << in_arraySize << std::endl;
+	insertCollectionGLDataIntoGearBuffer("TerrainLightingComputeGearBP", "default", in_jobResults, in_arraySize, in_arrayRef);
 }
 
-void SMDeferredLightingComputeV1::removeUnusedReplaceables()
+
+void SMDeferredLightingComputeV2::insertCollectionGLDataIntoGearBuffer(std::string in_gearName, std::string in_gearBufferName, TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
 {
-	if (terrainMemoryTracker.getNumberOfUnusedReplaceables() != 0)
-	{
-		int numberOfTicks = terrainMemoryTracker.getNumberOfUnusedReplaceables();
-		for (int x = 0; x < numberOfTicks; x++)
-		{
+	std::cout << "!!!! Found gear to insert data into..." << std::endl;
 
-			TerrainMemoryMoveMeta currentMeta = terrainMemoryTracker.removeUnusedReplaceablesAndShift();
-			//OrganicGLWinUtils::copyToBuffer(getTerrainBufferRef(), getTerrainSwapRef(), currentMeta.byteOffset, currentMeta.byteSize, 0);
-			int writeBackOffset = currentMeta.copyBackOffset;
-			//OrganicGLWinUtils::copyToBuffer(getTerrainSwapRef(), getTerrainBufferRef(), 0, currentMeta.byteSize, writeBackOffset);
-			//std::cout << std::endl;
-			OrganicGLWinUtils::moveForCopy(getTerrainBufferRef(), currentMeta.byteOffset, currentMeta.byteSize, writeBackOffset);
-			terrainMemoryTracker.outputAllElements();
+	int targetGearToInsert = 0;
+	std::cout << "Gear ID: " << targetGearToInsert << std::endl;
 
-		}
-	}
-	else
-	{
-		//std::cout << "No unused replaceables to remove..." << std::endl;
-	}
+	gearTrain[targetGearToInsert]->sendTerrainDataToGear(in_jobResults, in_arraySize, in_arrayRef);
+
 }
 
-void SMDeferredLightingComputeV1::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
+void SMDeferredLightingComputeV2::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
+	int targetGearToModify = 0;
+	gearTrain[targetGearToModify]->removeTerrainDataFromGear(in_keyForRemoval);
 }

@@ -43,6 +43,10 @@ public:
 		virtual void multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections) = 0;		// STEP 4
 		virtual void printDataForGears() = 0;
 		virtual void insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) = 0;
+		
+		virtual void flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval) = 0;
+		virtual void insertCollectionGLDataIntoGearBuffer(std::string in_gearName, std::string in_gearBufferName, TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) = 0;
+
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
 

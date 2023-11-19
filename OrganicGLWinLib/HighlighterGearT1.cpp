@@ -65,15 +65,6 @@ void HighlighterGearT1::executeGearFunction(std::string in_identifier)
 	}
 }
 
-void HighlighterGearT1::printData()
-{
-
-}
-
-void HighlighterGearT1::interpretMessage(Message in_message)
-{
-}
-
 void HighlighterGearT1::setupHighlighterVAO()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&highlighterVAO);	// create/bind the highlighter VAO

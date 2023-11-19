@@ -7,6 +7,13 @@
 #include "OrganicGLWinUtils.h"
 #include "GLDrawElementsInstancedJob.h"
 
+/*
+
+Description: This shader has the ability to render an instance of an object; it is experimental. It uses MAt4 values to render individual 
+instances of an object.
+
+*/
+
 class InstancedHighlighterGearT1 : public Gear
 {
 	public:
@@ -15,8 +22,12 @@ class InstancedHighlighterGearT1 : public Gear
 		void render();
 		void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
 		void executeGearFunction(std::string in_identifier);
-		void printData();
-		void interpretMessage(Message in_message);
+
+		// unused, but required public virtual functions for Gear
+		void printData() {};
+		void interpretMessage(Message in_message) {};
+		void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
+		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
 	private:
 		void setupInstancingBuffersAndVAO();
 		GLuint instancingVAO;

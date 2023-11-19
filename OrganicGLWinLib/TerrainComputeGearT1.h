@@ -17,6 +17,9 @@ public:
 	void executeGearFunction(std::string in_identifier);
 	void printData();
 	void interpretMessage(Message in_message);
+
+	void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
+	void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
 private:
 
 	//GLuint terrainBufferID = 0;				// the primary terrain buffer

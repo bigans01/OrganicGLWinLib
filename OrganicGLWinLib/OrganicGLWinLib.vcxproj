@@ -190,6 +190,7 @@
     <ClInclude Include="PosZFaceResolver.h" />
     <ClInclude Include="RenderableCube.h" />
     <ClInclude Include="RenderablePrimitiveBase.h" />
+    <ClInclude Include="SMDeferredLightingComputeV2.h" />
     <ClInclude Include="SPolyMode.h" />
     <ClInclude Include="SPolyResolution.h" />
     <ClInclude Include="SPolyShellProducer.h" />
@@ -434,6 +435,7 @@
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
     <ClInclude Include="SummaryScanResult.h" />
+    <ClInclude Include="TerrainLightingComputeGearBP.h" />
     <ClInclude Include="ThreeDLineSegment.h" />
     <ClInclude Include="TileLocation.h" />
     <ClInclude Include="TimeBasedWaveBase.h" />
@@ -571,6 +573,7 @@
     <ClCompile Include="RenderableCube.cpp" />
     <ClCompile Include="RenderablePrimitiveBase.cpp" />
     <ClCompile Include="RenderablePrimitiveContainer.cpp" />
+    <ClCompile Include="SMDeferredLightingComputeV2.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />
@@ -656,6 +659,7 @@
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
     <ClCompile Include="SPolyUtils.cpp" />
+    <ClCompile Include="TerrainLightingComputeGearBP.cpp" />
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzer.cpp" />
     <ClCompile Include="LineWelder.cpp" />
     <ClCompile Include="MassZone.cpp" />

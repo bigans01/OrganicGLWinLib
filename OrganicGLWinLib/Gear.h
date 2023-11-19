@@ -14,6 +14,7 @@
 #include "GLDrawElementsInstancedJob.h"
 #include "SmartIntMap.h"
 #include "GLProgramIDIndex.h"
+#include "TerrainJobResults.h"
 
 class ShaderMachineBase;
 class Gear
@@ -33,6 +34,10 @@ class Gear
 		virtual void executeGearFunction(std::string in_identifier) = 0;
 		virtual void printData() = 0;
 		virtual void interpretMessage(Message in_message) = 0;
+
+		virtual void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) = 0;
+		virtual void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) = 0;
+
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
 		void removeMultiDrawArrayJob(std::string in_jobName);
 		void insertDrawElementsInstancedJob(std::string in_jobName, GLDrawElementsInstancedJob in_job);

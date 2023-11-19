@@ -6,32 +6,43 @@
 #include "Gear.h"
 #include "OrganicGLWinUtils.h"
 
+/*
+
+Description: uses basic forward rendering to render textured tiled terrain data; does not do UV correction, so there is going to be bleeding of tiles
+into neighboring tiles.
+
+*/
+
 class TerrainSimpleGearT1 : public Gear
 {
-public:
-	// defined virtual functions (from MachineShader base class)
-	void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr);
-	void render();
-	void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
-	void executeGearFunction(std::string in_identifier);
-	void printData();
-	void interpretMessage(Message in_message);
+	public:
+		// defined virtual functions (from MachineShader base class)
+		void initializeMachineShader(int in_width, int in_height, GLuint in_programID, GLFWwindow* in_windowRef, ShaderMachineBase* in_shaderMachineBasePtr);
+		void render();
+		void passGLuintValue(std::string in_identifier, GLuint in_gluInt);
+		void executeGearFunction(std::string in_identifier);
+		void printData();
 
-private:
+		// unused, but required public virtual functions for Gear
+		void interpretMessage(Message in_message) {};
+		void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
+		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
 
-	// shader uniforms 
-	GLuint mvpHandle;
+	private:
 
-	// VAO 
-	GLuint terrainVaoID = 0;
+		// shader uniforms 
+		GLuint mvpHandle;
 
-	// terrain VAO setup
-	void setupTerrainVAO();
+		// VAO 
+		GLuint terrainVaoID = 0;
 
-	// render terrain
-	void renderTerrain();
+		// terrain VAO setup
+		void setupTerrainVAO();
 
-	// set matrices
-	void setMatrices();
+		// render terrain
+		void renderTerrain();
+
+		// set matrices
+		void setMatrices();
 };
 #endif

@@ -21,7 +21,7 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(0.0f, 0.0f, 23.7f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.0f, .237f, 0.7f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
@@ -52,42 +52,46 @@ void SMDeferredComputeV1::initialize(int in_windowWidth, int in_windowHeight, in
 
 
 	// ########################################################################## Terrain Gear (Compute) set up
+	// Gear 0: Setup TerrainComputeGearT1, which loads deferred rendering data into the deferred FBO buffer.
 	terrainBufferSize = in_immutableBufferSize * 1000000;			// setup the immutable buffers, x2
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 	insertNewBuffer("render_quad_buffer");							// set up the render quad buffer
 	insertNewFBO("deferred_FBO");									// create the deferred FBO; set it up
 	setupDeferredFBO();
-
-	
-	//insertNewMultiDrawArrayJob("terrain");
 	createProgram("TerrainComputeGearT1");
 	insertTerrainGear(0, programLookup["TerrainComputeGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	
 	// ########################################################################## Compute Gear set up
+	// Gear 1: Read from the color data in the FBO, into the computeWrite image we created.
 	createComputeProgram("DeferredComputeGearT1");
 	createComputeImage("computeWrite");			// the name of the texture that contains the image the compute shader will write to
 	insertComputeGear(1, programLookup["DeferredComputeGearT1"]);
 
 	// ########################################################################## Compute results gear set up
+	// Gear 2: When used in this case, DeferredComputeResultsGearT1 will transfer data from the image that the compute shader loaded into,
+	// into the main FBO.
 	createProgram("DeferredComputeResultsGearT1");
 	insertNewBuffer("compute_quad_buffer");
 	insertComputeResultsGear(2, programLookup["DeferredComputeResultsGearT1"]);
 	
 
 	// ########################################################################## Highlighter Gear set up
+	// Gear 3: Render any solid highlightable objects (block target, current blueprint borders, etc)
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(3, programLookup["HighlighterGearT1"]);
 
+	// ########################################################################## Instanced Highlighter Gear set up
+	// Gear 4: Draw any instanced rendering models (currently unused)
 	createProgram("InstancedHighlighterGearT1");
 	insertNewBuffer("mesh_buffer");
 	insertNewBuffer("matrices_buffer");
 	insertInstancedHighlighterGear(4, programLookup["InstancedHighlighterGearT1"]);
 
 	// ########################################################################## Wave highlighter gear set up
+	// Gear 5: display wave highlights (i.e, current ORE highlight, constituted highlights of an ORE)
 	createProgram("WaveHighlighterGearT1");
 	insertWaveHighlighterGear(5, programLookup["WaveHighlighterGearT1"]);
 
@@ -129,11 +133,6 @@ void SMDeferredComputeV1::runAllShadersNoSwap()
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
-}
-
-void SMDeferredComputeV1::shutdownGL()
-{
-
 }
 
 void SMDeferredComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
@@ -352,7 +351,7 @@ void SMDeferredComputeV1::removeUnusedReplaceables()
 	}
 }
 
-void SMDeferredComputeV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
+void SMDeferredComputeV1::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-
+	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
 }

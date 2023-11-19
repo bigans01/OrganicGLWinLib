@@ -1332,6 +1332,12 @@
     <ClInclude Include="GLProgramIDIndex.h">
       <Filter>Header Files\ShaderMachines\Gears</Filter>
     </ClInclude>
+    <ClInclude Include="SMDeferredLightingComputeV2.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLightingComputeGearBP.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1935,6 +1941,12 @@
       <Filter>Source Files\SolublePoly\SPolyUtils</Filter>
     </ClCompile>
     <ClCompile Include="GLProgramIdIndex.cpp">
+      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    </ClCompile>
+    <ClCompile Include="SMDeferredLightingComputeV2.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLightingComputeGearBP.cpp">
       <Filter>Source Files\ShaderMachines\Gears</Filter>
     </ClCompile>
   </ItemGroup>

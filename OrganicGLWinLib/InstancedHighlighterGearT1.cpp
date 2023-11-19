@@ -53,16 +53,6 @@ void InstancedHighlighterGearT1::executeGearFunction(std::string in_identifier)
 	}
 }
 
-void InstancedHighlighterGearT1::printData()
-{
-
-}
-
-void InstancedHighlighterGearT1::interpretMessage(Message in_message)
-{
-
-}
-
 void InstancedHighlighterGearT1::setupInstancingBuffersAndVAO()
 {
 	std::cout << "########### CALLING INSTANCED HIGHLIGHT SET UP " << std::endl;

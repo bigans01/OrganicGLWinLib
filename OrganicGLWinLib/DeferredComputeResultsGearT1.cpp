@@ -51,21 +51,6 @@ void DeferredComputeResultsGearT1::passGLuintValue(std::string in_identifier, GL
 	}
 }
 
-void DeferredComputeResultsGearT1::executeGearFunction(std::string in_identifier)
-{
-
-}
-
-void DeferredComputeResultsGearT1::printData()
-{
-
-}
-
-void DeferredComputeResultsGearT1::interpretMessage(Message in_message)
-{
-
-}
-
 void DeferredComputeResultsGearT1::setUpRenderQuad()
 {
 	OrganicGLWinUtils::createAndBindVertexArray(&quadVaoID);	// create/bind the VAO to quadVaoID

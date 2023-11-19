@@ -38,16 +38,12 @@ void SMPrimitiveV1::initialize(int in_windowWidth, int in_windowHeight, int in_i
 	insertNewPersistentBuffer("terrain_main", terrainBufferSize);		// main terrain buffer
 	insertNewPersistentBuffer("terrain_swap", terrainBufferSize);		// terrain swap buffer
 
-	// create the forward multiDrawCallJob
-	//insertNewMultiDrawArrayJob("terrain");
-
-	// create the terrain gear
+	// Gear 0: create the terrain gear; simply renders everything as red.
 	insertTerrainGear(0, programLookup["TerrainPrimitiveGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
-	// create the highlighter gear
+	// Gear 1: create the highlighter gear
 	createProgram("HighlighterGearT1");
 	insertNewBuffer("highlighter_buffer");
-	//insertNewMultiDrawArrayJob("highlighter_draw_job");
 	insertHighlighterGear(1, programLookup["HighlighterGearT1"]);
 }
 void SMPrimitiveV1::setupTextureAtlases()
@@ -88,15 +84,9 @@ void SMPrimitiveV1::runAllShadersNoSwap()
 	runGearTrain();	  // run the draw/rendering for each gear
 }
 
-void SMPrimitiveV1::shutdownGL()
-{
-
-}
-
 void SMPrimitiveV1::multiDrawTerrain(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	updateUniformRegistry();	// update all necessary uniforms in the registry, before they are re-sent to each gear
-	//updateMVPinGears(); // update the MVP uniforms in each gear
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
@@ -184,7 +174,7 @@ void SMPrimitiveV1::removeUnusedReplaceables()
 	}
 }
 
-void SMPrimitiveV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
+void SMPrimitiveV1::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-
+	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
 }

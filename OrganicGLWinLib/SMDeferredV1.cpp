@@ -61,10 +61,14 @@ void SMDeferredV1::initialize(int in_windowWidth, int in_windowHeight, int in_im
 
 	// create the terrain gear
 	std::cout << "!!! Attempting insert of TerrainGearT1" << std::endl;
+
+	// ########################################################################## terrain Gear set up
+	// Gear 0: This basic Gear that is supposed to deferred rendering isn't working on some GPUs; it causes a crash on an Nvidia 4070
 	insertTerrainGear(0, programLookup["TerrainGearT1"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 	std::cout << "!!! DONE Attempting insert of TerrainGearT1" << std::endl;
 
 	// ########################################################################## Highlighter Gear set up
+	// Gear 1: Render any solid highlightable objects (block target, current blueprint borders, etc)
 	//createMode0Program("Mode0");
 	//createMode0Program("HighlighterGearT1");
 	createProgram("HighlighterGearT1");
@@ -121,11 +125,6 @@ void SMDeferredV1::runAllShadersNoSwap()
 
 	//std::cout << "test: uniform for atlasTextureWidth: " << uniformRegistry.getFloat("atlasTextureWidth") << std::endl;
 	//std::cout << "test: uniform for atlasTileTextureWidth: " << uniformRegistry.getFloat("atlasTileTextureWidth") << std::endl;
-}
-
-void SMDeferredV1::shutdownGL()
-{
-
 }
 
 void SMDeferredV1::insertTerrainGear(int in_gearID, GLuint in_programID)
@@ -315,7 +314,7 @@ void SMDeferredV1::removeUnusedReplaceables()
 	}
 }
 
-void SMDeferredV1::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
+void SMDeferredV1::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-
+	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
 }

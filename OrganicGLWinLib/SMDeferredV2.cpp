@@ -31,8 +31,8 @@ void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	OrganicGLWinUtils::IMGuiInit(window);
 
 
-	// ########################################################################## Terrain Gear set up
-	// create the programs
+	// ########################################################################## terrain Gear set up
+	// Gear 0: This basic Gear that is supposed to deferred rendering isn't working on some GPUs; it causes a crash on an Nvidia 4070
 	//createMode4Program("Mode4");		// create the mode 4 program, name it mode 4. it MUST be created before the corresponding gear(s) is/are inserted.
 	//createMode4Program("TerrainGearT1");
 	createProgram("TerrainGearT2");
@@ -61,6 +61,7 @@ void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_im
 	insertTerrainGear(0, programLookup["TerrainGearT2"]);		// create the terrain shader (always the first shader); set the gear's program to be mode 4
 
 	// ########################################################################## Highlighter Gear set up
+	// Gear 1: Render any solid highlightable objects (block target, current blueprint borders, etc)
 	//createMode0Program("Mode0");
 	//createMode0Program("HighlighterGearT1");
 	createProgram("HighlighterGearT1");
@@ -106,11 +107,6 @@ void SMDeferredV2::runAllShadersNoSwap()
 	sendGearUniforms();	// send any other special uniform requests to each gear. 
 	sendDrawJobs();		// send each draw job to the gear(s) that requested them.
 	runGearTrain();	  // run the draw/rendering for each gear
-}
-
-void SMDeferredV2::shutdownGL()
-{
-
 }
 
 void SMDeferredV2::insertTerrainGear(int in_gearID, GLuint in_programID)
@@ -276,7 +272,7 @@ void SMDeferredV2::removeUnusedReplaceables()
 	}
 }
 
-void SMDeferredV2::insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight)
+void SMDeferredV2::flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval)
 {
-
+	terrainMemoryTracker.jobFlagAsReplaceable(in_keyForRemoval);
 }
