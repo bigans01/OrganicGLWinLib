@@ -150,7 +150,13 @@ void SMDeferredLightingComputeV1::setupDeferredFBO()
 	createGBufText(GL_TEXTURE3, GL_RGB8, getTextureLValueRef("diffuseTex"));		// g buffer for light diffuse = unit 2 (diffuseTex)
 	createGBufText(GL_TEXTURE4, GL_RGB8, getTextureLValueRef("specularTex"));		// g buffer for light specular = unit 3 (specularTex)
 	createGBufText(GL_TEXTURE13, GL_RGB8, getTextureLValueRef("colorTex"));		// g buffer for color = unit 2 (colorTex)
-	createGBufText(GL_TEXTURE14, GL_RGB8, getTextureLValueRef("normalTex"));		// g buffer for color = unit 2 (colorTex)
+
+	// Below: we need some variant that uses float data, for storing normals: GL_RGB32F can do the trick, or possibly even GLRGB16F...
+	// note that the second parameter, GL_RGB32F, used to actually be GL_RGB8; using this format was incorrect, as only normals with positive 
+	// values in the x/y/z dimension could be stored. Experiment with GL_RGBA16F when able, as GL_RGB32F may be overkill.
+	//
+	// See article: https://learnopengl.com/Advanced-Lighting/Deferred-Shading
+	createGBufText(GL_TEXTURE14, GL_RGBA16F, getTextureLValueRef("normalTex"));		// g buffer for color = unit 2 (colorTex)
 
 	std::cout << "!!!!!!!!!!! COMPUTE_V1: Depth buf value (pre-assign) is: " << getTextureID("depthBuf") << std::endl;
 	glActiveTexture(GL_TEXTURE6);
