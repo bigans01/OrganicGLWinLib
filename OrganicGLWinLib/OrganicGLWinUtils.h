@@ -104,20 +104,6 @@ public:
 	static ImGuiWindowFeedback IMGuiPrepWorldLocation(float world_precise[3], int world_organicLoc[9]);	// render the world location, return any metadata about mouse interaction/status
 	static ImGuiWindowFeedback IMGuiPrepBlockLocation(int world_organicLoc[9]);							// render the block location, return any metadata about mouse interaction/status
 
-	// TerrainTriangle functions
-
-	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREBlocks(OrganicRawEnclave* in_orePointer, 
-																	  EnclaveKeyDef::EnclaveKey in_oreKey, 
-																	  EnclaveKeyDef::EnclaveKey in_blueprintKey, 
-																	  AtlasMap* atlasMapRef);
-	static std::vector<TerrainTriangle> produceTerrainTrianglesFromOREEnclaveTriangles(OrganicRawEnclave* in_orePointer,
-																	  EnclaveKeyDef::EnclaveKey in_oreKey,
-																	  EnclaveKeyDef::EnclaveKey in_blueprintKey,
-																	  AtlasMap* atlasMapRef,
-																	  bool in_debugFlag);
-																			
-
-
 };
 
 #endif
