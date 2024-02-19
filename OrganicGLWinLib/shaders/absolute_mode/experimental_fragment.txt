@@ -1,0 +1,41 @@
+#version 330 core
+
+// Interpolated values from the vertex shaders
+in vec2 UV;
+
+// Output data:
+out vec3 color;
+
+// Values that stay constant
+uniform sampler2D TextureSampler;
+uniform float baseTextureWidth;
+
+void main()
+{
+	// Output color = color of the texture at the specified UV
+	float mipmapLevel = textureQueryLod(TextureSampler, UV).x;  // get the mipmap level that was used for automatic sampling
+	float baseTexWidthCopy = baseTextureWidth;			// copy from the uniform variable
+	if (mipmapLevel > 0)
+    {
+	    for (int i = 0; i < mipmapLevel; ++i)
+        {
+           baseTexWidthCopy = baseTexWidthCopy / 2;     // get the current width value to use
+        }		
+	}
+	float baseDist = 1.0f;	// just set the 1 value
+	float pixelUnitValue = baseDist / baseTexWidthCopy;
+	
+	// calculate pixel counts
+	float U_pixels_count = floor(UV.x / pixelUnitValue);
+	float V_pixels_count = floor(UV.y / pixelUnitValue);
+	
+	// calculated adjusted values
+	float adjusted_U_value = (U_pixels_count + .5) / baseTexWidthCopy;
+	float adjusted_V_value = (V_pixels_count + .5) / baseTexWidthCopy;
+	
+	vec2 newUV;
+	newUV.x = adjusted_U_value;
+	newUV.y = adjusted_V_value;
+	
+	color = texture(TextureSampler, newUV).rgb;  // use the new adjusted value
+}

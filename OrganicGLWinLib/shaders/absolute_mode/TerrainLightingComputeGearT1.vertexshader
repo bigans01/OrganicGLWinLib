@@ -1,0 +1,129 @@
+#version 430 core
+
+
+// Timestamp: 4/11/2019
+// Input vertex data, different for all executions of this shader.
+// testing for tile at 1, 1 ("blue") (it's really GRASS!)
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec3 calculatedNormal;
+layout(location = 2) in vec2 vertexUV;
+layout(location = 3) in vec2 tileUV;
+
+//layout(location = 0) in vec3 vertexPosition_modelspace;
+//layout(location = 1) in vec2 vertexUV;
+//layout(location = 2) in vec2 tileUV;
+
+// Output data ; will be interpolated for each fragment.
+out vec2 mmUVs[8];		// for storing the converted UVs for each MM level
+out vec3 outNormal;
+out vec3 Position;		// position of the vertex
+out vec2 UV;			// UV of the vertex (for pass 2 only -- should be revisited later)
+
+// Values that stay constant for the whole mesh.
+uniform mat4 ModelViewMatrix;
+uniform mat3 NormalMatrix;
+uniform mat4 MVP;
+uniform vec3 worldPosition;
+uniform float atlasTextureWidth;
+uniform float atlasTileTextureWidth;
+														
+void findMMLevelUVs(in int mmLevel);																				// finds appropriate UV values
+float checkTexelBorders(in float uvCoord, in float pixelUnitValue, in float leftBorder, in float rightBorder);		// checks the texel borders; ensures that the texels are within appropriate ranges
+vec2 getTexelBorders(in float inCoord);
+float distanceDiff = distance(vertexPosition_modelspace, worldPosition);
+
+void main()
+{
+    outNormal = normalize(NormalMatrix * calculatedNormal);
+	//Position = vec3( ModelViewMatrix * vec4(vertexPosition_modelspace,1.0) );
+	Position = vertexPosition_modelspace;							// output the original, un-altered terrain coordinates from the OrganicSystem
+	UV = vertexUV;													// will only be used in pass 2
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);			// Output position of the vertex, in clip space : MVP * position
+	findMMLevelUVs(7);												// Generate all appropriate UV values
+}
+
+
+void findMMLevelUVs(in int mmLevel)
+{
+	float atlasWidth = atlasTextureWidth;
+	float pixelUnitValue = 1.0f / atlasTextureWidth;         // test
+	float halfPixelUnitValue = pixelUnitValue / 2; // test
+	
+	vec2 U_borders = getTexelBorders(tileUV.x);
+	vec2 V_borders = getTexelBorders(tileUV.y);
+	float U_texel_begin = checkTexelBorders(vertexUV.x, pixelUnitValue, U_borders.x, U_borders.y);
+	float V_texel_begin = checkTexelBorders(vertexUV.y, pixelUnitValue, V_borders.x, V_borders.y);
+	
+	mmUVs[0].x = U_texel_begin;		       // set UV for mipmap level 0.
+	mmUVs[0].y = V_texel_begin;
+	if (mmLevel > 0)			      // set other MM levels
+	{
+		for (int x = 1; x < (mmLevel + 1); x++)   // remember, we are filling mipmaps, but not at level 0. (done in previous step)
+		{
+			atlasWidth = atlasWidth / 2;                    // set the atlas width for this mm level
+			//leftTexelBorder = leftTexelBorder / 2;
+			//rightTexelBorder = rightTexelBorder / 2; // set the rightTexelBorder for this mm level
+			
+			U_borders.x = U_borders.x / 2;
+			U_borders.y = U_borders.y / 2;
+			V_borders.x = V_borders.x / 2;
+			V_borders.y = V_borders.y / 2;
+			
+			pixelUnitValue = 1.0f / atlasWidth;          // get the pixelUnitValue for this mmLevel
+			halfPixelUnitValue = pixelUnitValue / 2; // test
+
+			U_texel_begin = checkTexelBorders(vertexUV.x, pixelUnitValue, U_borders.x, U_borders.y);
+			V_texel_begin = checkTexelBorders(vertexUV.y, pixelUnitValue, V_borders.x, V_borders.y);
+			
+			mmUVs[x].x = U_texel_begin;
+			mmUVs[x].y = V_texel_begin;
+		}
+	}
+}
+
+float checkTexelBorders(in float uvCoord, in float pixelUnitValue, in float leftBorder, in float rightBorder)
+{
+    float returnVal;	
+	float rightLimit = rightBorder - 1.0f;		// if rightBorderLimit is 1024, the limit is 1023
+	float leftLimit = leftBorder + 1.0f;    	// if leftBorderLimit is 512, the limit is 513
+	float halfPixelValue = pixelUnitValue /2;	// get the half pixel value
+	returnVal = floor(uvCoord / pixelUnitValue);		// basic calculation
+	if (returnVal >= rightLimit)						// does the floored value lie beyond the right border limit?
+	{
+	   returnVal = (rightLimit - 1.0f) + halfPixelValue;
+	}
+	
+	else if (returnVal <= leftLimit)					// does the floored value lie beyond the left border limit?
+	{
+	   returnVal = (leftLimit + 1.0f) - halfPixelValue;
+	}
+	
+	else
+	{
+	   returnVal = returnVal + halfPixelValue;
+	}
+	returnVal = returnVal * pixelUnitValue;
+	return returnVal;
+}
+
+vec2 getTexelBorders(in float inCoord)
+{
+	vec2 returnVec;
+	int tileCoord = int(inCoord);
+	if (tileCoord == 0)
+	{
+		returnVec.x = 0;
+		returnVec.y = atlasTileTextureWidth;
+	}
+	else
+	{
+		returnVec.x = tileCoord * atlasTileTextureWidth;
+		returnVec.y = (tileCoord * atlasTileTextureWidth) + atlasTileTextureWidth;
+	}
+	return returnVec;
+}
+
+
+
+
+

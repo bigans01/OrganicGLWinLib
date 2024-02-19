@@ -1,0 +1,32 @@
+#version 330 core
+
+#extension GL_ARB_texture_query_lod : enable
+// Timestamp: 4/11/2019
+// Interpolated values from the vertex shaders
+in vec2 mmUVs[8];
+
+// Output data:
+out vec4 color;
+
+// Values that stay constant
+uniform sampler2D TextureSampler;
+
+void findCenteredTexelColor();
+void main()
+{
+	// NEW CODE TO TEST GOES HERE
+	findCenteredTexelColor();
+}
+
+void findCenteredTexelColor()
+{
+	int tempMMLevel = int(textureQueryLod(TextureSampler, mmUVs[0]).x);			// replace this with UV?
+	float maxMMLevel = 7.0f;
+	if (tempMMLevel >= maxMMLevel)
+	{
+	    tempMMLevel = int(maxMMLevel);
+	}
+	vec2 appropriateUV = mmUVs[tempMMLevel];
+	color = textureLod(TextureSampler, appropriateUV, tempMMLevel);
+}
+

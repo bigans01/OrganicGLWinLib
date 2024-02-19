@@ -1,0 +1,54 @@
+#version 430 core
+
+subroutine void RenderPassType();
+subroutine uniform RenderPassType RenderPass;
+vec2 getAppropriateUV();
+
+// g-buffer textures
+layout(binding = 0) uniform sampler2D terrainTexture;	// texture unit 0 will be the texture being sampled from in pass1, for colors
+layout(binding = 1) uniform sampler2D PositionTexture;
+layout(binding = 2) uniform sampler2D ColorTexture;
+
+// inputs
+in vec2 mmUVs[8];		// for storing the converted UVs for each MM level
+in vec3 Position;	// position
+in vec2 UV;			// tex coords
+
+// outputs
+layout (location = 0) out vec4 FragColor;	// actual color output, used in pass2 (texture unit 0)
+layout (location = 1) out vec3 PositionData;	// used in pass 2
+layout (location = 2) out vec3 ColorData; 		// used in pass 2
+
+subroutine (RenderPassType)
+void pass1()
+{
+	// output to g-buffer textures, position and color
+	PositionData = Position;					// output position to texture unit 1
+	ColorData = texture(terrainTexture,getAppropriateUV()).rgb;		// output color to texture unit 2; use the appropriate UV value only
+	vec3 testColor;
+	testColor.r = 100.0f;
+	//ColorData = testColor;
+}
+
+subroutine (RenderPassType)
+void pass2()
+{
+	FragColor = texture(ColorTexture, UV);
+}
+
+vec2 getAppropriateUV()
+{
+	int tempMMLevel = int(textureQueryLod(terrainTexture, mmUVs[0]).x);			// replace this with UV?
+	float maxMMLevel = 7.0f;
+	if (tempMMLevel >= maxMMLevel)
+	{
+	    tempMMLevel = int(maxMMLevel);
+	}
+	vec2 appropriateUV = mmUVs[tempMMLevel];
+	return appropriateUV;
+}
+
+void main()
+{
+  RenderPass();
+}

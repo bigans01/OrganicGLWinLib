@@ -1,0 +1,40 @@
+#version 430 core
+
+vec2 getAppropriateUV();
+
+// NOTES:
+// gl_FragDepth = texture(DepthTexture,UV).r;			// REMEMBER: when specifiying what the frag depth will be JUST ONCE, you MUST manually set these values everywhere.
+// gl_FragDepth = gl_FragCoord.z;						// REMEMBER: when specifiying what the frag depth will be JUST ONCE, you MUST manually set these values 
+
+// g-buffer textures (can optionally sample from DepthTexture for testing purposes)
+layout(binding = 0) uniform sampler2D terrainTexture;	// texture unit 0 will be the texture being sampled from in pass1, for colors
+layout(binding = 3) uniform sampler2D DepthTexture;
+
+// inputs
+in vec2 mmUVs[8];	// for storing the converted UVs for each MM level
+in vec3 Position;	// position
+in vec2 UV;			// tex coords, for the quad of pass 2
+
+// outputs; these correspond to values in the drawBuffers call for glDrawBuffers -- GL_NONE, GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1
+layout (location = 0) out vec4 FragColor;	// actual color output, used in pass2 (default frame buffer color location)
+layout (location = 1) out vec3 PositionData;	// used in pass 2
+layout (location = 2) out vec3 ColorData; 		// used in pass 2
+
+vec2 getAppropriateUV()
+{
+	int tempMMLevel = int(textureQueryLod(terrainTexture, mmUVs[0]).x);			// replace this with UV?
+	float maxMMLevel = 7.0f;
+	if (tempMMLevel >= maxMMLevel)
+	{
+	    tempMMLevel = int(maxMMLevel);
+	}
+	vec2 appropriateUV = mmUVs[tempMMLevel];
+	return appropriateUV;
+}
+
+void main()
+{
+	// output to g-buffer textures, position and color
+	PositionData = Position;										// output position to texture unit 1
+	ColorData = texture(terrainTexture,getAppropriateUV()).rgb;		// output color to texture unit 2; use the appropriate UV value only
+}

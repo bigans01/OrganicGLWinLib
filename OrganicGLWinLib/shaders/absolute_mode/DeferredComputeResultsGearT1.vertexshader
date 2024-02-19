@@ -1,0 +1,25 @@
+#version 430 core
+
+
+// Timestamp: 4/11/2019
+// Input vertex data, different for all executions of this shader.
+// testing for tile at 1, 1 ("blue") (it's really GRASS!)
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexUV;
+
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;			// UV of the vertex (for pass 2 only -- should be revisited later)
+
+// Values that stay constant for the whole mesh.
+uniform mat4 ModelViewMatrix;
+uniform mat4 MVP;
+														
+void main()
+{
+	UV = vertexUV;													// will only be used in pass 2
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);			// Output position of the vertex, in clip space : MVP * position
+}
+
+
+
+

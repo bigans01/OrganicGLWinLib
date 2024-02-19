@@ -121,12 +121,6 @@
     <Filter Include="Header Files\UV">
       <UniqueIdentifier>{d7eb27a6-16f3-4946-9bee-dc070adaa11e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ShaderMachines\Gears\Generic">
-      <UniqueIdentifier>{5b037c69-7140-4fc4-9ed3-086e73fee9d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ShaderMachines\Gears\Generic">
-      <UniqueIdentifier>{7457d546-1617-458f-af81-ab3ccbfa1c5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\WorldLight">
       <UniqueIdentifier>{ac9551da-55ff-461b-80ca-66682fa68645}</UniqueIdentifier>
     </Filter>
@@ -156,6 +150,117 @@
     </Filter>
     <Filter Include="Source Files\SolublePoly\SPolyUtils">
       <UniqueIdentifier>{eb085d10-e8a4-4bb2-9842-041f35039dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode">
+      <UniqueIdentifier>{4fe698b7-afa6-4c19-8c08-24e4d60720d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1">
+      <UniqueIdentifier>{de5bfe2a-f137-492f-bd05-b7d1819e3c0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeGearT1">
+      <UniqueIdentifier>{4b8ebb34-2ddf-4577-b521-199c02c6d337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1">
+      <UniqueIdentifier>{fb674c38-7ab1-46d4-96d3-ef64b451a02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\DeferredLightingComputeGearT1">
+      <UniqueIdentifier>{9355f1c1-9264-41d4-a1d5-6679c5927e08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1">
+      <UniqueIdentifier>{49d98270-ef3c-4387-8a99-3004ed04e713}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1">
+      <UniqueIdentifier>{b13fd0aa-c674-4590-b16b-83b5bc77cd91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1">
+      <UniqueIdentifier>{cc0c65e4-cab3-4f73-987e-6987b0192309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGear">
+      <UniqueIdentifier>{d6517c15-4d54-40b7-83aa-2b9b6d4356ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1">
+      <UniqueIdentifier>{07af0afd-eb4b-44a9-bb57-85c9427ef650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1">
+      <UniqueIdentifier>{86bc15fd-d9cf-4baa-bae0-44722f3e70ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT2">
+      <UniqueIdentifier>{2506e2b5-bb6c-42be-a039-2b8451831d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP">
+      <UniqueIdentifier>{200cab7e-fa6c-47bc-856a-72c2071a0e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1">
+      <UniqueIdentifier>{1bed5f89-d5e0-43d5-be42-7a0687e49539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1">
+      <UniqueIdentifier>{fb9d5821-39a1-43b7-ad28-4b1dfd8103bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1">
+      <UniqueIdentifier>{27e4039f-c15c-458d-9e6f-068258ab2900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1">
+      <UniqueIdentifier>{15350870-5fe8-4980-b038-59b59c032ebc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Old_Shaders">
+      <UniqueIdentifier>{58f1aa97-114f-4f8e-9b6a-9b72fbdb4e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Old_Shaders\absolute">
+      <UniqueIdentifier>{e8de7b39-5b88-43bb-919d-a66d7ee61368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode">
+      <UniqueIdentifier>{4ee5b76e-04f5-48f0-afc1-41e54fac31a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1">
+      <UniqueIdentifier>{2fdb1f01-a453-4d4d-81ce-08249e30457c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Generic">
+      <UniqueIdentifier>{f59208fc-464a-4438-ab76-188d356e5c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Generic">
+      <UniqueIdentifier>{7457d546-1617-458f-af81-ab3ccbfa1c5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\DeferredComputeGearT1">
+      <UniqueIdentifier>{0ebe3306-2add-4db2-a694-4edbfcebefdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1">
+      <UniqueIdentifier>{e88cb931-f156-44f7-bc28-dfb9b52eb156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\DeferredLightingComputeGearT1">
+      <UniqueIdentifier>{40b67465-f5ae-4497-a379-7ca51e93327d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1">
+      <UniqueIdentifier>{32abbe71-987a-454d-afbe-0dd87b7f0615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1">
+      <UniqueIdentifier>{fe081e20-f272-4b3d-9ef8-be1f72f07021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1">
+      <UniqueIdentifier>{253571e9-1d6c-4b6d-8c90-e9c840ee2f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGearT1">
+      <UniqueIdentifier>{6b222e3f-6920-411b-b500-8ad3497e29cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1">
+      <UniqueIdentifier>{96d6389e-7c0f-41f4-9d6c-e34fc487540a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1">
+      <UniqueIdentifier>{073a0399-db05-4057-9bf7-f7c9513ec09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP">
+      <UniqueIdentifier>{2d08f44f-422e-4f2c-bb57-a22a4f383e1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1">
+      <UniqueIdentifier>{02f1f272-520c-4d3f-8cce-2ad85f4234ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1">
+      <UniqueIdentifier>{b3cd1bd5-91ac-4e62-91a8-d2b7fbee5769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1">
+      <UniqueIdentifier>{859df7c8-6e74-4812-9854-850bec01e0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1">
+      <UniqueIdentifier>{1288f95f-273d-464f-8dc8-56a40e57d0df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -621,42 +726,6 @@
     <ClInclude Include="SMPrimitiveV1.h">
       <Filter>Header Files\ShaderMachines</Filter>
     </ClInclude>
-    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredComputeGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredComputeResultsGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="DeferredLightingComputeGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="InstancedHighlighterGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="WaveHighlighterGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainSimpleGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainPrimitiveGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainLightingComputeGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainForwardGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainDebugGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
-    <ClInclude Include="TerrainComputeGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
     <ClInclude Include="FusedPoint.h">
       <Filter>Header Files\SolublePoly\Fusion</Filter>
     </ClInclude>
@@ -707,9 +776,6 @@
     </ClInclude>
     <ClInclude Include="FusionCandidateProducer.h">
       <Filter>Header Files\SolublePoly\Fusion</Filter>
-    </ClInclude>
-    <ClInclude Include="Gear.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
     </ClInclude>
     <ClInclude Include="QMBoolAreLinesColinear.h">
       <Filter>Header Files\Quaternions</Filter>
@@ -1014,9 +1080,6 @@
     <ClInclude Include="SelfComparePermit.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
     <ClInclude Include="TwoDCrawlingAttempt.h">
       <Filter>Header Files\Coplanar</Filter>
     </ClInclude>
@@ -1098,9 +1161,6 @@
     <ClInclude Include="CyclingDirectionFinder.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="HighlighterGearT1.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
     <ClInclude Include="ConsumedCleaveSequenceGroups.h">
       <Filter>Header Files\SolublePoly</Filter>
     </ClInclude>
@@ -1145,27 +1205,6 @@
     </ClInclude>
     <ClInclude Include="IntersectionLineValidity.h">
       <Filter>Header Files\SolublePoly</Filter>
-    </ClInclude>
-    <ClInclude Include="GLDataType.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLDrawElementsInstancedJob.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLInstancedCoordinateContainer.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMultiDrawArrayJob.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMultiDrawArrayParams.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLUniformRegistry.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
-    </ClInclude>
-    <ClInclude Include="GLUniformRequest.h">
-      <Filter>Header Files\ShaderMachines\Gears\Generic</Filter>
     </ClInclude>
     <ClInclude Include="ContestableBorderLineMap.h">
       <Filter>Header Files\MassZone</Filter>
@@ -1329,14 +1368,74 @@
     <ClInclude Include="ImGuiWindowFeedback.h">
       <Filter>Header Files\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="GLProgramIDIndex.h">
-      <Filter>Header Files\ShaderMachines\Gears</Filter>
-    </ClInclude>
     <ClInclude Include="SMDeferredLightingComputeV2.h">
       <Filter>Header Files\ShaderMachines</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainLightingComputeGearBP.h">
+    <ClInclude Include="ComputeCopyRBGFromTextureToImageGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredComputeResultsGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredLightingComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredLightingComputeGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="Gear.h">
       <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="GLProgramIDIndex.h">
+      <Filter>Header Files\ShaderMachines\Gears</Filter>
+    </ClInclude>
+    <ClInclude Include="HighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancedHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainDebugGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGear</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainForwardGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLightingComputeGearBP.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainLightingComputeGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainPrimitiveGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainSimpleGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="GLDataType.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLDrawElementsInstancedJob.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMultiDrawArrayJob.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUniformRegistry.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUniformRequest.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1583,42 +1682,6 @@
     <ClCompile Include="SMPrimitiveV1.cpp">
       <Filter>Source Files\ShaderMachines</Filter>
     </ClCompile>
-    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredComputeResultsGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredLightingComputeGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="DeferredComputeGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="InstancedHighlighterGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainComputeGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainDebugGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainForwardGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainLightingComputeGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="WaveHighlighterGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainSimpleGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
-    <ClCompile Include="TerrainPrimitiveGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
     <ClCompile Include="FusedPoint.cpp">
       <Filter>Source Files\SolublePoly\Fusion</Filter>
     </ClCompile>
@@ -1820,9 +1883,6 @@
     <ClCompile Include="SinTBW.cpp">
       <Filter>Source Files\TimeBased\Wave\Sin</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
     <ClCompile Include="TwoDIntersectionRecordManager.cpp">
       <Filter>Source Files\Coplanar</Filter>
     </ClCompile>
@@ -1853,9 +1913,6 @@
     <ClCompile Include="CyclingDirectionFinder.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="HighlighterGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
-    </ClCompile>
     <ClCompile Include="EmptyNormalFinder.cpp">
       <Filter>Source Files\SolublePoly</Filter>
     </ClCompile>
@@ -1869,13 +1926,13 @@
       <Filter>Source Files\SolublePoly</Filter>
     </ClCompile>
     <ClCompile Include="GLMultiDrawArrayJob.cpp">
-      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+      <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
     <ClCompile Include="GLUniformRegistry.cpp">
-      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+      <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
     <ClCompile Include="GLUniformRequest.cpp">
-      <Filter>Source Files\ShaderMachines\Gears\Generic</Filter>
+      <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
     <ClCompile Include="ContestedBorderLineMap.cpp">
       <Filter>Source Files\MassZone</Filter>
@@ -1946,8 +2003,186 @@
     <ClCompile Include="SMDeferredLightingComputeV2.cpp">
       <Filter>Source Files\ShaderMachines</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainLightingComputeGearBP.cpp">
-      <Filter>Source Files\ShaderMachines\Gears</Filter>
+    <ClCompile Include="ComputeCopyRBGFromTextureToImageGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\DeferredComputeGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredComputeResultsGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredLightingComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\DeferredLightingComputeGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="HighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancedHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainDebugGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainForwardGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLightingComputeGearBP.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLightingComputeGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainPrimitiveGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSimpleGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\absolute_mode\Mode0_FragmentShader.fragmentshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode0_VertexShader.vertexshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode1_FragmentShader.fragmentshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode1_VertexShader.vertexshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode2_FragmentShader.fragmentshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode2_VertexShader.vertexshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode3_FragmentShader.fragmentshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode3_VertexShader.vertexshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode4_Deferred2_FS.fragmentshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\Mode4_Deferred2_VS.vertexshader">
+      <Filter>Old_Shaders\absolute</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1.computeshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\DeferredComputeGearT1.computeshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\DeferredComputeResultsGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\DeferredComputeResultsGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredComputeResultsGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\DeferredLightingComputeGearT1.computeshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\DeferredLightingComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\HighlighterGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\HighlighterGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\HighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\InstancedHighlighterGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\InstancedHighlighterGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\InstancedHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainComputeGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainComputeGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainDebugGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGear</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainDebugGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainDebugGear</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainForwardGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainForwardGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainForwardGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainGearT2.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT2</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainGearT2.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainGearT2</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearBP.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearBP.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearBP</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainLightingComputeGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainPrimitiveGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainPrimitiveGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainPrimitiveGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainSimpleGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\TerrainSimpleGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\TerrainSimpleGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\WaveHighlighterGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\absolute_mode\WaveHighlighterGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="shaders\absolute_mode\experimental_fragment.txt">
+      <Filter>Old_Shaders\absolute</Filter>
+    </Text>
+    <Text Include="shaders\absolute_mode\Mode3_Experimental_Backup.txt">
+      <Filter>Old_Shaders\absolute</Filter>
+    </Text>
+    <Text Include="shaders\absolute_mode\Mode3_new.txt">
+      <Filter>Old_Shaders\absolute</Filter>
+    </Text>
+    <Text Include="shaders\absolute_mode\Mode3_newWorking.txt">
+      <Filter>Old_Shaders\absolute</Filter>
+    </Text>
+    <Text Include="shaders\absolute_mode\Mode3_old.txt">
+      <Filter>Old_Shaders\absolute</Filter>
+    </Text>
   </ItemGroup>
 </Project>

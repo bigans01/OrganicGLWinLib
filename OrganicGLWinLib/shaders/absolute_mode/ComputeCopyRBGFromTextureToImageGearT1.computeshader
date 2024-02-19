@@ -1,0 +1,26 @@
+#version 430
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(rgba32f, binding = 1) uniform image2D img_input;		// for image read, in next gear.
+layout(rgba32f, binding = 0) uniform image2D img_output;	// for image write (will not need to be here after testing)
+
+layout(binding = 13) uniform sampler2D colorGData;	// for reading from the color texture
+
+uniform int screenWidth;
+uniform int screenHeight;
+
+void main()
+{
+	ivec2 position = ivec2(gl_GlobalInvocationID.xy);
+	
+	vec2 textureDim;
+	//textureDim.x = 1024;	// screen width
+	//textureDim.y = 768;		// screen height
+	textureDim.x = screenWidth;
+	textureDim.y = screenHeight;
+	vec2 screenNormalized = vec2(position) / textureDim;
+	
+	
+	vec3 color = vec3(texture2D(colorGData, screenNormalized));
+	vec4 outColor = vec4(color, 1.0);
+	imageStore(img_input, position, outColor);						
+}

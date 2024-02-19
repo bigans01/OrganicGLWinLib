@@ -1,0 +1,20 @@
+#version 430
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(rgba32f, binding = 0) uniform image2D img_output;		// for image write
+layout(binding = 2) uniform sampler2D ColorTexture;				// for texture read; should already be set at 2
+
+uniform int screenWidth;
+uniform int screenHeight;
+
+void main() 
+{
+	ivec2 position = ivec2(gl_GlobalInvocationID.xy);
+	vec2 textureDim;
+	//textureDim.x = 1024;	// screen width
+	//textureDim.y = 768;		// screen height
+	textureDim.x = screenWidth;
+	textureDim.y = screenHeight;
+	vec2 screenNormalized = vec2(position) / textureDim;
+	vec4 color = texture2D(ColorTexture, screenNormalized);
+	imageStore(img_output, position, color);
+}

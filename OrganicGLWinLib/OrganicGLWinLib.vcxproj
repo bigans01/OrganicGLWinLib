@@ -176,7 +176,12 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CSCorrectionCandidate.h" />
     <ClInclude Include="FaceResolverBase.h" />
+    <ClInclude Include="GLDataType.h" />
+    <ClInclude Include="GLDrawElementsInstancedJob.h" />
+    <ClInclude Include="GLMultiDrawArrayJob.h" />
     <ClInclude Include="GLProgramIDIndex.h" />
+    <ClInclude Include="GLUniformRegistry.h" />
+    <ClInclude Include="GLUniformRequest.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
@@ -316,10 +321,7 @@
     <ClInclude Include="FusionCandidate.h" />
     <ClInclude Include="FusionCandidateOrigin.h" />
     <ClInclude Include="FusionCandidateProducer.h" />
-    <ClInclude Include="GLDrawElementsInstancedJob.h" />
-    <ClInclude Include="GLInstancedCoordinateContainer.h" />
     <ClInclude Include="CategorizedLineGroup.h" />
-    <ClInclude Include="GLMultiDrawArrayParams.h" />
     <ClInclude Include="GuestLineReactor.h" />
     <ClInclude Include="HostLineReactor.h" />
     <ClInclude Include="ImGuiButton.h" />
@@ -489,10 +491,6 @@
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="DeferredComputeGearT1.h" />
     <ClInclude Include="DeferredComputeResultsGearT1.h" />
-    <ClInclude Include="GLDataType.h" />
-    <ClInclude Include="GLMultiDrawArrayJob.h" />
-    <ClInclude Include="GLUniformRegistry.h" />
-    <ClInclude Include="GLUniformRequest.h" />
     <ClInclude Include="HighlighterGearT1.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -766,6 +764,54 @@
     <ClCompile Include="WaveHighlighterGearT1.cpp" />
     <ClCompile Include="WeldedTriangleGroupBuilder.cpp" />
     <ClCompile Include="WorldLightContainerMap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\absolute_mode\ComputeCopyRBGFromTextureToImageGearT1.computeshader" />
+    <None Include="shaders\absolute_mode\DeferredComputeGearT1.computeshader" />
+    <None Include="shaders\absolute_mode\DeferredComputeResultsGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\DeferredComputeResultsGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\DeferredLightingComputeGearT1.computeshader" />
+    <None Include="shaders\absolute_mode\HighlighterGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\HighlighterGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\InstancedHighlighterGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\InstancedHighlighterGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\Mode0_FragmentShader.fragmentshader" />
+    <None Include="shaders\absolute_mode\Mode0_VertexShader.vertexshader" />
+    <None Include="shaders\absolute_mode\Mode1_FragmentShader.fragmentshader" />
+    <None Include="shaders\absolute_mode\Mode1_VertexShader.vertexshader" />
+    <None Include="shaders\absolute_mode\Mode2_FragmentShader.fragmentshader" />
+    <None Include="shaders\absolute_mode\Mode2_VertexShader.vertexshader" />
+    <None Include="shaders\absolute_mode\Mode3_FragmentShader.fragmentshader" />
+    <None Include="shaders\absolute_mode\Mode3_VertexShader.vertexshader" />
+    <None Include="shaders\absolute_mode\Mode4_Deferred2_FS.fragmentshader" />
+    <None Include="shaders\absolute_mode\Mode4_Deferred2_VS.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainComputeGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainComputeGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainDebugGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainDebugGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainForwardGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainForwardGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainGearT2.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainGearT2.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearBP.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearBP.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainLightingComputeGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainPrimitiveGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainPrimitiveGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\TerrainSimpleGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\TerrainSimpleGearT1.vertexshader" />
+    <None Include="shaders\absolute_mode\WaveHighlighterGearT1.fragmentshader" />
+    <None Include="shaders\absolute_mode\WaveHighlighterGearT1.vertexshader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="shaders\absolute_mode\experimental_fragment.txt" />
+    <Text Include="shaders\absolute_mode\Mode3_Experimental_Backup.txt" />
+    <Text Include="shaders\absolute_mode\Mode3_new.txt" />
+    <Text Include="shaders\absolute_mode\Mode3_newWorking.txt" />
+    <Text Include="shaders\absolute_mode\Mode3_old.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

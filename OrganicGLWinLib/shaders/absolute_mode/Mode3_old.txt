@@ -1,0 +1,122 @@
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexUV;
+
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+uniform vec3 worldPosition;
+
+vec2 correctUV(in vec2 UVtoFix);
+vec2 correctUV2(in vec2 UVtoFix);
+float newCorrectionValue(in vec2 UVtoFix);
+float correctionValue = 1024;
+float distanceDiff = distance(vertexPosition_modelspace, worldPosition);
+
+void main(){
+
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+	
+	// UV of the vertex. No special space for this one.
+	//UV = vertexUV;
+	UV = correctUV(vertexUV);    // option 1
+	
+	//correctionValue = newCorrectionValue(UV);   // option2
+	//UV = correctUV2(vertexUV);
+}
+
+vec2 correctUV(in vec2 UVtoFix)
+{
+	vec2 fixVec = UVtoFix;
+	
+	if (distanceDiff >= 60)
+	{
+	    correctionValue = 4;
+	}
+	else if (distanceDiff >= 53)
+	{
+	    
+		float cutoffDiff = distanceDiff;
+		if (cutoffDiff > 53)
+	    {
+		    cutoffDiff = 53;
+		}
+		float sectionalDiff = ((cutoffDiff - 33) / 20) * 8;
+		correctionValue = 8 + sectionalDiff;
+		
+		//correctionValue = 8;
+	}
+	else if (distanceDiff >= 33)
+	{
+		float cutoffDiff = distanceDiff;
+		if (cutoffDiff > 33)
+	    {
+		    cutoffDiff = 33;
+		}
+		float sectionalDiff = ((cutoffDiff - 25) / 8) * 16;
+		correctionValue = 16 + sectionalDiff;
+	    //correctionValue = 16;
+	}	
+	else if (distanceDiff >= 25)
+	{
+		float cutoffDiff = distanceDiff;
+		if (cutoffDiff > 25)
+	    {
+		    cutoffDiff = 25;
+		}
+		float sectionalDiff = ((cutoffDiff - 7) / 8) * 32;
+		correctionValue = 32 + sectionalDiff;
+		//correctionValue = 32;
+	}
+	else if (distanceDiff >= 18)
+	{
+	    correctionValue = 64;
+	}
+	else if (distanceDiff >= 12)
+	{
+	    correctionValue = 128;
+	}
+	else if (distanceDiff >= 7)
+	{
+	    correctionValue = 256;
+	}
+	else if (distanceDiff >= 4)
+	{
+	    correctionValue = 512;
+	}
+	
+	fixVec.x = (floor(fixVec.x * correctionValue) + .5) / correctionValue;
+	fixVec.y = (floor(fixVec.y * correctionValue) + .5) / correctionValue;
+	return fixVec;
+}
+
+vec2 correctUV2(in vec2 UVtoFix)
+{
+    vec2 fixVec = UVtoFix;
+	fixVec.x = (floor(fixVec.x * correctionValue) + .5) / correctionValue;
+	fixVec.y = (floor(fixVec.y * correctionValue) + .5) / correctionValue;
+	return fixVec;
+}
+
+
+float newCorrectionValue(in vec2 UVtoFix)
+{
+	float atlas_log = log2(1024);
+	float tile_log = log2(1);
+	float log_diff = atlas_log - tile_log;
+	float increment = (log_diff/60);
+	float adjustedDiff;
+	if (distanceDiff >= 60)
+    {
+	   adjustedDiff = 60;
+	}
+	float total_increment_value = increment*adjustedDiff;
+	float adjusted_texture_width = pow(2, (atlas_log - total_increment_value));
+	return adjusted_texture_width;
+	//return atlas_log;
+}

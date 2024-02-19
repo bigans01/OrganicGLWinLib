@@ -1,0 +1,173 @@
+#version 430
+
+layout(local_size_x = 16, local_size_y = 16) in;
+layout(rgba32f, binding = 1) uniform image2D img_input;		// for image write
+layout(rgba32f, binding = 0) uniform image2D img_output;		// for image write
+
+layout(binding = 1) uniform sampler2D posGData;
+layout(binding = 2) uniform sampler2D ambientGData;
+layout(binding = 3) uniform sampler2D diffuseGData;
+layout(binding = 4) uniform sampler2D specularGData;
+layout(binding = 13) uniform sampler2D colorGData;				
+layout(binding = 14) uniform sampler2D normalGData;				
+
+uniform int screenWidth;
+uniform int screenHeight;
+uniform vec3 worldPosition; // for the position of the camera in the "world" space (revisit this understanding later)
+
+// lighting calculations would be done below, then stored to the image.
+void main() 
+{
+	// texture channels
+	//
+	// Ambient
+	// 		R - ambient multiplier 1
+	// 		G - specular light spread 
+	//      B - specular light exponent
+	// Diffuse
+	//      R - shininess multiplier
+	// Specular
+	//      R - globalAmbienceMultiplier
+
+	ivec2 position = ivec2(gl_GlobalInvocationID.xy);
+	vec2 textureDim;
+	//textureDim.x = 1024;	// screen width
+	//textureDim.y = 768;		// screen height
+	textureDim.x = screenWidth;
+	textureDim.y = screenHeight;
+	vec2 screenNormalized = vec2(position) / textureDim;
+	
+	// fetch data from the textures
+	vec3 positionG = vec3(texture2D(posGData, screenNormalized));
+	vec4 ambient = texture2D(ambientGData, screenNormalized);
+	vec4 diffuse = texture2D(diffuseGData, screenNormalized);
+	vec4 specular = texture2D(specularGData, screenNormalized);
+	
+	//vec3 color = vec3(texture2D(colorGData, screenNormalized));
+	
+	vec4 imageRaw = imageLoad(img_input, position);
+	vec3 imageRaw3d;
+	imageRaw3d.x = imageRaw.x;
+	imageRaw3d.y = imageRaw.y;
+	imageRaw3d.z = imageRaw.z;
+	vec3 color = imageRaw3d;
+	
+	vec3 normal = vec3(texture2D(normalGData, screenNormalized));
+	
+	// testing only, hard-coding... light position; ignore this
+	vec4 lightPosition;
+	vec3 lightIntensity;
+	
+	//lightPosition.x =  2.5;
+	//lightPosition.y =  2.5;
+	//lightPosition.z =  2.5;
+	
+	//lightPosition.x = 48.5;
+	//lightPosition.y = 16.5;
+	//lightPosition.z = 16.5;
+	
+	lightPosition.x = 29.50;
+	lightPosition.y = -10.8;
+	lightPosition.z = 55.5;
+
+	lightIntensity.x = 1;
+	lightIntensity.y = 1;
+	lightIntensity.z = 1;
+	
+	// linear = .7
+	// quadratic = 1.8
+	
+	// ----------------------------------------
+	// light color
+	vec3 lightColor;
+	lightColor.x = 1.00f;
+	lightColor.y = 0.0f;
+	lightColor.z = 1.0f;
+	
+	// ----------------- Attenuation
+	// linear = .7 -- second argument in newAttentuation below; 
+	// quadratic = 1.8 -- fourth argument in newAttenuation below; a lower value of this produces a higher attenuation, which causes the colored light to have more effect.
+	
+	float newDistance = length(vec3(lightPosition) - positionG);
+	//float newAttenuation = 1.0 / (1.0 + .2 * newDistance + .2 * newDistance * newDistance);
+	//float newAttenuation = 1.0 / (1.0 + .05 * newDistance + .01 * newDistance * newDistance);
+	//float newAttenuation = 1.0 / (1.0 + .20 * newDistance + .01 * newDistance * newDistance);
+	//float newAttenuation = 1.0 / (1.0 + .50 * newDistance + .01 * newDistance * newDistance);
+	float newAttenuation = 1.0 / (1.0 + .05 * newDistance + .90 * newDistance * newDistance);
+	//newAttenuation = 1.0;
+	
+	// ---------------- Compare attenuation to specular.r
+	//float adjustedBase = max((newAttenuation/3), specular.r);
+	float adjustedBase = max((newAttenuation/2), specular.r);
+	//float adjustedBase = max((newAttenuation), specular.r);
+
+	vec3 norm = normalize(normal);
+	vec3 viewDir = normalize(worldPosition - positionG);
+	//vec3 newLighting = color * 0.3;								// base ambient component, read from the g-buffer
+	//vec3 newLighting = color * specular.r;								// test, multiply by the value of globalAmbienceMultiplier
+	vec3 newLighting = color * adjustedBase;								// test, multiply by the value of globalAmbienceMultiplier
+	vec3 newViewDir = normalize(worldPosition - positionG);
+	
+	// ****new diffuse
+	vec3 newLightDir = normalize(vec3(lightPosition) - positionG);
+	vec3 newDiffuse = max(dot(normal, newLightDir), 0.0) * newLighting * lightColor;
+	
+	
+
+	
+	
+	// --------------- Diffuse
+	//float diffuseStrength = 0.6f;								// read from the G-buffer, the diffuse strength of the material; a higher value of this means that it will absorb more light (this is not ambient light, though)
+																// This value should come from the "R" channel in Specular texture
+    //float diffuseStrength = ambient.r * 1;
+	float diffuseStrength = ambient.r * 2;
+	vec3 baseDiffuse = vec3(0.0);
+	
+	float diff2 = max(dot(normal, newLightDir), 0.0);	// varies
+	// float diff2 = -1.0f; // total darkness
+	// float diff2 = 1.0f; // too bright
+	// float diff2 = 0.5f;
+	
+	//if (diff2 < 0.0f)
+	//{
+	//	diff2 = diff2 * -1.0f;
+	//}
+	
+	//baseDiffuse = diff2 * lightColor * diffuseStrength;
+	baseDiffuse = (diff2 * lightColor * diffuseStrength) * newAttenuation;
+	
+	
+	
+	
+	
+
+	// --------------- Specular
+	vec3 halfwayDir = normalize(newLightDir + newViewDir);
+	float newSpec = pow(max(dot(normal, halfwayDir), 0.0), 1.0);		// the last number represents the area of influence, a lower number = wider area?
+	
+	// **** >>>> new specular 2 Blinn-Phong
+	//vec3 halfwayDir = normalize(newLightDir + newViewDir);
+	float NdotL = dot(normal, newLightDir);
+	
+	// Below: this affects the white spot on the texture.
+	if (NdotL > 0.0)
+    {
+	     vec3 newReflectDir = reflect(-newLightDir, norm);
+		 float newSpec2 = pow(max(dot(viewDir, newReflectDir), 0.0), (ambient.g * 128));		// the last number represents how focused the light will be when it hits this material, the "shininess"; a lower value means the specular light "spreads" across the surface. // should be read from G-buffer
+																								// must be multipled by 256 after reading, because the value ranges between 0.0f and 1.0f.
+																								
+																								// ambient.b should be the material's specular property
+		 newLighting += (newSpec2 * lightColor * .5) * newAttenuation;							// the last number represents the specular intensity (how intense the light is for the entire "spot")  (third value represents the shininess multiplier)
+		 //specular2Result += newSpec2 * lightColor * 6;							// the last number represents the specular intensity (how intense the light is for the entire "spot")
+		 //specular2Result += (newSpec2 * lightColor * 1);							// the last number represents the specular intensity (how intense the light is for the entire "spot")
+   }
+	
+
+	newLighting += baseDiffuse;	
+	
+	vec3 finalResult = newLighting;
+	vec4 outColor = vec4(finalResult, 1.0);
+	//vec4 outColor = vec4(color, 1.0);
+	//vec4 outColor = vec4(vec3(1,0,0), 1.0);
+	imageStore(img_output, position, outColor);	
+}

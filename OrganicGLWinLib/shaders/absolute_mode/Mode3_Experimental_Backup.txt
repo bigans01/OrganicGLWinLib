@@ -1,0 +1,68 @@
+#version 330 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexUV;
+
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+uniform vec3 worldPosition;
+
+vec2 correctUV(in vec2 UVtoFix);
+int correctionValue = 1024;
+float distanceDiff = distance(vertexPosition_modelspace, worldPosition);
+
+void main(){
+
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+	
+	// UV of the vertex. No special space for this one.
+	//UV = vertexUV;
+	UV = correctUV(vertexUV);
+}
+
+vec2 correctUV(in vec2 UVtoFix)
+{
+	vec2 fixVec = UVtoFix;
+	
+	if (distanceDiff >= 60)
+	{
+	    correctionValue = 4;
+	}
+	else if (distanceDiff >= 50)
+	{
+	    correctionValue = 8;
+	}
+	else if (distanceDiff >= 30)
+	{
+	    correctionValue = 16;
+	}	
+	else if (distanceDiff >= 25)
+	{
+		correctionValue = 32;
+	}
+	else if (distanceDiff >= 20)
+	{
+	    correctionValue = 64;
+	}
+	else if (distanceDiff >= 18)
+	{
+	    correctionValue = 128;
+	}
+	else if (distanceDiff >= 7)
+	{
+	    correctionValue = 256;
+	}
+	else if (distanceDiff >= 4)
+	{
+	    correctionValue = 512;
+	}
+	
+	fixVec.x = (floor(fixVec.x * correctionValue) + .5) / correctionValue;
+	fixVec.y = (floor(fixVec.y * correctionValue) + .5) / correctionValue;
+	return fixVec;
+}
