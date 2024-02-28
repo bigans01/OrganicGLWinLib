@@ -3,6 +3,10 @@
 
 void SMForwardV2::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// set coordinate mode
+	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE;
+	setMachineCoordModeDependentSettings();
+	
 	// basic initialization
 	width = in_windowWidth;
 	height = in_windowHeight;

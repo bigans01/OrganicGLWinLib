@@ -30,6 +30,7 @@
 #include "DynamicBufferManager.h"
 #include "KeyPressTracker.h"
 #include "OneOffMacros.h"
+#include "GPUCoordinateMode.h"
 
 class ShaderMachineBase
 {
@@ -49,6 +50,11 @@ public:
 
 		virtual void removeUnusedReplaceables() = 0;
 		virtual void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) = 0;
+
+		// miscellaneous state retrieval functions
+		GPUCoordinateMode fetchMachineCoordMode();	// allows objects outside of an instance of this class to check the kinds of operations and style of vertex data 
+													// that the ShaderMachine expects to receive, so that those programs/objects may send data correctly 
+													// (i.e, OrganicCoreSystem would need this to determine what modifications it needs to make, if any, to vertex terrain data)
 
 		// direct Gear program communication 
 		void sendMessageToGLProgram(std::string in_programName, Message in_message);
@@ -163,6 +169,15 @@ protected:
 		ShaderMachineFeedback machineFeedback;				// gets any inputs that were received; it is loaded using a call to checkForTextInput().
 		TimeBasedWaveManager waveManager;
 		DynamicBufferManager dynBufferManager;
+		GPUCoordinateMode machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_UNDEFINED;	// determines how an instantiated ShaderMachine should have its gears interpret
+																							// vertex data. ***THIS MUST** be manually set by the call to the virtual initialize() function in each class that is derived
+																							// from this base. If it is not set, crashes/unhandled exceptions/errors are going to occur.
+
+		// Below: a pointer to the selected matrix/delta calculation function to use. ShaderMachine objects
+		// will determine a select function to use, based on the value of machineCoordMode, by calling the 
+		// setMachineCoordModeDependentSettings() function.
+		void(ShaderMachineBase::*matrixAndDeltaSelectedFunctionPtr)() = nullptr;
+
 
 		SmartIntMap<GLuint> bufferMap;									// (UPDATED 4/15/2021, to SmartIntMap) for typical buffers (non-persistent)
 		SmartIntMap<GLuint> persistentBufferMap;						// (UPDATED 4/15/2021, to SmartIntMap) map that stores IDs of persistent buffers
@@ -217,6 +232,7 @@ protected:
 
 		// for the camera
 		glm::vec3 position = glm::vec3(30, 0, 5);									// Initial position of camera : on +30x, 0y, +5z
+		glm::dvec3 worldPosition = glm::dvec3(30, 0, 5);
 		glm::vec3 direction;														// direction camera is facing
 		glm::vec3 up;
 		glm::mat4 projection;														// (temporary) OpenGL projection matrix
@@ -240,7 +256,14 @@ protected:
 		ImGuiSliderFloatPanelContainer sliderPanelContainer;
 		ImGuiInputTextPanelContainer inputPanelContainer;
 
-		
+		// functions dependent on the value of machineCoordMode
+		void setMachineCoordModeDependentSettings();	// This *MUST* be called in the initialize() function of each ShaderMachine, 
+														// AFTER machineCoordMode has been set by each ShaderMachine,
+														// or OpenGL/the program will crash while accessing a null pointer.
+
+		void runMatrixAndDeltaAbsoluteComputations();	// Uses logic required when vertex data is in absolute coordinates
+
+		void runMatrixAndDeltaLocalComputations();		// Uses logic required when vertex data is in blueprint-localized coordinates.
 
 		// gearTrain related functions
 		void runGearTrain();

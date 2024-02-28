@@ -283,18 +283,22 @@ void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
 		// Move forward
 		if (glfwGetKey(window, moveForwardKey) == GLFW_PRESS) {
 			position += direction * deltaTime * speed;
+			worldPosition += direction * deltaTime * speed;
 		}
 		// Move backward
 		if (glfwGetKey(window, moveBackwardKey) == GLFW_PRESS) {
 			position -= direction * deltaTime * speed;
+			worldPosition -= direction * deltaTime * speed;
 		}
 		// Strafe right
 		if (glfwGetKey(window, strafeRightKey) == GLFW_PRESS) {
 			position += right * deltaTime * speed;
+			worldPosition += right * deltaTime * speed;
 		}
 		// Strafe left
 		if (glfwGetKey(window, strafeLeftKey) == GLFW_PRESS) {
 			position -= right * deltaTime * speed;
+			worldPosition -= right * deltaTime * speed;
 		}
 
 		// camera toggling
@@ -393,6 +397,31 @@ void ShaderMachineBase::mouseButtonCallback(GLFWwindow* window, int button, int 
 
 void ShaderMachineBase::updateMatricesAndDelta()
 {
+	// run the selected computation style, which should have been set if setMachineCoordModeDependentSettings 
+	// was correctly called in the initialize() function of the used ShaderMachine.
+	(*this.*matrixAndDeltaSelectedFunctionPtr)();
+}
+
+void ShaderMachineBase::setMachineCoordModeDependentSettings()
+{
+	switch (machineCoordMode)
+	{
+		case GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE:
+		{
+			matrixAndDeltaSelectedFunctionPtr = &ShaderMachineBase::runMatrixAndDeltaAbsoluteComputations;
+			break;
+		};
+
+		case GPUCoordinateMode::COORDINATE_MODE_LOCAL:
+		{
+			matrixAndDeltaSelectedFunctionPtr = &ShaderMachineBase::runMatrixAndDeltaLocalComputations;
+			break;
+		};
+	}
+}
+
+void ShaderMachineBase::runMatrixAndDeltaAbsoluteComputations()
+{
 	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
 	// projection matrix : 45° Field of view, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -400,17 +429,16 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 	// Camera matrix
 
-	
 	view = glm::lookAt(
 		position,           // Camera is here
 		position + direction, // and looks here : at the same position, plus "direction"
 		up                  // Head is up (set to 0,-1,0 to look upside-down)
 	);
-	
+
 
 	// new
 	// REWORK BEGINS HERE; USE THIS NOW. (8/23/2020)
-	
+
 	/*
 	glm::vec3 dummyposition;
 	dummyposition.x = 0.0f;
@@ -429,6 +457,12 @@ void ShaderMachineBase::updateMatricesAndDelta()
 
 
 	lastTime = currentTime;
+}
+
+
+void ShaderMachineBase::runMatrixAndDeltaLocalComputations()
+{
+
 }
 
 void ShaderMachineBase::processInputFeedbackToImGuiObject(Message in_inputForObject)
@@ -640,6 +674,11 @@ ShaderMachineBase::GearFindResult ShaderMachineBase::findGear(std::string in_pro
 		}
 	}
 	return searchResult;
+}
+
+GPUCoordinateMode ShaderMachineBase::fetchMachineCoordMode()
+{
+	return machineCoordMode;
 }
 
 void ShaderMachineBase::sendMessageToGLProgram(std::string in_programName, Message in_message)

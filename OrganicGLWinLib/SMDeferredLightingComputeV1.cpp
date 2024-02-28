@@ -4,6 +4,10 @@
 // virtual functions (defined, inherited)
 void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// set coordinate mode
+	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE;
+	setMachineCoordModeDependentSettings();
+
 	// since this is a compute shader, we must make sure the compute "tiles" are setup correctly
 	ComputeResolution resolution(in_windowWidth, in_windowHeight, 16, 16);// use compute-adjusted coordinates, for a group size of 16
 	width = resolution.computeScreenWidth;

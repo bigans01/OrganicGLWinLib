@@ -1437,6 +1437,15 @@
     <ClInclude Include="GLUniformRequest.h">
       <Filter>Header Files\ShaderMachines\Generic</Filter>
     </ClInclude>
+    <ClInclude Include="GPUWorldCoordinate.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUWorldCoordinateProducer.h">
+      <Filter>Header Files\ShaderMachines\Generic</Filter>
+    </ClInclude>
+    <ClInclude Include="GPUCoordinateMode.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2047,6 +2056,12 @@
     </ClCompile>
     <ClCompile Include="WaveHighlighterGearT1.cpp">
       <Filter>Source Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUWorldCoordinate.cpp">
+      <Filter>Source Files\ShaderMachines\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="GPUWorldCoordinateProducer.cpp">
+      <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

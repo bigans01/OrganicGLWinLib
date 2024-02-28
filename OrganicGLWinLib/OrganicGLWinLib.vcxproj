@@ -182,6 +182,9 @@
     <ClInclude Include="GLProgramIDIndex.h" />
     <ClInclude Include="GLUniformRegistry.h" />
     <ClInclude Include="GLUniformRequest.h" />
+    <ClInclude Include="GPUCoordinateMode.h" />
+    <ClInclude Include="GPUWorldCoordinate.h" />
+    <ClInclude Include="GPUWorldCoordinateProducer.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
@@ -562,6 +565,8 @@
     <ClCompile Include="BorderLineIntersectRecorder.cpp" />
     <ClCompile Include="FaceResolverBase.cpp" />
     <ClCompile Include="GLProgramIdIndex.cpp" />
+    <ClCompile Include="GPUWorldCoordinate.cpp" />
+    <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />
