@@ -182,7 +182,6 @@
     <ClInclude Include="GLProgramIDIndex.h" />
     <ClInclude Include="GLUniformRegistry.h" />
     <ClInclude Include="GLUniformRequest.h" />
-    <ClInclude Include="GPUCoordinateMode.h" />
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />

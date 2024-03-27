@@ -1443,9 +1443,6 @@
     <ClInclude Include="GPUWorldCoordinateProducer.h">
       <Filter>Header Files\ShaderMachines\Generic</Filter>
     </ClInclude>
-    <ClInclude Include="GPUCoordinateMode.h">
-      <Filter>Header Files\ShaderMachines</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
