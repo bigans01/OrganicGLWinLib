@@ -27,6 +27,7 @@ class TerrainSimpleGearT1 : public Gear
 		void interpretMessage(Message in_message) {};
 		void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
 		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
+		void sendMessageAndBufferDataToGear(Message in_messageToSend, int in_arraySize, GLfloat* in_arrayRef) {};
 
 	private:
 

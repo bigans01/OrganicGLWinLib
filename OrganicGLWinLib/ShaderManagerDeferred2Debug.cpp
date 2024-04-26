@@ -176,7 +176,7 @@ void ShaderManagerDeferred2Debug::createGBufText(GLenum texUnit, GLenum  format,
 void ShaderManagerDeferred2Debug::render()
 {
 	do {
-		computeMatricesFromInputs();
+		computeCameraDirectionAndPosition();
 		updateMatricesAndDelta();
 
 		// IMGUI prep

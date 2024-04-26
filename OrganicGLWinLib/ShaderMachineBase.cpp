@@ -138,6 +138,20 @@ void ShaderMachineBase::renderTargetedBlockLocation(int world_organicLoc[9])
 	machineFeedback += OrganicGLWinUtils::IMGuiPrepBlockLocation(world_organicLoc);
 }
 
+bool ShaderMachineBase::doesBufferExist(std::string in_bufferName)
+{
+	bool exists = false;
+	auto bufferFinder = bufferLookup.find(in_bufferName);
+
+	// below: it we found it, return true.
+	if (bufferFinder != bufferLookup.end())
+	{
+		exists = true;
+	}
+
+	return exists;
+}
+
 GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
 {
 	GLuint returnGLuint;
@@ -148,36 +162,51 @@ GLuint ShaderMachineBase::getBufferID(std::string in_bufferName)
 
 void ShaderMachineBase::sendDataToPersistentBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, getPersistentBufferID(in_bufferName));				// bind to the specified buffer
-	glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+	if (doesBufferExist(in_bufferName))
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, getPersistentBufferID(in_bufferName));				// bind to the specified buffer
+		glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+	}
 }
 
 void ShaderMachineBase::sendDataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
-	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
-	//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
-	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+	if (doesBufferExist(in_bufferName))
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
+		//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+		//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+		glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+	}
 }
 
 void ShaderMachineBase::sendMat4DataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, glm::mat4* in_dataArray)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
-	//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
-	//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
-	glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+	if (doesBufferExist(in_bufferName))
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, getBufferID(in_bufferName));				// bind to the specified buffer
+		//glBufferSubData(GL_ARRAY_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);		// send the data to the buffer
+		//glBufferData(GL_ARRAY_BUFFER, 6 * 7 * sizeof(float), quadData, GL_STATIC_DRAW);		// populate the data
+		glBufferData(GL_ARRAY_BUFFER, in_byteSizeToWrite, in_dataArray, GL_STATIC_DRAW);
+	}
 }
 
 void ShaderMachineBase::sendDataToSSBOBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray)
 {
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
-	glBufferData(GL_SHADER_STORAGE_BUFFER, in_byteSizeToWrite, in_dataArray, GL_DYNAMIC_COPY);
+	if (doesBufferExist(in_bufferName))
+	{
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
+		glBufferData(GL_SHADER_STORAGE_BUFFER, in_byteSizeToWrite, in_dataArray, GL_DYNAMIC_COPY);
+	}
 }
 
 void ShaderMachineBase::sendDataToSSBOBufferSub(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray)
 {
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
-	glBufferSubData(GL_SHADER_STORAGE_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);
+	if (doesBufferExist(in_bufferName))
+	{
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, getBufferID(in_bufferName));
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, in_offset, in_byteSizeToWrite, in_dataArray);
+	}
 }
 
 int ShaderMachineBase::getVaoAttribMode()
@@ -189,7 +218,7 @@ int ShaderMachineBase::getVaoAttribByteSize()
 	return vaoAttribByteSize;
 }
 
-void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
+void ShaderMachineBase::computeCameraDirectionAndPosition(bool in_imguiFocusedFlag)
 {
 
 	// Compute time difference between current and last frame
@@ -283,22 +312,22 @@ void ShaderMachineBase::computeMatricesFromInputs(bool in_imguiFocusedFlag)
 		// Move forward
 		if (glfwGetKey(window, moveForwardKey) == GLFW_PRESS) {
 			position += direction * deltaTime * speed;
-			worldPosition += direction * deltaTime * speed;
+			smWorldPosition += direction * deltaTime * speed;
 		}
 		// Move backward
 		if (glfwGetKey(window, moveBackwardKey) == GLFW_PRESS) {
 			position -= direction * deltaTime * speed;
-			worldPosition -= direction * deltaTime * speed;
+			smWorldPosition -= direction * deltaTime * speed;
 		}
 		// Strafe right
 		if (glfwGetKey(window, strafeRightKey) == GLFW_PRESS) {
 			position += right * deltaTime * speed;
-			worldPosition += right * deltaTime * speed;
+			smWorldPosition += right * deltaTime * speed;
 		}
 		// Strafe left
 		if (glfwGetKey(window, strafeLeftKey) == GLFW_PRESS) {
 			position -= right * deltaTime * speed;
-			worldPosition -= right * deltaTime * speed;
+			smWorldPosition -= right * deltaTime * speed;
 		}
 
 		// camera toggling
@@ -462,7 +491,42 @@ void ShaderMachineBase::runMatrixAndDeltaAbsoluteComputations()
 
 void ShaderMachineBase::runMatrixAndDeltaLocalComputations()
 {
+	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
 
+	// projection matrix : 45° Field of view, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	projection = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 400.0f);
+
+	// For local computations, the position used for the MVP calculation is always at 0.
+	auto zeroPos = glm::vec3(0, 0, 0);
+
+	// FIX_HERE
+	
+	view = glm::lookAt(
+		zeroPos,
+		zeroPos + direction,
+		up
+	);
+	
+
+	// For the next frame, the "last time" will be "now"
+	model = glm::mat4(1.0);
+	MVP = projection * view;		// model is NOT needed here for terrain drawing, since terrain data is in world space already.
+
+	// Next, assuming computeMatricesFromInput is called, which should update the camera direction and position, we will calculate 
+	// the world coordinate data and send it to the uniform registry.
+	//
+	// Calculate the values to store in the corresponding GPUWorldCoordinate. Send this value to the uniformRegistry member of this class. 
+	auto currentWorldCoordinates = GPUWorldCoordinateProducer(smWorldPosition.x, smWorldPosition.y, smWorldPosition.z);
+
+	machineCurrentWorldCoord = currentWorldCoordinates.producedCoordinate;
+	uniformRegistry.insertEnclaveKey("worldCoordBPLocalCameraKey", machineCurrentWorldCoord.worldBPKey);
+	uniformRegistry.insertVec3("worldCoordBPLocalCameraCoord", IndependentUtils::convertECBPolyPointToVec3(machineCurrentWorldCoord.worldLocalizedPoint));
+
+	// After sending to the registry, the data can now be optionally fetched when updateUniformRegistry is called,
+	// assuming that the ShaderMachineBase-derived class is running in GPUCoordinateMode::COORDINATE_MODE_LOCAL.
+	// (this function should only get called when that mode is active anyway).
+
+	lastTime = currentTime;
 }
 
 void ShaderMachineBase::processInputFeedbackToImGuiObject(Message in_inputForObject)
@@ -531,6 +595,11 @@ void ShaderMachineBase::sendGearUniforms()
 			{
 				int dataToSend = uniformRegistry.getInt(currentRequest.uniformName);
 				gearTrainBegin->second.get()->sendUniform<GLDataType::INT, int>(currentRequest.uniformName, dataToSend);
+			}
+			else if (currentRequest.dataType == GLDataType::KEY3D)
+			{
+				EnclaveKeyDef::EnclaveKey dataToSend = uniformRegistry.get3DKey(currentRequest.uniformName);
+				gearTrainBegin->second.get()->sendUniform<GLDataType::KEY3D, EnclaveKeyDef::EnclaveKey>(currentRequest.uniformName, dataToSend);
 			}
 			
 		}
@@ -657,11 +726,8 @@ ShaderMachineBase::GearFindResult ShaderMachineBase::findGear(std::string in_pro
 	auto programFinder = programLookup.find(in_programName);
 	if (programFinder != programLookup.end())
 	{
-		int programIDToFind = programFinder->second;	// the ID to check against each program.
 		auto gearsBegin = gearTrain.begin();
 		auto gearsEnd = gearTrain.end();
-		bool wasSelectedGearFound = false;
-		int selectedGearID = 0;							// this will be set when 
 		for (; gearsBegin != gearsEnd; gearsBegin++)
 		{
 			if (gearsBegin->second.get()->programID == programFinder->second)	// find the Gear with a program ID that matches the program ID we're looking for.
@@ -687,6 +753,20 @@ void ShaderMachineBase::sendMessageToGLProgram(std::string in_programName, Messa
 	if (programToSearch.wasResultFound == true)
 	{
 		programToSearch.foundGear->interpretMessage(in_message);
+	}
+}
+
+void ShaderMachineBase::sendMessageAndBufferDataToGLProgram(std::string in_programName,
+	Message in_message,
+	int in_bufferSize,
+	GLfloat* in_dataArray)
+{
+	GearFindResult programToSearch = findGear(in_programName);
+	if (programToSearch.wasResultFound == true)
+	{
+		programToSearch.foundGear->sendMessageAndBufferDataToGear(in_message,
+																in_bufferSize,
+																in_dataArray);
 	}
 }
 
@@ -942,14 +1022,20 @@ void ShaderMachineBase::setDirection(float in_x, float in_y, float in_z)
 
 }
 
-glm::vec3* ShaderMachineBase::getPosition()
+void ShaderMachineBase::setPosition(glm::vec3 in_positionValue)
 {
-	return &position;
+	position = in_positionValue;
+	smWorldPosition = in_positionValue;
 }
 
-glm::vec3* ShaderMachineBase::getDirection()
+glm::vec3 ShaderMachineBase::getPositionValue()
 {
-	return &direction;
+	return position;
+}
+
+glm::vec3 ShaderMachineBase::getDirectionValue()
+{
+	return direction;
 }
 
 GLFWwindow* ShaderMachineBase::getWindow()

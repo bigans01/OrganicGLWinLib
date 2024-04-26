@@ -67,7 +67,7 @@ public:
 	static void loadShadersViaMode(GLuint* in_programID, std::string in_programName);
 	static void loadComputeShader(GLuint* in_programID, std::string in_computeShaderName);
 	static void initializeGlew();
-	static void computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
+	static void computeCameraDirectionAndPosition(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
 	static void setGLFWInputMode(GLFWwindow* in_window);
 	static int setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef, float* in_atlasTileWidth, float* in_atlasWidth);
 	static int setupTextureAtlasJPEG2(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);

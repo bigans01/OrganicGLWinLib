@@ -262,6 +262,18 @@
     <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1">
       <UniqueIdentifier>{1288f95f-273d-464f-8dc8-56a40e57d0df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\LocalizedHighlighterGearT1">
+      <UniqueIdentifier>{75672ccc-1676-41c6-af15-9b6948239dc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\localized_mode">
+      <UniqueIdentifier>{38db3241-06fa-4c4e-bf8b-b40e3ef9b67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\localized_mode">
+      <UniqueIdentifier>{6f0dcdb4-e94f-4405-9b8a-387b9884cd8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1">
+      <UniqueIdentifier>{cad61c7b-52cb-4200-9a3b-1ad9851308b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1443,6 +1455,12 @@
     <ClInclude Include="GPUWorldCoordinateProducer.h">
       <Filter>Header Files\ShaderMachines\Generic</Filter>
     </ClInclude>
+    <ClInclude Include="LocalizedHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1</Filter>
+    </ClInclude>
+    <ClInclude Include="SMLocalizedLightingComputeV1.h">
+      <Filter>Header Files\ShaderMachines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2060,6 +2078,12 @@
     <ClCompile Include="GPUWorldCoordinateProducer.cpp">
       <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
+    <ClCompile Include="LocalizedHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\LocalizedHighlighterGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="SMLocalizedLightingComputeV1.cpp">
+      <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\absolute_mode\Mode0_FragmentShader.fragmentshader">
@@ -2178,6 +2202,12 @@
     </None>
     <None Include="shaders\absolute_mode\WaveHighlighterGearT1.vertexshader">
       <Filter>Header Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ class GPUWorldCoordinateProducer
 		GPUWorldCoordinateProducer(double in_worldX, double in_worldY, double in_worldZ);
 		GPUWorldCoordinate producedCoordinate;
 	private:
+		int findTrueCollectionCoord(double in_worldCoord);
 };
 
 #endif

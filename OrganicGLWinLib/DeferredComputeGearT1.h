@@ -17,8 +17,10 @@ public:
 	void printData();
 	void interpretMessage(Message in_message);
 
+	// unused, but required public virtual functions for Gear
 	void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
 	void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
+	void sendMessageAndBufferDataToGear(Message in_messageToSend, int in_arraySize, GLfloat* in_arrayRef) {};
 
 private:
 

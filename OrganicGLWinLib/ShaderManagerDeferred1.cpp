@@ -286,7 +286,7 @@ void ShaderManagerDeferred1::runPass2()
 void ShaderManagerDeferred1::render()
 {
 	do {
-		computeMatricesFromInputs();
+		computeCameraDirectionAndPosition();
 		updateMatricesAndDelta();
 
 		// IMGUI prep

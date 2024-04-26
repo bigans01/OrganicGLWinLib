@@ -365,9 +365,6 @@ void SMDeferredLightingComputeV2::updateUniformRegistry()
 	// global ambience mutliplier
 	//globalAmbienceMultiplier = 1.0f;
 	uniformRegistry.insertFloat("globalAmbienceMultiplier", globalAmbienceMultiplier);
-
-	// update the MVP; model is not needed here, as terrain is already translated to world space.
-	MVP = projection * view;
 	uniformRegistry.insertMat4("MVP", MVP);
 
 	glm::mat4 currentMV = view;

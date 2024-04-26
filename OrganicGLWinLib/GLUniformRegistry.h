@@ -7,6 +7,7 @@
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include "EnclaveKeyDef.h"
 
 class GLUniformRegistry
 {
@@ -17,6 +18,7 @@ public:
 	void insertMat4(std::string in_stringValue, glm::mat4 in_mat4);
 	void insertFloat(std::string in_stringValue, float in_float);
 	void insertInt(std::string in_stringValue, int in_int);
+	void insertEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey);
 
 	glm::vec2 getVec2(std::string in_stringValue);
 	glm::vec3 getVec3(std::string in_stringValue);
@@ -24,6 +26,7 @@ public:
 	glm::mat4 getMat4(std::string in_stringValue);
 	float getFloat(std::string in_stringValue);
 	int getInt(std::string in_stringValue);
+	EnclaveKeyDef::EnclaveKey get3DKey(std::string in_stringValue);
 
 	float* getFloatRef(std::string in_stringValue);
 private:
@@ -33,6 +36,7 @@ private:
 	std::unordered_map<std::string, glm::mat4> regMat4;
 	std::unordered_map<std::string, float> regFloat;
 	std::unordered_map<std::string, int> regInt;
+	std::unordered_map<std::string, EnclaveKeyDef::EnclaveKey> regEnclaveKey;
 
 
 

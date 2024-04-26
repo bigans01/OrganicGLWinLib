@@ -27,6 +27,7 @@ public:
 	void executeGearFunction(std::string in_identifier) {};
 	void printData() {};
 	void interpretMessage(Message in_message) {};
+	void sendMessageAndBufferDataToGear(Message in_messageToSend, int in_arraySize, GLfloat* in_arrayRef) {};
 
 private:
 	void setUpRenderQuad();

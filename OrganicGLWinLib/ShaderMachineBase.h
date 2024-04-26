@@ -31,6 +31,8 @@
 #include "KeyPressTracker.h"
 #include "OneOffMacros.h"
 #include "GPUCoordinateMode.h"
+#include "GPUWorldCoordinateProducer.h"
+#include "IndependentUtils.h"
 
 class ShaderMachineBase
 {
@@ -70,6 +72,13 @@ public:
 																GLsizei* in_vertexCount,
 																int in_drawCount);
 		void sendDataToDynamicBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
+
+	
+		void sendMessageAndBufferDataToGLProgram(std::string in_programName, // Sends a Message + buffer data directly to a gear; will only get sent to the Gear if the Gear exists
+										   Message in_message,			
+										   int in_bufferSizeInBytes,	// Friendly Remember! 1 float = 4 bytes
+										   GLfloat* in_dataArray);
+
 		void deleteDynamicBuffer(std::string in_bufferName);	// uses the dynBufferManager to search for a list of gears that are affected by the 
 																// buffer delete; these affected gears will get a Message sent to them, which they may
 																// interpret to perform any necessary cleanup before the dynamically allocated buffer is deleted.
@@ -87,6 +96,7 @@ public:
 		void sendDataToPersistentBuffer(std::string in_bufferName, int in_offset, int in_byteSizeToWrite, GLfloat* in_dataArray);	// send's data to " " " "; uses sub
 
 		// buffer functions
+		bool doesBufferExist(std::string in_bufferName);
 		GLuint getBufferID(std::string in_bufferName);
 		void sendDataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);						// does a full copy, rebuilding the buffer
 		void sendMat4DataToBuffer(std::string in_bufferName, int in_byteSizeToWrite, glm::mat4* in_dataArray);					// full copy "" 
@@ -121,11 +131,16 @@ public:
 		 // "Terrain" vao data value retrieval functions for OrganicSystem
 		int getVaoAttribMode();
 		int getVaoAttribByteSize();
-		void computeMatricesFromInputs(bool in_imguiFocusedFlag);	// STEP 2: update matrices, but only apply changes from arrow keystrokes if an ImGui panel IS NOT focused.
+		void computeCameraDirectionAndPosition(bool in_imguiFocusedFlag);	// STEP 2: update the camera direction and position; 
+																			// the position of the camera is changed based on input keystrokes, multiplied
+																			// by the current "speed" modifier for the movement.
+
 		void updateMatricesAndDelta();								// STEP 3
 
-		glm::vec3* getPosition();
-		glm::vec3* getDirection();
+		// position and direction setting and retrieval
+		void setPosition(glm::vec3 in_positionValue);
+		glm::vec3 getPositionValue();
+		glm::vec3 getDirectionValue();
 		GLFWwindow* getWindow();
 
 		TerrainMemoryTracker terrainMemoryTracker;		// built-in terrain memory tracker
@@ -172,6 +187,9 @@ protected:
 		GPUCoordinateMode machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_UNDEFINED;	// determines how an instantiated ShaderMachine should have its gears interpret
 																							// vertex data. ***THIS MUST** be manually set by the call to the virtual initialize() function in each class that is derived
 																							// from this base. If it is not set, crashes/unhandled exceptions/errors are going to occur.
+
+		GPUWorldCoordinate machineCurrentWorldCoord;	// the current location of the world camera, in a dvec3; should be utilized when machineCoordMode is using 
+														// GPUCoordinateMode::COORDINATE_MODE_LOCAL.
 
 		// Below: a pointer to the selected matrix/delta calculation function to use. ShaderMachine objects
 		// will determine a select function to use, based on the value of machineCoordMode, by calling the 
@@ -232,7 +250,7 @@ protected:
 
 		// for the camera
 		glm::vec3 position = glm::vec3(30, 0, 5);									// Initial position of camera : on +30x, 0y, +5z
-		glm::dvec3 worldPosition = glm::dvec3(30, 0, 5);
+		glm::dvec3 smWorldPosition = glm::dvec3(30, 0, 5);
 		glm::vec3 direction;														// direction camera is facing
 		glm::vec3 up;
 		glm::mat4 projection;														// (temporary) OpenGL projection matrix

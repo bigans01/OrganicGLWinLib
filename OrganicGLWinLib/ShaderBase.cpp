@@ -23,7 +23,7 @@ int ShaderBase::getVaoAttribByteSize()
 	return vaoAttribByteSize;
 }
 
-void ShaderBase::computeMatricesFromInputs()
+void ShaderBase::computeCameraDirectionAndPosition()
 {
 	// glfwGetTime is called only once, the first time this function is called
 	//static double lastTime = glfwGetTime();

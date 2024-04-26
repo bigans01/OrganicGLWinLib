@@ -32,7 +32,8 @@ class TerrainLightingComputeGearBP : public Gear
 		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove);
 
 		// unused, but required public virtual functions for Gear
-		void interpretMessage(Message in_message) {}
+		void interpretMessage(Message in_message) {};
+		void sendMessageAndBufferDataToGear(Message in_messageToSend, int in_arraySize, GLfloat* in_arrayRef) {};
 
 	private:
 

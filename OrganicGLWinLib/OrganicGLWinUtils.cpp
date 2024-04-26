@@ -372,7 +372,7 @@ AtlasMetaData OrganicGLWinUtils::findAtlasMetadata(int in_atlasWidth, int in_til
 
 }
 
-void OrganicGLWinUtils::computeMatricesFromInputs(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref)
+void OrganicGLWinUtils::computeCameraDirectionAndPosition(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref)
 {
 	// glfwGetTime is called only once, the first time this function is called
 	static double lastTime = glfwGetTime();
@@ -799,6 +799,12 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_
 	{
 		std::cout << "##### ATTEMPTING LOAD FOR WaveHighlighterGearT1" << std::endl;
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/WaveHighlighterGearT1.vertexshader", "graphics/shaders/WaveHighlighterGearT1.fragmentshader");
+	}
+
+	else if (in_programName == "LocalizedHighlighterGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR LocalizedHighlighterGearT1" << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/LocalizedHighlighterGearT1.vertexshader", "graphics/shaders/LocalizedHighlighterGearT1.fragmentshader");
 	}
 }
 

@@ -31,6 +31,11 @@ void GLUniformRegistry::insertInt(std::string in_stringValue, int in_int)
 	regInt[in_stringValue] = in_int;
 }
 
+void GLUniformRegistry::insertEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey)
+{
+	regEnclaveKey[in_stringValue] = in_enclaveKey;
+}
+
 glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 {
 	glm::vec2 returnVec;
@@ -40,8 +45,6 @@ glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 		returnVec = regVec2[in_stringValue];
 	}
 	return returnVec;
-
-	//return regVec2[in_stringValue];
 }
 
 glm::vec3 GLUniformRegistry::getVec3(std::string in_stringValue)
@@ -53,8 +56,6 @@ glm::vec3 GLUniformRegistry::getVec3(std::string in_stringValue)
 		returnVec = regVec3[in_stringValue];
 	}
 	return returnVec;
-
-	//return regVec3[in_stringValue];
 }
 
 glm::mat3 GLUniformRegistry::getMat3(std::string in_stringValue)
@@ -66,8 +67,6 @@ glm::mat3 GLUniformRegistry::getMat3(std::string in_stringValue)
 		returnMat3 = regMat3[in_stringValue];
 	}
 	return returnMat3;
-
-	// return regMat3[in_stringValue];
 }
 
 glm::mat4 GLUniformRegistry::getMat4(std::string in_stringValue)
@@ -79,8 +78,6 @@ glm::mat4 GLUniformRegistry::getMat4(std::string in_stringValue)
 		returnMat4 = regMat4[in_stringValue];
 	}
 	return returnMat4;
-
-	//return regMat4[in_stringValue];
 }
 
 float GLUniformRegistry::getFloat(std::string in_stringValue)
@@ -92,8 +89,6 @@ float GLUniformRegistry::getFloat(std::string in_stringValue)
 		returnFloat = regFloat[in_stringValue];
 	}
 	return returnFloat;
-
-	//return regFloat[in_stringValue];
 }
 
 int GLUniformRegistry::getInt(std::string in_stringValue)
@@ -105,39 +100,20 @@ int GLUniformRegistry::getInt(std::string in_stringValue)
 		returnInt = regInt[in_stringValue];
 	}
 	return returnInt;
+}
 
-	//return regInt[in_stringValue];
+EnclaveKeyDef::EnclaveKey GLUniformRegistry::get3DKey(std::string in_stringValue)
+{
+	EnclaveKeyDef::EnclaveKey returnKey;
+	auto keyFinder = regEnclaveKey.find(in_stringValue);
+	if (keyFinder != regEnclaveKey.end())
+	{
+		returnKey = regEnclaveKey[in_stringValue];
+	}
+	return returnKey;
 }
 
 float* GLUniformRegistry::getFloatRef(std::string in_stringValue)
 {
 	return &regFloat[in_stringValue];
 }
-
-/*
-void GLUniformRegistry::processGearUniformRequests(Gear* in_gear)
-{
-	auto requestVectorBegin = in_gear->getUniformRequests()->begin();
-	auto requestVectorEnd = in_gear->getUniformRequests()->end();
-	for (requestVectorBegin; requestVectorBegin != requestVectorEnd; requestVectorBegin++)
-	{
-		if (requestVectorBegin->dataType == GLDataType::VEC2)
-		{
-
-		}
-		else if (requestVectorBegin->dataType == GLDataType::VEC3)
-		{
-
-		}
-		else if (requestVectorBegin->dataType == GLDataType::MAT4)
-		{
-			//glm::mat4 outMat4 = regMat4[requestVectorBegin->uniformName];
-			//in_gear->sendUniformMat4(requestVectorBegin->uniformName, outMat4);
-		}
-		else if (requestVectorBegin->dataType == GLDataType::FLOAT)
-		{
-
-		}
-	}
-}
-*/

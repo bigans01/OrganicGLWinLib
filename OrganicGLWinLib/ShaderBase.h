@@ -69,7 +69,7 @@ class ShaderBase
 		// non-virtual functions
 		GLuint* getTerrainBufferRef();
 		GLuint* getTerrainSwapRef();
-		void computeMatricesFromInputs();
+		void computeCameraDirectionAndPosition();
 		void updateMatricesAndDelta();
 		GLFWwindow* getWindow();
 		void setupTextureAtlas(AtlasMap* in_atlasMapRef, AtlasPropertiesGL* in_atlasPropertiesGLRef);

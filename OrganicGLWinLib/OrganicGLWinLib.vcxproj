@@ -185,6 +185,7 @@
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
+    <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="RenderableCube.h" />
     <ClInclude Include="RenderablePrimitiveBase.h" />
     <ClInclude Include="SMDeferredLightingComputeV2.h" />
+    <ClInclude Include="SMLocalizedLightingComputeV1.h" />
     <ClInclude Include="SPolyMode.h" />
     <ClInclude Include="SPolyResolution.h" />
     <ClInclude Include="SPolyShellProducer.h" />
@@ -566,6 +568,7 @@
     <ClCompile Include="GLProgramIdIndex.cpp" />
     <ClCompile Include="GPUWorldCoordinate.cpp" />
     <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
+    <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />
@@ -576,6 +579,7 @@
     <ClCompile Include="RenderablePrimitiveBase.cpp" />
     <ClCompile Include="RenderablePrimitiveContainer.cpp" />
     <ClCompile Include="SMDeferredLightingComputeV2.cpp" />
+    <ClCompile Include="SMLocalizedLightingComputeV1.cpp" />
     <ClCompile Include="SPolyResolution.cpp" />
     <ClCompile Include="SPolyShellProducer.cpp" />
     <ClCompile Include="BrasenhamMassTracer.cpp" />
@@ -809,6 +813,8 @@
     <None Include="shaders\absolute_mode\TerrainSimpleGearT1.vertexshader" />
     <None Include="shaders\absolute_mode\WaveHighlighterGearT1.fragmentshader" />
     <None Include="shaders\absolute_mode\WaveHighlighterGearT1.vertexshader" />
+    <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.fragmentshader" />
+    <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.vertexshader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="shaders\absolute_mode\experimental_fragment.txt" />

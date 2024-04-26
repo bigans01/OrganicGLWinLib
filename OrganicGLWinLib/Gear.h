@@ -36,6 +36,7 @@ class Gear
 		virtual void interpretMessage(Message in_message) = 0;
 
 		virtual void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) = 0;
+		virtual void sendMessageAndBufferDataToGear(Message in_messageToSend, int in_arraySize, GLfloat* in_arrayRef) = 0;
 		virtual void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) = 0;
 
 		void insertMultiDrawArrayJob(std::string in_jobName, GLMultiDrawArrayJob in_job);
@@ -73,6 +74,10 @@ class Gear
 			else if constexpr (in_dType == GLDataType::INT)
 			{
 				gearUniformRegistry.insertInt(in_uniformName, in_data);
+			}
+			else if constexpr (in_dType == GLDataType::KEY3D)
+			{
+				gearUniformRegistry.insertEnclaveKey(in_uniformName, in_data);
 			}
 			
 		}
