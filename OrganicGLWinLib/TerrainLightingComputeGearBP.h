@@ -13,6 +13,11 @@ Description: this gear renders in a similiar way to the TerrainLightComputeGearT
 is that this gear manages its own OpenGL buffers for rendering, in an eventual attempt to localize all the OpenGL data 
 around the world camera being 0.0f.
 
+This gear does atlas tile correction UV in the vertex shader. In the fragment shader, the mmUV array from the vertex shader is used to
+get the UV coordinates for each pixel in the buffer, in order to read from from other textures (ambience, diffuse, etc).
+
+This gear requires that it receives that deferred FBO ID to correctly operate from the parent ShaderMachine, as in the case of SMDeferredLightingComputeV2::insertTerrainGear.
+
 OpenGL buffer data is sent to this gear through calls to the sendTerrainToGear and removeTerrainDataFromGear required virtual functions.
 All elements in the renderableBlueprints map are then rendered when render() is called.
 

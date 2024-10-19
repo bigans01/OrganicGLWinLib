@@ -262,9 +262,6 @@
     <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\WaveHighlighterGearT1">
       <UniqueIdentifier>{1288f95f-273d-464f-8dc8-56a40e57d0df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ShaderMachines\Gears\absolute_mode\LocalizedHighlighterGearT1">
-      <UniqueIdentifier>{75672ccc-1676-41c6-af15-9b6948239dc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ShaderMachines\Gears\localized_mode">
       <UniqueIdentifier>{38db3241-06fa-4c4e-bf8b-b40e3ef9b67a}</UniqueIdentifier>
     </Filter>
@@ -273,6 +270,15 @@
     </Filter>
     <Filter Include="Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1">
       <UniqueIdentifier>{cad61c7b-52cb-4200-9a3b-1ad9851308b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear">
+      <UniqueIdentifier>{df2a88f8-c630-4340-95fb-2e620a8762a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1">
+      <UniqueIdentifier>{75672ccc-1676-41c6-af15-9b6948239dc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear">
+      <UniqueIdentifier>{252f0443-2f7e-4486-a620-e2a797beda28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1461,6 +1467,9 @@
     <ClInclude Include="SMLocalizedLightingComputeV1.h">
       <Filter>Header Files\ShaderMachines</Filter>
     </ClInclude>
+    <ClInclude Include="LocalizedGBufferComputeLoaderGear.h">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2079,10 +2088,13 @@
       <Filter>Source Files\ShaderMachines\Generic</Filter>
     </ClCompile>
     <ClCompile Include="LocalizedHighlighterGearT1.cpp">
-      <Filter>Source Files\ShaderMachines\Gears\absolute_mode\LocalizedHighlighterGearT1</Filter>
+      <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1</Filter>
     </ClCompile>
     <ClCompile Include="SMLocalizedLightingComputeV1.cpp">
       <Filter>Source Files\ShaderMachines</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2208,6 +2220,12 @@
     </None>
     <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.fragmentshader">
       <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
+    </None>
+    <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

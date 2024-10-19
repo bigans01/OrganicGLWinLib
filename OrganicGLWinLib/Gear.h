@@ -107,7 +107,7 @@ class Gear
 		std::unordered_map<std::string, int> gearTextureLookup;
 		std::unordered_map<std::string, int> gearMultiDrawArrayJobLookup;
 		std::unordered_map<std::string, int> gearDrawElementsInstancedJobLookup;
-
+		
 		GLUniformRegistry gearUniformRegistry;
 
 		void registerNewBuffer(std::string in_bufferName, GLuint in_bufferID);							// insert a typical, non-persistent buffer

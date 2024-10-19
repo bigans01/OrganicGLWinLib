@@ -185,6 +185,7 @@
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
+    <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
@@ -568,6 +569,7 @@
     <ClCompile Include="GLProgramIdIndex.cpp" />
     <ClCompile Include="GPUWorldCoordinate.cpp" />
     <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
+    <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp" />
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
@@ -813,6 +815,8 @@
     <None Include="shaders\absolute_mode\TerrainSimpleGearT1.vertexshader" />
     <None Include="shaders\absolute_mode\WaveHighlighterGearT1.fragmentshader" />
     <None Include="shaders\absolute_mode\WaveHighlighterGearT1.vertexshader" />
+    <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.fragmentshader" />
+    <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.vertexshader" />
     <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.fragmentshader" />
     <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.vertexshader" />
   </ItemGroup>

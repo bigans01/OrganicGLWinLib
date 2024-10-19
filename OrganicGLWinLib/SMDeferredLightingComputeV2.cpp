@@ -75,15 +75,20 @@ void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHe
 
 	insertTerrainGear(0, programLookup["TerrainLightingComputeGearBP"]);
 
-	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
-	createComputeImage(GL_TEXTURE16, "computeRead", 1);					// image unit 1, "read"
-	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 
 
 	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
 	// Gear 1: The ComputeCopyRBGFromTextureToImageGearT1 gear will read from the color buffer that was output to, 
 	// by Gear 0, and feed this data into the "computeRead" image unit, so that it may be operated on by the next gear.
+	//
+	// This specific compute gear will assume that the color data built when the previous gear was run, will be found in GL_TEXTURE13;
+	// This is required for the following line to work in the compute shader:
+	//
+	// layout(binding = 13) uniform sampler2D colorGData;	// for reading from the color texture
 	createComputeProgram("ComputeCopyRBGFromTextureToImageGearT1");
+	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
+	createComputeImage(GL_TEXTURE16, "computeRead", 1);					// image unit 1, "read"
+	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
 	insertComputeTransferGear(1, programLookup["ComputeCopyRBGFromTextureToImageGearT1"]);
 
 
@@ -288,7 +293,6 @@ void SMDeferredLightingComputeV2::insertComputeTransferGear(int in_gearID, GLuin
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new ComputeCopyRBGFromTextureToImageGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
-	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
 void SMDeferredLightingComputeV2::insertComputeGear(int in_gearID, GLuint in_programID)

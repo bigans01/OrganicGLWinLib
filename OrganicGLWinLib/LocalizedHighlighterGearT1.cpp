@@ -14,9 +14,13 @@ void LocalizedHighlighterGearT1::initializeMachineShader(int in_width, int in_he
 
 	// set up the uniform requests
 
-	// MVP
+	// reqMVP should be calculated with a view mat4 that is calculated from an origin of 0,0,0
 	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
 	uniformRequests.push_back(reqMVP);
+
+	// ***************************** the below two requests are Required for localization ***************************
+
+	// These uniforms should be calculated every frame, and come from the call to ShaderMachineBase::runMatrixAndDeltaLocalComputations
 
 	// The world camera's true blueprint key, before it was translated to 0,0,0
 	GLUniformRequest reqCameraBlueprintKey(GLDataType::KEY3D, "worldCoordBPLocalCameraKey");
@@ -25,6 +29,8 @@ void LocalizedHighlighterGearT1::initializeMachineShader(int in_width, int in_he
 	// The world camera's true local coordinate, before it was translated to 0,0,0
 	GLUniformRequest reqCameraLocalCoord(GLDataType::VEC3, "worldCoordBPLocalCameraCoord");
 	uniformRequests.push_back(reqCameraLocalCoord);
+
+	// ***************************** **************************************************** ************************** 
 
 	// Remember, draw call data is kept internally in this gear.
 
@@ -106,8 +112,8 @@ void LocalizedHighlighterGearT1::LBPHighlightBufferData::lbpHighlightDraw(GLuint
 	//lbpHighlightBPKey.printKey();
 	//std::cout << std::endl;
 
-	GLuint mvpUniform = glGetUniformLocation(in_programID, "MVP");	// find the MVP uniform
-	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &in_MVPvalue[0][0]);		// set the uniform
+	//GLuint mvpUniform = glGetUniformLocation(in_programID, "MVP");	// find the MVP uniform
+	//glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &in_MVPvalue[0][0]);		// set the uniform
 
 	// |||||||||||||| send the uniforms:
 
@@ -228,6 +234,9 @@ void LocalizedHighlighterGearT1::BPUniqueHighlights::drawHighlights(GLuint in_pr
 	glm::vec3 in_cameraBPLocalCoord,
 	glm::mat4 in_MVP)
 {
+	GLuint mvpUniform = glGetUniformLocation(in_programID, "MVP");	// find the MVP uniform
+	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &in_MVP[0][0]);		// set the uniform
+
 	for (auto& currentBPHighlights : bpHighlights)
 	{
 		for (auto& currentHighlight : currentBPHighlights.second.uniqueHighlights)
@@ -248,8 +257,13 @@ void LocalizedHighlighterGearT1::BPUniqueHighlights::drawHighlights(GLuint in_pr
 void LocalizedHighlighterGearT1::render()
 {
 	useProgram();
+
+	// we should be writing to and/or manipulating the default frame buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	glEnable(GL_DEPTH_TEST);	// may be temporary
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
+
 
 	highlightsIndex.drawHighlights(programID,
 									gearUniformRegistry.get3DKey("worldCoordBPLocalCameraKey"),

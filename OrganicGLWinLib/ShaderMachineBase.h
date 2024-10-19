@@ -334,7 +334,7 @@ protected:
 
 		static void mouseButtonCallbackWrapper(GLFWwindow* window, int button, int action, int mods);
 		void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-private:
+
 		struct GearFindResult
 		{
 			GearFindResult() {};

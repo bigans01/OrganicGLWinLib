@@ -518,6 +518,8 @@ void ShaderMachineBase::runMatrixAndDeltaLocalComputations()
 	// Calculate the values to store in the corresponding GPUWorldCoordinate. Send this value to the uniformRegistry member of this class. 
 	auto currentWorldCoordinates = GPUWorldCoordinateProducer(smWorldPosition.x, smWorldPosition.y, smWorldPosition.z);
 
+
+	// Below: translate the world coordinates of the camera to localized coordinates.
 	machineCurrentWorldCoord = currentWorldCoordinates.producedCoordinate;
 	uniformRegistry.insertEnclaveKey("worldCoordBPLocalCameraKey", machineCurrentWorldCoord.worldBPKey);
 	uniformRegistry.insertVec3("worldCoordBPLocalCameraCoord", IndependentUtils::convertECBPolyPointToVec3(machineCurrentWorldCoord.worldLocalizedPoint));

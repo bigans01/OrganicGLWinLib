@@ -11,6 +11,9 @@
 Description: this Gear is designed to load color data from an image that contains data from compute shaders,
 into the main frame buffer.
 
+It simply draws a quad across the screen, in order to sample each pixel that is being represented in the buffer;
+the MVP uniform is just a simple 1.0 mat4 matrix.
+
 */
 
 class DeferredComputeResultsGearT1 : public Gear
@@ -32,7 +35,7 @@ public:
 private:
 	void setUpRenderQuad();
 	void drawQuad();
-	void setDrawMatrices();
+	void setDrawMatrices();	// simply sets the MVP uniform as a glm::mat4(1.0), for rendering the screen quad for sampling.
 	GLuint quadVaoID = 0;
 
 	int screenWidthUniform;

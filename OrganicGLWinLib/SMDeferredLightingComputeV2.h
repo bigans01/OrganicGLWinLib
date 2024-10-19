@@ -27,7 +27,7 @@
 
 Description: This machine is similiar to SMDeferredLightingComputeV1, with the exception that the machine itself
 doesn't allocate the main/swap buffers that are normally used for terrain rendering; instead, the TerrainLightingComputeGearBP 
-manages the terrain data itself.
+manages the terrain data itself. 
 
 As a result of this, the terrainMemoryTracker doesn't manage any terrain data or memory.
 

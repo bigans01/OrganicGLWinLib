@@ -18,8 +18,8 @@ void DeferredComputeResultsGearT1::initializeMachineShader(int in_width, int in_
 	screenHeightUniform = glGetUniformLocation(programID, "screenHeight");
 
 	// set up the uniform requests
-	GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
-	uniformRequests.push_back(reqMVP);
+	//GLUniformRequest reqMVP(GLDataType::MAT4, "MVP");
+	//uniformRequests.push_back(reqMVP);
 
 	// compute width
 	GLUniformRequest reqWidth(GLDataType::INT, "screenWidth");
