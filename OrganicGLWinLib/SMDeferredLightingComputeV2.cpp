@@ -61,8 +61,6 @@ void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHe
 	sliderPanelContainer.insertSliderFloatIntoPanel("adjustable uniforms", "world light", &globalAmbienceMultiplier, 0.0f, 1.0f);
 
 
-	// ############################ SSBO for WorldLights set up
-	insertNewBuffer("world_lights_ssbo");
 
 
 
@@ -97,6 +95,7 @@ void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHe
 	// Gear 2: The DeferredLightingComputeGearT1 compute shader is an experimental shader, that is designed to experiment with
 	// rendering lights against tiles defined in compute shaders. This gear will apply lighting to the color buffer that was transffered-into by Gear 1.
 	createComputeProgram("DeferredLightingComputeGearT1");
+	insertNewBuffer("world_lights_ssbo");	// SSBO for WorldLights set up
 	insertComputeGear(2, programLookup["DeferredLightingComputeGearT1"]);
 
 
@@ -117,12 +116,12 @@ void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHe
 	createProgram("InstancedHighlighterGearT1");
 	insertNewBuffer("mesh_buffer");
 	insertNewBuffer("matrices_buffer");
-	insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
+	//insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
 
 	// ########################################################################## Wave highlighter gear set up
 	// Gear 6: display wave highlights (i.e, current ORE highlight, constituted highlights of an ORE)
 	createProgram("WaveHighlighterGearT1");
-	insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
+	//insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
 
 	std::cout << "Program IDs: " << std::endl;
 	for (auto& currentProgramValue : programLookup)

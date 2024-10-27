@@ -7,32 +7,34 @@ void SMLocalizedLightingComputeV1::initialize(int in_windowWidth, int in_windowH
 	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_LOCAL;
 	setMachineCoordModeDependentSettings();
 
-	// basic initialization;
-	// For the time being, this is a simple shader that should examine how localized translations 
-	// are rendered; this will be changed to take compute shaders into account at a later date.
-	width = in_windowWidth;
-	height = in_windowHeight;
+	// since this is a compute shader, we must make sure the compute "tiles" are setup correctly
+	ComputeResolution resolution(in_windowWidth, in_windowHeight, 16, 16);// use compute-adjusted coordinates, for a group size of 16
+	width = resolution.computeScreenWidth;
+	height = resolution.computeScreenHeight;
+
+	std::cout << "#### Width adjusted from: " << in_windowWidth << " to -> " << width << std::endl;
+	std::cout << "#### Height adjusted from: " << in_windowHeight << " to -> " << height << std::endl;
 
 	// set shader specific VAO values
-	vaoAttribMode = 1;
-	vaoAttribByteSize = 24;
+	vaoAttribMode = 4;
+	vaoAttribByteSize = 40;
 
 	OrganicGLWinUtils::initializeLibraryAndSetHints();				// initialization
-	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW window
+	window = OrganicGLWinUtils::createGLFWWindow(width, height);	// create the GLFW windowgf
 	OrganicGLWinUtils::checkWindowValidity(window);			// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::makeContextCurrent(window);
 	OrganicGLWinUtils::initializeGlew();
 	OrganicGLWinUtils::setBasicStates();					// CHECK FOR DEFERRED?
 	OrganicGLWinUtils::setGLFWInputMode(window);
-	OrganicGLWinUtils::setClearColor(.11f, .13f, .15f, 0.0f);	// background color
+	OrganicGLWinUtils::setClearColor(0.33f, 0.01f, 0.73f, 0.0f);	// background color
 
 	// enable depth dest
 	glEnable(GL_DEPTH_TEST);
 
 	// set keyboard input callback function.
 	glfwSetWindowUserPointer(window, this);	// testing only.
-	
-											// input callbacks
+
+	// input callbacks
 	glfwSetKeyCallback(window, keyCallbackWrapper);	// keyboard
 	glfwSetScrollCallback(window, mouseScrollCallbackWrapper);			// mouse scroll
 	glfwSetMouseButtonCallback(window, mouseButtonCallbackWrapper);		// mouse buttons
@@ -56,26 +58,66 @@ void SMLocalizedLightingComputeV1::initialize(int in_windowWidth, int in_windowH
 	sliderPanelContainer.insertSliderFloatIntoPanel("adjustable uniforms", "world light", &globalAmbienceMultiplier, 0.0f, 1.0f);
 
 
-	// Stuff for first gear (LocalizedGBufferComputeLoaderGear)
-	// !! create program here 
+
+
+
+	// ########################################################################## Terrain Gear (Lighting Compute) set up
+	// Gear 0: Remember, the TerrainLightingComputeGearBP gear doesn't use the two huge buffers; it manages it's own buffers for each blueprint draw call.
+	// The actual renderable data for each blueprint gets stored in this gear, via the calls to insertCollectionGLData.
 	createProgram("LocalizedGBufferComputeLoaderGear");
 	insertNewFBO("deferred_FBO");
 	setupDeferredFBO();
 	insertTerrainGear(0, programLookup["LocalizedGBufferComputeLoaderGear"]);
 
+
+	// ########################################################################## Compute ComputeCopyRBGFromTextureToImage set up
+	// Gear 1: The ComputeCopyRBGFromTextureToImageGearT1 gear will read from the color buffer that was output to, 
+	// by Gear 0, and feed this data into the "computeRead" image unit, so that it may be operated on by the next gear.
+	//
+	// This specific compute gear will assume that the color data built when the previous gear was run, will be found in GL_TEXTURE13;
+	// This is required for the following line to work in the compute shader:
+	//
+	// layout(binding = 13) uniform sampler2D colorGData;	// for reading from the color texture
+	createComputeProgram("ComputeCopyRBGFromTextureToImageGearT1");
+	insertNewBuffer("compute_quad_buffer");								// quad buffer used for compute shaders.
+	createComputeImage(GL_TEXTURE16, "computeRead", 1);					// image unit 1, "read"
+	createComputeImage(GL_TEXTURE11, "computeWrite", 0);				// create on texture unit 11, bind to image unit 0
+	insertComputeTransferGear(1, programLookup["ComputeCopyRBGFromTextureToImageGearT1"]);
+
+
+
+	// ########################################################################## Compute Gear set up
+	// Gear 2: The DeferredLightingComputeGearT1 compute shader is an experimental shader, that is designed to experiment with
+	// rendering lights against tiles defined in compute shaders. This gear will apply lighting to the color buffer that was transffered-into by Gear 1.
+	createComputeProgram("DeferredLightingComputeGearT1");
+	insertNewBuffer("world_lights_ssbo");	// SSBO for WorldLights set up
+	insertComputeGear(2, programLookup["DeferredLightingComputeGearT1"]);
+
+
+	// ########################################################################## Compute results gear set up
+	// Gear 3: Transfer the resulting lighting data that was stored into the image, into the main FBO.
+	createProgram("DeferredComputeResultsGearT1");
+	insertComputeResultsGear(3, programLookup["DeferredComputeResultsGearT1"]);
+
+	
 	// TEMPORARY: Just create the localized highlighting gear for now, to ensure the proposed localized logic works.
 	// create the simple terrain gear
 	createProgram("LocalizedHighlighterGearT1");
-	insertLocalizedHighlighterGear(1, programLookup["LocalizedHighlighterGearT1"]);
+	insertNewBuffer("highlighter_buffer");
+	insertLocalizedHighlighterGear(4, programLookup["LocalizedHighlighterGearT1"]);
+	
 
+	// ########################################################################## Instanced Highlighter Gear set up
+	// Gear 5: Draw any instanced rendering models (currently unused)
+	createProgram("InstancedHighlighterGearT1");
+	insertNewBuffer("mesh_buffer");
+	insertNewBuffer("matrices_buffer");
+	//insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
 
-
-
-
-
-
-
-
+	// ########################################################################## Wave highlighter gear set up
+	// Gear 6: display wave highlights (i.e, current ORE highlight, constituted highlights of an ORE)
+	createProgram("WaveHighlighterGearT1");
+	//insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
 
 	std::cout << "Program IDs: " << std::endl;
 	for (auto& currentProgramValue : programLookup)
@@ -90,12 +132,9 @@ void SMLocalizedLightingComputeV1::initialize(int in_windowWidth, int in_windowH
 	}
 
 
-	std::cout << "++++++++ !! SMLocalizedLightingComputeV1 complete. " << std::endl;
+	std::cout << "++++++++ !! SMDeferredLightingComputeV2 complete. " << std::endl;
 	int someVal = 4;
 	std::cin >> someVal;
-
-
-
 }
 
 void SMLocalizedLightingComputeV1::setupDeferredFBO()
@@ -178,11 +217,55 @@ void SMLocalizedLightingComputeV1::createGBufText(GLenum texUnit, GLenum  format
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
+void SMLocalizedLightingComputeV1::createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit)
+{
+	int tex_w = width;
+	int tex_h = height;
+	insertNewTexture(in_imageName);
+	glGenTextures(1, getTextureRef(in_imageName));
+	glActiveTexture(texUnit);						// compute will read from texture unit 4, to get the image.
+	glBindTexture(GL_TEXTURE_2D, getTextureID(in_imageName));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, tex_w, tex_h, 0, GL_RGBA, GL_FLOAT,
+		NULL);
+	glBindImageTexture(in_imageUnit, getTextureID(in_imageName), 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);	// bind to image unit 0, for this texture (it can now be sampled in the compute shader)
+	std::cout << "!!!!!!! SMLocalizedLightingComputeV1: Compute Image Texture ID is: " << getTextureID(in_imageName) << std::endl;	
+}
+
 void SMLocalizedLightingComputeV1::insertTerrainGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new LocalizedGBufferComputeLoaderGear());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));					// pass the deferred FBO
+}
+
+void SMLocalizedLightingComputeV1::insertComputeTransferGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new ComputeCopyRBGFromTextureToImageGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
+}
+
+void SMLocalizedLightingComputeV1::insertComputeGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredLightingComputeGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+	gearTrain[in_gearID]->passGLuintValue("original_image_unit_1_texture_ID", getTextureID("computeWrite"));
+	gearTrain[in_gearID]->passGLuintValue("original_image_unit_2_texture_ID", getTextureID("computeRead"));
+	gearTrain[in_gearID]->passGLuintValue("world_lights_ssbo_buffer_ID", getBufferID("world_lights_ssbo"));
+
+	std::cout << "!!! Compute Lights gear (Lighting Compute) inserted. " << std::endl;
+}
+
+void SMLocalizedLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new DeferredComputeResultsGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+	gearTrain[in_gearID]->passGLuintValue("compute_quad_buffer", getBufferID("compute_quad_buffer"));
+	gearTrain[in_gearID]->passGLuintValue("deferred_FBO", getFBOID("deferred_FBO"));
 }
 
 void SMLocalizedLightingComputeV1::insertLocalizedHighlighterGear(int in_gearID, GLuint in_programID)
@@ -192,7 +275,7 @@ void SMLocalizedLightingComputeV1::insertLocalizedHighlighterGear(int in_gearID,
 }
 
 void SMLocalizedLightingComputeV1::updateUniformRegistry()
-{
+{	
 	// Assuming runMatrixAndDeltaLocalComputations was called before this, the value of MVP should be ok.
 	//
 	// The values of "worldCoordBPLocalCameraKey" and "worldCoordBPLocalCameraCoord" should have been updated 
@@ -204,7 +287,6 @@ void SMLocalizedLightingComputeV1::updateUniformRegistry()
 	uniformRegistry.insertInt("screenHeight", height);
 
 	// global ambience mutliplier
-	//globalAmbienceMultiplier = 1.0f;
 	uniformRegistry.insertFloat("globalAmbienceMultiplier", globalAmbienceMultiplier);
 
 	//glm::mat4 currentMV = view;
@@ -212,14 +294,10 @@ void SMLocalizedLightingComputeV1::updateUniformRegistry()
 	uniformRegistry.insertVec3("worldPosition", position);	// update the world position uniform
 
 	// insert the normal matrix for lighting
-
-	//glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view)));
-
 	model = glm::mat4(1.0);
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
 
 	uniformRegistry.insertMat3("NormalMatrix", normalMatrix);
-
 }
 
 void SMLocalizedLightingComputeV1::setupTextureAtlases()
@@ -255,7 +333,7 @@ void SMLocalizedLightingComputeV1::printDataForGears()
 }
 
 void SMLocalizedLightingComputeV1::insertCollectionGLData(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef)
-{
+{	
 	GearFindResult gearFinder = findGear("LocalizedGBufferComputeLoaderGear");
 	if (gearFinder.wasResultFound)
 	{

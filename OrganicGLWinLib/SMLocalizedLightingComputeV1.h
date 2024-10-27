@@ -9,6 +9,10 @@
 
 #include "LocalizedHighlighterGearT1.h"
 #include "LocalizedGBufferComputeLoaderGear.h"
+#include "ComputeCopyRBGFromTextureToImageGearT1.h"
+#include "DeferredLightingComputeGearT1.h"
+#include "DeferredComputeResultsGearT1.h"
+#include "ComputeResolution.h"
 
 /*
 
@@ -26,7 +30,10 @@ appears to correctly translate basic highlight data.
 ||||||||||||| Gear order:
 
 	0:	 LocalizedGBufferComputeLoaderGear:
-	1:   LocalizedHighlighterGearT1
+	1:   ComputeCopyRBGFromTextureToImageGearT1
+	2:	 DeferredLightingComputeGearT1
+	3:   DeferredComputeResultsGearT1
+	4:   InstancedHighlighterGearT1
 
 ||||||||||||| Notable uniforms:
 
@@ -61,7 +68,7 @@ class SMLocalizedLightingComputeV1 : public ShaderMachineBase
 		void flagCollectionGLDataForRemoval(EnclaveKeyDef::EnclaveKey in_keyForRemoval);	// will remove blueprint data from the LocalizedGBufferComputeLoaderGear.
 
 		// unused, but required public virtual functions for ShaderMachineBase
-		void insertCollectionGLDataIntoGearBuffer(std::string in_gearName, std::string in_gearBufferName, TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {}
+		void insertCollectionGLDataIntoGearBuffer(std::string in_gearName, std::string in_gearBufferName, TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
 		void shutdownGL() {}	// needs to be revisited
 		void removeUnusedReplaceables() {}	// not used
 		void insertWorldLight(std::string in_stringedContainerName, int in_lightID, WorldLight in_worldLight) {}
@@ -70,11 +77,16 @@ class SMLocalizedLightingComputeV1 : public ShaderMachineBase
 
 	private:
 		void insertTerrainGear(int in_gearID, GLuint in_programID);
+
+		void insertComputeTransferGear(int in_gearID, GLuint in_programID);
+		void insertComputeGear(int in_gearID, GLuint in_programID);
+		void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 		void insertLocalizedHighlighterGear(int in_gearID, GLuint in_programID);
 
 		void setupDeferredFBO();	// sets up the deferred FBO, according to this Machine's needs/specifications;
 									// current intent as of 10/13/2024 is to set it up similiar to that of SMDeferredLightingComputeV2.
 		void createGBufText(GLenum texUnit, GLenum  format, GLuint &texid);		// creates a G-Buffer texture for use by the deferred shader.
+		void createComputeImage(GLenum texUnit, std::string in_imageName, int in_imageUnit);		// creates a read/write OpenGL image
 
 
 		void updateUniformRegistry();

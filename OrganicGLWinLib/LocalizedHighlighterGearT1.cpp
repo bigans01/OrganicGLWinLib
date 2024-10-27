@@ -261,10 +261,7 @@ void LocalizedHighlighterGearT1::render()
 	// we should be writing to and/or manipulating the default frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glEnable(GL_DEPTH_TEST);	// may be temporary
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
-
-
+	glEnable(GL_DEPTH_TEST);
 	highlightsIndex.drawHighlights(programID,
 									gearUniformRegistry.get3DKey("worldCoordBPLocalCameraKey"),
 									gearUniformRegistry.getVec3("worldCoordBPLocalCameraCoord"),
@@ -274,31 +271,6 @@ void LocalizedHighlighterGearT1::render()
 	// TEMPORARY: when done drawing all highlights, clear the buffers.
 	glDisable(GL_DEPTH_TEST);
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// remember, GL clear sets the depth buffer values to 1.0f, meaning they are the furthest away (closest to screen is 0.0f)
-	//glDisable(GL_DEPTH_TEST);
-
-	//glClear(GL_DEPTH_BUFFER_BIT);
-
-	/*
-	glBindVertexArray(highlighterVAO);								// bind to the terrain VAO, before drawing
-	GLuint mvpUniform = glGetUniformLocation(programID, "MVP");		// find the MVP uniform
-	glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, &gearUniformRegistry.getMat4("MVP")[0][0]);		// set the uniform
-	GLMultiDrawArrayJob jobToUse = getMultiDrawArrayJob("highlighter_draw_job");	// fetch the draw job
-	//std::cout << "(LocalizedHighlighterGearT1): jobToUse draw count is: " << jobToUse.drawCount << " | size of draw array job map is: " << gearMultiDrawArrayJobMap.size() << std::endl;
-	glMultiDrawArrays(GL_TRIANGLES, jobToUse.multiStartIndices.get(), jobToUse.multiVertexCount.get(), jobToUse.drawCount);	// render with draw job data
-	*/
-
-
-
-	//std::cout << "Rendering highlights..." << std::endl;
-	//std::cout << "(LocalizedHighlighterGearT1): testing machine access proxy; there are " << accessProxy.getMachineGearRef()->size() << std::endl;
-
-	//GLint* vertexOut = jobToUse.multiStartIndices.get();
-	//std::cout << "Vertices start: " << vertexOut[0] << std::endl;
-
-	//GLint* numberOut = jobToUse.multiVertexCount.get();
-	//std::cout << "Number of vertices: " << numberOut[0] << std::endl;
 }
 
 void LocalizedHighlighterGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)

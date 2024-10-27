@@ -200,12 +200,14 @@ void LocalizedGBufferComputeLoaderGear::LocalizedGBufferBPData::generateBlueprin
 	OrganicGLWinUtils::createAndBindVertexArray(&blueprintVAOID);	// create/bind the highlighter VAO
 	glBindBuffer(GL_ARRAY_BUFFER, blueprintBufferID);	// bind to the highlighter buffer
 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)0);	// world position
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)12);   // normal
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
-
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)24);	// calculated UV coordinates from OrganicSystem
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 10, (void*)32);	// tile ID in the atlas
+	glEnableVertexAttribArray(3);
 }
 
 void LocalizedGBufferComputeLoaderGear::LocalizedGBufferBPData::insertBlueprintDataIntoBuffer(int in_totalTriangles, int in_arraySize, GLfloat* in_arrayRef)
@@ -330,7 +332,9 @@ void LocalizedGBufferComputeLoaderGear::LocalizedGBufferBPDataMap::reloadExistin
 	GLfloat* in_arrayRef,
 	LocalizedGBufferBPData in_bpData)
 {
+	localizedBlueprintsMap[in_localizedBlueprintKey].deleteBlueprintBufferAndData();
 	localizedBlueprintsMap[in_localizedBlueprintKey] = in_bpData;
+	localizedBlueprintsMap[in_localizedBlueprintKey].generateBlueprintBuffer();
 	localizedBlueprintsMap[in_localizedBlueprintKey].insertBlueprintDataIntoBuffer(in_totalTriangles,
 		in_arraySize,
 		in_arrayRef);
