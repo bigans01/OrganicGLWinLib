@@ -116,12 +116,12 @@ void SMDeferredLightingComputeV2::initialize(int in_windowWidth, int in_windowHe
 	createProgram("InstancedHighlighterGearT1");
 	insertNewBuffer("mesh_buffer");
 	insertNewBuffer("matrices_buffer");
-	//insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
+	insertInstancedHighlighterGear(5, programLookup["InstancedHighlighterGearT1"]);
 
 	// ########################################################################## Wave highlighter gear set up
 	// Gear 6: display wave highlights (i.e, current ORE highlight, constituted highlights of an ORE)
 	createProgram("WaveHighlighterGearT1");
-	//insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
+	insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
 
 	std::cout << "Program IDs: " << std::endl;
 	for (auto& currentProgramValue : programLookup)

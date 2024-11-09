@@ -66,8 +66,10 @@ public:
 
 		// runtime buffer manipulation functions
 		void createDynamicBufferAndSendToGear(std::string in_bufferName, std::string in_programName);
-		void createDynamicBufferMultiDrawArrayJobAndSendToGear(std::string in_bufferName,
-																std::string in_programName,
+		void createDynamicBufferMultiDrawArrayJobAndSendToGear(
+																std::string in_programName, 
+																std::string in_bufferName,
+																EnclaveKeyDef::EnclaveKey in_blueprintKey,
 																GLint* in_startArray,
 																GLsizei* in_vertexCount,
 																int in_drawCount);
@@ -84,7 +86,7 @@ public:
 																// interpret to perform any necessary cleanup before the dynamically allocated buffer is deleted.
 
 		// GL multi draw array functions
-		void registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.
+		void registerMultiDrawArrayJob(std::string in_drawJobName, EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);	// registers and enables a new draw job.
 		void disableMultiDrawArrayJob(std::string in_drawJobName);	// disables a multi draw array job (job must exist to be disabled)
 		void enableMultiDrawArrayJob(std::string in_drawJobName);		// enables a multi draw array job (job must exist to be enabled)
 

@@ -57,11 +57,15 @@ void DynamicBufferManager::insertDataIntoDynBuffer(std::string in_bufferName, in
 	}
 }
 
-void DynamicBufferManager::createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_drawCount)
+void DynamicBufferManager::createDynamicMultiDrawArrayJob(std::string in_bufferName, 
+														  EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey, 
+														  GLint* in_startArray, 
+														  GLsizei* in_vertexCount, 
+														  int in_drawCount)
 {
 	// create the multi draw array job.
 	GLMultiDrawArrayJob newJob;
-	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_drawCount);
+	newJob.updateDrawArrayData(in_drawJobBlueprintKey, in_startArray, in_vertexCount, in_drawCount);
 
 	auto existingJobFinder = multiDrawArrayJobLookup.find(in_bufferName);
 	if (existingJobFinder == multiDrawArrayJobLookup.end())	// it doesn't exist 

@@ -117,7 +117,7 @@ void OrganicGLWinUtils::createBuffer(GLuint* in_bufferIDref)
 
 void OrganicGLWinUtils::deleteBuffer(GLuint* in_bufferIDToDelete)
 {
-	std::cout << "(OrganicGLWinUtils): deleting GL buffer with ID: " << *in_bufferIDToDelete << std::endl;
+	//std::cout << "(OrganicGLWinUtils): deleting GL buffer with ID: " << *in_bufferIDToDelete << std::endl;
 	glDeleteBuffers(1, in_bufferIDToDelete);
 }
 

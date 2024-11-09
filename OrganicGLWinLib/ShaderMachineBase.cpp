@@ -701,10 +701,10 @@ float ShaderMachineBase::retrieveFloatUniform(std::string in_floatUniformName)
 }
 
 
-void ShaderMachineBase::registerMultiDrawArrayJob(std::string in_drawJobName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
+void ShaderMachineBase::registerMultiDrawArrayJob(std::string in_drawJobName, EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections)
 {
 	GLMultiDrawArrayJob newJob;
-	newJob.updateDrawArrayData(0, in_startArray, in_vertexCount, in_numberOfCollections);
+	newJob.updateDrawArrayData(in_drawJobBlueprintKey, in_startArray, in_vertexCount, in_numberOfCollections);
 	//std::cout << "!!!!!!!!! (Machine) job vertex count: " << in_vertexCount[0] << std::endl;
 	insertNewMultiDrawArrayJob(in_drawJobName, newJob);
 }
@@ -751,9 +751,11 @@ GPUCoordinateMode ShaderMachineBase::fetchMachineCoordMode()
 
 void ShaderMachineBase::sendMessageToGLProgram(std::string in_programName, Message in_message)
 {
+	std::cout << "!!! Attempting to find gear for message..." << std::endl;
 	GearFindResult programToSearch = findGear(in_programName);
 	if (programToSearch.wasResultFound == true)
 	{
+		std::cout << "!!! Found gear to send message to." << std::endl;
 		programToSearch.foundGear->interpretMessage(in_message);
 	}
 }
@@ -787,8 +789,10 @@ void ShaderMachineBase::createDynamicBufferAndSendToGear(std::string in_bufferNa
 	}
 }
 
-void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(std::string in_bufferName,
-																			std::string in_programName,
+void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(
+																			std::string in_programName, 
+																			std::string in_bufferName,
+																			EnclaveKeyDef::EnclaveKey in_blueprintKey,
 																			GLint* in_startArray,
 																			GLsizei* in_vertexCount,
 																			int in_drawCount)
@@ -797,7 +801,7 @@ void ShaderMachineBase::createDynamicBufferMultiDrawArrayJobAndSendToGear(std::s
 	GearFindResult programToSearch = findGear(in_programName);
 	if (programToSearch.wasResultFound == true)
 	{
-		dynBufferManager.createDynamicMultiDrawArrayJob(in_bufferName, in_startArray, in_vertexCount, in_drawCount);
+		dynBufferManager.createDynamicMultiDrawArrayJob(in_bufferName, in_blueprintKey, in_startArray, in_vertexCount, in_drawCount);
 		Message requestMessage(MessageType::OPENGL_REGISTER_DYN_BUFFER_MULTIDRAW_JOB_IN_GEAR);	// tell the gear that it needs to fetch a multi draw array job
 																						// from the DynamicBufferManager (dynBufferManager)
 		requestMessage.insertString(in_bufferName);

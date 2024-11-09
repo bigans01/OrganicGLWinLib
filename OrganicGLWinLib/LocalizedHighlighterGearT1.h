@@ -41,12 +41,12 @@ class LocalizedHighlighterGearT1 : public Gear
 																												// and handle it appropriately; the Message type should be:
 																												// MessageType::SHADERMACHINE_BUFFER_DATA_COLLECTION_HIGHLIGHT
 																												
+		void interpretMessage(Message in_message);	// used for handling MessageType::SHADERMACHINE_REMOVE_TARGETBLOCK_HIGHLIGHT.
 
 		// unused, but required public virtual functions for Gear
 		void printData() {};
 		void sendTerrainDataToGear(TerrainJobResults in_jobResults, int in_arraySize, GLfloat* in_arrayRef) {};
 		void removeTerrainDataFromGear(EnclaveKeyDef::EnclaveKey in_keyToRemove) {};
-		void interpretMessage(Message in_message) {};
 
 	private:
 
@@ -99,6 +99,8 @@ class LocalizedHighlighterGearT1 : public Gear
 			void scanForAndRemoveCollectionHighlight();	// scan for wherever the UniqueHighlightEnum::CAMERA_COLLECTION might be, and erases it
 														// (this is done so that we don't render multiple UniqueHighlightEnum::CAMERA_COLLECTION highlights
 														//	from different blueprints)
+			
+			void scanForAndRemoveTargetedBlockHighlight();	// will remove the block highlighting from rendering
 			
 			// Call drawing on all highlights.
 			void drawHighlights(GLuint in_programID,

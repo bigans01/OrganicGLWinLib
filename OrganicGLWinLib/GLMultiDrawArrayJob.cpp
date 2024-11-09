@@ -10,7 +10,8 @@ GLMultiDrawArrayJob::GLMultiDrawArrayJob(const GLMultiDrawArrayJob& job_b)
 {
 	//std::cout << "Return constructor called" << std::endl;
 	//std::cout << "!! Original draw count value: " << drawCount << std::endl;
-	drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
+	//drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
+	drawJobBlueprintKey = job_b.drawJobBlueprintKey;
 	drawCount = job_b.drawCount;
 	isEnabled = job_b.isEnabled;
 
@@ -36,9 +37,10 @@ GLMultiDrawArrayJob::GLMultiDrawArrayJob(const GLMultiDrawArrayJob& job_b)
 	//std::cout << "!! New draw count value: " << drawCount << std::endl;
 }
 
-void GLMultiDrawArrayJob::updateDrawArrayData(GLuint in_drawJobBufferID, GLint* in_multiStartIndicesData, GLsizei* in_multiVertexCountData, int in_drawCount)
+void GLMultiDrawArrayJob::updateDrawArrayData(EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey, GLint* in_multiStartIndicesData, GLsizei* in_multiVertexCountData, int in_drawCount)
 {
-	drawJobBufferID = in_drawJobBufferID;
+	//drawJobBufferID = in_drawJobBufferID;
+	drawJobBlueprintKey = in_drawJobBlueprintKey;
 	drawCount = in_drawCount;
 	//std::cout << ">>>> new draw count will be: " << drawCount << std::endl;
 	//int someVal = 3;

@@ -15,13 +15,14 @@ class GLMultiDrawArrayJob
 		GLMultiDrawArrayJob();											// required, because we use unique_ptr in this class
 		GLMultiDrawArrayJob(const GLMultiDrawArrayJob& in_jobOrig);		// required, for when returning an instance of this class -- for example, as a return value for a function (again, because we unique_ptr)
 
-		GLuint drawJobBufferID = 0;		// the ID of the OpenGL buffer that this draw will be run on
+		//GLuint drawJobBufferID = 0;		// the ID of the OpenGL buffer that this draw will be run on
 		GLMultiDrawArrayJob& operator=(const GLMultiDrawArrayJob& job_b)		// for copying one to the other
 		{
 
 			//std::cout << "!! Original draw count value: " << drawCount << std::endl;
-			drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
+			//drawJobBufferID = job_b.drawJobBufferID;	// copy the buffer ID
 			//std::cout << "!!!! Old draw count: " << drawCount << std::endl;
+			drawJobBlueprintKey = job_b.drawJobBlueprintKey;
 			drawCount = job_b.drawCount;
 			isEnabled = job_b.isEnabled;
 			//std::cout << "!!!! New draw count: " << drawCount << std::endl;
@@ -82,13 +83,16 @@ class GLMultiDrawArrayJob
 		}
 		*/
 		
-
 		std::unique_ptr<GLint[]> multiStartIndices;
 		std::unique_ptr<GLsizei[]> multiVertexCount;
+		EnclaveKeyDef::EnclaveKey drawJobBlueprintKey;
 		int drawCount = 0;
 		bool isEnabled = true;	// determines whether or not this job should currently run; the default is TRUE
 
-		void updateDrawArrayData(GLuint in_drawJobBufferID, GLint* in_multiStartIndicesData, GLsizei* in_multiVertexCountData, int in_drawCount);
+		void updateDrawArrayData(EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey, 
+								GLint* in_multiStartIndicesData, 
+								GLsizei* in_multiVertexCountData, 
+								int in_drawCount);
 };
 
 #endif

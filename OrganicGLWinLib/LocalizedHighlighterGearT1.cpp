@@ -60,6 +60,37 @@ void LocalizedHighlighterGearT1::sendMessageAndBufferDataToGear(Message in_messa
 
 			break;
 		}
+
+		case MessageType::SHADERMACHINE_BUFFER_DATA_TARGETBLOCK_HIGHLIGHT:
+		{
+			EnclaveKeyDef::EnclaveKey collectionHighlightKey = in_messageToSend.readEnclaveKey();
+			int totalTriangles = in_messageToSend.readInt();
+
+			// scan for and remove the existing collection highlight, if it exists. Then, insert the necessary data.
+			highlightsIndex.scanForAndRemoveTargetedBlockHighlight();
+			//std::cout << "LocalizedHighlighterGearT1::sendMessageAndBufferDataToGear received data to render...total triangles to render will be: " << totalTriangles << std::endl;
+			highlightsIndex.insertNewHighlight(collectionHighlightKey,
+				UniqueHighlightEnum::TARGETED_BLOCK,
+				totalTriangles,
+				in_arraySize,
+				in_arrayRef);
+			break;
+		}
+	}
+}
+
+void LocalizedHighlighterGearT1::interpretMessage(Message in_message)
+{
+	in_message.open();
+	switch (in_message.messageType)
+	{
+		case MessageType::SHADERMACHINE_REMOVE_TARGETBLOCK_HIGHLIGHT:
+		{
+			// scan for and remove the existing collection highlight, if it exists. 
+			std::cout << "+++++++++++++++++++ Found signal to remove target block highlight. " << std::endl;
+			highlightsIndex.scanForAndRemoveTargetedBlockHighlight();
+			break;
+		}
 	}
 }
 
@@ -226,6 +257,14 @@ void LocalizedHighlighterGearT1::BPUniqueHighlights::scanForAndRemoveCollectionH
 	for (auto& currentBPHighlights : bpHighlights)
 	{
 		currentBPHighlights.second.removeHighlight(UniqueHighlightEnum::CAMERA_COLLECTION);
+	}
+}
+
+void LocalizedHighlighterGearT1::BPUniqueHighlights::scanForAndRemoveTargetedBlockHighlight()
+{
+	for (auto& currentBPHighlights : bpHighlights)
+	{
+		currentBPHighlights.second.removeHighlight(UniqueHighlightEnum::TARGETED_BLOCK);
 	}
 }
 

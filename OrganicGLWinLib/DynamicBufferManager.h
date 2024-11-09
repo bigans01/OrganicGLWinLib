@@ -16,7 +16,11 @@ class DynamicBufferManager
 		void attemptDeleteOfDynamicBuffer(std::string in_string);	// deletes a dynamic buffer, if that buffer exists.
 
 		void insertDataIntoDynBuffer(std::string in_bufferName, int in_byteSizeToWrite, GLfloat* in_dataArray);
-		void createDynamicMultiDrawArrayJob(std::string in_bufferName, GLint* in_startArray, GLsizei* in_vertexCount, int in_numberOfCollections);
+		void createDynamicMultiDrawArrayJob(std::string in_bufferName, 
+											EnclaveKeyDef::EnclaveKey in_drawJobBlueprintKey,
+											GLint* in_startArray, 
+											GLsizei* in_vertexCount, 
+											int in_numberOfCollections);
 		GLMultiDrawArrayJob fetchDynamicMultiDrawArrayJob(std::string in_bufferName);
 		OperableIntSet getBufferDestinationGears(std::string in_bufferName);
 	private:
