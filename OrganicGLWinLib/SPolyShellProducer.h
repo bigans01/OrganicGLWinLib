@@ -11,6 +11,7 @@
 #include "MessageContainer.h"
 #include "SPolyUtils.h"
 #include "ExceptionRecorder.h"
+#include "SPolyShellValidityChecker.h"
 
 class SPolyShellProducer
 {
@@ -85,6 +86,12 @@ class SPolyShellProducer
 		void checkForPosZSquareBoundaryInOutput();
 		ExceptionRecorder getExceptions();			// this will retrieve a copy of the ExceptionRecorder,
 													// so that any recorded exceptions can be analyzed/tracked/logged 
+
+		bool checkShellCompleteness();	// Assuming that runSPolyShellConstruction has already been called,
+										// this function will check the lines of the STriangle instances in the SPoly instances,
+										// of the SPoly objects in inputSPolys and outputSPolySuperGroups, to see if they all
+										// form a complete mesh. A mesh is considered complete when all lines involved in the mesh
+										// Touch exactly two triangles.
 
 	private:
 		void handleBorderDebugOption(DebugOption in_debugOption);

@@ -143,6 +143,77 @@ void SPolyShellProducer::relocateScabPolysToOutput()
 	}
 }
 
+bool SPolyShellProducer::checkShellCompleteness()
+{
+	bool isComplete = false;
+	std::set<BoundaryOrientation> touchedFaces;
+
+	// if there are any scabs that were produced in the shell, the shell's mesh will very likely be incomplete.
+	// So just return.
+	if (!existingScabSupergroups.isSupergroupEmpty())
+	{
+		return isComplete;
+	}
+
+
+	SPolyShellValidityChecker tempChecker;
+
+	// Make sure to enter the data from the original SPoly objects. 
+	for (auto& currentInput : inputSPolys)
+	{
+		if (currentInput.second.getBoundaryIndicatorOrientation() == BoundaryOrientation::NONE)
+		{
+			for (auto& currentInputTriangle : currentInput.second.triangles)
+			{
+				for (int x = 0; x < 3; x++)
+				{
+					HashedSTriangleLine convertedLine(currentInputTriangle.second.triangleLines[x].pointA, currentInputTriangle.second.triangleLines[x].pointB);
+					tempChecker.insertLine(convertedLine);
+				}
+			}
+		}
+	}
+	
+	// If we haven't returned yet, run all SPoly instances that are in outputSPolySuperGroups through an instance of SPolyShellValidityChecker.
+	for (auto& currentGroup : outputSPolySuperGroups)
+	{
+		touchedFaces.insert(currentGroup.first);
+
+		for (auto& currentSPoly : currentGroup.second.sPolyMap)
+		{
+			for (auto& currentTriangle : currentSPoly.second.triangles)
+			{
+				for (int x = 0; x < 3; x++)
+				{
+					HashedSTriangleLine convertedLine(currentTriangle.second.triangleLines[x].pointA, currentTriangle.second.triangleLines[x].pointB);
+					tempChecker.insertLine(convertedLine);
+				}
+			}
+		}
+	}
+
+	if (tempChecker.fetchValidity())
+	{
+		isComplete = true;
+	}
+	else
+	{
+		// it wasn't complete; so print the stats. First, show the touched faces.
+		std::cout << "Touched faces of bad mesh are: " << std::endl;
+		for (auto& currentFace : touchedFaces)
+		{
+			OrganicGLWinUtils::printBoundaryOrientationEnum(currentFace);
+			std::cout << std::endl;
+		}
+
+
+		std::cout << "Printing lines of ""bad"" mesh " << std::endl;
+		tempChecker.printLineStats();
+	}
+
+	return isComplete;
+}
+
 MessageContainer SPolyShellProducer::runSPolyShellConstruction(MassZoneBoxType in_massZoneBoxType)
 {
 	/*
@@ -358,6 +429,7 @@ void SPolyShellProducer::printAllProducedSPolys()
 	for (auto& currentInputSPoly : inputSPolys)
 	{
 		std::cout << "Input SPoly at index: " << currentInputsPolyID++ << std::endl;
+		currentInputSPoly.second.printTriangleMetadata();
 		
 	}
 

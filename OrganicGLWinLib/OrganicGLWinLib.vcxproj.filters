@@ -280,6 +280,12 @@
     <Filter Include="Source Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear">
       <UniqueIdentifier>{252f0443-2f7e-4486-a620-e2a797beda28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SolublePoly\SPolyShellValidityChecker">
+      <UniqueIdentifier>{dc324f29-f2ab-4671-aaf2-0a88045480c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SolublePoly\SPolyShellValidityChecker">
+      <UniqueIdentifier>{a95fb9d5-e6fa-442a-b782-5560841086f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1470,6 +1476,15 @@
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h">
       <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
     </ClInclude>
+    <ClInclude Include="SPolyShellValidityChecker.h">
+      <Filter>Header Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="HashedSTriangleLine.h">
+      <Filter>Header Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="HashedSTriangleLineCounter.h">
+      <Filter>Header Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2095,6 +2110,15 @@
     </ClCompile>
     <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp">
       <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
+    </ClCompile>
+    <ClCompile Include="HashedSTriangleLine.cpp">
+      <Filter>Source Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="HashedSTriangleLineCounter.cpp">
+      <Filter>Source Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="SPolyShellValidityChecker.cpp">
+      <Filter>Source Files\SolublePoly\SPolyShellValidityChecker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

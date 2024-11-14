@@ -1063,6 +1063,19 @@ void SPoly::printPlanarVectors()
 	}
 }
 
+void SPoly::printTriangleMetadata()
+{
+	std::cout << "SPoly: printing out triangle metadata... " << std::endl;
+	std::cout << "Empty normal: " << polyEmptyNormal.x << ", " << polyEmptyNormal.y << ", " << polyEmptyNormal.z << std::endl;
+	std::cout << "Indicator data: " << fetchPrintableBoundaryIndicatorString() << std::endl;
+
+
+	for (auto& currentTriangle : triangles)
+	{
+		currentTriangle.second.printPoints();
+	}
+}
+
 void SPoly::printAllCleaveLines()
 {
 	std::cout << "$$$ beginning cleave line print " << std::endl;

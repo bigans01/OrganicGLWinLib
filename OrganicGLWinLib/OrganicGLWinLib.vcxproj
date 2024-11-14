@@ -184,6 +184,8 @@
     <ClInclude Include="GLUniformRequest.h" />
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
+    <ClInclude Include="HashedSTriangleLine.h" />
+    <ClInclude Include="HashedSTriangleLineCounter.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
@@ -438,6 +440,7 @@
     <ClInclude Include="SPolyFracturerOptionEnum.h" />
     <ClInclude Include="SPolyScaler.h" />
     <ClInclude Include="SPolyScalingOps.h" />
+    <ClInclude Include="SPolyShellValidityChecker.h" />
     <ClInclude Include="SPolyUtils.h" />
     <ClInclude Include="STriangleCutter.h" />
     <ClInclude Include="STriangleOutputContainer.h" />
@@ -569,6 +572,8 @@
     <ClCompile Include="GLProgramIdIndex.cpp" />
     <ClCompile Include="GPUWorldCoordinate.cpp" />
     <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
+    <ClCompile Include="HashedSTriangleLine.cpp" />
+    <ClCompile Include="HashedSTriangleLineCounter.cpp" />
     <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp" />
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
@@ -666,6 +671,7 @@
     <ClCompile Include="IntersectionLine.cpp" />
     <ClCompile Include="IntersectionLineGroup.cpp" />
     <ClCompile Include="IntersectionResult.cpp" />
+    <ClCompile Include="SPolyShellValidityChecker.cpp" />
     <ClCompile Include="SPolyUtils.cpp" />
     <ClCompile Include="TerrainLightingComputeGearBP.cpp" />
     <ClCompile Include="TwoDLineSegmentIntersectAnalyzer.cpp" />

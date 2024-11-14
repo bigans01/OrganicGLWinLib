@@ -38,6 +38,7 @@ public:
 	void printLines();
 	void printPoints();
 	void printAllCleaveLines();
+	void printTriangleMetadata();	// print empty normal, boundary indicator, and STriangle points.
 	void addTriangle(STriangle in_triangle);
 	void setMRP(glm::vec3 in_mrp);
 	void setEmptyNormal(float in_x, float in_y, float in_z);
