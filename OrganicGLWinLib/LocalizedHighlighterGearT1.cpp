@@ -311,13 +311,3 @@ void LocalizedHighlighterGearT1::render()
 	glDisable(GL_DEPTH_TEST);
 
 }
-
-void LocalizedHighlighterGearT1::passGLuintValue(std::string in_identifier, GLuint in_gluInt)
-{
-
-}
-
-void LocalizedHighlighterGearT1::executeGearFunction(std::string in_identifier)
-{
-
-}

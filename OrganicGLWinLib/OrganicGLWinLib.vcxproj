@@ -189,6 +189,7 @@
     <ClInclude Include="ImGuiWindowFeedback.h" />
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
+    <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />
@@ -576,6 +577,7 @@
     <ClCompile Include="HashedSTriangleLineCounter.cpp" />
     <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp" />
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
+    <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />

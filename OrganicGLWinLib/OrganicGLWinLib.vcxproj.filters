@@ -286,6 +286,12 @@
     <Filter Include="Source Files\SolublePoly\SPolyShellValidityChecker">
       <UniqueIdentifier>{a95fb9d5-e6fa-442a-b782-5560841086f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1">
+      <UniqueIdentifier>{4c9b482a-ab32-4743-abba-6b97e977fc74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1">
+      <UniqueIdentifier>{7161dcbe-6ac5-41ab-a43d-faba81cfaae7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1485,6 +1491,9 @@
     <ClInclude Include="HashedSTriangleLineCounter.h">
       <Filter>Header Files\SolublePoly\SPolyShellValidityChecker</Filter>
     </ClInclude>
+    <ClInclude Include="LocalizedWaveHighlighterGearT1.h">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2119,6 +2128,9 @@
     </ClCompile>
     <ClCompile Include="SPolyShellValidityChecker.cpp">
       <Filter>Source Files\SolublePoly\SPolyShellValidityChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp">
+      <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
