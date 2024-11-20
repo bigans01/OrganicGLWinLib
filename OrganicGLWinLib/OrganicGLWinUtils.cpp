@@ -812,6 +812,12 @@ void OrganicGLWinUtils::loadShadersViaMode(GLuint* in_programID, std::string in_
 		std::cout << "##### ATTEMPTING LOAD FOR LocalizedGBufferComputeLoaderGear" << std::endl;
 		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/LocalizedGBufferComputeLoaderGear.vertexshader", "graphics/shaders/LocalizedGBufferComputeLoaderGear.fragmentshader");
 	}
+
+	else if (in_programName == "LocalizedWaveHighlighterGearT1")
+	{
+		std::cout << "##### ATTEMPTING LOAD FOR LocalizedWaveHighlighterGearT1" << std::endl;
+		*in_programID = OrganicShaderLoader::LoadShaders("graphics/shaders/LocalizedWaveHighlighterGearT1.vertexshader", "graphics/shaders/LocalizedWaveHighlighterGearT1.fragmentshader");
+	}
 }
 
 void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_computeShaderName)

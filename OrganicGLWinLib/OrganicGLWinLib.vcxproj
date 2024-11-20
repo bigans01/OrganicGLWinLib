@@ -827,6 +827,8 @@
     <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.vertexshader" />
     <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.fragmentshader" />
     <None Include="shaders\localized_mode\LocalizedHighlighterGearT1.vertexshader" />
+    <None Include="shaders\localized_mode\LocalizedWaveHighlighterGearT1.fragmentshader" />
+    <None Include="shaders\localized_mode\LocalizedWaveHighlighterGearT1.vertexshader" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="shaders\absolute_mode\experimental_fragment.txt" />

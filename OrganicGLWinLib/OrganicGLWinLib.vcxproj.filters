@@ -2263,6 +2263,12 @@
     <None Include="shaders\localized_mode\LocalizedGBufferComputeLoaderGear.fragmentshader">
       <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedGBufferComputeLoaderGear</Filter>
     </None>
+    <None Include="shaders\localized_mode\LocalizedWaveHighlighterGearT1.fragmentshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
+    </None>
+    <None Include="shaders\localized_mode\LocalizedWaveHighlighterGearT1.vertexshader">
+      <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shaders\absolute_mode\experimental_fragment.txt">

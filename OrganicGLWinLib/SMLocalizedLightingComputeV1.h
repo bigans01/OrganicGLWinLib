@@ -13,6 +13,7 @@
 #include "DeferredLightingComputeGearT1.h"
 #include "DeferredComputeResultsGearT1.h"
 #include "ComputeResolution.h"
+#include "LocalizedWaveHighlighterGearT1.h"
 
 /*
 
@@ -82,6 +83,7 @@ class SMLocalizedLightingComputeV1 : public ShaderMachineBase
 		void insertComputeGear(int in_gearID, GLuint in_programID);
 		void insertComputeResultsGear(int in_gearID, GLuint in_programID);
 		void insertLocalizedHighlighterGear(int in_gearID, GLuint in_programID);
+		void insertWaveHighlighterGear(int in_gearID, GLuint in_programID);
 
 		void setupDeferredFBO();	// sets up the deferred FBO, according to this Machine's needs/specifications;
 									// current intent as of 10/13/2024 is to set it up similiar to that of SMDeferredLightingComputeV2.

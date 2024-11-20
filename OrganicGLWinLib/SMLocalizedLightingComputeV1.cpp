@@ -116,8 +116,8 @@ void SMLocalizedLightingComputeV1::initialize(int in_windowWidth, int in_windowH
 
 	// ########################################################################## Wave highlighter gear set up
 	// Gear 6: display wave highlights (i.e, current ORE highlight, constituted highlights of an ORE)
-	createProgram("WaveHighlighterGearT1");
-	//insertWaveHighlighterGear(6, programLookup["WaveHighlighterGearT1"]);
+	createProgram("LocalizedWaveHighlighterGearT1");
+	insertWaveHighlighterGear(6, programLookup["LocalizedWaveHighlighterGearT1"]);
 
 	std::cout << "Program IDs: " << std::endl;
 	for (auto& currentProgramValue : programLookup)
@@ -271,6 +271,12 @@ void SMLocalizedLightingComputeV1::insertComputeResultsGear(int in_gearID, GLuin
 void SMLocalizedLightingComputeV1::insertLocalizedHighlighterGear(int in_gearID, GLuint in_programID)
 {
 	gearTrain[in_gearID] = std::unique_ptr<Gear>(new LocalizedHighlighterGearT1());
+	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
+}
+
+void SMLocalizedLightingComputeV1::insertWaveHighlighterGear(int in_gearID, GLuint in_programID)
+{
+	gearTrain[in_gearID] = std::unique_ptr<Gear>(new LocalizedWaveHighlighterGearT1());
 	gearTrain[in_gearID]->initializeMachineShader(width, height, in_programID, window, this);
 }
 

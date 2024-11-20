@@ -1,0 +1,55 @@
+#version 430 core
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec3 vertexColor;
+
+out vec3 fragmentColor;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+
+// camera Blueprint key dimensions
+//
+// Request should look like: GLUniformRequest reqCameraBlueprintKey(GLDataType::KEY3D, "worldCoordBPLocalCameraKey");
+// Then, insert each dim from that data as a separate uniform.
+//
+// The value of this key should come from the "worldCoordBPKey" EnclaveKey that should be found in the ShaderMachine's uniformRegistry
+// (also assuming the ShaderMachine is running its machineCoordMode in GPUCoordinateMode::COORDINATE_MODE_LOCAL)
+uniform int cameraBlueprintX;
+uniform int cameraBlueprintY;
+uniform int cameraBlueprintZ;
+
+uniform vec3 cameraLocalVec;
+
+// coordinate Blueprint key dimensions
+//
+// Request should look like: GLUniformRequest reqCoordinateBlueprintKey(GLDataType::KEY3D, "coordinateBlueprintKey");
+uniform int coordinateBlueprintX;
+uniform int coordinateBlueprintY;
+uniform int coordinateBlueprintZ;
+
+float translateDimension(in int coordinateBlueprintDim, in int cameraBlueprintDim, in float cameraLocalVecDim, in float bufferedDimValue);
+
+void main(){
+	float translatedValueX = translateDimension(coordinateBlueprintX, cameraBlueprintX, cameraLocalVec.x, vertexPosition_modelspace.x);
+	float translatedValueY = translateDimension(coordinateBlueprintY, cameraBlueprintY, cameraLocalVec.y, vertexPosition_modelspace.y);
+	float translatedValueZ = translateDimension(coordinateBlueprintZ, cameraBlueprintZ, cameraLocalVec.z, vertexPosition_modelspace.z);
+	vec3 translatedValue = vec3(translatedValueX, translatedValueY, translatedValueZ);
+    
+	gl_Position = MVP * vec4(translatedValue, 1);
+	//gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+	fragmentColor = vertexColor;
+}
+
+float translateDimension(in int coordinateBlueprintDim, in int cameraBlueprintDim, in float cameraLocalVecDim, in float bufferedDimValue)
+{
+	// Remember, the formula is:
+	//
+	// ((targetBlueprintKey.x - cameraKey.x) * 32.0f) - cameraBlueprintLocalizedCoordinate.x + positionData.x
+	//
+	//
+
+	float translatedValue = ((coordinateBlueprintDim - cameraBlueprintDim) * 32.0f) - cameraLocalVecDim + bufferedDimValue;
+	return translatedValue;
+}
