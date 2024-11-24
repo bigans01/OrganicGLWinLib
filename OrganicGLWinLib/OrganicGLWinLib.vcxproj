@@ -190,6 +190,8 @@
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
+    <ClInclude Include="MShaderBase.h" />
+    <ClInclude Include="MShaderController.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />
@@ -581,6 +583,7 @@
     <ClCompile Include="NegXFaceResolver.cpp" />
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />
+    <ClCompile Include="MShaderController.cpp" />
     <ClCompile Include="PosXFaceResolver.cpp" />
     <ClCompile Include="PosYFaceResolver.cpp" />
     <ClCompile Include="PosZFaceResolver.cpp" />

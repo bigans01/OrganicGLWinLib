@@ -292,6 +292,18 @@
     <Filter Include="Source Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1">
       <UniqueIdentifier>{7161dcbe-6ac5-41ab-a43d-faba81cfaae7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MShaderController">
+      <UniqueIdentifier>{830f7c9e-92d5-4ed1-8514-3e6a219403fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController">
+      <UniqueIdentifier>{9ab0eec2-5c27-42d8-8d55-ff003eafc399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MShaderController\MShader">
+      <UniqueIdentifier>{ccb33b54-763a-4ec6-9f6f-fbbece0ef1d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MShader">
+      <UniqueIdentifier>{34d3a3f7-b87a-4729-b285-30f94b11bfe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1494,6 +1506,12 @@
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h">
       <Filter>Header Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
     </ClInclude>
+    <ClInclude Include="MShaderBase.h">
+      <Filter>Header Files\MShaderController\MShader</Filter>
+    </ClInclude>
+    <ClInclude Include="MShaderController.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2131,6 +2149,9 @@
     </ClCompile>
     <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp">
       <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
+    </ClCompile>
+    <ClCompile Include="MShaderController.cpp">
+      <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
