@@ -62,11 +62,14 @@ public:
 
 	static void deleteBuffer(GLuint* in_bufferIDToDelete);
 
-	static void initializeLibraryAndSetHints();	// initializes the OpenGL library and the window; adds input(keypress) listening for the window
+	static bool initializeLibraryAndSetHints();					// initializes the OpenGL library and the window; adds input(keypress) listening for the window; returns true if glfw is setup OK.
+	static bool checkWindowValidity(GLFWwindow* in_window);		// checks if the given parameter actually points to a valid GLFWWindow; returns true if this is the case.
+	static bool initializeGlew();	// Attempts to setup GLEW; returns true if successful.
+
+
 	static void loadShadersViaMode(GLuint* in_programID, int in_mode);
 	static void loadShadersViaMode(GLuint* in_programID, std::string in_programName);
 	static void loadComputeShader(GLuint* in_programID, std::string in_computeShaderName);
-	static void initializeGlew();
 	static void computeCameraDirectionAndPosition(GLFWwindow* in_windowRef, float* in_horizontalAngle, float* in_verticalAngle, glm::vec3* in_position, float*  in_initialFoV, float* in_speed, float in_mouseSpeed, glm::mat4* in_projectionMatrix, glm::mat4* in_viewMatrix, glm::mat4* in_MVPref);
 	static void setGLFWInputMode(GLFWwindow* in_window);
 	static int setupTextureAtlasJPEG(GLuint* in_atlasTextureRef, AtlasMap* in_atlasRef, AtlasPropertiesGL* in_atlasPropertiesGLRef, float* in_atlasTileWidth, float* in_atlasWidth);
@@ -78,7 +81,6 @@ public:
 	static void shutdownOpenGLBasic(GLuint* in_terrainBufferID, GLuint* in_vertexArrayID, GLuint* in_programID);			// shuts down OpenGL for modes 0 through 2
 	static GLFWwindow* createGLFWWindow(int in_width, int in_height);
 	static void makeContextCurrent(GLFWwindow* in_window);
-	static void checkWindowValidity(GLFWwindow* in_window);
 	static void setBasicStates();																				// sets basic OpenGL states
 	static void setClearColor(float in_red, float in_green, float in_blue, float in_alpha);						// sets the background color
 	static void copyToBuffer(GLuint* in_readBufferID, GLuint* in_writeBufferID, int in_readByteOffset, int in_readByteSize, int in_writeByteOffset);

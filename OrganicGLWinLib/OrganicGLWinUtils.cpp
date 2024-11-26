@@ -840,13 +840,15 @@ void OrganicGLWinUtils::loadComputeShader(GLuint* in_programID, std::string in_c
 
 }
 
-void OrganicGLWinUtils::initializeLibraryAndSetHints()
+bool OrganicGLWinUtils::initializeLibraryAndSetHints()
 {
+	bool isGlfwSetup = true;
 	if (!glfwInit())	// initialize GLFW library
 	{
 		fprintf(stderr, "||||||||||||||||Failed to initialize GLFW\n");
 		getchar();
 		//return -1;
+		isGlfwSetup = false;
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -854,16 +856,21 @@ void OrganicGLWinUtils::initializeLibraryAndSetHints()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	return isGlfwSetup;
 }
 
-void OrganicGLWinUtils::checkWindowValidity(GLFWwindow* in_window)
+bool OrganicGLWinUtils::checkWindowValidity(GLFWwindow* in_window)
 {
+	bool isValid = true;
 	if (in_window == NULL) {
 		fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
 		getchar();
 		glfwTerminate();
 		//return -1;
+		isValid = false;
 	}
+	return isValid;
 }
 
 void OrganicGLWinUtils::makeContextCurrent(GLFWwindow* in_window)
@@ -904,15 +911,18 @@ void OrganicGLWinUtils::moveForCopy(GLuint* in_copyBufferID, int in_readByteOffs
 
 }
 
-void OrganicGLWinUtils::initializeGlew()
+bool OrganicGLWinUtils::initializeGlew()
 {
+	bool isGlewInitialized = true;
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "----------------Failed to initialize GLEW\n");
+		isGlewInitialized = false;
 		getchar();
 		glfwTerminate();
 		//return -1;
 	}
+	return isGlewInitialized;
 }
 
 void OrganicGLWinUtils::multiDrawArraysMode0(GLuint* in_drawArrayID, GLint* in_startArray, GLsizei* in_vertexCount, GLuint* in_MVPuniformLocation, glm::mat4* in_MVPmat4ref, int in_numberOfCollections)
