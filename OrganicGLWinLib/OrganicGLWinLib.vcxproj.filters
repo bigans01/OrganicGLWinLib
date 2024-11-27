@@ -1512,6 +1512,9 @@
     <ClInclude Include="MShaderController.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
+    <ClInclude Include="MPointGradient.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2151,6 +2154,9 @@
       <Filter>Source Files\ShaderMachines\Gears\localized_mode\LocalizedWaveHighlighterGearT1</Filter>
     </ClCompile>
     <ClCompile Include="MShaderController.cpp">
+      <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MPointGradient.cpp">
       <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
   </ItemGroup>

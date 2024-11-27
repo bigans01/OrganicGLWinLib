@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef MShaderController_H
-#define MShaderController_H
+#ifndef MSHADERCONTROLLER_H
+#define MSHADERCONTROLLER_H
 
 #include <GL/glew.h>
 //#define GLFW_DLL		// only used when linking to a DLL version of GLFW.

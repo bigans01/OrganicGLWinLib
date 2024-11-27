@@ -1,7 +1,9 @@
 #pragma once
 
-#ifndef MShaderBase_H
-#define MShaderBase_H
+#ifndef MSHADERBASE_H
+#define MSHADERBASE_H
+
+#include <cmath>
 
 class MShaderBase
 {
