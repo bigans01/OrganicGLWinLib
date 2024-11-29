@@ -9,6 +9,12 @@
 #include "MShaderBase.h"
 #include "OrganicGLWinUtils.h"
 #include "ComputeResolution.h"
+#include "ImGuiButtonClickResult.h"
+#include "ImGuiButtonPanelContainer.h"
+#include "ImGuiSliderFloatPanelContainer.h"
+#include "ImGuiInputTextPanelContainer.h"
+#include "ShaderMachineFeedback.h"
+#include "MBindingMap.h"
 
 /*
 
@@ -95,22 +101,16 @@ class MShaderController
 
 		std::unordered_map<std::string, MShaderBase> catalog;	// should contain all MShaderBase-derived classes that should be used
 
-		// Below: a struct that maps strings to OpenGL binding IDs; can be used by any OpenGL object that 
-		// utilizes bindings -- VAO, buffers, textures. It's purpose is to universally store all these IDs 
-		// in maps that can be shared across multiple MShaderBase instances.
-		struct BindingMap
-		{
-			BindingMap() {};
+		
 
-			bool doesBindingExist(std::string in_bindingToFind);	// returns true if the given binding was found; will not
-																	// create a new binding in the map, though.
+		// ***************************************************** Shareable objects *****************************************************************
+		// imgui objects, intended to be referenced via pointers in MShaderBase-derived classes
+		ImGuiButtonPanelContainer controllerButtonPanelContainer;
+		ImGuiSliderFloatPanelContainer controllerSliderPanelContainer;
+		ImGuiInputTextPanelContainer controllerInputPanelContainer;
+		ShaderMachineFeedback controllerMachineFeedback;
+		MBindingMap controllerBindings;		// binding map for use across different objects
 
-			void insertBinding(std::string in_bindingName, int in_bindingValue);	// insert a new binding; this will auto overwrite an existing binding 
-																					// (be careful)
-
-			std::unordered_map<std::string, int> bindings;
-
-		};
 
 };
 

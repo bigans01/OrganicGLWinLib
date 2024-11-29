@@ -304,6 +304,12 @@
     <Filter Include="Source Files\MShaderController\MShader">
       <UniqueIdentifier>{34d3a3f7-b87a-4729-b285-30f94b11bfe0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MShaderController\MGradientBase">
+      <UniqueIdentifier>{8b22d980-e135-48db-a910-635dda48da26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MGradientBase">
+      <UniqueIdentifier>{de3ba2f5-37f6-466e-9ebd-6ceeaa7f1473}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1515,6 +1521,21 @@
     <ClInclude Include="MPointGradient.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
+    <ClInclude Include="MGradientBase.h">
+      <Filter>Header Files\MShaderController\MGradientBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MVec3Gradient.h">
+      <Filter>Header Files\MShaderController\MGradientBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MGradientRunMode.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
+    <ClInclude Include="MGradientController.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
+    <ClInclude Include="MBindingMap.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2157,6 +2178,18 @@
       <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
     <ClCompile Include="MPointGradient.cpp">
+      <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MVec3Gradient.cpp">
+      <Filter>Source Files\MShaderController\MGradientBase</Filter>
+    </ClCompile>
+    <ClCompile Include="MGradientController.cpp">
+      <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MShaderBase.cpp">
+      <Filter>Source Files\MShaderController\MShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MBindingMap.cpp">
       <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
   </ItemGroup>
