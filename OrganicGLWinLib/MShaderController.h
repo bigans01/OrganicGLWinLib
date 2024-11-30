@@ -15,6 +15,7 @@
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
 #include "MBindingMap.h"
+#include "MSBasicCompute.h"
 
 /*
 
@@ -37,6 +38,9 @@ programming, when developing new derivatives of the MShaderBase class.
 class MShaderController
 {
 	public:
+		MShaderController();
+		~MShaderController();	// used to clean up the OpenGL Window, if it was created.
+
 		bool switchMShader(std::string in_shaderToSwitchTo);		// switch to a shader, if it's available; return true if switch was successful.
 		bool addMShaderToCatalog(std::string in_shaderToSwitchTo);	// attempt to add a shader to the catalog; return true if it was found and sucessfully added.
 
@@ -67,6 +71,9 @@ class MShaderController
 		}
 		void parseMessages() {}
 
+		// Information queue printing/fetching
+		void writeOutInformationalMessages();	// write any informational Messages in the mShaderSetupQueue to std::cout.
+
 	private:
 		void setupSharedComponents();	// buffers, VAOs etc that can be shared between MShaderBase 
 		                                // derived classes in the catalog should be set up here
@@ -92,6 +99,8 @@ class MShaderController
 
 		// Various flags that determine what has been set
 		bool isResolutionSet = false;	// set to true when an actual resolution has been set for the MShaderBase-derived classes;
+		bool isGLFWWindowActive = false;	// needs to be set to true when the call to OrganicGLWinUtils::checkWindowValidity in MShaderController::initializeMandatoryItems
+											// returns true.
 
 		int mainScreenWidth = 0;
 		int mainScreenHeight = 0;
@@ -99,7 +108,7 @@ class MShaderController
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
 
 
-		std::unordered_map<std::string, MShaderBase> catalog;	// should contain all MShaderBase-derived classes that should be used
+		std::unordered_map<std::string, std::unique_ptr<MShaderBase>> catalog;	// should contain all MShaderBase-derived classes that should be used
 
 		
 

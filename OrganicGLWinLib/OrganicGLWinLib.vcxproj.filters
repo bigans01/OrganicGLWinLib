@@ -1536,6 +1536,9 @@
     <ClInclude Include="MBindingMap.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
+    <ClInclude Include="MSBasicCompute.h">
+      <Filter>Header Files\MShaderController\MShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2191,6 +2194,9 @@
     </ClCompile>
     <ClCompile Include="MBindingMap.cpp">
       <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBasicCompute.cpp">
+      <Filter>Source Files\MShaderController\MShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

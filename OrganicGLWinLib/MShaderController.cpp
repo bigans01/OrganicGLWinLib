@@ -1,6 +1,23 @@
 #include "stdafx.h"
 #include "MShaderController.h"
 
+MShaderController::MShaderController()
+{
+
+}
+
+MShaderController::~MShaderController()
+{
+	std::cout << "Calling destructor for MShaderController..." << std::endl;
+
+	// Remove GLFW Window, if it was active.
+	if (isGLFWWindowActive)
+	{
+		glfwDestroyWindow(mainWindowPtr);
+		std::cout << "GLFW window destroyed." << std::endl;
+	};
+}
+
 bool MShaderController::switchMShader(std::string in_shaderToSwitchTo)
 {
 	return true;
@@ -28,6 +45,12 @@ void MShaderController::processMessage(Message in_messageToRead)
 		case MessageType::MSHADER_SET_COMPUTE_RESOLUTION: 
 		{ 
 			mShaderInfoQueue.push(setComputeResolution(std::move(in_messageToRead))); 
+			break;
+		}
+
+		case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
+		{
+			mShaderSetupQueue.push(in_messageToRead);
 			break;
 		}
 	}
@@ -67,6 +90,7 @@ void MShaderController::initializeMandatoryItems()
 	mainWindowPtr = OrganicGLWinUtils::createGLFWWindow(mainScreenWidth, mainScreenHeight);
 	if (OrganicGLWinUtils::checkWindowValidity(mainWindowPtr))
 	{
+		isGLFWWindowActive = true;
 		mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("OpenGL window created OK.")));
 	}
 	else { mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("OpenGL window creation FAILED."))); }
@@ -85,5 +109,38 @@ void MShaderController::initializeMandatoryItems()
 
 void MShaderController::createMShaders()
 {
+	while (!mShaderSetupQueue.empty())
+	{
+		auto currentShaderMessage = mShaderSetupQueue.front();
+		switch (currentShaderMessage.messageType)
+		{
+			case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
+			{
+				catalog["MSBasicCompute"] = std::unique_ptr<MShaderBase>(new MSBasicCompute());
+				catalog["MSBasicCompute"]->setSharedObjectPointers(&controllerButtonPanelContainer,
+																&controllerSliderPanelContainer,
+																&controllerInputPanelContainer,
+																&controllerMachineFeedback,
+																&controllerBindings);
+				catalog["MSBasicCompute"]->setupMShaderRequests();
+				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
+				break;
+			};
+		}
+		mShaderSetupQueue.pop();
+	}
+}
 
+void MShaderController::writeOutInformationalMessages()
+{
+	std::cout << "Writing out current MShaderController messages...." << std::endl;
+	while (!mShaderInfoQueue.empty())
+	{
+		auto currentInfo = mShaderInfoQueue.front();
+		currentInfo.open();
+		std::string infoString = currentInfo.readString();
+		std::cout << infoString << std::endl;
+
+		mShaderInfoQueue.pop();
+	}
 }

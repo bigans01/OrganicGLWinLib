@@ -195,6 +195,7 @@
     <ClInclude Include="MGradientController.h" />
     <ClInclude Include="MGradientRunMode.h" />
     <ClInclude Include="MPointGradient.h" />
+    <ClInclude Include="MSBasicCompute.h" />
     <ClInclude Include="MShaderBase.h" />
     <ClInclude Include="MShaderController.h" />
     <ClInclude Include="MVec3Gradient.h" />
@@ -589,6 +590,7 @@
     <ClCompile Include="MBindingMap.cpp" />
     <ClCompile Include="MGradientController.cpp" />
     <ClCompile Include="MPointGradient.cpp" />
+    <ClCompile Include="MSBasicCompute.cpp" />
     <ClCompile Include="MShaderBase.cpp" />
     <ClCompile Include="MVec3Gradient.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />

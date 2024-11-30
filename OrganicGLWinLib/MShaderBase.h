@@ -25,7 +25,7 @@ class MShaderBase
 		virtual Message checkRequiredBindings() = 0;	// should be called after requested bindings have been sent to an instance that is a child of this class;
 														// it should analyze the contents of the referenced MBindingMap (parentBindingMapPtr) to see if 
 														// the expected bindings are available.
-	private:
+	protected:
 		// references to shareable objects from the parent MShaderController
 		ImGuiButtonPanelContainer* parentButtonPanelContainerPtr = nullptr;
 		ImGuiSliderFloatPanelContainer* parentSliderPanelContainerPtr  = nullptr;
