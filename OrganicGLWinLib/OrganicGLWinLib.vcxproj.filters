@@ -1539,6 +1539,12 @@
     <ClInclude Include="MSBasicCompute.h">
       <Filter>Header Files\MShaderController\MShader</Filter>
     </ClInclude>
+    <ClInclude Include="MShaderSelectionCycler.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
+    <ClInclude Include="MShaderCatalog.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2197,6 +2203,12 @@
     </ClCompile>
     <ClCompile Include="MSBasicCompute.cpp">
       <Filter>Source Files\MShaderController\MShader</Filter>
+    </ClCompile>
+    <ClCompile Include="MShaderCatalog.cpp">
+      <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MShaderSelectionCycler.cpp">
+      <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

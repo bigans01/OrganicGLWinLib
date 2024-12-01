@@ -16,6 +16,8 @@
 #include "ShaderMachineFeedback.h"
 #include "MBindingMap.h"
 #include "MSBasicCompute.h"
+#include "MShaderCatalog.h"
+#include "MShaderSelectionCycler.h"
 
 /*
 
@@ -107,10 +109,9 @@ class MShaderController
 		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
 
+		MShaderCatalog catalog;		// contains and manages all usable MShaders
+		MShaderSelectionCycler mShaderCycler;	// keeps track of which MShader is currently selected, as well as the last one that was used.
 
-		std::unordered_map<std::string, std::unique_ptr<MShaderBase>> catalog;	// should contain all MShaderBase-derived classes that should be used
-
-		
 
 		// ***************************************************** Shareable objects *****************************************************************
 		// imgui objects, intended to be referenced via pointers in MShaderBase-derived classes

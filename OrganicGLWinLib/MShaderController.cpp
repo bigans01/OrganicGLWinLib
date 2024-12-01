@@ -3,7 +3,7 @@
 
 MShaderController::MShaderController()
 {
-
+	mShaderCycler.setCatalogRef(&catalog);
 }
 
 MShaderController::~MShaderController()
@@ -20,6 +20,14 @@ MShaderController::~MShaderController()
 
 bool MShaderController::switchMShader(std::string in_shaderToSwitchTo)
 {
+	Message attemptMessage = mShaderCycler.switchToMShader(in_shaderToSwitchTo);
+	attemptMessage.open();
+
+	int attemptStatus = attemptMessage.readInt();
+	std::string attemptInfo = attemptMessage.readString();
+
+	mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, attemptInfo));
+
 	return true;
 }
 
@@ -116,14 +124,21 @@ void MShaderController::createMShaders()
 		{
 			case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
 			{
-				catalog["MSBasicCompute"] = std::unique_ptr<MShaderBase>(new MSBasicCompute());
-				catalog["MSBasicCompute"]->setSharedObjectPointers(&controllerButtonPanelContainer,
-																&controllerSliderPanelContainer,
-																&controllerInputPanelContainer,
-																&controllerMachineFeedback,
-																&controllerBindings);
-				catalog["MSBasicCompute"]->setupMShaderRequests();
-				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
+				// Attempt to insert, only bother continuing if true.
+				if (catalog.insertMShader("MSBasicCompute", std::move(std::unique_ptr<MShaderBase>(new MSBasicCompute()))))
+				{
+					catalog.getShaderRef("MSBasicCompute")->setSharedObjectPointers(&controllerButtonPanelContainer,
+															&controllerSliderPanelContainer,
+															&controllerInputPanelContainer,
+															&controllerMachineFeedback,
+															&controllerBindings);
+					catalog.getShaderRef("MSBasicCompute")->setupMShaderRequestsAndName();
+					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
+				}
+				else
+				{
+					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create MSBasicCompute; ...did it already exist?")));
+				}
 				break;
 			};
 		}

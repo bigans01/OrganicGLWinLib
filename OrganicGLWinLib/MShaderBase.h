@@ -10,6 +10,13 @@
 #include "ShaderMachineFeedback.h"
 #include "MBindingMap.h"
 
+/*
+
+Description: base class that serves as the main parent for MShader classes, 
+such as MSBasicCompute.
+
+*/
+
 class MShaderBase
 {
 	public:
@@ -20,8 +27,10 @@ class MShaderBase
 			ShaderMachineFeedback* in_parentMachineFeedbackPtr,
 			MBindingMap* in_parentBindingMapPtr);
 
+		std::string fetchMShaderName();	
+
 		// Below: should be called after setSharedObjectPointers above
-		virtual void setupMShaderRequests() = 0;		// create strings for expected bindings (bindingRequests), etc
+		virtual void setupMShaderRequestsAndName() = 0;		// create strings for expected bindings (bindingRequests), etc
 		virtual Message checkRequiredBindings() = 0;	// should be called after requested bindings have been sent to an instance that is a child of this class;
 														// it should analyze the contents of the referenced MBindingMap (parentBindingMapPtr) to see if 
 														// the expected bindings are available.
@@ -32,6 +41,8 @@ class MShaderBase
 		ImGuiInputTextPanelContainer* parentInputPanelContainerPtr = nullptr;
 		ShaderMachineFeedback* parentMachineFeedbackPtr = nullptr;
 		MBindingMap* parentBindingMapPtr = nullptr;
+
+		std::string mShaderName = "";	// must be set by child class
 
 		std::vector<std::string> bindingRequests;	// a vector that contains the names of requested bindings
 };

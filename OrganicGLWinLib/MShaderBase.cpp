@@ -13,3 +13,8 @@ void MShaderBase::setSharedObjectPointers(ImGuiButtonPanelContainer* in_parentBu
 	parentMachineFeedbackPtr = in_parentMachineFeedbackRef;
 	parentBindingMapPtr = in_parentBindingMapPtr;
 }
+
+std::string MShaderBase::fetchMShaderName()
+{
+	return mShaderName;
+}

@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "MSBasicCompute.h"
 
-void MSBasicCompute::setupMShaderRequests()
+void MSBasicCompute::setupMShaderRequestsAndName()
 {
-
+	mShaderName = "MSBasicCompute";
 }
 
 Message MSBasicCompute::checkRequiredBindings()
