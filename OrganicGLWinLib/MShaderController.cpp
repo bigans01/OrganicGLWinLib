@@ -131,7 +131,10 @@ void MShaderController::createMShaders()
 															&controllerSliderPanelContainer,
 															&controllerInputPanelContainer,
 															&controllerMachineFeedback,
-															&controllerBindings);
+															&controllerBindings,
+															&controllerValueRegistry
+														);
+
 					catalog.getShaderRef("MSBasicCompute")->setupMShaderRequestsAndName();
 					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
 				}

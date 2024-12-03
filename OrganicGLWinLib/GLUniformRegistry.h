@@ -12,6 +12,7 @@
 class GLUniformRegistry
 {
 public:
+	// insertion functions
 	void insertVec2(std::string in_stringValue, glm::vec2 in_vec2);
 	void insertVec3(std::string in_stringValue, glm::vec3 in_vec3);
 	void insertMat3(std::string in_stringValue, glm::mat3 in_mat3);
@@ -20,6 +21,8 @@ public:
 	void insertInt(std::string in_stringValue, int in_int);
 	void insertEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey);
 
+
+	// retrieval functions
 	glm::vec2 getVec2(std::string in_stringValue);
 	glm::vec3 getVec3(std::string in_stringValue);
 	glm::mat3 getMat3(std::string in_stringValue);
@@ -27,6 +30,15 @@ public:
 	float getFloat(std::string in_stringValue);
 	int getInt(std::string in_stringValue);
 	EnclaveKeyDef::EnclaveKey get3DKey(std::string in_stringValue);
+
+	// existence-checking functions
+	bool doesVec2Exist(std::string in_stringValue);
+	bool doesVec3Exist(std::string in_stringValue);
+	bool doesMat3Exist(std::string in_stringValue);
+	bool doesMat4Exist(std::string in_stringValue);
+	bool doesFloatExist(std::string in_stringValue);
+	bool doesIntExist(std::string in_stringValue);
+	bool does3DKeyExist(std::string in_stringValue);
 
 	float* getFloatRef(std::string in_stringValue);
 private:

@@ -191,6 +191,7 @@
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
     <ClInclude Include="MBindingMap.h" />
+    <ClInclude Include="MGCIndex.h" />
     <ClInclude Include="MGradientBase.h" />
     <ClInclude Include="MGradientController.h" />
     <ClInclude Include="MGradientRunMode.h" />
@@ -590,6 +591,7 @@
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp" />
     <ClCompile Include="MBindingMap.cpp" />
+    <ClCompile Include="MGCIndex.cpp" />
     <ClCompile Include="MGradientController.cpp" />
     <ClCompile Include="MPointGradient.cpp" />
     <ClCompile Include="MSBasicCompute.cpp" />

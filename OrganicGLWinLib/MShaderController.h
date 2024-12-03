@@ -18,6 +18,7 @@
 #include "MSBasicCompute.h"
 #include "MShaderCatalog.h"
 #include "MShaderSelectionCycler.h"
+#include "GLUniformRegistry.h"
 
 /*
 
@@ -119,8 +120,8 @@ class MShaderController
 		ImGuiSliderFloatPanelContainer controllerSliderPanelContainer;
 		ImGuiInputTextPanelContainer controllerInputPanelContainer;
 		ShaderMachineFeedback controllerMachineFeedback;
-		MBindingMap controllerBindings;		// binding map for use across different objects
-
+		MBindingMap controllerBindings;				// binding map for use across different objects
+		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
 
 };
 

@@ -3,12 +3,19 @@
 #ifndef MSHADERBASE_H
 #define MSHADERBASE_H
 
+#include <GL/glew.h>
+//#define GLFW_DLL		// only used when linking to a DLL version of GLFW.
+#include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include "GLUniformRegistry.h"
+
 #include <cmath>
 #include "ImGuiButtonPanelContainer.h"
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
 #include "MBindingMap.h"
+//#include "GLUniformRegistry.h"
 
 /*
 
@@ -25,7 +32,9 @@ class MShaderBase
 			ImGuiSliderFloatPanelContainer* in_parentSliderPanelContainerPtr,
 			ImGuiInputTextPanelContainer* in_parentInputPanelContainerPtr,
 			ShaderMachineFeedback* in_parentMachineFeedbackPtr,
-			MBindingMap* in_parentBindingMapPtr);
+			MBindingMap* in_parentBindingMapPtr,
+			GLUniformRegistry* in_parentValueRegistryPtr
+		);
 
 		std::string fetchMShaderName();	
 
@@ -41,6 +50,7 @@ class MShaderBase
 		ImGuiInputTextPanelContainer* parentInputPanelContainerPtr = nullptr;
 		ShaderMachineFeedback* parentMachineFeedbackPtr = nullptr;
 		MBindingMap* parentBindingMapPtr = nullptr;
+		GLUniformRegistry* parentValueRegistryPtr = nullptr;
 
 		std::string mShaderName = "";	// must be set by child class
 
