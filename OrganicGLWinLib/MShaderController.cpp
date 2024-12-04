@@ -162,3 +162,15 @@ void MShaderController::writeOutInformationalMessages()
 		mShaderInfoQueue.pop();
 	}
 }
+
+void MShaderController::calculatePassedTime()
+{
+	// Find what the current time is, and subtract the lastTimeStamp value from it, to get
+	// the updated value for millisecondsSinceLastTimestamp. Once calculated, set the lastTimeStamp = currentTimeStamp.
+	//
+	// This function should be called every tick that the MShaderController is running.
+
+	currentTimeStamp = std::chrono::steady_clock::now();	
+	millisecondsSinceLastTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(currentTimeStamp - lastTimeStamp).count();
+	lastTimeStamp = currentTimeStamp;
+}

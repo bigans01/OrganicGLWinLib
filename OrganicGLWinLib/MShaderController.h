@@ -19,6 +19,8 @@
 #include "MShaderCatalog.h"
 #include "MShaderSelectionCycler.h"
 #include "GLUniformRegistry.h"
+#include <chrono>
+#include "MGCIndex.h"
 
 /*
 
@@ -110,8 +112,19 @@ class MShaderController
 		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
 
+		// ***************************************************** Shader-related objects ************************************************************
 		MShaderCatalog catalog;		// contains and manages all usable MShaders
 		MShaderSelectionCycler mShaderCycler;	// keeps track of which MShader is currently selected, as well as the last one that was used.
+
+		// ***************************************************** Time objects and functions*********************************************************
+		std::chrono::steady_clock::time_point lastTimeStamp;		// the timestamp set in the previous call to calculatePassedTime
+		std::chrono::steady_clock::time_point currentTimeStamp;		// the current timestamp value
+		float millisecondsSinceLastTimestamp = 0.0f;	// the time difference between currentTimeStamp and lastTimeStamp; should be updated every tick.
+		void calculatePassedTime();	// update currentTimeStamp, millisecondsSinceLastTimestamp, and set lastTimeStamp to the value of currentTimeStamp after that
+									// calculation is done.
+
+		// ***************************************************** Gradient control ******************************************************************
+		MGCIndex controllerMGCI;
 
 
 		// ***************************************************** Shareable objects *****************************************************************
