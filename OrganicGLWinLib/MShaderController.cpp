@@ -174,3 +174,137 @@ void MShaderController::calculatePassedTime()
 	millisecondsSinceLastTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(currentTimeStamp - lastTimeStamp).count();
 	lastTimeStamp = currentTimeStamp;
 }
+
+void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
+{
+	// Open Message; read the enum'd int value
+	in_gradientInsertionMessage.open();
+
+	float singleCyclePiValue = 0.0f;
+	float singleCycleDivisorMs = 0.0f;
+
+	std::string gradientName = in_gradientInsertionMessage.readString();
+	std::cout << "!! Finished reading string..." << std::endl;
+
+	float cycleDuration = 0.0f;	// only used with finite
+
+
+	// Step 1: read the single cycle pi, divisor value, and finite duration (if doing finite.
+	// These should always be the first floats of the Message.
+	switch (in_gradientInsertionMessage.messageType)
+	{
+		case MessageType::MSHADER_SETUP_CYCLICAL_MGRADIENT:
+		{
+			std::cout << "!! Fonund cyclical MGradient. " << std::endl;
+			singleCyclePiValue = in_gradientInsertionMessage.readFloat();
+			singleCycleDivisorMs = in_gradientInsertionMessage.readFloat();
+			break;
+		}
+
+		case MessageType::MSHADER_SETUP_FINITE_MGRADIENT:
+		{
+			std::cout << "!! Fonund finite MGradient. " << std::endl;
+			singleCyclePiValue = in_gradientInsertionMessage.readFloat();
+			singleCycleDivisorMs = in_gradientInsertionMessage.readFloat();
+
+			// specific to finite only, read the cycleDuration
+			cycleDuration = in_gradientInsertionMessage.readFloat();
+			break;
+		}
+	};
+
+	// Step 2: determine the type of gradient input, by reading the next int available and 
+	// casting it to MessageType. The MessageType being read should be some MGRADIENT-flavor of MessageType;
+	// Anything else might cause exceptions and/or other errors.
+	MessageType gradientTypeToBuild = MessageType(in_gradientInsertionMessage.readInt());	// read the int, cast it.
+
+	Message messageForMGC;	// will contain all data for the Message that contains the metadata for the gradient;
+							// this data will be used in step 3, when we insert into the controllerMGCI.
+
+	switch (gradientTypeToBuild)
+	{
+		case MessageType::MGRADIENT_VEC3_INPUT:
+		{
+			std::cout << "!! Attempting creation of MGRADIENT_VEC3_INPUT Message..." << std::endl;
+
+			ECBPolyPoint pointA = in_gradientInsertionMessage.readPoint();
+			std::cout << "~~~~point A value, prior to insert: "; pointA.printPointCoords(); std::cout << std::endl;
+
+			ECBPolyPoint pointB = in_gradientInsertionMessage.readPoint();
+			std::cout << "~~~~point B value, prior to insert: "; pointB.printPointCoords(); std::cout << std::endl;
+
+			messageForMGC = Message(MessageType::MGRADIENT_VEC3_INPUT,
+				pointA,	// point A
+				pointB	// point B
+			);
+
+			/*
+			// Do not insert Message data like this; the two points have no particular order. Use pre-defined variables instead
+			// I should probably put a note of this behavior in Message.h...
+			messageForMGC = Message(MessageType::MGRADIENT_VEC3_INPUT,
+								in_gradientInsertionMessage.readPoint(),	// point A
+								in_gradientInsertionMessage.readPoint()	// point B
+								);
+			*/
+			break;
+		}
+	};
+
+	// Step 3: based off the messageType of the input Message into this function, 
+	switch (in_gradientInsertionMessage.messageType)
+	{
+
+		case MessageType::MSHADER_SETUP_CYCLICAL_MGRADIENT:
+		{
+			std::cout << "Sending cyclical gradient to controllerMGCI..." << std::endl;
+			controllerMGCI.insertCyclicalGradient(gradientName,
+												messageForMGC,
+												singleCyclePiValue,
+												singleCycleDivisorMs);
+			break;
+		}
+
+		case MessageType::MSHADER_SETUP_FINITE_MGRADIENT:
+		{
+			std::cout << "Sending finite gradient to controllerMGCI..." << std::endl;
+			controllerMGCI.insertFiniteGradient(gradientName,
+												messageForMGC,
+												singleCyclePiValue,
+												singleCycleDivisorMs, 
+												cycleDuration);
+
+			break;
+		}
+	}
+}
+
+void MShaderController::runTick()
+{
+									// Step 1. Check for gradients to create, based on a "gradient processing queue"
+	updateAndapplyGradients(500.0f);						// Step 2: Update gradients, and apply them
+	controllerMGCI.deleteExpiredFiniteGradients();		// Step 3: remove expired gradients.
+}
+
+void MShaderController::updateAndapplyGradients(float in_ms)
+{
+	std::vector<Message> gradientMessageVector = controllerMGCI.updateGradientsAndGetOutputs(in_ms);
+	for (auto& currentGradientMessage : gradientMessageVector)
+	{
+		currentGradientMessage.open();
+		std::string variableName = currentGradientMessage.readString();
+
+		// For all fetched gradients, apply their values into the MShaderController's GLUniformRegistry (controllverValueRegistry)
+		switch (currentGradientMessage.messageType)
+		{
+			case MessageType::MGRADIENT_VEC3_OUTPUT:
+			{
+				ECBPolyPoint ppoint = currentGradientMessage.readPoint();
+				std::cout << "## Found vec3 value to insert. Name: " << variableName << " | Value: "; ppoint.printPointCoords(); std::cout << std::endl;
+				glm::vec3 vec3Point(ppoint.x, ppoint.y, ppoint.z);
+				controllerValueRegistry.insertVec3(variableName, vec3Point);
+				break;
+			};
+		}
+	}
+}
+

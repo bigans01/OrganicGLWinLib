@@ -21,3 +21,8 @@ std::string MShaderBase::fetchMShaderName()
 {
 	return mShaderName;
 }
+
+GLUniformRegistry* MShaderBase::getLocalValueRegistryRef()
+{
+	return &mShaderLocalValueRegistry;
+}

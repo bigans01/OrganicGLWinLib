@@ -79,6 +79,12 @@ class MShaderController
 		// Information queue printing/fetching
 		void writeOutInformationalMessages();	// write any informational Messages in the mShaderSetupQueue to std::cout.
 
+		void insertNewGradient(Message in_gradientInsertionMessage);	// uses either a Message of the type MSHADER_SETUP_CYCLICAL_MGRADIENT
+																		// or MSHADER_SETUP_FINITE_MGRADIENT to create an MGRADIENT and insert it into the 
+																		// controllerMGCI (object of MGCIndex)
+
+		void runTick();
+
 	private:
 		void setupSharedComponents();	// buffers, VAOs etc that can be shared between MShaderBase 
 		                                // derived classes in the catalog should be set up here
@@ -89,6 +95,10 @@ class MShaderController
 
 		void initializeMandatoryItems();	// setup GLFW, GLEW, and GLFWWindow, as well as other basic state info.
 		void createMShaders();
+
+		
+		void updateAndapplyGradients(float in_ms);	// update all grandients, and fetch their updated Messages, so
+													// that the values in the controllerValueRegistry are updated appropriately.
 
 		// Set functions, used in call to setup
 		Message setComputeResolution(Message in_messageToRead);

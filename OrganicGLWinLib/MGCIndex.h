@@ -30,8 +30,14 @@ class MGCIndex
 																															// gradient is determined by the Message contents,
 																															// and the float value represents how long the gradient should last in pi time.
 		bool doesGradientExist(std::string in_gradientName);	// returns true if a gradient already exists.
-		Message fetchGradientValueFromController(std::string in_gradientName, float in_piTimeValue);	// get the current value belonging to a gradient, by pi time duration.
+		Message fetchGradientValueFromController(std::string in_gradientName, float in_piTimeValue);	// get the current value belonging to a gradient, by pi time duration; 
+																										// this function will also append the value of the variable name in std::string format, 
+																										// to the return Message																
+					
 		void deleteExpiredFiniteGradients();	// check if any gradients have expired, and if so, delete them.
+		std::vector<Message> updateGradientsAndGetOutputs(float in_updateValueInMs);	// update all gradients by time, and return their corresponding Messages.
+																						// Should be used by the tick loop of MShaderController.
+
 	private:
 		std::unordered_map<std::string, MGradientController> gradientControllerMap;
 };

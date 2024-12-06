@@ -37,12 +37,16 @@ class MShaderBase
 		);
 
 		std::string fetchMShaderName();	
+		GLUniformRegistry* getLocalValueRegistryRef();	// get a ref to mShaderLocalValueRegistry;
+														// can be used by MShaderController or other classes to check for existence
+														// of certain uniforms, or other similiar operations.
 
 		// Below: should be called after setSharedObjectPointers above
 		virtual void setupMShaderRequestsAndName() = 0;		// create strings for expected bindings (bindingRequests), etc
 		virtual Message checkRequiredBindings() = 0;	// should be called after requested bindings have been sent to an instance that is a child of this class;
 														// it should analyze the contents of the referenced MBindingMap (parentBindingMapPtr) to see if 
 														// the expected bindings are available.
+
 	protected:
 		// references to shareable objects from the parent MShaderController
 		ImGuiButtonPanelContainer* parentButtonPanelContainerPtr = nullptr;
@@ -55,6 +59,10 @@ class MShaderBase
 		std::string mShaderName = "";	// must be set by child class
 
 		std::vector<std::string> bindingRequests;	// a vector that contains the names of requested bindings
+
+		GLUniformRegistry mShaderLocalValueRegistry;	// will store the "preferred" uniform/local values that the
+														// children of this class will want; each child class must manually
+														// define these.
 };
 
 #endif
