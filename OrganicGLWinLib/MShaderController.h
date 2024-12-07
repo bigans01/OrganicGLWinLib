@@ -117,6 +117,8 @@ class MShaderController
 		bool isGLFWWindowActive = false;	// needs to be set to true when the call to OrganicGLWinUtils::checkWindowValidity in MShaderController::initializeMandatoryItems
 											// returns true.
 
+		bool wasInitialTimeCalculated = false;	// used by calculatePassedTime(), to check if that function has been called at least once (used to set the initial value of lastTimeStamp)
+
 		int mainScreenWidth = 0;
 		int mainScreenHeight = 0;
 		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION
