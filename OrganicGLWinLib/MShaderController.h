@@ -96,6 +96,7 @@ class MShaderController
 		void initializeMandatoryItems();	// setup GLFW, GLEW, and GLFWWindow, as well as other basic state info.
 		void createMShaders();
 
+		void updateMVPVariables();
 		
 		void updateAndapplyGradients(float in_ms);	// update all grandients, and fetch their updated Messages, so
 													// that the values in the controllerValueRegistry are updated appropriately.

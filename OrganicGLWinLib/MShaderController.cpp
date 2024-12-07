@@ -163,26 +163,6 @@ void MShaderController::writeOutInformationalMessages()
 	}
 }
 
-void MShaderController::calculatePassedTime()
-{
-	// Find what the current time is, and subtract the lastTimeStamp value from it, to get
-	// the updated value for millisecondsSinceLastTimestamp. Once calculated, set the lastTimeStamp = currentTimeStamp.
-	//
-	// This function should be called every tick that the MShaderController is running.
-
-	currentTimeStamp = std::chrono::steady_clock::now();	
-
-	// If this the very first time this function is called, the timestamps will be equal;
-	// we must then set wasInitialTimeCalculated to true so that this doesn't happen again.
-	if (!wasInitialTimeCalculated)
-	{
-		lastTimeStamp = currentTimeStamp;
-		wasInitialTimeCalculated = true;
-	}
-
-	millisecondsSinceLastTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(currentTimeStamp - lastTimeStamp).count();
-	lastTimeStamp = currentTimeStamp;
-}
 
 void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
 {
@@ -291,8 +271,35 @@ void MShaderController::runTick()
 {
 										// Step 1: Check for gradients to create, based on a "gradient processing queue"
 	calculatePassedTime();				// Step 2: fetch the total time that has elapsed, to use as a value for updateAndApplyGradients
-	updateAndapplyGradients(millisecondsSinceLastTimestamp);		// Step 3: Update gradients, and apply them
-	controllerMGCI.deleteExpiredFiniteGradients();		// Step 4: remove expired gradients.
+	updateMVPVariables();				// Step 3: Calculate any MVP matrices or other similiar values that have been setup
+	updateAndapplyGradients(millisecondsSinceLastTimestamp);		// Step 4: Update gradients, and apply them
+	controllerMGCI.deleteExpiredFiniteGradients();		// Step 5: remove expired gradients.
+}
+
+void MShaderController::calculatePassedTime()
+{
+	// Find what the current time is, and subtract the lastTimeStamp value from it, to get
+	// the updated value for millisecondsSinceLastTimestamp. Once calculated, set the lastTimeStamp = currentTimeStamp.
+	//
+	// This function should be called every tick that the MShaderController is running.
+
+	currentTimeStamp = std::chrono::steady_clock::now();	
+
+	// If this the very first time this function is called, the timestamps will be equal;
+	// we must then set wasInitialTimeCalculated to true so that this doesn't happen again.
+	if (!wasInitialTimeCalculated)
+	{
+		lastTimeStamp = currentTimeStamp;
+		wasInitialTimeCalculated = true;
+	}
+
+	millisecondsSinceLastTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(currentTimeStamp - lastTimeStamp).count();
+	lastTimeStamp = currentTimeStamp;
+}
+
+void MShaderController::updateMVPVariables()
+{
+
 }
 
 void MShaderController::updateAndapplyGradients(float in_ms)
