@@ -276,6 +276,12 @@ void MShaderController::runTick()
 	controllerMGCI.deleteExpiredFiniteGradients();		// Step 5: remove expired gradients.
 }
 
+void MShaderController::processShaderChangeRequests()
+{
+
+}
+
+
 void MShaderController::calculatePassedTime()
 {
 	// Find what the current time is, and subtract the lastTimeStamp value from it, to get

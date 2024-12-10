@@ -1548,6 +1548,9 @@
     <ClInclude Include="MGCIndex.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
+    <ClInclude Include="MShaderHintIndexer.h">
+      <Filter>Header Files\MShaderController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2214,6 +2217,9 @@
       <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
     <ClCompile Include="MGCIndex.cpp">
+      <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MShaderHintIndexer.cpp">
       <Filter>Source Files\MShaderController</Filter>
     </ClCompile>
   </ItemGroup>

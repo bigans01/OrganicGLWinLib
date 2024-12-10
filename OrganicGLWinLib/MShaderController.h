@@ -21,6 +21,7 @@
 #include "GLUniformRegistry.h"
 #include <chrono>
 #include "MGCIndex.h"
+#include "MShaderHintIndexer.h"
 
 /*
 
@@ -86,6 +87,14 @@ class MShaderController
 		void runTick();
 
 	private:
+		void processShaderChangeRequests();	//	1.	check if there is a request to switch to a new MShader; if there is a request,
+											//		ensure that the MShader exists in the catalog.
+											//
+											//	2.  If the MShader does exist, proceed to checking for transitional hints in the 
+											//		controllerHintIndexer (class MShaderHintIndexer). This class should return a set of 
+											//		MShaderHintEnum values; use a case/switch statement to check the values to decide how to process.
+											//		the MShaderHintEnum values should be used to create gradients.
+
 		void setupSharedComponents();	// buffers, VAOs etc that can be shared between MShaderBase 
 		                                // derived classes in the catalog should be set up here
 
@@ -137,8 +146,10 @@ class MShaderController
 									// calculation is done.
 
 		// ***************************************************** Gradient control ******************************************************************
-		MGCIndex controllerMGCI;
+		MGCIndex controllerMGCI;	// stores and manages gradients that can be used by MShaderController
 
+		// ************************************************** Hint management ******************************************************************
+		MShaderHintIndexer controllerHintIndexer;	// contains and manages hints that can be used by MShaderController
 
 		// ***************************************************** Shareable objects *****************************************************************
 		// imgui objects, intended to be referenced via pointers in MShaderBase-derived classes

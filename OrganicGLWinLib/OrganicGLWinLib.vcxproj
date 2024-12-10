@@ -200,6 +200,7 @@
     <ClInclude Include="MShaderBase.h" />
     <ClInclude Include="MShaderCatalog.h" />
     <ClInclude Include="MShaderController.h" />
+    <ClInclude Include="MShaderHintIndexer.h" />
     <ClInclude Include="MShaderSelectionCycler.h" />
     <ClInclude Include="MVec3Gradient.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
@@ -597,6 +598,7 @@
     <ClCompile Include="MSBasicCompute.cpp" />
     <ClCompile Include="MShaderBase.cpp" />
     <ClCompile Include="MShaderCatalog.cpp" />
+    <ClCompile Include="MShaderHintIndexer.cpp" />
     <ClCompile Include="MShaderSelectionCycler.cpp" />
     <ClCompile Include="MVec3Gradient.cpp" />
     <ClCompile Include="NegXFaceResolver.cpp" />
