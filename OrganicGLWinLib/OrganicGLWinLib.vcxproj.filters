@@ -1551,6 +1551,9 @@
     <ClInclude Include="MShaderHintIndexer.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
+    <ClInclude Include="MSBasicGrayscale.h">
+      <Filter>Header Files\MShaderController\MShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2221,6 +2224,9 @@
     </ClCompile>
     <ClCompile Include="MShaderHintIndexer.cpp">
       <Filter>Source Files\MShaderController</Filter>
+    </ClCompile>
+    <ClCompile Include="MSBasicGrayscale.cpp">
+      <Filter>Source Files\MShaderController\MShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

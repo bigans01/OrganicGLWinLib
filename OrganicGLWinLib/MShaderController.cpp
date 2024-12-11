@@ -28,7 +28,18 @@ bool MShaderController::switchMShader(std::string in_shaderToSwitchTo)
 
 	mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, attemptInfo));
 
+	if (attemptStatus == 0)
+	{
+		return false;
+	}
+
 	return true;
+}
+
+void MShaderController::attemptSwitchOnNextTick(std::string in_shaderToSwitchTo)
+{
+	nextShaderToSwitchTo = in_shaderToSwitchTo;
+	shaderSwitchAttemptFlag = true;
 }
 
 bool MShaderController::addMShaderToCatalog(std::string in_shaderToSwitchTo)
@@ -57,6 +68,12 @@ void MShaderController::processMessage(Message in_messageToRead)
 		}
 
 		case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
+		{
+			mShaderSetupQueue.push(in_messageToRead);
+			break;
+		}
+
+		case MessageType::MSHADER_CREATE_MSBASICGRAYSCALE:
 		{
 			mShaderSetupQueue.push(in_messageToRead);
 			break;
@@ -122,6 +139,7 @@ void MShaderController::createMShaders()
 		auto currentShaderMessage = mShaderSetupQueue.front();
 		switch (currentShaderMessage.messageType)
 		{
+			// Basic compute shader
 			case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
 			{
 				// Attempt to insert, only bother continuing if true.
@@ -142,6 +160,31 @@ void MShaderController::createMShaders()
 				{
 					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create MSBasicCompute; ...did it already exist?")));
 				}
+				break;
+			};
+
+			// Grayscale shader 
+			case MessageType::MSHADER_CREATE_MSBASICGRAYSCALE:
+			{
+				// Attempt to insert, only bother continuing if true.
+				std::cout << "!! Found MessageType::MSHADER_CREATE_MSBASICGRAYSCALE; will attempt grayscale shader creation." << std::endl;
+				if (catalog.insertMShader("MSBasicGrayscale", std::move(std::unique_ptr<MShaderBase>(new MSBasicGrayscale()))))
+				{
+					catalog.getShaderRef("MSBasicGrayscale")->setSharedObjectPointers(&controllerButtonPanelContainer,
+															&controllerSliderPanelContainer,
+															&controllerInputPanelContainer,
+															&controllerMachineFeedback,
+															&controllerBindings,
+															&controllerValueRegistry
+														);
+					catalog.getShaderRef("MSBasicGrayscale")->setupMShaderRequestsAndName();
+					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicGrayscale...")));
+				}
+				else
+				{
+					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create MSBasicGrayscale; ...did it already exist?")));
+				}
+
 				break;
 			};
 		}
@@ -269,7 +312,11 @@ void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
 
 void MShaderController::runTick()
 {
-										// Step 1: Check for gradients to create, based on a "gradient processing queue"
+	processShaderChangeRequests();		// Step 1:	if attemptSwitchOnNextTick was called, attempt to switch
+										//			to the shader given by the current value of nextShaderToSwitchTo.
+										//		 	Check if there are any transitional hints to process as well, if the
+										//			switch was sucessful, to create new gradients.								
+
 	calculatePassedTime();				// Step 2: fetch the total time that has elapsed, to use as a value for updateAndApplyGradients
 	updateMVPVariables();				// Step 3: Calculate any MVP matrices or other similiar values that have been setup
 	updateAndapplyGradients(millisecondsSinceLastTimestamp);		// Step 4: Update gradients, and apply them
@@ -278,7 +325,40 @@ void MShaderController::runTick()
 
 void MShaderController::processShaderChangeRequests()
 {
+	// This function will only really attempt to do anything if the shaderSwitchAttemptFlag
+	// is set to true.
+	if (shaderSwitchAttemptFlag)
+	{
+		// Now, use the value in nextShaderToSwitchTo to attempt a switch.
+		// If the result is true, AND there are two shaders in the mShaderCycler proceed 
+		// to check for transitional hints.
+		bool wasSwitchSuccessful = switchMShader(nextShaderToSwitchTo);
+		if (wasSwitchSuccessful)
+		{
+			// If we're processing the very first call to attemptSwitchOnNextTick,
+			// there is no need to check transitional hints.
+			if (mShaderCycler.getNumberOfLoadedShaders() == 1)
+			{
+				std::cout << "Initial shader selected; ignoring transitional hint scan.";
+			}
 
+			// ...but if we're not on the first, check the hints.
+			else if (mShaderCycler.getNumberOfLoadedShaders() == 2)
+			{
+				std::cout << "!!! Scanning for hints." << std::endl;
+				auto transitionalHints = controllerHintIndexer.fetchTransitionalHints();
+				for (auto& currentHint : transitionalHints)
+				{
+					// each hint should be mapped to 1 gradient attempt.
+				}
+			}
+		}
+
+
+		// Once all is said and done, reset the flag, and nextShaderToSwitchTo value
+		nextShaderToSwitchTo = "";
+		shaderSwitchAttemptFlag = false;
+	}
 }
 
 

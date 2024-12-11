@@ -15,7 +15,10 @@
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
 #include "MBindingMap.h"
+
 #include "MSBasicCompute.h"
+#include "MSBasicGrayscale.h"
+
 #include "MShaderCatalog.h"
 #include "MShaderSelectionCycler.h"
 #include "GLUniformRegistry.h"
@@ -47,7 +50,9 @@ class MShaderController
 		MShaderController();
 		~MShaderController();	// used to clean up the OpenGL Window, if it was created.
 
-		bool switchMShader(std::string in_shaderToSwitchTo);		// switch to a shader, if it's available; return true if switch was successful.
+		bool switchMShader(std::string in_shaderToSwitchTo);			// directly switch to a shader, if it's available; return true if switch was successful.
+		void attemptSwitchOnNextTick(std::string in_shaderToSwitchTo);  // attempts to switch to the MShader that is represented by the given string, during the next call to runTick().
+
 		bool addMShaderToCatalog(std::string in_shaderToSwitchTo);	// attempt to add a shader to the catalog; return true if it was found and sucessfully added.
 
 
@@ -137,6 +142,9 @@ class MShaderController
 		// ***************************************************** Shader-related objects ************************************************************
 		MShaderCatalog catalog;		// contains and manages all usable MShaders
 		MShaderSelectionCycler mShaderCycler;	// keeps track of which MShader is currently selected, as well as the last one that was used.
+		std::string nextShaderToSwitchTo = "";	// set by a call to 
+		bool shaderSwitchAttemptFlag = false;	// set to true whenever nextShaderToSwitchTo gets set, and set to false when it gets cleared.
+		
 
 		// ***************************************************** Time objects and functions*********************************************************
 		std::chrono::steady_clock::time_point lastTimeStamp;		// the timestamp set in the previous call to calculatePassedTime

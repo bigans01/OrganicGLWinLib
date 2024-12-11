@@ -16,14 +16,14 @@ required to enable the "transiting" feature, as it allows for both the previous 
 class MShaderSelectionCycler
 {
 	public:
-		MShaderSelectionCycler() {};	// default constructor, so that this class can be happily inserted into MShaderController.
+		MShaderSelectionCycler();	// default constructor, so that this class can be happily inserted into MShaderController.
 		void setCatalogRef(MShaderCatalog* in_cyclerCatalogRef);	// sets the value of cyclerCatalogRef; this function should be called
 																	// first, before any other functions besides the constructor (so make sure in the constructor
 																	// of the MShaderController)
 		Message switchToMShader(std::string in_shaderName);
 		MShaderBase* getTargetShaderRef();		// should return the value at cycleArray[0], which will be the current MShader we are on/transitioning to.
 		MShaderBase* getPreviousShaderRef();	// should return the value at cycleArray[2], which will be the previous MShader we transitioned from.
-		int getNumberOfLoadedShaders();
+		int getNumberOfLoadedShaders();	// would be either 0, 1 or 2.
 	private:
 		MShaderCatalog* cyclerCatalogRef = nullptr;	// must be set by the call to setCatalogRef
 		MShaderBase* cycleArray[2];		// the first index at 0 will be the currently used shader; the index at 1 will be the last used shader.

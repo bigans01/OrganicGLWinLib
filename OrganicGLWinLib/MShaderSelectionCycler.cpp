@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "MShaderSelectionCycler.h"
 
+MShaderSelectionCycler::MShaderSelectionCycler()
+{
+	cycleArray[0] = nullptr;
+	cycleArray[1] = nullptr;
+}
+
 void MShaderSelectionCycler::setCatalogRef(MShaderCatalog* in_cyclerCatalogRef)
 {
 	cyclerCatalogRef = in_cyclerCatalogRef;

@@ -197,6 +197,7 @@
     <ClInclude Include="MGradientRunMode.h" />
     <ClInclude Include="MPointGradient.h" />
     <ClInclude Include="MSBasicCompute.h" />
+    <ClInclude Include="MSBasicGrayscale.h" />
     <ClInclude Include="MShaderBase.h" />
     <ClInclude Include="MShaderCatalog.h" />
     <ClInclude Include="MShaderController.h" />
@@ -596,6 +597,7 @@
     <ClCompile Include="MGradientController.cpp" />
     <ClCompile Include="MPointGradient.cpp" />
     <ClCompile Include="MSBasicCompute.cpp" />
+    <ClCompile Include="MSBasicGrayscale.cpp" />
     <ClCompile Include="MShaderBase.cpp" />
     <ClCompile Include="MShaderCatalog.cpp" />
     <ClCompile Include="MShaderHintIndexer.cpp" />
