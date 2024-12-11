@@ -31,6 +31,12 @@ bool MShaderController::switchMShader(std::string in_shaderToSwitchTo)
 	return true;
 }
 
+void MShaderController::attemptSwitchOnNextTick(std::string in_shaderToSwitchTo)
+{
+	nextShaderToSwitchTo = in_shaderToSwitchTo;
+	shaderSwitchAttemptFlag = true;
+}
+
 bool MShaderController::addMShaderToCatalog(std::string in_shaderToSwitchTo)
 {
 	return true;
