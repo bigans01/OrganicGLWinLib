@@ -16,7 +16,8 @@ class MShaderHintIndexer
 {
 	public:
 		void insertTransitionalHint(MShaderHintEnum in_hintToAdd);
-
+		Message processTransitionalHintMessage(Message in_hintMessage);	// processes a Message of the type MSHADER_TRANSITIONAL_HINT, 
+																		// to read an MShaderHintEnum value intended for transitional operations.
 		std::set<MShaderHintEnum> fetchTransitionalHints();
 	private:
 		std::set<MShaderHintEnum> transitionalHints;

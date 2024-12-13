@@ -78,6 +78,12 @@ void MShaderController::processMessage(Message in_messageToRead)
 			mShaderSetupQueue.push(in_messageToRead);
 			break;
 		}
+
+		case MessageType::MSHADER_TRANSITIONAL_HINT:
+		{
+			mShaderInfoQueue.push(controllerHintIndexer.processTransitionalHintMessage(in_messageToRead));
+			break;
+		}
 	}
 };
 
