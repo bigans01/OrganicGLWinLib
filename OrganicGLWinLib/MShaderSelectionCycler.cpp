@@ -7,9 +7,13 @@ MShaderSelectionCycler::MShaderSelectionCycler()
 	cycleArray[1] = nullptr;
 }
 
-void MShaderSelectionCycler::setCatalogRef(MShaderCatalog* in_cyclerCatalogRef)
+void MShaderSelectionCycler::setRefs(MShaderCatalog* in_cyclerCatalogRef,
+									GLUniformRegistry* in_controllerRegistryRef,
+									MGCIndex* in_controllerMGCIndexRef)
 {
 	cyclerCatalogRef = in_cyclerCatalogRef;
+	cyclerControllerRegistryRef = in_controllerRegistryRef;
+	cyclerControllerMGCIndexRef = in_controllerMGCIndexRef;
 }
 
 Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
@@ -38,8 +42,24 @@ Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
 			if (!(cycleArray[0]->fetchMShaderName() == cyclerCatalogRef->getShaderRef(in_shaderName)->fetchMShaderName()))
 			{
 				MShaderBase* tempPtr = cycleArray[0];
+
+
+				// swap the shader positions.
 				cycleArray[1] = tempPtr;
 				cycleArray[0] = cyclerCatalogRef->getShaderRef(in_shaderName);
+
+				// gather the soon-to-be old shader's preferred uniforms; erase them from the MShaderController's registry.
+				auto oldMShaderPreferredValues = tempPtr->getLocalValueRegistryRef();
+
+				// remove values found in the old shader's preferred registry, from the controller's registry;
+				// this needs to be done to ensure that the controller's registry is no longer using potentially unused values.
+				cyclerControllerRegistryRef->removeCommonValues(oldMShaderPreferredValues);
+
+				// get the preferred uniforms from the new shader; apply these uniforms only if the gradients don't exist yet,
+				// as a gradient existing means that it is already operating on a value in the controller's registry. This will
+				// effectively update the controller's registry with the values from the new shader, as long as they didn't exist yet already.
+				updateControllerRegistryForNonexistentGradients(cycleArray[0]->getLocalValueRegistryRef());
+
 
 				iterateLoadedShaders();
 
@@ -61,6 +81,81 @@ Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
 	}
 
 	return Message(MessageType::MSHADERSELECTIONCYCLER_ATTEMPT, switchSuccessful, switchMessage);
+}
+
+void MShaderSelectionCycler::updateControllerRegistryForNonexistentGradients(GLUniformRegistry* in_newShaderRegistryRef)
+{
+	// check vec2
+	auto fetchedVec2Strings = in_newShaderRegistryRef->fetchRegVec2Names();
+	for (auto& fetchedVec2StringsIter : fetchedVec2Strings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as vec2,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedVec2StringsIter))
+		{
+			cyclerControllerRegistryRef->insertVec2(fetchedVec2StringsIter, in_newShaderRegistryRef->getVec2(fetchedVec2StringsIter));
+		}
+	}
+
+	// check vec3 
+	auto fetchedVec3Strings = in_newShaderRegistryRef->fetchRegVec3Names();
+	for (auto& fetchedVec3StringsIter : fetchedVec3Strings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as vec3,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedVec3StringsIter))
+		{
+			cyclerControllerRegistryRef->insertVec3(fetchedVec3StringsIter, in_newShaderRegistryRef->getVec3(fetchedVec3StringsIter));
+		}
+	}
+
+	// check mat3
+	auto fetchedMat3Strings = in_newShaderRegistryRef->fetchRegMat3Names();
+	for (auto& fetchedMat3StringsIter : fetchedMat3Strings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as mat3,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedMat3StringsIter))
+		{
+			cyclerControllerRegistryRef->insertMat3(fetchedMat3StringsIter, in_newShaderRegistryRef->getMat3(fetchedMat3StringsIter));
+		}
+	}
+
+	// check mat4
+	auto fetchedMat4Strings = in_newShaderRegistryRef->fetchRegMat4Names();
+	for (auto& fetchedMat4StringsIter : fetchedMat4Strings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as mat4,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedMat4StringsIter))
+		{
+			cyclerControllerRegistryRef->insertMat4(fetchedMat4StringsIter, in_newShaderRegistryRef->getMat4(fetchedMat4StringsIter));
+		}
+	}
+
+	// check float
+	auto fetchedFloatStrings = in_newShaderRegistryRef->fetchRegFloatNames();
+	for (auto& fetchedFloatStringsIter : fetchedFloatStrings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as float,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedFloatStringsIter))
+		{
+			cyclerControllerRegistryRef->insertFloat(fetchedFloatStringsIter, in_newShaderRegistryRef->getFloat(fetchedFloatStringsIter));
+		}
+	}
+	
+	// check int
+	auto fetchedIntStrings = in_newShaderRegistryRef->fetchRegIntNames();
+	for (auto& fetchedIntStringsIter : fetchedIntStrings)
+	{
+		// as long as it doesn't already exist as a gradient, insert the value as int,
+		// into the controllers uniform registry.
+		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedIntStringsIter))
+		{
+			cyclerControllerRegistryRef->insertInt(fetchedIntStringsIter, in_newShaderRegistryRef->getInt(fetchedIntStringsIter));
+		}
+	}
 }
 
 MShaderBase* MShaderSelectionCycler::getTargetShaderRef()

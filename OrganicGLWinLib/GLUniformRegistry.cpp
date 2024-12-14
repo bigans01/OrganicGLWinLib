@@ -195,3 +195,105 @@ float* GLUniformRegistry::getFloatRef(std::string in_stringValue)
 {
 	return &regFloat[in_stringValue];
 }
+
+void GLUniformRegistry::removeCommonValues(GLUniformRegistry* in_otherRegistryRef)
+{
+	// get vec2 from other registry
+	for (auto& currentOtherVec2 : in_otherRegistryRef->regVec2)
+	{
+		// erase the vec2 from THIS object, not the other one
+		regVec2.erase(currentOtherVec2.first);
+	}
+
+	// get vec3 from other registry
+	for (auto& currentOtherVec3 : in_otherRegistryRef->regVec3)
+	{
+		// erase the vec3 from THIS object, not the other one
+		regVec3.erase(currentOtherVec3.first);
+	}
+
+	// get mat3 from other registry
+	for (auto& currentOtherMat3 : in_otherRegistryRef->regMat3)
+	{
+		regMat3.erase(currentOtherMat3.first);
+	}
+
+	// get mat4 from other registry
+	for (auto& currentOtherMat4 : in_otherRegistryRef->regMat4)
+	{
+		regMat4.erase(currentOtherMat4.first);
+	}
+
+	// get float from other registry
+	for (auto& currentOtherFloat : in_otherRegistryRef->regFloat)
+	{
+		regFloat.erase(currentOtherFloat.first);
+	}
+
+	// get int from other registry
+	for (auto& currentOtherInt : in_otherRegistryRef->regInt)
+	{
+		regInt.erase(currentOtherInt.first);
+	}
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegVec2Names()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentVec2 : regVec2)
+	{
+		returnStringVector.push_back(currentVec2.first);
+	}
+	return returnStringVector;
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegVec3Names()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentVec3 : regVec3)
+	{
+		returnStringVector.push_back(currentVec3.first);
+	}
+	return returnStringVector;
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegMat3Names()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentMat3 : regMat3)
+	{
+		returnStringVector.push_back(currentMat3.first);
+	}
+	return returnStringVector;
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegMat4Names()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentMat4 : regMat4)
+	{
+		returnStringVector.push_back(currentMat4.first);
+	}
+	return returnStringVector;
+
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegFloatNames()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentFloat : regFloat)
+	{
+		returnStringVector.push_back(currentFloat.first);
+	}
+	return returnStringVector;
+}
+
+std::vector<std::string> GLUniformRegistry::fetchRegIntNames()
+{
+	std::vector<std::string> returnStringVector;
+	for (auto& currentInt : regInt)
+	{
+		returnStringVector.push_back(currentInt.first);
+	}
+	return returnStringVector;
+}

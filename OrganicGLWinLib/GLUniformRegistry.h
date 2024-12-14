@@ -41,6 +41,17 @@ public:
 	bool does3DKeyExist(std::string in_stringValue);
 
 	float* getFloatRef(std::string in_stringValue);
+
+	void removeCommonValues(GLUniformRegistry* in_otherRegistryRef);	// remove values from this registry object, 
+																		// that are found in the referenced one (does not remove the value from referenced registry)
+
+	// name-retrieval functions
+	std::vector<std::string> fetchRegVec2Names();
+	std::vector<std::string> fetchRegVec3Names();
+	std::vector<std::string> fetchRegMat3Names();
+	std::vector<std::string> fetchRegMat4Names();
+	std::vector<std::string> fetchRegFloatNames();
+	std::vector<std::string> fetchRegIntNames();
 private:
 	std::unordered_map<std::string, glm::vec2> regVec2;
 	std::unordered_map<std::string, glm::vec3> regVec3;

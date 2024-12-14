@@ -111,6 +111,8 @@ class MShaderController
 		void createMShaders();
 
 		void updateMVPVariables();
+
+		void parseHintAndCreateGradient(MShaderHintEnum in_enumValue);
 		
 		void updateAndapplyGradients(float in_ms);	// update all grandients, and fetch their updated Messages, so
 													// that the values in the controllerValueRegistry are updated appropriately.

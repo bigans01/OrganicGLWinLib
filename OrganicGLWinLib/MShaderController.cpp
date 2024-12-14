@@ -3,7 +3,9 @@
 
 MShaderController::MShaderController()
 {
-	mShaderCycler.setCatalogRef(&catalog);
+	mShaderCycler.setRefs(	&catalog,
+							&controllerValueRegistry,
+							&controllerMGCI);
 }
 
 MShaderController::~MShaderController()
@@ -346,16 +348,23 @@ void MShaderController::processShaderChangeRequests()
 			if (mShaderCycler.getNumberOfLoadedShaders() == 1)
 			{
 				std::cout << "Initial shader selected; ignoring transitional hint scan.";
+				// copy over uniform/other stored values from selected shader, into the controllerValueRegistry;
+				// gradients cannot be used when only one shader is in the mShaderCycler.
 			}
 
 			// ...but if we're not on the first, check the hints.
 			else if (mShaderCycler.getNumberOfLoadedShaders() == 2)
 			{
+				// copy over uniform/other stored values from selected shader, into the controllerValueRegistry;
+
+				// Whenever there are two shaders loaded in the mShaderCycler,
+				// we can attempt gradient transitioning.
+
 				std::cout << "!!! Scanning for hints." << std::endl;
 				auto transitionalHints = controllerHintIndexer.fetchTransitionalHints();
 				for (auto& currentHint : transitionalHints)
 				{
-					// each hint should be mapped to 1 gradient attempt.
+					parseHintAndCreateGradient(currentHint);
 				}
 			}
 		}
@@ -364,6 +373,30 @@ void MShaderController::processShaderChangeRequests()
 		// Once all is said and done, reset the flag, and nextShaderToSwitchTo value
 		nextShaderToSwitchTo = "";
 		shaderSwitchAttemptFlag = false;
+	}
+}
+
+void MShaderController::parseHintAndCreateGradient(MShaderHintEnum in_enumValue)
+{
+	// each hint should be mapped to 1 gradient attempt.
+	//
+	// If the gradient does not exist:
+	//	-Value A comes from the old shader, via getPreviousShaderRef.
+	//  -Value B comes from the new shader, via getTargetShaderRef.
+
+	// If the gradient DOES exist:
+	//  -Value A should come from the MShaderController's registry
+	//  -Value B comes from the new shader, via getTargetShaderRef.
+	//	-replace the old gradient of the same name with the new one.
+	
+
+	switch (in_enumValue)
+	{
+		case MShaderHintEnum::TRANSIT_CLEAR_COLOR:
+		{
+			std::cout << "!! Found TRANSIT_CLEAR_COLOR to use during transit..." << std::endl;
+			break;
+		}
 	}
 }
 
