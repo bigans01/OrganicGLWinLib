@@ -140,6 +140,7 @@ class MShaderController
 		int mainScreenHeight = 0;
 		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
+		float fullCircleRadians = 6.28319f;	// 360 degrees, represented in radians; aka a full cycle of 2pi.
 
 		// ***************************************************** Shader-related objects ************************************************************
 		MShaderCatalog catalog;		// contains and manages all usable MShaders
@@ -169,6 +170,21 @@ class MShaderController
 		ShaderMachineFeedback controllerMachineFeedback;
 		MBindingMap controllerBindings;				// binding map for use across different objects
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
+
+		// ***************************************************** Gradient forming activities ******************************************************
+		// A note for all gradients:
+		// 
+		// If the gradient does not exist:
+		//	-Value A comes from the old shader, via getPreviousShaderRef.
+		//  -Value B comes from the new shader, via getTargetShaderRef.
+
+		// If the gradient DOES exist:
+		//  -Value A should come from the MShaderController's registry
+		//  -Value B comes from the new shader, via getTargetShaderRef.
+		//	-replace the old gradient of the same name with the new one.
+		void formClearColorGradient();	// Attempts to create a background_clear_color gradient; both old and new shaders 
+										// must have a background_clear_color uniform value in their registries; should not create a gradient
+										// if the condition to do so is not met.
 
 };
 

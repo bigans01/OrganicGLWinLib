@@ -36,6 +36,41 @@ void GLUniformRegistry::insertEnclaveKey(std::string in_stringValue, EnclaveKeyD
 	regEnclaveKey[in_stringValue] = in_enclaveKey;
 }
 
+void GLUniformRegistry::deleteVec2(std::string in_stringValue)
+{
+	regVec2.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteVec3(std::string in_stringValue)
+{
+	regVec3.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteMat3(std::string in_stringValue)
+{
+	regMat3.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteMat4(std::string in_stringValue)
+{
+	regMat4.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteFloat(std::string in_stringValue)
+{
+	regFloat.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteInt(std::string in_stringValue)
+{
+	regInt.erase(in_stringValue);
+}
+
+void GLUniformRegistry::deleteEnclaveKey(std::string in_stringValue)
+{
+	regEnclaveKey.erase(in_stringValue);
+}
+
 glm::vec2 GLUniformRegistry::getVec2(std::string in_stringValue)
 {
 	glm::vec2 returnVec;

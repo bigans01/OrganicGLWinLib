@@ -41,6 +41,9 @@ class MShaderSelectionCycler
 
 		void updateControllerRegistryForNonexistentGradients(GLUniformRegistry* in_newShaderRegistryRef);	// update the controller registry, for all values found in the referenced
 																											// shader that don't already exist as gradients in the MShaderController.
+
+		void removeObsoleteValues();	// compare values in the old/former shader, to the new one that is in play; if the new one 
+										// doesn't utilize values from the old one, remove those.
 };
 
 #endif

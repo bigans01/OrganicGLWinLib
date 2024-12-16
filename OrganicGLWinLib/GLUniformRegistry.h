@@ -21,6 +21,15 @@ public:
 	void insertInt(std::string in_stringValue, int in_int);
 	void insertEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey);
 
+	// deletion functions
+	void deleteVec2(std::string in_stringValue);
+	void deleteVec3(std::string in_stringValue);
+	void deleteMat3(std::string in_stringValue);
+	void deleteMat4(std::string in_stringValue);
+	void deleteFloat(std::string in_stringValue);
+	void deleteInt(std::string in_stringValue);
+	void deleteEnclaveKey(std::string in_stringValue);
+
 
 	// retrieval functions
 	glm::vec2 getVec2(std::string in_stringValue);

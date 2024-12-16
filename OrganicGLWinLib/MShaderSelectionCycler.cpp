@@ -51,9 +51,8 @@ Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
 				// gather the soon-to-be old shader's preferred uniforms; erase them from the MShaderController's registry.
 				auto oldMShaderPreferredValues = tempPtr->getLocalValueRegistryRef();
 
-				// remove values found in the old shader's preferred registry, from the controller's registry;
-				// this needs to be done to ensure that the controller's registry is no longer using potentially unused values.
-				cyclerControllerRegistryRef->removeCommonValues(oldMShaderPreferredValues);
+				// values in the old shader, but not in the new shader, should be removed from the parent MShaderController's registry.
+				removeObsoleteValues();
 
 				// get the preferred uniforms from the new shader; apply these uniforms only if the gradients don't exist yet,
 				// as a gradient existing means that it is already operating on a value in the controller's registry. This will
@@ -154,6 +153,73 @@ void MShaderSelectionCycler::updateControllerRegistryForNonexistentGradients(GLU
 		if (!cyclerControllerMGCIndexRef->doesGradientExist(fetchedIntStringsIter))
 		{
 			cyclerControllerRegistryRef->insertInt(fetchedIntStringsIter, in_newShaderRegistryRef->getInt(fetchedIntStringsIter));
+		}
+	}
+}
+
+void MShaderSelectionCycler::removeObsoleteValues()
+{
+	// old/new shader pointers
+	auto oldShaderPtr = getPreviousShaderRef();
+	auto newShaderPtr = getTargetShaderRef();
+
+	// check vec2
+	for (auto& currentOldVec2 : oldShaderPtr->getLocalValueRegistryRef()->fetchRegVec2Names())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesVec2Exist(currentOldVec2))
+		{
+			cyclerControllerRegistryRef->deleteVec2(currentOldVec2);
+		}
+	}
+
+	// check vec3
+	for (auto& currentOldVec3 : oldShaderPtr->getLocalValueRegistryRef()->fetchRegVec3Names())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesVec3Exist(currentOldVec3))
+		{
+			cyclerControllerRegistryRef->deleteVec3(currentOldVec3);
+		}
+	}
+
+	// check mat3
+	for (auto& currentOldMat3 : oldShaderPtr->getLocalValueRegistryRef()->fetchRegMat3Names())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesMat3Exist(currentOldMat3))
+		{
+			cyclerControllerRegistryRef->deleteMat3(currentOldMat3);
+		}
+	}
+
+	// check mat4
+	for (auto& currentOldMat4 : oldShaderPtr->getLocalValueRegistryRef()->fetchRegMat4Names())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesMat4Exist(currentOldMat4))
+		{
+			cyclerControllerRegistryRef->deleteMat4(currentOldMat4);
+		}
+	}
+
+	// check float
+	for (auto& currentOldFloat : oldShaderPtr->getLocalValueRegistryRef()->fetchRegFloatNames())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesFloatExist(currentOldFloat))
+		{
+			cyclerControllerRegistryRef->deleteFloat(currentOldFloat);
+		}
+	}
+
+	// check int
+	for (auto& currentOldInt : oldShaderPtr->getLocalValueRegistryRef()->fetchRegIntNames())
+	{
+		// if it doesn't exist in the new shader, remove it from the cyclerControllerRegistry.
+		if (!newShaderPtr->getLocalValueRegistryRef()->doesIntExist(currentOldInt))
+		{
+			cyclerControllerRegistryRef->deleteInt(currentOldInt);
 		}
 	}
 }

@@ -347,7 +347,7 @@ void MShaderController::processShaderChangeRequests()
 			// there is no need to check transitional hints.
 			if (mShaderCycler.getNumberOfLoadedShaders() == 1)
 			{
-				std::cout << "Initial shader selected; ignoring transitional hint scan.";
+				std::cout << "Initial shader selected; ignoring transitional hint scan." << std::endl;
 				// copy over uniform/other stored values from selected shader, into the controllerValueRegistry;
 				// gradients cannot be used when only one shader is in the mShaderCycler.
 			}
@@ -356,6 +356,9 @@ void MShaderController::processShaderChangeRequests()
 			else if (mShaderCycler.getNumberOfLoadedShaders() == 2)
 			{
 				// copy over uniform/other stored values from selected shader, into the controllerValueRegistry;
+				std::cout << "########## TEST, getNumberOfLoadedShaders() ###########: "; ECBPolyPoint(controllerValueRegistry.getVec3("background_clear_color")).printPointCoords(); std::cout << std::endl;
+				std::cout << "## Old shader name: " << mShaderCycler.getPreviousShaderRef()->fetchMShaderName() << std::endl;
+				std::cout << "## New shader name: " << mShaderCycler.getTargetShaderRef()->fetchMShaderName() << std::endl;
 
 				// Whenever there are two shaders loaded in the mShaderCycler,
 				// we can attempt gradient transitioning.
@@ -395,8 +398,69 @@ void MShaderController::parseHintAndCreateGradient(MShaderHintEnum in_enumValue)
 		case MShaderHintEnum::TRANSIT_CLEAR_COLOR:
 		{
 			std::cout << "!! Found TRANSIT_CLEAR_COLOR to use during transit..." << std::endl;
+			formClearColorGradient();
 			break;
 		}
+	}
+}
+
+void MShaderController::formClearColorGradient()
+{
+	// Condition 1: If both the old and new shaders have the "background_clear_color" value in their uniforms,
+	// AND a gradient with that name doesn't exist, insert a finite gradient using the background colors of both the
+	// old and new shader.
+	if (
+		(mShaderCycler.getPreviousShaderRef()->getLocalValueRegistryRef()->doesVec3Exist("background_clear_color"))
+		&&
+		(mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->doesVec3Exist("background_clear_color"))
+		&&
+		(!controllerMGCI.doesGradientExist("background_clear_color"))
+	   )
+	{
+		Message finiteClearColor(MessageType::MSHADER_SETUP_FINITE_MGRADIENT,
+								int(MessageType::MGRADIENT_VEC3_INPUT),
+								"background_clear_color",	// must be named this
+								fullCircleRadians,	// 2 pi radians
+								2000.0f,			// cycle duration, in ms
+								1000.0f,			// finite time duration, in ms					
+								ECBPolyPoint(mShaderCycler.getPreviousShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color")),
+								ECBPolyPoint(mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color"))
+							);
+
+		std::cout << "!! Creating new background_clear_color gradient..." << std::endl;
+		auto bgColorA = mShaderCycler.getPreviousShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color");
+		std::cout << "Old background color: " << bgColorA.x << ", " << bgColorA.y << ", " << bgColorA.z << std::endl;
+		auto bgColorB = mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color");
+		std::cout << "New background color: " << bgColorB.x << ", " << bgColorB.y << ", " << bgColorB.z << std::endl;
+		insertNewGradient(finiteClearColor);
+	}
+
+	// Condition 2: If the new shader has a value of "background_clear_color" in it's uniform, AND the gradient already exists,
+	// use the existing background color sitting in this controller's registry as the start value, and the preferred background color of
+	// the new target MShader, and create a new gradient with those values.
+	else if
+	(
+		(mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->doesVec3Exist("background_clear_color"))
+		&&
+		(controllerMGCI.doesGradientExist("background_clear_color"))
+	)
+	{
+		Message finiteClearColor(MessageType::MSHADER_SETUP_FINITE_MGRADIENT,
+								int(MessageType::MGRADIENT_VEC3_INPUT),
+								"background_clear_color",	// must be named this
+								fullCircleRadians,	// 2 pi radians
+								2000.0f,			// cycle duration, in ms
+								1000.0f,			// finite time duration, in ms					
+								ECBPolyPoint(controllerValueRegistry.getVec3("background_clear_color")),
+								ECBPolyPoint(mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color"))
+							);
+
+		std::cout << "!! Updating existing background_clear_color gradient..." << std::endl;
+		auto bgColorA = controllerValueRegistry.getVec3("background_clear_color");
+		std::cout << "Old background color: " << bgColorA.x << ", " << bgColorA.y << ", " << bgColorA.z << std::endl;
+		auto bgColorB = mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color");
+		std::cout << "New background color: " << bgColorB.x << ", " << bgColorB.y << ", " << bgColorB.z << std::endl;
+		insertNewGradient(finiteClearColor);
 	}
 }
 
