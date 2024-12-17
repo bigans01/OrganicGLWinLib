@@ -327,7 +327,7 @@ void MShaderController::runTick()
 
 	calculatePassedTime();				// Step 2: fetch the total time that has elapsed, to use as a value for updateAndApplyGradients
 	updateMVPVariables();				// Step 3: Calculate any MVP matrices or other similiar values that have been setup
-	updateAndapplyGradients(millisecondsSinceLastTimestamp);		// Step 4: Update gradients, and apply them
+	updateAndapplyGradients(secondsSinceLastTimestamp * 1000);		// Step 4: Update gradients, and apply them (gradients work in milliseconds)
 	controllerMGCI.deleteExpiredFiniteGradients();		// Step 5: remove expired gradients.
 }
 
@@ -468,11 +468,11 @@ void MShaderController::formClearColorGradient()
 void MShaderController::calculatePassedTime()
 {
 	// Find what the current time is, and subtract the lastTimeStamp value from it, to get
-	// the updated value for millisecondsSinceLastTimestamp. Once calculated, set the lastTimeStamp = currentTimeStamp.
+	// the updated value for secondsSinceLastTimestamp. Once calculated, set the lastTimeStamp = currentTimeStamp.
 	//
 	// This function should be called every tick that the MShaderController is running.
 
-	currentTimeStamp = std::chrono::steady_clock::now();	
+	currentTimeStamp = glfwGetTime();
 
 	// If this the very first time this function is called, the timestamps will be equal;
 	// we must then set wasInitialTimeCalculated to true so that this doesn't happen again.
@@ -482,8 +482,13 @@ void MShaderController::calculatePassedTime()
 		wasInitialTimeCalculated = true;
 	}
 
-	millisecondsSinceLastTimestamp = std::chrono::duration_cast<std::chrono::milliseconds>(currentTimeStamp - lastTimeStamp).count();
+	secondsSinceLastTimestamp = float(currentTimeStamp - lastTimeStamp);
 	lastTimeStamp = currentTimeStamp;
+}
+
+void MShaderController::updateDirectionVector()
+{
+
 }
 
 void MShaderController::updateMVPVariables()

@@ -110,6 +110,7 @@ class MShaderController
 		void initializeMandatoryItems();	// setup GLFW, GLEW, and GLFWWindow, as well as other basic state info.
 		void createMShaders();
 
+		void updateDirectionVector();
 		void updateMVPVariables();
 
 		void parseHintAndCreateGradient(MShaderHintEnum in_enumValue);
@@ -150,9 +151,9 @@ class MShaderController
 		
 
 		// ***************************************************** Time objects and functions*********************************************************
-		std::chrono::steady_clock::time_point lastTimeStamp;		// the timestamp set in the previous call to calculatePassedTime
-		std::chrono::steady_clock::time_point currentTimeStamp;		// the current timestamp value
-		float millisecondsSinceLastTimestamp = 0.0f;	// the time difference between currentTimeStamp and lastTimeStamp; should be updated every tick.
+		double lastTimeStamp;		// the timestamp set in the previous call to calculatePassedTime
+		double currentTimeStamp;		// the current timestamp value
+		float secondsSinceLastTimestamp = 0.0f;	// the time difference between currentTimeStamp and lastTimeStamp; should be updated every tick.
 		void calculatePassedTime();	// update currentTimeStamp, millisecondsSinceLastTimestamp, and set lastTimeStamp to the value of currentTimeStamp after that
 									// calculation is done.
 
@@ -170,6 +171,16 @@ class MShaderController
 		ShaderMachineFeedback controllerMachineFeedback;
 		MBindingMap controllerBindings;				// binding map for use across different objects
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
+
+		// ***************************************************** Direction calculation members ****************************************************
+		float horizontalAngle = (3.14f * .75f) + 3.14f;
+																					// 3.14 = 0,0, 1
+																					// 3.14 * .75f = .7, 0, -.7
+																					// (3.14 * .75) + 3.14 = 
+		float verticalAngle = 0.0f;													// Initial vertical angle : none
+		float initialFoV = 45.0f;													// Initial Field of view
+		float speed = 10.0f;														// 3 units / second
+		float mouseSpeed = 0.005f;
 
 		// ***************************************************** Gradient forming activities ******************************************************
 		// A note for all gradients:
