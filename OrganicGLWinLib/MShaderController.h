@@ -25,6 +25,7 @@
 #include <chrono>
 #include "MGCIndex.h"
 #include "MShaderHintIndexer.h"
+#include "KeyPressTracker.h"
 
 /*
 
@@ -90,6 +91,7 @@ class MShaderController
 																		// controllerMGCI (object of MGCIndex)
 
 		void runTick();
+		bool checkIfRunning();
 
 	private:
 		void processShaderChangeRequests();	//	1.	check if there is a request to switch to a new MShader; if there is a request,
@@ -110,7 +112,9 @@ class MShaderController
 		void initializeMandatoryItems();	// setup GLFW, GLEW, and GLFWWindow, as well as other basic state info.
 		void createMShaders();
 
-		void updateDirectionVector();
+		void updateCameraDirectionAndPosition(bool in_imguiFocusedFlag);	// update the camera position, based off current direction and velocity;
+																			// also update the direction of the camera if the windows is focused, AND the mouse was moved around while in the window;
+																			// The bool input flag should represent if an ImGui object was focused during the frame.
 		void updateMVPVariables();
 
 		void parseHintAndCreateGradient(MShaderHintEnum in_enumValue);
@@ -157,6 +161,10 @@ class MShaderController
 		void calculatePassedTime();	// update currentTimeStamp, millisecondsSinceLastTimestamp, and set lastTimeStamp to the value of currentTimeStamp after that
 									// calculation is done.
 
+		// ***************************************************** Camera focus ***************************************************** 
+		bool wasFocusedPreviousFrame = false;
+		bool cameraBoundToMousePointer = true;
+
 		// ***************************************************** Gradient control ******************************************************************
 		MGCIndex controllerMGCI;	// stores and manages gradients that can be used by MShaderController
 
@@ -173,6 +181,13 @@ class MShaderController
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
 
 		// ***************************************************** Direction calculation members ****************************************************
+		glm::vec3 direction;	// direction camera is facing
+		glm::vec3 up;
+		glm::mat4 projection;	// (temporary) OpenGL projection matrix
+		glm::mat4 view;			// (temporary) OpenGL view matrix
+		glm::mat4 model;		// (temporary) OpenGL model matrix
+		glm::mat4 MVP;
+
 		float horizontalAngle = (3.14f * .75f) + 3.14f;
 																					// 3.14 = 0,0, 1
 																					// 3.14 * .75f = .7, 0, -.7
@@ -181,6 +196,13 @@ class MShaderController
 		float initialFoV = 45.0f;													// Initial Field of view
 		float speed = 10.0f;														// 3 units / second
 		float mouseSpeed = 0.005f;
+
+		// ***************************************************** Input control/callbacks **********************************************************
+		KeyPressTracker controllerInputTracker;
+		static void controllerKeyboardCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		bool continueRunning = true;
+
 
 		// ***************************************************** Gradient forming activities ******************************************************
 		// A note for all gradients:

@@ -138,6 +138,12 @@ void MShaderController::initializeMandatoryItems()
 	}
 	else { mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("GLEW setup FAILED."))); }
 
+	// keyboard and other feedbacks must be setup after GLFW/GLEW has been setup; attempting to do this
+	// on the constructor of this class would have no effect, as nothing would have been initialized yet before this
+	// function was called.
+	OrganicGLWinUtils::setGLFWInputMode(mainWindowPtr);		// set input mode for feedback from the keyboard
+	glfwSetWindowUserPointer(mainWindowPtr, this);			// required, before glfwGetWindowUserPointer is called
+	glfwSetKeyCallback(mainWindowPtr, controllerKeyboardCallbackWrapper);	// keyboard
 }
 
 void MShaderController::createMShaders()
@@ -320,6 +326,7 @@ void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
 
 void MShaderController::runTick()
 {
+	// ---------- Phase 1: Check for requests,  calculate passed time, update variables and gradients, reset shader feedback
 	processShaderChangeRequests();		// Step 1:	if attemptSwitchOnNextTick was called, attempt to switch
 										//			to the shader given by the current value of nextShaderToSwitchTo.
 										//		 	Check if there are any transitional hints to process as well, if the
@@ -329,6 +336,24 @@ void MShaderController::runTick()
 	updateMVPVariables();				// Step 3: Calculate any MVP matrices or other similiar values that have been setup
 	updateAndapplyGradients(secondsSinceLastTimestamp * 1000);		// Step 4: Update gradients, and apply them (gradients work in milliseconds)
 	controllerMGCI.deleteExpiredFiniteGradients();		// Step 5: remove expired gradients.
+
+	// ---------- Phase 2: Render non ImGui components (but do not swap buffers)
+	// TODO: This is where the currently selected MShader will be called upon to do its rendering, somehow.
+	
+	// ---------- Phase 3: Render ImGui components, process any clicks/interactions from ImGui
+	// TODO: Somehow: start a new ImGui frame, read feedback, then render ImGui
+
+	// ---------- Phase 4: swap the buffers
+	glfwSwapBuffers(mainWindowPtr);		// TEMPORARY: swap buffers to render a new frame; realistically, this will get done by the currently selected
+										// MShader, but this is just here for now.
+
+
+
+
+
+	// ----------- Phase 5: poll for input feedback events (i.e, from keyboard); take actions based off any input somehow.
+	glfwPollEvents();	// required, so that we may check for keyboard inputs and other similiar events that are waiting in the queue...
+	// TODO: need to read and process input feedback that occurred in this tick
 }
 
 void MShaderController::processShaderChangeRequests()
@@ -377,6 +402,39 @@ void MShaderController::processShaderChangeRequests()
 		nextShaderToSwitchTo = "";
 		shaderSwitchAttemptFlag = false;
 	}
+}
+
+void MShaderController::controllerKeyboardCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	std::cout << "!! Caling callback!" << std::endl;
+	static_cast<MShaderController*>(glfwGetWindowUserPointer(window))->controllerKeyboardCallback(window, key, scancode, action, mods);
+}
+
+void MShaderController::controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	std::cout << "!!! Found some input..." << std::endl;
+	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
+	{
+		//toggleCameraBoundToMousePointer();
+		std::cout << "!! Found condition to stop running." << std::endl;
+		continueRunning = false;
+	}
+
+	// new, for KeyPressTracker keyTracker:
+
+	if (action == GLFW_PRESS)
+	{
+		controllerInputTracker.insertCycle(key);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		controllerInputTracker.killCycle(key);
+	}
+}
+
+bool MShaderController::checkIfRunning()
+{
+	return continueRunning;
 }
 
 void MShaderController::parseHintAndCreateGradient(MShaderHintEnum in_enumValue)
@@ -486,8 +544,83 @@ void MShaderController::calculatePassedTime()
 	lastTimeStamp = currentTimeStamp;
 }
 
-void MShaderController::updateDirectionVector()
+void MShaderController::updateCameraDirectionAndPosition(bool in_imguiFocusedFlag)
 {
+	// This function should be setup similiar to 
+	// Get mouse position ShaderMachineBase::computeCameraDirectionAndPosition.
+	//
+	// It should be called immediately before the updateMVPVariables function.
+	//
+	// The in_imguiFocusedFlag is used to check if an imgui window is being focused, in which case
+	// we want to focus input on that object.
+	double xpos, ypos;
+	int isFocused = glfwGetWindowAttrib(mainWindowPtr, GLFW_FOCUSED);
+
+	// always set wasFocusedPreviousFrame to false if it isn't focused.
+	if (isFocused == 0)
+	{
+		wasFocusedPreviousFrame = false;
+	}
+
+	// do this check when the gets re-focused; i.e., the user clicks the window.
+	if
+	(
+		(isFocused == 1)
+		&&
+		(wasFocusedPreviousFrame == false)
+		//&&
+		//(cameraBoundToMousePointer == true)
+	)
+	{
+		glfwSetCursorPos(mainWindowPtr, mainScreenWidth / 2, mainScreenHeight / 2);
+		wasFocusedPreviousFrame = true;
+		cameraBoundToMousePointer = true;
+	}
+
+	// if the window is focused, and the camera is working with the mouse pointer,
+	// we must update it if there was any movement.
+	if
+	(
+		(isFocused == 1)
+		&&
+		(cameraBoundToMousePointer == true)
+	)
+	{
+		// For below/TODO: is this really necessary? can't we just do glfwSetCursorPos?
+		glfwGetCursorPos(mainWindowPtr, &xpos, &ypos);
+
+		// Reset mouse position for next frame
+		glfwSetCursorPos(mainWindowPtr, mainScreenWidth / 2, mainScreenHeight / 2);
+
+
+
+
+
+		//std::cout << "OpenGL is FOCUSED!" << std::endl;
+
+
+		// Compute new orientation
+		horizontalAngle += mouseSpeed * float(mainScreenWidth / 2 - xpos);
+		verticalAngle += mouseSpeed * float(mainScreenHeight / 2 - ypos);
+
+		// Direction : Spherical coordinates to Cartesian coordinates conversion
+		direction = glm::vec3(
+			cos(verticalAngle) * sin(horizontalAngle),
+			sin(verticalAngle),
+			cos(verticalAngle) * cos(horizontalAngle)
+		);
+	}
+
+	// Right vector
+	glm::vec3 right = glm::vec3(
+		sin(horizontalAngle - 3.14f / 2.0f),
+		0,
+		cos(horizontalAngle - 3.14f / 2.0f)
+	);
+
+	// Up vector
+	up = glm::cross(right, direction);
+
 
 }
 
