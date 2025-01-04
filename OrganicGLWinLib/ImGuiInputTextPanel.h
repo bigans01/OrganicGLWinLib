@@ -69,7 +69,7 @@ class ImGuiInputTextPanel
 
 			if (ImGui::IsWindowHovered() == true)
 			{
-				feedback.wasMouseInWindow = true;
+				feedback.wasMouseInImGuiObject = true;
 				feedback.mouseHoveredPanelName = panelName;
 			}
 

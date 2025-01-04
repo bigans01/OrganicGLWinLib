@@ -27,9 +27,9 @@ class ShaderMachineFeedback
 			}
 
 			// append mouse window flag
-			if (in_feedbackB.wasMouseInWindow == true)
+			if (in_feedbackB.wasMouseInImGuiObject == true)
 			{
-				wasMouseInWindow = true;
+				wasMouseInImGuiObject = true;
 				mouseHoveredPanelName = in_feedbackB.mouseHoveredPanelName;
 			}
 
@@ -65,7 +65,7 @@ class ShaderMachineFeedback
 			// check for hovering
 			if (in_buttonClickResult.wasWindowHovered == true)
 			{
-				wasMouseInWindow = true;
+				wasMouseInImGuiObject = true;
 				mouseHoveredPanelName = in_buttonClickResult.buttonPanelName;
 			}
 
@@ -90,7 +90,7 @@ class ShaderMachineFeedback
 			// check for hovering
 			if (in_windowFeedback.windowHovered == true)
 			{
-				wasMouseInWindow = true;
+				wasMouseInImGuiObject = true;
 				mouseHoveredPanelName = in_windowFeedback.windowHoveredName;
 			}
 
@@ -121,7 +121,7 @@ class ShaderMachineFeedback
 		ImGuiButtonClickResult buttonClickResult;
 		std::string mouseHoveredPanelName = "";
 		bool wasInputTextModified = false;		// if any input text was modified, set this value to true.
-		bool wasMouseInWindow = false;			// if a mosue was ever in a ImGui panel, window, etc...this should be set to true.
+		bool wasMouseInImGuiObject = false;			// if a mosue was ever in a ImGui panel, window, etc...this should be set to true.
 
 		bool wasAWindowFocused = false;
 		std::string focusedWindowName = "";
