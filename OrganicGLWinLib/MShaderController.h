@@ -26,6 +26,8 @@
 #include "MGCIndex.h"
 #include "MShaderHintIndexer.h"
 #include "KeyPressTracker.h"
+#include "OpenGLFeedbackListener.h"
+#include "GUIInteractionCondition.h"
 
 /*
 
@@ -198,6 +200,7 @@ class MShaderController
 		float mouseSpeed = 0.005f;
 
 		// ***************************************************** Input control/callbacks **********************************************************
+		OpenGLFeedbackListener inputListener;
 		KeyPressTracker controllerInputTracker;
 		static void controllerKeyboardCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

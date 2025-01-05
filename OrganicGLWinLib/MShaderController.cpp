@@ -3,9 +3,15 @@
 
 MShaderController::MShaderController()
 {
-	mShaderCycler.setRefs(	&catalog,
-							&controllerValueRegistry,
-							&controllerMGCI);
+	mShaderCycler.setRefs(&catalog,
+		&controllerValueRegistry,
+		&controllerMGCI);
+
+	inputListener.initializeFeedbackListener(&controllerInputTracker, &controllerMachineFeedback);
+
+	// trigger setup, basic testing
+	inputListener.createTrigger("LCTRL", Message(MessageType::NOVAL), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_LEFT_CONTROL);
+	inputListener.createTrigger("LSHIFT", Message(MessageType::NOVAL), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_LEFT_SHIFT);
 }
 
 MShaderController::~MShaderController()
@@ -353,7 +359,23 @@ void MShaderController::runTick()
 
 	// ----------- Phase 5: poll for input feedback events (i.e, from keyboard); take actions based off any input somehow.
 	glfwPollEvents();	// required, so that we may check for keyboard inputs and other similiar events that are waiting in the queue...
+
+	// 5.1: Feedback gathering.
+	controllerInputTracker.resetChangeState();			// required: reset change state back to false
+	controllerInputTracker.flagStillPressedStates();	// check for inputs still pressed from the previous tick.
+	controllerInputTracker.handleKeyPressTransfers(false);	// allow keyboard input as feedback, if clicks weren't made in ImGui
+	controllerInputTracker.destroyCyclesAtEndOfLife();	// destroy inputs no longer being pressed, before calling scanForTriggerRemovalConditions below.
+	inputListener.scanForTriggerFiringConditions();		// look for fired fired triggers
+	inputListener.scanForTriggerRemovalConditions();
+	controllerInputTracker.destroyOneoffs();			// destroy one off inputs, such as mouse scroll
+
+	// 5.2: checking the contents of inputListener.firedTriggerMessages, and
+	// other relevant objects should be done here
 	// TODO: need to read and process input feedback that occurred in this tick
+	auto fetchedKeyboardMessages = inputListener.fetchTriggerMessages();
+
+	// 5.3: cleanup / erase the feedback queues in the inputListener
+	inputListener.clearFeedbackMessages();
 }
 
 void MShaderController::processShaderChangeRequests()

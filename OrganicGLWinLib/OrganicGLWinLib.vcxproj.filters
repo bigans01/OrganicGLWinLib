@@ -310,6 +310,12 @@
     <Filter Include="Source Files\MShaderController\MGradientBase">
       <UniqueIdentifier>{de3ba2f5-37f6-466e-9ebd-6ceeaa7f1473}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\OpenGLFeedbackListener">
+      <UniqueIdentifier>{9ea5c08f-af12-4c4d-870e-1e8f5d6ba2a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGLFeedbackListener">
+      <UniqueIdentifier>{34c687a0-26f2-48c7-ae48-fbcccba66bb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1554,6 +1560,15 @@
     <ClInclude Include="MSBasicGrayscale.h">
       <Filter>Header Files\MShaderController\MShader</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGLFeedbackListener.h">
+      <Filter>Header Files\OpenGLFeedbackListener</Filter>
+    </ClInclude>
+    <ClInclude Include="InputTrigger.h">
+      <Filter>Header Files\OpenGLFeedbackListener</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIInteractionCondition.h">
+      <Filter>Header Files\OpenGLFeedbackListener</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2227,6 +2242,12 @@
     </ClCompile>
     <ClCompile Include="MSBasicGrayscale.cpp">
       <Filter>Source Files\MShaderController\MShader</Filter>
+    </ClCompile>
+    <ClCompile Include="InputTrigger.cpp">
+      <Filter>Source Files\OpenGLFeedbackListener</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGLFeedbackListener.cpp">
+      <Filter>Source Files\OpenGLFeedbackListener</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

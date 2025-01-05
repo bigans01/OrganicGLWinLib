@@ -80,6 +80,7 @@ class KeyPressTracker
 
 	private:
 		friend class ShaderMachineBase;
+		friend class MShaderController;
 		template<typename FirstInput, typename ...RemainingInputs> int incrementInputCount(int in_incrementValue, FirstInput && first, RemainingInputs && ...remaining)
 		{
 			int currentValue = in_incrementValue + 1;

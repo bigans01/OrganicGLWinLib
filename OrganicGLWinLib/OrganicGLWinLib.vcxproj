@@ -184,9 +184,11 @@
     <ClInclude Include="GLUniformRequest.h" />
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
+    <ClInclude Include="GUIInteractionCondition.h" />
     <ClInclude Include="HashedSTriangleLine.h" />
     <ClInclude Include="HashedSTriangleLineCounter.h" />
     <ClInclude Include="ImGuiWindowFeedback.h" />
+    <ClInclude Include="InputTrigger.h" />
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="MShaderHintIndexer.h" />
     <ClInclude Include="MShaderSelectionCycler.h" />
     <ClInclude Include="MVec3Gradient.h" />
+    <ClInclude Include="OpenGLFeedbackListener.h" />
     <ClInclude Include="RenderablePrimitiveContainer.h" />
     <ClInclude Include="InvalidCleaveSequences.h" />
     <ClInclude Include="NegXFaceResolver.h" />
@@ -589,6 +592,7 @@
     <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
     <ClCompile Include="HashedSTriangleLine.cpp" />
     <ClCompile Include="HashedSTriangleLineCounter.cpp" />
+    <ClCompile Include="InputTrigger.cpp" />
     <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp" />
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp" />
@@ -607,6 +611,7 @@
     <ClCompile Include="NegYFaceResolver.cpp" />
     <ClCompile Include="NegZFaceResolver.cpp" />
     <ClCompile Include="MShaderController.cpp" />
+    <ClCompile Include="OpenGLFeedbackListener.cpp" />
     <ClCompile Include="PosXFaceResolver.cpp" />
     <ClCompile Include="PosYFaceResolver.cpp" />
     <ClCompile Include="PosZFaceResolver.cpp" />
