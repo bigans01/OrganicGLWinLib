@@ -4,16 +4,34 @@
 bool MGCIndex::insertCyclicalGradient(std::string in_gradientName, 
 									  Message in_cyclicalGradientMessage,
 									  float in_singleCycleInPi,
-									  float in_piDivisorMs)
+									  float in_piDivisorMs,
+									  bool in_overwriteExistingFlag)
 {
 	bool wasInserted = false;
-	auto gradientFinder = gradientControllerMap.find(in_gradientName);
-	if (gradientFinder == gradientControllerMap.end())	// it wasn't found, insert.
+
+	switch (in_overwriteExistingFlag)
 	{
-		MGradientController newController(in_cyclicalGradientMessage, in_singleCycleInPi, in_piDivisorMs);
-		gradientControllerMap[in_gradientName] = newController;
-		wasInserted = true;
+		case false:
+		{
+			auto gradientFinder = gradientControllerMap.find(in_gradientName);
+			if (gradientFinder == gradientControllerMap.end())	// it wasn't found, insert.
+			{
+				MGradientController newController(in_cyclicalGradientMessage, in_singleCycleInPi, in_piDivisorMs);
+				gradientControllerMap[in_gradientName] = newController;
+				wasInserted = true;
+			}
+			break;
+		}
+
+		case true:
+		{
+			MGradientController newController(in_cyclicalGradientMessage, in_singleCycleInPi, in_piDivisorMs);
+			gradientControllerMap[in_gradientName] = newController;
+			wasInserted = true;
+			break;
+		}
 	}
+
 	return wasInserted;
 }
 
@@ -21,16 +39,34 @@ bool MGCIndex::insertFiniteGradient(std::string in_gradientName,
 									Message in_finiteGradientMessage, 
 									float in_singleCycleInPi,
 									float in_piDivisorMs,
-									float in_finiteDuration)
+									float in_finiteDuration,
+									bool in_overwriteExistingFlag)
 {
 	bool wasInserted = false;
-	auto gradientFinder = gradientControllerMap.find(in_gradientName);
-	if (gradientFinder == gradientControllerMap.end())	// it wasn't found, insert.
+
+	switch (in_overwriteExistingFlag)
 	{
-		MGradientController newController(in_finiteGradientMessage, in_singleCycleInPi, in_piDivisorMs, in_finiteDuration);
-		gradientControllerMap[in_gradientName] = newController;
-		wasInserted = true;
+		case false:
+		{
+			auto gradientFinder = gradientControllerMap.find(in_gradientName);
+			if (gradientFinder == gradientControllerMap.end())	// it wasn't found, insert.
+			{
+				MGradientController newController(in_finiteGradientMessage, in_singleCycleInPi, in_piDivisorMs, in_finiteDuration);
+				gradientControllerMap[in_gradientName] = newController;
+				wasInserted = true;
+			}
+			break;
+		}
+
+		case true:
+		{
+			MGradientController newController(in_finiteGradientMessage, in_singleCycleInPi, in_piDivisorMs, in_finiteDuration);
+			gradientControllerMap[in_gradientName] = newController;
+			wasInserted = true;
+			break;
+		}
 	}
+
 	return wasInserted;
 }
 

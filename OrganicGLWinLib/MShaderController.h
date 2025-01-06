@@ -88,9 +88,11 @@ class MShaderController
 		// Information queue printing/fetching
 		void writeOutInformationalMessages();	// write any informational Messages in the mShaderSetupQueue to std::cout.
 
-		void insertNewGradient(Message in_gradientInsertionMessage);	// uses either a Message of the type MSHADER_SETUP_CYCLICAL_MGRADIENT
-																		// or MSHADER_SETUP_FINITE_MGRADIENT to create an MGRADIENT and insert it into the 
-																		// controllerMGCI (object of MGCIndex)
+		void insertNewGradient(Message in_gradientInsertionMessage,		// uses either a Message of the type MSHADER_SETUP_CYCLICAL_MGRADIENT
+							  bool in_overwriteGradientFlag);			// or MSHADER_SETUP_FINITE_MGRADIENT to create an MGRADIENT and insert it into the 
+																		// controllerMGCI (object of MGCIndex); the bool value indicates whether or not
+																		// the gradient should be overwritten if it already exists.
+																		
 
 		void runTick();
 		bool checkIfRunning();
@@ -202,9 +204,11 @@ class MShaderController
 		// ***************************************************** Input control/callbacks **********************************************************
 		OpenGLFeedbackListener inputListener;
 		KeyPressTracker controllerInputTracker;
+		bool continueRunning = true;
 		static void controllerKeyboardCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		bool continueRunning = true;
+		void processInputFeedback(std::queue<Message> in_feedbackQueue);	// designed to analyze the feedback queue that is contained within the inputListener,
+																			// and potentially perform an action based on that Message. should be run every tick
 
 
 		// ***************************************************** Gradient forming activities ******************************************************

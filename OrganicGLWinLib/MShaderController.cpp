@@ -12,6 +12,10 @@ MShaderController::MShaderController()
 	// trigger setup, basic testing
 	inputListener.createTrigger("LCTRL", Message(MessageType::NOVAL), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_LEFT_CONTROL);
 	inputListener.createTrigger("LSHIFT", Message(MessageType::NOVAL), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_LEFT_SHIFT);
+
+	// testing only: use J and K keys to dynamically switch between MShaders at runtime.
+	inputListener.createTrigger("SWITCH_TO_GRAYSCALE", Message(MessageType::MSHADER_SWITCH_SHADER_NAME, "MSBasicGrayscale"), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_J);
+	inputListener.createTrigger("SWITCH_TO_MSBASICCOMPUTE", Message(MessageType::MSHADER_SWITCH_SHADER_NAME, "MSBasicCompute"), GUIInteractionCondition::NOT_DEPENDENT, GLFW_KEY_K);
 }
 
 MShaderController::~MShaderController()
@@ -227,7 +231,7 @@ void MShaderController::writeOutInformationalMessages()
 }
 
 
-void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
+void MShaderController::insertNewGradient(Message in_gradientInsertionMessage, bool in_overwriteGradientFlag)
 {
 	// Open Message; read the enum'd int value
 	in_gradientInsertionMessage.open();
@@ -312,7 +316,8 @@ void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
 			controllerMGCI.insertCyclicalGradient(gradientName,
 												messageForMGC,
 												singleCyclePiValue,
-												singleCycleDivisorMs);
+												singleCycleDivisorMs, 
+												in_overwriteGradientFlag);
 			break;
 		}
 
@@ -323,7 +328,8 @@ void MShaderController::insertNewGradient(Message in_gradientInsertionMessage)
 												messageForMGC,
 												singleCyclePiValue,
 												singleCycleDivisorMs, 
-												cycleDuration);
+												cycleDuration,
+												in_overwriteGradientFlag);
 
 			break;
 		}
@@ -373,9 +379,32 @@ void MShaderController::runTick()
 	// other relevant objects should be done here
 	// TODO: need to read and process input feedback that occurred in this tick
 	auto fetchedKeyboardMessages = inputListener.fetchTriggerMessages();
+	processInputFeedback(fetchedKeyboardMessages);
 
 	// 5.3: cleanup / erase the feedback queues in the inputListener
 	inputListener.clearFeedbackMessages();
+}
+
+void MShaderController::processInputFeedback(std::queue<Message> in_feedbackQueue)
+{
+	while (!in_feedbackQueue.empty())
+	{
+		Message currentMessage = in_feedbackQueue.front();
+		switch (currentMessage.messageType) 
+		{
+			// Below: make an attempt to switch to the designated MShader on the next tick.
+			case MessageType::MSHADER_SWITCH_SHADER_NAME:
+			{
+				currentMessage.open();
+				std::string shaderName = currentMessage.readString();
+				std::cout << "!!! Found shader name for attempted shader switch: " << shaderName << std::endl;
+				attemptSwitchOnNextTick(shaderName);
+				break;
+			}
+		}
+
+		in_feedbackQueue.pop();
+	}
 }
 
 void MShaderController::processShaderChangeRequests()
@@ -512,7 +541,7 @@ void MShaderController::formClearColorGradient()
 		std::cout << "Old background color: " << bgColorA.x << ", " << bgColorA.y << ", " << bgColorA.z << std::endl;
 		auto bgColorB = mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color");
 		std::cout << "New background color: " << bgColorB.x << ", " << bgColorB.y << ", " << bgColorB.z << std::endl;
-		insertNewGradient(finiteClearColor);
+		insertNewGradient(finiteClearColor, false);
 	}
 
 	// Condition 2: If the new shader has a value of "background_clear_color" in it's uniform, AND the gradient already exists,
@@ -525,6 +554,7 @@ void MShaderController::formClearColorGradient()
 		(controllerMGCI.doesGradientExist("background_clear_color"))
 	)
 	{
+
 		Message finiteClearColor(MessageType::MSHADER_SETUP_FINITE_MGRADIENT,
 								int(MessageType::MGRADIENT_VEC3_INPUT),
 								"background_clear_color",	// must be named this
@@ -540,7 +570,14 @@ void MShaderController::formClearColorGradient()
 		std::cout << "Old background color: " << bgColorA.x << ", " << bgColorA.y << ", " << bgColorA.z << std::endl;
 		auto bgColorB = mShaderCycler.getTargetShaderRef()->getLocalValueRegistryRef()->getVec3("background_clear_color");
 		std::cout << "New background color: " << bgColorB.x << ", " << bgColorB.y << ", " << bgColorB.z << std::endl;
-		insertNewGradient(finiteClearColor);
+
+		/*
+		int someVal = 3;
+		std::cout << "FOUND EXISTING COLOR GRADIENT TO UPDATE; Enter number to continue. " << std::endl;
+		std::cin >> someVal;
+		*/
+
+		insertNewGradient(finiteClearColor, true);	// the second argument needs to be true, to overwrite hte existing gradient.
 	}
 }
 
