@@ -192,7 +192,10 @@
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
-    <ClInclude Include="MBindingMap.h" />
+    <ClInclude Include="MAPIObjectData.h" />
+    <ClInclude Include="MAPIObjectManager.h" />
+    <ClInclude Include="MAPIObjectRequest.h" />
+    <ClInclude Include="MAPIObjectType.h" />
     <ClInclude Include="MGCIndex.h" />
     <ClInclude Include="MGradientBase.h" />
     <ClInclude Include="MGradientController.h" />
@@ -596,7 +599,7 @@
     <ClCompile Include="LocalizedGBufferComputeLoaderGear.cpp" />
     <ClCompile Include="LocalizedHighlighterGearT1.cpp" />
     <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp" />
-    <ClCompile Include="MBindingMap.cpp" />
+    <ClCompile Include="MAPIObjectManager.cpp" />
     <ClCompile Include="MGCIndex.cpp" />
     <ClCompile Include="MGradientController.cpp" />
     <ClCompile Include="MPointGradient.cpp" />

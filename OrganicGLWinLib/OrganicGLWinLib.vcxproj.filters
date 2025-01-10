@@ -316,6 +316,12 @@
     <Filter Include="Source Files\OpenGLFeedbackListener">
       <UniqueIdentifier>{34c687a0-26f2-48c7-ae48-fbcccba66bb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MShaderController\MBinding">
+      <UniqueIdentifier>{be129f42-984c-409a-9bf1-6fa96b8a159c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MBinding">
+      <UniqueIdentifier>{91a22478-87d1-4ad9-9c60-870ff9cbffa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1539,9 +1545,6 @@
     <ClInclude Include="MGradientController.h">
       <Filter>Header Files\MShaderController</Filter>
     </ClInclude>
-    <ClInclude Include="MBindingMap.h">
-      <Filter>Header Files\MShaderController</Filter>
-    </ClInclude>
     <ClInclude Include="MSBasicCompute.h">
       <Filter>Header Files\MShaderController\MShader</Filter>
     </ClInclude>
@@ -1568,6 +1571,18 @@
     </ClInclude>
     <ClInclude Include="GUIInteractionCondition.h">
       <Filter>Header Files\OpenGLFeedbackListener</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectManager.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectData.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectType.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectRequest.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2222,9 +2237,6 @@
     <ClCompile Include="MShaderBase.cpp">
       <Filter>Source Files\MShaderController\MShader</Filter>
     </ClCompile>
-    <ClCompile Include="MBindingMap.cpp">
-      <Filter>Source Files\MShaderController</Filter>
-    </ClCompile>
     <ClCompile Include="MSBasicCompute.cpp">
       <Filter>Source Files\MShaderController\MShader</Filter>
     </ClCompile>
@@ -2248,6 +2260,9 @@
     </ClCompile>
     <ClCompile Include="OpenGLFeedbackListener.cpp">
       <Filter>Source Files\OpenGLFeedbackListener</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPIObjectManager.cpp">
+      <Filter>Source Files\MShaderController\MBinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

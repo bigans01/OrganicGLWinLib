@@ -14,7 +14,7 @@
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
-#include "MBindingMap.h"
+#include "MAPIObjectManager.h"
 
 #include "MSBasicCompute.h"
 #include "MSBasicGrayscale.h"
@@ -181,7 +181,10 @@ class MShaderController
 		ImGuiSliderFloatPanelContainer controllerSliderPanelContainer;
 		ImGuiInputTextPanelContainer controllerInputPanelContainer;
 		ShaderMachineFeedback controllerMachineFeedback;
-		MBindingMap controllerBindings;				// binding map for use across different objects
+
+		MAPIObjectManager controllerBindings;				// binding map for use across different objects; this is intended to store metadata such as buffer, texture, VAO IDs;
+													// this member should be shared across all MShader objects, so that they may reference it at any time to get these appropriate values.
+
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
 
 		// ***************************************************** Direction calculation members ****************************************************
@@ -200,6 +203,10 @@ class MShaderController
 		float initialFoV = 45.0f;													// Initial Field of view
 		float speed = 10.0f;														// 3 units / second
 		float mouseSpeed = 0.005f;
+
+		// ***************************************************** Binding and Component handling ***************************************************
+		void processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess);	// attempt to create an API resource, from the given request.
+		void createControllerBuffer(std::string in_bufferName);			// used when MAPIObjectType::BUFFER is detected in processAPIObjectRequest.
 
 		// ***************************************************** Input control/callbacks **********************************************************
 		OpenGLFeedbackListener inputListener;

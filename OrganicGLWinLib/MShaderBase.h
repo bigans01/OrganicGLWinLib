@@ -14,8 +14,8 @@
 #include "ImGuiSliderFloatPanelContainer.h"
 #include "ImGuiInputTextPanelContainer.h"
 #include "ShaderMachineFeedback.h"
-#include "MBindingMap.h"
-//#include "GLUniformRegistry.h"
+#include "MAPIObjectManager.h"
+#include "MAPIObjectRequest.h"
 
 /*
 
@@ -32,9 +32,11 @@ class MShaderBase
 			ImGuiSliderFloatPanelContainer* in_parentSliderPanelContainerPtr,
 			ImGuiInputTextPanelContainer* in_parentInputPanelContainerPtr,
 			ShaderMachineFeedback* in_parentMachineFeedbackPtr,
-			MBindingMap* in_parentBindingMapPtr,
+			MAPIObjectManager* in_parentBindingMapPtr,
 			GLUniformRegistry* in_parentValueRegistryPtr
 		);
+
+		std::vector<MAPIObjectRequest> fetchMShaderBindingRequests();	// should be called after 
 
 		std::string fetchMShaderName();	
 		GLUniformRegistry* getLocalValueRegistryRef();	// get a ref to mShaderLocalValueRegistry;
@@ -42,9 +44,11 @@ class MShaderBase
 														// of certain uniforms, or other similiar operations.
 
 		// Below: should be called after setSharedObjectPointers above
-		virtual void setupMShaderRequestsAndName() = 0;		// create strings for expected bindings (bindingRequests), etc
+		virtual void setupMShaderRequestsAndName() = 0;		// set the shader name, create MAPIObjectRequest objects for expected bindings (bindingRequests), 
+															// required uniform registry variables, etc.
+															
 		virtual Message checkRequiredBindings() = 0;	// should be called after requested bindings have been sent to an instance that is a child of this class;
-														// it should analyze the contents of the referenced MBindingMap (parentBindingMapPtr) to see if 
+														// it should analyze the contents of the referenced MAPIObjectManager (parentBindingMapPtr) to see if 
 														// the expected bindings are available.
 
 	protected:
@@ -53,12 +57,12 @@ class MShaderBase
 		ImGuiSliderFloatPanelContainer* parentSliderPanelContainerPtr  = nullptr;
 		ImGuiInputTextPanelContainer* parentInputPanelContainerPtr = nullptr;
 		ShaderMachineFeedback* parentMachineFeedbackPtr = nullptr;
-		MBindingMap* parentBindingMapPtr = nullptr;
+		MAPIObjectManager* parentBindingMapPtr = nullptr;
 		GLUniformRegistry* parentValueRegistryPtr = nullptr;
 
 		std::string mShaderName = "";	// must be set by child class
 
-		std::vector<std::string> bindingRequests;	// a vector that contains the names of requested bindings
+		std::vector<MAPIObjectRequest> bindingRequests;	// a vector that contains the names of requested bindings
 
 		GLUniformRegistry mShaderLocalValueRegistry;	// will store the "preferred" uniform/local values that the
 														// children of this class will want; each child class must manually

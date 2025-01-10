@@ -179,6 +179,13 @@ void MShaderController::createMShaders()
 
 					catalog.getShaderRef("MSBasicCompute")->setupMShaderRequestsAndName();
 					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
+
+					// Fetch the required binding requests, and procese each one.
+					auto fetchedBindingRequests = catalog.getShaderRef("MSBasicCompute")->fetchMShaderBindingRequests();
+					for (auto& currentRequest : fetchedBindingRequests)
+					{
+						processAPIObjectRequest(currentRequest);
+					}
 				}
 				else
 				{
@@ -203,6 +210,13 @@ void MShaderController::createMShaders()
 														);
 					catalog.getShaderRef("MSBasicGrayscale")->setupMShaderRequestsAndName();
 					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicGrayscale...")));
+
+					// Fetch the required binding requests, and procese each one.
+					auto fetchedBindingRequests = catalog.getShaderRef("MSBasicGrayscale")->fetchMShaderBindingRequests();
+					for (auto& currentRequest : fetchedBindingRequests)
+					{
+						processAPIObjectRequest(currentRequest);
+					}
 				}
 				else
 				{
@@ -213,6 +227,44 @@ void MShaderController::createMShaders()
 			};
 		}
 		mShaderSetupQueue.pop();
+	}
+}
+
+void MShaderController::processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess)
+{
+	std::cout << "!!! calling processAPIObjectRequest..." << std::endl;
+	Message bindingProcessingResult(MessageType::MSHADER_INFO);
+	
+	switch (in_bindingRequestToProcess.getBindingRequestType())
+	{
+		case MAPIObjectType::BUFFER:
+		{
+			// create a new buffer, get its bound value and put into an MAPIObjectData, using MAPIObjectType::BUFFER, 
+			//																	 in_bindingRequestToProcess.getBindingRequestName(),
+			//																	 and a Message containing the int of the value to store.
+			createControllerBuffer(in_bindingRequestToProcess.getBindingRequestName());
+			break;
+		}
+	}
+	
+}
+
+void MShaderController::createControllerBuffer(std::string in_bufferName)
+{
+	if (!controllerBindings.doesBindingExist(MAPIObjectType::BUFFER, in_bufferName))
+	{
+		MAPIObjectData newBufferBinding(MAPIObjectType::BUFFER, in_bufferName, Message(MessageType::NOVAL));
+
+		//std::cout << "!! Attempting buffer binding insert..." << std::endl;
+		auto insertionResult = controllerBindings.attemptBindingInsert(newBufferBinding);
+		if (insertionResult)
+		{
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Created and bound new buffer: " + in_bufferName)));
+		}
+	}
+	else
+	{
+		mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Buffer already existed/bound: " + in_bufferName)));
 	}
 }
 

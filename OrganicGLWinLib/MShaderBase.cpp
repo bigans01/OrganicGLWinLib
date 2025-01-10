@@ -5,7 +5,7 @@ void MShaderBase::setSharedObjectPointers(ImGuiButtonPanelContainer* in_parentBu
 	ImGuiSliderFloatPanelContainer* in_parentSliderPanelContainerRef,
 	ImGuiInputTextPanelContainer* in_parentInputPanelContainerRef,
 	ShaderMachineFeedback* in_parentMachineFeedbackRef,
-	MBindingMap* in_parentBindingMapPtr,
+	MAPIObjectManager* in_parentBindingMapPtr,
 	GLUniformRegistry* in_parentValueRegistryPtr
 )
 {
@@ -15,6 +15,11 @@ void MShaderBase::setSharedObjectPointers(ImGuiButtonPanelContainer* in_parentBu
 	parentMachineFeedbackPtr = in_parentMachineFeedbackRef;
 	parentBindingMapPtr = in_parentBindingMapPtr;
 	parentValueRegistryPtr = in_parentValueRegistryPtr;
+}
+
+std::vector<MAPIObjectRequest> MShaderBase::fetchMShaderBindingRequests()
+{
+	return bindingRequests;
 }
 
 std::string MShaderBase::fetchMShaderName()
