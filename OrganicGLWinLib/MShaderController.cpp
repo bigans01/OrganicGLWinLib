@@ -161,71 +161,55 @@ void MShaderController::createMShaders()
 	while (!mShaderSetupQueue.empty())
 	{
 		auto currentShaderMessage = mShaderSetupQueue.front();
+
+		std::string insertAttemptShaderName = "";
+		bool wasInsertSuccessful = false;
 		switch (currentShaderMessage.messageType)
 		{
-			// Basic compute shader
+			// For MSBasicCompute shader attempt
 			case MessageType::MSHADER_CREATE_MSBASICCOMPUTE:
 			{
-				// Attempt to insert, only bother continuing if true.
-				if (catalog.insertMShader("MSBasicCompute", std::move(std::unique_ptr<MShaderBase>(new MSBasicCompute()))))
-				{
-					catalog.getShaderRef("MSBasicCompute")->setSharedObjectPointers(&controllerButtonPanelContainer,
-															&controllerSliderPanelContainer,
-															&controllerInputPanelContainer,
-															&controllerMachineFeedback,
-															&controllerBindings,
-															&controllerValueRegistry
-														);
-
-					catalog.getShaderRef("MSBasicCompute")->setupMShaderRequestsAndName();
-					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicCompute...")));
-
-					// Fetch the required binding requests, and procese each one.
-					auto fetchedBindingRequests = catalog.getShaderRef("MSBasicCompute")->fetchMShaderBindingRequests();
-					for (auto& currentRequest : fetchedBindingRequests)
-					{
-						processAPIObjectRequest(currentRequest);
-					}
-				}
-				else
-				{
-					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create MSBasicCompute; ...did it already exist?")));
-				}
+				insertAttemptShaderName = "MSBasicCompute";
+				wasInsertSuccessful = catalog.insertMShader(insertAttemptShaderName, std::move(std::unique_ptr<MShaderBase>(new MSBasicCompute())));
 				break;
-			};
+			}
 
-			// Grayscale shader 
+			// For MSBasicGrayscale shader attempt
 			case MessageType::MSHADER_CREATE_MSBASICGRAYSCALE:
 			{
-				// Attempt to insert, only bother continuing if true.
-				std::cout << "!! Found MessageType::MSHADER_CREATE_MSBASICGRAYSCALE; will attempt grayscale shader creation." << std::endl;
-				if (catalog.insertMShader("MSBasicGrayscale", std::move(std::unique_ptr<MShaderBase>(new MSBasicGrayscale()))))
-				{
-					catalog.getShaderRef("MSBasicGrayscale")->setSharedObjectPointers(&controllerButtonPanelContainer,
-															&controllerSliderPanelContainer,
-															&controllerInputPanelContainer,
-															&controllerMachineFeedback,
-															&controllerBindings,
-															&controllerValueRegistry
-														);
-					catalog.getShaderRef("MSBasicGrayscale")->setupMShaderRequestsAndName();
-					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on MSBasicGrayscale...")));
-
-					// Fetch the required binding requests, and procese each one.
-					auto fetchedBindingRequests = catalog.getShaderRef("MSBasicGrayscale")->fetchMShaderBindingRequests();
-					for (auto& currentRequest : fetchedBindingRequests)
-					{
-						processAPIObjectRequest(currentRequest);
-					}
-				}
-				else
-				{
-					mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create MSBasicGrayscale; ...did it already exist?")));
-				}
-
+				insertAttemptShaderName = "MSBasicGrayscale";
+				wasInsertSuccessful = catalog.insertMShader(insertAttemptShaderName, std::move(std::unique_ptr<MShaderBase>(new MSBasicGrayscale())));
 				break;
-			};
+			}
 		}
+
+		// Only bother continuing the initialization of the shader, if we know for a fact that it was inserted into the catalog.
+		if (wasInsertSuccessful)
+		{
+			std::cout << "Attempting creation of " + insertAttemptShaderName + " MShader. " << std::endl;
+			catalog.getShaderRef(insertAttemptShaderName)->setSharedObjectPointers(&controllerButtonPanelContainer,
+				&controllerSliderPanelContainer,
+				&controllerInputPanelContainer,
+				&controllerMachineFeedback,
+				&controllerBindings,
+				&controllerValueRegistry
+			);
+
+			catalog.getShaderRef(insertAttemptShaderName)->setupMShaderRequestsAndName();
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on " + insertAttemptShaderName + "...")));
+
+			// Fetch the required binding requests, and procese each one.
+			auto fetchedBindingRequests = catalog.getShaderRef(insertAttemptShaderName)->fetchMShaderBindingRequests();
+			for (auto& currentRequest : fetchedBindingRequests)
+			{
+				processAPIObjectRequest(currentRequest);
+			}
+		}
+		else
+		{
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Failed to create " + insertAttemptShaderName +  "; ...did it already exist?")));
+		}
+
 		mShaderSetupQueue.pop();
 	}
 }
