@@ -26,9 +26,10 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 	return wasFound;
 }
 
-bool MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInsert)
+Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInsert)
 {
-	bool wasInsertSuccessful = false;
+	Message attemptMetadata(MessageType::MSHADER_INFO);
+	int wasSuccessful = 0;
 	switch (in_bindingToInsert.getBindingType())
 	{
 		case MAPIObjectType::BUFFER:
@@ -37,16 +38,48 @@ bool MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInsert)
 			auto nameFindIter = bufferResourceMap.find(bindingNameToCheck);
 			if (nameFindIter == bufferResourceMap.end()) // it was not found
 			{
+				// Because MBufferBinding makes a call to glGenBuffers with an argument of 1 buffer,
+				// there should in theory never be an error that is generated when attempting to create a buffer.
+				// So if it gets created an inserted, just automatically assume it was succesful (i.e, no special
+				// error checking is required.)
 				MBufferBinding newBufferBinding(in_bindingToInsert);
 				bufferResourceMap[in_bindingToInsert.getBindingName()] = newBufferBinding;
-				wasInsertSuccessful = true;
+				wasSuccessful = 1;
+				attemptMetadata.insertString("MAPIObjectManager created new buffer, " + bindingNameToCheck);
 			}
-			// if the above statement didn't work, it already existed, and we didn't insert.
+			// if the above statement didn't work, it already existed, and we didn't insert. So return false.
+			else
+			{ 
+				attemptMetadata.insertString("MAPIObjectManager creation of new buffer, " + bindingNameToCheck + " failed (already exists)");
+			}
 
 			break;
 		}
 	}
-	return wasInsertSuccessful;
+
+	attemptMetadata.insertInt(wasSuccessful);
+	return attemptMetadata;
+}
+
+Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRequest)
+{
+	Message handleAttemptData;
+
+	switch (in_objectRequest.getBindingRequestType())
+	{
+		case MAPIObjectType::BUFFER:
+		{
+			// check if the buffer exists already. If it does not exist, 
+			// create the MAPIObjectData for a BUFFER and use it in the call to attemptBindingInsert.
+			// Should require no additional metadata in the Message.
+			std::string bufferName = in_objectRequest.getBindingRequestName();
+			MAPIObjectData newBufferBinding(MAPIObjectType::BUFFER, bufferName, Message(MessageType::NOVAL));
+			handleAttemptData = attemptBindingInsert(newBufferBinding);
+			break;
+		}
+	}
+
+	return handleAttemptData;
 }
 
 int MAPIObjectManager::fetchBinding(MAPIObjectType in_bindingType, std::string in_bindingName)

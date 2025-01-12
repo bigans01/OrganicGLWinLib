@@ -217,39 +217,8 @@ void MShaderController::createMShaders()
 void MShaderController::processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess)
 {
 	std::cout << "!!! calling processAPIObjectRequest..." << std::endl;
-	Message bindingProcessingResult(MessageType::MSHADER_INFO);
-	
-	switch (in_bindingRequestToProcess.getBindingRequestType())
-	{
-		case MAPIObjectType::BUFFER:
-		{
-			// create a new buffer, get its bound value and put into an MAPIObjectData, using MAPIObjectType::BUFFER, 
-			//																	 in_bindingRequestToProcess.getBindingRequestName(),
-			//																	 and a Message containing the int of the value to store.
-			createControllerBuffer(in_bindingRequestToProcess.getBindingRequestName());
-			break;
-		}
-	}
-	
-}
-
-void MShaderController::createControllerBuffer(std::string in_bufferName)
-{
-	if (!controllerBindings.doesBindingExist(MAPIObjectType::BUFFER, in_bufferName))
-	{
-		MAPIObjectData newBufferBinding(MAPIObjectType::BUFFER, in_bufferName, Message(MessageType::NOVAL));
-
-		//std::cout << "!! Attempting buffer binding insert..." << std::endl;
-		auto insertionResult = controllerBindings.attemptBindingInsert(newBufferBinding);
-		if (insertionResult)
-		{
-			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Created and bound new buffer: " + in_bufferName)));
-		}
-	}
-	else
-	{
-		mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Buffer already existed/bound: " + in_bufferName)));
-	}
+	Message requestResult = controllerBindings.handleMAPIObjectRequest(in_bindingRequestToProcess);
+	mShaderInfoQueue.push(requestResult);	
 }
 
 void MShaderController::writeOutInformationalMessages()

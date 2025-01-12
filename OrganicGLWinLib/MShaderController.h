@@ -205,8 +205,7 @@ class MShaderController
 		float mouseSpeed = 0.005f;
 
 		// ***************************************************** Binding and Component handling ***************************************************
-		void processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess);	// attempt to create an API resource, from the given request.
-		void createControllerBuffer(std::string in_bufferName);			// used when MAPIObjectType::BUFFER is detected in processAPIObjectRequest.
+		void processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess);	// calls controllerBindings.handleMAPIObjectRequest, with the given input parameter.
 
 		// ***************************************************** Input control/callbacks **********************************************************
 		OpenGLFeedbackListener inputListener;

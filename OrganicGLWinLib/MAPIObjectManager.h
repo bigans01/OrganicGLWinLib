@@ -4,6 +4,7 @@
 #define MAPIObjectManager_H
 
 #include "MAPIObjectData.h"
+#include "MAPIObjectRequest.h"
 #include "OrganicGLWinUtils.h"
 
 /*
@@ -27,8 +28,13 @@ class MAPIObjectManager
 		bool doesBindingExist(MAPIObjectType in_bindingType, std::string in_bindingName);	// returns true if the given binding was found; will not
 																						// create a new binding in the map, though.
 
-		bool attemptBindingInsert(MAPIObjectData in_bindingToInsert);	// insert a new binding, as long as it didn't exist already; the bool return value 
-																// should be true if it did insert a new binding, and false if it existed already.
+
+		Message handleMAPIObjectRequest(MAPIObjectRequest in_objectRequest);	//	Get the meta date from the MAPIObjectRequest, and analyze it to attempt to insert a new binding, 
+																				//	as long as it didn't exist already; This function will create a corresponding MAPIObjectType that is built
+																				//	around the MAPIObjectType specified in in_objectRequest. That object will be used in the call to 
+																				//  attemptBindingInsert, which will return a Message containing specifics about what happened during the 
+																				//  attempted insert.
+	
 
 		int fetchBinding(MAPIObjectType in_bindingType, std::string in_bindingName);	// given a type and name of the binding, attempt to 
 																						// return a value from the appropriate binding map 
@@ -38,8 +44,11 @@ class MAPIObjectManager
 	private:
 
 		void cleanupResources();	// should be called on destructor of this class; deletes any remaining allocated resoruces in the resource maps.
+		Message attemptBindingInsert(MAPIObjectData in_bindingToInsert);	// used by handleMAPIObjectRequest to insert new API-based objects into their corresponding map/container.
+																			// The return value of this is a Message that contains if the insertiona failed/succeeded, and what relevant reasons, if any.
 
-		// used with MAPIObjectType::BUFFER
+		// used with MAPIObjectType::BUFFER. This simply calls glGenBuffers, via createBuffer below.
+		// No special error checking should be required here, as we are simply generating a buffer.
 		struct MBufferBinding
 		{
 			MBufferBinding() {};
@@ -52,16 +61,12 @@ class MAPIObjectManager
 
 			void deleteBufferResource() 
 			{ 
-				std::cout << "!! deleting buffer resource, with ID: " << bufferId << std::endl;
-				int deleteVal = 3;
-				std::cin >> deleteVal;
-
 				OrganicGLWinUtils::deleteBuffer(&bufferId); 
 			} ;
 
 			std::string bufferBindingName = "";
 			GLuint bufferId = 0;
-			Message bufferBindingMessage;
+			Message bufferBindingMessage;	// optional, potentially unused (give it a tuning pass sometime after 1/11/2025)
 
 
 			std::string getBindingName()
