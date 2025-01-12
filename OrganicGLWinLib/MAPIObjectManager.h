@@ -51,32 +51,74 @@ class MAPIObjectManager
 		// No special error checking should be required here, as we are simply generating a buffer.
 		struct MBufferBinding
 		{
-			MBufferBinding() {};
-			MBufferBinding(MAPIObjectData in_bufferBinding)
-			{
-				bufferBindingName = in_bufferBinding.getBindingName();
-				OrganicGLWinUtils::createBuffer(&bufferId);
-				std::cout << "MBufferBinding: created buffer with ID: " << bufferId << std::endl;
-			};
+			public:
+				MBufferBinding() {};
+				MBufferBinding(MAPIObjectData in_bufferBinding)
+				{
+					bufferBindingName = in_bufferBinding.getBindingName();
+					OrganicGLWinUtils::createBuffer(&bufferId);
+					std::cout << "MBufferBinding: created buffer with ID: " << bufferId << std::endl;
+				}
 
-			void deleteBufferResource() 
-			{ 
-				OrganicGLWinUtils::deleteBuffer(&bufferId); 
-			} ;
+				void deleteBufferResource() 
+				{ 
+					OrganicGLWinUtils::deleteBuffer(&bufferId); 
+				}
 
-			std::string bufferBindingName = "";
-			GLuint bufferId = 0;
-			Message bufferBindingMessage;	// optional, potentially unused (give it a tuning pass sometime after 1/11/2025)
+				std::string getBindingName()
+				{
+					return bufferBindingName;
+				}
+
+				GLuint getBufferId()
+				{
+					return bufferId;
+				}
+			private:
+				std::string bufferBindingName = "";
+				GLuint bufferId = 0;
+				Message bufferBindingMessage;	// optional, potentially unused (give it a tuning pass sometime after 1/11/2025)
 
 
-			std::string getBindingName()
-			{
-				return bufferBindingName;
-			}
+		};
+
+		// used with MAPIObjectType::TEXTURE. This simply calls glGenTextures directly (no calls to OrganicGLWinUtils)
+		// No special error checking required here.
+		struct MTextureBinding
+		{
+			public:
+				MTextureBinding() {};
+				MTextureBinding(MAPIObjectData in_textureBinding)
+				{
+					textureBindingName = in_textureBinding.getBindingName();
+					glGenTextures(1, &textureId);
+					std::cout << "MTextureBinding: created texture with ID: " << textureId << std::endl;
+				}
+
+				void deleteTextureResource()
+				{
+					glDeleteTextures(1, &textureId);
+				}
+
+				std::string getBindingName()
+				{
+					return textureBindingName;
+				}
+
+				GLuint getTextureId()
+				{
+					return textureId;
+				}
+			private:
+				std::string textureBindingName = "";
+				GLuint textureId = 0;
+				Message textureBindingMessage;
+
 		};
 
 		// maps for various binding structs
 		std::unordered_map<std::string, MBufferBinding> bufferResourceMap;
+		std::unordered_map<std::string, MTextureBinding> textureResourceMap;
 };
 
 #endif

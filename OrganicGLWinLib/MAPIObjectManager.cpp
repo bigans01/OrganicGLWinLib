@@ -21,6 +21,15 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 			}
 			break;
 		}
+
+		case MAPIObjectType::TEXTURE:
+		{
+			auto bindingNameFinder = textureResourceMap.find(in_bindingName);
+			if (bindingNameFinder != textureResourceMap.end())
+			{
+				wasFound = true;
+			}
+		}
 	}
 
 	return wasFound;
@@ -45,12 +54,28 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 				MBufferBinding newBufferBinding(in_bindingToInsert);
 				bufferResourceMap[in_bindingToInsert.getBindingName()] = newBufferBinding;
 				wasSuccessful = 1;
-				attemptMetadata.insertString("MAPIObjectManager created new buffer, " + bindingNameToCheck);
+				attemptMetadata.insertString("MAPIObjectManager created new buffer, " + bindingNameToCheck + " bound with ID: " + std::to_string(bufferResourceMap[in_bindingToInsert.getBindingName()].getBufferId()));
 			}
 			// if the above statement didn't work, it already existed, and we didn't insert. So return false.
 			else
 			{ 
 				attemptMetadata.insertString("MAPIObjectManager creation of new buffer, " + bindingNameToCheck + " failed (already exists)");
+			}
+
+			break;
+		}
+
+		case MAPIObjectType::TEXTURE:
+		{
+			auto bindingNameToCheck = in_bindingToInsert.getBindingName();
+			auto nameFindIter = textureResourceMap.find(bindingNameToCheck);
+			if (nameFindIter == textureResourceMap.end())
+			{
+				// Generating a texture is also a simple operation (glGenTextures); there should really be no error checking required here.
+				MTextureBinding newTextureBinding(in_bindingToInsert);
+				textureResourceMap[in_bindingToInsert.getBindingName()] = newTextureBinding;
+				wasSuccessful = 1;
+				attemptMetadata.insertString("MAPIObjectManager created new texture, " + bindingNameToCheck + " bound with ID: " + std::to_string(textureResourceMap[in_bindingToInsert.getBindingName()].getTextureId()));
 			}
 
 			break;
@@ -69,12 +94,21 @@ Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRe
 	{
 		case MAPIObjectType::BUFFER:
 		{
-			// check if the buffer exists already. If it does not exist, 
-			// create the MAPIObjectData for a BUFFER and use it in the call to attemptBindingInsert.
+			// Create the MAPIObjectData for a BUFFER and use it in the call to attemptBindingInsert.
 			// Should require no additional metadata in the Message.
 			std::string bufferName = in_objectRequest.getBindingRequestName();
 			MAPIObjectData newBufferBinding(MAPIObjectType::BUFFER, bufferName, Message(MessageType::NOVAL));
 			handleAttemptData = attemptBindingInsert(newBufferBinding);
+			break;
+		}
+
+		case MAPIObjectType::TEXTURE:
+		{
+			// Create the MAPIObjectData for a TEXTURE and use it in the call to attemptBindingInsert.
+			// Should require no additional metadata in the Message.
+			std::string textureName = in_objectRequest.getBindingRequestName();
+			MAPIObjectData newTextureBinding(MAPIObjectType::TEXTURE, textureName, Message(MessageType::NOVAL));
+			handleAttemptData = attemptBindingInsert(newTextureBinding);
 			break;
 		}
 	}
@@ -93,7 +127,17 @@ int MAPIObjectManager::fetchBinding(MAPIObjectType in_bindingType, std::string i
 			auto bindingNameFinder = bufferResourceMap.find(in_bindingName);
 			if (bindingNameFinder != bufferResourceMap.end())	// it was found
 			{
-				returnBinding = bufferResourceMap[in_bindingName].bufferId;
+				returnBinding = bufferResourceMap[in_bindingName].getBufferId();
+			}
+			break;
+		}
+
+		case MAPIObjectType::TEXTURE:
+		{
+			auto bindingNameFinder = textureResourceMap.find(in_bindingName);
+			if (bindingNameFinder != textureResourceMap.end())	// it was found
+			{
+				returnBinding = textureResourceMap[in_bindingName].getTextureId();
 			}
 			break;
 		}
