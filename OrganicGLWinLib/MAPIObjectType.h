@@ -15,6 +15,7 @@ enum class MAPIObjectType
 	UNSET,		// default value
 	BUFFER,		// intended for storing buffer IDs
 	TEXTURE,	// " " texture IDs
+	FBO,		// " " for custom frame buffer objects
 	VAO			// " " VAO IDs
 };
 

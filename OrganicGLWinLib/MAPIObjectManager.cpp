@@ -29,6 +29,17 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 			{
 				wasFound = true;
 			}
+			break;
+		}
+
+		case MAPIObjectType::FBO:
+		{
+			auto fboNameFinder = fboResourceMap.find(in_bindingName);
+			if (fboNameFinder != fboResourceMap.end())
+			{
+				wasFound = true;
+			}
+			break;
 		}
 	}
 
@@ -38,7 +49,7 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInsert)
 {
 	Message attemptMetadata(MessageType::MSHADER_INFO);
-	int wasSuccessful = 0;
+	int wasSuccessful = 0;	// this will get to 1 upon success
 	switch (in_bindingToInsert.getBindingType())
 	{
 		case MAPIObjectType::BUFFER:
@@ -77,6 +88,31 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 				wasSuccessful = 1;
 				attemptMetadata.insertString("MAPIObjectManager created new texture, " + bindingNameToCheck + " bound with ID: " + std::to_string(textureResourceMap[in_bindingToInsert.getBindingName()].getTextureId()));
 			}
+			else
+			{
+				attemptMetadata.insertString("MAPIObjectManager creation of new texture, " + bindingNameToCheck + " failed (already exists)");
+			}
+
+			break;
+		}
+
+		case MAPIObjectType::FBO:
+		{
+			auto bindingNameTocheck = in_bindingToInsert.getBindingName();
+			auto nameFindIter = fboResourceMap.find(bindingNameTocheck);
+			if (nameFindIter == fboResourceMap.end())
+			{
+				// Generating a FBO object is a simple call in OpenGL; various attachments such as textures and other settintgs are outside
+				// of the scope of this function
+				MFBOBinding newFBOBinding(in_bindingToInsert);
+				fboResourceMap[in_bindingToInsert.getBindingName()] = newFBOBinding;
+				wasSuccessful = 1;
+				attemptMetadata.insertString("MAPIObjectManager created new frame buffer object (FBO), " + bindingNameTocheck + " bound with ID: " + std::to_string(fboResourceMap[in_bindingToInsert.getBindingName()].getFBOId()));
+			}
+			else
+			{
+				attemptMetadata.insertString("MAPIObjectManager creation of new frame buffer object (FBO), " + bindingNameTocheck + " failed (already exists)");
+			}
 
 			break;
 		}
@@ -111,6 +147,16 @@ Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRe
 			handleAttemptData = attemptBindingInsert(newTextureBinding);
 			break;
 		}
+
+		case MAPIObjectType::FBO:
+		{
+			// Create the MAPIObjectData for a FBO and use it in the call to attemptBindingInsert.
+			// Should require no additional metadata in the Message.
+			std::string fboName = in_objectRequest.getBindingRequestName();
+			MAPIObjectData newFBOBinding(MAPIObjectType::FBO, fboName, Message(MessageType::NOVAL));
+			handleAttemptData = attemptBindingInsert(newFBOBinding);
+			break;
+		}
 	}
 
 	return handleAttemptData;
@@ -141,6 +187,16 @@ int MAPIObjectManager::fetchBinding(MAPIObjectType in_bindingType, std::string i
 			}
 			break;
 		}
+
+		case MAPIObjectType::FBO:
+		{
+			auto bindingNameFinder = fboResourceMap.find(in_bindingName);
+			if (bindingNameFinder != fboResourceMap.end())	// it was found
+			{
+				returnBinding = fboResourceMap[in_bindingName].getFBOId();
+			}
+			break;
+		}
 	}
 
 	return returnBinding;
@@ -152,5 +208,17 @@ void MAPIObjectManager::cleanupResources()
 	for (auto& currentBufferResource : bufferResourceMap)
 	{
 		currentBufferResource.second.deleteBufferResource();
+	}
+
+	// cleanup texture bindings
+	for (auto& currentTextureResource : textureResourceMap)
+	{
+		currentTextureResource.second.deleteTextureResource();
+	}
+
+	// cleanup FBO bindings
+	for (auto& currentFBOResource : fboResourceMap)
+	{
+		currentFBOResource.second.deleteFBOResource();
 	}
 }
