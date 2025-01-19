@@ -197,6 +197,8 @@
     <ClInclude Include="MAPIObjectRequest.h" />
     <ClInclude Include="MAPIObjectType.h" />
     <ClInclude Include="MGCIndex.h" />
+    <ClInclude Include="MGearBase.h" />
+    <ClInclude Include="MGearManager.h" />
     <ClInclude Include="MGradientBase.h" />
     <ClInclude Include="MGradientController.h" />
     <ClInclude Include="MGradientRunMode.h" />
@@ -601,6 +603,8 @@
     <ClCompile Include="LocalizedWaveHighlighterGearT1.cpp" />
     <ClCompile Include="MAPIObjectManager.cpp" />
     <ClCompile Include="MGCIndex.cpp" />
+    <ClCompile Include="MGearBase.cpp" />
+    <ClCompile Include="MGearManager.cpp" />
     <ClCompile Include="MGradientController.cpp" />
     <ClCompile Include="MPointGradient.cpp" />
     <ClCompile Include="MSBasicCompute.cpp" />

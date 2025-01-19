@@ -322,6 +322,18 @@
     <Filter Include="Source Files\MShaderController\MBinding">
       <UniqueIdentifier>{91a22478-87d1-4ad9-9c60-870ff9cbffa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MShaderController\MShader\MGearManager">
+      <UniqueIdentifier>{fa6bd593-9eef-4ed2-9d56-1f2e89a61cd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MShader\MGearManager\MGear">
+      <UniqueIdentifier>{87bddd70-dbe6-4898-9227-08cd7e754cae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MShaderController\MShader\MGearManager">
+      <UniqueIdentifier>{d1ba4d46-bf03-40b4-9c16-d9660515f9da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MShaderController\MShader\MGearManager\MGear">
+      <UniqueIdentifier>{c7781815-be71-49e6-96ac-e58af10f43e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1584,6 +1596,12 @@
     <ClInclude Include="MAPIObjectRequest.h">
       <Filter>Header Files\MShaderController\MBinding</Filter>
     </ClInclude>
+    <ClInclude Include="MGearBase.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    </ClInclude>
+    <ClInclude Include="MGearManager.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2263,6 +2281,12 @@
     </ClCompile>
     <ClCompile Include="MAPIObjectManager.cpp">
       <Filter>Source Files\MShaderController\MBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="MGearBase.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    </ClCompile>
+    <ClCompile Include="MGearManager.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,8 @@
 #include "MAPIObjectManager.h"
 #include "MAPIObjectRequest.h"
 
+#include "MGearManager.h"
+
 /*
 
 Description: base class that serves as the main parent for MShader classes, 
@@ -67,6 +69,8 @@ class MShaderBase
 		GLUniformRegistry mShaderLocalValueRegistry;	// will store the "preferred" uniform/local values that the
 														// children of this class will want; each child class must manually
 														// define these.
+
+		MGearManager mShaderGearManager;	// controls all MGear objects that the MShaderBase children classes will utilize
 };
 
 #endif

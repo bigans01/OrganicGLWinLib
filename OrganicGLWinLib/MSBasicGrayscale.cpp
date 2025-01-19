@@ -3,6 +3,9 @@
 
 void MSBasicGrayscale::setupMShaderRequestsAndName()
 {
+	// First thing, always: make sure the MGearManager is initialized properly.
+	mShaderGearManager.initializeMGearManager(parentBindingMapPtr, parentValueRegistryPtr);
+
 	mShaderName = "MSBasicGrayscale";
 	mShaderLocalValueRegistry.insertVec3("background_clear_color", glm::vec3(0.0f, 0.50f, 0.0f));
 

@@ -3,6 +3,9 @@
 
 void MSBasicCompute::setupMShaderRequestsAndName()
 {
+	// First thing, always: make sure the MGearManager is initialized properly.
+	mShaderGearManager.initializeMGearManager(parentBindingMapPtr, parentValueRegistryPtr);
+
 	mShaderName = "MSBasicCompute";
 	mShaderLocalValueRegistry.insertVec3("background_clear_color", glm::vec3(0.49f, 0.0f, 0.47f));
 
