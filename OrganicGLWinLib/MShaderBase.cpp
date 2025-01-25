@@ -31,3 +31,8 @@ GLUniformRegistry* MShaderBase::getLocalValueRegistryRef()
 {
 	return &mShaderLocalValueRegistry;
 }
+
+void MShaderBase::cleanupSpawnedMGears()
+{
+	mShaderGearManager.cleanupMGears();
+}

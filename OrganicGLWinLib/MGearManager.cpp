@@ -8,7 +8,15 @@ void MGearManager::initializeMGearManager(MAPIObjectManager* in_msbObjectManager
 	msbUniformRegistryRef = in_msbUniformRegistrRef;
 }
 
-bool MGearManager::insertMGear(std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear)
+void MGearManager::cleanupMGears()
+{
+	for (auto& currentMGear : mGearMap)
+	{
+		currentMGear.second->cleanupMGear();
+	}
+}
+
+bool MGearManager::insertMGear(int in_gearSequenceLocation, std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear)
 {
 	bool wasMGearInserted = false;
 	auto mGearFinder = mGearMap.find(in_mGearName);
@@ -16,6 +24,9 @@ bool MGearManager::insertMGear(std::string in_mGearName, std::unique_ptr<MGearBa
 	{
 		mGearMap[in_mGearName] = std::move(in_newMGear);
 		mGearMap[in_mGearName].get()->setMGearPointers(msbObjectManagerRef, msbUniformRegistryRef);
+		mGearMap[in_mGearName].get()->initializeMGear();
+
+		gearSequence[in_gearSequenceLocation] = in_mGearName;
 	}
 
 	return wasMGearInserted;
@@ -47,8 +58,9 @@ MGearBase* MGearManager::getMGearRef(std::string in_mGearName)
 
 void MGearManager::renderMGears()
 {
-	for (auto& currentMGear : mGearMap)
+	for (auto& currentSequencedGear : gearSequence)
 	{
-		currentMGear.second->render();
+		auto gearName = currentSequencedGear.second;
+		mGearMap[gearName]->render();
 	}
 }

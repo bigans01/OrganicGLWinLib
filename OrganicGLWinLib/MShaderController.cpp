@@ -28,6 +28,10 @@ MShaderController::~MShaderController()
 		glfwDestroyWindow(mainWindowPtr);
 		std::cout << "GLFW window destroyed." << std::endl;
 	};
+
+	// Cleanup MGears
+	catalog.cleanupMShaderMGears();
+
 }
 
 bool MShaderController::switchMShader(std::string in_shaderToSwitchTo)
@@ -112,12 +116,25 @@ Message MShaderController::setComputeResolution(Message in_messageToRead)
 	int desiredScreenHeight = in_messageToRead.readInt();
 
 	ComputeResolution mResolution(desiredScreenWidth, desiredScreenHeight, computeDim, computeDim);
-	mainScreenWidth = mResolution.computeScreenWidth;
-	mainScreenHeight = mResolution.computeScreenHeight;
-	mainComputeDim = computeDim;
+	mainScreenWidth = mResolution.computeScreenWidth;		// should be represented as "screen_pixel_width" in the registry
+	mainScreenHeight = mResolution.computeScreenHeight;		//  "screen_pixel_height"
+	mainComputeDim = computeDim;							//  "screen_compute_group_dim"
+	mainScreenHorizonalComputeGroups = mResolution.computeScreenWidth;	// "screen_compute_columns"
+	mainScreenVerticalComputeGroups = mResolution.computeScreenHeight;	// "screen_compute_rows"
+
+	updateScreenDimensionUniforms();	// update the registry with all the new screen dimension metadata
 
 	isResolutionSet = true;
 	return Message(MessageType::MSHADER_INFO, std::string("Compute resolution set"));
+}
+
+void MShaderController::updateScreenDimensionUniforms()
+{
+	controllerValueRegistry.insertInt("screen_pixel_width", mainScreenWidth);
+	controllerValueRegistry.insertInt("screen_pixel_height", mainScreenHeight);
+	controllerValueRegistry.insertInt("screen_compute_group_dim", mainComputeDim);
+	controllerValueRegistry.insertInt("screen_compute_columns", mainScreenHorizonalComputeGroups);
+	controllerValueRegistry.insertInt("screen_compute_rows", mainScreenVerticalComputeGroups);
 }
 
 void MShaderController::initializeMandatoryItems()

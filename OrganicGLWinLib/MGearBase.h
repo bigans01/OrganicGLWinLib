@@ -5,6 +5,7 @@
 
 #include "GLUniformRegistry.h"
 #include "MAPIObjectManager.h"
+#include "OrganicShaderLoader.h"
 
 /*
 * 
@@ -15,20 +16,32 @@
 * MGearBase children classes are directly responsible for rendering, using the referenced objects above; for instance, an MGear
 * will need to utilize the GLUniformRegistry to acquire specific uniform values (such as a vec3), and use the MAPIObjectManager to 
 * find buffers, framebuffers, etc. These can all be referenced before rendering.
+* 
+* The MGear children classes should also be responsible for creating their own shader programs; this will simplify the management of the creation
+* of the shaders, whereas in the old model it was all managed through calls to functions such as OrganicGLWinUtils::loadShadersViaMode
+
 
 */
 
 class MGearBase
 {
 	public:
+		// required virtual functions
+		virtual void initializeMGear() = 0;		//	set up varrious things required by the MGear; should be called immediately after
+												//	setMGearPointers
 		virtual void render() = 0;	// should be called every tick in which this MGear is run
+
+		virtual void cleanupMGear() = 0;	// should be called before MGear is deleted (deletes shaders, programs, other resources)
 
 		// Below: always call this first after the derived class is instantiated into a map
 		void setMGearPointers(MAPIObjectManager* in_mGearObjectManagerRef,
-			GLUniformRegistry* in_mGearUniformRegistryRef);
-	private:
+							GLUniformRegistry* in_mGearUniformRegistryRef);
+	protected:
 		MAPIObjectManager* mGearObjectManagerRef = nullptr;
 		GLUniformRegistry* mGearUniformRegistryRef = nullptr;
+
+		int mGearProgramID = 0;	// used to store the program ID that is returned when compiling compute/fragment/vertex shaders, via functions 
+								// such as OrganicShaderLoader::LoadShaders; this value should be set when the shaders are loaded in the call to initializeMGear
 };
 
 #endif

@@ -147,7 +147,12 @@ class MShaderController
 
 		int mainScreenWidth = 0;
 		int mainScreenHeight = 0;
-		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION
+		int mainComputeDim = 0;		// would be set by a Message of the type MSHADER_SET_COMPUTE_RESOLUTION; determines the number of compute shaders
+									// assigned to each group (i.e, 16x16 = 256)
+
+		int mainScreenVerticalComputeGroups = 0;	// the number of compute rows (from top to bottom, rows)
+		int mainScreenHorizonalComputeGroups = 0;	// the number of compute columns (from left to right, vertical slices)
+
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
 		float fullCircleRadians = 6.28319f;	// 360 degrees, represented in radians; aka a full cycle of 2pi.
 
@@ -172,8 +177,10 @@ class MShaderController
 		// ***************************************************** Gradient control ******************************************************************
 		MGCIndex controllerMGCI;	// stores and manages gradients that can be used by MShaderController
 
+
 		// ************************************************** Hint management ******************************************************************
 		MShaderHintIndexer controllerHintIndexer;	// contains and manages hints that can be used by MShaderController
+
 
 		// ***************************************************** Shareable objects *****************************************************************
 		// imgui objects, intended to be referenced via pointers in MShaderBase-derived classes
@@ -183,9 +190,11 @@ class MShaderController
 		ShaderMachineFeedback controllerMachineFeedback;
 
 		MAPIObjectManager controllerBindings;				// binding map for use across different objects; this is intended to store metadata such as buffer, texture, VAO IDs;
-													// this member should be shared across all MShader objects, so that they may reference it at any time to get these appropriate values.
+															// this member should be shared across all MShader objects, so that they may reference it at any time to get these appropriate values.
 
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
+
+
 
 		// ***************************************************** Direction calculation members ****************************************************
 		glm::vec3 direction;	// direction camera is facing
@@ -204,8 +213,12 @@ class MShaderController
 		float speed = 10.0f;														// 3 units / second
 		float mouseSpeed = 0.005f;
 
+
+
 		// ***************************************************** Binding and Component handling ***************************************************
 		void processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess);	// calls controllerBindings.handleMAPIObjectRequest, with the given input parameter.
+
+
 
 		// ***************************************************** Input control/callbacks **********************************************************
 		OpenGLFeedbackListener inputListener;
@@ -231,6 +244,9 @@ class MShaderController
 		void formClearColorGradient();	// Attempts to create a background_clear_color gradient; both old and new shaders 
 										// must have a background_clear_color uniform value in their registries; should not create a gradient
 										// if the condition to do so is not met.
+
+		// ***************************************************** Miscellaneous functions **********************************************************
+		void updateScreenDimensionUniforms();	// will insert the screen width/height, and compute resolution value dims into the registry.
 
 };
 

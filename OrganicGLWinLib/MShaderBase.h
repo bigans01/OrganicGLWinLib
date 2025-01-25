@@ -45,6 +45,9 @@ class MShaderBase
 														// can be used by MShaderController or other classes to check for existence
 														// of certain uniforms, or other similiar operations.
 
+		void cleanupSpawnedMGears();	// call cleanupMGears() on all gears in the mShaderGearManager
+
+		// ***** Required virtual functions *****
 		// Below: should be called after setSharedObjectPointers above
 		virtual void setupMShaderRequestsAndName() = 0;		// set the shader name, create MAPIObjectRequest objects for expected bindings (bindingRequests), 
 															// required uniform registry variables, etc.

@@ -20,6 +20,8 @@ class MShaderCatalog
 		bool isShaderInMap(std::string in_shaderName);	// returns true if the shader given by the string exists.
 		MShaderBase* getShaderRef(std::string in_shaderName);	// returns a pointer to the specified shader, mapped in the given string;
 																// if the shader wasn't found, returns a nullptr.
+
+		void cleanupMShaderMGears();	// calls cleanupSpawnedMGears on each MShaderBase object in shaderMap.
 	private:
 		std::unordered_map<std::string, std::unique_ptr<MShaderBase>> shaderMap;	// should contain all MShaderBase-derived classes that should be used
 

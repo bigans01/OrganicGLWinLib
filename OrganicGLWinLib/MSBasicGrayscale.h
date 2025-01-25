@@ -4,6 +4,7 @@
 #define MSBASICGRAYSCALE_H
 
 #include "MShaderBase.h"
+#include "GrayscaleMG.h"
 
 class MSBasicGrayscale : public MShaderBase
 {

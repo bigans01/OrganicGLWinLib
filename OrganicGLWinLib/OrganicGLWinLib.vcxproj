@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BasicMG.h" />
     <ClInclude Include="BorderLineLink.h" />
     <ClInclude Include="BorderLineCycle.h" />
     <ClInclude Include="BorderLineCycler.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="BorderLinePointPair.h" />
     <ClInclude Include="CSCorrectionCandidate.h" />
     <ClInclude Include="FaceResolverBase.h" />
+    <ClInclude Include="GLBasicProgramData.h" />
     <ClInclude Include="GLDataType.h" />
     <ClInclude Include="GLDrawElementsInstancedJob.h" />
     <ClInclude Include="GLMultiDrawArrayJob.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="GLUniformRequest.h" />
     <ClInclude Include="GPUWorldCoordinate.h" />
     <ClInclude Include="GPUWorldCoordinateProducer.h" />
+    <ClInclude Include="GrayscaleMG.h" />
     <ClInclude Include="GUIInteractionCondition.h" />
     <ClInclude Include="HashedSTriangleLine.h" />
     <ClInclude Include="HashedSTriangleLineCounter.h" />
@@ -587,6 +590,7 @@
     <ClInclude Include="ZDimLine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BasicMG.cpp" />
     <ClCompile Include="BorderLineCycle.cpp" />
     <ClCompile Include="BorderLineCycler.cpp" />
     <ClCompile Include="BorderLineInterceptRecord.cpp" />
@@ -595,6 +599,7 @@
     <ClCompile Include="GLProgramIdIndex.cpp" />
     <ClCompile Include="GPUWorldCoordinate.cpp" />
     <ClCompile Include="GPUWorldCoordinateProducer.cpp" />
+    <ClCompile Include="GrayscaleMG.cpp" />
     <ClCompile Include="HashedSTriangleLine.cpp" />
     <ClCompile Include="HashedSTriangleLineCounter.cpp" />
     <ClCompile Include="InputTrigger.cpp" />

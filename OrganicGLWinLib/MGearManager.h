@@ -21,18 +21,23 @@ class MGearManager
 		void initializeMGearManager(MAPIObjectManager* in_msbObjectManagerRef,
 									GLUniformRegistry* in_msbUniformRegistrRef);
 
-		bool insertMGear(std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear);	// insert a specific MGear:
+		bool insertMGear(int in_gearSequenceLocation, std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear);	// insert a specific MGear:
 																							// use std::move when setting up the parameters
 																							// for this function call; returns true
 																							// if it was actually inserted.
+																							//
+																							// The int value represents the position in the rendering sequence to use,
+																							// in the gearSequence map, when renderMGears() is called.
 
 		bool isMGearInManager(std::string in_mGearName);	// returns true if an MGear exists
 		MGearBase* getMGearRef(std::string in_mMGearName);	// returns a pointer to an MGearBase-derived object; the value will be null
 															// if it doesn't exist.
 
 		void renderMGears();	// call render() on all MGear objects in the mGearMap.
+		void cleanupMGears();	// undo all allocations/used resources spawned by each MGear (delete shaders, programs, any buffers exclusive to an MGear etc)
 	private:
 		std::unordered_map<std::string, std::unique_ptr<MGearBase>> mGearMap;	// contains all MGear objects that will be utilized for rendering.
+		std::map<int, std::string> gearSequence;
 
 		MAPIObjectManager* msbObjectManagerRef = nullptr;
 		GLUniformRegistry* msbUniformRegistryRef = nullptr;

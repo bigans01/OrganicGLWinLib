@@ -1602,6 +1602,15 @@
     <ClInclude Include="MGearManager.h">
       <Filter>Header Files\MShaderController\MShader\MGearManager</Filter>
     </ClInclude>
+    <ClInclude Include="BasicMG.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    </ClInclude>
+    <ClInclude Include="GrayscaleMG.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    </ClInclude>
+    <ClInclude Include="GLBasicProgramData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2287,6 +2296,12 @@
     </ClCompile>
     <ClCompile Include="MGearManager.cpp">
       <Filter>Source Files\MShaderController\MShader\MGearManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicMG.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    </ClCompile>
+    <ClCompile Include="GrayscaleMG.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

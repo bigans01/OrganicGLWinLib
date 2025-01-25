@@ -36,3 +36,11 @@ MShaderBase* MShaderCatalog::getShaderRef(std::string in_shaderName)
 	}
 	return returnPtr;
 }
+
+void MShaderCatalog::cleanupMShaderMGears()
+{
+	for (auto& currentMShader : shaderMap)
+	{
+		currentMShader.second->cleanupSpawnedMGears();
+	}
+}
