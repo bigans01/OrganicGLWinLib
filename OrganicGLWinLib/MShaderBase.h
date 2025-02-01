@@ -45,7 +45,10 @@ class MShaderBase
 														// can be used by MShaderController or other classes to check for existence
 														// of certain uniforms, or other similiar operations.
 
-		void cleanupSpawnedMGears();	// call cleanupMGears() on all gears in the mShaderGearManager
+		void cleanupSpawnedMGears();			// call cleanupMGears() on all gears in the mShaderGearManager
+
+		bool checkForRequiredGearObjects(std::queue<Message>* in_messageQueueRef);		// calls the verifyRequiredGearObjects function on mShaderGearManager;
+																						// return value should be true if all requested objects were found in the referenced MAPIObjectManager.
 
 		// ***** Required virtual functions *****
 		// Below: should be called after setSharedObjectPointers above

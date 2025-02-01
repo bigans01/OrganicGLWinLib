@@ -6,6 +6,7 @@
 #include "GLUniformRegistry.h"
 #include "MAPIObjectManager.h"
 #include "OrganicShaderLoader.h"
+#include "MAPIObjectMetadata.h"
 
 /*
 * 
@@ -29,9 +30,14 @@ class MGearBase
 		// required virtual functions
 		virtual void initializeMGear() = 0;		//	set up varrious things required by the MGear; should be called immediately after
 												//	setMGearPointers
+
+		virtual std::vector<MAPIObjectMetadata> fetchRequiredObjects() = 0;	// used to verify that objects are instantiated/setup correctly;
+																			// called by MGearManager::verifyRequiredGearObjects()
+
 		virtual void render() = 0;	// should be called every tick in which this MGear is run
 
 		virtual void cleanupMGear() = 0;	// should be called before MGear is deleted (deletes shaders, programs, other resources)
+
 
 		// Below: always call this first after the derived class is instantiated into a map
 		void setMGearPointers(MAPIObjectManager* in_mGearObjectManagerRef,

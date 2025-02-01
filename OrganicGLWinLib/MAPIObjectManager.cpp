@@ -6,15 +6,15 @@ MAPIObjectManager::~MAPIObjectManager()
 	cleanupResources();
 }
 
-bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::string in_bindingName)
+bool MAPIObjectManager::doesBindingExist(MAPIObjectMetadata in_objectMeta)
 {
 	bool wasFound = false;
 
-	switch (in_bindingType)
+	switch (in_objectMeta.mdType)
 	{
 		case MAPIObjectType::BUFFER:
 		{
-			auto bindingNameFinder = bufferResourceMap.find(in_bindingName);
+			auto bindingNameFinder = bufferResourceMap.find(in_objectMeta.mdName);
 			if (bindingNameFinder != bufferResourceMap.end())	// it was found
 			{
 				wasFound = true;
@@ -24,7 +24,7 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 
 		case MAPIObjectType::TEXTURE:
 		{
-			auto bindingNameFinder = textureResourceMap.find(in_bindingName);
+			auto bindingNameFinder = textureResourceMap.find(in_objectMeta.mdName);
 			if (bindingNameFinder != textureResourceMap.end())
 			{
 				wasFound = true;
@@ -34,7 +34,7 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectType in_bindingType, std::str
 
 		case MAPIObjectType::FBO:
 		{
-			auto fboNameFinder = fboResourceMap.find(in_bindingName);
+			auto fboNameFinder = fboResourceMap.find(in_objectMeta.mdName);
 			if (fboNameFinder != fboResourceMap.end())
 			{
 				wasFound = true;
@@ -162,38 +162,38 @@ Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRe
 	return handleAttemptData;
 }
 
-int MAPIObjectManager::fetchBinding(MAPIObjectType in_bindingType, std::string in_bindingName)
+int MAPIObjectManager::fetchBinding(MAPIObjectMetadata in_objectMeta)
 {
 	int returnBinding = -1;	// if this is still -1 when we return, we're in trouble (the resource wasn't found)
 
-	switch (in_bindingType)
+	switch (in_objectMeta.mdType)
 	{
 		case MAPIObjectType::BUFFER:
 		{
-			auto bindingNameFinder = bufferResourceMap.find(in_bindingName);
+			auto bindingNameFinder = bufferResourceMap.find(in_objectMeta.mdName);
 			if (bindingNameFinder != bufferResourceMap.end())	// it was found
 			{
-				returnBinding = bufferResourceMap[in_bindingName].getBufferId();
+				returnBinding = bufferResourceMap[in_objectMeta.mdName].getBufferId();
 			}
 			break;
 		}
 
 		case MAPIObjectType::TEXTURE:
 		{
-			auto bindingNameFinder = textureResourceMap.find(in_bindingName);
+			auto bindingNameFinder = textureResourceMap.find(in_objectMeta.mdName);
 			if (bindingNameFinder != textureResourceMap.end())	// it was found
 			{
-				returnBinding = textureResourceMap[in_bindingName].getTextureId();
+				returnBinding = textureResourceMap[in_objectMeta.mdName].getTextureId();
 			}
 			break;
 		}
 
 		case MAPIObjectType::FBO:
 		{
-			auto bindingNameFinder = fboResourceMap.find(in_bindingName);
+			auto bindingNameFinder = fboResourceMap.find(in_objectMeta.mdName);
 			if (bindingNameFinder != fboResourceMap.end())	// it was found
 			{
-				returnBinding = fboResourceMap[in_bindingName].getFBOId();
+				returnBinding = fboResourceMap[in_objectMeta.mdName].getFBOId();
 			}
 			break;
 		}

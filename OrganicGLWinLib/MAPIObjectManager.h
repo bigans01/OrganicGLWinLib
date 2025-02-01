@@ -6,6 +6,7 @@
 #include "MAPIObjectData.h"
 #include "MAPIObjectRequest.h"
 #include "OrganicGLWinUtils.h"
+#include "MAPIObjectMetadata.h"
 
 /*
 * 
@@ -25,7 +26,7 @@ class MAPIObjectManager
 	public:
 		MAPIObjectManager() {};
 		~MAPIObjectManager();
-		bool doesBindingExist(MAPIObjectType in_bindingType, std::string in_bindingName);	// returns true if the given binding was found; will not
+		bool doesBindingExist(MAPIObjectMetadata in_objectMeta);	// returns true if the given binding was found; will not
 																						// create a new binding in the map, though.
 
 
@@ -36,7 +37,7 @@ class MAPIObjectManager
 																				//  attempted insert.
 	
 
-		int fetchBinding(MAPIObjectType in_bindingType, std::string in_bindingName);	// given a type and name of the binding, attempt to 
+		int fetchBinding(MAPIObjectMetadata in_objectMeta);	// given a type and name of the binding, attempt to 
 																						// return a value from the appropriate binding map 
 																						// (i.e, bufferResourceMap for MAPIObjectType::BUFFER).
 																						// The return value will be the int that represents the assigned ID 

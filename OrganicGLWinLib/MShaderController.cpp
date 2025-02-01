@@ -119,8 +119,8 @@ Message MShaderController::setComputeResolution(Message in_messageToRead)
 	mainScreenWidth = mResolution.computeScreenWidth;		// should be represented as "screen_pixel_width" in the registry
 	mainScreenHeight = mResolution.computeScreenHeight;		//  "screen_pixel_height"
 	mainComputeDim = computeDim;							//  "screen_compute_group_dim"
-	mainScreenHorizonalComputeGroups = mResolution.computeScreenWidth;	// "screen_compute_columns"
-	mainScreenVerticalComputeGroups = mResolution.computeScreenHeight;	// "screen_compute_rows"
+	mainScreenHorizonalComputeGroups = mResolution.computeScreenWidth / computeDim;	// "screen_compute_columns"
+	mainScreenVerticalComputeGroups = mResolution.computeScreenHeight / computeDim;	// "screen_compute_rows"
 
 	updateScreenDimensionUniforms();	// update the registry with all the new screen dimension metadata
 
@@ -203,7 +203,8 @@ void MShaderController::createMShaders()
 		// Only bother continuing the initialization of the shader, if we know for a fact that it was inserted into the catalog.
 		if (wasInsertSuccessful)
 		{
-			std::cout << "Attempting creation of " + insertAttemptShaderName + " MShader. " << std::endl;
+			//std::cout << "Attempting creation of " + insertAttemptShaderName + " MShader. " << std::endl;
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "Attempting creation of " + insertAttemptShaderName + " MShader. "));
 			catalog.getShaderRef(insertAttemptShaderName)->setSharedObjectPointers(&controllerButtonPanelContainer,
 				&controllerSliderPanelContainer,
 				&controllerInputPanelContainer,
@@ -215,11 +216,23 @@ void MShaderController::createMShaders()
 			catalog.getShaderRef(insertAttemptShaderName)->setupMShaderRequestsAndName();
 			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on " + insertAttemptShaderName + "...")));
 
-			// Fetch the required binding requests, and procese each one.
+			// Fetch the required binding requests, and process each one.
 			auto fetchedBindingRequests = catalog.getShaderRef(insertAttemptShaderName)->fetchMShaderBindingRequests();
 			for (auto& currentRequest : fetchedBindingRequests)
 			{
 				processAPIObjectRequest(currentRequest);
+			}
+
+			// For safety, verify that the underlying MGear objects in the newly spawned MShader have all their requested resources,
+			// that would be found in the MAPIObjectManager
+			bool allGearObjectsFound = catalog.getShaderRef(insertAttemptShaderName)->checkForRequiredGearObjects(&mShaderInfoQueue);
+			if (allGearObjectsFound)
+			{
+				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "All required MGear resources found for " + insertAttemptShaderName));
+			}
+			else
+			{
+				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "Missing some required MGear resources for " + insertAttemptShaderName));
 			}
 		}
 		else

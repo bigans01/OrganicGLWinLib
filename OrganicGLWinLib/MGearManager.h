@@ -33,6 +33,10 @@ class MGearManager
 		MGearBase* getMGearRef(std::string in_mMGearName);	// returns a pointer to an MGearBase-derived object; the value will be null
 															// if it doesn't exist.
 
+		bool verifyRequiredGearObjects(std::queue<Message>* in_messageQueueRef);	// gets the required objects list from each MGear in an instance of this class,
+																					// and checks whether or not they all exist in the referenced MAPIObjectManager (msbObjectManagerRef);
+																					// should return true only if everything exists.
+
 		void renderMGears();	// call render() on all MGear objects in the mGearMap.
 		void cleanupMGears();	// undo all allocations/used resources spawned by each MGear (delete shaders, programs, any buffers exclusive to an MGear etc)
 	private:

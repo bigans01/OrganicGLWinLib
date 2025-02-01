@@ -36,3 +36,8 @@ void MShaderBase::cleanupSpawnedMGears()
 {
 	mShaderGearManager.cleanupMGears();
 }
+
+bool MShaderBase::checkForRequiredGearObjects(std::queue<Message>* in_messageQueueRef)
+{
+	return mShaderGearManager.verifyRequiredGearObjects(in_messageQueueRef);
+}

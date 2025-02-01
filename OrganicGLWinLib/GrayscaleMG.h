@@ -15,6 +15,7 @@ class GrayscaleMG : public MGearBase
 {
 	public:
 		void initializeMGear();
+		std::vector<MAPIObjectMetadata> fetchRequiredObjects();
 		void render();
 		void cleanupMGear();
 	private:

@@ -12,6 +12,17 @@ void BasicMG::initializeMGear()
 	basicFragmentShaderId = programData.fragmentShaderId;
 }
 
+std::vector<MAPIObjectMetadata> BasicMG::fetchRequiredObjects()
+{
+	std::vector<MAPIObjectMetadata> returnVector;
+	returnVector.push_back(MAPIObjectMetadata(MAPIObjectType::BUFFER, "somebufferhuh"));
+
+
+
+
+	return returnVector;
+}
+
 void BasicMG::render()
 {
 

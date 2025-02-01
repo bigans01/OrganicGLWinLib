@@ -64,3 +64,40 @@ void MGearManager::renderMGears()
 		mGearMap[gearName]->render();
 	}
 }
+
+bool MGearManager::verifyRequiredGearObjects(std::queue<Message>* in_messageQueueRef)
+{
+	bool allObjectsFound = true;	// assume true; set to false the moment a single object isn't found.
+	for (auto& currentMGear : mGearMap)
+	{
+		in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, "Checking required objects for named gear, " + currentMGear.first));
+
+		auto currentMGearObjectVector = currentMGear.second->fetchRequiredObjects();
+		for (auto& currentRequiredObject : currentMGearObjectVector)
+		{
+			std::string mapiObjectNameString = "";
+			switch (currentRequiredObject.mdType)
+			{
+				case MAPIObjectType::BUFFER: { mapiObjectNameString = "BUFFER"; break; }
+				case MAPIObjectType::FBO: { mapiObjectNameString = "FBO"; break; }
+				case MAPIObjectType::TEXTURE: { mapiObjectNameString = "TEXTURE"; break; }
+				case MAPIObjectType::VAO: { mapiObjectNameString = "VAO"; break; }
+			}
+
+			std::string objectLoggingString = "Checking for " + mapiObjectNameString + " with the name " + currentRequiredObject.mdName + ": ";
+
+			bool didBindingExist = msbObjectManagerRef->doesBindingExist(currentRequiredObject);
+			if (didBindingExist)
+			{
+				objectLoggingString += "Success";
+			}
+			else
+			{
+				objectLoggingString += "Failure";
+				allObjectsFound = false;
+			}
+			in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, objectLoggingString));
+		}
+	}
+	return allObjectsFound;
+}

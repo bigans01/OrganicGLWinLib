@@ -1611,6 +1611,9 @@
     <ClInclude Include="GLBasicProgramData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MAPIObjectMetadata.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
