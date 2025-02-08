@@ -15,9 +15,11 @@ class GrayscaleMG : public MGearBase
 {
 	public:
 		void initializeMGear();
-		std::vector<MAPIObjectMetadata> fetchRequiredObjects();
+		std::vector<MAPIObjectMetadata> fetchRequiredObjects();	
 		void render();
 		void cleanupMGear();
+		void setObjectBindings();
+
 	private:
 		GLuint grayscaleVertexShaderId = 0;
 		GLuint grayscaleFragmentShaderId = 0;

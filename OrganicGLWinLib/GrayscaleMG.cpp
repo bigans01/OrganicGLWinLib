@@ -36,6 +36,11 @@ std::vector<MAPIObjectMetadata> GrayscaleMG::fetchRequiredObjects()
 	return returnVector;
 }
 
+void GrayscaleMG::setObjectBindings()
+{
+
+}
+
 void GrayscaleMG::render()
 {
 

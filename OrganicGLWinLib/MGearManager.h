@@ -39,6 +39,7 @@ class MGearManager
 
 		void renderMGears();	// call render() on all MGear objects in the mGearMap.
 		void cleanupMGears();	// undo all allocations/used resources spawned by each MGear (delete shaders, programs, any buffers exclusive to an MGear etc)
+		void createRequiredGearObjects();	// calls setObjectBindings() for all MGear objects in the mGearMap
 	private:
 		std::unordered_map<std::string, std::unique_ptr<MGearBase>> mGearMap;	// contains all MGear objects that will be utilized for rendering.
 		std::map<int, std::string> gearSequence;

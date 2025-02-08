@@ -16,6 +16,14 @@ void MGearManager::cleanupMGears()
 	}
 }
 
+void MGearManager::createRequiredGearObjects()
+{
+	for (auto& currentMGear : mGearMap)
+	{
+		currentMGear.second->setObjectBindings();
+	}
+}
+
 bool MGearManager::insertMGear(int in_gearSequenceLocation, std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear)
 {
 	bool wasMGearInserted = false;

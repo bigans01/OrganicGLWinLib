@@ -18,6 +18,7 @@ class BasicMG : public MGearBase
 		std::vector<MAPIObjectMetadata> fetchRequiredObjects();
 		void render();
 		void cleanupMGear();
+		void setObjectBindings();
 	private:
 		GLuint basicVertexShaderId = 0;
 		GLuint basicFragmentShaderId = 0;

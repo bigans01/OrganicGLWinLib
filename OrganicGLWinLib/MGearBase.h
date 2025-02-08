@@ -38,6 +38,9 @@ class MGearBase
 
 		virtual void cleanupMGear() = 0;	// should be called before MGear is deleted (deletes shaders, programs, other resources)
 
+		virtual void setObjectBindings() = 0;	// use to set up VAOs, other binding objects; ensure that the resources exist before calling
+												// this function.
+
 
 		// Below: always call this first after the derived class is instantiated into a map
 		void setMGearPointers(MAPIObjectManager* in_mGearObjectManagerRef,

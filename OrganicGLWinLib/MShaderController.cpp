@@ -100,8 +100,23 @@ void MShaderController::processMessage(Message in_messageToRead)
 			mShaderInfoQueue.push(controllerHintIndexer.processTransitionalHintMessage(in_messageToRead));
 			break;
 		}
+
+		case MessageType::MSHADER_SET_WORLD_POSITION:
+		{
+			in_messageToRead.open();
+			glm::vec3 readVec3 = IndependentUtils::convertECBPolyPointToVec3(in_messageToRead.readPoint());
+			setCameraPosition(readVec3);
+		}
 	}
-};
+}
+
+void MShaderController::setCameraPosition(glm::vec3 in_position)
+{
+	mCameraPosition = in_position;
+	mWorldPosition = in_position;
+	std::string positionAsString = std::to_string(mCameraPosition.x) + ", " + std::to_string(mCameraPosition.y) + ", " + std::to_string(mCameraPosition.z);
+	mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "Set world position to: " + positionAsString));
+}
 
 Message MShaderController::setComputeResolution(Message in_messageToRead)
 {
@@ -229,6 +244,11 @@ void MShaderController::createMShaders()
 			if (allGearObjectsFound)
 			{
 				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "All required MGear resources found for " + insertAttemptShaderName));
+
+				// Do VAO or other GL object stuff here, per gear, per MShader...at this point, binding requests from individual 
+				// MGear objects can be processed, by calling setBindingsForGears (which ultiamtely calls setObjectBindings for each MGear object)
+				// all resources/objects should be created prior to any objects being created/bound to existing buffers
+				catalog.getShaderRef(insertAttemptShaderName)->setBindingsForGears();
 			}
 			else
 			{
@@ -380,12 +400,20 @@ void MShaderController::runTick()
 										//			switch was sucessful, to create new gradients.								
 
 	calculatePassedTime();				// Step 2: fetch the total time that has elapsed, to use as a value for updateAndApplyGradients
-	updateMVPVariables();				// Step 3: Calculate any MVP matrices or other similiar values that have been setup
-	updateAndapplyGradients(secondsSinceLastTimestamp * 1000);		// Step 4: Update gradients, and apply them (gradients work in milliseconds)
-	controllerMGCI.deleteExpiredFiniteGradients();		// Step 5: remove expired gradients.
+
+	// Step 3: Calculate camera direction/position, and any MVP matrices or other similiar values that have been setup
+	updateCameraDirectionAndPosition(wasImGuiObjectFocused);
+	updateViewMatricesAndWorldCoords();
+
+	updateAndapplyGradients(secondsSinceLastTimestamp * 1000);	// Step 4: Update gradients, and apply them (gradients work in milliseconds)
+	controllerMGCI.deleteExpiredFiniteGradients();				// Step 5: remove expired gradients.
 
 	// ---------- Phase 2: Render non ImGui components (but do not swap buffers)
 	// TODO: This is where the currently selected MShader will be called upon to do its rendering, somehow.
+
+	// Need to start doing ImGui stuff here; ensure that the value of wasImGuiObjectFocused gets
+	// a check done on it, to ensure that it can updated appropriately
+
 	
 	// ---------- Phase 3: Render ImGui components, process any clicks/interactions from ImGui
 	// TODO: Somehow: start a new ImGui frame, read feedback, then render ImGui
@@ -643,7 +671,7 @@ void MShaderController::updateCameraDirectionAndPosition(bool in_imguiFocusedFla
 	// This function should be setup similiar to 
 	// Get mouse position ShaderMachineBase::computeCameraDirectionAndPosition.
 	//
-	// It should be called immediately before the updateMVPVariables function.
+	// It should be called immediately before the updateViewMatricesAndWorldCoords function.
 	//
 	// The in_imguiFocusedFlag is used to check if an imgui window is being focused, in which case
 	// we want to focus input on that object.
@@ -715,11 +743,96 @@ void MShaderController::updateCameraDirectionAndPosition(bool in_imguiFocusedFla
 	// Up vector
 	up = glm::cross(right, direction);
 
+	// If an ImGui window is currently focused, we want to direct arrow key input to that window, and not 
+	// have those keystrokes affect movement within the "world." This is what the check of in_imguiFocusedFlag is for.
+	if
+		(
+			(isFocused == 1)				// the OpenGL window must be focused, 
+			&&								// AND
+			in_imguiFocusedFlag == false	// an ImGui panel within that window CANNOT be focused,
+			// because if it was focused we would want arrow key input to go to that ImGui panel.
+			)
+	{
+
+
+		// Move forward
+		if (glfwGetKey(mainWindowPtr, moveForwardKey) == GLFW_PRESS) {
+			mCameraPosition += direction * secondsSinceLastTimestamp * speed;
+			mWorldPosition += direction * secondsSinceLastTimestamp * speed;
+		}
+		// Move backward
+		if (glfwGetKey(mainWindowPtr, moveBackwardKey) == GLFW_PRESS) {
+			mCameraPosition -= direction * secondsSinceLastTimestamp * speed;
+			mWorldPosition -= direction * secondsSinceLastTimestamp * speed;
+		}
+		// Strafe right
+		if (glfwGetKey(mainWindowPtr, strafeRightKey) == GLFW_PRESS) {
+			mCameraPosition += right * secondsSinceLastTimestamp * speed;
+			mWorldPosition += right * secondsSinceLastTimestamp * speed;
+		}
+		// Strafe left
+		if (glfwGetKey(mainWindowPtr, strafeLeftKey) == GLFW_PRESS) {
+			mCameraPosition -= right * secondsSinceLastTimestamp * speed;
+			mWorldPosition -= right * secondsSinceLastTimestamp * speed;
+		}
+
+		// camera toggling
+		//if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		//{
+			//toggleCameraBoundToMousePointer();
+		//}
+	}
+
 
 }
 
-void MShaderController::updateMVPVariables()
+void MShaderController::updateViewMatricesAndWorldCoords()
 {
+	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
+
+	// projection matrix : 45° Field of view, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	projection = glm::perspective(FoV, 4.0f / 3.0f, 0.1f, 400.0f);
+	model = glm::mat4(1.0);
+
+	
+	
+	// Remember, for the matrix updates below, we need to have the direction/up vectors calculated already,
+	// from updateCameraDirectionAndPosition
+
+	// ******************* Local Matrices **********************************************************************************
+	// Update the localized view mat4, put it into the registry. (may or may not be used, depending on the MShader)
+	auto zeroPos = glm::vec3(0, 0, 0);
+	glm::mat4 localizedView = glm::lookAt(
+										zeroPos,
+										zeroPos + direction,
+										up
+										);
+	controllerValueRegistry.insertMat4("local_view_matrix", localizedView);
+
+	// With localized view calculated, do the local MVP.
+	glm::mat4 localizedMVP = projection * localizedView;
+	controllerValueRegistry.insertMat4("local_MVP_matrix", localizedMVP);
+
+
+
+
+
+	// ******************* Absolute Matrices *******************************************************************************
+	// Update the absolute view mat4, put it into the registry. (may or may not be used, depending on the MShader)
+	glm::mat4 absoluteView = glm::lookAt(mCameraPosition, 
+										 mCameraPosition + direction, 
+										 up);
+	controllerValueRegistry.insertMat4("absolute_view_matrix", absoluteView);
+
+	// With absolute view calculated, do the absolute MVP.
+	glm::mat4 absoluteMVP = projection * absoluteView;
+	controllerValueRegistry.insertMat4("absolute_MVP_matrix", absoluteMVP);
+	
+	// Update world coordinates
+	auto currentWorldCoordinates = GPUWorldCoordinateProducer(mWorldPosition.x, mWorldPosition.y, mWorldPosition.z);
+	mCurrentWorldCoord = currentWorldCoordinates.producedCoordinate;
+	controllerValueRegistry.insertEnclaveKey("worldCoordBPLocalCameraKey", mCurrentWorldCoord.worldBPKey);
+	controllerValueRegistry.insertVec3("worldCoordBPLocalCameraCoord", IndependentUtils::convertECBPolyPointToVec3(mCurrentWorldCoord.worldLocalizedPoint));
 
 }
 

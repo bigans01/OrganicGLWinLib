@@ -28,6 +28,7 @@
 #include "KeyPressTracker.h"
 #include "OpenGLFeedbackListener.h"
 #include "GUIInteractionCondition.h"
+#include "GPUWorldCoordinateProducer.h"
 
 /*
 
@@ -96,6 +97,7 @@ class MShaderController
 
 		void runTick();
 		bool checkIfRunning();
+		void setCameraPosition(glm::vec3 in_position);
 
 	private:
 		void processShaderChangeRequests();	//	1.	check if there is a request to switch to a new MShader; if there is a request,
@@ -118,8 +120,13 @@ class MShaderController
 
 		void updateCameraDirectionAndPosition(bool in_imguiFocusedFlag);	// update the camera position, based off current direction and velocity;
 																			// also update the direction of the camera if the windows is focused, AND the mouse was moved around while in the window;
-																			// The bool input flag should represent if an ImGui object was focused during the frame.
-		void updateMVPVariables();
+																			// The bool input flag should represent if an ImGui object was focused during the frame;
+																			// this function should be called right before updateViewMatricesAndWorldCoords()					
+			
+		void updateViewMatricesAndWorldCoords();	// update both the absolute and localized coordinate modes, regardless of which one is being used; 
+													// also updates mCurrentWorldCoord for localized coordinate mode; 
+													// call this immediately after updateCameraDirectionAndPosition.
+													
 
 		void parseHintAndCreateGradient(MShaderHintEnum in_enumValue);
 		
@@ -195,6 +202,15 @@ class MShaderController
 		GLUniformRegistry controllerValueRegistry;	// should contain all uniforms, values that would be shared between MShaders and this instance
 
 
+		// ***************************************************** Camera/World coordinates *************************************************************
+		// world movement keys
+		int moveForwardKey = GLFW_KEY_W;
+		int strafeRightKey = GLFW_KEY_D;
+		int strafeLeftKey = GLFW_KEY_A;
+		int moveBackwardKey = GLFW_KEY_S;
+		glm::vec3 mCameraPosition = glm::vec3(30, 0, 5);									// Initial position of camera : on +30x, 0y, +5z
+		glm::dvec3 mWorldPosition = glm::dvec3(30, 0, 5);
+		GPUWorldCoordinate mCurrentWorldCoord;
 
 		// ***************************************************** Direction calculation members ****************************************************
 		glm::vec3 direction;	// direction camera is facing
@@ -224,6 +240,7 @@ class MShaderController
 		OpenGLFeedbackListener inputListener;
 		KeyPressTracker controllerInputTracker;
 		bool continueRunning = true;
+		bool wasImGuiObjectFocused = false;		// used every frame except the initial one; set to true as long as an ImGui window was focused.
 		static void controllerKeyboardCallbackWrapper(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void processInputFeedback(std::queue<Message> in_feedbackQueue);	// designed to analyze the feedback queue that is contained within the inputListener,

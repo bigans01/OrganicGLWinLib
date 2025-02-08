@@ -37,6 +37,11 @@ void MShaderBase::cleanupSpawnedMGears()
 	mShaderGearManager.cleanupMGears();
 }
 
+void MShaderBase::setBindingsForGears()
+{
+	mShaderGearManager.createRequiredGearObjects();
+}
+
 bool MShaderBase::checkForRequiredGearObjects(std::queue<Message>* in_messageQueueRef)
 {
 	return mShaderGearManager.verifyRequiredGearObjects(in_messageQueueRef);

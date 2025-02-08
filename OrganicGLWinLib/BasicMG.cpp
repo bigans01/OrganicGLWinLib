@@ -23,6 +23,11 @@ std::vector<MAPIObjectMetadata> BasicMG::fetchRequiredObjects()
 	return returnVector;
 }
 
+void BasicMG::setObjectBindings()
+{ 
+
+}
+
 void BasicMG::render()
 {
 

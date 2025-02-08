@@ -47,6 +47,9 @@ class MShaderBase
 
 		void cleanupSpawnedMGears();			// call cleanupMGears() on all gears in the mShaderGearManager
 
+		void setBindingsForGears();		// ultimately used to call setObjectBindings() for all MGear objects found in the MGearManager (mShaderGearManager);
+										// should be called only after objects required by MGear objects have been instantiated/setup.
+
 		bool checkForRequiredGearObjects(std::queue<Message>* in_messageQueueRef);		// calls the verifyRequiredGearObjects function on mShaderGearManager;
 																						// return value should be true if all requested objects were found in the referenced MAPIObjectManager.
 
