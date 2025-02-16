@@ -43,7 +43,9 @@ void GrayscaleMG::setObjectBindings()
 
 void GrayscaleMG::render()
 {
-
+	// switch to this program, then
+	// use MAPIObjectManager::fetchBinding to bind to appropriate resources (i.e, glBindBuffer(mGearObjectManagerRef->fetchBinding(...)); )
+	switchToMGearProgram();
 }
 
 void GrayscaleMG::cleanupMGear()

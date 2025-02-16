@@ -46,3 +46,8 @@ bool MShaderBase::checkForRequiredGearObjects(std::queue<Message>* in_messageQue
 {
 	return mShaderGearManager.verifyRequiredGearObjects(in_messageQueueRef);
 }
+
+void MShaderBase::renderAllGears()
+{
+	mShaderGearManager.renderMGears();
+}

@@ -53,6 +53,7 @@ class MShaderBase
 		bool checkForRequiredGearObjects(std::queue<Message>* in_messageQueueRef);		// calls the verifyRequiredGearObjects function on mShaderGearManager;
 																						// return value should be true if all requested objects were found in the referenced MAPIObjectManager.
 
+
 		// ***** Required virtual functions *****
 		// Below: should be called after setSharedObjectPointers above
 		virtual void setupMShaderRequestsAndName() = 0;		// set the shader name, create MAPIObjectRequest objects for expected bindings (bindingRequests), 
@@ -61,8 +62,12 @@ class MShaderBase
 		virtual Message checkRequiredBindings() = 0;	// should be called after requested bindings have been sent to an instance that is a child of this class;
 														// it should analyze the contents of the referenced MAPIObjectManager (parentBindingMapPtr) to see if 
 														// the expected bindings are available.
+		
+		virtual void prepareAndRender() = 0;	// allows the MShader to run any custom code it needs (prepare), before rendering
+												// all MGear objects contained in the mShaderGearManager.
 
 	protected:
+		void renderAllGears();
 		// references to shareable objects from the parent MShaderController
 		ImGuiButtonPanelContainer* parentButtonPanelContainerPtr = nullptr;
 		ImGuiSliderFloatPanelContainer* parentSliderPanelContainerPtr  = nullptr;

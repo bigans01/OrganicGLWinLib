@@ -20,6 +20,7 @@ class MSBasicCompute : public MShaderBase
 	public:	
 		void setupMShaderRequestsAndName();
 		Message checkRequiredBindings();
+		void prepareAndRender();
 	private:
 };
 

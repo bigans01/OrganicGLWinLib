@@ -34,7 +34,7 @@ class MGearBase
 		virtual std::vector<MAPIObjectMetadata> fetchRequiredObjects() = 0;	// used to verify that objects are instantiated/setup correctly;
 																			// called by MGearManager::verifyRequiredGearObjects()
 
-		virtual void render() = 0;	// should be called every tick in which this MGear is run
+		virtual void render() = 0;	// should be called every tick in which this MGear is run; ensure that switchToMGearProgram() is called first in this function
 
 		virtual void cleanupMGear() = 0;	// should be called before MGear is deleted (deletes shaders, programs, other resources)
 
@@ -45,6 +45,9 @@ class MGearBase
 		// Below: always call this first after the derived class is instantiated into a map
 		void setMGearPointers(MAPIObjectManager* in_mGearObjectManagerRef,
 							GLUniformRegistry* in_mGearUniformRegistryRef);
+
+		void switchToMGearProgram();	// should always be called first in the render() virtual function for 
+										// a given MGearBase-derived class/object.
 	protected:
 		MAPIObjectManager* mGearObjectManagerRef = nullptr;
 		GLUniformRegistry* mGearUniformRegistryRef = nullptr;

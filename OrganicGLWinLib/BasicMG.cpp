@@ -30,7 +30,9 @@ void BasicMG::setObjectBindings()
 
 void BasicMG::render()
 {
-
+	// switch to this program, then
+	// use MAPIObjectManager::fetchBinding to bind to appropriate resources (i.e, glBindBuffer(mGearObjectManagerRef->fetchBinding(...)); )
+	switchToMGearProgram();
 }
 
 void BasicMG::cleanupMGear()

@@ -29,3 +29,16 @@ Message MSBasicGrayscale::checkRequiredBindings()
 	Message returnMessage;
 	return returnMessage;
 }
+
+void MSBasicGrayscale::prepareAndRender()
+{
+	// Testing only: get the current value of the background_clear_color from 
+	// the MShader's registry, and use that in a call to glClear when all gears are rendered.
+	// (this was done to check if gradient smoothing was functional, and how it looked.)
+	auto currentClearColor = parentValueRegistryPtr->getVec3("background_clear_color");
+	glClearColor(currentClearColor.x, currentClearColor.y, currentClearColor.z, 0.0f);
+
+	renderAllGears();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}

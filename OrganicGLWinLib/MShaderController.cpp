@@ -411,6 +411,9 @@ void MShaderController::runTick()
 	// ---------- Phase 2: Render non ImGui components (but do not swap buffers)
 	// TODO: This is where the currently selected MShader will be called upon to do its rendering, somehow.
 
+	mShaderCycler.getTargetShaderRef()->prepareAndRender();		// signal the currently selected MShader to do it's 
+																// desired rendering.
+
 	// Need to start doing ImGui stuff here; ensure that the value of wasImGuiObjectFocused gets
 	// a check done on it, to ensure that it can updated appropriately
 

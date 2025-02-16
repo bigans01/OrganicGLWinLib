@@ -11,6 +11,7 @@ class MSBasicGrayscale : public MShaderBase
 	public:
 		void setupMShaderRequestsAndName();
 		Message checkRequiredBindings();
+		void prepareAndRender();
 	private:
 };
 

@@ -7,3 +7,8 @@ void MGearBase::setMGearPointers(MAPIObjectManager* in_mGearObjectManagerRef,
 	mGearObjectManagerRef = in_mGearObjectManagerRef;
 	mGearUniformRegistryRef = in_mGearUniformRegistryRef;
 }
+
+void MGearBase::switchToMGearProgram()
+{
+	glUseProgram(mGearProgramID);
+}
