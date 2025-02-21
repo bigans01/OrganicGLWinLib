@@ -83,28 +83,35 @@ bool MGearManager::verifyRequiredGearObjects(std::queue<Message>* in_messageQueu
 		auto currentMGearObjectVector = currentMGear.second->fetchRequiredObjects();
 		for (auto& currentRequiredObject : currentMGearObjectVector)
 		{
-			std::string mapiObjectNameString = "";
-			switch (currentRequiredObject.mdType)
+			switch (currentRequiredObject.fetchMdMapKeyType())
 			{
-				case MAPIObjectType::BUFFER: { mapiObjectNameString = "BUFFER"; break; }
-				case MAPIObjectType::FBO: { mapiObjectNameString = "FBO"; break; }
-				case MAPIObjectType::TEXTURE: { mapiObjectNameString = "TEXTURE"; break; }
-				case MAPIObjectType::VAO: { mapiObjectNameString = "VAO"; break; }
-			}
+				// For typical string-based MGear objects
+				case MAPIObjectMapKeyType::STRING_KEYTYPE:
+				{
+					std::string mapiObjectNameString = "";
+					switch (currentRequiredObject.fetchMdObjectType())
+					{
+						case MAPIObjectType::BUFFER: { mapiObjectNameString = "BUFFER"; break; }
+						case MAPIObjectType::FBO: { mapiObjectNameString = "FBO"; break; }
+						case MAPIObjectType::TEXTURE: { mapiObjectNameString = "TEXTURE"; break; }
+						case MAPIObjectType::VAO: { mapiObjectNameString = "VAO"; break; }
+					}
 
-			std::string objectLoggingString = "Checking for " + mapiObjectNameString + " with the name " + currentRequiredObject.mdName + ": ";
+					std::string objectLoggingString = "Checking for " + mapiObjectNameString + " with the name " + currentRequiredObject.fetchMdName() + ": ";
 
-			bool didBindingExist = msbObjectManagerRef->doesBindingExist(currentRequiredObject);
-			if (didBindingExist)
-			{
-				objectLoggingString += "Success";
+					bool didBindingExist = msbObjectManagerRef->doesBindingExist(currentRequiredObject);
+					if (didBindingExist)
+					{
+						objectLoggingString += "Success";
+					}
+					else
+					{
+						objectLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, objectLoggingString));
+				}
 			}
-			else
-			{
-				objectLoggingString += "Failure";
-				allObjectsFound = false;
-			}
-			in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, objectLoggingString));
 		}
 	}
 	return allObjectsFound;

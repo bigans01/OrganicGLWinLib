@@ -4,6 +4,7 @@
 #define MAPIObjectRequest_H
 
 #include "MAPIObjectType.h"
+#include "MAPIObjectMapKeyType.h"
 #include <string>
 
 /*
@@ -20,20 +21,40 @@ class MAPIObjectRequest
 	public:
 		MAPIObjectRequest() {};	// default constructor required for copy into a vector, etc
 
-		// Below: the typical constructor that should be used 
-		MAPIObjectRequest(MAPIObjectType in_bindingType, std::string in_bindingName) :	
-			bindingType(in_bindingType),
-			bindingName(in_bindingName)
-		{};
+		// Below: constructor for string types.
+		MAPIObjectRequest(MAPIObjectType in_requestBindingType, 
+						  std::string in_bindingName) :	
+			requestBindingType(in_requestBindingType),
+			requestBindingString(in_bindingName)
+		{
+			requestMapKeyType = MAPIObjectMapKeyType::STRING_KEYTYPE;
+		};
 
-		MAPIObjectType getBindingRequestType() { return bindingType;  }
-		std::string getBindingRequestName() { return bindingName; }
+		// Below: constructor for 3d key types.
+		MAPIObjectRequest(MAPIObjectType in_requestBindingType,
+			EnclaveKeyDef::EnclaveKey in_keyEnclaveValue,
+			std::string in_requestBindingKeyMapName) :
+				requestBindingType(in_requestBindingType),
+				requestBindingKey(in_keyEnclaveValue),
+				requestBindingKeyMapName(in_requestBindingKeyMapName)
+		{
+			requestMapKeyType = MAPIObjectMapKeyType::ENCLAVE_KEYTYPE;
+		}
+
+
+		MAPIObjectMapKeyType getBindingMapKeyType() { return requestMapKeyType;  }
+		MAPIObjectType getBindingRequestType() { return requestBindingType;  }
+		std::string getBindingRequestName() { return requestBindingString; }
 
 	private:
-		MAPIObjectType bindingType = MAPIObjectType::UNSET;	// default value is UNSET; determines if the binding type is for a texture, buffer, VAO, etc
+		MAPIObjectMapKeyType requestMapKeyType = MAPIObjectMapKeyType::UNSET_KEYTYPE;
+		MAPIObjectType requestBindingType = MAPIObjectType::UNSET;	// default value is UNSET; determines if the binding type is for a texture, buffer, VAO, etc
 		// must be set by non-default constructor.
 
-		std::string bindingName = "";	// the required name of the binding
+		std::string requestBindingString = "";				// when the key value type is string, the string is stored here.
+
+		EnclaveKeyDef::EnclaveKey requestBindingKey;		// when the key value is a 3d key, that key value is stored here.
+		std::string requestBindingKeyMapName = "";			// when the key value is a 3d key, this specifies the name of the 3d key map
 };
 
 #endif

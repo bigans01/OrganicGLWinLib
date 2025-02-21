@@ -1614,6 +1614,9 @@
     <ClInclude Include="MAPIObjectMetadata.h">
       <Filter>Header Files\MShaderController\MBinding</Filter>
     </ClInclude>
+    <ClInclude Include="MAPIObjectMapKeyType.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

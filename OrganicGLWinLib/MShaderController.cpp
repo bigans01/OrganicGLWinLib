@@ -246,9 +246,11 @@ void MShaderController::createMShaders()
 				mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, "All required MGear resources found for " + insertAttemptShaderName));
 
 				// Do VAO or other GL object stuff here, per gear, per MShader...at this point, binding requests from individual 
-				// MGear objects can be processed, by calling setBindingsForGears (which ultiamtely calls setObjectBindings for each MGear object)
+				// MGear objects can be processed, by calling setBindingsForGears (which ultimately calls setObjectBindings for each MGear object)
 				// all resources/objects should be created prior to any objects being created/bound to existing buffers
 				catalog.getShaderRef(insertAttemptShaderName)->setBindingsForGears();
+
+
 			}
 			else
 			{

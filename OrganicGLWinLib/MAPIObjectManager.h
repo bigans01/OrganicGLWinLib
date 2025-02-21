@@ -56,7 +56,7 @@ class MAPIObjectManager
 				MBufferBinding() {};
 				MBufferBinding(MAPIObjectData in_bufferBinding)
 				{
-					bufferBindingName = in_bufferBinding.getBindingName();
+					bufferBindingName = in_bufferBinding.getDataBindingName();
 					OrganicGLWinUtils::createBuffer(&bufferId);
 					std::cout << "MBufferBinding: created buffer with ID: " << bufferId << std::endl;
 				}
@@ -66,7 +66,7 @@ class MAPIObjectManager
 					OrganicGLWinUtils::deleteBuffer(&bufferId); 
 				}
 
-				std::string getBindingName()
+				std::string getDataBindingName()
 				{
 					return bufferBindingName;
 				}
@@ -91,7 +91,7 @@ class MAPIObjectManager
 				MTextureBinding() {};
 				MTextureBinding(MAPIObjectData in_textureBinding)
 				{
-					textureBindingName = in_textureBinding.getBindingName();
+					textureBindingName = in_textureBinding.getDataBindingName();
 					glGenTextures(1, &textureId);
 					std::cout << "MTextureBinding: created texture with ID: " << textureId << std::endl;
 				}
@@ -101,7 +101,7 @@ class MAPIObjectManager
 					glDeleteTextures(1, &textureId);
 				}
 
-				std::string getBindingName()
+				std::string getDataBindingName()
 				{
 					return textureBindingName;
 				}
@@ -124,7 +124,7 @@ class MAPIObjectManager
 				MFBOBinding() {};
 				MFBOBinding(MAPIObjectData in_textureBinding)
 				{
-					fboBindingName = in_textureBinding.getBindingName();
+					fboBindingName = in_textureBinding.getDataBindingName();
 					glGenFramebuffers(1, &fboBindingId);
 				}
 
