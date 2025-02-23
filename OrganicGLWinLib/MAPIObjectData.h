@@ -45,8 +45,8 @@ class MAPIObjectData
 			          std::string in_requestBindingKeyMapName,
 			          Message in_dataBindingMessage) :
 			dataBindingType(in_dataBindingType),
-			dataBindingKey(in_keyEnclaveValue),
-			dataBindingKeyMapName(in_requestBindingKeyMapName),
+			dataBindingThreeDKey(in_keyEnclaveValue),
+			dataBindingThreeDKeyMapName(in_requestBindingKeyMapName),
 			dataBindingMessage(in_dataBindingMessage)
 		{
 			dataMapKeyType = MAPIObjectMapKeyType::ENCLAVE_KEYTYPE;
@@ -56,8 +56,14 @@ class MAPIObjectData
 
 		MAPIObjectMapKeyType getDataMapKeyType() { return dataMapKeyType; } 
 		MAPIObjectType getDataBindingType() { return dataBindingType; }
-		std::string getDataBindingName() { return dataBindingName; }
 		Message getDataBindingMessage() { return dataBindingMessage; }
+
+		// Below: this function used when fetching data from string types (dataMapKeyType = MAPIObjectMapKeyType::STRING_KEYTYPE)
+		std::string getDataBindingName() { return dataBindingName; }
+
+		// Below: these functions are used when fetching data from 3d key types (dataMapKeyType = MAPIObjectMapKeyType::ENCLAVE_KEYTYPE)
+		std::string getDataBindingThreeDKeyMapName() { return dataBindingThreeDKeyMapName; }
+		EnclaveKeyDef::EnclaveKey getDataBindingThreeDKey() { return dataBindingThreeDKey; }
 
 	private:
 		MAPIObjectMapKeyType dataMapKeyType = MAPIObjectMapKeyType::UNSET_KEYTYPE;
@@ -67,8 +73,8 @@ class MAPIObjectData
 		std::string dataBindingName = "";	// the required name of the binding
 		Message dataBindingMessage;			// the Message that contains metadata about the binding.
 
-		EnclaveKeyDef::EnclaveKey dataBindingKey;		// when the key value is a 3d key, that key value is stored here.
-		std::string dataBindingKeyMapName = "";			// when the key value is a 3d key, this specifies the name of the 3d key map
+		EnclaveKeyDef::EnclaveKey dataBindingThreeDKey;		// when the key value is a 3d key, that key value is stored here.
+		std::string dataBindingThreeDKeyMapName = "";			// when the key value is a 3d key, this specifies the name of the 3d key map
 };
 
 #endif

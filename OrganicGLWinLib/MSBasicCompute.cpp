@@ -17,9 +17,15 @@ void MSBasicCompute::setupMShaderRequestsAndName()
 	MAPIObjectRequest bufferRequest(MAPIObjectType::BUFFER, "testbuffer");
 	MAPIObjectRequest textureRequest(MAPIObjectType::TEXTURE, "testTexture");
 	MAPIObjectRequest fboRequest(MAPIObjectType::FBO, "testFBO");
+
+	// Below: testing only, to ensure that 3d-key retrieval works for BUFFER objects
+	MAPIObjectRequest threeDTest(MAPIObjectType::BUFFER, EnclaveKeyDef::EnclaveKey(1, 1, 1), "3dTest");
+
 	bindingRequests.push_back(bufferRequest);
 	bindingRequests.push_back(textureRequest);
 	bindingRequests.push_back(fboRequest);
+
+	bindingRequests.push_back(threeDTest);
 }
 
 Message MSBasicCompute::checkRequiredBindings()

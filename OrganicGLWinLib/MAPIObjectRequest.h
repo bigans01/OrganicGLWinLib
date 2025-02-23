@@ -44,7 +44,13 @@ class MAPIObjectRequest
 
 		MAPIObjectMapKeyType getBindingMapKeyType() { return requestMapKeyType;  }
 		MAPIObjectType getBindingRequestType() { return requestBindingType;  }
+		
+		// Below: This is used for string types. See usage in MAPIObjectManager::handleMAPIObjectRequest.
 		std::string getBindingRequestName() { return requestBindingString; }
+
+		// Below: These are for 3d key types.
+		std::string getBindingRequestKeyMapName() { return requestBindingKeyMapName;  }
+		EnclaveKeyDef::EnclaveKey getBindingEnclaveKey() { return requestBindingKey;  }
 
 	private:
 		MAPIObjectMapKeyType requestMapKeyType = MAPIObjectMapKeyType::UNSET_KEYTYPE;

@@ -49,8 +49,37 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectMetadata in_objectMeta)
 			}
 			break;
 		}
+
+		// For EnclaveKey-based  binding searching
+		case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+		{
+			std::string threeDKeyMapName = in_objectMeta.fetchMdKeyMapName();
+			switch (in_objectMeta.fetchMdObjectType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					auto threeDKeyMapNameFinder = stringedThreeDBufferMaps.find(threeDKeyMapName);
+					if (threeDKeyMapNameFinder != stringedThreeDBufferMaps.end())
+					{
+						// it exists
+						if (threeDKeyMapNameFinder->second.doesThreeDBindingExist(in_objectMeta.fetchMdKeyValue()))
+						{
+							wasFound = true;
+						}
+					}
+					break;
+				}
+			}
+			break;
+		}
+
 	}
 	return wasFound;
+}
+
+void MAPIObjectManager::deleteBinding(MAPIObjectMetadata in_objectMeta)
+{ 
+
 }
 
 
@@ -97,6 +126,50 @@ Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRe
 			}
 		    break;
 		}
+
+		// For EnclaveKey-based requests
+		case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+		{
+			switch (in_objectRequest.getBindingRequestType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					// Create the MAPIObjectData for a BUFFER and use it in the call to attemptBindingInsert.
+					// Should require no additional metadata in the Message; we will need to get the EnclaveKey for the map,
+					// and the string-keyed value for that map we are inserting into.
+					std::string keyedMapName = in_objectRequest.getBindingRequestKeyMapName();
+					EnclaveKeyDef::EnclaveKey keyedMapKey = in_objectRequest.getBindingEnclaveKey();
+					MAPIObjectData newBufferBinding(MAPIObjectType::BUFFER, keyedMapKey, keyedMapName, Message(MessageType::NOVAL));
+					handleAttemptData = attemptBindingInsert(newBufferBinding);
+					break;
+				}
+
+				case MAPIObjectType::TEXTURE:
+				{
+					// Create the MAPIObjectData for a TEXTURE and use it in the call to attemptBindingInsert.
+					// Should require no additional metadata in the Message; we will need to get the EnclaveKey for the map,
+					// and the string-keyed value for that map we are inserting into.
+					std::string keyedMapName = in_objectRequest.getBindingRequestKeyMapName();
+					EnclaveKeyDef::EnclaveKey keyedMapKey = in_objectRequest.getBindingEnclaveKey();
+					MAPIObjectData newTextureBinding(MAPIObjectType::TEXTURE, keyedMapKey, keyedMapName, Message(MessageType::NOVAL));
+					handleAttemptData = attemptBindingInsert(newTextureBinding);
+					break;
+				}
+
+				case MAPIObjectType::FBO:
+				{
+					// Create the MAPIObjectData for a FBO and use it in the call to attemptBindingInsert.
+					// Should require no additional metadata in the Message; we will need to get the EnclaveKey for the map,
+					// and the string-keyed value for that map we are inserting into.
+					std::string keyedMapName = in_objectRequest.getBindingRequestKeyMapName();
+					EnclaveKeyDef::EnclaveKey keyedMapKey = in_objectRequest.getBindingEnclaveKey();
+					MAPIObjectData newTextureBinding(MAPIObjectType::FBO, keyedMapKey, keyedMapName, Message(MessageType::NOVAL));
+					handleAttemptData = attemptBindingInsert(newTextureBinding);
+					break;
+				}
+			}
+			break;
+		}
 	}
 	return handleAttemptData;
 }
@@ -119,11 +192,11 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 					auto nameFindIter = bufferResourceMap.find(bindingNameToCheck);
 					if (nameFindIter == bufferResourceMap.end()) // it was not found
 					{
-						// Because MBufferBinding makes a call to glGenBuffers with an argument of 1 buffer,
+						// Because StringedMBufferBinding makes a call to glGenBuffers with an argument of 1 buffer,
 						// there should in theory never be an error that is generated when attempting to create a buffer.
 						// So if it gets created an inserted, just automatically assume it was succesful (i.e, no special
 						// error checking is required.)
-						MBufferBinding newBufferBinding(in_bindingToInsert);
+						StringedMBufferBinding newBufferBinding(in_bindingToInsert);
 						bufferResourceMap[in_bindingToInsert.getDataBindingName()] = newBufferBinding;
 						wasSuccessful = 1;
 						attemptMetadata.insertString("MAPIObjectManager created new buffer, " + bindingNameToCheck + " bound with ID: " + std::to_string(bufferResourceMap[in_bindingToInsert.getDataBindingName()].getBufferId()));
@@ -144,7 +217,7 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 					if (nameFindIter == textureResourceMap.end())
 					{
 						// Generating a texture is also a simple operation (glGenTextures); there should really be no error checking required here.
-						MTextureBinding newTextureBinding(in_bindingToInsert);
+						StringedMTextureBinding newTextureBinding(in_bindingToInsert);
 						textureResourceMap[in_bindingToInsert.getDataBindingName()] = newTextureBinding;
 						wasSuccessful = 1;
 						attemptMetadata.insertString("MAPIObjectManager created new texture, " + bindingNameToCheck + " bound with ID: " + std::to_string(textureResourceMap[in_bindingToInsert.getDataBindingName()].getTextureId()));
@@ -165,7 +238,7 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 					{
 						// Generating a FBO object is a simple call in OpenGL; various attachments such as textures and other settintgs are outside
 						// of the scope of this function
-						MFBOBinding newFBOBinding(in_bindingToInsert);
+						StringedMFBOBinding newFBOBinding(in_bindingToInsert);
 						fboResourceMap[in_bindingToInsert.getDataBindingName()] = newFBOBinding;
 						wasSuccessful = 1;
 						attemptMetadata.insertString("MAPIObjectManager created new frame buffer object (FBO), " + bindingNameTocheck + " bound with ID: " + std::to_string(fboResourceMap[in_bindingToInsert.getDataBindingName()].getFBOId()));
@@ -175,6 +248,48 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 						attemptMetadata.insertString("MAPIObjectManager creation of new frame buffer object (FBO), " + bindingNameTocheck + " failed (already exists)");
 					}
 
+					break;
+				}
+			}
+			break;
+		}
+
+		// For EnclaveKey-based binding inserts
+		case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+		{
+			switch (in_bindingToInsert.getDataBindingType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					auto threeDMapName = in_bindingToInsert.getDataBindingThreeDKeyMapName();
+					auto threeDMapKeyValue = in_bindingToInsert.getDataBindingThreeDKey();
+
+					// If there is no key/value pair for the given 3d key, insert the requested value
+					if (!stringedThreeDBufferMaps[threeDMapName].doesThreeDBindingExist(threeDMapKeyValue))
+					{
+						ThreeDKeyedMBufferBinding newThreeDBufferBinding(in_bindingToInsert);
+						stringedThreeDBufferMaps[threeDMapName].insertThreeDBinding(threeDMapKeyValue, newThreeDBufferBinding);
+						wasSuccessful = 1;
+						attemptMetadata.insertString("MAPIObjectManager created new 3d keyed buffer binding, (\"" + threeDMapName + "\", " + threeDMapKeyValue.getKeyString() 
+							                        + "), bound with ID: " + std::to_string(stringedThreeDBufferMaps[threeDMapName].fetchThreeDBindingId(threeDMapKeyValue)));
+					}
+					//auto threeDMapNameFinder = stringedThreeDBufferMaps.find(threeDMapNameToCheck);
+					//if (threeDMapNameFinder)
+					else
+					{
+						attemptMetadata.insertString("MAPIObjectManager creation of new 3d keyed buffer binding, (\"" + threeDMapName + "\", " + threeDMapKeyValue.getKeyString() + "), failed (already exists) ");
+					}
+
+					break;
+				}
+
+				case MAPIObjectType::TEXTURE:
+				{
+					break;
+				}
+
+				case MAPIObjectType::FBO:
+				{
 					break;
 				}
 			}
@@ -203,6 +318,7 @@ int MAPIObjectManager::fetchBinding(MAPIObjectMetadata in_objectMeta)
 					auto bindingNameFinder = bufferResourceMap.find(in_objectMeta.fetchMdName());
 					if (bindingNameFinder != bufferResourceMap.end())	// it was found
 					{
+						//returnBinding = bufferResourceMap[in_objectMeta.fetchMdName()].getBufferId();
 						returnBinding = bufferResourceMap[in_objectMeta.fetchMdName()].getBufferId();
 					}
 					break;
@@ -230,27 +346,57 @@ int MAPIObjectManager::fetchBinding(MAPIObjectMetadata in_objectMeta)
 			}
 			break;
 		}
+
+		// For EnclaveKey-based searches
+		case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+		{
+			switch (in_objectMeta.fetchMdObjectType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					auto threeDMapNameFinder = stringedThreeDBufferMaps.find(in_objectMeta.fetchMdKeyMapName());
+					if (threeDMapNameFinder != stringedThreeDBufferMaps.end()) // it was found, now check for the key
+					{
+						if (threeDMapNameFinder->second.doesThreeDBindingExist(in_objectMeta.fetchMdKeyValue())) // it was found!
+						{
+							returnBinding = threeDMapNameFinder->second.fetchThreeDBindingId(in_objectMeta.fetchMdKeyValue());
+						}
+					}
+					break;
+				}
+			}
+			break;
+		}
 	}
 	return returnBinding;
 }
 
 void MAPIObjectManager::cleanupResources()
 {
-	// cleanup buffer bindings
+	// cleanup stringed buffer bindings
 	for (auto& currentBufferResource : bufferResourceMap)
 	{
 		currentBufferResource.second.deleteBufferResource();
 	}
 
-	// cleanup texture bindings
+	// cleanup stringed texture bindings
 	for (auto& currentTextureResource : textureResourceMap)
 	{
 		currentTextureResource.second.deleteTextureResource();
 	}
 
-	// cleanup FBO bindings
+	// cleanup stringed FBO bindings
 	for (auto& currentFBOResource : fboResourceMap)
 	{
 		currentFBOResource.second.deleteFBOResource();
+	}
+
+	// cleanup keyed buffer bindings
+	for (auto& currentStringedKeyedMap : stringedThreeDBufferMaps)
+	{
+		for (auto& currentKeyBinding : currentStringedKeyedMap.second.threeDBindings)
+		{
+			currentKeyBinding.second.deleteThreeDBufferResource();
+		}
 	}
 }

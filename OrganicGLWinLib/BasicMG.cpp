@@ -32,6 +32,25 @@ void BasicMG::render()
 {
 	// switch to this program, then
 	// use MAPIObjectManager::fetchBinding to bind to appropriate resources (i.e, glBindBuffer(mGearObjectManagerRef->fetchBinding(...)); )
+	
+
+	// optional: use doesBindingExist to check that a binding exists.
+	bool testExistence = mGearObjectManagerRef->doesBindingExist(MAPIObjectMetadata(MAPIObjectType::BUFFER, EnclaveKeyDef::EnclaveKey(1, 1, 1), "3dTest"));
+	if (testExistence)
+	{
+		//std::cout << "binding exists!!! " << std::endl;
+	}
+	
+	GLuint testFetch = mGearObjectManagerRef->fetchBinding(MAPIObjectMetadata(MAPIObjectType::BUFFER, EnclaveKeyDef::EnclaveKey(1, 1, 1), "3dTest"));
+
+	/*
+	// Testing only (to make sure fetchBinding works), un comment when needed.
+	if (testFetch != -1)
+	{
+		std::cout << "BasicMG: found buffer in mGearObjectManagerRef: " << testFetch << std::endl;
+	}
+	*/
+
 	switchToMGearProgram();
 }
 
