@@ -77,9 +77,90 @@ bool MAPIObjectManager::doesBindingExist(MAPIObjectMetadata in_objectMeta)
 	return wasFound;
 }
 
-void MAPIObjectManager::deleteBinding(MAPIObjectMetadata in_objectMeta)
+bool MAPIObjectManager::deleteBinding(MAPIObjectMetadata in_objectMeta)
 { 
+	bool wasBindingDeleted = false;
+	switch (in_objectMeta.fetchMdMapKeyType())
+	{
+		// For typical string-based binding searching
+		case MAPIObjectMapKeyType::STRING_KEYTYPE:
+		{
+			switch (in_objectMeta.fetchMdObjectType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					auto bindingNameFinder = bufferResourceMap.find(in_objectMeta.fetchMdName());
+					if (bindingNameFinder != bufferResourceMap.end())	// it was found
+					{
+						// Remember, the buffer resource must be deleted first, before the erase.
+						bufferResourceMap[in_objectMeta.fetchMdName()].deleteBufferResource();
+						bufferResourceMap.erase(in_objectMeta.fetchMdName());
+						wasBindingDeleted = true;
+					}
+					break;
+				}
 
+				case MAPIObjectType::TEXTURE:
+				{
+					auto bindingNameFinder = textureResourceMap.find(in_objectMeta.fetchMdName());
+					if (bindingNameFinder != textureResourceMap.end())
+					{
+						// Remember, the texture resource must be deleted first, before the erase.
+						textureResourceMap[in_objectMeta.fetchMdName()].deleteTextureResource();
+						textureResourceMap.erase(in_objectMeta.fetchMdName());
+						wasBindingDeleted = true;
+					}
+					break;
+				}
+
+				case MAPIObjectType::FBO:
+				{
+					auto fboNameFinder = fboResourceMap.find(in_objectMeta.fetchMdName());
+					if (fboNameFinder != fboResourceMap.end())
+					{
+						fboResourceMap[in_objectMeta.fetchMdName()].deleteFBOResource();
+						fboResourceMap.erase(in_objectMeta.fetchMdName());
+						wasBindingDeleted = true;
+					}
+					break;
+				}
+			}
+			break;
+		}
+
+		// For EnclaveKey-based  binding searching
+		case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+		{
+			std::string threeDKeyMapName = in_objectMeta.fetchMdKeyMapName();
+			switch (in_objectMeta.fetchMdObjectType())
+			{
+				case MAPIObjectType::BUFFER:
+				{
+					auto threeDKeyMapNameFinder = stringedThreeDBufferMaps.find(threeDKeyMapName);
+					if (threeDKeyMapNameFinder != stringedThreeDBufferMaps.end())
+					{
+						// it exists
+						if (threeDKeyMapNameFinder->second.doesThreeDBindingExist(in_objectMeta.fetchMdKeyValue()))
+						{
+							threeDKeyMapNameFinder->second.deleteThreeDBinding(in_objectMeta.fetchMdKeyValue());
+							wasBindingDeleted = true;
+						}
+
+						// if a binding was deleted, check the size of the 3d map. if it's 0, just delete it to free up memory.
+						if (wasBindingDeleted && threeDKeyMapNameFinder->second.isMapEmpty())
+						{
+							stringedThreeDBufferMaps.erase(threeDKeyMapName);
+						}
+					}
+					break;
+				}
+			}
+			break;
+		}
+
+	}
+
+	return wasBindingDeleted;
 }
 
 

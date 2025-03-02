@@ -393,8 +393,47 @@ void MShaderController::insertNewGradient(Message in_gradientInsertionMessage, b
 	}
 }
 
+void MShaderController::requestBindingDelete(MAPIObjectMetadata in_bindingDataToDelete)
+{
+	// Safety: allows for a thread other than the one doing runTick() to safely insert
+	// a delete binding request.
+	std::lock_guard<std::mutex> lock(bindingDeleteRequestMutex);
+	
+	// insert the request into the queue...
+	bindingDeleteRequests.push(in_bindingDataToDelete);
+}
+
+void MShaderController::processBindingDeleteRequests()
+{
+	// Safety: allows for the runTick() to safely access this queue, if another thread
+	// is attempting to insert into it.
+	std::lock_guard<std::mutex> lock(bindingDeleteRequestMutex);
+
+	while (!bindingDeleteRequests.empty())
+	{
+		auto currentRequest = bindingDeleteRequests.front();
+
+		// Send every request to controllerBindings (MAPIObjectManager) for processing;
+		// have each request return a bool value indicating if the buffer was deleted or not, 
+		// and write out the results to the informational queue.
+		bool wasBindingDeleted = controllerBindings.deleteBinding(currentRequest);
+		if (wasBindingDeleted)
+		{
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("!! Binding deleted: " + currentRequest.buildMetadataInfoString())));
+		}
+		else
+		{
+			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("!! Binding WAS NOT deleted! " + currentRequest.buildMetadataInfoString())));
+		}
+
+		bindingDeleteRequests.pop();
+	}
+}
+
 void MShaderController::runTick()
 {
+	processBindingDeleteRequests();	// check for deletes before we do anything else
+
 	// ---------- Phase 1: Check for requests,  calculate passed time, update variables and gradients, reset shader feedback
 	processShaderChangeRequests();		// Step 1:	if attemptSwitchOnNextTick was called, attempt to switch
 										//			to the shader given by the current value of nextShaderToSwitchTo.

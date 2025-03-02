@@ -44,7 +44,7 @@ class MAPIObjectManager
 															// that the GUI API gave the object when it was allocated.
 															// Return value will be -1 if no object is found.
 
-		void deleteBinding(MAPIObjectMetadata in_objectMeta);
+		bool deleteBinding(MAPIObjectMetadata in_objectMeta);
 	private:
 
 		void cleanupResources();	// should be called on destructor of this class; deletes any remaining allocated resoruces in the resource maps.
@@ -128,6 +128,11 @@ class MAPIObjectManager
 				void deleteThreeDBinding(EnclaveKeyDef::EnclaveKey in_threeDValue)
 				{
 					threeDBindings.erase(in_threeDValue);
+				}
+
+				bool isMapEmpty()
+				{
+					return threeDBindings.empty();
 				}
 
 				GLuint fetchThreeDBindingId(EnclaveKeyDef::EnclaveKey in_threeDValue)

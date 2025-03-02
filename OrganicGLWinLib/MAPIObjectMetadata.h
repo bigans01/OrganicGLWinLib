@@ -44,6 +44,49 @@ class MAPIObjectMetadata
 		EnclaveKeyDef::EnclaveKey fetchMdKeyValue() { return mdKeyValue; }
 		std::string fetchMdKeyMapName() { return mdKeyMapName; }
 
+		std::string buildMetadataInfoString()
+		{
+			std::string returnString = "";
+
+			std::string objectTypeString = "";
+			switch (mdType)
+			{
+				case MAPIObjectType::UNSET: { objectTypeString = "MAPIObjectType::UNSET"; break; }
+				case MAPIObjectType::BUFFER: { objectTypeString = "MAPIObjectType::BUFFER"; break; }
+				case MAPIObjectType::TEXTURE: { objectTypeString = "MAPIObjectType::TEXTURE"; break; }
+				case MAPIObjectType::VAO: { objectTypeString = "MAPIObjectType::VAO"; break; }
+				case MAPIObjectType::FBO: { objectTypeString = "MAPIObjectType::FBO"; break; }
+			}
+
+			switch (mdMapKeyType)
+			{
+				case MAPIObjectMapKeyType::UNSET_KEYTYPE:
+				{
+					returnString = "No data set for this MAPIObjectMetadata instance.";
+					break;
+				}
+
+				case MAPIObjectMapKeyType::STRING_KEYTYPE:
+				{
+					std::string keytypeString = "Map type: MAPIObjectMapKeyType::STRING_KEYTYPE";
+					std::string stringedKey = "String key value: " + mdName;
+					returnString = "Metadata info: | " + keytypeString + " | Object type: " + objectTypeString + " | " + stringedKey;
+					break;
+				}
+
+				case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+				{
+					std::string keytypeString = "Map type: MAPIObjectMapKeyType::ENCLAVE_KEYTYPE";
+					std::string key3dValue = "3d key value: " + mdKeyValue.getKeyString();
+					std::string keyMapNameString = "3d map name: " + mdKeyMapName;
+					returnString = "Metadata info: | " + keytypeString + " | Object type: " + objectTypeString + " | " + key3dValue + " | " + keyMapNameString;
+					break;
+				}
+			}
+
+			return returnString;
+		};
+
 	private:
 		MAPIObjectMapKeyType mdMapKeyType = MAPIObjectMapKeyType::UNSET_KEYTYPE;	// determines the kind of container/map
 																					// that this data should go into (i.e, a string-keyed map, or a 3d-keyed map)

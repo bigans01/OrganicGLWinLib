@@ -23,6 +23,7 @@
 #include "MShaderSelectionCycler.h"
 #include "GLUniformRegistry.h"
 #include <chrono>
+#include <mutex>
 #include "MGCIndex.h"
 #include "MShaderHintIndexer.h"
 #include "KeyPressTracker.h"
@@ -76,6 +77,21 @@ class MShaderController
 		void setup() {}
 
 
+
+		// Information queue printing/fetching
+		void writeOutInformationalMessages();	// write any informational Messages in the mShaderSetupQueue to std::cout.
+
+																		
+		void requestBindingDelete(MAPIObjectMetadata in_bindingDataToDelete);	// will put this into the deletion queue; should be thread-safe,
+																				// so that the request can be inserted at any time, even if it is done
+																				// when runTick() is being called.
+
+
+		void runTick();			// checks for bindings to delete/insert, signals current MShader to do its rendering, displays ImGui, etc...
+		bool checkIfRunning();	// returns the bool that indicates whether or not this MShaderController has been flagged to stop rendering (false), or to continue (true)
+		void setCameraPosition(glm::vec3 in_position);	// set the camera position used for rendering
+
+	private:
 		// Below: Use a series of Messages (or just a single one) to signal how the MShaderController should be set up. For example,
 		// a Message for setting the screen resolution could be sent, along with a Message for setting the background color or certain matrix values.
 		template<typename FirstMessage, typename ...RemainingMessages> void parseMessages(FirstMessage && firstMessage,
@@ -86,20 +102,14 @@ class MShaderController
 		}
 		void parseMessages() {}
 
-		// Information queue printing/fetching
-		void writeOutInformationalMessages();	// write any informational Messages in the mShaderSetupQueue to std::cout.
+		void processBindingDeleteRequests();	// processes each MAPIObjectMetadata object in the bindingDeleteRequests queue, 
+												// and attempts to delete them (if they exist)
 
 		void insertNewGradient(Message in_gradientInsertionMessage,		// uses either a Message of the type MSHADER_SETUP_CYCLICAL_MGRADIENT
 							  bool in_overwriteGradientFlag);			// or MSHADER_SETUP_FINITE_MGRADIENT to create an MGRADIENT and insert it into the 
 																		// controllerMGCI (object of MGCIndex); the bool value indicates whether or not
 																		// the gradient should be overwritten if it already exists.
-																		
 
-		void runTick();
-		bool checkIfRunning();
-		void setCameraPosition(glm::vec3 in_position);
-
-	private:
 		void processShaderChangeRequests();	//	1.	check if there is a request to switch to a new MShader; if there is a request,
 											//		ensure that the MShader exists in the catalog.
 											//
@@ -162,6 +172,10 @@ class MShaderController
 
 		GLFWwindow* mainWindowPtr = nullptr;	// set by the call to initializeMandatoryItems
 		float fullCircleRadians = 6.28319f;	// 360 degrees, represented in radians; aka a full cycle of 2pi.
+
+		// ***************************************************** Request handling ******************************************************************
+		std::mutex bindingDeleteRequestMutex;	// used when calling requestBindingDelete, or processBindingDeletes
+		std::queue<MAPIObjectMetadata> bindingDeleteRequests;
 
 		// ***************************************************** Shader-related objects ************************************************************
 		MShaderCatalog catalog;		// contains and manages all usable MShaders
