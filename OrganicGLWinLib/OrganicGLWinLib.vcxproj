@@ -195,12 +195,16 @@
     <ClInclude Include="LocalizedGBufferComputeLoaderGear.h" />
     <ClInclude Include="LocalizedHighlighterGearT1.h" />
     <ClInclude Include="LocalizedWaveHighlighterGearT1.h" />
+    <ClInclude Include="MAPIObjectBinding.h" />
     <ClInclude Include="MAPIObjectData.h" />
     <ClInclude Include="MAPIObjectManager.h" />
     <ClInclude Include="MAPIObjectMapKeyType.h" />
     <ClInclude Include="MAPIObjectMetadata.h" />
     <ClInclude Include="MAPIObjectRequest.h" />
+    <ClInclude Include="MAPIObjectScanEnum.h" />
     <ClInclude Include="MAPIObjectType.h" />
+    <ClInclude Include="MAPIObjectUpdate.h" />
+    <ClInclude Include="MAPIObjectUpdateEnum.h" />
     <ClInclude Include="MGCIndex.h" />
     <ClInclude Include="MGearBase.h" />
     <ClInclude Include="MGearManager.h" />

@@ -7,6 +7,7 @@
 #include "MAPIObjectRequest.h"
 #include "OrganicGLWinUtils.h"
 #include "MAPIObjectMetadata.h"
+#include "MAPIObjectBinding.h"
 
 /*
 * 
@@ -45,6 +46,8 @@ class MAPIObjectManager
 															// Return value will be -1 if no object is found.
 
 		bool deleteBinding(MAPIObjectMetadata in_objectMeta);
+
+		std::vector<MAPIObjectBinding> fetchAllBindings();	// checks all binding maps of this class, and inserts a MAPIObjectBinding into the returning vector for each object found.
 	private:
 
 		void cleanupResources();	// should be called on destructor of this class; deletes any remaining allocated resoruces in the resource maps.
@@ -214,6 +217,11 @@ class MAPIObjectManager
 				void deleteFBOResource()
 				{
 					glDeleteFramebuffers(1, &fboBindingId);
+				}
+
+				std::string getStringedDataBindingName()
+				{
+					return fboBindingName;
 				}
 
 				GLuint getFBOId()

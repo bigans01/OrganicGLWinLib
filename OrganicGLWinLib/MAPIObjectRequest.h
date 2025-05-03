@@ -52,6 +52,47 @@ class MAPIObjectRequest
 		std::string getBindingRequestKeyMapName() { return requestBindingKeyMapName;  }
 		EnclaveKeyDef::EnclaveKey getBindingEnclaveKey() { return requestBindingKey;  }
 
+		void printRequestData()
+		{
+			switch (requestMapKeyType)
+			{
+				case MAPIObjectMapKeyType::STRING_KEYTYPE:
+				{
+					std::cout << "Request data || requestMdMapKeyType = STRING_KEYTYPE ";
+
+					switch (requestBindingType)
+					{
+						case MAPIObjectType::BUFFER: { std::cout << "| binding type: BUFFER "; break; }
+						case MAPIObjectType::TEXTURE: { std::cout << "| binding type: TEXTURE "; break; }
+						case MAPIObjectType::FBO: { std::cout << "| binding type: FBO "; break; }
+						case MAPIObjectType::VAO: { std::cout << "| binding type: VAO "; break; }
+					}
+
+					std::cout << " | string key: " << requestBindingString;
+					
+					break;
+				}
+
+				case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+				{
+					std::cout << "Request data || requestMdMapKeyType = ENCLAVE_KEYTYPE ";
+
+					switch (requestBindingType)
+					{
+						case MAPIObjectType::BUFFER: { std::cout << "| binding type: BUFFER "; break; }
+						case MAPIObjectType::TEXTURE: { std::cout << "| binding type: TEXTURE "; break; }
+						case MAPIObjectType::FBO: { std::cout << "| binding type: FBO "; break; }
+						case MAPIObjectType::VAO: { std::cout << "| binding type: VAO "; break; }
+					}
+
+					std::cout << " | enclave key: "; requestBindingKey.printKey(); std::cout << " ";
+					std::cout << " | enclave key stringed map name: " << requestBindingKeyMapName << std::endl;
+
+					break;
+				}
+			}
+		}
+
 	private:
 		MAPIObjectMapKeyType requestMapKeyType = MAPIObjectMapKeyType::UNSET_KEYTYPE;
 		MAPIObjectType requestBindingType = MAPIObjectType::UNSET;	// default value is UNSET; determines if the binding type is for a texture, buffer, VAO, etc

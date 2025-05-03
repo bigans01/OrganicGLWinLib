@@ -4,6 +4,7 @@
 #define MAPIOBJECTMETADATA_H
 
 #include "MAPIObjectType.h"
+#include "MAPIObjectRequest.h"
 #include <string>
 
 /*
@@ -17,6 +18,35 @@ class MAPIObjectMetadata
 {
 	public:
 		MAPIObjectMetadata() {};
+
+		// Use when copying data from an instance of MAPIObjectRequest;
+		// Make sure the MAPIObjectRequest being used is properly instantiated and set before attempting to use this
+		// constructor.
+		//
+		// Used by MShaderController::insertDynamicBufferData, when needed to build based off
+		// a newly inserted MAPIObjectRequest.
+		MAPIObjectMetadata(MAPIObjectRequest in_requestToCopy)
+		{
+			mdType = in_requestToCopy.getBindingRequestType();
+			switch (in_requestToCopy.getBindingMapKeyType())
+			{
+				case MAPIObjectMapKeyType::STRING_KEYTYPE:
+				{
+					mdMapKeyType = MAPIObjectMapKeyType::STRING_KEYTYPE;
+					mdName = in_requestToCopy.getBindingRequestName();
+					break;
+				}
+
+				case MAPIObjectMapKeyType::ENCLAVE_KEYTYPE:
+				{
+					mdMapKeyType = MAPIObjectMapKeyType::ENCLAVE_KEYTYPE;
+					mdKeyValue = in_requestToCopy.getBindingEnclaveKey();
+					mdKeyMapName = in_requestToCopy.getBindingRequestKeyMapName();
+					break;
+				}
+			}
+			
+		}
 
 		// Use when simply searching for strings 
 		MAPIObjectMetadata(MAPIObjectType in_mdType, 

@@ -1617,6 +1617,18 @@
     <ClInclude Include="MAPIObjectMapKeyType.h">
       <Filter>Header Files\MShaderController\MBinding</Filter>
     </ClInclude>
+    <ClInclude Include="MAPIObjectScanEnum.h">
+      <Filter>Source Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectUpdateEnum.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectUpdate.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjectBinding.h">
+      <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

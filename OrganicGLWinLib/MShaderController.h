@@ -30,6 +30,7 @@
 #include "OpenGLFeedbackListener.h"
 #include "GUIInteractionCondition.h"
 #include "GPUWorldCoordinateProducer.h"
+#include "MAPIObjectUpdate.h"
 
 /*
 
@@ -90,6 +91,10 @@ class MShaderController
 		void runTick();			// checks for bindings to delete/insert, signals current MShader to do its rendering, displays ImGui, etc...
 		bool checkIfRunning();	// returns the bool that indicates whether or not this MShaderController has been flagged to stop rendering (false), or to continue (true)
 		void setCameraPosition(glm::vec3 in_position);	// set the camera position used for rendering
+
+		void insertDynamicBufferData(Message in_directingMessage, int in_arraySize, GLfloat* in_arrayRef);	// if the buffer is found/created -- the action
+																											// of which will be based off the Message -- the data will then be 
+																											// inserted into said buffer. 
 
 	private:
 		// Below: Use a series of Messages (or just a single one) to signal how the MShaderController should be set up. For example,

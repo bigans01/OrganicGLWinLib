@@ -19,6 +19,7 @@ class BasicMG : public MGearBase
 		void render();
 		void cleanupMGear();
 		void setObjectBindings();
+		void conductMAPIObjectScan(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef);
 	private:
 		GLuint basicVertexShaderId = 0;
 		GLuint basicFragmentShaderId = 0;

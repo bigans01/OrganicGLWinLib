@@ -6,6 +6,7 @@
 #include "MGearBase.h"
 #include "GLUniformRegistry.h"
 #include "MAPIObjectManager.h"
+#include "MAPIObjectUpdate.h"
 
 /*
 *	Description: This class serves as a container of MGear-derived classes, and simplifies 
@@ -40,6 +41,11 @@ class MGearManager
 		void renderMGears();	// call render() on all MGear objects in the mGearMap.
 		void cleanupMGears();	// undo all allocations/used resources spawned by each MGear (delete shaders, programs, any buffers exclusive to an MGear etc)
 		void createRequiredGearObjects();	// calls setObjectBindings() for all MGear objects in the mGearMap
+
+		void sendScanSignalToGears(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef);	// signals to all gears in this manager, 
+																												// that they will need to either:
+																												// A.) conduct a full scan of all objects in the MAPIObjectManager
+																												// B.) analyze the referenced vector for individual objects (this vector is/should be cleared after each tick)
 	private:
 		std::unordered_map<std::string, std::unique_ptr<MGearBase>> mGearMap;	// contains all MGear objects that will be utilized for rendering.
 		std::map<int, std::string> gearSequence;

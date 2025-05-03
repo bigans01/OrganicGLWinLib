@@ -28,6 +28,7 @@ Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
 		if (currentLoadedShaders == 0)
 		{
 			cycleArray[0] = cyclerCatalogRef->getShaderRef(in_shaderName);
+			cycleArray[0]->flagForFullScanOnNextTick();
 			iterateLoadedShaders();
 
 			// found shader OK
@@ -47,6 +48,7 @@ Message MShaderSelectionCycler::switchToMShader(std::string in_shaderName)
 				// swap the shader positions.
 				cycleArray[1] = tempPtr;
 				cycleArray[0] = cyclerCatalogRef->getShaderRef(in_shaderName);
+				cycleArray[0]->flagForFullScanOnNextTick();
 
 				// gather the soon-to-be old shader's preferred uniforms; erase them from the MShaderController's registry.
 				auto oldMShaderPreferredValues = tempPtr->getLocalValueRegistryRef();

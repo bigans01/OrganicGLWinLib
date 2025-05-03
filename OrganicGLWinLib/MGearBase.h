@@ -7,6 +7,7 @@
 #include "MAPIObjectManager.h"
 #include "OrganicShaderLoader.h"
 #include "MAPIObjectMetadata.h"
+#include "MAPIObjectUpdate.h"
 
 /*
 * 
@@ -40,6 +41,10 @@ class MGearBase
 
 		virtual void setObjectBindings() = 0;	// use to set up VAOs, other binding objects; ensure that the resources exist before calling
 												// this function.
+
+		virtual void conductMAPIObjectScan(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef) = 0;	// this function is used by the MGearBase-child class to signal that it 
+																															// should either do a full scan of all objects, or perform an individual scan
+																															// of all objects in the referenced vector.
 
 
 		// Below: always call this first after the derived class is instantiated into a map

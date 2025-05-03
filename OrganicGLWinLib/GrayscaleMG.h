@@ -19,6 +19,7 @@ class GrayscaleMG : public MGearBase
 		void render();
 		void cleanupMGear();
 		void setObjectBindings();
+		void conductMAPIObjectScan(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef);
 
 	private:
 		GLuint grayscaleVertexShaderId = 0;

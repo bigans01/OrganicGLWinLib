@@ -24,6 +24,14 @@ void MGearManager::createRequiredGearObjects()
 	}
 }
 
+void MGearManager::sendScanSignalToGears(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef)
+{
+	for (auto& currentMGear : mGearMap)
+	{
+		currentMGear.second->conductMAPIObjectScan(in_fullscanFlag, in_updateVectorRef);
+	}
+}
+
 bool MGearManager::insertMGear(int in_gearSequenceLocation, std::string in_mGearName, std::unique_ptr<MGearBase> in_newMGear)
 {
 	bool wasMGearInserted = false;

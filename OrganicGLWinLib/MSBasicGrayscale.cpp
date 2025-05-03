@@ -32,6 +32,15 @@ Message MSBasicGrayscale::checkRequiredBindings()
 
 void MSBasicGrayscale::prepareAndRender()
 {
+	// Check if we to scan for updates this tick; if we must do that, have all the gears do their scans (if they have any to do),
+	// and reset the flag.
+	if (scanForUpdatesFlag)
+	{
+		// ... do stuff
+		mShaderGearManager.sendScanSignalToGears(runFullScan, &updatesToProcess);
+		resetUpdateObjects();
+	}
+
 	// Testing only: get the current value of the background_clear_color from 
 	// the MShader's registry, and use that in a call to glClear when all gears are rendered.
 	// (this was done to check if gradient smoothing was functional, and how it looked.)

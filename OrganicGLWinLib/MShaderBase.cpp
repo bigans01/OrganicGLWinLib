@@ -47,6 +47,25 @@ bool MShaderBase::checkForRequiredGearObjects(std::queue<Message>* in_messageQue
 	return mShaderGearManager.verifyRequiredGearObjects(in_messageQueueRef);
 }
 
+void MShaderBase::flagForUpdateScanOnNextTick(MAPIObjectUpdate in_updatedObject)
+{
+	scanForUpdatesFlag = true;
+	updatesToProcess.push_back(in_updatedObject);
+}
+
+void MShaderBase::flagForFullScanOnNextTick()
+{
+	scanForUpdatesFlag = true;
+	runFullScan = true;
+}
+
+void MShaderBase::resetUpdateObjects()
+{
+	scanForUpdatesFlag = false;
+	runFullScan = false;
+	updatesToProcess.clear();
+}
+
 void MShaderBase::renderAllGears()
 {
 	mShaderGearManager.renderMGears();

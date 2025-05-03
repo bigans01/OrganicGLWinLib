@@ -28,6 +28,41 @@ void BasicMG::setObjectBindings()
 
 }
 
+void BasicMG::conductMAPIObjectScan(bool in_fullscanFlag, std::vector<MAPIObjectUpdate>* in_updateVectorRef)
+{ 
+	// If the full scan flag is set, we will need to check all MAPI objects to see if there's anything we want.
+	if (in_fullscanFlag)
+	{
+		// NOTICE: Be sure to clear out the container(s) used by this MGearBase-derived class completely, 
+		// before inserting based off a full scan (it is safer to start from scratch, as bindings for any deleted buffers
+		// will still be lurking in the binding maps (before the first tick) )
+		//
+		// This needs to be fixed at a later date to somtehing cleaner (noted on 5/2/2025)
+
+
+		std::cout << "BasicMG: conducting scan of usable objects (FULL_SCAN)" << std::endl;
+		std::vector<MAPIObjectBinding> fetchedBindings = mGearObjectManagerRef->fetchAllBindings();
+		for (auto& currentBinding : fetchedBindings)
+		{
+			// ...
+			// Do whatever we want here, (ignore a buffer, accept a buffer, put it's value into a map...)
+			// ...
+
+			currentBinding.printBindingData();
+		}
+	}
+	// ...otherwise, check whatever was added in the in_updateVectorRef, which contains updates for this tick, but gets reset
+	// and cleared after the tick ends.
+	else
+	{
+		for (auto& currentObjectUpdate : *in_updateVectorRef)
+		{
+			currentObjectUpdate.printUpdateData();
+		}
+	}
+}
+
+
 void BasicMG::render()
 {
 	// switch to this program, then

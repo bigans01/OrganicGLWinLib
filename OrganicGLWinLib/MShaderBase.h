@@ -18,6 +18,8 @@
 #include "MAPIObjectRequest.h"
 
 #include "MGearManager.h"
+#include "MAPIObjectUpdate.h"
+
 
 /*
 
@@ -64,10 +66,21 @@ class MShaderBase
 														// the expected bindings are available.
 		
 		virtual void prepareAndRender() = 0;	// allows the MShader to run any custom code it needs (prepare), before rendering
-												// all MGear objects contained in the mShaderGearManager.
+												// all MGear objects contained in the MAPIObjectManager; this function is also where the logic
+												// for checking for creates/deletes in the MAPIObjectManager is carried out.
+
+		void flagForFullScanOnNextTick();	// used to indicate that a full scan of objects in the MAPIObjectManager should be done, in the next call to
+											// prepareAndRender(); mainly used when a new MShader is being selected/switched to at run time, or when the engine first starts.
+
+		void flagForUpdateScanOnNextTick(MAPIObjectUpdate in_updatedObject);		// will set scanForUpdatesFlag to true, and signal to all constituent MGear objects
+		                                                                            // that they should run a scan against the contents of updatesToProcess; be sure to reset the value
+																					// of scanForUpdatesFlag  with a call to resetUpdateObjects;
 
 	protected:
 		void renderAllGears();
+		void resetUpdateObjects();	// revert the value of scanForUpdatesFlag back to false; should be called in the prepareAndRender
+									// function of the children of this class, after the scanning logic is handled upon scanForUpdatesFlag being true.
+
 		// references to shareable objects from the parent MShaderController
 		ImGuiButtonPanelContainer* parentButtonPanelContainerPtr = nullptr;
 		ImGuiSliderFloatPanelContainer* parentSliderPanelContainerPtr  = nullptr;
@@ -76,9 +89,17 @@ class MShaderBase
 		MAPIObjectManager* parentBindingMapPtr = nullptr;
 		GLUniformRegistry* parentValueRegistryPtr = nullptr;
 
+		bool scanForUpdatesFlag = false;	// set to true, when the MShader needs to notify it's gears that they should scan for
+											// object updates in the MAPIObjectManager (i.e, was a buffer inserted in it)
+
+		bool runFullScan = false;	// if flagForFullScanOnNextTick is called, set this to true. set to false when resetUpdateObjects is called.
+
 		std::string mShaderName = "";	// must be set by child class
 
 		std::vector<MAPIObjectRequest> bindingRequests;	// a vector that contains the names of requested bindings
+
+		std::vector<MAPIObjectUpdate> updatesToProcess;	// contains updates (creates, or deletes) that should be processed; 
+														// make sure all gears get an opportunity to scan this before its cleared by 
 
 		GLUniformRegistry mShaderLocalValueRegistry;	// will store the "preferred" uniform/local values that the
 														// children of this class will want; each child class must manually

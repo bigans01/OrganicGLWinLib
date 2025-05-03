@@ -163,6 +163,50 @@ bool MAPIObjectManager::deleteBinding(MAPIObjectMetadata in_objectMeta)
 	return wasBindingDeleted;
 }
 
+std::vector<MAPIObjectBinding> MAPIObjectManager::fetchAllBindings()
+{ 
+	std::vector<MAPIObjectBinding> bindingVector;
+
+	// Check stringed buffers
+	for (auto& currentBufferResource : bufferResourceMap)
+	{
+		bindingVector.push_back(MAPIObjectBinding(MAPIObjectType::BUFFER,
+								currentBufferResource.second.getStringedDataBindingName(),
+								currentBufferResource.second.getBufferId()));
+	}
+
+	// Check stringed textures
+	for (auto& currentTextureResource : textureResourceMap)
+	{
+		bindingVector.push_back(MAPIObjectBinding(MAPIObjectType::TEXTURE,
+			currentTextureResource.second.getStringedDataBindingName(),
+			currentTextureResource.second.getTextureId()));
+	}
+
+	// Check stringed FBOs
+	for (auto& currentFBOResource : fboResourceMap)
+	{
+		bindingVector.push_back(MAPIObjectBinding(MAPIObjectType::TEXTURE,
+			currentFBOResource.second.getStringedDataBindingName(),
+			currentFBOResource.second.getFBOId()));
+	}
+
+	// Check 3d-keyed buffers
+	for (auto& currentStringedKeyedmap : stringedThreeDBufferMaps)
+	{
+		for (auto& current3dKeyedElement : currentStringedKeyedmap.second.threeDBindings)
+		{
+			bindingVector.push_back(MAPIObjectBinding(MAPIObjectType::BUFFER,
+													current3dKeyedElement.first,
+													currentStringedKeyedmap.first, 
+													current3dKeyedElement.second.getThreeDKeyedBufferId()));
+		}
+	}
+
+
+	return bindingVector;
+}
+
 
 Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRequest)
 {

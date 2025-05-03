@@ -108,7 +108,7 @@ Message MVec3Gradient::calculateByTime(float in_piValue)
 	(*this.*yRunPtr)(initialValue.y, desiredValue.y, &returnPoint.y, in_piValue);
 	(*this.*zRunPtr)(initialValue.z, desiredValue.z, &returnPoint.z, in_piValue);
 
-	std::cout << "!! Finished with MVec3Gradient::calculateByTime, returning Message..." << std::endl;
+	//std::cout << "!! Finished with MVec3Gradient::calculateByTime, returning Message..." << std::endl;
 
 	return Message(MessageType::MGRADIENT_VEC3_OUTPUT, returnPoint);
 }

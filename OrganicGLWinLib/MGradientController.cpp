@@ -47,7 +47,7 @@ Message MGradientController::fetchValueByTime(float in_timeInMs)
 
 		case MGradientRunMode::RUN_GRADIENT_AS_FINITE_INCREMENTING:
 		{
-			std::cout << "Calling FINITE calculateByTime..." << std::endl;
+			//std::cout << "Calling FINITE calculateByTime..." << std::endl;
 			finiteTimePassed += in_timeInMs;
 			float valueForCalculation = determinePiValueForGradientCalculation(finiteTimePassed);
 			if (finiteTimePassed >= finiteTimeLimit)

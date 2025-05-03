@@ -110,6 +110,57 @@ void MShaderController::processMessage(Message in_messageToRead)
 	}
 }
 
+void MShaderController::insertDynamicBufferData(Message in_directingMessage, int in_arraySize, GLfloat* in_arrayRef)
+{
+	// The type of action to take/buffer to modify should be based off the MessageType of the input Message.
+
+	std::cout << "Calling insertDynamicBufferData..." << std::endl;
+	in_directingMessage.open();
+	switch (in_directingMessage.messageType) 
+	{
+		case MessageType::MSHADER_CREATE_STRINGED_BUFFER:
+		{
+
+			// create a stringed buffer request; copy that into a MAPIObjectMetadata 
+			// so that we may fetch the buffer binding when it is created.
+			std::string bufferName = in_directingMessage.readString();
+			MAPIObjectRequest bufferRequest(MAPIObjectType::BUFFER, bufferName);
+
+
+			std::cout << "Calling insertDynamicBufferData (2)..." << std::endl;
+			Message insertionResult = controllerBindings.handleMAPIObjectRequest(bufferRequest);
+
+			// Check the Message to see if a buffer was actually inserted; if it was, 
+			// we need to signal to the currently selected MShader that it should have it's
+			// gears scan for updates.
+			insertionResult.open();
+			int wasBufferInserted = insertionResult.readInt();
+
+			std::cout << "Calling insertDynamicBufferData (3)..." << std::endl;
+			if (wasBufferInserted)
+			{
+				MAPIObjectUpdate creationUpdate(MAPIObjectUpdateEnum::MAPI_OBJECT_CREATED, bufferRequest);
+				mShaderCycler.getTargetShaderRef()->flagForUpdateScanOnNextTick(creationUpdate);
+
+				std::cout << "Calling insertDynamicBufferData (4)..." << std::endl;
+			}
+
+			MAPIObjectMetadata metadataForCheck(bufferRequest);
+
+			// if the buffer was found and/or created, insert into it.
+			if (controllerBindings.doesBindingExist(metadataForCheck))
+			{
+				std::cout << "binding exists, attempting to call OpenGL..." << std::endl;
+
+				int bufferToBind = controllerBindings.fetchBinding(metadataForCheck);
+				glBindBuffer(GL_ARRAY_BUFFER, bufferToBind);
+				glBufferData(GL_ARRAY_BUFFER, in_arraySize, in_arrayRef, GL_STATIC_DRAW);
+			}
+			break;
+		}
+	}
+}
+
 void MShaderController::setCameraPosition(glm::vec3 in_position)
 {
 	mCameraPosition = in_position;
@@ -250,7 +301,9 @@ void MShaderController::createMShaders()
 				// all resources/objects should be created prior to any objects being created/bound to existing buffers
 				catalog.getShaderRef(insertAttemptShaderName)->setBindingsForGears();
 
-
+				// The current shader to use is equal to whatever we just created.
+				std::cout << "!! ---- Switching after just creating..." << std::endl;
+				switchMShader(insertAttemptShaderName);
 			}
 			else
 			{
@@ -420,6 +473,9 @@ void MShaderController::processBindingDeleteRequests()
 		if (wasBindingDeleted)
 		{
 			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("!! Binding deleted: " + currentRequest.buildMetadataInfoString())));
+
+			MAPIObjectUpdate creationUpdate(MAPIObjectUpdateEnum::MAPI_OBJECT_DELETED, currentRequest);
+			mShaderCycler.getTargetShaderRef()->flagForUpdateScanOnNextTick(creationUpdate);
 		}
 		else
 		{
@@ -894,7 +950,7 @@ void MShaderController::updateAndapplyGradients(float in_ms)
 			case MessageType::MGRADIENT_VEC3_OUTPUT:
 			{
 				ECBPolyPoint ppoint = currentGradientMessage.readPoint();
-				std::cout << "## Found vec3 value to insert. Name: " << variableName << " | Value: "; ppoint.printPointCoords(); std::cout << std::endl;
+				//std::cout << "## Found vec3 value to insert. Name: " << variableName << " | Value: "; ppoint.printPointCoords(); std::cout << std::endl;
 				glm::vec3 vec3Point(ppoint.x, ppoint.y, ppoint.z);
 				controllerValueRegistry.insertVec3(variableName, vec3Point);
 				break;
