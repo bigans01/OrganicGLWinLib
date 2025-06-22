@@ -33,7 +33,7 @@ Message SPolyUtils::meltSPolySupergroupIntoMessage(SPolySupergroup* in_sPolySupe
 		{
 			for (int currentLine = 0; currentLine < 3; currentLine++)
 			{
-				glm::vec3 currentLinePoint = currentSTriangle.second.triangleLines[currentLine].pointA;
+				glm::vec3 currentLinePoint = currentSTriangle.second.triangleLines[currentLine].fetchPointAGlmVec3Version();
 				ECBPolyPoint convertedPoint(currentLinePoint.x, currentLinePoint.y, currentLinePoint.z);
 				meltedGroupData.insertPoint(convertedPoint);
 			}
@@ -136,7 +136,8 @@ std::vector<OrganicWrappedBBFan> SPolyUtils::produceFansFromSupergroup(SPolySupe
 			// we will then go to the next triangle.
 			for (int x = 0; x < 3; x++)
 			{
-				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[x].pointA));
+				//tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[x].pointA));
+				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertFTrianglePointToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[x].fetchPointAFTrianglePoint()));
 			}
 
 			// Now, iterate currentTargetSTriangleBegin by 1, and then continue with the rest of the triangles.
@@ -144,7 +145,8 @@ std::vector<OrganicWrappedBBFan> SPolyUtils::produceFansFromSupergroup(SPolySupe
 			currentTargetSTriangleBegin++;
 			for (; currentTargetSTriangleBegin != currentTargetSTriangleEnd; currentTargetSTriangleBegin++)
 			{
-				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[2].pointA));
+				//tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertVec3ToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[2].pointA));
+				tempCircuit.finalCircuitPoints.insertNewPoint(OrganicGLWinUtils::convertFTrianglePointToPolyPoint(currentTargetSTriangleBegin->second.triangleLines[2].fetchPointAFTrianglePoint()));
 			}
 
 			// Construct the OrganicWrappedBBFan we will be adding, and then call buildBBFanWithBoundaryIndicator on it.

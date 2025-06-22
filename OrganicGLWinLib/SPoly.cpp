@@ -90,7 +90,7 @@ bool SPoly::checkForSquarePosZ()
 	{
 		for (int x = 0; x < 3; x++)
 		{
-			glm::vec3 currentPointA = triangleScanBegin->second.triangleLines[x].pointA;
+			glm::vec3 currentPointA = triangleScanBegin->second.triangleLines[x].fetchPointAGlmVec3Version();
 
 			// check for point 0.
 			if
@@ -170,9 +170,9 @@ bool SPoly::checkForSquarePosZ()
 
 void SPoly::determinePrimalPoints()
 {
-	primePoint0 = triangles[0].triangleLines[0].pointA;
-	primePoint1 = triangles[0].triangleLines[1].pointA;
-	primePoint2 = triangles[0].triangleLines[2].pointA;
+	primePoint0 = triangles[0].triangleLines[0].fetchPointAGlmVec3Version();
+	primePoint1 = triangles[0].triangleLines[1].fetchPointAGlmVec3Version();
+	primePoint2 = triangles[0].triangleLines[2].fetchPointAGlmVec3Version();
 }
 
 std::map<int, int> SPoly::getBorderLinesForSharedPoint(glm::vec3 in_sharedPoint)
@@ -234,8 +234,8 @@ void SPoly::determineBorderLines()
 	{
 		for (int y = 0; y < 3; y++)
 		{
-			glm::vec3 currentPointA = triangles[x].triangleLines[y].pointA;
-			glm::vec3 currentPointB = triangles[x].triangleLines[y].pointB;
+			glm::vec3 currentPointA = triangles[x].triangleLines[y].fetchPointAGlmVec3Version();
+			glm::vec3 currentPointB = triangles[x].triangleLines[y].fetchPointBGlmVec3Version();
 
 			// cycle through each of the border lines
 			for (int z = 0; z < numberOfSPolyBorderLines; z++)
@@ -283,9 +283,10 @@ void SPoly::setMRP(glm::vec3 in_mrp)
 
 void SPoly::calculateEmptyNormal()
 {
-	glm::vec3 point0 = triangles[0].triangleLines[0].pointA;
-	glm::vec3 point1 = triangles[0].triangleLines[1].pointA;
-	glm::vec3 point2 = triangles[0].triangleLines[2].pointA;
+	glm::vec3 point0 = triangles[0].triangleLines[0].fetchPointAGlmVec3Version();
+	glm::vec3 point1 = triangles[0].triangleLines[1].fetchPointAGlmVec3Version();
+	glm::vec3 point2 = triangles[0].triangleLines[2].fetchPointAGlmVec3Version();
+
 	EmptyNormalFinder finder(point0, point1, point2, massOriginPoint);
 	//std::cout << "!!!#####: Value of Empty Normal for this Poly is: " << finder.calculatedNormal.x << ", " << finder.calculatedNormal.y << ", " << finder.calculatedNormal.z << std::endl;
 	polyEmptyNormal = finder.calculatedNormal;
@@ -514,8 +515,8 @@ glm::vec3 SPoly::rotateForPlanarVectorCalc(glm::vec3* in_pointA, glm::vec3* in_p
 void SPoly::addBorderLine(STriangleLine in_triangleLine)
 {
 	SPolyBorderLines newBorderLine;
-	newBorderLine.pointA = in_triangleLine.pointA;
-	newBorderLine.pointB = in_triangleLine.pointB;
+	newBorderLine.pointA = in_triangleLine.fetchPointAGlmVec3Version();
+	newBorderLine.pointB = in_triangleLine.fetchPointBGlmVec3Version();
 	//std::cout << "!!! Added border line: (" << numberOfSPolyBorderLines << "): " << newBorderLine.pointA.x << ", " << newBorderLine.pointA.y << ", " << newBorderLine.pointA.z << " | " << newBorderLine.pointB.x << ", " << newBorderLine.pointB.y << ", " << newBorderLine.pointB.z << std::endl;
 	borderLines[numberOfSPolyBorderLines++] = newBorderLine;
 }
@@ -864,7 +865,9 @@ void SPoly::loadTrianglesAndBorderLinesIntoQuatPoints(QuatRotationPoints* in_qua
 	{
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(trianglesBegin->second.triangleLines[x].getPointARef(),
+													  trianglesBegin->second.triangleLines[x].getPointBRef()
+													 );
 		}
 	}
 
@@ -893,7 +896,9 @@ void SPoly::loadPrimalsTrianglesAndBordersIntoQuatPoints(QuatRotationPoints* in_
 		// load the lines of each STriangle
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(trianglesBegin->second.triangleLines[x].getPointARef(),
+				                                      trianglesBegin->second.triangleLines[x].getPointBRef()
+														);
 		}
 	}
 
@@ -919,7 +924,8 @@ void SPoly::loadAllIntoQuatPoints(QuatRotationPoints* in_quatRotationPointsRef)
 		// load the lines of each STriangle
 		for (int x = 0; x < 3; x++)
 		{
-			in_quatRotationPointsRef->insertPointRefs(&trianglesBegin->second.triangleLines[x].pointA, &trianglesBegin->second.triangleLines[x].pointB);
+			in_quatRotationPointsRef->insertPointRefs(trianglesBegin->second.triangleLines[x].getPointARef(),
+													  trianglesBegin->second.triangleLines[x].getPointBRef());
 		}
 	}
 

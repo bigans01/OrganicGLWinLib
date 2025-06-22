@@ -127,11 +127,12 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 					if
 						(
 
-						QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedSegmentPointA,
-							in_hostSTrianglePtr->triangleLines[0].pointA,
-							in_hostSTrianglePtr->triangleLines[1].pointA,
-							in_hostSTrianglePtr->triangleLines[2].pointA) == true
-							)
+							QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedSegmentPointA,
+								in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version()
+							) == true
+						)
 					{
 						std::cout << "!! The 2d point, A, lies within the triangle: " << convertedSegmentPointA.x << ", " << convertedSegmentPointA.y << ", " << convertedSegmentPointA.z << std::endl;
 						newLine.line.pointB = convertedSegmentPointA;
@@ -141,9 +142,9 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 					
 
 							QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedSegmentPointB,
-								in_hostSTrianglePtr->triangleLines[0].pointA,
-								in_hostSTrianglePtr->triangleLines[1].pointA,
-								in_hostSTrianglePtr->triangleLines[2].pointA) == true
+								in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version()) == true
 							)
 					{
 						std::cout << "!! The 2d point, B, lies within the triangle: " << convertedSegmentPointB.x << ", " << convertedSegmentPointB.y << ", " << convertedSegmentPointB.z << std::endl;
@@ -257,9 +258,18 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 
 						if
 							(
-								(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointA, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+								(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointA, 
+																			in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+																			in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(), 
+																			in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version()) 
+									                                        == true)
 								&&
-								(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointB, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+			
+								(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointB, 
+																			in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(), 
+																			in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(), 
+																			in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version()) 
+																			== true)
 							)
 						{
 							std::cout << "!! this segment is a INTERCEPTS_POINT_PRECISE that exists within the area of the compared-to STriangle. " << std::endl;
@@ -328,7 +338,13 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 						glm::vec3 convertedPoint = OrganicGLWinUtils::convert2DToGlmVec3(pointToCheckIfExistsWithinRelatedArea);
 						if
 						(
-							(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPoint, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+
+							(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPoint,
+								in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+								in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version())
+								== true)
+
 							&&
 							(matchedFlag == true)
 						)
@@ -393,9 +409,21 @@ CategorizedLine TwoDLineSegment::attemptCategorizedLineConstruction(glm::vec3 in
 			
 			if
 				(
-					(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointA, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+
+					(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointA,
+																in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+																in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+																in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version())
+																== true)
+
 					&&
-					(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointB, in_hostSTrianglePtr->triangleLines[0].pointA, in_hostSTrianglePtr->triangleLines[1].pointA, in_hostSTrianglePtr->triangleLines[2].pointA) == true)
+
+					(QuatUtils::checkIfPointLiesWithinTrianglePBZ(convertedPointB,
+																in_hostSTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+																in_hostSTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+																in_hostSTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version())
+																== true)
+
 					)
 			{
 				std::cout << "!! this segment is a NON_BOUND that exists within the area of the compared-to STriangle. " << std::endl;

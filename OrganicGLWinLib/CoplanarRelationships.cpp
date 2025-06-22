@@ -252,9 +252,10 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 		std::cout << "==========> Current tracked SPoly, current STriangle: " << std::endl;
 		trackedSPolyTrianglesBegin->second.printPoints();
 
-		rasterizer.insertCuttableTriangleMass(trackedSPolyTrianglesBegin->second.triangleLines[0].pointA,
-											 trackedSPolyTrianglesBegin->second.triangleLines[1].pointA,
-											 trackedSPolyTrianglesBegin->second.triangleLines[2].pointA);
+		rasterizer.insertCuttableTriangleMass(trackedSPolyTrianglesBegin->second.triangleLines[0].fetchPointAGlmVec3Version(),
+											  trackedSPolyTrianglesBegin->second.triangleLines[1].fetchPointAGlmVec3Version(),
+											  trackedSPolyTrianglesBegin->second.triangleLines[2].fetchPointAGlmVec3Version());
+
 		rasterizer.runScanWithCurrentCuttableTriangle();
 	}
 	rasterizer.getCountOfTilesWithCuttableArea();
@@ -269,9 +270,11 @@ CuttingSequenceRunStatus CoplanarRelationships::runSecondaryCuttingSequenceMetho
 		auto currentSTrianglesEnd = relatedSPolysToUseForCuttingBegin->second.triangles.end();
 		for (; currentSTrianglesBegin != currentSTrianglesEnd; currentSTrianglesBegin++)
 		{
-			rasterizer.insertCuttingTriangleMass(currentSTrianglesBegin->second.triangleLines[0].pointA,
-												currentSTrianglesBegin->second.triangleLines[1].pointA,
-												currentSTrianglesBegin->second.triangleLines[2].pointA);
+			rasterizer.insertCuttingTriangleMass(currentSTrianglesBegin->second.triangleLines[0].fetchPointAGlmVec3Version(),
+												 currentSTrianglesBegin->second.triangleLines[1].fetchPointAGlmVec3Version(),
+												 currentSTrianglesBegin->second.triangleLines[2].fetchPointAGlmVec3Version());
+
+
 			rasterizer.runScanWithCurrentCuttingTriangle();
 
 			float currentRemainingPercentage = rasterizer.getRemainingCuttableAreaPercentage();

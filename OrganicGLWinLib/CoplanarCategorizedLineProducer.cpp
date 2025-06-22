@@ -89,13 +89,16 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 		for (int currentGuestTriangleIndex = 0; currentGuestTriangleIndex < guestPolyTriangleCount; currentGuestTriangleIndex++)					// .. to each of poly B's tertiaries...
 		{
 			STriangle* currentGuestTrianglePtr = &relatedSPolyRef->triangles[currentGuestTriangleIndex];			// for the current triangle we're comparing to
-			glm::vec3 currentGuestTriangleCentroid = OrganicGLWinUtils::findTriangleCentroid(currentGuestTrianglePtr->triangleLines[0].pointA,
-																							currentGuestTrianglePtr->triangleLines[1].pointA,
-																							currentGuestTrianglePtr->triangleLines[2].pointA);
+			
+
+			glm::vec3 currentGuestTriangleCentroid = OrganicGLWinUtils::findTriangleCentroid(currentGuestTrianglePtr->triangleLines[0].fetchPointAGlmVec3Version(),
+																							 currentGuestTrianglePtr->triangleLines[1].fetchPointAGlmVec3Version(),
+																							 currentGuestTrianglePtr->triangleLines[2].fetchPointAGlmVec3Version());
+
 			for (int y = 0; y < 3; y++)		// for looping through guestTrianglePtr's lines
 			{
-				TwoDPoint currentGuestTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(currentGuestTrianglePtr->triangleLines[y].pointA);
-				TwoDPoint currentGuestTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(currentGuestTrianglePtr->triangleLines[y].pointB);
+				TwoDPoint currentGuestTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(currentGuestTrianglePtr->triangleLines[y].fetchPointAGlmVec3Version());
+				TwoDPoint currentGuestTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(currentGuestTrianglePtr->triangleLines[y].fetchPointBGlmVec3Version());
 				TwoDLineSegment currentGuestTriangleSegment(currentGuestTriangleTwoDLineSegmentA, currentGuestTriangleTwoDLineSegmentB);
 				std::cout << ":::::::::::::> Current guest triangle segment: " << currentGuestTriangleTwoDLineSegmentA.x << ", " << currentGuestTriangleTwoDLineSegmentA.y << " | "
 																			   << currentGuestTriangleTwoDLineSegmentB.x << ", " << currentGuestTriangleTwoDLineSegmentB.y << std::endl;
@@ -104,8 +107,8 @@ void CoplanarCategorizedLineProducer::performLineComparison()
 				{
 					for (int z = 0; z < 3; z++)	// for looping through hostTrianglePtr's lines
 					{
-						TwoDPoint currentHostTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointA);
-						TwoDPoint currentHostTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].pointB);
+						TwoDPoint currentHostTriangleTwoDLineSegmentA = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].fetchPointAGlmVec3Version());
+						TwoDPoint currentHostTriangleTwoDLineSegmentB = OrganicGLWinUtils::convertGlmVec3To2D(hostTrianglePtr->triangleLines[z].fetchPointBGlmVec3Version());
 						TwoDLineSegment currentHostTriangleSegment(currentHostTriangleTwoDLineSegmentA, currentHostTriangleTwoDLineSegmentB);
 						std::cout << ":::> Current host segment: " << currentHostTriangleTwoDLineSegmentA.x << ", " << currentHostTriangleTwoDLineSegmentA.y << " | "
 							<< currentHostTriangleTwoDLineSegmentB.x << ", " << currentHostTriangleTwoDLineSegmentB.y << std::endl;

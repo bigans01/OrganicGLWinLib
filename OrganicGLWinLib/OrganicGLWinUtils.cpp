@@ -1272,6 +1272,11 @@ ECBPolyPoint OrganicGLWinUtils::convertVec3ToPolyPoint(glm::vec3 in_glmvec3)
 	return ECBPolyPoint(in_glmvec3.x, in_glmvec3.y, in_glmvec3.z);
 }
 
+ECBPolyPoint OrganicGLWinUtils::convertFTrianglePointToPolyPoint(FTrianglePoint in_fTrianglePoint)
+{
+	return ECBPolyPoint(in_fTrianglePoint.point.x, in_fTrianglePoint.point.y, in_fTrianglePoint.point.z);
+}
+
 glm::vec3 OrganicGLWinUtils::convertPolyPointToVec3(ECBPolyPoint in_ecbPolyPoint)
 {
 	return glm::vec3(in_ecbPolyPoint.x, in_ecbPolyPoint.y, in_ecbPolyPoint.z);

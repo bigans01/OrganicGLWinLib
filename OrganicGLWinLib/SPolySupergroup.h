@@ -34,9 +34,9 @@ class SPolySupergroup
 					for (int x = 0; x < 3; x++)
 					{
 						std::cout << "Point " << x << ": " 
-							<< sTrianglesBegin->second.triangleLines[x].pointA.x << ", "
-							<< sTrianglesBegin->second.triangleLines[x].pointA.y << ", "
-							<< sTrianglesBegin->second.triangleLines[x].pointA.z << std::endl;
+							<< sTrianglesBegin->second.triangleLines[x].getPointAx() << ", "
+							<< sTrianglesBegin->second.triangleLines[x].getPointAy() << ", "
+							<< sTrianglesBegin->second.triangleLines[x].getPointAz() << std::endl;
 					}
 				}
 			}
@@ -89,8 +89,8 @@ class SPolySupergroup
 						//	<< sTrianglesBegin->second.triangleLines[x].pointA.x << ", "
 						//	<< sTrianglesBegin->second.triangleLines[x].pointA.y << ", "
 						//	<< sTrianglesBegin->second.triangleLines[x].pointA.z << std::endl;
-						sTrianglesBegin->second.triangleLines[x].pointA = OrganicGLWinUtils::roundVec3ToHundredths(sTrianglesBegin->second.triangleLines[x].pointA);
-						sTrianglesBegin->second.triangleLines[x].pointB = OrganicGLWinUtils::roundVec3ToHundredths(sTrianglesBegin->second.triangleLines[x].pointB);
+						sTrianglesBegin->second.triangleLines[x].loadHundredthRoundedPointAFromOtherLine(&sTrianglesBegin->second.triangleLines[x]);
+						sTrianglesBegin->second.triangleLines[x].loadHundredthRoundedPointBFromOtherLine(&sTrianglesBegin->second.triangleLines[x]);
 					}
 				}
 			}

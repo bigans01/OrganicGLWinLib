@@ -19,8 +19,9 @@ class RaycastIntersectionTest
 			sTriangleToCastAgainst(in_sTriangleToTest)
 		{
 			STriangleLine lineToTest;
-			lineToTest.pointA = rayToCast.raySegmentBeginPoint;
-			lineToTest.pointB = rayToCast.raySegmentEndPoint;
+			lineToTest.setPointA(rayToCast.raySegmentBeginPoint.x, rayToCast.raySegmentBeginPoint.y, rayToCast.raySegmentBeginPoint.z);
+			lineToTest.setPointB(rayToCast.raySegmentEndPoint.x, rayToCast.raySegmentEndPoint.y, rayToCast.raySegmentEndPoint.z);
+
 			producedResult = runIntersectionTest(sTriangleToCastAgainst, lineToTest);
 		}
 	private:

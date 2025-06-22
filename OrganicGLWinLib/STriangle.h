@@ -21,7 +21,7 @@ public:
 		std::cout << "!! Printing points of STriangle. " << std::endl;
 		for (int x = 0; x < 3; x++)
 		{
-			std::cout << "point " << x << ": " << triangleLines[x].pointA.x << ", " << triangleLines[x].pointA.y << ", " << triangleLines[x].pointA.z << std::endl;
+			std::cout << "point " << x << ": " << triangleLines[x].getPointAx() << ", " << triangleLines[x].getPointAy() << ", " << triangleLines[x].getPointAz() << std::endl;
 		}
 	}
 
@@ -51,9 +51,10 @@ public:
 		// x clamp check
 		if
 		(
-			(triangleLines[0].pointA.x == triangleLines[1].pointA.x)
+			(triangleLines[0].getPointAx() == triangleLines[1].getPointAx())
+
 			&&
-			(triangleLines[1].pointA.x == triangleLines[2].pointA.x)
+			(triangleLines[1].getPointAx() == triangleLines[2].getPointAx())
 		)
 		{
 			//std::cout << "Perfect X-clamp detected! " << std::endl;
@@ -63,9 +64,10 @@ public:
 		// y clamp check
 		if
 		(
-			(triangleLines[0].pointA.y == triangleLines[1].pointA.y)
+			(triangleLines[0].getPointAy() == triangleLines[1].getPointAy())
+
 			&&
-			(triangleLines[1].pointA.y == triangleLines[2].pointA.y)
+			(triangleLines[1].getPointAy() == triangleLines[2].getPointAy())
 		)
 		{
 			//std::cout << "Perfect Y-clamp detected! " << std::endl;
@@ -75,9 +77,9 @@ public:
 		// z clamp check
 		if
 		(
-			(triangleLines[0].pointA.z == triangleLines[1].pointA.z)
+			(triangleLines[0].getPointAz() == triangleLines[1].getPointAz())
 			&&
-			(triangleLines[1].pointA.z == triangleLines[2].pointA.z)
+			(triangleLines[1].getPointAz() == triangleLines[2].getPointAz())
 		)
 		{
 			//std::cout << "Perfect Z-clamp detected! " << std::endl;
@@ -92,7 +94,7 @@ public:
 		std::map<int, PointCounter> tempPointCounter;
 		for (int x = 0; x < 3; x++)
 		{
-			insertIntoPointCounterMap(&tempPointCounter, triangleLines[x].pointA);
+			insertIntoPointCounterMap(&tempPointCounter, triangleLines[x].fetchPointAGlmVec3Version());
 		}
 
 		// if the size of the tempPointCounter map isn't 3, there aren't 3 unique points.

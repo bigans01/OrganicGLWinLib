@@ -24,9 +24,9 @@ class PointToSPolyRelationship
 				std::cout << "[" << relationshipMapBegin->first << "] -> points: ";
 				for (int x = 0; x < 3; x++)
 				{
-					std::cout << relationshipMapBegin->second.sTriangleRef->triangleLines[x].pointA.x << ", "
-						<< relationshipMapBegin->second.sTriangleRef->triangleLines[x].pointA.y << ", "
-						<< relationshipMapBegin->second.sTriangleRef->triangleLines[x].pointA.z << " | ";
+					std::cout << relationshipMapBegin->second.sTriangleRef->triangleLines[x].getPointAx() << ", "
+						<< relationshipMapBegin->second.sTriangleRef->triangleLines[x].getPointAy() << ", "
+						<< relationshipMapBegin->second.sTriangleRef->triangleLines[x].getPointAz() << " | ";
 				}
 				std::cout << std::endl;
 			}

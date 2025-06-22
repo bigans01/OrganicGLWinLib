@@ -167,7 +167,9 @@ bool SPolyShellProducer::checkShellCompleteness()
 			{
 				for (int x = 0; x < 3; x++)
 				{
-					HashedSTriangleLine convertedLine(currentInputTriangle.second.triangleLines[x].pointA, currentInputTriangle.second.triangleLines[x].pointB);
+					HashedSTriangleLine convertedLine(currentInputTriangle.second.triangleLines[x].fetchPointAGlmVec3Version(),
+													  currentInputTriangle.second.triangleLines[x].fetchPointBGlmVec3Version());
+
 					tempChecker.insertLine(convertedLine);
 				}
 			}
@@ -185,7 +187,10 @@ bool SPolyShellProducer::checkShellCompleteness()
 			{
 				for (int x = 0; x < 3; x++)
 				{
-					HashedSTriangleLine convertedLine(currentTriangle.second.triangleLines[x].pointA, currentTriangle.second.triangleLines[x].pointB);
+					HashedSTriangleLine convertedLine(currentTriangle.second.triangleLines[x].fetchPointAGlmVec3Version(),
+													  currentTriangle.second.triangleLines[x].fetchPointBGlmVec3Version()
+													  );
+
 					tempChecker.insertLine(convertedLine);
 				}
 			}

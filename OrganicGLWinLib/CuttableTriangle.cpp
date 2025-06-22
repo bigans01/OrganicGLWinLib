@@ -4,16 +4,23 @@
 CuttableTriangle::CuttableTriangle(STriangle in_cuttableTriangle)
 {
 	// find the centroid
-	glm::vec3 pointA = in_cuttableTriangle.triangleLines[0].pointA;
-	glm::vec3 pointB = in_cuttableTriangle.triangleLines[1].pointA;
-	glm::vec3 pointC = in_cuttableTriangle.triangleLines[2].pointA;
+	glm::vec3 pointA = in_cuttableTriangle.triangleLines[0].fetchPointAGlmVec3Version();
+	glm::vec3 pointB = in_cuttableTriangle.triangleLines[1].fetchPointAGlmVec3Version();
+	glm::vec3 pointC = in_cuttableTriangle.triangleLines[2].fetchPointAGlmVec3Version();
+
+
 	glm::vec3 centroid = OrganicGLWinUtils::findTriangleCentroid(pointA, pointB, pointC);
 
 	// find the centroid facing normal for each line
 	for (int x = 0; x < 3; x++)
-	{			
-		glm::vec3 centroidFacingNormal = QuatUtils::findOrientatedLineNormal(in_cuttableTriangle.triangleLines[x].pointA, in_cuttableTriangle.triangleLines[x].pointB, centroid);
-		CuttableTriangleLine newLine(in_cuttableTriangle.triangleLines[x].pointA, in_cuttableTriangle.triangleLines[x].pointB, centroidFacingNormal);
+	{	
+		glm::vec3 centroidFacingNormal = QuatUtils::findOrientatedLineNormal(in_cuttableTriangle.triangleLines[x].fetchPointAGlmVec3Version(),
+																			in_cuttableTriangle.triangleLines[x].fetchPointBGlmVec3Version(),
+																			centroid);
+
+		CuttableTriangleLine newLine(in_cuttableTriangle.triangleLines[x].fetchPointAGlmVec3Version(),
+			                         in_cuttableTriangle.triangleLines[x].fetchPointBGlmVec3Version(),
+			                         centroidFacingNormal);
 		cuttableTriangleLines[x] = newLine;
 	}
 }

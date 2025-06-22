@@ -42,16 +42,16 @@ class RPoly
 					STriangleLine* currentLinePtr = &sTrianglesBegin->second.triangleLines[x];
 
 					// get raster cube points
-					glm::vec3 currentLinePointA = RUtils::convertToRasterGridPoint(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
-					glm::vec3 currentLinePointB = RUtils::convertToRasterGridPoint(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
+					glm::vec3 currentLinePointA = RUtils::convertToRasterGridPoint(currentLinePtr->fetchPointAGlmVec3Version(), rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
+					glm::vec3 currentLinePointB = RUtils::convertToRasterGridPoint(currentLinePtr->fetchPointBGlmVec3Version(), rPolyRCubeDimLength, rPolyTilesPerDim, rPolyTileWeightToHundredthFloatRatio);
 
 					// get raster cube cooridnates
-					EnclaveKeyDef::EnclaveKey pointARasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointA, rPolyRCubeDimLength, rPolyTilesPerDim);
-					EnclaveKeyDef::EnclaveKey pointBRasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->pointB, rPolyRCubeDimLength, rPolyTilesPerDim);
+					EnclaveKeyDef::EnclaveKey pointARasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->fetchPointAGlmVec3Version(), rPolyRCubeDimLength, rPolyTilesPerDim);
+					EnclaveKeyDef::EnclaveKey pointBRasterCubeCoord = RUtils::convertToRasterGridCell(currentLinePtr->fetchPointBGlmVec3Version(), rPolyRCubeDimLength, rPolyTilesPerDim);
 
 					rTriangleLogger.log("(RPoly): rPolyTileWeightToHundredthFloatRatio value: ", rPolyTileWeightToHundredthFloatRatio, "\n");
-					rTriangleLogger.log("(RPoly): current line, point A: ", currentLinePtr->pointA.x, ", ", currentLinePtr->pointA.y, ", ", currentLinePtr->pointA.z, "\n");
-					rTriangleLogger.log("(RPoly): current line, point B: ", currentLinePtr->pointB.x, ", ", currentLinePtr->pointB.y, ", ", currentLinePtr->pointB.z, "\n");
+					rTriangleLogger.log("(RPoly): current line, point A: ", currentLinePtr->getPointAx(), ", ", currentLinePtr->getPointAy(), ", ", currentLinePtr->getPointAz(), "\n");
+					rTriangleLogger.log("(RPoly): current line, point B: ", currentLinePtr->getPointBx(), ", ", currentLinePtr->getPointBy(), ", ", currentLinePtr->getPointBz(), "\n");
 					rTriangleLogger.log("(RPoly): current line, point A 3d raster grid point: ", currentLinePointA.x, ", ", currentLinePointA.y, ", ", currentLinePointA.z, "\n");
 					rTriangleLogger.log("(RPoly): current line, point B 3d raster grid point: ", currentLinePointB.x, ", ", currentLinePointB.y, ", ", currentLinePointB.z, "\n");
 					rTriangleLogger.log("(RPoly): current line, point A cube coordinate: ", pointARasterCubeCoord.x, ", ", pointARasterCubeCoord.y, ", ", pointARasterCubeCoord.z, "\n");
@@ -67,6 +67,7 @@ class RPoly
 											rPolyTileWeightToHundredthFloatRatio,
 											rPolyMaterialID);
 					builtLineArray[x] = builtLine;
+					
 				}
 				RTriangle builtRTriangle(builtLineArray[0], builtLineArray[1], builtLineArray[2], in_rTriangleDebugLevel, rPolyMaterialID);
 

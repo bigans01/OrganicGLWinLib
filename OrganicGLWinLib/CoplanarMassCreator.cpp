@@ -194,9 +194,12 @@ void CoplanarMassCreator::runMassManipulation()
 			{
 				std::cout << "!!! Acquiring total related area..." << std::endl;
 
-				float areaConsumed = calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA,
-					sTrianglesBegin->second.triangleLines[1].pointA,
-					sTrianglesBegin->second.triangleLines[2].pointA);
+				float areaConsumed = calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].fetchPointAGlmVec3Version(),
+														   sTrianglesBegin->second.triangleLines[1].fetchPointAGlmVec3Version(),
+														   sTrianglesBegin->second.triangleLines[2].fetchPointAGlmVec3Version()
+				);
+
+
 				std::cout << "(float) area consumed: " << areaConsumed << std::endl;
 
 				//double dAreaConsumed = calculateTriangleAreaDouble(sTrianglesBegin->second.triangleLines[0].pointA,

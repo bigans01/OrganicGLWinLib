@@ -12,7 +12,7 @@ class CoplanarComparisonCoandidatePoints
 		{
 			for (int x = 0; x < 3; x++)
 			{
-				points[x] = in_sTriangleRef->triangleLines[x].pointA;
+				points[x] = in_sTriangleRef->triangleLines[x].fetchPointAGlmVec3Version();
 				availableCandidates.insert(x);
 			}
 		};

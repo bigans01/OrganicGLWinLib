@@ -19,16 +19,17 @@ void MassZoneShellSlice::runAnalysis()
 	shellSlicePolyLogger.log("(MassZoneShellSlice): |||| |||||||||----->> BEGIN Running analysis for a shell slice based off of SPoly ", baseSPolyID, ", STriangle ", baseSTriangleID, "\n");
 	shellSlicePolyLogger.log("(MassZoneShellSlice): |||| ----->> Point to compare against the shell is: ", relationshipPointToCompare.x, ", ", relationshipPointToCompare.y, ", ", relationshipPointToCompare.z, "\n");
 	shellSlicePolyLogger.log("(MassZoneShellSlice): |||| ----->> Shell slice base triangle points are:", "\n");
-	shellSlicePolyLogger.log("(MassZoneShellSlice): point 0: ", shellSliceBaseTriangle->triangleLines[0].pointA.x, ", ", shellSliceBaseTriangle->triangleLines[0].pointA.y, ", ", shellSliceBaseTriangle->triangleLines[0].pointA.z, "\n");
-	shellSlicePolyLogger.log("(MassZoneShellSlice): point 1: ", shellSliceBaseTriangle->triangleLines[1].pointA.x, ", ", shellSliceBaseTriangle->triangleLines[1].pointA.y, ", ", shellSliceBaseTriangle->triangleLines[1].pointA.z, "\n");
-	shellSlicePolyLogger.log("(MassZoneShellSlice): point 2: ", shellSliceBaseTriangle->triangleLines[2].pointA.x, ", ", shellSliceBaseTriangle->triangleLines[2].pointA.y, ", ", shellSliceBaseTriangle->triangleLines[2].pointA.z, "\n");
+	shellSlicePolyLogger.log("(MassZoneShellSlice): point 0: ", shellSliceBaseTriangle->triangleLines[0].getPointAx(), ", ", shellSliceBaseTriangle->triangleLines[0].getPointAy(), ", ", shellSliceBaseTriangle->triangleLines[0].getPointAz(), "\n");
+	shellSlicePolyLogger.log("(MassZoneShellSlice): point 1: ", shellSliceBaseTriangle->triangleLines[1].getPointAx(), ", ", shellSliceBaseTriangle->triangleLines[1].getPointAy(), ", ", shellSliceBaseTriangle->triangleLines[1].getPointAz(), "\n");
+	shellSlicePolyLogger.log("(MassZoneShellSlice): point 2: ", shellSliceBaseTriangle->triangleLines[2].getPointAx(), ", ", shellSliceBaseTriangle->triangleLines[2].getPointAy(), ", ", shellSliceBaseTriangle->triangleLines[2].getPointAz(), "\n");
 	shellSlicePolyLogger.log("(MassZoneShellSlice): |||| ----->> Shell slice empty normal: ", shellSliceBaseEmptyNormal.x, ", ", shellSliceBaseEmptyNormal.y, ", ", shellSliceBaseEmptyNormal.z, "\n");
 
 	// first, check the relationship. 
+
 	PointToMassRelationshipType analyzedType = QuatUtils::findPointToMassRelationship(relationshipPointToCompare,
-																						shellSliceBaseTriangle->triangleLines[0].pointA,
-																						shellSliceBaseTriangle->triangleLines[1].pointA,
-																						shellSliceBaseTriangle->triangleLines[2].pointA,
+																						shellSliceBaseTriangle->triangleLines[0].fetchPointAGlmVec3Version(),
+																						shellSliceBaseTriangle->triangleLines[1].fetchPointAGlmVec3Version(),
+																						shellSliceBaseTriangle->triangleLines[2].fetchPointAGlmVec3Version(),
 																						shellSliceBaseEmptyNormal,
 																						PolyDebugLevel::NONE);
 	// if it's exactly in the STriangle's area, we're good.

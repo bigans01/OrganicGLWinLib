@@ -19,7 +19,10 @@ float CoplanarMassManipulator::calculateSPolyArea(SPoly* in_sPolyRef)
 	auto sTrianglesEnd = in_sPolyRef->triangles.end();
 	for (; sTrianglesBegin != sTrianglesEnd; sTrianglesBegin++)
 	{
-		totalArea += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].pointA, sTrianglesBegin->second.triangleLines[1].pointA, sTrianglesBegin->second.triangleLines[2].pointA);
+		totalArea += calculateTriangleArea(sTrianglesBegin->second.triangleLines[0].fetchPointAGlmVec3Version(),
+										   sTrianglesBegin->second.triangleLines[1].fetchPointAGlmVec3Version(),
+										   sTrianglesBegin->second.triangleLines[2].fetchPointAGlmVec3Version()
+		);
 	}
 	return totalArea;
 }

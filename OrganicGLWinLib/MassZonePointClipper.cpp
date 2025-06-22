@@ -141,9 +141,9 @@ bool MassZonePointClipper::compareMeshMatterMetaAgainstClippingShells(MeshMatter
 				{
 					clipperPolyLogger.log("(MassZonePointClipper): point ", pointToCompareFor.x, ", ", pointToCompareFor.y, ", ", pointToCompareFor.z, 
 										   ", ", " was found as being within the PBZ of the clipping shell SPoly with ID ", clippingShellMapBegin->first, ", in STriangle with ID ", x, " | ",
-						                   " Points of triangle: ", currentSTriangleRef->triangleLines[0].pointA.x, ", ", currentSTriangleRef->triangleLines[0].pointA.y, ", ", currentSTriangleRef->triangleLines[0].pointA.z, " | ",
-																	currentSTriangleRef->triangleLines[1].pointA.x, ", ", currentSTriangleRef->triangleLines[1].pointA.y, ", ", currentSTriangleRef->triangleLines[1].pointA.z, " | ", 
-																	currentSTriangleRef->triangleLines[2].pointA.x, ", ", currentSTriangleRef->triangleLines[2].pointA.y, ", ", currentSTriangleRef->triangleLines[2].pointA.z, "\n" );
+						                   " Points of triangle: ", currentSTriangleRef->triangleLines[0].getPointAx(), ", ", currentSTriangleRef->triangleLines[0].getPointAy(), ", ", currentSTriangleRef->triangleLines[0].getPointAz(), " | ",
+																	currentSTriangleRef->triangleLines[1].getPointAx(), ", ", currentSTriangleRef->triangleLines[1].getPointAy(), ", ", currentSTriangleRef->triangleLines[1].getPointAz(), " | ",
+																	currentSTriangleRef->triangleLines[2].getPointAx(), ", ", currentSTriangleRef->triangleLines[2].getPointAy(), ", ", currentSTriangleRef->triangleLines[2].getPointAz(), "\n" );
 											
 					relationshipTrackerContainer.insertRelationshipTrackerData(pointToCompareFor, clippingShellMapBegin->first, x, currentSTriangleRef, currentClippingShellSPolyRef->polyEmptyNormal);
 					currentPointSPolyIDsOfFoundPBZs.intSet.insert(clippingShellMapBegin->first);
@@ -382,7 +382,7 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " Points of triangle to compare to: ", "\n");
 					for (int x = 0; x < 3; x++)
 					{
-						clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " [", x, "]: ", currentTriangleToCompareTo->triangleLines[x].pointA.x, ", ", currentTriangleToCompareTo->triangleLines[x].pointA.y, ", ", currentTriangleToCompareTo->triangleLines[x].pointA.z, "\n");
+						clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " [", x, "]: ", currentTriangleToCompareTo->triangleLines[x].getPointAx(), ", ", currentTriangleToCompareTo->triangleLines[x].getPointAy(), ", ", currentTriangleToCompareTo->triangleLines[x].getPointAz(), "\n");
 					}
 
 				}
@@ -393,22 +393,23 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 				// *********************************************************First border line 
 				SPolyBorderLines* firstBorderLineInLinkRef = linksBegin->second.linkedBorderLines[0];
 				STriangleLine tempLine;
-				tempLine.pointA = firstBorderLineInLinkRef->pointA;
-				tempLine.pointB = firstBorderLineInLinkRef->pointB;
-				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (First line) Comparing line with points (", tempLine.pointA.x, ", ", tempLine.pointA.y, ", ", tempLine.pointA.z, " | ",
-					tempLine.pointB.x, ", ", tempLine.pointB.y, ", ", tempLine.pointB.z, ") ", "\n");
+				tempLine.setPointA(firstBorderLineInLinkRef->pointA.x, firstBorderLineInLinkRef->pointA.y, firstBorderLineInLinkRef->pointA.z);
+				tempLine.setPointB(firstBorderLineInLinkRef->pointB.x, firstBorderLineInLinkRef->pointB.y, firstBorderLineInLinkRef->pointB.z);
+
+				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (First line) Comparing line with points (", tempLine.getPointAx(), ", ", tempLine.getPointAy(), ", ", tempLine.getPointAz(), " | ",
+					tempLine.getPointBx(), ", ", tempLine.getPointBy(), ", ", tempLine.getPointBz(), ") ", "\n");
 				FusionCandidateProducer shellProducerFirst(PolyDebugLevel::NONE);
 				FusionCandidate shellCandidateFirst = shellProducerFirst.produceCandidate(*currentTriangleToCompareTo, tempLine);		// send a copy of the STriangle
 				if
 				(
 					(shellCandidateFirst.candidateIntersectionResult.wasIntersectFound == 1)
 					&&
-					(shellCandidateFirst.candidateIntersectionResult.intersectedPoint == tempLine.pointB)
+					(shellCandidateFirst.candidateIntersectionResult.intersectedPoint == tempLine.fetchPointBGlmVec3Version())
 				)
 				{
-					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(First Line) (( NOTICE )) : point ", tempLine.pointB.x, ", ", tempLine.pointB.y, ", ", tempLine.pointB.z,
+					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(First Line) (( NOTICE )) : point ", tempLine.getPointBx(), ", ", tempLine.getPointBy(), ", ", tempLine.getPointBz(),
 					" found as being coplanar, breaking.", "\n");
-					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLine.pointB, BorderLineLinkPointState::COPLANAR);
+					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLine.fetchPointBGlmVec3Version(), BorderLineLinkPointState::COPLANAR);
 					pointFoundAsCoplanar = true;
 					break;
 				}
@@ -416,22 +417,23 @@ bool MassZonePointClipper::runFirstTwoDisqualificationPasses(BorderLineLinkConta
 				// *********************************************************Second border line 
 				SPolyBorderLines* secondBorderLineInLinkRef = linksBegin->second.linkedBorderLines[1];
 				STriangleLine tempLineB;
-				tempLineB.pointA = secondBorderLineInLinkRef->pointA;
-				tempLineB.pointB = secondBorderLineInLinkRef->pointB;
-				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (Second line) Comparing line with points (", tempLineB.pointA.x, ", ", tempLineB.pointA.y, ", ", tempLineB.pointA.z, " | ",
-					tempLineB.pointB.x, ", ", tempLineB.pointB.y, ", ", tempLineB.pointB.z, ") ", "\n");
+				tempLineB.setPointA(secondBorderLineInLinkRef->pointA.x, secondBorderLineInLinkRef->pointA.y, secondBorderLineInLinkRef->pointA.z);
+				tempLineB.setPointB(secondBorderLineInLinkRef->pointB.x, secondBorderLineInLinkRef->pointB.y, secondBorderLineInLinkRef->pointB.z);
+
+				clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, " (Second line) Comparing line with points (", tempLineB.getPointAx(), ", ", tempLineB.getPointAy(), ", ", tempLineB.getPointAz(), " | ",
+					tempLineB.getPointBx(), ", ", tempLineB.getPointBy(), ", ", tempLineB.getPointBz(), ") ", "\n");
 				FusionCandidateProducer shellProducerSecond(PolyDebugLevel::NONE);
 				FusionCandidate shellCandidateSecond = shellProducerSecond.produceCandidate(*currentTriangleToCompareTo, tempLineB);
 				if
 				(
 					(shellCandidateSecond.candidateIntersectionResult.wasIntersectFound == 1)
 					&&
-					(shellCandidateSecond.candidateIntersectionResult.intersectedPoint == tempLineB.pointA)
+					(shellCandidateSecond.candidateIntersectionResult.intersectedPoint == tempLineB.fetchPointAGlmVec3Version())
 				)
 				{
-					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(Second Line) (( NOTICE )) : point ", tempLineB.pointA.x, ", ", tempLineB.pointA.y, ", ", tempLineB.pointA.z,
+					clipperPolyLogger.log("(MassZonePointClipper) ", zoneString, "(Second Line) (( NOTICE )) : point ", tempLineB.getPointAx(), ", ", tempLineB.getPointAy(), ", ", tempLineB.getPointAz(),
 						" found as being coplanar, breaking.", "\n");
-					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLineB.pointA, BorderLineLinkPointState::COPLANAR);
+					in_borderLineLinkContainerRef->updateLinkPointStatus(tempLineB.fetchPointAGlmVec3Version(), BorderLineLinkPointState::COPLANAR);
 					pointFoundAsCoplanar = true;
 					break;
 				}
@@ -463,11 +465,15 @@ bool MassZonePointClipper::checkIfPointIsWithinPBZ(glm::vec3 in_pointToCheck, ST
 	STriangle sTriangleCopy = in_sTriangleCopy;
 	for (int x = 0; x < 3; x++)
 	{
-		if (in_pointToCheck == sTriangleCopy.triangleLines[x].pointA)
+		if (sTriangleCopy.triangleLines[x].doesPointAEqualValue(in_pointToCheck))
 		{
 			return true;
 		}
 	}
-	return QuatUtils::checkIfPointLiesWithinTrianglePBZ(pointToCheckCopy, sTriangleCopy.triangleLines[0].pointA, sTriangleCopy.triangleLines[1].pointA, sTriangleCopy.triangleLines[2].pointA);
-	//return QuatUtils::checkIfPointLiesWithinTrianglePBZDebug(pointToCheckCopy, sTriangleCopy.triangleLines[0].pointA, sTriangleCopy.triangleLines[1].pointA, sTriangleCopy.triangleLines[2].pointA, PolyDebugLevel::DEBUG);
+
+	return QuatUtils::checkIfPointLiesWithinTrianglePBZ(pointToCheckCopy,
+														sTriangleCopy.triangleLines[0].fetchPointAGlmVec3Version(),
+														sTriangleCopy.triangleLines[1].fetchPointAGlmVec3Version(),
+														sTriangleCopy.triangleLines[2].fetchPointAGlmVec3Version()
+													);
 }

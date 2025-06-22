@@ -16,8 +16,8 @@ FusionCandidate FusionCandidateProducer::produceCandidate(STriangle in_sTriangle
 
 	// do a compare where the in_line is swapped
 	STriangleLine swappedLine = in_sTriangleLine;
-	swappedLine.pointA = in_sTriangleLine.pointB;
-	swappedLine.pointB = in_sTriangleLine.pointA;
+
+	swappedLine.setPointsAsSwappedFromOtherLine(&in_sTriangleLine);
 
 	// do the swapped compare
 	RayIntersectionResult resultB = determineRayRelationShipToTriangle(in_sTriangle, swappedLine);
@@ -187,7 +187,7 @@ bool FusionCandidateProducer::isPointEqualToTrianglePoint(glm::vec3 in_point, ST
 	bool result = false;
 	for (int x = 0; x < 3; x++)
 	{
-		if (in_point == in_triangleRef->triangleLines[x].pointA)
+		if (in_triangleRef->triangleLines[x].doesPointAEqualValue(in_point))
 		{
 			//std::cout << "!!:##### Notice: although the ray isn't coplanar to the triangle (result of 2), one point was found as being equal to a point in the compared-to triangle. Flagging as 1. " << std::endl;
 			result = true;
@@ -206,26 +206,26 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 	//std::cout << "(Fusion) triangle, point 0: " << in_triangle.triangleLines[0].pointA.x << ", " << in_triangle.triangleLines[0].pointA.y << ", " << in_triangle.triangleLines[0].pointA.z << std::endl;
 	//std::cout << "(Fusion) triangle, point 1: " << in_triangle.triangleLines[1].pointA.x << ", " << in_triangle.triangleLines[1].pointA.y << ", " << in_triangle.triangleLines[1].pointA.z << std::endl;
 	//std::cout << "(Fusion) triangle, point 2: " << in_triangle.triangleLines[2].pointA.x << ", " << in_triangle.triangleLines[2].pointA.y << ", " << in_triangle.triangleLines[2].pointA.z << std::endl;
-	candidateProductionLogger.log("(Fusion) triangle, point 0: ", in_triangle.triangleLines[0].pointA.x, ", ", in_triangle.triangleLines[0].pointA.y, ", ", in_triangle.triangleLines[0].pointA.z, "\n");
-	candidateProductionLogger.log("(Fusion) triangle, point 1: ", in_triangle.triangleLines[1].pointA.x, ", ", in_triangle.triangleLines[1].pointA.y, ", ", in_triangle.triangleLines[1].pointA.z, "\n");
-	candidateProductionLogger.log("(Fusion) triangle, point 2: ", in_triangle.triangleLines[2].pointA.x, ", ", in_triangle.triangleLines[2].pointA.y, ", ", in_triangle.triangleLines[2].pointA.z, "\n");
+	candidateProductionLogger.log("(Fusion) triangle, point 0: ", in_triangle.triangleLines[0].getPointAx(), ", ", in_triangle.triangleLines[0].getPointAy(), ", ", in_triangle.triangleLines[0].getPointAz(), "\n");
+	candidateProductionLogger.log("(Fusion) triangle, point 1: ", in_triangle.triangleLines[1].getPointAx(), ", ", in_triangle.triangleLines[1].getPointAy(), ", ", in_triangle.triangleLines[1].getPointAz(), "\n");
+	candidateProductionLogger.log("(Fusion) triangle, point 2: ", in_triangle.triangleLines[2].getPointAx(), ", ", in_triangle.triangleLines[2].getPointAy(), ", ", in_triangle.triangleLines[2].getPointAz(), "\n");
 
 	//std::cout << "(Fusion) Checking if this line intersects: pointA: " << in_line.pointA.x << ", " << in_line.pointA.y << ", " << in_line.pointA.z << " | pointB: " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
 	//std::cout << "=========" << std::endl;
-	candidateProductionLogger.log("(Fusion) Checking if this line intersects: pointA: ", in_line.pointA.x, ", ", in_line.pointA.y, ", ", in_line.pointA.z, " | pointB: ", in_line.pointB.x, ", ", in_line.pointB.y, ", ", in_line.pointB.z, "\n");
+	candidateProductionLogger.log("(Fusion) Checking if this line intersects: pointA: ", in_line.getPointAx(), ", ", in_line.getPointAy(), ", ", in_line.getPointAz(), " | pointB: ", in_line.getPointAx(), ", ", in_line.getPointAy(), ", ", in_line.getPointAz(), "\n");
 	candidateProductionLogger.log("(Fusion) =========", "\n");
 
-	glm::vec3 point0 = in_triangle.triangleLines[0].pointA;
-	glm::vec3 point1 = in_triangle.triangleLines[1].pointA;
-	glm::vec3 point2 = in_triangle.triangleLines[2].pointA;
 
+	glm::vec3 point0 = in_triangle.triangleLines[0].fetchPointAGlmVec3Version();
+	glm::vec3 point1 = in_triangle.triangleLines[1].fetchPointAGlmVec3Version();
+	glm::vec3 point2 = in_triangle.triangleLines[2].fetchPointAGlmVec3Version();
 
 	int matchCount = 0;
 
 	// attempt match of point A of the triangleLine to all 3 points:
 	for (int x = 0; x < 3; x++)
 	{
-		if (in_line.pointA == in_triangle.triangleLines[x].pointA)
+		if (in_triangle.triangleLines[x].doesPointAEqualValue(in_line.fetchPointAGlmVec3Version()))
 		{
 			matchCount++;
 		}
@@ -234,7 +234,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 	// ...of point B
 	for (int x = 0; x < 3; x++)
 	{
-		if (in_line.pointB == in_triangle.triangleLines[x].pointA)
+		if (in_triangle.triangleLines[x].doesPointAEqualValue(in_line.fetchPointBGlmVec3Version()))
 		{
 			matchCount++;
 		}
@@ -352,8 +352,9 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		//N.z = -1.0f;
 
 
-		glm::vec3 dir = in_line.pointB - in_line.pointA;
-		glm::vec3 w0 = in_line.pointA - point0;
+
+		glm::vec3 dir = in_line.fetchPointBGlmVec3Version() - in_line.fetchPointAGlmVec3Version();
+		glm::vec3 w0 = in_line.fetchPointAGlmVec3Version() - point0;
 
 		//std::cout << "Normal: " << N.x << ", " << N.y << ", " << N.z << std::endl;
 		//std::cout << "Dir: " << dir.x << ", " << dir.y << ", " << dir.z << std::endl;
@@ -401,7 +402,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 				//withinFlag = OrganicGLWinUtils::checkIfPointLiesWithinTriangleWithRotateToZ(in_line.pointB, point0, point1, point2);
 
 				// first point = point to check, remaining 3 = points of triangle (see header file for QMBoolPointWithinTrianglePBZ)
-				withinFlag = QuatUtils::checkIfPointLiesWithinTrianglePBZ(in_line.pointB, point0, point1, point2);
+				withinFlag = QuatUtils::checkIfPointLiesWithinTrianglePBZ(in_line.fetchPointBGlmVec3Version(), point0, point1, point2);
 
 				//std::cout << "||||||||| Triangle planar check; triangle points are: " << std::endl;
 				//std::cout << "triangle, point 0: " << point0.x << ", " << point0.y << ", " << point0.z << std::endl;
@@ -414,7 +415,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 
 
 				//std::cout << "::>>> Checking if Point B lies within triangle " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
-				candidateProductionLogger.log("::>>> Checking if Point B lies within triangle ", in_line.pointB.x, ", ", in_line.pointB.y, ", ", in_line.pointB.z, "\n");
+				candidateProductionLogger.log("::>>> Checking if Point B lies within triangle ", in_line.getPointBx(), ", ", in_line.getPointBy(), ", ", in_line.getPointBz(), "\n");
 
 				// since we know it's coplanar, the point lies within the triangle if either of the two is met:
 				// 1.) it lies within the triangle (withinFlag would be true)
@@ -423,18 +424,18 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 				(
 					(withinFlag == true)	
 					||
-					(isPointEqualToTrianglePoint(in_line.pointB, &in_triangle) == true)
+					(isPointEqualToTrianglePoint(in_line.fetchPointBGlmVec3Version(), &in_triangle) == true)
 				)
 				{
 					//std::cout << "::>>> (This point lies WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
-					candidateProductionLogger.log("::>>> (This point lies WITHIN the triangle!) ", in_line.pointB.x, ", ", in_line.pointB.y, ", ", in_line.pointB.z, "\n");
+					candidateProductionLogger.log("::>>> (This point lies WITHIN the triangle!) ", in_line.getPointBx(), ", ", in_line.getPointBy(), ", ", in_line.getPointBz(), "\n");
 					returnResult.liesWithinTriangleZone = true;
 					returnResult.setResult(2);
 				}
 				else if (withinFlag == false)
 				{
 					//std::cout << "::>>> (This point DOES NOT LIE WITHIN the triangle!) " << in_line.pointB.x << ", " << in_line.pointB.y << ", " << in_line.pointB.z << std::endl;
-					candidateProductionLogger.log("::>>> (This point DOES NOT LIE WITHIN the triangle!) ", in_line.pointB.x, ", ", in_line.pointB.y, ", ", in_line.pointB.z, "\n");
+					candidateProductionLogger.log("::>>> (This point DOES NOT LIE WITHIN the triangle!) ", in_line.getPointBx(), ", ", in_line.getPointBy(), ", ", in_line.getPointBz(), "\n");
 					returnResult.setResult(0);
 				}
 
@@ -451,7 +452,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 		// check whether or not point B of the line matches a point
 		for (int x = 0; x < 3; x++)
 		{
-			if (in_line.pointB == in_triangle.triangleLines[x].pointA)
+			if (in_triangle.triangleLines[x].doesPointAEqualValue(in_line.fetchPointBGlmVec3Version()))
 			{
 				//std::cout << "!!:##### Notice: although the ray isn't coplanar to the triangle (result of 2), one point was found as being equal to a point in the compared-to triangle. Flagging as 1. " << std::endl;
 				candidateProductionLogger.log("!!:##### Notice: although the ray isn't coplanar to the triangle (result of 2), one point was found as being equal to a point in the compared-to triangle. Flagging as 1. ", "\n");
@@ -469,7 +470,7 @@ RayIntersectionResult FusionCandidateProducer::determineRayRelationShipToTriangl
 			returnResult.setResult(0);
 		}
 
-		intersect_candidate = in_line.pointA + (r * dir);
+		intersect_candidate = in_line.fetchPointAGlmVec3Version() + (r * dir);
 
 		// is I inside T?
 		glm::vec3 w;

@@ -110,9 +110,9 @@ void PointToSPolyRelationshipTrackerContainer::removePointsExistingOutsideOfShel
 		for (; relatedSPolysBegin != relatedSPolysEnd; relatedSPolysBegin++)
 		{
 			// we can use any STriangle in the SPoly, so just get the first.
-			glm::vec3 point0 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[0].pointA;	
-			glm::vec3 point1 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[1].pointA;
-			glm::vec3 point2 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[2].pointA;
+			glm::vec3 point0 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[0].fetchPointAGlmVec3Version();
+			glm::vec3 point1 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[1].fetchPointAGlmVec3Version();
+			glm::vec3 point2 = relatedSPolysBegin->second.sTriangleRelationshipMap.begin()->second.sTriangleRef->triangleLines[2].fetchPointAGlmVec3Version();
 
 			glm::vec3 emptyNormal = relatedSPolysBegin->second.relatedSPolyEmptyNormal;	// we only need to get the first relationship, to get the empty normal.
 

@@ -6,14 +6,15 @@ void CategorizedLineColinearTester::runColinearTests()
 	// load the STriangle's line's first points
 	for (int x = 0; x < 3; x++)
 	{
-		coplanarPoints.insertPointRefs(&hostSTriangle.triangleLines[x].pointA);
+		coplanarPoints.insertPointRefs(hostSTriangle.triangleLines[x].getPointARef());
 	}
 
 	// load the candidate line's points into the coplanar points
 	coplanarPoints.insertPointRefs(&candidateLine.line.pointA, &candidateLine.line.pointB);
 
 	// translate by the first point of the first line in the host STriangle
-	pointTranslator.performCheck(hostSTriangle.triangleLines[0].pointA);
+	pointTranslator.performCheck(hostSTriangle.triangleLines[0].fetchPointAGlmVec3Version());
+
 	if (pointTranslator.requiresTranslation == 1)	// almost 100% of the time, this will be run
 	{
 		//std::cout << "!! prime point 0 requires translation!! " << std::endl;
@@ -35,15 +36,15 @@ void CategorizedLineColinearTester::runColinearTests()
 	{
 		if (x != 2)
 		{
-			TwoDPoint pointA = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[x].pointA);
-			TwoDPoint pointB = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[x+1].pointA);
+			TwoDPoint pointA = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[x].fetchPointAGlmVec3Version());
+			TwoDPoint pointB = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[x + 1].fetchPointAGlmVec3Version());
 			TwoDLineSegment newSegment(pointA, pointB);
 			segmentArray[x] = newSegment;
 		}
 		else if (x == 2)
 		{
-			TwoDPoint pointA = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[2].pointA);
-			TwoDPoint pointB = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[0].pointA);
+			TwoDPoint pointA = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[2].fetchPointAGlmVec3Version());
+			TwoDPoint pointB = OrganicGLWinUtils::convertGlmVec3To2D(hostSTriangle.triangleLines[0].fetchPointAGlmVec3Version());
 			TwoDLineSegment newSegment(pointA, pointB);
 			segmentArray[x] = newSegment;
 		}

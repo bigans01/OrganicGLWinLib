@@ -20,10 +20,14 @@ void TwoDLineSegmentJudge::runJudgement()
 			glm::vec3 converted2D = OrganicGLWinUtils::convert2DToGlmVec3(suspectLine.b);
 			if
 				(
-					QuatUtils::checkIfPointLiesWithinTrianglePBZ(converted2D, 
-							sTrianglesBegin->second.triangleLines[0].pointA, 
-							sTrianglesBegin->second.triangleLines[1].pointA,
-							sTrianglesBegin->second.triangleLines[2].pointA)
+
+
+					QuatUtils::checkIfPointLiesWithinTrianglePBZ(converted2D,
+						sTrianglesBegin->second.triangleLines[0].fetchPointAGlmVec3Version(),
+						sTrianglesBegin->second.triangleLines[1].fetchPointAGlmVec3Version(),
+						sTrianglesBegin->second.triangleLines[2].fetchPointAGlmVec3Version()
+					)
+
 					== true
 				)
 			{
