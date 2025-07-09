@@ -5,6 +5,9 @@
 
 #include "CategorizedLine.h"
 
+/* Description: this class is used to store CategorizedLine objects that have been flagged as being 
+colinear to a border line of an STriangle; used primarily in MassZoneBoxBoundarySPolySet::insertCategorizedLinesFromNonboundarySPoly. */
+
 class ContestableBorderLineMap
 {
 	public:

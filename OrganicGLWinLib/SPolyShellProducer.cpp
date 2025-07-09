@@ -204,6 +204,8 @@ bool SPolyShellProducer::checkShellCompleteness()
 	else
 	{
 		// it wasn't complete; so print the stats. First, show the touched faces.
+
+		/*
 		std::cout << "Touched faces of bad mesh are: " << std::endl;
 		for (auto& currentFace : touchedFaces)
 		{
@@ -214,6 +216,7 @@ bool SPolyShellProducer::checkShellCompleteness()
 
 		std::cout << "Printing lines of ""bad"" mesh " << std::endl;
 		tempChecker.printLineStats();
+		*/
 	}
 
 	return isComplete;

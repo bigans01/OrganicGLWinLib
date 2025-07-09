@@ -9,9 +9,9 @@ void QMVoidAlignTriangleToXYPlane::solve(SPolyScalingOps* in_scalingOpsRef, Quat
 	// NOTE: this QM assumes the triangle has been translated such that the first point of the triangle is at 0,0.
 
 	// set points.
-	pointARef = quatRotationPointsRef->getFirstPointRef();
-	pointBRef = quatRotationPointsRef->getSecondPointRef();
-	pointCRef = quatRotationPointsRef->getThirdPointRef();
+	pointARef = quatRotationPointsRef->getFirstPoint();
+	pointBRef = quatRotationPointsRef->getSecondPoint();
+	pointCRef = quatRotationPointsRef->getThirdPoint();
 
 	alignFirstLineToXYPlane();
 	alignSecondLineToXYPlane();
@@ -23,7 +23,7 @@ void QMVoidAlignTriangleToXYPlane::solve(SPolyScalingOps* in_scalingOpsRef, Quat
 void QMVoidAlignTriangleToXYPlane::alignFirstLineToXYPlane()
 {
 	// check if we need to rotate about the Y-axis to get to the same Z values for the line
-	if (pointBRef->z != 0.0f)
+	if (pointBRef.z != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
 		//std::cout << "ROTATE_AROUND_Y required." << std::endl;
@@ -31,7 +31,7 @@ void QMVoidAlignTriangleToXYPlane::alignFirstLineToXYPlane()
 	}
 
 	// check if we need to rotate about the Z-axis to get to the same Y values for the line
-	if (pointBRef->y != 0.0f)
+	if (pointBRef.y != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Z;
 		//std::cout << "ROTATE_AROUND_Z required." << std::endl;
@@ -66,7 +66,7 @@ void QMVoidAlignTriangleToXYPlane::alignSecondLineToXYPlane()
 {
 	if
 	(
-		(pointCRef->z != pointARef->z)		// must be on same Z coordinate
+		(pointCRef.z != pointARef.z)		// must be on same Z coordinate
 		//&&									// --AND--
 		//(pointCRef->y > 0)					// y for the third point must be positive
 	)
@@ -177,7 +177,8 @@ void QMVoidAlignTriangleToXYPlane::rotateFirstLineAroundYAndPushIntoStack()
 {
 	float radians = 0.0f;
 	float fullRadian360 = 6.28319f;
-	float atan2result = atan2(pointBRef->z, pointBRef->x); // find the radians we'll need to rotate by
+	float atan2result = atan2(pointBRef.z, pointBRef.x); // find the radians we'll need to rotate by
+
 	float firstPassRotateRadians = 0.0f;
 	if (atan2result > 0.0)
 	{
@@ -211,7 +212,9 @@ void QMVoidAlignTriangleToXYPlane::rotateFirstLineAroundZAndPushIntoStack()
 
 	//std::cout << "!! Point B x is: " << pointBRef->x << std::endl;
 	//std::cout << "!! Point B y is: " << pointBRef->y << std::endl;
-	float atan2result = atan2(pointBRef->y, pointBRef->x); // find the radians we'll need to rotate by
+	
+	float atan2result = atan2(pointBRef.y, pointBRef.x); // find the radians we'll need to rotate by
+
 	//std::cout << "!!! Atan2result is: " << atan2result << std::endl;
 	float firstPassRotateRadians = 0.0f;
 

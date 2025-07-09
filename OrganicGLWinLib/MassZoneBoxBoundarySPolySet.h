@@ -36,7 +36,14 @@ class MassZoneBoxBoundarySPolySet
 		void setRecorderRef(ExceptionRecorder* in_exceptionRecorderRef);
 		void setLogLevel(PolyDebugLevel in_sPolyDebugLevel);
 		void compareSPolySubZoneSPolyToBoundarySPoly(SPoly* in_sPolyRef);
-		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);
+		void insertCategorizedLinesFromNonboundarySPoly(SPoly* in_sPolyRef);	// compares the guest SPoly (the parameter passed in), to the boundary SPoly
+																				// referenced at boundarySPolyRef. Each CategorizedLine of the guest SPoly is compared to 
+																				// all of the border lines contained within the boundarySPolyRef; if any of the guest SPoly lines
+																				// are coplanar to a border line of the boudary SPoly, contestables.insertChallengingCategorizedLine will have to be
+																				// called so that the challenge can be resolved. A "challenge" will typically occur when 
+																				// there have been no SPolys generated on this boundary, outside of the boundarySPolyRef itself,
+																				// yet other SPolys from other boundaries have their lines "touch" thise boundary.
+			
 		void setBoundarySPolySG(SPolySupergroup in_boundarySPolySG);	// used to manually set the value of boundarySPolySG; would be used in the case
 																		// where a valid typical boundary SPoly already exists and needs to be inserted 
 																		// (see the function MassZone::createMassZoneShell, Step 3-B)

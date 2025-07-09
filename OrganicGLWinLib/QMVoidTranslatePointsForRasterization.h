@@ -12,7 +12,8 @@ class QMVoidTranslatePointsForRasterization	: public QMVoidBase
 		void solve(QuatRotationPoints* in_quatRotationPointsRef, PolyDebugLevel in_polyDebugLevel);
 	private:
 		QuatRotationPoints* rotationpointsRefVector = nullptr;
-		glm::vec3* emptyNormalRef = nullptr;
+		//glm::vec3* emptyNormalRef = nullptr;
+		glm::vec3 emptyNormalRef;
 		std::vector<QuatRotationType> rotationOrder;
 		std::stack<QuatRotationRecord> rotationRecords;
 

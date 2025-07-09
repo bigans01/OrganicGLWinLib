@@ -17,9 +17,13 @@ class QMVoidAlignTriangleToXYPlane
 		SPolyScalingOps* scalingOpsRef = nullptr;
 		QuatRotationPoints* quatRotationPointsRef = nullptr;
 
-		glm::vec3* pointARef = nullptr;			// point A of the triangle
-		glm::vec3* pointBRef = nullptr;			// point B "
-		glm::vec3* pointCRef = nullptr;			// point C "
+		//glm::vec3* pointARef = nullptr;			// point A of the triangle
+		//glm::vec3* pointBRef = nullptr;			// point B "
+		//glm::vec3* pointCRef = nullptr;			// point C "
+		glm::vec3 pointARef;			// point A of the triangle
+		glm::vec3 pointBRef;			// point B "
+		glm::vec3 pointCRef;			// point C "
+
 		std::vector<QuatRotationType> rotationTypeVector;
 
 		void alignFirstLineToXYPlane();

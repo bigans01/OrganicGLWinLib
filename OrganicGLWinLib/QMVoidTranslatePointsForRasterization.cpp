@@ -14,17 +14,17 @@ void QMVoidTranslatePointsForRasterization::solve(QuatRotationPoints* in_quatRot
 	rotationpointsRefVector = in_quatRotationPointsRef;
 
 	// the last point in the set of points should be the empty normal in the tracked SPoly.
-	emptyNormalRef = in_quatRotationPointsRef->getLastPointRef();
+	emptyNormalRef = in_quatRotationPointsRef->getLastPoint();
 
 	// check if we need to rotate around X-axis to get to the normal to 0.
-	if (emptyNormalRef->y != 0.0f)
+	if (emptyNormalRef.y != 0.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_X;
 		rotationOrder.push_back(rotateType);
 	}
 
 	// check if we need to rotate around Y-axis to get the normal to positive Z
-	if (emptyNormalRef->z != 1.0f)
+	if (emptyNormalRef.z != 1.0f)
 	{
 		QuatRotationType rotateType = QuatRotationType::ROTATE_AROUND_Y;
 		rotationOrder.push_back(rotateType);
