@@ -3,6 +3,9 @@
 
 void SMForwardV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// ShaderMachine name
+	smNameString = "SMForwardV1";
+
 	// set coordinate mode
 	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE;
 	setMachineCoordModeDependentSettings();

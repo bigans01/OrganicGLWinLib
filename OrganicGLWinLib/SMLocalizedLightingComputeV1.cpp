@@ -3,6 +3,9 @@
 
 void SMLocalizedLightingComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// ShaderMachine name
+	smNameString = "SMLocalizedLightingComputeV1";
+
 	// set coordinate mode
 	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_LOCAL;
 	setMachineCoordModeDependentSettings();

@@ -58,6 +58,10 @@ public:
 													// that the ShaderMachine expects to receive, so that those programs/objects may send data correctly 
 													// (i.e, OrganicCoreSystem would need this to determine what modifications it needs to make, if any, to vertex terrain data)
 
+		// various state retrieval functions (primarily used for logging)
+		void fetchResolution(int* in_widthRef, int* in_heightRef);
+		std::string fetchCurrentShaderMachineName();
+
 		// direct Gear program communication 
 		void sendMessageToGLProgram(std::string in_programName, Message in_message);
 
@@ -177,9 +181,11 @@ public:
 		void resetFeedback();
 protected:
 		friend class Gear;
+
 		// misc
 		GLFWwindow* window;									// pointer to openGL window
 		int width, height;									// screen height, width
+		std::string smNameString = "";		// the designated name of the ShaderMachine, must be set by the individual ShaderMachines themselves, in their initialize functions.
 
 		GLUniformRegistry uniformRegistry;
 		WorldLightContainerMap worldLights;
@@ -309,6 +315,7 @@ protected:
 
 		// wave manager functions
 		void updateWaveUniforms();
+
 
 		// draw job disabling functions
 

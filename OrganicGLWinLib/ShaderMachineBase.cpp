@@ -749,6 +749,17 @@ GPUCoordinateMode ShaderMachineBase::fetchMachineCoordMode()
 	return machineCoordMode;
 }
 
+void ShaderMachineBase::fetchResolution(int* in_widthRef, int* in_heightRef)
+{
+	*in_widthRef = width;
+	*in_heightRef = height;
+}
+
+std::string ShaderMachineBase::fetchCurrentShaderMachineName()
+{
+	return smNameString;
+}
+
 void ShaderMachineBase::sendMessageToGLProgram(std::string in_programName, Message in_message)
 {
 	std::cout << "!!! Attempting to find gear for message..." << std::endl;

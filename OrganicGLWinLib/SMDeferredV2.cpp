@@ -3,6 +3,9 @@
 
 void SMDeferredV2::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// ShaderMachine name
+	smNameString = "SMDeferredV2";
+
 	// set coordinate mode
 	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE;
 	setMachineCoordModeDependentSettings();

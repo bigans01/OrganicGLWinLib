@@ -4,6 +4,9 @@
 // virtual functions (defined, inherited)
 void SMDeferredLightingComputeV1::initialize(int in_windowWidth, int in_windowHeight, int in_immutableBufferSize)
 {
+	// ShaderMachine name
+	smNameString = "SMDeferredLightingComputeV1";
+
 	// set coordinate mode
 	machineCoordMode = GPUCoordinateMode::COORDINATE_MODE_ABSOLUTE;
 	setMachineCoordModeDependentSettings();
