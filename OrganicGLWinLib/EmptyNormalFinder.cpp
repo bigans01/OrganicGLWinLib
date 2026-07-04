@@ -1,95 +1,105 @@
 #include "stdafx.h"
 #include "EmptyNormalFinder.h"
 
-EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, glm::vec3 in_massReferencePoint)
+EmptyNormalFinder::EmptyNormalFinder(DoublePoint in_point0, DoublePoint in_point1, DoublePoint in_point2, DoublePoint in_massReferencePoint)
 {
-	// push back the points
-	glm::vec3 point0Copy = in_point0;
-	glm::vec3 point1Copy = in_point1;
-	glm::vec3 point2Copy = in_point2;
-	glm::vec3 mrp = in_massReferencePoint;
+	DoublePoint points[3];
+	points[0] = in_point0;
+	points[1] = in_point1;
+	points[2] = in_point2;
 
-	//std::cout << "!!! Initial points are: " << std::endl;
-	//std::cout << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-	//std::cout << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-	//std::cout << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+	std::set<double> xRanges;
+	std::set<double> yRanges;
+	std::set<double> zRanges;
 
-	quatPoints.insertPointRefs(&point0Copy, &point1Copy, &point2Copy, &mrp, &calculatedNormal);
-
-	// check for any translation
-	pointTranslator.performCheck(quatPoints.getFirstPoint());
-	if (pointTranslator.requiresTranslation == 1)
+	for (int x = 0; x < 3; x++)
 	{
-		quatPoints.applyTranslation(pointTranslator.getTranslationValue());
-		//std::cout << "!!! Points were translated; their values are: " << std::endl;
-		//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-		//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-		//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+		xRanges.insert(points[x].x);
+		yRanges.insert(points[x].y);
+		zRanges.insert(points[x].z);
+
+		//std::cout << "Double point values were: " << points[x].x << ", " << points[x].y << ", " << points[x].z << std::endl;
 	}
 
+	// the amount to adjust in x/y/z, is the inverse of the minimum found in each dim set.
+	// I.e., a triangle point at 320022.0f is going to need to be adjusted by -320000.0f
+	double minXAdjustment = ((floor(*xRanges.begin() / 32.0)) * -1.0) * 32.0;
+	double minYAdjustment = ((floor(*yRanges.begin() / 32.0)) * -1.0) * 32.0;
+	double minZAdjustment = ((floor(*zRanges.begin() / 32.0)) * -1.0) * 32.0;
 
 
-	//glm::vec3 ab = point1Copy - point0Copy;		// get the ab_> vector, to do the alignment for
-	//std::cout << "Before rotation: " << ab.x << ", " << ab.y << ", " << ab.z << std::endl;
+	DoublePoint translationValue(minXAdjustment, minYAdjustment, minZAdjustment);
+	translationValue.roundHundredth();
 
-	rotationManager.initializeAndRunForEmptyNormal(&quatPoints);
-	glm::vec3 validCalculatedNormal = rotationManager.getEmptyNormal();		// this will be stored in calculatedNormal when we are all done
-	if (pointTranslator.requiresTranslation == 1)
+	//std::cout << "translationValues are:" << translationValue.x << ", " << translationValue.y << ", " << translationValue.z << std::endl;
+
+	// now, translate copies of the points (not the original points), along with the MRP.
+	DoublePoint adjustedPoints[3];
+	for (int x = 0; x < 3; x++)
 	{
-		quatPoints.applyTranslation(pointTranslator.getReverseTranslationValue());
-		//std::cout << "!!!!!! Points were reverse translated; their values are: " << std::endl;
-		//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-		//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-		//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
+		adjustedPoints[x] = points[x] + translationValue;
 	}
-	
-	calculatedNormal = glm::normalize(validCalculatedNormal);	// normalize to a unit vector.
-	//std::cout << "0: " << point0Copy.x << ", " << point0Copy.y << ", " << point0Copy.z << std::endl;
-	//std::cout << "1: " << point1Copy.x << ", " << point1Copy.y << ", " << point1Copy.z << std::endl;
-	//std::cout << "2: " << point2Copy.x << ", " << point2Copy.y << ", " << point2Copy.z << std::endl;
-	//std::cout << ">> MRP point is: " << mrp.x << ", " << mrp.y << ", " << mrp.z << std::endl;
-	//std::cout << ">> Empty normal is: " << calculatedNormal.x << ", " << calculatedNormal.y << ", " << calculatedNormal.z << std::endl;
-	
-	//int sillyVal = 3;
-	//std::cin >> sillyVal;
+	DoublePoint adjustedMRP = in_massReferencePoint + translationValue;
 
-	/*
-	float radiansToRotateBy = getRadiansForXAlignmentS1(ab);
-	glm::vec3 rotationAroundY;
-	rotationAroundY.y = 1.0f;
-	QuatRotationRecord s1record(radiansToRotateBy, rotationAroundY);
+	DoublePoint determinedCentroid = IndependentUtils::determineTriangleCentroid(adjustedPoints[0], adjustedPoints[1], adjustedPoints[2]);
+	DoublePoint diff = determinedCentroid - adjustedMRP;
+	glm::vec3 diffToNormalize(diff.x, diff.y, diff.z);
+	diffToNormalize = glm::normalize(diffToNormalize);
 
-	glm::quat originalQuat = s1record.returnOriginalRotation();
-	glm::vec3 newPosition = originalQuat * ab;
-	std::cout << "Post rotation: " << newPosition.x << ", " << newPosition.y << ", " << newPosition.z << std::endl;
-
-	quatPoints.applyQuaternion(originalQuat);
-	std::cout << "!!!! Quat points vector, post rotation: " << std::endl;
-	quatPoints.printPoints();
-
-
-	glm::quat reverseQuat = s1record.returnReverseRotation();
-	glm::vec3 reversePosition = reverseQuat * newPosition;
-	std::cout << "Reverse rotation: " << reversePosition.x << ", " << reversePosition.y << ", " << reversePosition.z << std::endl;
-	*/
-
+	calculatedNormal = diffToNormalize;
 }
 
-float EmptyNormalFinder::getRadiansForXAlignmentS1(glm::vec3 in_vec3)
+EmptyNormalFinder::EmptyNormalFinder(glm::vec3 in_point0, glm::vec3 in_point1, glm::vec3 in_point2, glm::vec3 in_massReferencePoint)
 {
-	float radians = 0.0f;
-	float fullRadian360 = 6.28319f;
-	float atan2result = atan2(in_vec3.z, in_vec3.x);
-	float firstPassRotateRadians;
-	if (atan2result > 0.0)
+	DoublePoint points[3];
+	points[0] = DoublePoint(in_point0);
+	points[1] = DoublePoint(in_point1);
+	points[2] = DoublePoint(in_point2);
+
+	DoublePoint massReferencePoint = DoublePoint(in_massReferencePoint);
+
+	std::set<double> xRanges;
+	std::set<double> yRanges;
+	std::set<double> zRanges;
+
+	for (int x = 0; x < 3; x++)
 	{
-		//firstPassRotateRadians = fullRadian360 - atan2result;
-		firstPassRotateRadians = atan2result;
+		xRanges.insert(points[x].x);
+		yRanges.insert(points[x].y);
+		zRanges.insert(points[x].z);
+
+		//std::cout << "Double point values were: " << points[x].x << ", " << points[x].y << ", " << points[x].z << std::endl;
 	}
-	else if (atan2result < 0.0) // if a is less than 0, add the result to fullRadian360 to get the amount to rotate by. (the quat goes CW when the rotation axis is pointing in a positive direction)
+
+	// the amount to adjust in x/y/z, is the inverse of the minimum found in each dim set.
+	// I.e., a triangle point at 320022.0f is going to need to be adjusted by -320000.0f
+	double minXAdjustment = ((floor(*xRanges.begin() / 32.0)) * -1.0) * 32.0;
+	double minYAdjustment = ((floor(*yRanges.begin() / 32.0)) * -1.0) * 32.0;
+	double minZAdjustment = ((floor(*zRanges.begin() / 32.0)) * -1.0) * 32.0;
+
+
+	DoublePoint translationValue(minXAdjustment, minYAdjustment, minZAdjustment);
+	translationValue.roundHundredth();
+
+	//std::cout << "translationValues are:" << translationValue.x << ", " << translationValue.y << ", " << translationValue.z << std::endl;
+
+	// now, translate copies of the points (not the original points), along with the MRP.
+	DoublePoint adjustedPoints[3];
+	for (int x = 0; x < 3; x++)
 	{
-		//firstPassRotateRadians = abs(atan2result);
-		firstPassRotateRadians = fullRadian360 + atan2result;
+		adjustedPoints[x] = points[x] + translationValue;
 	}
-	return firstPassRotateRadians;
+	DoublePoint adjustedMRP = massReferencePoint + translationValue;
+
+	DoublePoint determinedCentroid = IndependentUtils::determineTriangleCentroid(adjustedPoints[0], adjustedPoints[1], adjustedPoints[2]);
+	DoublePoint diff = determinedCentroid - adjustedMRP;
+	glm::vec3 diffToNormalize(diff.x, diff.y, diff.z);
+	diffToNormalize = glm::normalize(diffToNormalize);
+ 
+	calculatedNormal = diffToNormalize;
+}
+
+glm::vec3 EmptyNormalFinder::getFinderCalculatedNormal()
+{
+	return calculatedNormal;
 }

@@ -289,7 +289,8 @@ void SPoly::calculateEmptyNormal()
 
 	EmptyNormalFinder finder(point0, point1, point2, massOriginPoint);
 	//std::cout << "!!!#####: Value of Empty Normal for this Poly is: " << finder.calculatedNormal.x << ", " << finder.calculatedNormal.y << ", " << finder.calculatedNormal.z << std::endl;
-	polyEmptyNormal = finder.calculatedNormal;
+	//polyEmptyNormal = finder.calculatedNormal;
+	polyEmptyNormal = finder.getFinderCalculatedNormal();
 }
 
 PerfectClampEnum SPoly::calculateAndGetPerfectClampingValue()
