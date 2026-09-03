@@ -205,7 +205,7 @@ bool SPolyShellProducer::checkShellCompleteness()
 	{
 		// it wasn't complete; so print the stats. First, show the touched faces.
 
-		/*
+		
 		std::cout << "Touched faces of bad mesh are: " << std::endl;
 		for (auto& currentFace : touchedFaces)
 		{
@@ -216,7 +216,18 @@ bool SPolyShellProducer::checkShellCompleteness()
 
 		std::cout << "Printing lines of ""bad"" mesh " << std::endl;
 		tempChecker.printLineStats();
-		*/
+
+
+		// Check: if the size of outputSPolySuperGroups is 0, we had a complete shell failure, and no boundaries were produced at all.
+		// Used by functions such as OrganicSystem::jobCheckIfPolysExistInBlockFace in OrganicCoreLib.
+		if (outputSPolySuperGroups.size() == 0)
+		{
+
+			Message invalidShellMessage(MessageType::NOVAL, "\tInvalid SPolyShell produced; an instance of SPolyShellProducer produced exactly 0 outputSPolySuperGroups. The produced shell therefore has 0 faces and is invalid.");
+			ExceptionRecord invalidShellRecord(ExceptionRecordType::EXCEPTION_INVALID_SHELL_PRODUCED, invalidShellMessage);
+			producerExceptionRecorder.insertException(invalidShellRecord);
+			std::cout << "!!! Inserted exception..." << std::endl;
+		}
 	}
 
 	return isComplete;
