@@ -243,19 +243,19 @@ void ShaderMachineBase::computeCameraDirectionAndPosition(bool in_imguiFocusedFl
 		&&
 		(wasFocusedPreviousFrame == false)
 		//&&
-		//(cameraBoundToMousePointer == true)
+		//(guiWindowFocusedByMouse == true)
 	)
 	{
 		glfwSetCursorPos(window, width / 2, height / 2);
 		wasFocusedPreviousFrame = true;
-		cameraBoundToMousePointer = true;
+		guiWindowFocusedByMouse = true;
 	}
 
 	if 
 	(
 		(isFocused == 1)
 		&&
-		(cameraBoundToMousePointer == true)
+		(guiWindowFocusedByMouse == true)
 	)
 	{
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -1002,14 +1002,14 @@ void ShaderMachineBase::createComputeProgram(std::string in_programName)
 
 void ShaderMachineBase::toggleCameraBoundToMousePointer()
 {
-	if (cameraBoundToMousePointer == true)
+	if (guiWindowFocusedByMouse == true)
 	{
-		cameraBoundToMousePointer = false;
+		guiWindowFocusedByMouse = false;
 	}
-	else if (cameraBoundToMousePointer == false)
+	else if (guiWindowFocusedByMouse == false)
 	{
 		glfwSetCursorPos(window, width / 2, height / 2); // when setting back to true, set the cursor to center of the screen.
-		cameraBoundToMousePointer = true;
+		guiWindowFocusedByMouse = true;
 	}
 }
 

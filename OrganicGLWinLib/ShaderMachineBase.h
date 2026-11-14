@@ -253,7 +253,7 @@ protected:
 		int terrainBufferSize = 0;	// set when the ShaderMachine is initialized
 
 		// mouse control 
-		bool cameraBoundToMousePointer = true;	
+		bool guiWindowFocusedByMouse = true;	
 
 
 		// for the camera

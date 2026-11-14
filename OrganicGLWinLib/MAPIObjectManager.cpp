@@ -248,6 +248,28 @@ Message MAPIObjectManager::handleMAPIObjectRequest(MAPIObjectRequest in_objectRe
 					handleAttemptData = attemptBindingInsert(newFBOBinding);
 					break;
 				}
+
+				case MAPIObjectType::VAO:
+				{
+					// Create the VAO array, but do nothing else; MShader objects and their subsequent gears will
+					// have to define how they intend to work with the object; this means that those objects will have to do 
+					// something like:
+					// 
+					// glBindVertexArray(<vaoID>)
+					// glBindBuffer(GL_ARRAY_BUFFER, <bufferID>)
+					// glEnableVertexAttribArray(0);
+					// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)0);		// First attribute: a vec3 representing the point data, before it is translated by MVP.
+					// glEnableVertexAttribArray(1);
+					// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (void*)12);    // Second attribute: a vec3 representing the output color.
+					//
+					// glEnableVertexAttribArray(0);
+					//
+					// ... in order to setup the VAO.
+					std::string vaoName = in_objectRequest.getBindingRequestName();
+					MAPIObjectData newVAOBinding(MAPIObjectType::VAO, vaoName, Message(MessageType::NOVAL));
+					handleAttemptData = attemptBindingInsert(newVAOBinding);
+					break;
+				}
 			}
 		    break;
 		}
@@ -375,6 +397,26 @@ Message MAPIObjectManager::attemptBindingInsert(MAPIObjectData in_bindingToInser
 
 					break;
 				}
+
+				case MAPIObjectType::VAO:
+				{
+					auto bindingNameToCheck = in_bindingToInsert.getDataBindingName();
+					auto nameFindIter = vaoResourceMap.find(bindingNameToCheck);
+					if (nameFindIter == vaoResourceMap.end())
+					{
+						// Setup a new VAO object.
+						StringedMVAOBinding newVAOBinding(in_bindingToInsert);
+						vaoResourceMap[in_bindingToInsert.getDataBindingName()] = newVAOBinding;
+						wasSuccessful = 1;
+						attemptMetadata.insertString("MAPIObjectManager created new vertex array object (VAO), " + bindingNameToCheck + " bound with ID: " + std::to_string(vaoResourceMap[in_bindingToInsert.getDataBindingName()].getVAOId()));
+					}
+					else
+					{
+						attemptMetadata.insertString("MAPIObjectManager created new vertex array object (VAO), " + bindingNameToCheck + " failed (already exists)");
+					}
+
+					break;
+				}
 			}
 			break;
 		}
@@ -468,6 +510,16 @@ int MAPIObjectManager::fetchBinding(MAPIObjectMetadata in_objectMeta)
 					}
 					break;
 				}
+
+				case MAPIObjectType::VAO:
+				{
+					auto bindingNameFinder = vaoResourceMap.find(in_objectMeta.fetchMdName());
+					if (bindingNameFinder != vaoResourceMap.end())
+					{
+						returnBinding = vaoResourceMap[in_objectMeta.fetchMdName()].getVAOId();
+					}
+					break;
+				}
 			}
 			break;
 		}
@@ -516,6 +568,13 @@ void MAPIObjectManager::cleanupResources()
 		currentFBOResource.second.deleteFBOResource();
 	}
 
+	// cleanup stringed VAO resources
+	for (auto& currentVAOResource : vaoResourceMap)
+	{
+		currentVAOResource.second.deleteVAOResource();
+	}
+
+	
 	// cleanup keyed buffer bindings
 	for (auto& currentStringedKeyedMap : stringedThreeDBufferMaps)
 	{
@@ -524,4 +583,5 @@ void MAPIObjectManager::cleanupResources()
 			currentKeyBinding.second.deleteThreeDBufferResource();
 		}
 	}
+
 }

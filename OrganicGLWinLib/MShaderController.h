@@ -48,6 +48,20 @@ For instance, one could run a shader that uses compute shaders, or they could ru
 must have an agreed-upon-format between each other. While this may not always be the most efficient approach, it should allow for ease of use and
 programming, when developing new derivatives of the MShaderBase class. 
 
+Basic loop cycle is (using the function OrganicGLManager::renderReadyArrays in OrganicCoreLib as a reference):
+
+1. Call computeCameraDirectionAndPosition
+2. Check window focus; if window is focused, we can check what buttons were pressed and respond accordingly
+3. Update matrices and delta values
+4. Reset shader machine feedback
+5. Check KeyPressTrackers
+6. Render GL data with selected MShaderBase-derived class
+7. Check for buttons clicked / key presses
+8. Render ImGui
+9. Swap buffers to do actual rendering
+10. Poll events
+
+
 */
 
 class MShaderController
@@ -92,9 +106,17 @@ class MShaderController
 		bool checkIfRunning();	// returns the bool that indicates whether or not this MShaderController has been flagged to stop rendering (false), or to continue (true)
 		void setCameraPosition(glm::vec3 in_position);	// set the camera position used for rendering
 
-		void insertDynamicBufferData(Message in_directingMessage, int in_arraySize, GLfloat* in_arrayRef);	// if the buffer is found/created -- the action
+		void insertDynamicBufferData(Message in_directingMessage, int in_arraySizeInBytes, GLfloat* in_arrayRef);	// if the buffer is found/created -- the action
 																											// of which will be based off the Message -- the data will then be 
 																											// inserted into said buffer. 
+
+		void insertUniformVec2(std::string in_stringValue, glm::vec2 in_vec2);
+		void insertUniformVec3(std::string in_stringValue, glm::vec3 in_vec3);
+		void insertUniformMat3(std::string in_stringValue, glm::mat3 in_mat3);
+		void insertUniformMat4(std::string in_stringValue, glm::mat4 in_mat4);
+		void insertUniformFloat(std::string in_stringValue, float in_float);
+		void insertUniformInt(std::string in_stringValue, int in_int);
+		void insertUniformEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey);
 
 	private:
 		// Below: Use a series of Messages (or just a single one) to signal how the MShaderController should be set up. For example,
@@ -131,7 +153,10 @@ class MShaderController
 														// Message objects that come from the call to setup().
 
 		void initializeMandatoryItems();	// setup GLFW, GLEW, and GLFWWindow, as well as other basic state info.
-		void createMShaders();
+		void createMShaders();	// attempts to start shaders in the mShaderSetupQueue; will also attempt to process the object and uniform requests that
+								// each shader expects. 
+								//
+								// TODO: need to figure out the nature in which uniform requests will be processed. (11/13/2026)	
 
 		void updateCameraDirectionAndPosition(bool in_imguiFocusedFlag);	// update the camera position, based off current direction and velocity;
 																			// also update the direction of the camera if the windows is focused, AND the mouse was moved around while in the window;
@@ -198,7 +223,7 @@ class MShaderController
 
 		// ***************************************************** Camera focus ***************************************************** 
 		bool wasFocusedPreviousFrame = false;
-		bool cameraBoundToMousePointer = true;
+		bool cameraBoundToMousePointer = true;	// used to determine whether or not the mouse movement will be bound to the rendered OpenGL window; true by default, but when false it will allow the mouse to move outside the OpenGL window (see function updateCameraDirectionAndPosition).
 
 		// ***************************************************** Gradient control ******************************************************************
 		MGCIndex controllerMGCI;	// stores and manages gradients that can be used by MShaderController
@@ -249,6 +274,8 @@ class MShaderController
 		float mouseSpeed = 0.005f;
 
 
+		// control toggling
+		void toggleCameraBoundToMousePointer();		// toggles whether or not mouse movement is bound to the OpenGL window, by toggling the bool value of cameraBoundToMousePointer.
 
 		// ***************************************************** Binding and Component handling ***************************************************
 		void processAPIObjectRequest(MAPIObjectRequest in_bindingRequestToProcess);	// calls controllerBindings.handleMAPIObjectRequest, with the given input parameter.
@@ -264,6 +291,8 @@ class MShaderController
 		void controllerKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void processInputFeedback(std::queue<Message> in_feedbackQueue);	// designed to analyze the feedback queue that is contained within the inputListener,
 																			// and potentially perform an action based on that Message. should be run every tick
+
+
 
 
 		// ***************************************************** Gradient forming activities ******************************************************

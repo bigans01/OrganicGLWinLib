@@ -7,21 +7,30 @@ void MSBasicGrayscale::setupMShaderRequestsAndName()
 	mShaderGearManager.initializeMGearManager(parentBindingMapPtr, parentValueRegistryPtr);
 
 	// Create necessary MGear objects in the mShaderGearManager:
-	// -GrayscaleMG (sequence location 0)
-	mShaderGearManager.insertMGear(0, "GrayscaleMG", std::move(std::unique_ptr<MGearBase>(new GrayscaleMG())));
+	// -BasicGrayscaleMG (sequence location 0)
+	mShaderGearManager.insertMGear(0, "BasicGrayscaleMG", std::move(std::unique_ptr<MGearBase>(new BasicGrayscaleMG())));
 
 	mShaderName = "MSBasicGrayscale";
+
+	// Setup local, preferred values that are common between other shaders (such as background color, some depth value, etc)
 	mShaderLocalValueRegistry.insertVec3("background_clear_color", glm::vec3(0.0f, 0.50f, 0.0f));
 
 	// Below: simple test to verify buffer creation request works (can be used as a reference/removed when needed)
 	MAPIObjectRequest bufferRequest(MAPIObjectType::BUFFER, "testbuffer");
-	MAPIObjectRequest bufferRequest2(MAPIObjectType::BUFFER, "testbuffer2");
+	MAPIObjectRequest bufferRequest2(MAPIObjectType::BUFFER, "testRenderBuffer");
 	MAPIObjectRequest textureRequest(MAPIObjectType::TEXTURE, "testTexture");
 	MAPIObjectRequest fboRequest(MAPIObjectType::FBO, "testFBO");
+	MAPIObjectRequest vaoRequest(MAPIObjectType::VAO, "commonVAO");
+
 	bindingRequests.push_back(bufferRequest);
 	bindingRequests.push_back(bufferRequest2);
 	bindingRequests.push_back(textureRequest);
 	bindingRequests.push_back(fboRequest);
+	bindingRequests.push_back(vaoRequest);
+
+	// Create the expected matrix values we need to find, such as the basicMVP.
+	GLUniformRequest basicMVPRequest(GLDataType::MAT4, "absolute_MVP_matrix");
+	mShaderUniformRequests.push_back(basicMVPRequest);
 }
 
 Message MSBasicGrayscale::checkRequiredBindings()
@@ -47,7 +56,9 @@ void MSBasicGrayscale::prepareAndRender()
 	auto currentClearColor = parentValueRegistryPtr->getVec3("background_clear_color");
 	glClearColor(currentClearColor.x, currentClearColor.y, currentClearColor.z, 0.0f);
 
+	// Call the following gears:
+	// BasicGrayscaleMG
 	renderAllGears();
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

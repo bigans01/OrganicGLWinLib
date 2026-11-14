@@ -8,6 +8,7 @@
 #include "OrganicShaderLoader.h"
 #include "MAPIObjectMetadata.h"
 #include "MAPIObjectUpdate.h"
+#include "GLUniformRequest.h"
 
 /*
 * 
@@ -32,8 +33,11 @@ class MGearBase
 		virtual void initializeMGear() = 0;		//	set up varrious things required by the MGear; should be called immediately after
 												//	setMGearPointers
 
-		virtual std::vector<MAPIObjectMetadata> fetchRequiredObjects() = 0;	// used to verify that objects are instantiated/setup correctly;
+		virtual std::vector<MAPIObjectMetadata> fetchRequiredMAPIObjects() = 0;	// used to verify that objects are instantiated/setup correctly;
 																			// called by MGearManager::verifyRequiredGearObjects()
+
+		virtual std::vector<GLUniformRequest> fetchRequiredGLUniforms() = 0;	// fetch a vector of required GLUniformRequest that represent values that the MGear needs to function.
+																				
 
 		virtual void render() = 0;	// should be called every tick in which this MGear is run; ensure that switchToMGearProgram() is called first in this function
 

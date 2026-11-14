@@ -110,7 +110,7 @@ void MShaderController::processMessage(Message in_messageToRead)
 	}
 }
 
-void MShaderController::insertDynamicBufferData(Message in_directingMessage, int in_arraySize, GLfloat* in_arrayRef)
+void MShaderController::insertDynamicBufferData(Message in_directingMessage, int in_arraySizeInBytes, GLfloat* in_arrayRef)
 {
 	// The type of action to take/buffer to modify should be based off the MessageType of the input Message.
 
@@ -154,11 +154,46 @@ void MShaderController::insertDynamicBufferData(Message in_directingMessage, int
 
 				int bufferToBind = controllerBindings.fetchBinding(metadataForCheck);
 				glBindBuffer(GL_ARRAY_BUFFER, bufferToBind);
-				glBufferData(GL_ARRAY_BUFFER, in_arraySize, in_arrayRef, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, in_arraySizeInBytes, in_arrayRef, GL_STATIC_DRAW);
 			}
 			break;
 		}
 	}
+}
+
+void MShaderController::insertUniformVec2(std::string in_stringValue, glm::vec2 in_vec2)
+{
+	controllerValueRegistry.insertVec2(in_stringValue, in_vec2);
+}
+
+void MShaderController::insertUniformVec3(std::string in_stringValue, glm::vec3 in_vec3)
+{
+	controllerValueRegistry.insertVec3(in_stringValue, in_vec3);
+}
+
+void MShaderController::insertUniformMat3(std::string in_stringValue, glm::mat3 in_mat3)
+{
+	controllerValueRegistry.insertMat3(in_stringValue, in_mat3);
+}
+
+void MShaderController::insertUniformMat4(std::string in_stringValue, glm::mat4 in_mat4)
+{
+	controllerValueRegistry.insertMat4(in_stringValue, in_mat4);
+}
+
+void MShaderController::insertUniformFloat(std::string in_stringValue, float in_float)
+{
+	controllerValueRegistry.insertFloat(in_stringValue, in_float);
+}
+
+void MShaderController::insertUniformInt(std::string in_stringValue, int in_int)
+{
+	controllerValueRegistry.insertInt(in_stringValue, in_int);
+}
+
+void MShaderController::insertUniformEnclaveKey(std::string in_stringValue, EnclaveKeyDef::EnclaveKey in_enclaveKey)
+{
+	controllerValueRegistry.insertEnclaveKey(in_stringValue, in_enclaveKey);
 }
 
 void MShaderController::setCameraPosition(glm::vec3 in_position)
@@ -279,14 +314,23 @@ void MShaderController::createMShaders()
 				&controllerValueRegistry
 			);
 
+			// Below: setupMShaderRequestsAndName needs to be called on the shader we just created (insertAttemptShaderName), 
+			// so that the requests can get fetched and processed one-by-one in a call to processAPIObjectRequest
 			catalog.getShaderRef(insertAttemptShaderName)->setupMShaderRequestsAndName();
 			mShaderInfoQueue.push(Message(MessageType::MSHADER_INFO, std::string("Verifying bindings on " + insertAttemptShaderName + "...")));
 
 			// Fetch the required binding requests, and process each one.
 			auto fetchedBindingRequests = catalog.getShaderRef(insertAttemptShaderName)->fetchMShaderBindingRequests();
-			for (auto& currentRequest : fetchedBindingRequests)
+			for (auto& currentBindingRequest : fetchedBindingRequests)
 			{
-				processAPIObjectRequest(currentRequest);
+				processAPIObjectRequest(currentBindingRequest);
+			}
+
+			// Process uniforms here...
+			auto fetchedUniformRequests = catalog.getShaderRef(insertAttemptShaderName)->fetchMShaderUniformRequests();
+			for (auto& currentUniformRequest : fetchedUniformRequests)
+			{
+				// TODO: Need to think about the logic here...
 			}
 
 			// For safety, verify that the underlying MGear objects in the newly spawned MShader have all their requested resources,
@@ -518,12 +562,10 @@ void MShaderController::runTick()
 	// ---------- Phase 3: Render ImGui components, process any clicks/interactions from ImGui
 	// TODO: Somehow: start a new ImGui frame, read feedback, then render ImGui
 
+
 	// ---------- Phase 4: swap the buffers
 	glfwSwapBuffers(mainWindowPtr);		// TEMPORARY: swap buffers to render a new frame; realistically, this will get done by the currently selected
 										// MShader, but this is just here for now.
-
-
-
 
 
 	// ----------- Phase 5: poll for input feedback events (i.e, from keyboard); take actions based off any input somehow.
@@ -629,8 +671,20 @@ void MShaderController::controllerKeyboardCallback(GLFWwindow* window, int key, 
 	std::cout << "!!! Found some input..." << std::endl;
 	if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS)
 	{
-		//toggleCameraBoundToMousePointer();
-		std::cout << "!! Found condition to stop running." << std::endl;
+		toggleCameraBoundToMousePointer();
+		std::cout << "!! Found P key!" << std::endl;
+
+		std::cout << ":::::::::::: World position is now: " << mWorldPosition.x << ", " << mWorldPosition.y << ", " << mWorldPosition.z << std::endl;
+		std::cout << ":::::::::::: Camera position is now: " << mCameraPosition.x << ", " << mCameraPosition.y << ", " << mCameraPosition.z << std::endl;
+		std::cout << ":::::::::::: Direction is now: " << direction.x << ", " << direction.y << ", " << direction.z << std::endl;
+
+		//continueRunning = false;
+	}
+
+	if (key == GLFW_KEY_L && action == GLFW_PRESS)
+	{
+		toggleCameraBoundToMousePointer();
+		std::cout << "!! Found key to stop window (L)" << std::endl;
 		continueRunning = false;
 	}
 
@@ -766,6 +820,21 @@ void MShaderController::calculatePassedTime()
 	lastTimeStamp = currentTimeStamp;
 }
 
+
+void MShaderController::toggleCameraBoundToMousePointer()
+{
+	if (cameraBoundToMousePointer == true)
+	{
+		// setting this to false allows the mouse pointer to go outside of the OpenGL window and click other things (like the console window for example)
+		cameraBoundToMousePointer = false;
+	}
+	else if (cameraBoundToMousePointer == false)
+	{
+		glfwSetCursorPos(mainWindowPtr, mainScreenWidth / 2, mainScreenHeight / 2); // when setting back to true, set the cursor to center of the screen.
+		cameraBoundToMousePointer = true;
+	}
+}
+
 void MShaderController::updateCameraDirectionAndPosition(bool in_imguiFocusedFlag)
 {
 	// This function should be setup similiar to 
@@ -800,7 +869,9 @@ void MShaderController::updateCameraDirectionAndPosition(bool in_imguiFocusedFla
 	}
 
 	// if the window is focused, and the camera is working with the mouse pointer,
-	// we must update it if there was any movement.
+	// we must update it if there was any movement; when cameraBoundToMousePointer is NOT true,
+	// the values of glfwGetCursorPos and glfwSetCursorPos are not called, allowing the mouse to float/hover
+	// outside of the OpenGL window and click other things.
 	if
 	(
 		(isFocused == 1)

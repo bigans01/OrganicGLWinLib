@@ -22,6 +22,11 @@ std::vector<MAPIObjectRequest> MShaderBase::fetchMShaderBindingRequests()
 	return bindingRequests;
 }
 
+std::vector<GLUniformRequest> MShaderBase::fetchMShaderUniformRequests()
+{
+	return mShaderUniformRequests;
+}
+
 std::string MShaderBase::fetchMShaderName()
 {
 	return mShaderName;

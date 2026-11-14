@@ -4,7 +4,7 @@
 #define MSBASICCOMPUTE_H
 
 #include "MShaderBase.h"
-#include "BasicMG.h"
+#include "BasicComputeMG.h"
 
 /*
 

@@ -334,6 +334,24 @@
     <Filter Include="Header Files\MShaderController\MShader\MGearManager\MGear">
       <UniqueIdentifier>{c7781815-be71-49e6-96ac-e58af10f43e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MShaderController\MShader\MGearManager\MGear\Absolute">
+      <UniqueIdentifier>{0ce156f7-33f4-47ab-bc96-f42b324703cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicComputeMG">
+      <UniqueIdentifier>{90752d15-1a0f-4008-8afe-6278dfd1d0dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicGrayscaleMG">
+      <UniqueIdentifier>{0faa5569-7552-498a-8967-cb1af246a2ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MShader\MGearManager\MGear\Absolute">
+      <UniqueIdentifier>{ad733bec-879b-4a50-831a-a5caa3410ff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicComputeMG">
+      <UniqueIdentifier>{82a2105b-9ee0-4b96-991f-718f5d18f6ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicGrayscaleMG">
+      <UniqueIdentifier>{eddcdcc2-0299-486e-a807-8cbf985761ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1602,12 +1620,6 @@
     <ClInclude Include="MGearManager.h">
       <Filter>Header Files\MShaderController\MShader\MGearManager</Filter>
     </ClInclude>
-    <ClInclude Include="BasicMG.h">
-      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear</Filter>
-    </ClInclude>
-    <ClInclude Include="GrayscaleMG.h">
-      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear</Filter>
-    </ClInclude>
     <ClInclude Include="GLBasicProgramData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1628,6 +1640,12 @@
     </ClInclude>
     <ClInclude Include="MAPIObjectBinding.h">
       <Filter>Header Files\MShaderController\MBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicComputeMG.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicComputeMG</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicGrayscaleMG.h">
+      <Filter>Header Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicGrayscaleMG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2315,11 +2333,11 @@
     <ClCompile Include="MGearManager.cpp">
       <Filter>Source Files\MShaderController\MShader\MGearManager</Filter>
     </ClCompile>
-    <ClCompile Include="BasicMG.cpp">
-      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    <ClCompile Include="BasicComputeMG.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicComputeMG</Filter>
     </ClCompile>
-    <ClCompile Include="GrayscaleMG.cpp">
-      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear</Filter>
+    <ClCompile Include="BasicGrayscaleMG.cpp">
+      <Filter>Source Files\MShaderController\MShader\MGearManager\MGear\Absolute\BasicGrayscaleMG</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

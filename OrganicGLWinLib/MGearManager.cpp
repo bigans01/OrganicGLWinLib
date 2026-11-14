@@ -84,11 +84,13 @@ void MGearManager::renderMGears()
 bool MGearManager::verifyRequiredGearObjects(std::queue<Message>* in_messageQueueRef)
 {
 	bool allObjectsFound = true;	// assume true; set to false the moment a single object isn't found.
+
 	for (auto& currentMGear : mGearMap)
 	{
 		in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, "Checking required objects for named gear, " + currentMGear.first));
 
-		auto currentMGearObjectVector = currentMGear.second->fetchRequiredObjects();
+		// First, check required MAPI objects.
+		auto currentMGearObjectVector = currentMGear.second->fetchRequiredMAPIObjects();
 		for (auto& currentRequiredObject : currentMGearObjectVector)
 		{
 			switch (currentRequiredObject.fetchMdMapKeyType())
@@ -118,6 +120,133 @@ bool MGearManager::verifyRequiredGearObjects(std::queue<Message>* in_messageQueu
 						allObjectsFound = false;
 					}
 					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, objectLoggingString));
+				}
+			}
+		}
+
+		// Next, check required uniforms
+		auto currentMGearRequiredUniformVector = currentMGear.second->fetchRequiredGLUniforms();
+		for (auto& currentRequiredUniform : currentMGearRequiredUniformVector)
+		{
+			switch (currentRequiredUniform.dataType)
+			{
+				case GLDataType::VEC2:
+				{
+					std::string uniformLoggingString = "Checking for vec2 uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesVec2Exist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::VEC3:
+				{
+					std::string uniformLoggingString = "Checking for vec3 uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesVec3Exist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::MAT3:
+				{
+					std::string uniformLoggingString = "Checking for mat3 uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesMat3Exist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::MAT4:
+				{
+					std::string uniformLoggingString = "Checking for mat4 uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesMat4Exist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::FLOAT:
+				{
+					std::string uniformLoggingString = "Checking for float uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesFloatExist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::INT:
+				{
+					std::string uniformLoggingString = "Checking for int uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->doesIntExist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
+				}
+
+				case GLDataType::KEY3D:
+				{
+					std::string uniformLoggingString = "Checking for EnclaveKeyDef::EnclaveKey uniform with name " + currentRequiredUniform.uniformName + ": ";
+
+					if (msbUniformRegistryRef->does3DKeyExist(currentRequiredUniform.uniformName))
+					{
+						uniformLoggingString += "Success";
+					}
+					else
+					{
+						uniformLoggingString += "Failure";
+						allObjectsFound = false;
+					}
+					in_messageQueueRef->push(Message(MessageType::MSHADER_INFO, uniformLoggingString));
+					break;
 				}
 			}
 		}

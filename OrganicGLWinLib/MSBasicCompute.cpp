@@ -7,16 +7,19 @@ void MSBasicCompute::setupMShaderRequestsAndName()
 	mShaderGearManager.initializeMGearManager(parentBindingMapPtr, parentValueRegistryPtr);
 
 	// Create necessary MGear objects in the mShaderGearManager:
-	// -BasicMG (sequence location 0)
-	mShaderGearManager.insertMGear(0, "BasicMG", std::move(std::unique_ptr<MGearBase>(new BasicMG())));
+	// -BasicComputeMG (sequence location 0)
+	mShaderGearManager.insertMGear(0, "BasicComputeMG", std::move(std::unique_ptr<MGearBase>(new BasicComputeMG())));
 
 	mShaderName = "MSBasicCompute";
+
+	// Setup local, preferred values that are common between other shaders (such as background color, some depth value, etc)
 	mShaderLocalValueRegistry.insertVec3("background_clear_color", glm::vec3(0.49f, 0.0f, 0.47f));
 
 	// Below: simple test to verify buffer creation request works (can be used as a reference/removed when needed)
 	MAPIObjectRequest bufferRequest(MAPIObjectType::BUFFER, "testbuffer");
 	MAPIObjectRequest textureRequest(MAPIObjectType::TEXTURE, "testTexture");
 	MAPIObjectRequest fboRequest(MAPIObjectType::FBO, "testFBO");
+	MAPIObjectRequest vaoRequest(MAPIObjectType::VAO, "commonVAO");
 
 	// Below: testing only, to ensure that 3d-key retrieval works for BUFFER objects
 	MAPIObjectRequest threeDTest(MAPIObjectType::BUFFER, EnclaveKeyDef::EnclaveKey(1, 1, 1), "3dTest");
@@ -24,8 +27,16 @@ void MSBasicCompute::setupMShaderRequestsAndName()
 	bindingRequests.push_back(bufferRequest);
 	bindingRequests.push_back(textureRequest);
 	bindingRequests.push_back(fboRequest);
+	bindingRequests.push_back(vaoRequest);
 
 	bindingRequests.push_back(threeDTest);
+
+	MAPIObjectRequest someBufferRequest(MAPIObjectType::BUFFER, "somebufferhuh");
+	bindingRequests.push_back(someBufferRequest);
+
+	// Create the expected matrix values we need to find, such as the basicMVP.
+	GLUniformRequest basicMVPRequest(GLDataType::MAT4, "absolute_MVP_matrix");
+	mShaderUniformRequests.push_back(basicMVPRequest);
 }
 
 Message MSBasicCompute::checkRequiredBindings()
@@ -54,7 +65,10 @@ void MSBasicCompute::prepareAndRender()
 	auto currentClearColor = parentValueRegistryPtr->getVec3("background_clear_color");
 	glClearColor(currentClearColor.x, currentClearColor.y, currentClearColor.z, 0.0f);
 
+
+	// Call the following gears:
+	// BasicComputeMG
 	renderAllGears();
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

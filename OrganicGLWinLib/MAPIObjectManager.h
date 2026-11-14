@@ -90,6 +90,37 @@ class MAPIObjectManager
 
 		};
 
+		struct StringedMVAOBinding
+		{
+			public:
+				StringedMVAOBinding() {};
+				StringedMVAOBinding(MAPIObjectData in_bufferBinding)
+				{
+					vaoBindingName = in_bufferBinding.getDataBindingName();
+					glGenVertexArrays(1, &vaoId);
+				}
+
+				void deleteVAOResource()
+				{
+					glDeleteVertexArrays(1, &vaoId);
+				}
+
+				std::string getStringedVAOName()
+				{
+					return vaoBindingName;
+				}
+
+				GLuint getVAOId()
+				{
+					return vaoId;
+				}
+
+			private:
+				std::string vaoBindingName = "";
+				GLuint vaoId = 0;
+				Message vaoBindingMessage;
+		};
+
 		struct ThreeDKeyedMBufferBinding
 		{
 			public:
@@ -240,6 +271,7 @@ class MAPIObjectManager
 		std::unordered_map<std::string, StringedMBufferBinding> bufferResourceMap;
 		std::unordered_map<std::string, StringedMTextureBinding> textureResourceMap;
 		std::unordered_map<std::string, StringedMFBOBinding> fboResourceMap;
+		std::unordered_map<std::string, StringedMVAOBinding> vaoResourceMap;
 
 		// maps for 3d-keyed bindings
 		std::unordered_map<std::string, ThreeDKeyedBufferBindingMap> stringedThreeDBufferMaps;	// a string-keyed map of ThreeDKeyedBufferBindingMap; 
